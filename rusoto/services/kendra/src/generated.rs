@@ -62,7 +62,7 @@ pub struct AccessControlListConfiguration {
 /// <p>Provides information about the column that should be used for filtering the query response by groups.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AclConfiguration {
-    /// <p>A list of groups, separated by semi-colons, that filters a query response based on user context. The document is only returned to users that are in one of the groups specified in the <code>UserContext</code> field of the <a>Query</a> operation.</p>
+    /// <p>A list of groups, separated by semi-colons, that filters a query response based on user context. The document is only returned to users that are in one of the groups specified in the <code>UserContext</code> field of the <code>Query</code> operation.</p>
     #[serde(rename = "AllowedGroupsColumnName")]
     pub allowed_groups_column_name: String,
 }
@@ -138,6 +138,29 @@ pub struct AttributeFilter {
     pub or_all_filters: Option<Vec<AttributeFilter>>,
 }
 
+/// <p>Provides the configuration information to connect to websites that require user authentication.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AuthenticationConfiguration {
+    /// <p>The list of configuration information that's required to connect to and crawl a website host using basic authentication credentials.</p> <p>The list includes the name and port number of the website host.</p>
+    #[serde(rename = "BasicAuthentication")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub basic_authentication: Option<Vec<BasicAuthenticationConfiguration>>,
+}
+
+/// <p>Provides the configuration information to connect to websites that require basic user authentication.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct BasicAuthenticationConfiguration {
+    /// <p>Your secret ARN, which you can create in <a href="https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html">AWS Secrets Manager</a> </p> <p>You use a secret if basic authentication credentials are required to connect to a website. The secret stores your credentials of user name and password.</p>
+    #[serde(rename = "Credentials")]
+    pub credentials: String,
+    /// <p>The name of the website host you want to connect to using authentication credentials.</p> <p>For example, the host name of https://a.example.com/page1.html is "a.example.com".</p>
+    #[serde(rename = "Host")]
+    pub host: String,
+    /// <p>The port number of the website host you want to connect to using authentication credentials.</p> <p>For example, the port for https://a.example.com/page1.html is 443, the standard port for HTTPS.</p>
+    #[serde(rename = "Port")]
+    pub port: i64,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchDeleteDocumentRequest {
@@ -161,7 +184,7 @@ pub struct BatchDeleteDocumentResponse {
     pub failed_documents: Option<Vec<BatchDeleteDocumentResponseFailedDocument>>,
 }
 
-/// <p>Provides information about documents that could not be removed from an index by the <a>BatchDeleteDocument</a> operation.</p>
+/// <p>Provides information about documents that could not be removed from an index by the <code>BatchDeleteDocument</code> operation.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct BatchDeleteDocumentResponseFailedDocument {
@@ -181,11 +204,53 @@ pub struct BatchDeleteDocumentResponseFailedDocument {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct BatchGetDocumentStatusRequest {
+    /// <p>A list of <code>DocumentInfo</code> objects that identify the documents for which to get the status. You identify the documents by their document ID and optional attributes.</p>
+    #[serde(rename = "DocumentInfoList")]
+    pub document_info_list: Vec<DocumentInfo>,
+    /// <p>The identifier of the index to add documents to. The index ID is returned by the <a href="https://docs.aws.amazon.com/kendra/latest/dg/API_CreateIndex.html"> CreateIndex </a> operation.</p>
+    #[serde(rename = "IndexId")]
+    pub index_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BatchGetDocumentStatusResponse {
+    /// <p>The status of documents. The status indicates if the document is waiting to be indexed, is in the process of indexing, has completed indexing, or failed indexing. If a document failed indexing, the status provides the reason why.</p>
+    #[serde(rename = "DocumentStatusList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_status_list: Option<Vec<Status>>,
+    /// <p>A list of documents that Amazon Kendra couldn't get the status for. The list includes the ID of the document and the reason that the status couldn't be found.</p>
+    #[serde(rename = "Errors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub errors: Option<Vec<BatchGetDocumentStatusResponseError>>,
+}
+
+/// <p>Provides a response when the status of a document could not be retrieved.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BatchGetDocumentStatusResponseError {
+    /// <p>The unique identifier of the document whose status could not be retrieved.</p>
+    #[serde(rename = "DocumentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_id: Option<String>,
+    /// <p>Indicates the source of the error.</p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+    /// <p>States that the API could not get the status of a document. This could be because the request is not valid or there is a system error.</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct BatchPutDocumentRequest {
-    /// <p>One or more documents to add to the index. </p> <p>Documents have the following file size limits.</p> <ul> <li> <p>5 MB total size for inline documents</p> </li> <li> <p>50 MB total size for files from an S3 bucket</p> </li> <li> <p>5 MB extracted text for any file</p> </li> </ul> <p>For more information about file size and transaction per second quotas, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/quotas.html">Quotas</a>.</p>
+    /// <p>One or more documents to add to the index.</p> <p>Documents can include custom attributes. For example, 'DataSourceId' and 'DataSourceSyncJobId' are custom attributes that provide information on the synchronization of documents running on a data source. Note, 'DataSourceSyncJobId' could be an optional custom attribute as Amazon Kendra will use the ID of a running sync job.</p> <p>Documents have the following file size limits.</p> <ul> <li> <p>5 MB total size for inline documents</p> </li> <li> <p>50 MB total size for files from an S3 bucket</p> </li> <li> <p>5 MB extracted text for any file</p> </li> </ul> <p>For more information about file size and transaction per second quotas, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/quotas.html">Quotas</a>.</p>
     #[serde(rename = "Documents")]
     pub documents: Vec<Document>,
-    /// <p>The identifier of the index to add the documents to. You need to create the index first using the <a>CreateIndex</a> operation.</p>
+    /// <p>The identifier of the index to add the documents to. You need to create the index first using the <code>CreateIndex</code> operation.</p>
     #[serde(rename = "IndexId")]
     pub index_id: String,
     /// <p>The Amazon Resource Name (ARN) of a role that is allowed to run the <code>BatchPutDocument</code> operation. For more information, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/iam-roles.html">IAM Roles for Amazon Kendra</a>.</p>
@@ -221,18 +286,26 @@ pub struct BatchPutDocumentResponseFailedDocument {
     pub id: Option<String>,
 }
 
-/// <p>Specifies capacity units configured for your index. You can add and remove capacity units to tune an index to your requirements.</p>
+/// <p>Specifies capacity units configured for your enterprise edition index. You can add and remove capacity units to tune an index to your requirements.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CapacityUnitsConfiguration {
-    /// <p>The amount of extra query capacity for an index. Each capacity unit provides 0.5 queries per second and 40,000 queries per day.</p>
+    /// <p>The amount of extra query capacity for an index and <a href="https://docs.aws.amazon.com/kendra/latest/dg/API_GetQuerySuggestions.html">GetQuerySuggestions</a> capacity.</p> <p>A single extra capacity unit for an index provides 0.5 queries per second or approximately 40,000 queries per day.</p> <p> <code>GetQuerySuggestions</code> capacity is 5 times the provisioned query capacity for an index. For example, the base capacity for an index is 0.5 queries per second, so GetQuerySuggestions capacity is 2.5 calls per second. If adding another 0.5 queries per second to total 1 queries per second for an index, the <code>GetQuerySuggestions</code> capacity is 5 calls per second.</p>
     #[serde(rename = "QueryCapacityUnits")]
     pub query_capacity_units: i64,
-    /// <p>The amount of extra storage capacity for an index. Each capacity unit provides 150 Gb of storage space or 500,000 documents, whichever is reached first.</p>
+    /// <p>The amount of extra storage capacity for an index. A single capacity unit for an index provides 150 GB of storage space or 500,000 documents, whichever is reached first.</p>
     #[serde(rename = "StorageCapacityUnits")]
     pub storage_capacity_units: i64,
 }
 
-/// <p>Gathers information about when a particular result was clicked by a user. Your application uses the <a>SubmitFeedback</a> operation to provide click information.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ClearQuerySuggestionsRequest {
+    /// <p>The identifier of the index you want to clear query suggestions from.</p>
+    #[serde(rename = "IndexId")]
+    pub index_id: String,
+}
+
+/// <p>Gathers information about when a particular result was clicked by a user. Your application uses the <code>SubmitFeedback</code> operation to provide click information.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ClickFeedback {
@@ -260,7 +333,7 @@ pub struct ColumnConfiguration {
     #[serde(rename = "DocumentTitleColumnName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_title_column_name: Option<String>,
-    /// <p>An array of objects that map database column names to the corresponding fields in an index. You must first create the fields in the index using the <a>UpdateIndex</a> operation.</p>
+    /// <p>An array of objects that map database column names to the corresponding fields in an index. You must first create the fields in the index using the <code>UpdateIndex</code> operation.</p>
     #[serde(rename = "FieldMappings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub field_mappings: Option<Vec<DataSourceToIndexFieldMapping>>,
@@ -279,10 +352,10 @@ pub struct ConfluenceAttachmentConfiguration {
     pub crawl_attachments: Option<bool>,
 }
 
-/// <p>Defines the mapping between a field in the Confluence data source to a Amazon Kendra index field.</p> <p>You must first create the index field using the operation. </p>
+/// <p>Defines the mapping between a field in the Confluence data source to a Amazon Kendra index field.</p> <p>You must first create the index field using the <code>UpdateIndex</code> operation. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConfluenceAttachmentToIndexFieldMapping {
-    /// <p>The name of the field in the data source. </p> <p>You must first create the index field using the operation. </p>
+    /// <p>The name of the field in the data source. </p> <p>You must first create the index field using the <code>UpdateIndex</code> operation. </p>
     #[serde(rename = "DataSourceFieldName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_source_field_name: Option<String>,
@@ -296,7 +369,7 @@ pub struct ConfluenceAttachmentToIndexFieldMapping {
     pub index_field_name: Option<String>,
 }
 
-/// <p>Specifies the blog settings for the Confluence data source. Blogs are always indexed unless filtered from the index by the <code>ExclusionPatterns</code> or <code>InclusionPatterns</code> fields in the data type.</p>
+/// <p>Specifies the blog settings for the Confluence data source. Blogs are always indexed unless filtered from the index by the <code>ExclusionPatterns</code> or <code>InclusionPatterns</code> fields in the <code>ConfluenceConfiguration</code> type.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConfluenceBlogConfiguration {
     /// <p>Defines how blog metadata fields should be mapped to index fields. Before you can map a field, you must first create an index field with a matching type using the console or the <code>UpdateIndex</code> operation.</p> <p>If you specify the <code>BlogFieldMappings</code> parameter, you must specify at least one field mapping.</p>
@@ -305,7 +378,7 @@ pub struct ConfluenceBlogConfiguration {
     pub blog_field_mappings: Option<Vec<ConfluenceBlogToIndexFieldMapping>>,
 }
 
-/// <p>Defines the mapping between a blog field in the Confluence data source to a Amazon Kendra index field.</p> <p>You must first create the index field using the operation. </p>
+/// <p>Defines the mapping between a blog field in the Confluence data source to a Amazon Kendra index field.</p> <p>You must first create the index field using the <code>UpdateIndex</code> operation. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConfluenceBlogToIndexFieldMapping {
     /// <p>The name of the field in the data source. </p>
@@ -373,7 +446,7 @@ pub struct ConfluencePageConfiguration {
     pub page_field_mappings: Option<Vec<ConfluencePageToIndexFieldMapping>>,
 }
 
-/// <p>Defines the mapping between a field in the Confluence data source to a Amazon Kendra index field.</p> <p>You must first create the index field using the operation. </p>
+/// <p>Defines the mapping between a field in the Confluence data source to a Amazon Kendra index field.</p> <p>You must first create the index field using the <code>UpdateIndex</code> operation. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConfluencePageToIndexFieldMapping {
     /// <p>The name of the field in the data source. </p>
@@ -415,7 +488,7 @@ pub struct ConfluenceSpaceConfiguration {
     pub space_field_mappings: Option<Vec<ConfluenceSpaceToIndexFieldMapping>>,
 }
 
-/// <p>Defines the mapping between a field in the Confluence data source to a Amazon Kendra index field.</p> <p>You must first create the index field using the operation. </p>
+/// <p>Defines the mapping between a field in the Confluence data source to a Amazon Kendra index field.</p> <p>You must first create the index field using the <code>UpdateIndex</code> operation. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConfluenceSpaceToIndexFieldMapping {
     /// <p>The name of the field in the data source. </p>
@@ -590,6 +663,44 @@ pub struct CreateIndexResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateQuerySuggestionsBlockListRequest {
+    /// <p>A token that you provide to identify the request to create a query suggestions block list.</p>
+    #[serde(rename = "ClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_token: Option<String>,
+    /// <p>A user-friendly description for the block list.</p> <p>For example, the description "List of all offensive words that can appear in user queries and need to be blocked from suggestions."</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The identifier of the index you want to create a query suggestions block list for.</p>
+    #[serde(rename = "IndexId")]
+    pub index_id: String,
+    /// <p>A user friendly name for the block list.</p> <p>For example, the block list named 'offensive-words' includes all offensive words that could appear in user queries and need to be blocked from suggestions.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The IAM (Identity and Access Management) role used by Amazon Kendra to access the block list text file in your S3 bucket.</p> <p>You need permissions to the role ARN (Amazon Resource Name). The role needs S3 read permissions to your file in S3 and needs to give STS (Security Token Service) assume role permissions to Amazon Kendra.</p>
+    #[serde(rename = "RoleArn")]
+    pub role_arn: String,
+    /// <p>The S3 path to your block list text file in your S3 bucket.</p> <p>Each block word or phrase should be on a separate line in a text file.</p> <p>For information on the current quota limits for block lists, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/quotas.html">Quotas for Amazon Kendra</a>.</p>
+    #[serde(rename = "SourceS3Path")]
+    pub source_s3_path: S3Path,
+    /// <p>A tag that you can assign to a block list that categorizes the block list.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateQuerySuggestionsBlockListResponse {
+    /// <p>The unique identifier of the created block list.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateThesaurusRequest {
     /// <p>A token that you provide to identify the request to create a thesaurus. Multiple calls to the <code>CreateThesaurus</code> operation with the same client token will create only one index. </p>
     #[serde(rename = "ClientToken")]
@@ -661,9 +772,12 @@ pub struct DataSourceConfiguration {
     #[serde(rename = "SharePointConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub share_point_configuration: Option<SharePointConfiguration>,
+    #[serde(rename = "WebCrawlerConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub web_crawler_configuration: Option<WebCrawlerConfiguration>,
 }
 
-/// <p>Summary information for a Amazon Kendra data source. Returned in a call to .</p>
+/// <p>Summary information for a Amazon Kendra data source. Returned in a call to the <code>DescribeDataSource</code> operation.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DataSourceSummary {
@@ -679,7 +793,7 @@ pub struct DataSourceSummary {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The status of the data source. When the status is <code>ATIVE</code> the data source is ready to use.</p>
+    /// <p>The status of the data source. When the status is <code>ACTIVE</code> the data source is ready to use.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -738,9 +852,10 @@ pub struct DataSourceSyncJobMetricTarget {
     /// <p>The ID of the data source that is running the sync job.</p>
     #[serde(rename = "DataSourceId")]
     pub data_source_id: String,
-    /// <p>The ID of the sync job that is running on the data source.</p>
+    /// <p>The ID of the sync job that is running on the data source.</p> <p>If the ID of a sync job is not provided and there is a sync job running, then the ID of this sync job is used and metrics are generated for this sync job.</p> <p>If the ID of a sync job is not provided and there is no sync job running, then no metrics are generated and documents are indexed/deleted at the index level without sync job metrics included.</p>
     #[serde(rename = "DataSourceSyncJobId")]
-    pub data_source_sync_job_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_source_sync_job_id: Option<String>,
 }
 
 /// <p>Maps a batch delete document request to a specific data source sync job. This is optional and should only be supplied when documents are deleted by a data source connector.</p>
@@ -769,7 +884,7 @@ pub struct DataSourceSyncJobMetrics {
     pub documents_scanned: Option<String>,
 }
 
-/// <p>Maps a column or attribute in the data source to an index field. You must first create the fields in the index using the <a>UpdateIndex</a> operation.</p>
+/// <p>Maps a column or attribute in the data source to an index field. You must first create the fields in the index using the <code>UpdateIndex</code> operation.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataSourceToIndexFieldMapping {
     /// <p>The name of the column or attribute in the data source.</p>
@@ -848,6 +963,17 @@ pub struct DeleteIndexRequest {
     /// <p>The identifier of the index to delete.</p>
     #[serde(rename = "Id")]
     pub id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteQuerySuggestionsBlockListRequest {
+    /// <p>The unique identifier of the block list that needs to be deleted.</p>
+    #[serde(rename = "Id")]
+    pub id: String,
+    /// <p>The identifier of the you want to delete a block list from.</p>
+    #[serde(rename = "IndexId")]
+    pub index_id: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -995,7 +1121,7 @@ pub struct DescribeIndexRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeIndexResponse {
-    /// <p>For enterprise edtion indexes, you can choose to use additional capacity to meet the needs of your application. This contains the capacity units used for the index. A 0 for the query capacity or the storage capacity indicates that the index is using the default capacity for the index.</p>
+    /// <p>For Enterprise edition indexes, you can choose to use additional capacity to meet the needs of your application. This contains the capacity units used for the index. A 0 for the query capacity or the storage capacity indicates that the index is using the default capacity for the index.</p>
     #[serde(rename = "CapacityUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub capacity_units: Option<CapacityUnitsConfiguration>,
@@ -1055,6 +1181,119 @@ pub struct DescribeIndexResponse {
     #[serde(rename = "UserTokenConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_token_configurations: Option<Vec<UserTokenConfiguration>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeQuerySuggestionsBlockListRequest {
+    /// <p>The unique identifier of the block list.</p>
+    #[serde(rename = "Id")]
+    pub id: String,
+    /// <p>The identifier of the index for the block list.</p>
+    #[serde(rename = "IndexId")]
+    pub index_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeQuerySuggestionsBlockListResponse {
+    /// <p>Shows the date-time a block list for query suggestions was last created.</p>
+    #[serde(rename = "CreatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>Shows the description for the block list.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Shows the error message with details when there are issues in processing the block list.</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    /// <p>Shows the current size of the block list text file in S3.</p>
+    #[serde(rename = "FileSizeBytes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_size_bytes: Option<i64>,
+    /// <p>Shows the unique identifier of the block list.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>Shows the identifier of the index for the block list.</p>
+    #[serde(rename = "IndexId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_id: Option<String>,
+    /// <p>Shows the current number of valid, non-empty words or phrases in the block list text file.</p>
+    #[serde(rename = "ItemCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub item_count: Option<i64>,
+    /// <p>Shows the name of the block list.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>Shows the current IAM (Identity and Access Management) role used by Amazon Kendra to access the block list text file in S3.</p> <p>The role needs S3 read permissions to your file in S3 and needs to give STS (Security Token Service) assume role permissions to Amazon Kendra.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+    /// <p>Shows the current S3 path to your block list text file in your S3 bucket.</p> <p>Each block word or phrase should be on a separate line in a text file.</p> <p>For information on the current quota limits for block lists, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/quotas.html">Quotas for Amazon Kendra</a>.</p>
+    #[serde(rename = "SourceS3Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_s3_path: Option<S3Path>,
+    /// <p>Shows whether the current status of the block list is <code>ACTIVE</code> or <code>INACTIVE</code>.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>Shows the date-time a block list for query suggestions was last updated.</p>
+    #[serde(rename = "UpdatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub updated_at: Option<f64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeQuerySuggestionsConfigRequest {
+    /// <p>The identifier of the index you want to describe query suggestions settings for.</p>
+    #[serde(rename = "IndexId")]
+    pub index_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeQuerySuggestionsConfigResponse {
+    /// <p>Shows whether Amazon Kendra uses all queries or only uses queries that include user information to generate query suggestions.</p>
+    #[serde(rename = "IncludeQueriesWithoutUserInformation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_queries_without_user_information: Option<bool>,
+    /// <p>Shows the date-time query suggestions for an index was last cleared.</p> <p>After you clear suggestions, Amazon Kendra learns new suggestions based on new queries added to the query log from the time you cleared suggestions. Amazon Kendra only considers re-occurences of a query from the time you cleared suggestions. </p>
+    #[serde(rename = "LastClearTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_clear_time: Option<f64>,
+    /// <p>Shows the date-time query suggestions for an index was last updated.</p>
+    #[serde(rename = "LastSuggestionsBuildTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_suggestions_build_time: Option<f64>,
+    /// <p>Shows the minimum number of unique users who must search a query in order for the query to be eligible to suggest to your users.</p>
+    #[serde(rename = "MinimumNumberOfQueryingUsers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub minimum_number_of_querying_users: Option<i64>,
+    /// <p>Shows the minimum number of times a query must be searched in order for the query to be eligible to suggest to your users.</p>
+    #[serde(rename = "MinimumQueryCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub minimum_query_count: Option<i64>,
+    /// <p>Shows whether query suggestions are currently in <code>ENABLED</code> mode or <code>LEARN_ONLY</code> mode.</p> <p>By default, Amazon Kendra enables query suggestions.<code>LEARN_ONLY</code> turns off query suggestions for your users. You can change the mode using the <a href="https://docs.aws.amazon.com/kendra/latest/dg/API_UpdateQuerySuggestionsConfig.html">UpdateQuerySuggestionsConfig</a> operation.</p>
+    #[serde(rename = "Mode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mode: Option<String>,
+    /// <p>Shows how recent your queries are in your query log time window (in days).</p>
+    #[serde(rename = "QueryLogLookBackWindowInDays")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_log_look_back_window_in_days: Option<i64>,
+    /// <p>Shows whether the status of query suggestions settings is currently Active or Updating.</p> <p>Active means the current settings apply and Updating means your changed settings are in the process of applying.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>Shows the current total count of query suggestions for an index.</p> <p>This count can change when you update your query suggestions settings, if you filter out certain queries from suggestions using a block list, and as the query log accumulates more queries for Amazon Kendra to learn from.</p>
+    #[serde(rename = "TotalSuggestionsCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_suggestions_count: Option<i64>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1175,7 +1414,7 @@ pub struct DocumentAttribute {
 /// <p>The value of a custom document attribute. You can only provide one value for a custom attribute.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DocumentAttributeValue {
-    /// <p>A date expressed as an ISO 8601 string.</p>
+    /// <p>A date expressed as an ISO 8601 string.</p> <p>It is important for the time zone to be included in the ISO 8601 date-time format. For example, 20120325T123010+01:00 is the ISO 8601 date-time format for March 25th 2012 at 12:30PM (plus 10 seconds) in Central European Time.</p>
     #[serde(rename = "DateValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub date_value: Option<f64>,
@@ -1207,6 +1446,19 @@ pub struct DocumentAttributeValueCountPair {
     pub document_attribute_value: Option<DocumentAttributeValue>,
 }
 
+/// <p>Identifies a document for which to retrieve status information</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DocumentInfo {
+    /// <p><p>Attributes that identify a specific version of a document to check.</p> <p>The only valid attributes are:</p> <ul> <li> <p>version</p> </li> <li> <p>datasourceId</p> </li> <li> <p>jobExecutionId</p> </li> </ul> <p>The attributes follow these rules:</p> <ul> <li> <p> <code>dataSourceId</code> and <code>jobExecutionId</code> must be used together.</p> </li> <li> <p> <code>version</code> is ignored if <code>dataSourceId</code> and <code>jobExecutionId</code> are not provided.</p> </li> <li> <p>If <code>dataSourceId</code> and <code>jobExecutionId</code> are provided, but <code>version</code> is not, the version defaults to &quot;0&quot;.</p> </li> </ul></p>
+    #[serde(rename = "Attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<Vec<DocumentAttribute>>,
+    /// <p>The unique identifier of the document.</p>
+    #[serde(rename = "DocumentId")]
+    pub document_id: String,
+}
+
 /// <p>Specifies the properties of a custom index field.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DocumentMetadataConfiguration {
@@ -1224,6 +1476,17 @@ pub struct DocumentMetadataConfiguration {
     /// <p>The data type of the index field. </p>
     #[serde(rename = "Type")]
     pub type_: String,
+}
+
+/// <p>Overrides the document relevance properties of a custom index field.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DocumentRelevanceConfiguration {
+    /// <p>The name of the tuning configuration to override document relevance at the index level.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    #[serde(rename = "Relevance")]
+    pub relevance: Relevance,
 }
 
 /// <p>Document metadata files that contain information such as the document access control information, source URI, document author, and custom attributes. Each metadata file contains metadata about a single document.</p>
@@ -1302,6 +1565,34 @@ pub struct FaqSummary {
     pub updated_at: Option<f64>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetQuerySuggestionsRequest {
+    /// <p>The identifier of the index you want to get query suggestions from.</p>
+    #[serde(rename = "IndexId")]
+    pub index_id: String,
+    /// <p>The maximum number of query suggestions you want to show to your users.</p>
+    #[serde(rename = "MaxSuggestionsCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_suggestions_count: Option<i64>,
+    /// <p>The text of a user's query to generate query suggestions.</p> <p>A query is suggested if the query prefix matches what a user starts to type as their query.</p> <p>Amazon Kendra does not show any suggestions if a user types fewer than two characters or more than 60 characters. A query must also have at least one search result and contain at least one word of more than four characters.</p>
+    #[serde(rename = "QueryText")]
+    pub query_text: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetQuerySuggestionsResponse {
+    /// <p>The unique identifier for a list of query suggestions for an index.</p>
+    #[serde(rename = "QuerySuggestionsId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_suggestions_id: Option<String>,
+    /// <p>A list of query suggestions for an index.</p>
+    #[serde(rename = "Suggestions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub suggestions: Option<Vec<Suggestion>>,
+}
+
 /// <p>Provides configuration information for data sources that connect to Google Drive.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GoogleDriveConfiguration {
@@ -1321,7 +1612,7 @@ pub struct GoogleDriveConfiguration {
     #[serde(rename = "ExclusionPatterns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exclusion_patterns: Option<Vec<String>>,
-    /// <p>Defines mapping between a field in the Google Drive and a Amazon Kendra index field.</p> <p>If you are using the console, you can define index fields when creating the mapping. If you are using the API, you must first create the field using the <a>UpdateIndex</a> operation.</p>
+    /// <p>Defines mapping between a field in the Google Drive and a Amazon Kendra index field.</p> <p>If you are using the console, you can define index fields when creating the mapping. If you are using the API, you must first create the field using the <code>UpdateIndex</code> operation.</p>
     #[serde(rename = "FieldMappings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub field_mappings: Option<Vec<DataSourceToIndexFieldMapping>>,
@@ -1562,6 +1853,35 @@ pub struct ListIndicesResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListQuerySuggestionsBlockListsRequest {
+    /// <p>The identifier of the index for a list of all block lists that exist for that index.</p> <p>For information on the current quota limits for block lists, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/quotas.html">Quotas for Amazon Kendra</a>.</p>
+    #[serde(rename = "IndexId")]
+    pub index_id: String,
+    /// <p>The maximum number of block lists to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the previous response was incomplete (because there is more data to retrieve), Amazon Kendra returns a pagination token in the response. You can use this pagination token to retrieve the next set of block lists (<code>BlockListSummaryItems</code>).</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListQuerySuggestionsBlockListsResponse {
+    /// <p>Summary items for a block list.</p> <p>This includes summary items on the block list ID, block list name, when the block list was created, when the block list was last updated, and the count of block words/phrases in the block list.</p> <p>For information on the current quota limits for block lists, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/quotas.html">Quotas for Amazon Kendra</a>.</p>
+    #[serde(rename = "BlockListSummaryItems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub block_list_summary_items: Option<Vec<QuerySuggestionsBlockListSummary>>,
+    /// <p>If the response is truncated, Amazon Kendra returns this token that you can use in the subsequent request to retrieve the next set of block lists.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the index, FAQ, or data source to get a list of tags for.</p>
     #[serde(rename = "ResourceARN")]
@@ -1664,6 +1984,21 @@ pub struct Principal {
     pub type_: String,
 }
 
+/// <p>Provides the configuration information for a web proxy to connect to website hosts.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ProxyConfiguration {
+    /// <p>Your secret ARN, which you can create in <a href="https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html">AWS Secrets Manager</a> </p> <p>The credentials are optional. You use a secret if web proxy credentials are required to connect to a website host. Amazon Kendra currently support basic authentication to connect to a web proxy server. The secret stores your credentials.</p>
+    #[serde(rename = "Credentials")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub credentials: Option<String>,
+    /// <p>The name of the website host you want to connect to via a web proxy server.</p> <p>For example, the host name of https://a.example.com/page1.html is "a.example.com".</p>
+    #[serde(rename = "Host")]
+    pub host: String,
+    /// <p>The port number of the website host you want to connect to via a web proxy server. </p> <p>For example, the port for https://a.example.com/page1.html is 443, the standard port for HTTPS.</p>
+    #[serde(rename = "Port")]
+    pub port: i64,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct QueryRequest {
@@ -1671,11 +2006,15 @@ pub struct QueryRequest {
     #[serde(rename = "AttributeFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attribute_filter: Option<AttributeFilter>,
+    /// <p>Overrides relevance tuning configurations of fields or attributes set at the index level.</p> <p>If you use this API to override the relevance tuning configured at the index level, but there is no relevance tuning configured at the index level, then Amazon Kendra does not apply any relevance tuning.</p> <p>If there is relevance tuning configured at the index level, but you do not use this API to override any relevance tuning in the index, then Amazon Kendra uses the relevance tuning that is configured at the index level.</p> <p>If there is relevance tuning configured for fields at the index level, but you use this API to override only some of these fields, then for the fields you did not override, the importance is set to 1.</p>
+    #[serde(rename = "DocumentRelevanceOverrideConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_relevance_override_configurations: Option<Vec<DocumentRelevanceConfiguration>>,
     /// <p>An array of documents attributes. Amazon Kendra returns a count for each attribute key specified. You can use this information to help narrow the search for your user.</p>
     #[serde(rename = "Facets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub facets: Option<Vec<Facet>>,
-    /// <p>The unique identifier of the index to search. The identifier is returned in the response from the operation.</p>
+    /// <p>The unique identifier of the index to search. The identifier is returned in the response from the <code>CreateIndex</code> operation.</p>
     #[serde(rename = "IndexId")]
     pub index_id: String,
     /// <p>Query results are returned in pages the size of the <code>PageSize</code> parameter. By default, Amazon Kendra returns the first page of results. Use this parameter to get result pages after the first one.</p>
@@ -1778,6 +2117,36 @@ pub struct QueryResultItem {
     pub type_: Option<String>,
 }
 
+/// <p>Summary information on a query suggestions block list.</p> <p>This includes information on the block list ID, block list name, when the block list was created, when the block list was last updated, and the count of block words/phrases in the block list.</p> <p>For information on the current quota limits for block lists, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/quotas.html">Quotas for Amazon Kendra</a>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct QuerySuggestionsBlockListSummary {
+    /// <p>The date-time summary information for a query suggestions block list was last created.</p>
+    #[serde(rename = "CreatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>The identifier of a block list.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The number of items in the block list file.</p>
+    #[serde(rename = "ItemCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub item_count: Option<i64>,
+    /// <p>The name of the block list.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The status of the block list.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The date-time the block list was last updated.</p>
+    #[serde(rename = "UpdatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub updated_at: Option<f64>,
+}
+
 /// <p>Provides information for manually tuning the relevance of a field in a search. When a query includes terms that match the field, the results are given a boost in the response based on these tuning parameters.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Relevance {
@@ -1803,7 +2172,7 @@ pub struct Relevance {
     pub value_importance_map: Option<::std::collections::HashMap<String, i64>>,
 }
 
-/// <p>Provides feedback on how relevant a document is to a search. Your application uses the <a>SubmitFeedback</a> operation to provide relevance information.</p>
+/// <p>Provides feedback on how relevant a document is to a search. Your application uses the <code>SubmitFeedback</code> operation to provide relevance information.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RelevanceFeedback {
@@ -1828,11 +2197,11 @@ pub struct S3DataSourceConfiguration {
     #[serde(rename = "DocumentsMetadataConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub documents_metadata_configuration: Option<DocumentsMetadataConfiguration>,
-    /// <p>A list of glob patterns for documents that should not be indexed. If a document that matches an inclusion prefix or inclusion pattern also matches an exclusion pattern, the document is not indexed.</p> <p>For more information about glob patterns, see <a href="https://en.wikipedia.org/wiki/Glob_(programming)">glob (programming)</a> in <i>Wikipedia</i>.</p>
+    /// <p><p>A list of glob patterns for documents that should not be indexed. If a document that matches an inclusion prefix or inclusion pattern also matches an exclusion pattern, the document is not indexed.</p> <p>Some <a href="https://docs.aws.amazon.com/cli/latest/reference/s3/#use-of-exclude-and-include-filters">examples</a> are:</p> <ul> <li> <p> <i>*.png , <em>.jpg</i> will exclude all PNG and JPEG image files in a directory (files with the extensions .png and .jpg).</p> </li> <li> <p> <i></em>internal<em></i> will exclude all files in a directory that contain &#39;internal&#39; in the file name, such as &#39;internal&#39;, &#39;internal<em>only&#39;, &#39;company</em>internal&#39;.</p> </li> <li> <p> <i></em><em>/</em>internal*</i> will exclude all internal-related files in a directory and its subdirectories.</p> </li> </ul></p>
     #[serde(rename = "ExclusionPatterns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exclusion_patterns: Option<Vec<String>>,
-    /// <p>A list of glob patterns for documents that should be indexed. If a document that matches an inclusion pattern also matches an exclusion pattern, the document is not indexed.</p> <p>For more information about glob patterns, see <a href="https://en.wikipedia.org/wiki/Glob_(programming)">glob (programming)</a> in <i>Wikipedia</i>.</p>
+    /// <p><p>A list of glob patterns for documents that should be indexed. If a document that matches an inclusion pattern also matches an exclusion pattern, the document is not indexed.</p> <p>Some <a href="https://docs.aws.amazon.com/cli/latest/reference/s3/#use-of-exclude-and-include-filters">examples</a> are:</p> <ul> <li> <p> <i><em>.txt</i> will include all text files in a directory (files with the extension .txt).</p> </li> <li> <p> <i></em><em>/</em>.txt</i> will include all text files in a directory and its subdirectories.</p> </li> <li> <p> <i><em>tax</em></i> will include all files in a directory that contain &#39;tax&#39; in the file name, such as &#39;tax&#39;, &#39;taxes&#39;, &#39;income_tax&#39;.</p> </li> </ul></p>
     #[serde(rename = "InclusionPatterns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inclusion_patterns: Option<Vec<String>>,
@@ -1859,7 +2228,7 @@ pub struct SalesforceChatterFeedConfiguration {
     /// <p>The name of the column in the Salesforce FeedItem table that contains the content to index. Typically this is the <code>Body</code> column.</p>
     #[serde(rename = "DocumentDataFieldName")]
     pub document_data_field_name: String,
-    /// <p>The name of the column in the Salesforce FeedItem table that contains the title of the document. This is typically the <code>Title</code> collumn.</p>
+    /// <p>The name of the column in the Salesforce FeedItem table that contains the title of the document. This is typically the <code>Title</code> column.</p>
     #[serde(rename = "DocumentTitleFieldName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_title_field_name: Option<String>,
@@ -1892,7 +2261,7 @@ pub struct SalesforceConfiguration {
     #[serde(rename = "IncludeAttachmentFilePatterns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_attachment_file_patterns: Option<Vec<String>>,
-    /// <p>Specifies configuration information for the knowlege article types that Amazon Kendra indexes. Amazon Kendra indexes standard knowledge articles and the standard fields of knowledge articles, or the custom fields of custom knowledge articles, but not both.</p>
+    /// <p>Specifies configuration information for the knowledge article types that Amazon Kendra indexes. Amazon Kendra indexes standard knowledge articles and the standard fields of knowledge articles, or the custom fields of custom knowledge articles, but not both.</p>
     #[serde(rename = "KnowledgeArticleConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub knowledge_article_configuration: Option<SalesforceKnowledgeArticleConfiguration>,
@@ -1932,7 +2301,7 @@ pub struct SalesforceCustomKnowledgeArticleTypeConfiguration {
     pub name: String,
 }
 
-/// <p>Specifies configuration information for the knowlege article types that Amazon Kendra indexes. Amazon Kendra indexes standard knowledge articles and the standard fields of knowledge articles, or the custom fields of custom knowledge articles, but not both </p>
+/// <p>Specifies configuration information for the knowledge article types that Amazon Kendra indexes. Amazon Kendra indexes standard knowledge articles and the standard fields of knowledge articles, or the custom fields of custom knowledge articles, but not both </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SalesforceKnowledgeArticleConfiguration {
     /// <p>Provides configuration information for custom Salesforce knowledge articles.</p>
@@ -1979,13 +2348,13 @@ pub struct SalesforceStandardObjectAttachmentConfiguration {
     pub field_mappings: Option<Vec<DataSourceToIndexFieldMapping>>,
 }
 
-/// <p>Specifies confguration information for indexing a single standard object.</p>
+/// <p>Specifies configuration information for indexing a single standard object.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SalesforceStandardObjectConfiguration {
     /// <p>The name of the field in the standard object table that contains the document contents.</p>
     #[serde(rename = "DocumentDataFieldName")]
     pub document_data_field_name: String,
-    /// <p>The name of the field in the standard object table that contains the document titleB.</p>
+    /// <p>The name of the field in the standard object table that contains the document title.</p>
     #[serde(rename = "DocumentTitleFieldName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_title_field_name: Option<String>,
@@ -2029,6 +2398,18 @@ pub struct Search {
     pub sortable: Option<bool>,
 }
 
+/// <p>Provides the configuration information of the seed or starting point URLs to crawl.</p> <p> <i>When selecting websites to index, you must adhere to the <a href="https://aws.amazon.com/aup/">Amazon Acceptable Use Policy</a> and all other Amazon terms. Remember that you must only use the Amazon Kendra web crawler to index your own webpages, or webpages that you have authorization to index.</i> </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct SeedUrlConfiguration {
+    /// <p>The list of seed or starting point URLs of the websites you want to crawl.</p> <p>The list can include a maximum of 100 seed URLs.</p>
+    #[serde(rename = "SeedUrls")]
+    pub seed_urls: Vec<String>,
+    /// <p>You can choose one of the following modes:</p> <ul> <li> <p> <code>HOST_ONLY</code> – crawl only the website host names. For example, if the seed URL is "abc.example.com", then only URLs with host name "abc.example.com" are crawled.</p> </li> <li> <p> <code>SUBDOMAINS</code> – crawl the website host names with subdomains. For example, if the seed URL is "abc.example.com", then "a.abc.example.com" and "b.abc.example.com" are also crawled.</p> </li> <li> <p> <code>EVERYTHING</code> – crawl the website host names with subdomains and other domains that the webpages link to.</p> </li> </ul> <p>The default mode is set to <code>HOST_ONLY</code>.</p>
+    #[serde(rename = "WebCrawlerMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub web_crawler_mode: Option<String>,
+}
+
 /// <p>Provides the identifier of the AWS KMS customer master key (CMK) used to encrypt data indexed by Amazon Kendra. Amazon Kendra doesn't support asymmetric CMKs.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ServerSideEncryptionConfiguration {
@@ -2041,6 +2422,10 @@ pub struct ServerSideEncryptionConfiguration {
 /// <p>Provides configuration information required to connect to a ServiceNow data source.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ServiceNowConfiguration {
+    /// <p>Determines the type of authentication used to connect to the ServiceNow instance. If you choose <code>HTTP_BASIC</code>, Amazon Kendra is authenticated using the user name and password provided in the AWS Secrets Manager secret in the <code>SecretArn</code> field. When you choose <code>OAUTH2</code>, Amazon Kendra is authenticated using the OAuth token and secret provided in the Secrets Manager secret, and the user name and password are used to determine which information Amazon Kendra has access to.</p> <p>When you use <code>OAUTH2</code> authentication, you must generate a token and a client secret using the ServiceNow console. For more information, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/data-source-servicenow.html">Using a ServiceNow data source</a>.</p>
+    #[serde(rename = "AuthenticationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authentication_type: Option<String>,
     /// <p>The ServiceNow instance that the data source connects to. The host endpoint should look like the following: <code>{instance}.service-now.com.</code> </p>
     #[serde(rename = "HostUrl")]
     pub host_url: String,
@@ -2082,6 +2467,10 @@ pub struct ServiceNowKnowledgeArticleConfiguration {
     #[serde(rename = "FieldMappings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub field_mappings: Option<Vec<DataSourceToIndexFieldMapping>>,
+    /// <p>A query that selects the knowledge articles to index. The query can return articles from multiple knowledge bases, and the knowledge bases can be public or private.</p> <p>The query string must be one generated by the ServiceNow console. For more information, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/servicenow-query.html">Specifying documents to index with a query</a>. </p>
+    #[serde(rename = "FilterQuery")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_query: Option<String>,
     /// <p>List of regular expressions applied to knowledge articles. Items that don't match the inclusion pattern are not indexed. The regex is applied to the field specified in the <code>PatternTargetField</code>.</p>
     #[serde(rename = "IncludeAttachmentFilePatterns")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2102,7 +2491,7 @@ pub struct ServiceNowServiceCatalogConfiguration {
     #[serde(rename = "DocumentTitleFieldName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_title_field_name: Option<String>,
-    /// <p>Determines the types of file attachments that are excluded from the index.</p>
+    /// <p>A list of regular expression patterns. Documents that match the patterns are excluded from the index. Documents that don't match the patterns are included in the index. If a document matches both an exclusion pattern and an inclusion pattern, the document is not included in the index.</p> <p>The regex is applied to the file name of the attachment.</p>
     #[serde(rename = "ExcludeAttachmentFilePatterns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exclude_attachment_file_patterns: Option<Vec<String>>,
@@ -2110,7 +2499,7 @@ pub struct ServiceNowServiceCatalogConfiguration {
     #[serde(rename = "FieldMappings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub field_mappings: Option<Vec<DataSourceToIndexFieldMapping>>,
-    /// <p>Determines the types of file attachments that are included in the index. </p>
+    /// <p>A list of regular expression patterns. Documents that match the patterns are included in the index. Documents that don't match the patterns are excluded from the index. If a document matches both an exclusion pattern and an inclusion pattern, the document is not included in the index.</p> <p>The regex is applied to the file name of the attachment.</p>
     #[serde(rename = "IncludeAttachmentFilePatterns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_attachment_file_patterns: Option<Vec<String>>,
@@ -2135,7 +2524,7 @@ pub struct SharePointConfiguration {
     #[serde(rename = "ExclusionPatterns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exclusion_patterns: Option<Vec<String>>,
-    /// <p>A list of <code>DataSourceToIndexFieldMapping</code> objects that map Microsoft SharePoint attributes to custom fields in the Amazon Kendra index. You must first create the index fields using the operation before you map SharePoint attributes. For more information, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html">Mapping Data Source Fields</a>.</p>
+    /// <p>A list of <code>DataSourceToIndexFieldMapping</code> objects that map Microsoft SharePoint attributes to custom fields in the Amazon Kendra index. You must first create the index fields using the <code>UpdateIndex</code> operation before you map SharePoint attributes. For more information, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/field-mapping.html">Mapping Data Source Fields</a>.</p>
     #[serde(rename = "FieldMappings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub field_mappings: Option<Vec<DataSourceToIndexFieldMapping>>,
@@ -2143,12 +2532,15 @@ pub struct SharePointConfiguration {
     #[serde(rename = "InclusionPatterns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inclusion_patterns: Option<Vec<String>>,
-    /// <p>The Amazon Resource Name (ARN) of credentials stored in AWS Secrets Manager. The credentials should be a user/password pair. For more information, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/data-source-sharepoint.html">Using a Microsoft SharePoint Data Source</a>. For more information about AWS Secrets Manager, see <a href="https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html"> What Is AWS Secrets Manager </a> in the <i>AWS Secrets Manager</i> user guide.</p>
+    /// <p>The Amazon Resource Name (ARN) of credentials stored in AWS Secrets Manager. The credentials should be a user/password pair. If you use SharePoint Sever, you also need to provide the sever domain name as part of the credentials. For more information, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/data-source-sharepoint.html">Using a Microsoft SharePoint Data Source</a>. For more information about AWS Secrets Manager, see <a href="https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html"> What Is AWS Secrets Manager </a> in the <i>AWS Secrets Manager</i> user guide.</p>
     #[serde(rename = "SecretArn")]
     pub secret_arn: String,
     /// <p>The version of Microsoft SharePoint that you are using as a data source.</p>
     #[serde(rename = "SharePointVersion")]
     pub share_point_version: String,
+    #[serde(rename = "SslCertificateS3Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ssl_certificate_s3_path: Option<S3Path>,
     /// <p>The URLs of the Microsoft SharePoint site that contains the documents that should be indexed.</p>
     #[serde(rename = "Urls")]
     pub urls: Vec<String>,
@@ -2159,6 +2551,14 @@ pub struct SharePointConfiguration {
     #[serde(rename = "VpcConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_configuration: Option<DataSourceVpcConfiguration>,
+}
+
+/// <p>Provides the configuration information of the sitemap URLs to crawl.</p> <p> <i>When selecting websites to index, you must adhere to the <a href="https://aws.amazon.com/aup/">Amazon Acceptable Use Policy</a> and all other Amazon terms. Remember that you must only use the Amazon Kendra web crawler to index your own webpages, or webpages that you have authorization to index.</i> </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct SiteMapsConfiguration {
+    /// <p>The list of sitemap URLs of the websites you want to crawl.</p> <p>The list can include a maximum of three sitemap URLs.</p>
+    #[serde(rename = "SiteMaps")]
+    pub site_maps: Vec<String>,
 }
 
 /// <p><p>Specifies the document attribute to use to sort the response to a Amazon Kendra query. You can specify a single attribute for sorting. The attribute must have the <code>Sortable</code> flag set to <code>true</code>, otherwise Amazon Kendra returns an exception.</p> <p>You can sort attributes of the following types.</p> <ul> <li> <p>Date value</p> </li> <li> <p>Long value</p> </li> <li> <p>String value</p> </li> </ul> <p>You can&#39;t sort attributes of the following type.</p> <ul> <li> <p>String list value</p> </li> </ul></p>
@@ -2202,6 +2602,28 @@ pub struct StartDataSourceSyncJobResponse {
     pub execution_id: Option<String>,
 }
 
+/// <p>Provides information about the status of documents submitted for indexing.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Status {
+    /// <p>The unique identifier of the document.</p>
+    #[serde(rename = "DocumentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_id: Option<String>,
+    /// <p>The current status of a document.</p> <p>If the document was submitted for deletion, the status is <code>NOT_FOUND</code> after the document is deleted.</p>
+    #[serde(rename = "DocumentStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_status: Option<String>,
+    /// <p>Indicates the source of the error.</p>
+    #[serde(rename = "FailureCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_code: Option<String>,
+    /// <p>Provides detailed information about why the document couldn't be indexed. Use this information to correct the error before you resubmit the document for indexing.</p>
+    #[serde(rename = "FailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StopDataSourceSyncJobRequest {
@@ -2223,13 +2645,65 @@ pub struct SubmitFeedbackRequest {
     /// <p>The identifier of the index that was queried.</p>
     #[serde(rename = "IndexId")]
     pub index_id: String,
-    /// <p>The identifier of the specific query for which you are submitting feedback. The query ID is returned in the response to the operation.</p>
+    /// <p>The identifier of the specific query for which you are submitting feedback. The query ID is returned in the response to the <code>Query</code> operation.</p>
     #[serde(rename = "QueryId")]
     pub query_id: String,
     /// <p>Provides Amazon Kendra with relevant or not relevant feedback for whether a particular item was relevant to the search.</p>
     #[serde(rename = "RelevanceFeedbackItems")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub relevance_feedback_items: Option<Vec<RelevanceFeedback>>,
+}
+
+/// <p>A single query suggestion.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Suggestion {
+    /// <p>The unique UUID (universally unique identifier) of a single query suggestion.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The value for the unique UUID (universally unique identifier) of a single query suggestion.</p> <p>The value is the text string of a suggestion.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<SuggestionValue>,
+}
+
+/// <p>The text highlights for a single query suggestion.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SuggestionHighlight {
+    /// <p>The zero-based location in the response string where the highlight starts.</p>
+    #[serde(rename = "BeginOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub begin_offset: Option<i64>,
+    /// <p>The zero-based location in the response string where the highlight ends.</p>
+    #[serde(rename = "EndOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_offset: Option<i64>,
+}
+
+/// <p>Provides text and information about where to highlight the query suggestion text.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SuggestionTextWithHighlights {
+    /// <p>The beginning and end of the query suggestion text that should be highlighted.</p>
+    #[serde(rename = "Highlights")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub highlights: Option<Vec<SuggestionHighlight>>,
+    /// <p>The query suggestion text to display to the user.</p>
+    #[serde(rename = "Text")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub text: Option<String>,
+}
+
+/// <p>The <code>SuggestionTextWithHighlights</code> structure information.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SuggestionValue {
+    /// <p>The <code>SuggestionTextWithHighlights</code> structure that contains the query suggestion text and highlights.</p>
+    #[serde(rename = "Text")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub text: Option<SuggestionTextWithHighlights>,
 }
 
 /// <p>A list of key/value pairs that identify an index, FAQ, or data source. Tag keys and values can consist of Unicode letters, digits, white space, and any of the following symbols: _ . : / = + - @.</p>
@@ -2372,7 +2846,7 @@ pub struct UpdateDataSourceRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateIndexRequest {
-    /// <p>Sets the number of addtional storage and query capacity units that should be used by the index. You can change the capacity of the index up to 5 times per day.</p> <p>If you are using extra storage units, you can't reduce the storage capacity below that required to meet the storage needs for your index.</p>
+    /// <p>Sets the number of additional storage and query capacity units that should be used by the index. You can change the capacity of the index up to 5 times per day.</p> <p>If you are using extra storage units, you can't reduce the storage capacity below that required to meet the storage needs for your index.</p>
     #[serde(rename = "CapacityUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub capacity_units: Option<CapacityUnitsConfiguration>,
@@ -2407,6 +2881,61 @@ pub struct UpdateIndexRequest {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateQuerySuggestionsBlockListRequest {
+    /// <p>The description for a block list.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The unique identifier of a block list.</p>
+    #[serde(rename = "Id")]
+    pub id: String,
+    /// <p>The identifier of the index for a block list.</p>
+    #[serde(rename = "IndexId")]
+    pub index_id: String,
+    /// <p>The name of a block list.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The IAM (Identity and Access Management) role used to access the block list text file in S3.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+    /// <p>The S3 path where your block list text file sits in S3.</p> <p>If you update your block list and provide the same path to the block list text file in S3, then Amazon Kendra reloads the file to refresh the block list. Amazon Kendra does not automatically refresh your block list. You need to call the <code>UpdateQuerySuggestionsBlockList</code> API to refresh you block list.</p> <p>If you update your block list, then Amazon Kendra asynchronously refreshes all query suggestions with the latest content in the S3 file. This means changes might not take effect immediately.</p>
+    #[serde(rename = "SourceS3Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_s3_path: Option<S3Path>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateQuerySuggestionsConfigRequest {
+    /// <p> <code>TRUE</code> to include queries without user information (i.e. all queries, irrespective of the user), otherwise <code>FALSE</code> to only include queries with user information.</p> <p>If you pass user information to Amazon Kendra along with the queries, you can set this flag to <code>FALSE</code> and instruct Amazon Kendra to only consider queries with user information.</p> <p>If you set to <code>FALSE</code>, Amazon Kendra only considers queries searched at least <code>MinimumQueryCount</code> times across <code>MinimumNumberOfQueryingUsers</code> unique users for suggestions.</p> <p>If you set to <code>TRUE</code>, Amazon Kendra ignores all user information and learns from all queries.</p>
+    #[serde(rename = "IncludeQueriesWithoutUserInformation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_queries_without_user_information: Option<bool>,
+    /// <p>The identifier of the index you want to update query suggestions settings for.</p>
+    #[serde(rename = "IndexId")]
+    pub index_id: String,
+    /// <p>The minimum number of unique users who must search a query in order for the query to be eligible to suggest to your users.</p> <p>Increasing this number might decrease the number of suggestions. However, this ensures a query is searched by many users and is truly popular to suggest to users.</p> <p>How you tune this setting depends on your specific needs.</p>
+    #[serde(rename = "MinimumNumberOfQueryingUsers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub minimum_number_of_querying_users: Option<i64>,
+    /// <p>The the minimum number of times a query must be searched in order to be eligible to suggest to your users.</p> <p>Decreasing this number increases the number of suggestions. However, this affects the quality of suggestions as it sets a low bar for a query to be considered popular to suggest to users.</p> <p>How you tune this setting depends on your specific needs.</p>
+    #[serde(rename = "MinimumQueryCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub minimum_query_count: Option<i64>,
+    /// <p>Set the mode to <code>ENABLED</code> or <code>LEARN_ONLY</code>.</p> <p>By default, Amazon Kendra enables query suggestions. <code>LEARN_ONLY</code> mode allows you to turn off query suggestions. You can to update this at any time.</p> <p>In <code>LEARN_ONLY</code> mode, Amazon Kendra continues to learn from new queries to keep suggestions up to date for when you are ready to switch to ENABLED mode again.</p>
+    #[serde(rename = "Mode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mode: Option<String>,
+    /// <p>How recent your queries are in your query log time window.</p> <p>The time window is the number of days from current day to past days.</p> <p>By default, Amazon Kendra sets this to 180.</p>
+    #[serde(rename = "QueryLogLookBackWindowInDays")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_log_look_back_window_in_days: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateThesaurusRequest {
     /// <p>The updated description of the thesaurus.</p>
     #[serde(rename = "Description")]
@@ -2431,6 +2960,19 @@ pub struct UpdateThesaurusRequest {
     pub source_s3_path: Option<S3Path>,
 }
 
+/// <p>Provides the configuration information of the URLs to crawl.</p> <p> <i>When selecting websites to index, you must adhere to the <a href="https://aws.amazon.com/aup/">Amazon Acceptable Use Policy</a> and all other Amazon terms. Remember that you must only use the Amazon Kendra web crawler to index your own webpages, or webpages that you have authorization to index.</i> </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Urls {
+    /// <p>Provides the configuration of the seed or starting point URLs of the websites you want to crawl.</p> <p>You can choose to crawl only the website host names, or the website host names with subdomains, or the website host names with subdomains and other domains that the webpages link to.</p> <p>You can list up to 100 seed URLs.</p>
+    #[serde(rename = "SeedUrlConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub seed_url_configuration: Option<SeedUrlConfiguration>,
+    /// <p>Provides the configuration of the sitemap URLs of the websites you want to crawl.</p> <p>Only URLs belonging to the same website host names are crawled. You can list up to three sitemap URLs.</p>
+    #[serde(rename = "SiteMapsConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub site_maps_configuration: Option<SiteMapsConfiguration>,
+}
+
 /// <p>Provides information about the user context for a Amazon Kendra index.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2452,6 +2994,46 @@ pub struct UserTokenConfiguration {
     #[serde(rename = "JwtTokenTypeConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub jwt_token_type_configuration: Option<JwtTokenTypeConfiguration>,
+}
+
+/// <p>Provides the configuration information required for Amazon Kendra web crawler.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct WebCrawlerConfiguration {
+    /// <p>Provides configuration information required to connect to websites using authentication.</p> <p>You can connect to websites using basic authentication of user name and password.</p> <p>You must provide the website host name and port number. For example, the host name of https://a.example.com/page1.html is "a.example.com" and the port is 443, the standard port for HTTPS. You use a secret in <a href="https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html">AWS Secrets Manager</a> to store your authentication credentials.</p>
+    #[serde(rename = "AuthenticationConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authentication_configuration: Option<AuthenticationConfiguration>,
+    /// <p>Specifies the number of levels in a website that you want to crawl.</p> <p>The first level begins from the website seed or starting point URL. For example, if a website has 3 levels – index level (i.e. seed in this example), sections level, and subsections level – and you are only interested in crawling information up to the sections level (i.e. levels 0-1), you can set your depth to 1.</p> <p>The default crawl depth is set to 2.</p>
+    #[serde(rename = "CrawlDepth")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub crawl_depth: Option<i64>,
+    /// <p>The maximum size (in MB) of a webpage or attachment to crawl.</p> <p>Files larger than this size (in MB) are skipped/not crawled.</p> <p>The default maximum size of a webpage or attachment is set to 50 MB.</p>
+    #[serde(rename = "MaxContentSizePerPageInMegaBytes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_content_size_per_page_in_mega_bytes: Option<f32>,
+    /// <p>The maximum number of URLs on a webpage to include when crawling a website. This number is per webpage.</p> <p>As a website’s webpages are crawled, any URLs the webpages link to are also crawled. URLs on a webpage are crawled in order of appearance.</p> <p>The default maximum links per page is 100.</p>
+    #[serde(rename = "MaxLinksPerPage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_links_per_page: Option<i64>,
+    /// <p>The maximum number of URLs crawled per website host per minute.</p> <p>A minimum of one URL is required.</p> <p>The default maximum number of URLs crawled per website host per minute is 300.</p>
+    #[serde(rename = "MaxUrlsPerMinuteCrawlRate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_urls_per_minute_crawl_rate: Option<i64>,
+    /// <p>Provides configuration information required to connect to your internal websites via a web proxy.</p> <p>You must provide the website host name and port number. For example, the host name of https://a.example.com/page1.html is "a.example.com" and the port is 443, the standard port for HTTPS.</p> <p>Web proxy credentials are optional and you can use them to connect to a web proxy server that requires basic authentication. To store web proxy credentials, you use a secret in <a href="https://docs.aws.amazon.com/secretsmanager/latest/userguide/intro.html">AWS Secrets Manager</a>.</p>
+    #[serde(rename = "ProxyConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub proxy_configuration: Option<ProxyConfiguration>,
+    /// <p>The regular expression pattern to exclude certain URLs to crawl.</p> <p>If there is a regular expression pattern to include certain URLs that conflicts with the exclude pattern, the exclude pattern takes precedence.</p>
+    #[serde(rename = "UrlExclusionPatterns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url_exclusion_patterns: Option<Vec<String>>,
+    /// <p>The regular expression pattern to include certain URLs to crawl.</p> <p>If there is a regular expression pattern to exclude certain URLs that conflicts with the include pattern, the exclude pattern takes precedence.</p>
+    #[serde(rename = "UrlInclusionPatterns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url_inclusion_patterns: Option<Vec<String>>,
+    /// <p>Specifies the seed or starting point URLs of the websites or the sitemap URLs of the websites you want to crawl.</p> <p>You can include website subdomains. You can list up to 100 seed URLs and up to three sitemap URLs.</p> <p> <i>When selecting websites to index, you must adhere to the <a href="https://aws.amazon.com/aup/">Amazon Acceptable Use Policy</a> and all other Amazon terms. Remember that you must only use the Amazon Kendra web crawler to index your own webpages, or webpages that you have authorization to index.</i> </p>
+    #[serde(rename = "Urls")]
+    pub urls: Urls,
 }
 
 /// Errors returned by BatchDeleteDocument
@@ -2510,6 +3092,64 @@ impl fmt::Display for BatchDeleteDocumentError {
     }
 }
 impl Error for BatchDeleteDocumentError {}
+/// Errors returned by BatchGetDocumentStatus
+#[derive(Debug, PartialEq)]
+pub enum BatchGetDocumentStatusError {
+    /// <p><p/></p>
+    AccessDenied(String),
+    /// <p><p/></p>
+    Conflict(String),
+    /// <p><p/></p>
+    InternalServer(String),
+    /// <p><p/></p>
+    ResourceNotFound(String),
+    /// <p><p/></p>
+    Throttling(String),
+}
+
+impl BatchGetDocumentStatusError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<BatchGetDocumentStatusError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(BatchGetDocumentStatusError::AccessDenied(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(BatchGetDocumentStatusError::Conflict(err.msg))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(BatchGetDocumentStatusError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(BatchGetDocumentStatusError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(BatchGetDocumentStatusError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for BatchGetDocumentStatusError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            BatchGetDocumentStatusError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            BatchGetDocumentStatusError::Conflict(ref cause) => write!(f, "{}", cause),
+            BatchGetDocumentStatusError::InternalServer(ref cause) => write!(f, "{}", cause),
+            BatchGetDocumentStatusError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            BatchGetDocumentStatusError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for BatchGetDocumentStatusError {}
 /// Errors returned by BatchPutDocument
 #[derive(Debug, PartialEq)]
 pub enum BatchPutDocumentError {
@@ -2572,6 +3212,64 @@ impl fmt::Display for BatchPutDocumentError {
     }
 }
 impl Error for BatchPutDocumentError {}
+/// Errors returned by ClearQuerySuggestions
+#[derive(Debug, PartialEq)]
+pub enum ClearQuerySuggestionsError {
+    /// <p><p/></p>
+    AccessDenied(String),
+    /// <p><p/></p>
+    Conflict(String),
+    /// <p><p/></p>
+    InternalServer(String),
+    /// <p><p/></p>
+    ResourceNotFound(String),
+    /// <p><p/></p>
+    Throttling(String),
+}
+
+impl ClearQuerySuggestionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ClearQuerySuggestionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ClearQuerySuggestionsError::AccessDenied(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(ClearQuerySuggestionsError::Conflict(err.msg))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(ClearQuerySuggestionsError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ClearQuerySuggestionsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ClearQuerySuggestionsError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ClearQuerySuggestionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ClearQuerySuggestionsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ClearQuerySuggestionsError::Conflict(ref cause) => write!(f, "{}", cause),
+            ClearQuerySuggestionsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ClearQuerySuggestionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ClearQuerySuggestionsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ClearQuerySuggestionsError {}
 /// Errors returned by CreateDataSource
 #[derive(Debug, PartialEq)]
 pub enum CreateDataSourceError {
@@ -2762,6 +3460,86 @@ impl fmt::Display for CreateIndexError {
     }
 }
 impl Error for CreateIndexError {}
+/// Errors returned by CreateQuerySuggestionsBlockList
+#[derive(Debug, PartialEq)]
+pub enum CreateQuerySuggestionsBlockListError {
+    /// <p><p/></p>
+    AccessDenied(String),
+    /// <p><p/></p>
+    Conflict(String),
+    /// <p><p/></p>
+    InternalServer(String),
+    /// <p><p/></p>
+    ResourceNotFound(String),
+    /// <p><p/></p>
+    ServiceQuotaExceeded(String),
+    /// <p><p/></p>
+    Throttling(String),
+}
+
+impl CreateQuerySuggestionsBlockListError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateQuerySuggestionsBlockListError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        CreateQuerySuggestionsBlockListError::AccessDenied(err.msg),
+                    )
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateQuerySuggestionsBlockListError::Conflict(
+                        err.msg,
+                    ))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(
+                        CreateQuerySuggestionsBlockListError::InternalServer(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        CreateQuerySuggestionsBlockListError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(
+                        CreateQuerySuggestionsBlockListError::ServiceQuotaExceeded(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateQuerySuggestionsBlockListError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateQuerySuggestionsBlockListError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateQuerySuggestionsBlockListError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateQuerySuggestionsBlockListError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateQuerySuggestionsBlockListError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateQuerySuggestionsBlockListError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateQuerySuggestionsBlockListError::ServiceQuotaExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateQuerySuggestionsBlockListError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateQuerySuggestionsBlockListError {}
 /// Errors returned by CreateThesaurus
 #[derive(Debug, PartialEq)]
 pub enum CreateThesaurusError {
@@ -2986,6 +3764,76 @@ impl fmt::Display for DeleteIndexError {
     }
 }
 impl Error for DeleteIndexError {}
+/// Errors returned by DeleteQuerySuggestionsBlockList
+#[derive(Debug, PartialEq)]
+pub enum DeleteQuerySuggestionsBlockListError {
+    /// <p><p/></p>
+    AccessDenied(String),
+    /// <p><p/></p>
+    Conflict(String),
+    /// <p><p/></p>
+    InternalServer(String),
+    /// <p><p/></p>
+    ResourceNotFound(String),
+    /// <p><p/></p>
+    Throttling(String),
+}
+
+impl DeleteQuerySuggestionsBlockListError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteQuerySuggestionsBlockListError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        DeleteQuerySuggestionsBlockListError::AccessDenied(err.msg),
+                    )
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(DeleteQuerySuggestionsBlockListError::Conflict(
+                        err.msg,
+                    ))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(
+                        DeleteQuerySuggestionsBlockListError::InternalServer(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DeleteQuerySuggestionsBlockListError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteQuerySuggestionsBlockListError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteQuerySuggestionsBlockListError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteQuerySuggestionsBlockListError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteQuerySuggestionsBlockListError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteQuerySuggestionsBlockListError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteQuerySuggestionsBlockListError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteQuerySuggestionsBlockListError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteQuerySuggestionsBlockListError {}
 /// Errors returned by DeleteThesaurus
 #[derive(Debug, PartialEq)]
 pub enum DeleteThesaurusError {
@@ -3184,6 +4032,132 @@ impl fmt::Display for DescribeIndexError {
     }
 }
 impl Error for DescribeIndexError {}
+/// Errors returned by DescribeQuerySuggestionsBlockList
+#[derive(Debug, PartialEq)]
+pub enum DescribeQuerySuggestionsBlockListError {
+    /// <p><p/></p>
+    AccessDenied(String),
+    /// <p><p/></p>
+    InternalServer(String),
+    /// <p><p/></p>
+    ResourceNotFound(String),
+    /// <p><p/></p>
+    Throttling(String),
+}
+
+impl DescribeQuerySuggestionsBlockListError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeQuerySuggestionsBlockListError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        DescribeQuerySuggestionsBlockListError::AccessDenied(err.msg),
+                    )
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(
+                        DescribeQuerySuggestionsBlockListError::InternalServer(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeQuerySuggestionsBlockListError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(
+                        DescribeQuerySuggestionsBlockListError::Throttling(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeQuerySuggestionsBlockListError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeQuerySuggestionsBlockListError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeQuerySuggestionsBlockListError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeQuerySuggestionsBlockListError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeQuerySuggestionsBlockListError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeQuerySuggestionsBlockListError {}
+/// Errors returned by DescribeQuerySuggestionsConfig
+#[derive(Debug, PartialEq)]
+pub enum DescribeQuerySuggestionsConfigError {
+    /// <p><p/></p>
+    AccessDenied(String),
+    /// <p><p/></p>
+    InternalServer(String),
+    /// <p><p/></p>
+    ResourceNotFound(String),
+    /// <p><p/></p>
+    Throttling(String),
+}
+
+impl DescribeQuerySuggestionsConfigError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeQuerySuggestionsConfigError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DescribeQuerySuggestionsConfigError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(
+                        DescribeQuerySuggestionsConfigError::InternalServer(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeQuerySuggestionsConfigError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeQuerySuggestionsConfigError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeQuerySuggestionsConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeQuerySuggestionsConfigError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeQuerySuggestionsConfigError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeQuerySuggestionsConfigError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeQuerySuggestionsConfigError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeQuerySuggestionsConfigError {}
 /// Errors returned by DescribeThesaurus
 #[derive(Debug, PartialEq)]
 pub enum DescribeThesaurusError {
@@ -3232,6 +4206,70 @@ impl fmt::Display for DescribeThesaurusError {
     }
 }
 impl Error for DescribeThesaurusError {}
+/// Errors returned by GetQuerySuggestions
+#[derive(Debug, PartialEq)]
+pub enum GetQuerySuggestionsError {
+    /// <p><p/></p>
+    AccessDenied(String),
+    /// <p><p/></p>
+    Conflict(String),
+    /// <p><p/></p>
+    InternalServer(String),
+    /// <p><p/></p>
+    ResourceNotFound(String),
+    /// <p><p/></p>
+    ServiceQuotaExceeded(String),
+    /// <p><p/></p>
+    Throttling(String),
+}
+
+impl GetQuerySuggestionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetQuerySuggestionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(GetQuerySuggestionsError::AccessDenied(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(GetQuerySuggestionsError::Conflict(err.msg))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(GetQuerySuggestionsError::InternalServer(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetQuerySuggestionsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(GetQuerySuggestionsError::ServiceQuotaExceeded(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(GetQuerySuggestionsError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetQuerySuggestionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetQuerySuggestionsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetQuerySuggestionsError::Conflict(ref cause) => write!(f, "{}", cause),
+            GetQuerySuggestionsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            GetQuerySuggestionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetQuerySuggestionsError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
+            GetQuerySuggestionsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetQuerySuggestionsError {}
 /// Errors returned by ListDataSourceSyncJobs
 #[derive(Debug, PartialEq)]
 pub enum ListDataSourceSyncJobsError {
@@ -3428,6 +4466,68 @@ impl fmt::Display for ListIndicesError {
     }
 }
 impl Error for ListIndicesError {}
+/// Errors returned by ListQuerySuggestionsBlockLists
+#[derive(Debug, PartialEq)]
+pub enum ListQuerySuggestionsBlockListsError {
+    /// <p><p/></p>
+    AccessDenied(String),
+    /// <p><p/></p>
+    InternalServer(String),
+    /// <p><p/></p>
+    ResourceNotFound(String),
+    /// <p><p/></p>
+    Throttling(String),
+}
+
+impl ListQuerySuggestionsBlockListsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListQuerySuggestionsBlockListsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ListQuerySuggestionsBlockListsError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(
+                        ListQuerySuggestionsBlockListsError::InternalServer(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        ListQuerySuggestionsBlockListsError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListQuerySuggestionsBlockListsError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListQuerySuggestionsBlockListsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListQuerySuggestionsBlockListsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListQuerySuggestionsBlockListsError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListQuerySuggestionsBlockListsError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListQuerySuggestionsBlockListsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListQuerySuggestionsBlockListsError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -3966,6 +5066,144 @@ impl fmt::Display for UpdateIndexError {
     }
 }
 impl Error for UpdateIndexError {}
+/// Errors returned by UpdateQuerySuggestionsBlockList
+#[derive(Debug, PartialEq)]
+pub enum UpdateQuerySuggestionsBlockListError {
+    /// <p><p/></p>
+    AccessDenied(String),
+    /// <p><p/></p>
+    Conflict(String),
+    /// <p><p/></p>
+    InternalServer(String),
+    /// <p><p/></p>
+    ResourceNotFound(String),
+    /// <p><p/></p>
+    Throttling(String),
+}
+
+impl UpdateQuerySuggestionsBlockListError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateQuerySuggestionsBlockListError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        UpdateQuerySuggestionsBlockListError::AccessDenied(err.msg),
+                    )
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateQuerySuggestionsBlockListError::Conflict(
+                        err.msg,
+                    ))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(
+                        UpdateQuerySuggestionsBlockListError::InternalServer(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        UpdateQuerySuggestionsBlockListError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateQuerySuggestionsBlockListError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateQuerySuggestionsBlockListError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateQuerySuggestionsBlockListError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateQuerySuggestionsBlockListError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateQuerySuggestionsBlockListError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateQuerySuggestionsBlockListError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateQuerySuggestionsBlockListError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateQuerySuggestionsBlockListError {}
+/// Errors returned by UpdateQuerySuggestionsConfig
+#[derive(Debug, PartialEq)]
+pub enum UpdateQuerySuggestionsConfigError {
+    /// <p><p/></p>
+    AccessDenied(String),
+    /// <p><p/></p>
+    Conflict(String),
+    /// <p><p/></p>
+    InternalServer(String),
+    /// <p><p/></p>
+    ResourceNotFound(String),
+    /// <p><p/></p>
+    Throttling(String),
+}
+
+impl UpdateQuerySuggestionsConfigError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateQuerySuggestionsConfigError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UpdateQuerySuggestionsConfigError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateQuerySuggestionsConfigError::Conflict(
+                        err.msg,
+                    ))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(UpdateQuerySuggestionsConfigError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        UpdateQuerySuggestionsConfigError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateQuerySuggestionsConfigError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateQuerySuggestionsConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateQuerySuggestionsConfigError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateQuerySuggestionsConfigError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateQuerySuggestionsConfigError::InternalServer(ref cause) => write!(f, "{}", cause),
+            UpdateQuerySuggestionsConfigError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateQuerySuggestionsConfigError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateQuerySuggestionsConfigError {}
 /// Errors returned by UpdateThesaurus
 #[derive(Debug, PartialEq)]
 pub enum UpdateThesaurusError {
@@ -4023,17 +5261,29 @@ impl Error for UpdateThesaurusError {}
 /// Trait representing the capabilities of the kendra API. kendra clients implement this trait.
 #[async_trait]
 pub trait Kendra {
-    /// <p>Removes one or more documents from an index. The documents must have been added with the <a>BatchPutDocument</a> operation.</p> <p>The documents are deleted asynchronously. You can see the progress of the deletion by using AWS CloudWatch. Any error messages releated to the processing of the batch are sent to you CloudWatch log.</p>
+    /// <p>Removes one or more documents from an index. The documents must have been added with the <code>BatchPutDocument</code> operation.</p> <p>The documents are deleted asynchronously. You can see the progress of the deletion by using AWS CloudWatch. Any error messages related to the processing of the batch are sent to you CloudWatch log.</p>
     async fn batch_delete_document(
         &self,
         input: BatchDeleteDocumentRequest,
     ) -> Result<BatchDeleteDocumentResponse, RusotoError<BatchDeleteDocumentError>>;
+
+    /// <p>Returns the indexing status for one or more documents submitted with the <a href="https://docs.aws.amazon.com/kendra/latest/dg/API_BatchPutDocument.html"> BatchPutDocument</a> operation.</p> <p>When you use the <code>BatchPutDocument</code> operation, documents are indexed asynchronously. You can use the <code>BatchGetDocumentStatus</code> operation to get the current status of a list of documents so that you can determine if they have been successfully indexed.</p> <p>You can also use the <code>BatchGetDocumentStatus</code> operation to check the status of the <a href="https://docs.aws.amazon.com/kendra/latest/dg/API_BatchDeleteDocument.html"> BatchDeleteDocument</a> operation. When a document is deleted from the index, Amazon Kendra returns <code>NOT_FOUND</code> as the status.</p>
+    async fn batch_get_document_status(
+        &self,
+        input: BatchGetDocumentStatusRequest,
+    ) -> Result<BatchGetDocumentStatusResponse, RusotoError<BatchGetDocumentStatusError>>;
 
     /// <p>Adds one or more documents to an index.</p> <p>The <code>BatchPutDocument</code> operation enables you to ingest inline documents or a set of documents stored in an Amazon S3 bucket. Use this operation to ingest your text and unstructured text into an index, add custom attributes to the documents, and to attach an access control list to the documents added to the index.</p> <p>The documents are indexed asynchronously. You can see the progress of the batch using AWS CloudWatch. Any error messages related to processing the batch are sent to your AWS CloudWatch log.</p>
     async fn batch_put_document(
         &self,
         input: BatchPutDocumentRequest,
     ) -> Result<BatchPutDocumentResponse, RusotoError<BatchPutDocumentError>>;
+
+    /// <p>Clears existing query suggestions from an index.</p> <p>This deletes existing suggestions only, not the queries in the query log. After you clear suggestions, Amazon Kendra learns new suggestions based on new queries added to the query log from the time you cleared suggestions. If you do not see any new suggestions, then please allow Amazon Kendra to collect enough queries to learn new suggestions.</p>
+    async fn clear_query_suggestions(
+        &self,
+        input: ClearQuerySuggestionsRequest,
+    ) -> Result<(), RusotoError<ClearQuerySuggestionsError>>;
 
     /// <p>Creates a data source that you use to with an Amazon Kendra index. </p> <p>You specify a name, data source connector type and description for your data source. You also specify configuration information such as document metadata (author, source URI, and so on) and user context information.</p> <p> <code>CreateDataSource</code> is a synchronous operation. The operation returns 200 if the data source was successfully created. Otherwise, an exception is raised.</p>
     async fn create_data_source(
@@ -4047,11 +5297,20 @@ pub trait Kendra {
         input: CreateFaqRequest,
     ) -> Result<CreateFaqResponse, RusotoError<CreateFaqError>>;
 
-    /// <p>Creates a new Amazon Kendra index. Index creation is an asynchronous operation. To determine if index creation has completed, check the <code>Status</code> field returned from a call to . The <code>Status</code> field is set to <code>ACTIVE</code> when the index is ready to use.</p> <p>Once the index is active you can index your documents using the operation or using one of the supported data sources. </p>
+    /// <p>Creates a new Amazon Kendra index. Index creation is an asynchronous operation. To determine if index creation has completed, check the <code>Status</code> field returned from a call to <code>DescribeIndex</code>. The <code>Status</code> field is set to <code>ACTIVE</code> when the index is ready to use.</p> <p>Once the index is active you can index your documents using the <code>BatchPutDocument</code> operation or using one of the supported data sources. </p>
     async fn create_index(
         &self,
         input: CreateIndexRequest,
     ) -> Result<CreateIndexResponse, RusotoError<CreateIndexError>>;
+
+    /// <p>Creates a block list to exlcude certain queries from suggestions.</p> <p>Any query that contains words or phrases specified in the block list is blocked or filtered out from being shown as a suggestion.</p> <p>You need to provide the file location of your block list text file in your S3 bucket. In your text file, enter each block word or phrase on a separate line.</p> <p>For information on the current quota limits for block lists, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/quotas.html">Quotas for Amazon Kendra</a>.</p>
+    async fn create_query_suggestions_block_list(
+        &self,
+        input: CreateQuerySuggestionsBlockListRequest,
+    ) -> Result<
+        CreateQuerySuggestionsBlockListResponse,
+        RusotoError<CreateQuerySuggestionsBlockListError>,
+    >;
 
     /// <p>Creates a thesaurus for an index. The thesaurus contains a list of synonyms in Solr format.</p>
     async fn create_thesaurus(
@@ -4059,7 +5318,7 @@ pub trait Kendra {
         input: CreateThesaurusRequest,
     ) -> Result<CreateThesaurusResponse, RusotoError<CreateThesaurusError>>;
 
-    /// <p>Deletes an Amazon Kendra data source. An exception is not thrown if the data source is already being deleted. While the data source is being deleted, the <code>Status</code> field returned by a call to the operation is set to <code>DELETING</code>. For more information, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/delete-data-source.html">Deleting Data Sources</a>.</p>
+    /// <p>Deletes an Amazon Kendra data source. An exception is not thrown if the data source is already being deleted. While the data source is being deleted, the <code>Status</code> field returned by a call to the <code>DescribeDataSource</code> operation is set to <code>DELETING</code>. For more information, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/delete-data-source.html">Deleting Data Sources</a>.</p>
     async fn delete_data_source(
         &self,
         input: DeleteDataSourceRequest,
@@ -4068,11 +5327,17 @@ pub trait Kendra {
     /// <p>Removes an FAQ from an index.</p>
     async fn delete_faq(&self, input: DeleteFaqRequest) -> Result<(), RusotoError<DeleteFaqError>>;
 
-    /// <p>Deletes an existing Amazon Kendra index. An exception is not thrown if the index is already being deleted. While the index is being deleted, the <code>Status</code> field returned by a call to the <a>DescribeIndex</a> operation is set to <code>DELETING</code>.</p>
+    /// <p>Deletes an existing Amazon Kendra index. An exception is not thrown if the index is already being deleted. While the index is being deleted, the <code>Status</code> field returned by a call to the <code>DescribeIndex</code> operation is set to <code>DELETING</code>.</p>
     async fn delete_index(
         &self,
         input: DeleteIndexRequest,
     ) -> Result<(), RusotoError<DeleteIndexError>>;
+
+    /// <p>Deletes a block list used for query suggestions for an index.</p> <p>A deleted block list might not take effect right away. Amazon Kendra needs to refresh the entire suggestions list to add back the queries that were previously blocked.</p>
+    async fn delete_query_suggestions_block_list(
+        &self,
+        input: DeleteQuerySuggestionsBlockListRequest,
+    ) -> Result<(), RusotoError<DeleteQuerySuggestionsBlockListError>>;
 
     /// <p>Deletes an existing Amazon Kendra thesaurus. </p>
     async fn delete_thesaurus(
@@ -4098,11 +5363,35 @@ pub trait Kendra {
         input: DescribeIndexRequest,
     ) -> Result<DescribeIndexResponse, RusotoError<DescribeIndexError>>;
 
+    /// <p>Describes a block list used for query suggestions for an index.</p> <p>This is used to check the current settings that are applied to a block list.</p>
+    async fn describe_query_suggestions_block_list(
+        &self,
+        input: DescribeQuerySuggestionsBlockListRequest,
+    ) -> Result<
+        DescribeQuerySuggestionsBlockListResponse,
+        RusotoError<DescribeQuerySuggestionsBlockListError>,
+    >;
+
+    /// <p>Describes the settings of query suggestions for an index.</p> <p>This is used to check the current settings applied to query suggestions.</p>
+    async fn describe_query_suggestions_config(
+        &self,
+        input: DescribeQuerySuggestionsConfigRequest,
+    ) -> Result<
+        DescribeQuerySuggestionsConfigResponse,
+        RusotoError<DescribeQuerySuggestionsConfigError>,
+    >;
+
     /// <p>Describes an existing Amazon Kendra thesaurus.</p>
     async fn describe_thesaurus(
         &self,
         input: DescribeThesaurusRequest,
     ) -> Result<DescribeThesaurusResponse, RusotoError<DescribeThesaurusError>>;
+
+    /// <p>Fetches the queries that are suggested to your users.</p>
+    async fn get_query_suggestions(
+        &self,
+        input: GetQuerySuggestionsRequest,
+    ) -> Result<GetQuerySuggestionsResponse, RusotoError<GetQuerySuggestionsError>>;
 
     /// <p>Gets statistics about synchronizing Amazon Kendra with a data source.</p>
     async fn list_data_source_sync_jobs(
@@ -4127,6 +5416,15 @@ pub trait Kendra {
         &self,
         input: ListIndicesRequest,
     ) -> Result<ListIndicesResponse, RusotoError<ListIndicesError>>;
+
+    /// <p>Lists the block lists used for query suggestions for an index.</p> <p>For information on the current quota limits for block lists, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/quotas.html">Quotas for Amazon Kendra</a>.</p>
+    async fn list_query_suggestions_block_lists(
+        &self,
+        input: ListQuerySuggestionsBlockListsRequest,
+    ) -> Result<
+        ListQuerySuggestionsBlockListsResponse,
+        RusotoError<ListQuerySuggestionsBlockListsError>,
+    >;
 
     /// <p>Gets a list of tags associated with a specified resource. Indexes, FAQs, and data sources can have tags associated with them.</p>
     async fn list_tags_for_resource(
@@ -4185,6 +5483,18 @@ pub trait Kendra {
         input: UpdateIndexRequest,
     ) -> Result<(), RusotoError<UpdateIndexError>>;
 
+    /// <p>Updates a block list used for query suggestions for an index.</p> <p>Updates to a block list might not take effect right away. Amazon Kendra needs to refresh the entire suggestions list to apply any updates to the block list. Other changes not related to the block list apply immediately.</p> <p>If a block list is updating, then you need to wait for the first update to finish before submitting another update.</p> <p>Amazon Kendra supports partial updates, so you only need to provide the fields you want to update.</p>
+    async fn update_query_suggestions_block_list(
+        &self,
+        input: UpdateQuerySuggestionsBlockListRequest,
+    ) -> Result<(), RusotoError<UpdateQuerySuggestionsBlockListError>>;
+
+    /// <p>Updates the settings of query suggestions for an index.</p> <p>Amazon Kendra supports partial updates, so you only need to provide the fields you want to update.</p> <p>If an update is currently processing (i.e. 'happening'), you need to wait for the update to finish before making another update.</p> <p>Updates to query suggestions settings might not take effect right away. The time for your updated settings to take effect depends on the updates made and the number of search queries in your index.</p> <p>You can still enable/disable query suggestions at any time.</p>
+    async fn update_query_suggestions_config(
+        &self,
+        input: UpdateQuerySuggestionsConfigRequest,
+    ) -> Result<(), RusotoError<UpdateQuerySuggestionsConfigError>>;
+
     /// <p>Updates a thesaurus file associated with an index.</p>
     async fn update_thesaurus(
         &self,
@@ -4231,7 +5541,7 @@ impl KendraClient {
 
 #[async_trait]
 impl Kendra for KendraClient {
-    /// <p>Removes one or more documents from an index. The documents must have been added with the <a>BatchPutDocument</a> operation.</p> <p>The documents are deleted asynchronously. You can see the progress of the deletion by using AWS CloudWatch. Any error messages releated to the processing of the batch are sent to you CloudWatch log.</p>
+    /// <p>Removes one or more documents from an index. The documents must have been added with the <code>BatchPutDocument</code> operation.</p> <p>The documents are deleted asynchronously. You can see the progress of the deletion by using AWS CloudWatch. Any error messages related to the processing of the batch are sent to you CloudWatch log.</p>
     async fn batch_delete_document(
         &self,
         input: BatchDeleteDocumentRequest,
@@ -4252,6 +5562,28 @@ impl Kendra for KendraClient {
         proto::json::ResponsePayload::new(&response).deserialize::<BatchDeleteDocumentResponse, _>()
     }
 
+    /// <p>Returns the indexing status for one or more documents submitted with the <a href="https://docs.aws.amazon.com/kendra/latest/dg/API_BatchPutDocument.html"> BatchPutDocument</a> operation.</p> <p>When you use the <code>BatchPutDocument</code> operation, documents are indexed asynchronously. You can use the <code>BatchGetDocumentStatus</code> operation to get the current status of a list of documents so that you can determine if they have been successfully indexed.</p> <p>You can also use the <code>BatchGetDocumentStatus</code> operation to check the status of the <a href="https://docs.aws.amazon.com/kendra/latest/dg/API_BatchDeleteDocument.html"> BatchDeleteDocument</a> operation. When a document is deleted from the index, Amazon Kendra returns <code>NOT_FOUND</code> as the status.</p>
+    async fn batch_get_document_status(
+        &self,
+        input: BatchGetDocumentStatusRequest,
+    ) -> Result<BatchGetDocumentStatusResponse, RusotoError<BatchGetDocumentStatusError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSKendraFrontendService.BatchGetDocumentStatus",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, BatchGetDocumentStatusError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<BatchGetDocumentStatusResponse, _>()
+    }
+
     /// <p>Adds one or more documents to an index.</p> <p>The <code>BatchPutDocument</code> operation enables you to ingest inline documents or a set of documents stored in an Amazon S3 bucket. Use this operation to ingest your text and unstructured text into an index, add custom attributes to the documents, and to attach an access control list to the documents added to the index.</p> <p>The documents are indexed asynchronously. You can see the progress of the batch using AWS CloudWatch. Any error messages related to processing the batch are sent to your AWS CloudWatch log.</p>
     async fn batch_put_document(
         &self,
@@ -4268,6 +5600,26 @@ impl Kendra for KendraClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<BatchPutDocumentResponse, _>()
+    }
+
+    /// <p>Clears existing query suggestions from an index.</p> <p>This deletes existing suggestions only, not the queries in the query log. After you clear suggestions, Amazon Kendra learns new suggestions based on new queries added to the query log from the time you cleared suggestions. If you do not see any new suggestions, then please allow Amazon Kendra to collect enough queries to learn new suggestions.</p>
+    async fn clear_query_suggestions(
+        &self,
+        input: ClearQuerySuggestionsRequest,
+    ) -> Result<(), RusotoError<ClearQuerySuggestionsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSKendraFrontendService.ClearQuerySuggestions",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ClearQuerySuggestionsError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Creates a data source that you use to with an Amazon Kendra index. </p> <p>You specify a name, data source connector type and description for your data source. You also specify configuration information such as document metadata (author, source URI, and so on) and user context information.</p> <p> <code>CreateDataSource</code> is a synchronous operation. The operation returns 200 if the data source was successfully created. Otherwise, an exception is raised.</p>
@@ -4306,7 +5658,7 @@ impl Kendra for KendraClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateFaqResponse, _>()
     }
 
-    /// <p>Creates a new Amazon Kendra index. Index creation is an asynchronous operation. To determine if index creation has completed, check the <code>Status</code> field returned from a call to . The <code>Status</code> field is set to <code>ACTIVE</code> when the index is ready to use.</p> <p>Once the index is active you can index your documents using the operation or using one of the supported data sources. </p>
+    /// <p>Creates a new Amazon Kendra index. Index creation is an asynchronous operation. To determine if index creation has completed, check the <code>Status</code> field returned from a call to <code>DescribeIndex</code>. The <code>Status</code> field is set to <code>ACTIVE</code> when the index is ready to use.</p> <p>Once the index is active you can index your documents using the <code>BatchPutDocument</code> operation or using one of the supported data sources. </p>
     async fn create_index(
         &self,
         input: CreateIndexRequest,
@@ -4322,6 +5674,31 @@ impl Kendra for KendraClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateIndexResponse, _>()
+    }
+
+    /// <p>Creates a block list to exlcude certain queries from suggestions.</p> <p>Any query that contains words or phrases specified in the block list is blocked or filtered out from being shown as a suggestion.</p> <p>You need to provide the file location of your block list text file in your S3 bucket. In your text file, enter each block word or phrase on a separate line.</p> <p>For information on the current quota limits for block lists, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/quotas.html">Quotas for Amazon Kendra</a>.</p>
+    async fn create_query_suggestions_block_list(
+        &self,
+        input: CreateQuerySuggestionsBlockListRequest,
+    ) -> Result<
+        CreateQuerySuggestionsBlockListResponse,
+        RusotoError<CreateQuerySuggestionsBlockListError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSKendraFrontendService.CreateQuerySuggestionsBlockList",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateQuerySuggestionsBlockListError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateQuerySuggestionsBlockListResponse, _>()
     }
 
     /// <p>Creates a thesaurus for an index. The thesaurus contains a list of synonyms in Solr format.</p>
@@ -4342,7 +5719,7 @@ impl Kendra for KendraClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateThesaurusResponse, _>()
     }
 
-    /// <p>Deletes an Amazon Kendra data source. An exception is not thrown if the data source is already being deleted. While the data source is being deleted, the <code>Status</code> field returned by a call to the operation is set to <code>DELETING</code>. For more information, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/delete-data-source.html">Deleting Data Sources</a>.</p>
+    /// <p>Deletes an Amazon Kendra data source. An exception is not thrown if the data source is already being deleted. While the data source is being deleted, the <code>Status</code> field returned by a call to the <code>DescribeDataSource</code> operation is set to <code>DELETING</code>. For more information, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/delete-data-source.html">Deleting Data Sources</a>.</p>
     async fn delete_data_source(
         &self,
         input: DeleteDataSourceRequest,
@@ -4373,7 +5750,7 @@ impl Kendra for KendraClient {
         Ok(())
     }
 
-    /// <p>Deletes an existing Amazon Kendra index. An exception is not thrown if the index is already being deleted. While the index is being deleted, the <code>Status</code> field returned by a call to the <a>DescribeIndex</a> operation is set to <code>DELETING</code>.</p>
+    /// <p>Deletes an existing Amazon Kendra index. An exception is not thrown if the index is already being deleted. While the index is being deleted, the <code>Status</code> field returned by a call to the <code>DescribeIndex</code> operation is set to <code>DELETING</code>.</p>
     async fn delete_index(
         &self,
         input: DeleteIndexRequest,
@@ -4385,6 +5762,26 @@ impl Kendra for KendraClient {
 
         let response = self
             .sign_and_dispatch(request, DeleteIndexError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p>Deletes a block list used for query suggestions for an index.</p> <p>A deleted block list might not take effect right away. Amazon Kendra needs to refresh the entire suggestions list to add back the queries that were previously blocked.</p>
+    async fn delete_query_suggestions_block_list(
+        &self,
+        input: DeleteQuerySuggestionsBlockListRequest,
+    ) -> Result<(), RusotoError<DeleteQuerySuggestionsBlockListError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSKendraFrontendService.DeleteQuerySuggestionsBlockList",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteQuerySuggestionsBlockListError::from_response)
             .await?;
         std::mem::drop(response);
         Ok(())
@@ -4464,6 +5861,59 @@ impl Kendra for KendraClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeIndexResponse, _>()
     }
 
+    /// <p>Describes a block list used for query suggestions for an index.</p> <p>This is used to check the current settings that are applied to a block list.</p>
+    async fn describe_query_suggestions_block_list(
+        &self,
+        input: DescribeQuerySuggestionsBlockListRequest,
+    ) -> Result<
+        DescribeQuerySuggestionsBlockListResponse,
+        RusotoError<DescribeQuerySuggestionsBlockListError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSKendraFrontendService.DescribeQuerySuggestionsBlockList",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeQuerySuggestionsBlockListError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeQuerySuggestionsBlockListResponse, _>()
+    }
+
+    /// <p>Describes the settings of query suggestions for an index.</p> <p>This is used to check the current settings applied to query suggestions.</p>
+    async fn describe_query_suggestions_config(
+        &self,
+        input: DescribeQuerySuggestionsConfigRequest,
+    ) -> Result<
+        DescribeQuerySuggestionsConfigResponse,
+        RusotoError<DescribeQuerySuggestionsConfigError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSKendraFrontendService.DescribeQuerySuggestionsConfig",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeQuerySuggestionsConfigError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeQuerySuggestionsConfigResponse, _>()
+    }
+
     /// <p>Describes an existing Amazon Kendra thesaurus.</p>
     async fn describe_thesaurus(
         &self,
@@ -4480,6 +5930,27 @@ impl Kendra for KendraClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeThesaurusResponse, _>()
+    }
+
+    /// <p>Fetches the queries that are suggested to your users.</p>
+    async fn get_query_suggestions(
+        &self,
+        input: GetQuerySuggestionsRequest,
+    ) -> Result<GetQuerySuggestionsResponse, RusotoError<GetQuerySuggestionsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSKendraFrontendService.GetQuerySuggestions",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetQuerySuggestionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetQuerySuggestionsResponse, _>()
     }
 
     /// <p>Gets statistics about synchronizing Amazon Kendra with a data source.</p>
@@ -4556,6 +6027,31 @@ impl Kendra for KendraClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListIndicesResponse, _>()
+    }
+
+    /// <p>Lists the block lists used for query suggestions for an index.</p> <p>For information on the current quota limits for block lists, see <a href="https://docs.aws.amazon.com/kendra/latest/dg/quotas.html">Quotas for Amazon Kendra</a>.</p>
+    async fn list_query_suggestions_block_lists(
+        &self,
+        input: ListQuerySuggestionsBlockListsRequest,
+    ) -> Result<
+        ListQuerySuggestionsBlockListsResponse,
+        RusotoError<ListQuerySuggestionsBlockListsError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSKendraFrontendService.ListQuerySuggestionsBlockLists",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListQuerySuggestionsBlockListsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListQuerySuggestionsBlockListsResponse, _>()
     }
 
     /// <p>Gets a list of tags associated with a specified resource. Indexes, FAQs, and data sources can have tags associated with them.</p>
@@ -4736,6 +6232,46 @@ impl Kendra for KendraClient {
 
         let response = self
             .sign_and_dispatch(request, UpdateIndexError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p>Updates a block list used for query suggestions for an index.</p> <p>Updates to a block list might not take effect right away. Amazon Kendra needs to refresh the entire suggestions list to apply any updates to the block list. Other changes not related to the block list apply immediately.</p> <p>If a block list is updating, then you need to wait for the first update to finish before submitting another update.</p> <p>Amazon Kendra supports partial updates, so you only need to provide the fields you want to update.</p>
+    async fn update_query_suggestions_block_list(
+        &self,
+        input: UpdateQuerySuggestionsBlockListRequest,
+    ) -> Result<(), RusotoError<UpdateQuerySuggestionsBlockListError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSKendraFrontendService.UpdateQuerySuggestionsBlockList",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateQuerySuggestionsBlockListError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
+    /// <p>Updates the settings of query suggestions for an index.</p> <p>Amazon Kendra supports partial updates, so you only need to provide the fields you want to update.</p> <p>If an update is currently processing (i.e. 'happening'), you need to wait for the update to finish before making another update.</p> <p>Updates to query suggestions settings might not take effect right away. The time for your updated settings to take effect depends on the updates made and the number of search queries in your index.</p> <p>You can still enable/disable query suggestions at any time.</p>
+    async fn update_query_suggestions_config(
+        &self,
+        input: UpdateQuerySuggestionsConfigRequest,
+    ) -> Result<(), RusotoError<UpdateQuerySuggestionsConfigError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSKendraFrontendService.UpdateQuerySuggestionsConfig",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateQuerySuggestionsConfigError::from_response)
             .await?;
         std::mem::drop(response);
         Ok(())

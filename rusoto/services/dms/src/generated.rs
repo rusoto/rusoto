@@ -843,6 +843,35 @@ pub struct DescribeConnectionsResponse {
     pub marker: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeEndpointSettingsMessage {
+    /// <p>The databse engine used for your source or target endpoint.</p>
+    #[serde(rename = "EngineName")]
+    pub engine_name: String,
+    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that the remaining results can be retrieved.</p>
+    #[serde(rename = "MaxRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_records: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeEndpointSettingsResponse {
+    /// <p>Descriptions of the endpoint settings available for your source or target database engine.</p>
+    #[serde(rename = "EndpointSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub endpoint_settings: Option<Vec<EndpointSetting>>,
+    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+}
+
 /// <p><p/></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1635,6 +1664,44 @@ pub struct Endpoint {
     pub username: Option<String>,
 }
 
+/// <p>Endpoint settings.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct EndpointSetting {
+    /// <p>The relevance or validity of an endpoint setting for an engine name and its endpoint type.</p>
+    #[serde(rename = "Applicability")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub applicability: Option<String>,
+    /// <p>Enumerated values to use for this endpoint.</p>
+    #[serde(rename = "EnumValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enum_values: Option<Vec<String>>,
+    /// <p>The maximum value of an endpoint setting that is of type <code>int</code>.</p>
+    #[serde(rename = "IntValueMax")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub int_value_max: Option<i64>,
+    /// <p>The minimum value of an endpoint setting that is of type <code>int</code>.</p>
+    #[serde(rename = "IntValueMin")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub int_value_min: Option<i64>,
+    /// <p>The name that you want to give the endpoint settings.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A value that marks this endpoint setting as sensitive.</p>
+    #[serde(rename = "Sensitive")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sensitive: Option<bool>,
+    /// <p>The type of endpoint. Valid values are <code>source</code> and <code>target</code>.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+    /// <p>The unit of measure for this endpoint setting.</p>
+    #[serde(rename = "Units")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub units: Option<String>,
+}
+
 /// <p>Describes an identifiable significant activity that affects a replication instance or task. This object can provide the message, the available event categories, the date and source of the event, and the AWS DMS resource type.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1811,7 +1878,7 @@ pub struct ImportCertificateResponse {
 /// <p>Provides information that describes an Apache Kafka endpoint. This information includes the output format of records applied to the endpoint and details of transaction and control table data information.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct KafkaSettings {
-    /// <p>The broker location and port of the Kafka broker that hosts your Kafka instance. Specify the broker in the form <code> <i>broker-hostname-or-ip</i>:<i>port</i> </code>. For example, <code>"ec2-12-345-678-901.compute-1.amazonaws.com:2345"</code>.</p>
+    /// <p>A comma-separated list of one or more broker locations in your Kafka cluster that host your Kafka instance. Specify each broker location in the form <code> <i>broker-hostname-or-ip</i>:<i>port</i> </code>. For example, <code>"ec2-12-345-678-901.compute-1.amazonaws.com:2345"</code>. For more information and examples of specifying a list of broker locations, see <a href="https://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kafka.html">Using Apache Kafka as a target for AWS Database Migration Service</a> in the <i>AWS Data Migration Service User Guide</i>. </p>
     #[serde(rename = "Broker")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub broker: Option<String>,
@@ -1847,6 +1914,34 @@ pub struct KafkaSettings {
     #[serde(rename = "PartitionIncludeSchemaTable")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub partition_include_schema_table: Option<bool>,
+    /// <p>The secure password you created when you first set up your MSK cluster to validate a client identity and make an encrypted connection between server and client using SASL-SSL authentication.</p>
+    #[serde(rename = "SaslPassword")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sasl_password: Option<String>,
+    /// <p> The secure username you created when you first set up your MSK cluster to validate a client identity and make an encrypted connection between server and client using SASL-SSL authentication.</p>
+    #[serde(rename = "SaslUsername")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sasl_username: Option<String>,
+    /// <p>Set secure connection to a Kafka target endpoint using Transport Layer Security (TLS). Options include <code>ssl-encryption</code>, <code>ssl-authentication</code>, and <code>sasl-ssl</code>. <code>sasl-ssl</code> requires <code>SaslUsername</code> and <code>SaslPassword</code>.</p>
+    #[serde(rename = "SecurityProtocol")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_protocol: Option<String>,
+    /// <p> The Amazon Resource Name (ARN) for the private Certification Authority (CA) cert that AWS DMS uses to securely connect to your Kafka target endpoint.</p>
+    #[serde(rename = "SslCaCertificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ssl_ca_certificate_arn: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the client certificate used to securely connect to a Kafka target endpoint.</p>
+    #[serde(rename = "SslClientCertificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ssl_client_certificate_arn: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) for the client private key used to securely connect to a Kafka target endpoint.</p>
+    #[serde(rename = "SslClientKeyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ssl_client_key_arn: Option<String>,
+    /// <p> The password for the client private key used to securely connect to a Kafka target endpoint.</p>
+    #[serde(rename = "SslClientKeyPassword")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ssl_client_key_password: Option<String>,
     /// <p>The topic to which you migrate the data. If you don't specify a topic, AWS DMS specifies <code>"kafka-default-topic"</code> as the migration topic.</p>
     #[serde(rename = "Topic")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1936,6 +2031,10 @@ pub struct MicrosoftSQLServerSettings {
     #[serde(rename = "Port")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<i64>,
+    /// <p>Cleans and recreates table metadata information on the replication instance when a mismatch occurs. An example is a situation where running an alter DDL statement on a table might result in different information about the table cached in the replication instance.</p>
+    #[serde(rename = "QuerySingleAlwaysOnNode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_single_always_on_node: Option<bool>,
     /// <p>When this attribute is set to <code>Y</code>, AWS DMS only reads changes from transaction log backups and doesn't read from the active transaction log file during ongoing replication. Setting this parameter to <code>Y</code> enables you to control active transaction log file growth during full load and ongoing replication tasks. However, it can add some source latency to ongoing replication.</p>
     #[serde(rename = "ReadBackupOnly")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1960,6 +2059,10 @@ pub struct MicrosoftSQLServerSettings {
     #[serde(rename = "UseBcpFullLoad")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub use_bcp_full_load: Option<bool>,
+    /// <p>When this attribute is set to <code>Y</code>, DMS processes third-party transaction log backups if they are created in native format.</p>
+    #[serde(rename = "UseThirdPartyBackupDevice")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub use_third_party_backup_device: Option<bool>,
     /// <p>Endpoint connection user name.</p>
     #[serde(rename = "Username")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2251,7 +2354,7 @@ pub struct ModifyReplicationTaskMessage {
     #[serde(rename = "ReplicationTaskSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task_settings: Option<String>,
-    /// <p>When using the AWS CLI or boto3, provide the path of the JSON file that contains the table mappings. Precede the path with <code>file://</code>. When working with the DMS API, provide the JSON as the parameter value, for example: <code>--table-mappings file://mappingfile.json</code> </p>
+    /// <p>When using the AWS CLI or boto3, provide the path of the JSON file that contains the table mappings. Precede the path with <code>file://</code>. For example, <code>--table-mappings file://mappingfile.json</code>. When working with the DMS API, provide the JSON as the parameter value. </p>
     #[serde(rename = "TableMappings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_mappings: Option<String>,
@@ -2361,6 +2464,10 @@ pub struct MySQLSettings {
     #[serde(rename = "AfterConnectScript")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub after_connect_script: Option<String>,
+    /// <p>Adjusts the behavior of DMS when migrating from an SQL Server source database that is hosted as part of an Always On availability group cluster. If you need DMS to poll all the nodes in the Always On cluster for transaction backups, set this attribute to <code>false</code>.</p>
+    #[serde(rename = "CleanSourceMetadataOnMismatch")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub clean_source_metadata_on_mismatch: Option<bool>,
     /// <p>Database name for the endpoint.</p>
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2545,6 +2652,14 @@ pub struct OracleSettings {
     #[serde(rename = "SecretsManagerAccessRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secrets_manager_access_role_arn: Option<String>,
+    /// <p><p>Required only if your Oracle endpoint uses Advanced Storage Manager (ASM). The full ARN of the IAM role that specifies AWS DMS as the trusted entity and grants the required permissions to access the <code>SecretsManagerOracleAsmSecret</code>. This <code>SecretsManagerOracleAsmSecret</code> has the secret value that allows access to the Oracle ASM of the endpoint.</p> <note> <p>You can specify one of two sets of values for these permissions. You can specify the values for this setting and <code>SecretsManagerOracleAsmSecretId</code>. Or you can specify clear-text values for <code>AsmUserName</code>, <code>AsmPassword</code>, and <code>AsmServerName</code>. You can&#39;t specify both. For more information on creating this <code>SecretsManagerOracleAsmSecret</code> and the <code>SecretsManagerOracleAsmAccessRoleArn</code> and <code>SecretsManagerOracleAsmSecretId</code> required to access it, see <a href="https://docs.aws.amazon.com/https:/docs.aws.amazon.com/dms/latest/userguide/CHAP_Security.html#security-iam-secretsmanager">Using secrets to access AWS Database Migration Service resources</a> in the <i>AWS Database Migration Service User Guide</i>.</p> </note></p>
+    #[serde(rename = "SecretsManagerOracleAsmAccessRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secrets_manager_oracle_asm_access_role_arn: Option<String>,
+    /// <p>Required only if your Oracle endpoint uses Advanced Storage Manager (ASM). The full ARN, partial ARN, or friendly name of the <code>SecretsManagerOracleAsmSecret</code> that contains the Oracle ASM connection details for the Oracle endpoint.</p>
+    #[serde(rename = "SecretsManagerOracleAsmSecretId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secrets_manager_oracle_asm_secret_id: Option<String>,
     /// <p>The full ARN, partial ARN, or friendly name of the <code>SecretsManagerSecret</code> that contains the Oracle endpoint connection details.</p>
     #[serde(rename = "SecretsManagerSecretId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2561,6 +2676,10 @@ pub struct OracleSettings {
     #[serde(rename = "ServerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_name: Option<String>,
+    /// <p>Use this attribute to convert <code>SDO_GEOMETRY</code> to <code>GEOJSON</code> format. By default, DMS calls the <code>SDO2GEOJSON</code> custom function if present and accessible. Or you can create your own custom function that mimics the operation of <code>SDOGEOJSON</code> and set <code>SpatialDataOptionToGeoJsonFunctionName</code> to call it instead. </p>
+    #[serde(rename = "SpatialDataOptionToGeoJsonFunctionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub spatial_data_option_to_geo_json_function_name: Option<String>,
     /// <p>Set this attribute to <code>true</code> in order to use the Binary Reader to capture change data for an Amazon RDS for Oracle as the source. This tells the DMS instance to use any specified prefix replacement to access all online redo logs.</p>
     #[serde(rename = "UseAlternateFolderForOnline")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3476,7 +3595,7 @@ pub struct S3Settings {
     #[serde(rename = "ServerSideEncryptionKmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_side_encryption_kms_key_id: Option<String>,
-    /// <p> The Amazon Resource Name (ARN) used by the service access IAM role. It is a required parameter that enables DMS to write and read objects from an 3S bucket.</p>
+    /// <p> The Amazon Resource Name (ARN) used by the service access IAM role. It is a required parameter that enables DMS to write and read objects from an S3 bucket.</p>
     #[serde(rename = "ServiceAccessRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_access_role_arn: Option<String>,
@@ -4932,6 +5051,28 @@ impl fmt::Display for DescribeConnectionsError {
     }
 }
 impl Error for DescribeConnectionsError {}
+/// Errors returned by DescribeEndpointSettings
+#[derive(Debug, PartialEq)]
+pub enum DescribeEndpointSettingsError {}
+
+impl DescribeEndpointSettingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEndpointSettingsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeEndpointSettingsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {}
+    }
+}
+impl Error for DescribeEndpointSettingsError {}
 /// Errors returned by DescribeEndpointTypes
 #[derive(Debug, PartialEq)]
 pub enum DescribeEndpointTypesError {}
@@ -6011,6 +6152,8 @@ pub enum MoveReplicationTaskError {
     AccessDeniedFault(String),
     /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
+    /// <p>AWS DMS cannot access the AWS KMS key.</p>
+    KMSKeyNotAccessibleFault(String),
     /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
 }
@@ -6027,6 +6170,11 @@ impl MoveReplicationTaskError {
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(
                         MoveReplicationTaskError::InvalidResourceStateFault(err.msg),
+                    )
+                }
+                "KMSKeyNotAccessibleFault" => {
+                    return RusotoError::Service(
+                        MoveReplicationTaskError::KMSKeyNotAccessibleFault(err.msg),
                     )
                 }
                 "ResourceNotFoundFault" => {
@@ -6049,6 +6197,7 @@ impl fmt::Display for MoveReplicationTaskError {
             MoveReplicationTaskError::InvalidResourceStateFault(ref cause) => {
                 write!(f, "{}", cause)
             }
+            MoveReplicationTaskError::KMSKeyNotAccessibleFault(ref cause) => write!(f, "{}", cause),
             MoveReplicationTaskError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -6509,6 +6658,8 @@ impl Error for StopReplicationTaskError {}
 /// Errors returned by TestConnection
 #[derive(Debug, PartialEq)]
 pub enum TestConnectionError {
+    /// <p>AWS DMS was denied access to the endpoint. Check that the role is correctly configured.</p>
+    AccessDeniedFault(String),
     /// <p>The resource is in a state that prevents it from being used for database migration.</p>
     InvalidResourceStateFault(String),
     /// <p>AWS DMS cannot access the AWS KMS key.</p>
@@ -6523,6 +6674,9 @@ impl TestConnectionError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TestConnectionError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "AccessDeniedFault" => {
+                    return RusotoError::Service(TestConnectionError::AccessDeniedFault(err.msg))
+                }
                 "InvalidResourceStateFault" => {
                     return RusotoError::Service(TestConnectionError::InvalidResourceStateFault(
                         err.msg,
@@ -6554,6 +6708,7 @@ impl fmt::Display for TestConnectionError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            TestConnectionError::AccessDeniedFault(ref cause) => write!(f, "{}", cause),
             TestConnectionError::InvalidResourceStateFault(ref cause) => write!(f, "{}", cause),
             TestConnectionError::KMSKeyNotAccessibleFault(ref cause) => write!(f, "{}", cause),
             TestConnectionError::ResourceNotFoundFault(ref cause) => write!(f, "{}", cause),
@@ -6695,6 +6850,12 @@ pub trait DatabaseMigrationService {
         &self,
         input: DescribeConnectionsMessage,
     ) -> Result<DescribeConnectionsResponse, RusotoError<DescribeConnectionsError>>;
+
+    /// <p>Returns information about the possible endpoint settings available when you create an endpoint for a specific database engine.</p>
+    async fn describe_endpoint_settings(
+        &self,
+        input: DescribeEndpointSettingsMessage,
+    ) -> Result<DescribeEndpointSettingsResponse, RusotoError<DescribeEndpointSettingsError>>;
 
     /// <p>Returns information about the type of endpoints available.</p>
     async fn describe_endpoint_types(
@@ -7393,6 +7554,28 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeConnectionsResponse, _>()
+    }
+
+    /// <p>Returns information about the possible endpoint settings available when you create an endpoint for a specific database engine.</p>
+    async fn describe_endpoint_settings(
+        &self,
+        input: DescribeEndpointSettingsMessage,
+    ) -> Result<DescribeEndpointSettingsResponse, RusotoError<DescribeEndpointSettingsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AmazonDMSv20160101.DescribeEndpointSettings",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeEndpointSettingsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeEndpointSettingsResponse, _>()
     }
 
     /// <p>Returns information about the type of endpoints available.</p>

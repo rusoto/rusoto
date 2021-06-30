@@ -196,6 +196,45 @@ pub struct AssignTapePoolOutput {
     pub tape_arn: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AssociateFileSystemInput {
+    /// <p>The Amazon Resource Name (ARN) of the storage used for the audit logs.</p>
+    #[serde(rename = "AuditDestinationARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audit_destination_arn: Option<String>,
+    #[serde(rename = "CacheAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_attributes: Option<CacheAttributes>,
+    /// <p>A unique string value that you supply that is used by the file gateway to ensure idempotent file system association creation.</p>
+    #[serde(rename = "ClientToken")]
+    pub client_token: String,
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
+    /// <p>The Amazon Resource Name (ARN) of the Amazon FSx file system to associate with the Amazon FSx file gateway.</p>
+    #[serde(rename = "LocationARN")]
+    pub location_arn: String,
+    /// <p>The password of the user credential.</p>
+    #[serde(rename = "Password")]
+    pub password: String,
+    /// <p>A list of up to 50 tags that can be assigned to the file system association. Each tag is a key-value pair.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>The user name of the user credential that has permission to access the root share D$ of the Amazon FSx file system. The user account must belong to the Amazon FSx delegated admin user group.</p>
+    #[serde(rename = "UserName")]
+    pub user_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AssociateFileSystemOutput {
+    /// <p>The ARN of the newly created file system association.</p>
+    #[serde(rename = "FileSystemAssociationARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_system_association_arn: Option<String>,
+}
+
 /// <p>AttachVolumeInput</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -278,7 +317,7 @@ pub struct BandwidthRateLimitInterval {
     #[serde(rename = "AverageUploadRateLimitInBitsPerSec")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub average_upload_rate_limit_in_bits_per_sec: Option<i64>,
-    /// <p> The days of the week component of the bandwidth rate limit interval, represented as ordinal numbers from 0 to 6, where 0 represents Sunday and 6 Saturday. </p>
+    /// <p> The days of the week component of the bandwidth rate limit interval, represented as ordinal numbers from 0 to 6, where 0 represents Sunday and 6 represents Saturday. </p>
     #[serde(rename = "DaysOfWeek")]
     pub days_of_week: Vec<i64>,
     /// <p> The hour of the day to end the bandwidth rate limit interval. </p>
@@ -295,10 +334,10 @@ pub struct BandwidthRateLimitInterval {
     pub start_minute_of_hour: i64,
 }
 
-/// <p>Lists refresh cache information.</p>
+/// <p>The refresh cache information for the file share.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CacheAttributes {
-    /// <p>Refreshes a file share's cache by using Time To Live (TTL). TTL is the length of time since the last refresh after which access to the directory would cause the file gateway to first refresh that directory's contents from the Amazon S3 bucket. The TTL duration is in seconds.</p> <p>Valid Values: 300 to 2,592,000 seconds (5 minutes to 30 days)</p>
+    /// <p>Refreshes a file share's cache by using Time To Live (TTL). TTL is the length of time since the last refresh after which access to the directory would cause the file gateway to first refresh that directory's contents from the Amazon S3 bucket or Amazon FSx file system. The TTL duration is in seconds.</p> <p>Valid Values: 300 to 2,592,000 seconds (5 minutes to 30 days)</p>
     #[serde(rename = "CacheStaleTimeoutInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_stale_timeout_in_seconds: Option<i64>,
@@ -481,7 +520,7 @@ pub struct CreateCachediSCSIVolumeOutput {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateNFSFileShareInput {
-    /// <p>Refresh cache information.</p>
+    /// <p>Specifies refresh cache information for the file share.</p>
     #[serde(rename = "CacheAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_attributes: Option<CacheAttributes>,
@@ -522,7 +561,7 @@ pub struct CreateNFSFileShareInput {
     #[serde(rename = "NFSFileShareDefaults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub nfs_file_share_defaults: Option<NFSFileShareDefaults>,
-    /// <p>The notification policy of the file share.</p>
+    /// <p>The notification policy of the file share. <code>SettlingTimeInSeconds</code> controls the number of seconds to wait after the last point in time a client wrote to a file before generating an <code>ObjectUploaded</code> notification. Because clients can make many small writes to files, it's best to set this parameter for as long as possible to avoid generating multiple notifications for the same file in a small time period.</p> <note> <p> <code>SettlingTimeInSeconds</code> has no effect on the timing of the object uploading to Amazon S3, only the timing of the notification.</p> </note> <p>The following example sets <code>NotificationPolicy</code> on with <code>SettlingTimeInSeconds</code> set to 60.</p> <p> <code>{\"Upload\": {\"SettlingTimeInSeconds\": 60}}</code> </p> <p>The following example sets <code>NotificationPolicy</code> off.</p> <p> <code>{}</code> </p>
     #[serde(rename = "NotificationPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_policy: Option<String>,
@@ -573,7 +612,7 @@ pub struct CreateSMBFileShareInput {
     #[serde(rename = "AdminUserList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub admin_user_list: Option<Vec<String>>,
-    /// <p>The Amazon Resource Name (ARN) of the storage used for the audit logs.</p>
+    /// <p>The Amazon Resource Name (ARN) of the storage used for audit logs.</p>
     #[serde(rename = "AuditDestinationARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audit_destination_arn: Option<String>,
@@ -581,7 +620,7 @@ pub struct CreateSMBFileShareInput {
     #[serde(rename = "Authentication")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication: Option<String>,
-    /// <p>Refresh cache information.</p>
+    /// <p>Specifies refresh cache information for the file share.</p>
     #[serde(rename = "CacheAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_attributes: Option<CacheAttributes>,
@@ -622,7 +661,7 @@ pub struct CreateSMBFileShareInput {
     /// <p>The ARN of the backend storage used for storing file data. A prefix name can be added to the S3 bucket name. It must end with a "/".</p>
     #[serde(rename = "LocationARN")]
     pub location_arn: String,
-    /// <p>The notification policy of the file share.</p>
+    /// <p>The notification policy of the file share. <code>SettlingTimeInSeconds</code> controls the number of seconds to wait after the last point in time a client wrote to a file before generating an <code>ObjectUploaded</code> notification. Because clients can make many small writes to files, it's best to set this parameter for as long as possible to avoid generating multiple notifications for the same file in a small time period.</p> <note> <p> <code>SettlingTimeInSeconds</code> has no effect on the timing of the object uploading to Amazon S3, only the timing of the notification.</p> </note> <p>The following example sets <code>NotificationPolicy</code> on with <code>SettlingTimeInSeconds</code> set to 60.</p> <p> <code>{\"Upload\": {\"SettlingTimeInSeconds\": 60}}</code> </p> <p>The following example sets <code>NotificationPolicy</code> off.</p> <p> <code>{}</code> </p>
     #[serde(rename = "NotificationPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_policy: Option<String>,
@@ -747,10 +786,10 @@ pub struct CreateStorediSCSIVolumeInput {
     /// <p>The network interface of the gateway on which to expose the iSCSI target. Only IPv4 addresses are accepted. Use <a>DescribeGatewayInformation</a> to get a list of the network interfaces available on a gateway.</p> <p>Valid Values: A valid IP address.</p>
     #[serde(rename = "NetworkInterfaceId")]
     pub network_interface_id: String,
-    /// <p>Set to true <code>true</code> if you want to preserve the data on the local disk. Otherwise, set to <code>false</code> to create an empty volume.</p> <p>Valid Values: <code>true</code> | <code>false</code> </p>
+    /// <p>Set to <code>true</code> if you want to preserve the data on the local disk. Otherwise, set to <code>false</code> to create an empty volume.</p> <p>Valid Values: <code>true</code> | <code>false</code> </p>
     #[serde(rename = "PreserveExistingData")]
     pub preserve_existing_data: bool,
-    /// <p>The snapshot ID (e.g. "snap-1122aabb") of the snapshot to restore as the new stored volume. Specify this field if you want to create the iSCSI storage volume from a snapshot; otherwise, do not include this field. To list snapshots for your account use <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-DescribeSnapshots.html">DescribeSnapshots</a> in the <i>Amazon Elastic Compute Cloud API Reference</i>.</p>
+    /// <p>The snapshot ID (e.g., "snap-1122aabb") of the snapshot to restore as the new stored volume. Specify this field if you want to create the iSCSI storage volume from a snapshot; otherwise, do not include this field. To list snapshots for your account use <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-DescribeSnapshots.html">DescribeSnapshots</a> in the <i>Amazon Elastic Compute Cloud API Reference</i>.</p>
     #[serde(rename = "SnapshotId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snapshot_id: Option<String>,
@@ -887,7 +926,7 @@ pub struct CreateTapesInput {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p><p>A prefix that you append to the barcode of the virtual tape you are creating. This prefix makes the barcode unique.</p> <note> <p>The prefix must be 1 to 4 characters in length and must be one of the uppercase letters from A to Z.</p> </note></p>
+    /// <p><p>A prefix that you append to the barcode of the virtual tape you are creating. This prefix makes the barcode unique.</p> <note> <p>The prefix must be 1-4 characters in length and must be one of the uppercase letters from A to Z.</p> </note></p>
     #[serde(rename = "TapeBarcodePrefix")]
     pub tape_barcode_prefix: String,
     /// <p><p>The size, in bytes, of the virtual tapes that you want to create.</p> <note> <p>The size must be aligned by gigabyte (1024<em>1024</em>1024 bytes).</p> </note></p>
@@ -1125,11 +1164,11 @@ pub struct DescribeAvailabilityMonitorTestOutput {
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_arn: Option<String>,
-    /// <p>The time the High Availability monitoring test was started. If a test hasn't been performed, the value of this field is null.</p>
+    /// <p>The time the high availability monitoring test was started. If a test hasn't been performed, the value of this field is null.</p>
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
-    /// <p>The status of the High Availability monitoring test. If a test hasn't been performed, the value of this field is null.</p>
+    /// <p>The status of the high availability monitoring test. If a test hasn't been performed, the value of this field is null.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1253,6 +1292,23 @@ pub struct DescribeChapCredentialsOutput {
     #[serde(rename = "ChapCredentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub chap_credentials: Option<Vec<ChapInfo>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeFileSystemAssociationsInput {
+    /// <p>An array containing the Amazon Resource Name (ARN) of each file system association to be described.</p>
+    #[serde(rename = "FileSystemAssociationARNList")]
+    pub file_system_association_arn_list: Vec<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeFileSystemAssociationsOutput {
+    /// <p>An array containing the <code>FileSystemAssociationInfo</code> data type of each file system association to be described. </p>
+    #[serde(rename = "FileSystemAssociationInfoList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_system_association_info_list: Option<Vec<FileSystemAssociationInfo>>,
 }
 
 /// <p>A JSON object containing the ID of the gateway.</p>
@@ -1595,7 +1651,7 @@ pub struct DescribeTapesInput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeTapesOutput {
-    /// <p>An opaque string which can be used as part of a subsequent DescribeTapes call to retrieve the next page of results.</p> <p>If a response does not contain a marker, then there are no more results to be retrieved.</p>
+    /// <p>An opaque string that can be used as part of a subsequent <code>DescribeTapes</code> call to retrieve the next page of results.</p> <p>If a response does not contain a marker, then there are no more results to be retrieved.</p>
     #[serde(rename = "Marker")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
@@ -1761,6 +1817,27 @@ pub struct DisableGatewayOutput {
     pub gateway_arn: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DisassociateFileSystemInput {
+    /// <p>The Amazon Resource Name (ARN) of the file system association to be deleted.</p>
+    #[serde(rename = "FileSystemAssociationARN")]
+    pub file_system_association_arn: String,
+    /// <p>If this value is set to true, the operation disassociates an Amazon FSx file system immediately. It ends all data uploads to the file system, and the file system association enters the <code>FORCE_DELETING</code> status. If this value is set to false, the Amazon FSx file system does not disassociate until all data is uploaded.</p>
+    #[serde(rename = "ForceDelete")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub force_delete: Option<bool>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DisassociateFileSystemOutput {
+    /// <p>The Amazon Resource Name (ARN) of the deleted file system association.</p>
+    #[serde(rename = "FileSystemAssociationARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_system_association_arn: Option<String>,
+}
+
 /// <p>Represents a gateway's local disk.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1813,6 +1890,59 @@ pub struct FileShareInfo {
     #[serde(rename = "FileShareType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_share_type: Option<String>,
+    #[serde(rename = "GatewayARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gateway_arn: Option<String>,
+}
+
+/// <p>Describes the object returned by <code>DescribeFileSystemAssociations</code> that describes a created file system association.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FileSystemAssociationInfo {
+    /// <p>The Amazon Resource Name (ARN) of the storage used for the audit logs.</p>
+    #[serde(rename = "AuditDestinationARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audit_destination_arn: Option<String>,
+    #[serde(rename = "CacheAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_attributes: Option<CacheAttributes>,
+    /// <p>The Amazon Resource Name (ARN) of the file system association.</p>
+    #[serde(rename = "FileSystemAssociationARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_system_association_arn: Option<String>,
+    /// <p>The status of the file system association. Valid Values: <code>AVAILABLE</code> | <code>CREATING</code> | <code>DELETING</code> | <code>FORCE_DELETING</code> | <code>MISCONFIGURED</code> | <code>UPDATING</code> | <code>UNAVAILABLE</code> </p>
+    #[serde(rename = "FileSystemAssociationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_system_association_status: Option<String>,
+    #[serde(rename = "GatewayARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gateway_arn: Option<String>,
+    /// <p>The ARN of the backend Amazon FSx file system used for storing file data. For information, see <a href="https://docs.aws.amazon.com/fsx/latest/APIReference/API_FileSystem.html">FileSystem</a> in the <i>Amazon FSx API Reference</i>.</p>
+    #[serde(rename = "LocationARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location_arn: Option<String>,
+    /// <p>A list of up to 50 tags assigned to the SMB file share, sorted alphabetically by key name. Each tag is a key-value pair.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+/// <p>Gets the summary returned by <code>ListFileSystemAssociation</code>, which is a summary of a created file system association.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FileSystemAssociationSummary {
+    /// <p>The Amazon Resource Name (ARN) of the file system association.</p>
+    #[serde(rename = "FileSystemAssociationARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_system_association_arn: Option<String>,
+    /// <p>The ID of the file system association.</p>
+    #[serde(rename = "FileSystemAssociationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_system_association_id: Option<String>,
+    /// <p>The status of the file share. Valid Values: <code>AVAILABLE</code> | <code>CREATING</code> | <code>DELETING</code> | <code>FORCE_DELETING</code> | <code>MISCONFIGURED</code> | <code>UPDATING</code> | <code>UNAVAILABLE</code> </p>
+    #[serde(rename = "FileSystemAssociationStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_system_association_status: Option<String>,
     #[serde(rename = "GatewayARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_arn: Option<String>,
@@ -1944,6 +2074,39 @@ pub struct ListFileSharesOutput {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub marker: Option<String>,
     /// <p>If a value is present, there are more file shares to return. In a subsequent request, use <code>NextMarker</code> as the value for <code>Marker</code> to retrieve the next set of file shares.</p>
+    #[serde(rename = "NextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_marker: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListFileSystemAssociationsInput {
+    #[serde(rename = "GatewayARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gateway_arn: Option<String>,
+    /// <p>The maximum number of file system associations to return in the response. If present, <code>Limit</code> must be an integer with a value greater than zero. Optional.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>Opaque pagination token returned from a previous <code>ListFileSystemAssociations</code> operation. If present, <code>Marker</code> specifies where to continue the list from after a previous call to <code>ListFileSystemAssociations</code>. Optional.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListFileSystemAssociationsOutput {
+    /// <p>An array of information about the Amazon FSx gateway's file system associations.</p>
+    #[serde(rename = "FileSystemAssociationSummaryList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_system_association_summary_list: Option<Vec<FileSystemAssociationSummary>>,
+    /// <p>If the request includes <code>Marker</code>, the response returns that value in this field.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    /// <p>If a value is present, there are more file system associations to return. In a subsequent request, use <code>NextMarker</code> as the value for <code>Marker</code> to retrieve the next set of file system associations.</p>
     #[serde(rename = "NextMarker")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_marker: Option<String>,
@@ -2188,7 +2351,7 @@ pub struct NFSFileShareDefaults {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NFSFileShareInfo {
-    /// <p>Refresh cache information.</p>
+    /// <p>Refresh cache information for the file share.</p>
     #[serde(rename = "CacheAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_attributes: Option<CacheAttributes>,
@@ -2232,7 +2395,7 @@ pub struct NFSFileShareInfo {
     #[serde(rename = "NFSFileShareDefaults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub nfs_file_share_defaults: Option<NFSFileShareDefaults>,
-    /// <p>The notification policy of the file share.</p>
+    /// <p>The notification policy of the file share. <code>SettlingTimeInSeconds</code> controls the number of seconds to wait after the last point in time a client wrote to a file before generating an <code>ObjectUploaded</code> notification. Because clients can make many small writes to files, it's best to set this parameter for as long as possible to avoid generating multiple notifications for the same file in a small time period.</p> <note> <p> <code>SettlingTimeInSeconds</code> has no effect on the timing of the object uploading to Amazon S3, only the timing of the notification.</p> </note> <p>The following example sets <code>NotificationPolicy</code> on with <code>SettlingTimeInSeconds</code> set to 60.</p> <p> <code>{\"Upload\": {\"SettlingTimeInSeconds\": 60}}</code> </p> <p>The following example sets <code>NotificationPolicy</code> off.</p> <p> <code>{}</code> </p>
     #[serde(rename = "NotificationPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_policy: Option<String>,
@@ -2449,14 +2612,14 @@ pub struct SMBFileShareInfo {
     #[serde(rename = "AdminUserList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub admin_user_list: Option<Vec<String>>,
-    /// <p>The Amazon Resource Name (ARN) of the storage used for the audit logs.</p>
+    /// <p>The Amazon Resource Name (ARN) of the storage used for audit logs.</p>
     #[serde(rename = "AuditDestinationARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audit_destination_arn: Option<String>,
     #[serde(rename = "Authentication")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication: Option<String>,
-    /// <p>Refresh cache information.</p>
+    /// <p>Refresh cache information for the file share.</p>
     #[serde(rename = "CacheAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_attributes: Option<CacheAttributes>,
@@ -2502,7 +2665,7 @@ pub struct SMBFileShareInfo {
     #[serde(rename = "LocationARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location_arn: Option<String>,
-    /// <p>The notification policy of the file share.</p>
+    /// <p>The notification policy of the file share. <code>SettlingTimeInSeconds</code> controls the number of seconds to wait after the last point in time a client wrote to a file before generating an <code>ObjectUploaded</code> notification. Because clients can make many small writes to files, it's best to set this parameter for as long as possible to avoid generating multiple notifications for the same file in a small time period.</p> <note> <p> <code>SettlingTimeInSeconds</code> has no effect on the timing of the object uploading to Amazon S3, only the timing of the notification.</p> </note> <p>The following example sets <code>NotificationPolicy</code> on with <code>SettlingTimeInSeconds</code> set to 60.</p> <p> <code>{\"Upload\": {\"SettlingTimeInSeconds\": 60}}</code> </p> <p>The following example sets <code>NotificationPolicy</code> off.</p> <p> <code>{}</code> </p>
     #[serde(rename = "NotificationPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_policy: Option<String>,
@@ -2981,6 +3144,38 @@ pub struct UpdateChapCredentialsOutput {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateFileSystemAssociationInput {
+    /// <p>The Amazon Resource Name (ARN) of the storage used for the audit logs.</p>
+    #[serde(rename = "AuditDestinationARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audit_destination_arn: Option<String>,
+    #[serde(rename = "CacheAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cache_attributes: Option<CacheAttributes>,
+    /// <p>The Amazon Resource Name (ARN) of the file system association that you want to update.</p>
+    #[serde(rename = "FileSystemAssociationARN")]
+    pub file_system_association_arn: String,
+    /// <p>The password of the user credential.</p>
+    #[serde(rename = "Password")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub password: Option<String>,
+    /// <p>The user name of the user credential that has permission to access the root share D$ of the Amazon FSx file system. The user account must belong to the Amazon FSx delegated admin user group.</p>
+    #[serde(rename = "UserName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateFileSystemAssociationOutput {
+    /// <p>The ARN of the updated file system association.</p>
+    #[serde(rename = "FileSystemAssociationARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_system_association_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateGatewayInformationInput {
     /// <p>The Amazon Resource Name (ARN) of the Amazon CloudWatch log group that you want to use to monitor and log events in the gateway.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/WhatIsCloudWatchLogs.html">What is Amazon CloudWatch Logs?</a> </p>
     #[serde(rename = "CloudWatchLogGroupARN")]
@@ -3062,7 +3257,7 @@ pub struct UpdateMaintenanceStartTimeOutput {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateNFSFileShareInput {
-    /// <p>Refresh cache information.</p>
+    /// <p>specifies refresh cache information for the file share.</p>
     #[serde(rename = "CacheAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_attributes: Option<CacheAttributes>,
@@ -3097,7 +3292,7 @@ pub struct UpdateNFSFileShareInput {
     #[serde(rename = "NFSFileShareDefaults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub nfs_file_share_defaults: Option<NFSFileShareDefaults>,
-    /// <p>The notification policy of the file share.</p>
+    /// <p>The notification policy of the file share. <code>SettlingTimeInSeconds</code> controls the number of seconds to wait after the last point in time a client wrote to a file before generating an <code>ObjectUploaded</code> notification. Because clients can make many small writes to files, it's best to set this parameter for as long as possible to avoid generating multiple notifications for the same file in a small time period.</p> <note> <p> <code>SettlingTimeInSeconds</code> has no effect on the timing of the object uploading to Amazon S3, only the timing of the notification.</p> </note> <p>The following example sets <code>NotificationPolicy</code> on with <code>SettlingTimeInSeconds</code> set to 60.</p> <p> <code>{\"Upload\": {\"SettlingTimeInSeconds\": 60}}</code> </p> <p>The following example sets <code>NotificationPolicy</code> off.</p> <p> <code>{}</code> </p>
     #[serde(rename = "NotificationPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_policy: Option<String>,
@@ -3141,11 +3336,11 @@ pub struct UpdateSMBFileShareInput {
     #[serde(rename = "AdminUserList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub admin_user_list: Option<Vec<String>>,
-    /// <p>The Amazon Resource Name (ARN) of the storage used for the audit logs.</p>
+    /// <p>The Amazon Resource Name (ARN) of the storage used for audit logs.</p>
     #[serde(rename = "AuditDestinationARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audit_destination_arn: Option<String>,
-    /// <p>Refresh cache information.</p>
+    /// <p>Specifies refresh cache information for the file share.</p>
     #[serde(rename = "CacheAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cache_attributes: Option<CacheAttributes>,
@@ -3180,7 +3375,7 @@ pub struct UpdateSMBFileShareInput {
     #[serde(rename = "KMSKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key: Option<String>,
-    /// <p>The notification policy of the file share.</p>
+    /// <p>The notification policy of the file share. <code>SettlingTimeInSeconds</code> controls the number of seconds to wait after the last point in time a client wrote to a file before generating an <code>ObjectUploaded</code> notification. Because clients can make many small writes to files, it's best to set this parameter for as long as possible to avoid generating multiple notifications for the same file in a small time period.</p> <note> <p> <code>SettlingTimeInSeconds</code> has no effect on the timing of the object uploading to Amazon S3, only the timing of the notification.</p> </note> <p>The following example sets <code>NotificationPolicy</code> on with <code>SettlingTimeInSeconds</code> set to 60.</p> <p> <code>{\"Upload\": {\"SettlingTimeInSeconds\": 60}}</code> </p> <p>The following example sets <code>NotificationPolicy</code> off.</p> <p> <code>{}</code> </p>
     #[serde(rename = "NotificationPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_policy: Option<String>,
@@ -3643,6 +3838,46 @@ impl fmt::Display for AssignTapePoolError {
     }
 }
 impl Error for AssignTapePoolError {}
+/// Errors returned by AssociateFileSystem
+#[derive(Debug, PartialEq)]
+pub enum AssociateFileSystemError {
+    /// <p>An internal server error has occurred during the request. For more information, see the error and message fields.</p>
+    InternalServerError(String),
+    /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
+    InvalidGatewayRequest(String),
+}
+
+impl AssociateFileSystemError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateFileSystemError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(AssociateFileSystemError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "InvalidGatewayRequestException" => {
+                    return RusotoError::Service(AssociateFileSystemError::InvalidGatewayRequest(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for AssociateFileSystemError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AssociateFileSystemError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            AssociateFileSystemError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for AssociateFileSystemError {}
 /// Errors returned by AttachVolume
 #[derive(Debug, PartialEq)]
 pub enum AttachVolumeError {
@@ -4791,6 +5026,52 @@ impl fmt::Display for DescribeChapCredentialsError {
     }
 }
 impl Error for DescribeChapCredentialsError {}
+/// Errors returned by DescribeFileSystemAssociations
+#[derive(Debug, PartialEq)]
+pub enum DescribeFileSystemAssociationsError {
+    /// <p>An internal server error has occurred during the request. For more information, see the error and message fields.</p>
+    InternalServerError(String),
+    /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
+    InvalidGatewayRequest(String),
+}
+
+impl DescribeFileSystemAssociationsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeFileSystemAssociationsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        DescribeFileSystemAssociationsError::InternalServerError(err.msg),
+                    )
+                }
+                "InvalidGatewayRequestException" => {
+                    return RusotoError::Service(
+                        DescribeFileSystemAssociationsError::InvalidGatewayRequest(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeFileSystemAssociationsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeFileSystemAssociationsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeFileSystemAssociationsError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeFileSystemAssociationsError {}
 /// Errors returned by DescribeGatewayInformation
 #[derive(Debug, PartialEq)]
 pub enum DescribeGatewayInformationError {
@@ -5407,6 +5688,46 @@ impl fmt::Display for DisableGatewayError {
     }
 }
 impl Error for DisableGatewayError {}
+/// Errors returned by DisassociateFileSystem
+#[derive(Debug, PartialEq)]
+pub enum DisassociateFileSystemError {
+    /// <p>An internal server error has occurred during the request. For more information, see the error and message fields.</p>
+    InternalServerError(String),
+    /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
+    InvalidGatewayRequest(String),
+}
+
+impl DisassociateFileSystemError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateFileSystemError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(DisassociateFileSystemError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "InvalidGatewayRequestException" => {
+                    return RusotoError::Service(
+                        DisassociateFileSystemError::InvalidGatewayRequest(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DisassociateFileSystemError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DisassociateFileSystemError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            DisassociateFileSystemError::InvalidGatewayRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DisassociateFileSystemError {}
 /// Errors returned by JoinDomain
 #[derive(Debug, PartialEq)]
 pub enum JoinDomainError {
@@ -5527,6 +5848,52 @@ impl fmt::Display for ListFileSharesError {
     }
 }
 impl Error for ListFileSharesError {}
+/// Errors returned by ListFileSystemAssociations
+#[derive(Debug, PartialEq)]
+pub enum ListFileSystemAssociationsError {
+    /// <p>An internal server error has occurred during the request. For more information, see the error and message fields.</p>
+    InternalServerError(String),
+    /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
+    InvalidGatewayRequest(String),
+}
+
+impl ListFileSystemAssociationsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListFileSystemAssociationsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        ListFileSystemAssociationsError::InternalServerError(err.msg),
+                    )
+                }
+                "InvalidGatewayRequestException" => {
+                    return RusotoError::Service(
+                        ListFileSystemAssociationsError::InvalidGatewayRequest(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListFileSystemAssociationsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListFileSystemAssociationsError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListFileSystemAssociationsError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListFileSystemAssociationsError {}
 /// Errors returned by ListGateways
 #[derive(Debug, PartialEq)]
 pub enum ListGatewaysError {
@@ -6443,6 +6810,52 @@ impl fmt::Display for UpdateChapCredentialsError {
     }
 }
 impl Error for UpdateChapCredentialsError {}
+/// Errors returned by UpdateFileSystemAssociation
+#[derive(Debug, PartialEq)]
+pub enum UpdateFileSystemAssociationError {
+    /// <p>An internal server error has occurred during the request. For more information, see the error and message fields.</p>
+    InternalServerError(String),
+    /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
+    InvalidGatewayRequest(String),
+}
+
+impl UpdateFileSystemAssociationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateFileSystemAssociationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        UpdateFileSystemAssociationError::InternalServerError(err.msg),
+                    )
+                }
+                "InvalidGatewayRequestException" => {
+                    return RusotoError::Service(
+                        UpdateFileSystemAssociationError::InvalidGatewayRequest(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateFileSystemAssociationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateFileSystemAssociationError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateFileSystemAssociationError::InvalidGatewayRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdateFileSystemAssociationError {}
 /// Errors returned by UpdateGatewayInformation
 #[derive(Debug, PartialEq)]
 pub enum UpdateGatewayInformationError {
@@ -6844,7 +7257,7 @@ pub trait StorageGateway {
         input: AddTagsToResourceInput,
     ) -> Result<AddTagsToResourceOutput, RusotoError<AddTagsToResourceError>>;
 
-    /// <p>Configures one or more gateway local disks as upload buffer for a specified gateway. This operation is supported for the stored volume, cached volume and tape gateway types.</p> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add upload buffer, and one or more disk IDs that you want to configure as upload buffer.</p>
+    /// <p>Configures one or more gateway local disks as upload buffer for a specified gateway. This operation is supported for the stored volume, cached volume, and tape gateway types.</p> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add upload buffer, and one or more disk IDs that you want to configure as upload buffer.</p>
     async fn add_upload_buffer(
         &self,
         input: AddUploadBufferInput,
@@ -6861,6 +7274,12 @@ pub trait StorageGateway {
         &self,
         input: AssignTapePoolInput,
     ) -> Result<AssignTapePoolOutput, RusotoError<AssignTapePoolError>>;
+
+    /// <p>Associate an Amazon FSx file system with the Amazon FSx file gateway. After the association process is complete, the file shares on the Amazon FSx file system are available for access through the gateway. This operation only supports the Amazon FSx file gateway type.</p>
+    async fn associate_file_system(
+        &self,
+        input: AssociateFileSystemInput,
+    ) -> Result<AssociateFileSystemOutput, RusotoError<AssociateFileSystemError>>;
 
     /// <p>Connects a volume to an iSCSI connection and then attaches the volume to the specified gateway. Detaching and attaching a volume enables you to recover your data from one gateway to a different gateway without creating a snapshot. It also makes it easier to move your volumes from an on-premises gateway to a gateway hosted on an Amazon EC2 instance.</p>
     async fn attach_volume(
@@ -6898,7 +7317,7 @@ pub trait StorageGateway {
         input: CreateSMBFileShareInput,
     ) -> Result<CreateSMBFileShareOutput, RusotoError<CreateSMBFileShareError>>;
 
-    /// <p><p>Initiates a snapshot of a volume.</p> <p>AWS Storage Gateway provides the ability to back up point-in-time snapshots of your data to Amazon Simple Storage (Amazon S3) for durable off-site recovery, as well as import the data to an Amazon Elastic Block Store (EBS) volume in Amazon Elastic Compute Cloud (EC2). You can take snapshots of your gateway volume on a scheduled or ad hoc basis. This API enables you to take an ad hoc snapshot. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/managing-volumes.html#SchedulingSnapshot">Editing a snapshot schedule</a>.</p> <p>In the <code>CreateSnapshot</code> request, you identify the volume by providing its Amazon Resource Name (ARN). You must also provide description for the snapshot. When AWS Storage Gateway takes the snapshot of specified volume, the snapshot and description appears in the AWS Storage Gateway console. In response, AWS Storage Gateway returns you a snapshot ID. You can use this snapshot ID to check the snapshot progress or later use it when you want to create a volume from a snapshot. This operation is only supported in stored and cached volume gateway type.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeSnapshots.html">DescribeSnapshots</a> or <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DeleteSnapshot.html">DeleteSnapshot</a> in the <i>Amazon Elastic Compute Cloud API Reference</i>.</p> </note> <important> <p>Volume and snapshot IDs are changing to a longer length ID format. For more information, see the important note on the <a href="https://docs.aws.amazon.com/storagegateway/latest/APIReference/Welcome.html">Welcome</a> page.</p> </important></p>
+    /// <p><p>Initiates a snapshot of a volume.</p> <p>AWS Storage Gateway provides the ability to back up point-in-time snapshots of your data to Amazon Simple Storage (Amazon S3) for durable off-site recovery, and also import the data to an Amazon Elastic Block Store (EBS) volume in Amazon Elastic Compute Cloud (EC2). You can take snapshots of your gateway volume on a scheduled or ad hoc basis. This API enables you to take an ad hoc snapshot. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/managing-volumes.html#SchedulingSnapshot">Editing a snapshot schedule</a>.</p> <p>In the <code>CreateSnapshot</code> request, you identify the volume by providing its Amazon Resource Name (ARN). You must also provide description for the snapshot. When AWS Storage Gateway takes the snapshot of specified volume, the snapshot and description appears in the AWS Storage Gateway console. In response, AWS Storage Gateway returns you a snapshot ID. You can use this snapshot ID to check the snapshot progress or later use it when you want to create a volume from a snapshot. This operation is only supported in stored and cached volume gateway type.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeSnapshots.html">DescribeSnapshots</a> or <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DeleteSnapshot.html">DeleteSnapshot</a> in the <i>Amazon Elastic Compute Cloud API Reference</i>.</p> </note> <important> <p>Volume and snapshot IDs are changing to a longer length ID format. For more information, see the important note on the <a href="https://docs.aws.amazon.com/storagegateway/latest/APIReference/Welcome.html">Welcome</a> page.</p> </important></p>
     async fn create_snapshot(
         &self,
         input: CreateSnapshotInput,
@@ -7000,7 +7419,7 @@ pub trait StorageGateway {
         input: DeleteVolumeInput,
     ) -> Result<DeleteVolumeOutput, RusotoError<DeleteVolumeError>>;
 
-    /// <p>Returns information about the most recent High Availability monitoring test that was performed on the host in a cluster. If a test isn't performed, the status and start time in the response would be null.</p>
+    /// <p>Returns information about the most recent high availability monitoring test that was performed on the host in a cluster. If a test isn't performed, the status and start time in the response would be null.</p>
     async fn describe_availability_monitor_test(
         &self,
         input: DescribeAvailabilityMonitorTestInput,
@@ -7041,6 +7460,15 @@ pub trait StorageGateway {
         &self,
         input: DescribeChapCredentialsInput,
     ) -> Result<DescribeChapCredentialsOutput, RusotoError<DescribeChapCredentialsError>>;
+
+    /// <p>Gets the file system association information. This operation is only supported for Amazon FSx file gateways.</p>
+    async fn describe_file_system_associations(
+        &self,
+        input: DescribeFileSystemAssociationsInput,
+    ) -> Result<
+        DescribeFileSystemAssociationsOutput,
+        RusotoError<DescribeFileSystemAssociationsError>,
+    >;
 
     /// <p>Returns metadata about a gateway such as its name, network interfaces, configured time zone, and the state (whether the gateway is running or not). To specify which gateway to describe, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
     async fn describe_gateway_information(
@@ -7132,6 +7560,12 @@ pub trait StorageGateway {
         input: DisableGatewayInput,
     ) -> Result<DisableGatewayOutput, RusotoError<DisableGatewayError>>;
 
+    /// <p>Disassociates an Amazon FSx file system from the specified gateway. After the disassociation process finishes, the gateway can no longer access the Amazon FSx file system. This operation is only supported in the Amazon FSx file gateway type.</p>
+    async fn disassociate_file_system(
+        &self,
+        input: DisassociateFileSystemInput,
+    ) -> Result<DisassociateFileSystemOutput, RusotoError<DisassociateFileSystemError>>;
+
     /// <p>Adds a file gateway to an Active Directory domain. This operation is only supported for file gateways that support the SMB file protocol.</p>
     async fn join_domain(
         &self,
@@ -7152,6 +7586,12 @@ pub trait StorageGateway {
         &self,
         input: ListFileSharesInput,
     ) -> Result<ListFileSharesOutput, RusotoError<ListFileSharesError>>;
+
+    /// <p>Gets a list of <code>FileSystemAssociationSummary</code> objects. Each object contains a summary of a file system association. This operation is only supported for Amazon FSx file gateways.</p>
+    async fn list_file_system_associations(
+        &self,
+        input: ListFileSystemAssociationsInput,
+    ) -> Result<ListFileSystemAssociationsOutput, RusotoError<ListFileSystemAssociationsError>>;
 
     /// <p>Lists gateways owned by an AWS account in an AWS Region specified in the request. The returned list is ordered by gateway Amazon Resource Name (ARN).</p> <p>By default, the operation returns a maximum of 100 gateways. This operation supports pagination that allows you to optionally reduce the number of gateways returned in a response.</p> <p>If you have more gateways than are returned in a response (that is, the response returns only a truncated list of your gateways), the response contains a marker that you can specify in your next request to fetch the next page of gateways.</p>
     async fn list_gateways(
@@ -7207,7 +7647,7 @@ pub trait StorageGateway {
         input: NotifyWhenUploadedInput,
     ) -> Result<NotifyWhenUploadedOutput, RusotoError<NotifyWhenUploadedError>>;
 
-    /// <p>Refreshes the cache for the specified file share. This operation finds objects in the Amazon S3 bucket that were added, removed, or replaced since the gateway last listed the bucket's contents and cached the results. This operation is only supported in the file gateway type. You can subscribe to be notified through an Amazon CloudWatch event when your RefreshCache operation completes. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting notified about file operations</a> in the <i>AWS Storage Gateway User Guide</i>.</p> <p>When this API is called, it only initiates the refresh operation. When the API call completes and returns a success code, it doesn't necessarily mean that the file refresh has completed. You should use the refresh-complete notification to determine that the operation has completed before you check for new files on the gateway file share. You can subscribe to be notified through an CloudWatch event when your <code>RefreshCache</code> operation completes.</p> <p>Throttle limit: This API is asynchronous so the gateway will accept no more than two refreshes at any time. We recommend using the refresh-complete CloudWatch event notification before issuing additional requests. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting notified about file operations</a> in the <i>AWS Storage Gateway User Guide</i>.</p> <p>If you invoke the RefreshCache API when two requests are already being processed, any new request will cause an <code>InvalidGatewayRequestException</code> error because too many requests were sent to the server.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting notified about file operations</a> in the <i>AWS Storage Gateway User Guide</i>.</p>
+    /// <p>Refreshes the cached inventory of objects for the specified file share. This operation finds objects in the Amazon S3 bucket that were added, removed, or replaced since the gateway last listed the bucket's contents and cached the results. This operation does not import files into the file gateway cache storage. It only updates the cached inventory to reflect changes in the inventory of the objects in the S3 bucket. This operation is only supported in the file gateway type. You can subscribe to be notified through an Amazon CloudWatch event when your <code>RefreshCache</code> operation completes. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting notified about file operations</a> in the <i>AWS Storage Gateway User Guide</i>.</p> <p>When this API is called, it only initiates the refresh operation. When the API call completes and returns a success code, it doesn't necessarily mean that the file refresh has completed. You should use the refresh-complete notification to determine that the operation has completed before you check for new files on the gateway file share. You can subscribe to be notified through a CloudWatch event when your <code>RefreshCache</code> operation completes.</p> <p>Throttle limit: This API is asynchronous, so the gateway will accept no more than two refreshes at any time. We recommend using the refresh-complete CloudWatch event notification before issuing additional requests. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting notified about file operations</a> in the <i>AWS Storage Gateway User Guide</i>.</p> <p>If you invoke the RefreshCache API when two requests are already being processed, any new request will cause an <code>InvalidGatewayRequestException</code> error because too many requests were sent to the server.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting notified about file operations</a> in the <i>AWS Storage Gateway User Guide</i>.</p>
     async fn refresh_cache(
         &self,
         input: RefreshCacheInput,
@@ -7296,6 +7736,12 @@ pub trait StorageGateway {
         &self,
         input: UpdateChapCredentialsInput,
     ) -> Result<UpdateChapCredentialsOutput, RusotoError<UpdateChapCredentialsError>>;
+
+    /// <p>Updates a file system association. This operation is only supported in the Amazon FSx file gateway type.</p>
+    async fn update_file_system_association(
+        &self,
+        input: UpdateFileSystemAssociationInput,
+    ) -> Result<UpdateFileSystemAssociationOutput, RusotoError<UpdateFileSystemAssociationError>>;
 
     /// <p><p>Updates a gateway&#39;s metadata, which includes the gateway&#39;s name and time zone. To specify which gateway to update, use the Amazon Resource Name (ARN) of the gateway in your request.</p> <note> <p>For gateways activated after September 2, 2015, the gateway&#39;s ARN contains the gateway ID rather than the gateway name. However, changing the name of the gateway has no effect on the gateway&#39;s ARN.</p> </note></p>
     async fn update_gateway_information(
@@ -7445,7 +7891,7 @@ impl StorageGateway for StorageGatewayClient {
         proto::json::ResponsePayload::new(&response).deserialize::<AddTagsToResourceOutput, _>()
     }
 
-    /// <p>Configures one or more gateway local disks as upload buffer for a specified gateway. This operation is supported for the stored volume, cached volume and tape gateway types.</p> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add upload buffer, and one or more disk IDs that you want to configure as upload buffer.</p>
+    /// <p>Configures one or more gateway local disks as upload buffer for a specified gateway. This operation is supported for the stored volume, cached volume, and tape gateway types.</p> <p>In the request, you specify the gateway Amazon Resource Name (ARN) to which you want to add upload buffer, and one or more disk IDs that you want to configure as upload buffer.</p>
     async fn add_upload_buffer(
         &self,
         input: AddUploadBufferInput,
@@ -7497,6 +7943,27 @@ impl StorageGateway for StorageGatewayClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<AssignTapePoolOutput, _>()
+    }
+
+    /// <p>Associate an Amazon FSx file system with the Amazon FSx file gateway. After the association process is complete, the file shares on the Amazon FSx file system are available for access through the gateway. This operation only supports the Amazon FSx file gateway type.</p>
+    async fn associate_file_system(
+        &self,
+        input: AssociateFileSystemInput,
+    ) -> Result<AssociateFileSystemOutput, RusotoError<AssociateFileSystemError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "StorageGateway_20130630.AssociateFileSystem",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, AssociateFileSystemError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<AssociateFileSystemOutput, _>()
     }
 
     /// <p>Connects a volume to an iSCSI connection and then attaches the volume to the specified gateway. Detaching and attaching a volume enables you to recover your data from one gateway to a different gateway without creating a snapshot. It also makes it easier to move your volumes from an on-premises gateway to a gateway hosted on an Amazon EC2 instance.</p>
@@ -7611,7 +8078,7 @@ impl StorageGateway for StorageGatewayClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateSMBFileShareOutput, _>()
     }
 
-    /// <p><p>Initiates a snapshot of a volume.</p> <p>AWS Storage Gateway provides the ability to back up point-in-time snapshots of your data to Amazon Simple Storage (Amazon S3) for durable off-site recovery, as well as import the data to an Amazon Elastic Block Store (EBS) volume in Amazon Elastic Compute Cloud (EC2). You can take snapshots of your gateway volume on a scheduled or ad hoc basis. This API enables you to take an ad hoc snapshot. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/managing-volumes.html#SchedulingSnapshot">Editing a snapshot schedule</a>.</p> <p>In the <code>CreateSnapshot</code> request, you identify the volume by providing its Amazon Resource Name (ARN). You must also provide description for the snapshot. When AWS Storage Gateway takes the snapshot of specified volume, the snapshot and description appears in the AWS Storage Gateway console. In response, AWS Storage Gateway returns you a snapshot ID. You can use this snapshot ID to check the snapshot progress or later use it when you want to create a volume from a snapshot. This operation is only supported in stored and cached volume gateway type.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeSnapshots.html">DescribeSnapshots</a> or <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DeleteSnapshot.html">DeleteSnapshot</a> in the <i>Amazon Elastic Compute Cloud API Reference</i>.</p> </note> <important> <p>Volume and snapshot IDs are changing to a longer length ID format. For more information, see the important note on the <a href="https://docs.aws.amazon.com/storagegateway/latest/APIReference/Welcome.html">Welcome</a> page.</p> </important></p>
+    /// <p><p>Initiates a snapshot of a volume.</p> <p>AWS Storage Gateway provides the ability to back up point-in-time snapshots of your data to Amazon Simple Storage (Amazon S3) for durable off-site recovery, and also import the data to an Amazon Elastic Block Store (EBS) volume in Amazon Elastic Compute Cloud (EC2). You can take snapshots of your gateway volume on a scheduled or ad hoc basis. This API enables you to take an ad hoc snapshot. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/managing-volumes.html#SchedulingSnapshot">Editing a snapshot schedule</a>.</p> <p>In the <code>CreateSnapshot</code> request, you identify the volume by providing its Amazon Resource Name (ARN). You must also provide description for the snapshot. When AWS Storage Gateway takes the snapshot of specified volume, the snapshot and description appears in the AWS Storage Gateway console. In response, AWS Storage Gateway returns you a snapshot ID. You can use this snapshot ID to check the snapshot progress or later use it when you want to create a volume from a snapshot. This operation is only supported in stored and cached volume gateway type.</p> <note> <p>To list or delete a snapshot, you must use the Amazon EC2 API. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeSnapshots.html">DescribeSnapshots</a> or <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DeleteSnapshot.html">DeleteSnapshot</a> in the <i>Amazon Elastic Compute Cloud API Reference</i>.</p> </note> <important> <p>Volume and snapshot IDs are changing to a longer length ID format. For more information, see the important note on the <a href="https://docs.aws.amazon.com/storagegateway/latest/APIReference/Welcome.html">Welcome</a> page.</p> </important></p>
     async fn create_snapshot(
         &self,
         input: CreateSnapshotInput,
@@ -7937,7 +8404,7 @@ impl StorageGateway for StorageGatewayClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteVolumeOutput, _>()
     }
 
-    /// <p>Returns information about the most recent High Availability monitoring test that was performed on the host in a cluster. If a test isn't performed, the status and start time in the response would be null.</p>
+    /// <p>Returns information about the most recent high availability monitoring test that was performed on the host in a cluster. If a test isn't performed, the status and start time in the response would be null.</p>
     async fn describe_availability_monitor_test(
         &self,
         input: DescribeAvailabilityMonitorTestInput,
@@ -8074,6 +8541,31 @@ impl StorageGateway for StorageGatewayClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<DescribeChapCredentialsOutput, _>()
+    }
+
+    /// <p>Gets the file system association information. This operation is only supported for Amazon FSx file gateways.</p>
+    async fn describe_file_system_associations(
+        &self,
+        input: DescribeFileSystemAssociationsInput,
+    ) -> Result<
+        DescribeFileSystemAssociationsOutput,
+        RusotoError<DescribeFileSystemAssociationsError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "StorageGateway_20130630.DescribeFileSystemAssociations",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeFileSystemAssociationsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeFileSystemAssociationsOutput, _>()
     }
 
     /// <p>Returns metadata about a gateway such as its name, network interfaces, configured time zone, and the state (whether the gateway is running or not). To specify which gateway to describe, use the Amazon Resource Name (ARN) of the gateway in your request.</p>
@@ -8389,6 +8881,28 @@ impl StorageGateway for StorageGatewayClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DisableGatewayOutput, _>()
     }
 
+    /// <p>Disassociates an Amazon FSx file system from the specified gateway. After the disassociation process finishes, the gateway can no longer access the Amazon FSx file system. This operation is only supported in the Amazon FSx file gateway type.</p>
+    async fn disassociate_file_system(
+        &self,
+        input: DisassociateFileSystemInput,
+    ) -> Result<DisassociateFileSystemOutput, RusotoError<DisassociateFileSystemError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "StorageGateway_20130630.DisassociateFileSystem",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DisassociateFileSystemError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DisassociateFileSystemOutput, _>()
+    }
+
     /// <p>Adds a file gateway to an Active Directory domain. This operation is only supported for file gateways that support the SMB file protocol.</p>
     async fn join_domain(
         &self,
@@ -8451,6 +8965,29 @@ impl StorageGateway for StorageGatewayClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListFileSharesOutput, _>()
+    }
+
+    /// <p>Gets a list of <code>FileSystemAssociationSummary</code> objects. Each object contains a summary of a file system association. This operation is only supported for Amazon FSx file gateways.</p>
+    async fn list_file_system_associations(
+        &self,
+        input: ListFileSystemAssociationsInput,
+    ) -> Result<ListFileSystemAssociationsOutput, RusotoError<ListFileSystemAssociationsError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "StorageGateway_20130630.ListFileSystemAssociations",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListFileSystemAssociationsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListFileSystemAssociationsOutput, _>()
     }
 
     /// <p>Lists gateways owned by an AWS account in an AWS Region specified in the request. The returned list is ordered by gateway Amazon Resource Name (ARN).</p> <p>By default, the operation returns a maximum of 100 gateways. This operation supports pagination that allows you to optionally reduce the number of gateways returned in a response.</p> <p>If you have more gateways than are returned in a response (that is, the response returns only a truncated list of your gateways), the response contains a marker that you can specify in your next request to fetch the next page of gateways.</p>
@@ -8625,7 +9162,7 @@ impl StorageGateway for StorageGatewayClient {
         proto::json::ResponsePayload::new(&response).deserialize::<NotifyWhenUploadedOutput, _>()
     }
 
-    /// <p>Refreshes the cache for the specified file share. This operation finds objects in the Amazon S3 bucket that were added, removed, or replaced since the gateway last listed the bucket's contents and cached the results. This operation is only supported in the file gateway type. You can subscribe to be notified through an Amazon CloudWatch event when your RefreshCache operation completes. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting notified about file operations</a> in the <i>AWS Storage Gateway User Guide</i>.</p> <p>When this API is called, it only initiates the refresh operation. When the API call completes and returns a success code, it doesn't necessarily mean that the file refresh has completed. You should use the refresh-complete notification to determine that the operation has completed before you check for new files on the gateway file share. You can subscribe to be notified through an CloudWatch event when your <code>RefreshCache</code> operation completes.</p> <p>Throttle limit: This API is asynchronous so the gateway will accept no more than two refreshes at any time. We recommend using the refresh-complete CloudWatch event notification before issuing additional requests. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting notified about file operations</a> in the <i>AWS Storage Gateway User Guide</i>.</p> <p>If you invoke the RefreshCache API when two requests are already being processed, any new request will cause an <code>InvalidGatewayRequestException</code> error because too many requests were sent to the server.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting notified about file operations</a> in the <i>AWS Storage Gateway User Guide</i>.</p>
+    /// <p>Refreshes the cached inventory of objects for the specified file share. This operation finds objects in the Amazon S3 bucket that were added, removed, or replaced since the gateway last listed the bucket's contents and cached the results. This operation does not import files into the file gateway cache storage. It only updates the cached inventory to reflect changes in the inventory of the objects in the S3 bucket. This operation is only supported in the file gateway type. You can subscribe to be notified through an Amazon CloudWatch event when your <code>RefreshCache</code> operation completes. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting notified about file operations</a> in the <i>AWS Storage Gateway User Guide</i>.</p> <p>When this API is called, it only initiates the refresh operation. When the API call completes and returns a success code, it doesn't necessarily mean that the file refresh has completed. You should use the refresh-complete notification to determine that the operation has completed before you check for new files on the gateway file share. You can subscribe to be notified through a CloudWatch event when your <code>RefreshCache</code> operation completes.</p> <p>Throttle limit: This API is asynchronous, so the gateway will accept no more than two refreshes at any time. We recommend using the refresh-complete CloudWatch event notification before issuing additional requests. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting notified about file operations</a> in the <i>AWS Storage Gateway User Guide</i>.</p> <p>If you invoke the RefreshCache API when two requests are already being processed, any new request will cause an <code>InvalidGatewayRequestException</code> error because too many requests were sent to the server.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting notified about file operations</a> in the <i>AWS Storage Gateway User Guide</i>.</p>
     async fn refresh_cache(
         &self,
         input: RefreshCacheInput,
@@ -8925,6 +9462,29 @@ impl StorageGateway for StorageGatewayClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateChapCredentialsOutput, _>()
+    }
+
+    /// <p>Updates a file system association. This operation is only supported in the Amazon FSx file gateway type.</p>
+    async fn update_file_system_association(
+        &self,
+        input: UpdateFileSystemAssociationInput,
+    ) -> Result<UpdateFileSystemAssociationOutput, RusotoError<UpdateFileSystemAssociationError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "StorageGateway_20130630.UpdateFileSystemAssociation",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateFileSystemAssociationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateFileSystemAssociationOutput, _>()
     }
 
     /// <p><p>Updates a gateway&#39;s metadata, which includes the gateway&#39;s name and time zone. To specify which gateway to update, use the Amazon Resource Name (ARN) of the gateway in your request.</p> <note> <p>For gateways activated after September 2, 2015, the gateway&#39;s ARN contains the gateway ID rather than the gateway name. However, changing the name of the gateway has no effect on the gateway&#39;s ARN.</p> </note></p>

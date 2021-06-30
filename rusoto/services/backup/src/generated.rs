@@ -32,7 +32,7 @@ pub struct AdvancedBackupSetting {
     #[serde(rename = "BackupOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backup_options: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The type of AWS resource to be backed up. For VSS Windows backups, the only supported resource type is Amazon EC2.</p> <p>Valid values: <code>EC2</code>.</p>
+    /// <p>Specifies an object containing resource type and backup options. The only supported resource type is Amazon EC2 instances with Windows VSS. For an CloudFormation example, see the <a href="https://docs.aws.amazon.com/aws-backup/latest/devguide/integrate-cloudformation-with-aws-backup.html">sample CloudFormation template to enable Windows VSS</a> in the <i>AWS Backup User Guide</i>.</p> <p>Valid values: <code>EC2</code>.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
@@ -90,7 +90,7 @@ pub struct BackupJob {
     #[serde(rename = "ExpectedCompletionDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expected_completion_date: Option<f64>,
-    /// <p>Specifies the IAM role ARN used to create the target recovery point; for example, <code>arn:aws:iam::123456789012:role/S3Access</code>.</p>
+    /// <p>Specifies the IAM role ARN used to create the target recovery point. IAM roles other than the default role must include either <code>AWSBackup</code> or <code>AwsBackup</code> in the role name. For example, <code>arn:aws:iam::123456789012:role/AWSBackupRDSAccess</code>. Role names without those strings lack permissions to perform backup jobs.</p>
     #[serde(rename = "IamRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_role_arn: Option<String>,
@@ -224,7 +224,11 @@ pub struct BackupRule {
     #[serde(rename = "CopyActions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub copy_actions: Option<Vec<CopyAction>>,
-    /// <p>The lifecycle defines when a protected resource is transitioned to cold storage and when it expires. AWS Backup transitions and expires backups automatically according to the lifecycle that you define. </p> <p>Backups transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, the “expire after days” setting must be 90 days greater than the “transition to cold after days” setting. The “transition to cold after days” setting cannot be changed after a backup has been transitioned to cold. </p>
+    /// <p>Specifies whether AWS Backup creates continuous backups. True causes AWS Backup to create continuous backups capable of point-in-time restore (PITR). False (or not specified) causes AWS Backup to create snapshot backups.</p>
+    #[serde(rename = "EnableContinuousBackup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_continuous_backup: Option<bool>,
+    /// <p>The lifecycle defines when a protected resource is transitioned to cold storage and when it expires. AWS Backup transitions and expires backups automatically according to the lifecycle that you define. </p> <p>Backups transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, the “expire after days” setting must be 90 days greater than the “transition to cold after days” setting. The “transition to cold after days” setting cannot be changed after a backup has been transitioned to cold. </p> <p>Only Amazon EFS file system backups can be transitioned to cold storage.</p>
     #[serde(rename = "Lifecycle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lifecycle: Option<Lifecycle>,
@@ -264,7 +268,11 @@ pub struct BackupRuleInput {
     #[serde(rename = "CopyActions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub copy_actions: Option<Vec<CopyAction>>,
-    /// <p>The lifecycle defines when a protected resource is transitioned to cold storage and when it expires. AWS Backup will transition and expire backups automatically according to the lifecycle that you define. </p> <p>Backups transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, the “expire after days” setting must be 90 days greater than the “transition to cold after days” setting. The “transition to cold after days” setting cannot be changed after a backup has been transitioned to cold. </p>
+    /// <p>Specifies whether AWS Backup creates continuous backups. True causes AWS Backup to create continuous backups capable of point-in-time restore (PITR). False (or not specified) causes AWS Backup to create snapshot backups.</p>
+    #[serde(rename = "EnableContinuousBackup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_continuous_backup: Option<bool>,
+    /// <p>The lifecycle defines when a protected resource is transitioned to cold storage and when it expires. AWS Backup will transition and expire backups automatically according to the lifecycle that you define. </p> <p>Backups transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, the “expire after days” setting must be 90 days greater than the “transition to cold after days” setting. The “transition to cold after days” setting cannot be changed after a backup has been transitioned to cold. </p> <p>Only Amazon EFS file system backups can be transitioned to cold storage.</p>
     #[serde(rename = "Lifecycle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lifecycle: Option<Lifecycle>,
@@ -294,7 +302,7 @@ pub struct BackupSelection {
     /// <p>The ARN of the IAM role that AWS Backup uses to authenticate when backing up the target resource; for example, <code>arn:aws:iam::123456789012:role/S3Access</code>.</p>
     #[serde(rename = "IamRoleArn")]
     pub iam_role_arn: String,
-    /// <p>An array of conditions used to specify a set of resources to assign to a backup plan; for example, <code>"StringEquals": {"ec2:ResourceTag/Department": "accounting"</code>.</p>
+    /// <p>An array of conditions used to specify a set of resources to assign to a backup plan; for example, <code>"StringEquals": {"ec2:ResourceTag/Department": "accounting"</code>. Assigns the backup plan to every resource with at least one matching tag.</p>
     #[serde(rename = "ListOfTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub list_of_tags: Option<Vec<Condition>>,
@@ -367,7 +375,7 @@ pub struct BackupVaultListMember {
     pub number_of_recovery_points: Option<i64>,
 }
 
-/// <p>Contains <code>DeleteAt</code> and <code>MoveToColdStorageAt</code> timestamps, which are used to specify a lifecycle for a recovery point.</p> <p>The lifecycle defines when a protected resource is transitioned to cold storage and when it expires. AWS Backup transitions and expires backups automatically according to the lifecycle that you define.</p> <p>Backups transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, the “expire after days” setting must be 90 days greater than the “transition to cold after days” setting. The “transition to cold after days” setting cannot be changed after a backup has been transitioned to cold.</p>
+/// <p>Contains <code>DeleteAt</code> and <code>MoveToColdStorageAt</code> timestamps, which are used to specify a lifecycle for a recovery point.</p> <p>The lifecycle defines when a protected resource is transitioned to cold storage and when it expires. AWS Backup transitions and expires backups automatically according to the lifecycle that you define.</p> <p>Backups transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, the “expire after days” setting must be 90 days greater than the “transition to cold after days” setting. The “transition to cold after days” setting cannot be changed after a backup has been transitioned to cold.</p> <p>Only Amazon EFS file system backups can be transitioned to cold storage.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CalculatedLifecycle {
@@ -449,7 +457,7 @@ pub struct CopyJob {
     #[serde(rename = "ResourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arn: Option<String>,
-    /// <p>The type of AWS resource to be copied; for example, an Amazon Elastic Block Store (Amazon EBS) volume or an Amazon Relational Database Service (Amazon RDS) database. </p>
+    /// <p>The type of AWS resource to be copied; for example, an Amazon Elastic Block Store (Amazon EBS) volume or an Amazon Relational Database Service (Amazon RDS) database.</p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
@@ -547,7 +555,7 @@ pub struct CreateBackupSelectionOutput {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateBackupVaultInput {
-    /// <p>The name of a logical container where backups are stored. Backup vaults are identified by names that are unique to the account used to create them and the AWS Region where they are created. They consist of lowercase letters, numbers, and hyphens.</p>
+    /// <p>The name of a logical container where backups are stored. Backup vaults are identified by names that are unique to the account used to create them and the AWS Region where they are created. They consist of letters, numbers, and hyphens.</p>
     #[serde(rename = "BackupVaultName")]
     pub backup_vault_name: String,
     /// <p>Metadata that you can assign to help organize the resources that you create. Each tag is a key-value pair.</p>
@@ -814,7 +822,7 @@ pub struct DescribeGlobalSettingsOutput {
     #[serde(rename = "GlobalSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub global_settings: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The date and time that the global settings was last updated. This update is in Unix format and Coordinated Universal Time (UTC). The value of <code>LastUpdateTime</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
+    /// <p>The date and time that the global settings were last updated. This update is in Unix format and Coordinated Universal Time (UTC). The value of <code>LastUpdateTime</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
     #[serde(rename = "LastUpdateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_update_time: Option<f64>,
@@ -903,7 +911,7 @@ pub struct DescribeRecoveryPointOutput {
     #[serde(rename = "LastRestoreTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_restore_time: Option<f64>,
-    /// <p>The lifecycle defines when a protected resource is transitioned to cold storage and when it expires. AWS Backup transitions and expires backups automatically according to the lifecycle that you define. </p> <p>Backups that are transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, the “expire after days” setting must be 90 days greater than the “transition to cold after days” setting. The “transition to cold after days” setting cannot be changed after a backup has been transitioned to cold. </p>
+    /// <p>The lifecycle defines when a protected resource is transitioned to cold storage and when it expires. AWS Backup transitions and expires backups automatically according to the lifecycle that you define. </p> <p>Backups that are transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, the “expire after days” setting must be 90 days greater than the “transition to cold after days” setting. The “transition to cold after days” setting cannot be changed after a backup has been transitioned to cold. </p> <p>Only Amazon EFS file system backups can be transitioned to cold storage.</p>
     #[serde(rename = "Lifecycle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lifecycle: Option<Lifecycle>,
@@ -1009,6 +1017,17 @@ pub struct DescribeRestoreJobOutput {
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_message: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DisassociateRecoveryPointInput {
+    /// <p>The unique name of an AWS Backup vault. Required.</p>
+    #[serde(rename = "BackupVaultName")]
+    pub backup_vault_name: String,
+    /// <p>An Amazon Resource Name (ARN) that uniquely identifies an AWS Backup recovery point. Required.</p>
+    #[serde(rename = "RecoveryPointArn")]
+    pub recovery_point_arn: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1236,13 +1255,13 @@ pub struct GetRecoveryPointRestoreMetadataOutput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetSupportedResourceTypesOutput {
-    /// <p><p>Contains a string with the supported AWS resource types:</p> <ul> <li> <p> <code>DynamoDB</code> for Amazon DynamoDB</p> </li> <li> <p> <code>EBS</code> for Amazon Elastic Block Store</p> </li> <li> <p> <code>EC2</code> for Amazon Elastic Compute Cloud</p> </li> <li> <p> <code>EFS</code> for Amazon Elastic File System</p> </li> <li> <p> <code>RDS</code> for Amazon Relational Database Service</p> </li> <li> <p> <code>Storage Gateway</code> for AWS Storage Gateway</p> </li> </ul></p>
+    /// <p><p>Contains a string with the supported AWS resource types:</p> <ul> <li> <p> <code>DynamoDB</code> for Amazon DynamoDB</p> </li> <li> <p> <code>EBS</code> for Amazon Elastic Block Store</p> </li> <li> <p> <code>EC2</code> for Amazon Elastic Compute Cloud</p> </li> <li> <p> <code>EFS</code> for Amazon Elastic File System</p> </li> <li> <p> <code>RDS</code> for Amazon Relational Database Service</p> </li> <li> <p> <code>Aurora</code> for Amazon Aurora</p> </li> <li> <p> <code>Storage Gateway</code> for AWS Storage Gateway</p> </li> </ul></p>
     #[serde(rename = "ResourceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_types: Option<Vec<String>>,
 }
 
-/// <p>Contains an array of <code>Transition</code> objects specifying how long in days before a recovery point transitions to cold storage or is deleted.</p> <p>Backups transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, on the console, the “expire after days” setting must be 90 days greater than the “transition to cold after days” setting. The “transition to cold after days” setting cannot be changed after a backup has been transitioned to cold.</p>
+/// <p>Contains an array of <code>Transition</code> objects specifying how long in days before a recovery point transitions to cold storage or is deleted.</p> <p>Backups transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, on the console, the “expire after days” setting must be 90 days greater than the “transition to cold after days” setting. The “transition to cold after days” setting cannot be changed after a backup has been transitioned to cold.</p> <p>Only Amazon EFS file system backups can be transitioned to cold storage.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Lifecycle {
     /// <p>Specifies the number of days after creation that a recovery point is deleted. Must be greater than 90 days plus <code>MoveToColdStorageAfterDays</code>.</p>
@@ -1258,7 +1277,7 @@ pub struct Lifecycle {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListBackupJobsInput {
-    /// <p>The account ID to list the jobs from. Returns only backup jobs associated with the specified account ID.</p>
+    /// <p>The account ID to list the jobs from. Returns only backup jobs associated with the specified account ID.</p> <p>If used from an AWS Organizations management account, passing <code>*</code> returns all jobs across the organization.</p>
     #[serde(rename = "ByAccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub by_account_id: Option<String>,
@@ -1278,7 +1297,7 @@ pub struct ListBackupJobsInput {
     #[serde(rename = "ByResourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub by_resource_arn: Option<String>,
-    /// <p><p>Returns only backup jobs for the specified resources:</p> <ul> <li> <p> <code>DynamoDB</code> for Amazon DynamoDB</p> </li> <li> <p> <code>EBS</code> for Amazon Elastic Block Store</p> </li> <li> <p> <code>EC2</code> for Amazon Elastic Compute Cloud</p> </li> <li> <p> <code>EFS</code> for Amazon Elastic File System</p> </li> <li> <p> <code>RDS</code> for Amazon Relational Database Service</p> </li> <li> <p> <code>Storage Gateway</code> for AWS Storage Gateway</p> </li> </ul></p>
+    /// <p><p>Returns only backup jobs for the specified resources:</p> <ul> <li> <p> <code>DynamoDB</code> for Amazon DynamoDB</p> </li> <li> <p> <code>EBS</code> for Amazon Elastic Block Store</p> </li> <li> <p> <code>EC2</code> for Amazon Elastic Compute Cloud</p> </li> <li> <p> <code>EFS</code> for Amazon Elastic File System</p> </li> <li> <p> <code>RDS</code> for Amazon Relational Database Service</p> </li> <li> <p> <code>Aurora</code> for Amazon Aurora</p> </li> <li> <p> <code>Storage Gateway</code> for AWS Storage Gateway</p> </li> </ul></p>
     #[serde(rename = "ByResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub by_resource_type: Option<String>,
@@ -1472,7 +1491,7 @@ pub struct ListCopyJobsInput {
     #[serde(rename = "ByResourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub by_resource_arn: Option<String>,
-    /// <p><p>Returns only backup jobs for the specified resources:</p> <ul> <li> <p> <code>DynamoDB</code> for Amazon DynamoDB</p> </li> <li> <p> <code>EBS</code> for Amazon Elastic Block Store</p> </li> <li> <p> <code>EC2</code> for Amazon Elastic Compute Cloud</p> </li> <li> <p> <code>EFS</code> for Amazon Elastic File System</p> </li> <li> <p> <code>RDS</code> for Amazon Relational Database Service</p> </li> <li> <p> <code>Storage Gateway</code> for AWS Storage Gateway</p> </li> </ul></p>
+    /// <p><p>Returns only backup jobs for the specified resources:</p> <ul> <li> <p> <code>DynamoDB</code> for Amazon DynamoDB</p> </li> <li> <p> <code>EBS</code> for Amazon Elastic Block Store</p> </li> <li> <p> <code>EC2</code> for Amazon Elastic Compute Cloud</p> </li> <li> <p> <code>EFS</code> for Amazon Elastic File System</p> </li> <li> <p> <code>RDS</code> for Amazon Relational Database Service</p> </li> <li> <p> <code>Aurora</code> for Amazon Aurora</p> </li> <li> <p> <code>Storage Gateway</code> for AWS Storage Gateway</p> </li> </ul></p>
     #[serde(rename = "ByResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub by_resource_type: Option<String>,
@@ -1770,7 +1789,7 @@ pub struct RecoveryPointByBackupVault {
     #[serde(rename = "LastRestoreTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_restore_time: Option<f64>,
-    /// <p>The lifecycle defines when a protected resource is transitioned to cold storage and when it expires. AWS Backup transitions and expires backups automatically according to the lifecycle that you define. </p> <p>Backups transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, the “expire after days” setting must be 90 days greater than the “transition to cold after days” setting. The “transition to cold after days” setting cannot be changed after a backup has been transitioned to cold. </p>
+    /// <p>The lifecycle defines when a protected resource is transitioned to cold storage and when it expires. AWS Backup transitions and expires backups automatically according to the lifecycle that you define. </p> <p>Backups transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, the “expire after days” setting must be 90 days greater than the “transition to cold after days” setting. The “transition to cold after days” setting cannot be changed after a backup has been transitioned to cold. </p> <p>Only Amazon EFS file system backups can be transitioned to cold storage.</p>
     #[serde(rename = "Lifecycle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lifecycle: Option<Lifecycle>,
@@ -1916,7 +1935,7 @@ pub struct StartBackupJobInput {
     /// <p>The name of a logical container where backups are stored. Backup vaults are identified by names that are unique to the account used to create them and the AWS Region where they are created. They consist of lowercase letters, numbers, and hyphens.</p>
     #[serde(rename = "BackupVaultName")]
     pub backup_vault_name: String,
-    /// <p>A value in minutes after a backup job is successfully started before it must be completed or it will be canceled by AWS Backup. This value is optional.</p>
+    /// <p>A value in minutes during which a successfully started backup must complete, or else AWS Backup will cancel the job. This value is optional. This value begins counting down from when the backup was scheduled. It does not add additional time for <code>StartWindowMinutes</code>, or if the backup started later than scheduled.</p>
     #[serde(rename = "CompleteWindowMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub complete_window_minutes: Option<i64>,
@@ -1927,7 +1946,7 @@ pub struct StartBackupJobInput {
     #[serde(rename = "IdempotencyToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub idempotency_token: Option<String>,
-    /// <p>The lifecycle defines when a protected resource is transitioned to cold storage and when it expires. AWS Backup will transition and expire backups automatically according to the lifecycle that you define. </p> <p>Backups transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, the “expire after days” setting must be 90 days greater than the “transition to cold after days” setting. The “transition to cold after days” setting cannot be changed after a backup has been transitioned to cold. </p>
+    /// <p>The lifecycle defines when a protected resource is transitioned to cold storage and when it expires. AWS Backup will transition and expire backups automatically according to the lifecycle that you define. </p> <p>Backups transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, the “expire after days” setting must be 90 days greater than the “transition to cold after days” setting. The “transition to cold after days” setting cannot be changed after a backup has been transitioned to cold. </p> <p>Only Amazon EFS file system backups can be transitioned to cold storage.</p>
     #[serde(rename = "Lifecycle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lifecycle: Option<Lifecycle>,
@@ -1938,7 +1957,7 @@ pub struct StartBackupJobInput {
     /// <p>An Amazon Resource Name (ARN) that uniquely identifies a resource. The format of the ARN depends on the resource type.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
-    /// <p>A value in minutes after a backup is scheduled before a job will be canceled if it doesn't start successfully. This value is optional.</p>
+    /// <p>A value in minutes after a backup is scheduled before a job will be canceled if it doesn't start successfully. This value is optional, and the default is 8 hours.</p>
     #[serde(rename = "StartWindowMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_window_minutes: Option<i64>,
@@ -1951,7 +1970,7 @@ pub struct StartBackupJobOutput {
     #[serde(rename = "BackupJobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backup_job_id: Option<String>,
-    /// <p>The date and time that a backup job is started, in Unix format and Coordinated Universal Time (UTC). The value of <code>CreationDate</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
+    /// <p>The date and time that a backup job is created, in Unix format and Coordinated Universal Time (UTC). The value of <code>CreationDate</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
@@ -1992,7 +2011,7 @@ pub struct StartCopyJobOutput {
     #[serde(rename = "CopyJobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub copy_job_id: Option<String>,
-    /// <p>The date and time that a copy job is started, in Unix format and Coordinated Universal Time (UTC). The value of <code>CreationDate</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
+    /// <p>The date and time that a copy job is created, in Unix format and Coordinated Universal Time (UTC). The value of <code>CreationDate</code> is accurate to milliseconds. For example, the value 1516925490.087 represents Friday, January 26, 2018 12:11:30.087 AM.</p>
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
@@ -2008,13 +2027,13 @@ pub struct StartRestoreJobInput {
     #[serde(rename = "IdempotencyToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub idempotency_token: Option<String>,
-    /// <p><p>A set of metadata key-value pairs. Contains information, such as a resource name, required to restore a recovery point.</p> <p> You can get configuration metadata about a resource at the time it was backed up by calling <code>GetRecoveryPointRestoreMetadata</code>. However, values in addition to those provided by <code>GetRecoveryPointRestoreMetadata</code> might be required to restore a resource. For example, you might need to provide a new resource name if the original already exists.</p> <p>You need to specify specific metadata to restore an Amazon Elastic File System (Amazon EFS) instance:</p> <ul> <li> <p> <code>file-system-id</code>: The ID of the Amazon EFS file system that is backed up by AWS Backup. Returned in <code>GetRecoveryPointRestoreMetadata</code>.</p> </li> <li> <p> <code>Encrypted</code>: A Boolean value that, if true, specifies that the file system is encrypted. If <code>KmsKeyId</code> is specified, <code>Encrypted</code> must be set to <code>true</code>.</p> </li> <li> <p> <code>KmsKeyId</code>: Specifies the AWS KMS key that is used to encrypt the restored file system. You can specify a key from another AWS account provided that key it is properly shared with your account via AWS KMS.</p> </li> <li> <p> <code>PerformanceMode</code>: Specifies the throughput mode of the file system.</p> </li> <li> <p> <code>CreationToken</code>: A user-supplied value that ensures the uniqueness (idempotency) of the request.</p> </li> <li> <p> <code>newFileSystem</code>: A Boolean value that, if true, specifies that the recovery point is restored to a new Amazon EFS file system.</p> </li> <li> <p> <code>ItemsToRestore </code>: A serialized list of up to five strings where each string is a file path. Use <code>ItemsToRestore</code> to restore specific files or directories rather than the entire file system. This parameter is optional.</p> </li> </ul></p>
+    /// <p><p>A set of metadata key-value pairs. Contains information, such as a resource name, required to restore a recovery point.</p> <p> You can get configuration metadata about a resource at the time it was backed up by calling <code>GetRecoveryPointRestoreMetadata</code>. However, values in addition to those provided by <code>GetRecoveryPointRestoreMetadata</code> might be required to restore a resource. For example, you might need to provide a new resource name if the original already exists.</p> <p>You need to specify specific metadata to restore an Amazon Elastic File System (Amazon EFS) instance:</p> <ul> <li> <p> <code>file-system-id</code>: The ID of the Amazon EFS file system that is backed up by AWS Backup. Returned in <code>GetRecoveryPointRestoreMetadata</code>.</p> </li> <li> <p> <code>Encrypted</code>: A Boolean value that, if true, specifies that the file system is encrypted. If <code>KmsKeyId</code> is specified, <code>Encrypted</code> must be set to <code>true</code>.</p> </li> <li> <p> <code>KmsKeyId</code>: Specifies the AWS KMS key that is used to encrypt the restored file system. You can specify a key from another AWS account provided that key it is properly shared with your account via AWS KMS.</p> </li> <li> <p> <code>PerformanceMode</code>: Specifies the throughput mode of the file system.</p> </li> <li> <p> <code>CreationToken</code>: A user-supplied value that ensures the uniqueness (idempotency) of the request.</p> </li> <li> <p> <code>newFileSystem</code>: A Boolean value that, if true, specifies that the recovery point is restored to a new Amazon EFS file system.</p> </li> <li> <p> <code>ItemsToRestore </code>: An array of one to five strings where each string is a file path. Use <code>ItemsToRestore</code> to restore specific files or directories rather than the entire file system. This parameter is optional. For example, <code>&quot;itemsToRestore&quot;:&quot;[&quot;/my.test&quot;]&quot;</code>.</p> </li> </ul></p>
     #[serde(rename = "Metadata")]
     pub metadata: ::std::collections::HashMap<String, String>,
     /// <p>An ARN that uniquely identifies a recovery point; for example, <code>arn:aws:backup:us-east-1:123456789012:recovery-point:1EB3B5E7-9EB0-435A-A80B-108B488B0D45</code>.</p>
     #[serde(rename = "RecoveryPointArn")]
     pub recovery_point_arn: String,
-    /// <p><p>Starts a job to restore a recovery point for one of the following resources:</p> <ul> <li> <p> <code>DynamoDB</code> for Amazon DynamoDB</p> </li> <li> <p> <code>EBS</code> for Amazon Elastic Block Store</p> </li> <li> <p> <code>EC2</code> for Amazon Elastic Compute Cloud</p> </li> <li> <p> <code>EFS</code> for Amazon Elastic File System</p> </li> <li> <p> <code>RDS</code> for Amazon Relational Database Service</p> </li> <li> <p> <code>Storage Gateway</code> for AWS Storage Gateway</p> </li> </ul></p>
+    /// <p><p>Starts a job to restore a recovery point for one of the following resources:</p> <ul> <li> <p> <code>DynamoDB</code> for Amazon DynamoDB</p> </li> <li> <p> <code>EBS</code> for Amazon Elastic Block Store</p> </li> <li> <p> <code>EC2</code> for Amazon Elastic Compute Cloud</p> </li> <li> <p> <code>EFS</code> for Amazon Elastic File System</p> </li> <li> <p> <code>RDS</code> for Amazon Relational Database Service</p> </li> <li> <p> <code>Aurora</code> for Amazon Aurora</p> </li> <li> <p> <code>Storage Gateway</code> for AWS Storage Gateway</p> </li> </ul></p>
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
@@ -2043,7 +2062,7 @@ pub struct TagResourceInput {
     /// <p>An ARN that uniquely identifies a resource. The format of the ARN depends on the type of the tagged resource.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
-    /// <p>Key-value pairs that are used to help organize your resources. You can assign your own metadata to the resources you create. </p>
+    /// <p>Key-value pairs that are used to help organize your resources. You can assign your own metadata to the resources you create.</p>
     #[serde(rename = "Tags")]
     pub tags: ::std::collections::HashMap<String, String>,
 }
@@ -2130,7 +2149,7 @@ pub struct UpdateRecoveryPointLifecycleOutput {
     #[serde(rename = "CalculatedLifecycle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub calculated_lifecycle: Option<CalculatedLifecycle>,
-    /// <p>The lifecycle defines when a protected resource is transitioned to cold storage and when it expires. AWS Backup transitions and expires backups automatically according to the lifecycle that you define. </p> <p>Backups transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, the “expire after days” setting must be 90 days greater than the “transition to cold after days” setting. The “transition to cold after days” setting cannot be changed after a backup has been transitioned to cold. </p>
+    /// <p>The lifecycle defines when a protected resource is transitioned to cold storage and when it expires. AWS Backup transitions and expires backups automatically according to the lifecycle that you define. </p> <p>Backups transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, the “expire after days” setting must be 90 days greater than the “transition to cold after days” setting. The “transition to cold after days” setting cannot be changed after a backup has been transitioned to cold. </p> <p>Only Amazon EFS file system backups can be transitioned to cold storage.</p>
     #[serde(rename = "Lifecycle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lifecycle: Option<Lifecycle>,
@@ -2640,6 +2659,8 @@ pub enum DeleteRecoveryPointError {
     InvalidParameterValue(String),
     /// <p>Indicates that something is wrong with the input to the request. For example, a parameter is of the wrong type.</p>
     InvalidRequest(String),
+    /// <p>AWS Backup is already performing an action on this recovery point. It can't perform the action you requested until the first action finishes. Try again later.</p>
+    InvalidResourceState(String),
     /// <p>Indicates that a required parameter is missing.</p>
     MissingParameterValue(String),
     /// <p>A resource that is required for the action doesn't exist.</p>
@@ -2659,6 +2680,11 @@ impl DeleteRecoveryPointError {
                 }
                 "InvalidRequestException" => {
                     return RusotoError::Service(DeleteRecoveryPointError::InvalidRequest(err.msg))
+                }
+                "InvalidResourceStateException" => {
+                    return RusotoError::Service(DeleteRecoveryPointError::InvalidResourceState(
+                        err.msg,
+                    ))
                 }
                 "MissingParameterValueException" => {
                     return RusotoError::Service(DeleteRecoveryPointError::MissingParameterValue(
@@ -2688,6 +2714,7 @@ impl fmt::Display for DeleteRecoveryPointError {
         match *self {
             DeleteRecoveryPointError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
             DeleteRecoveryPointError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteRecoveryPointError::InvalidResourceState(ref cause) => write!(f, "{}", cause),
             DeleteRecoveryPointError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
             DeleteRecoveryPointError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             DeleteRecoveryPointError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
@@ -2866,6 +2893,8 @@ impl Error for DescribeCopyJobError {}
 /// Errors returned by DescribeGlobalSettings
 #[derive(Debug, PartialEq)]
 pub enum DescribeGlobalSettingsError {
+    /// <p>Indicates that something is wrong with the input to the request. For example, a parameter is of the wrong type.</p>
+    InvalidRequest(String),
     /// <p>The request failed due to a temporary failure of the server.</p>
     ServiceUnavailable(String),
 }
@@ -2874,6 +2903,11 @@ impl DescribeGlobalSettingsError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeGlobalSettingsError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
             match err.typ.as_str() {
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DescribeGlobalSettingsError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
                 "ServiceUnavailableException" => {
                     return RusotoError::Service(DescribeGlobalSettingsError::ServiceUnavailable(
                         err.msg,
@@ -2890,6 +2924,7 @@ impl fmt::Display for DescribeGlobalSettingsError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            DescribeGlobalSettingsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
             DescribeGlobalSettingsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -3105,6 +3140,84 @@ impl fmt::Display for DescribeRestoreJobError {
     }
 }
 impl Error for DescribeRestoreJobError {}
+/// Errors returned by DisassociateRecoveryPoint
+#[derive(Debug, PartialEq)]
+pub enum DisassociateRecoveryPointError {
+    /// <p>Indicates that something is wrong with a parameter's value. For example, the value is out of range.</p>
+    InvalidParameterValue(String),
+    /// <p>Indicates that something is wrong with the input to the request. For example, a parameter is of the wrong type.</p>
+    InvalidRequest(String),
+    /// <p>AWS Backup is already performing an action on this recovery point. It can't perform the action you requested until the first action finishes. Try again later.</p>
+    InvalidResourceState(String),
+    /// <p>Indicates that a required parameter is missing.</p>
+    MissingParameterValue(String),
+    /// <p>A resource that is required for the action doesn't exist.</p>
+    ResourceNotFound(String),
+    /// <p>The request failed due to a temporary failure of the server.</p>
+    ServiceUnavailable(String),
+}
+
+impl DisassociateRecoveryPointError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateRecoveryPointError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        DisassociateRecoveryPointError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DisassociateRecoveryPointError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "InvalidResourceStateException" => {
+                    return RusotoError::Service(
+                        DisassociateRecoveryPointError::InvalidResourceState(err.msg),
+                    )
+                }
+                "MissingParameterValueException" => {
+                    return RusotoError::Service(
+                        DisassociateRecoveryPointError::MissingParameterValue(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DisassociateRecoveryPointError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        DisassociateRecoveryPointError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DisassociateRecoveryPointError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DisassociateRecoveryPointError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateRecoveryPointError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DisassociateRecoveryPointError::InvalidResourceState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateRecoveryPointError::MissingParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateRecoveryPointError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DisassociateRecoveryPointError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DisassociateRecoveryPointError {}
 /// Errors returned by ExportBackupPlanTemplate
 #[derive(Debug, PartialEq)]
 pub enum ExportBackupPlanTemplateError {
@@ -4434,6 +4547,8 @@ impl Error for StartBackupJobError {}
 pub enum StartCopyJobError {
     /// <p>Indicates that something is wrong with a parameter's value. For example, the value is out of range.</p>
     InvalidParameterValue(String),
+    /// <p>Indicates that something is wrong with the input to the request. For example, a parameter is of the wrong type.</p>
+    InvalidRequest(String),
     /// <p>A limit in the request has been exceeded; for example, a maximum number of items allowed in a request.</p>
     LimitExceeded(String),
     /// <p>Indicates that a required parameter is missing.</p>
@@ -4450,6 +4565,9 @@ impl StartCopyJobError {
             match err.typ.as_str() {
                 "InvalidParameterValueException" => {
                     return RusotoError::Service(StartCopyJobError::InvalidParameterValue(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(StartCopyJobError::InvalidRequest(err.msg))
                 }
                 "LimitExceededException" => {
                     return RusotoError::Service(StartCopyJobError::LimitExceeded(err.msg))
@@ -4475,6 +4593,7 @@ impl fmt::Display for StartCopyJobError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             StartCopyJobError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            StartCopyJobError::InvalidRequest(ref cause) => write!(f, "{}", cause),
             StartCopyJobError::LimitExceeded(ref cause) => write!(f, "{}", cause),
             StartCopyJobError::MissingParameterValue(ref cause) => write!(f, "{}", cause),
             StartCopyJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
@@ -4962,7 +5081,7 @@ pub trait Backup {
         input: DeleteBackupVaultNotificationsInput,
     ) -> Result<(), RusotoError<DeleteBackupVaultNotificationsError>>;
 
-    /// <p>Deletes the recovery point specified by a recovery point ID.</p>
+    /// <p>Deletes the recovery point specified by a recovery point ID.</p> <p>If the recovery point ID belongs to a continuous backup, calling this endpoint deletes the existing continuous backup and stops future continuous backup.</p>
     async fn delete_recovery_point(
         &self,
         input: DeleteRecoveryPointInput,
@@ -4986,7 +5105,7 @@ pub trait Backup {
         input: DescribeCopyJobInput,
     ) -> Result<DescribeCopyJobOutput, RusotoError<DescribeCopyJobError>>;
 
-    /// <p>The current feature settings for the AWS Account.</p>
+    /// <p>Describes the global settings of the AWS account, including whether it is opted in to cross-account backup.</p>
     async fn describe_global_settings(
         &self,
     ) -> Result<DescribeGlobalSettingsOutput, RusotoError<DescribeGlobalSettingsError>>;
@@ -5014,13 +5133,19 @@ pub trait Backup {
         input: DescribeRestoreJobInput,
     ) -> Result<DescribeRestoreJobOutput, RusotoError<DescribeRestoreJobError>>;
 
+    /// <p>Deletes the specified continuous backup recovery point from AWS Backup and releases control of that continuous backup to the source service, such as Amazon RDS. The source service will continue to create and retain continuous backups using the lifecycle that you specified in your original backup plan.</p> <p>Does not support snapshot backup recovery points.</p>
+    async fn disassociate_recovery_point(
+        &self,
+        input: DisassociateRecoveryPointInput,
+    ) -> Result<(), RusotoError<DisassociateRecoveryPointError>>;
+
     /// <p>Returns the backup plan that is specified by the plan ID as a backup template.</p>
     async fn export_backup_plan_template(
         &self,
         input: ExportBackupPlanTemplateInput,
     ) -> Result<ExportBackupPlanTemplateOutput, RusotoError<ExportBackupPlanTemplateError>>;
 
-    /// <p>Returns <code>BackupPlan</code> details for the specified <code>BackupPlanId</code>. Returns the body of a backup plan in JSON format, in addition to plan metadata.</p>
+    /// <p>Returns <code>BackupPlan</code> details for the specified <code>BackupPlanId</code>. The details are the body of a backup plan in JSON format, in addition to plan metadata.</p>
     async fn get_backup_plan(
         &self,
         input: GetBackupPlanInput,
@@ -5070,7 +5195,7 @@ pub trait Backup {
         &self,
     ) -> Result<GetSupportedResourceTypesOutput, RusotoError<GetSupportedResourceTypesError>>;
 
-    /// <p>Returns a list of existing backup jobs for an authenticated account.</p>
+    /// <p>Returns a list of existing backup jobs for an authenticated account for the last 30 days. For a longer period of time, consider using these <a href="https://docs.aws.amazon.com/aws-backup/latest/devguide/monitoring.html">monitoring tools</a>.</p>
     async fn list_backup_jobs(
         &self,
         input: ListBackupJobsInput,
@@ -5163,13 +5288,13 @@ pub trait Backup {
         input: StartBackupJobInput,
     ) -> Result<StartBackupJobOutput, RusotoError<StartBackupJobError>>;
 
-    /// <p>Starts a job to create a one-time copy of the specified resource.</p>
+    /// <p>Starts a job to create a one-time copy of the specified resource.</p> <p>Does not support continuous backups.</p>
     async fn start_copy_job(
         &self,
         input: StartCopyJobInput,
     ) -> Result<StartCopyJobOutput, RusotoError<StartCopyJobError>>;
 
-    /// <p>Recovers the saved resource identified by an Amazon Resource Name (ARN). </p>
+    /// <p>Recovers the saved resource identified by an Amazon Resource Name (ARN).</p>
     async fn start_restore_job(
         &self,
         input: StartRestoreJobInput,
@@ -5199,13 +5324,13 @@ pub trait Backup {
         input: UpdateBackupPlanInput,
     ) -> Result<UpdateBackupPlanOutput, RusotoError<UpdateBackupPlanError>>;
 
-    /// <p>Updates the current global settings for the AWS Account. Use the <code>DescribeGlobalSettings</code> API to determine the current settings.</p>
+    /// <p>Updates the current global settings for the AWS account. Use the <code>DescribeGlobalSettings</code> API to determine the current settings.</p>
     async fn update_global_settings(
         &self,
         input: UpdateGlobalSettingsInput,
     ) -> Result<(), RusotoError<UpdateGlobalSettingsError>>;
 
-    /// <p>Sets the transition lifecycle of a recovery point.</p> <p>The lifecycle defines when a protected resource is transitioned to cold storage and when it expires. AWS Backup transitions and expires backups automatically according to the lifecycle that you define. </p> <p>Backups transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, the “expire after days” setting must be 90 days greater than the “transition to cold after days” setting. The “transition to cold after days” setting cannot be changed after a backup has been transitioned to cold. </p>
+    /// <p>Sets the transition lifecycle of a recovery point.</p> <p>The lifecycle defines when a protected resource is transitioned to cold storage and when it expires. AWS Backup transitions and expires backups automatically according to the lifecycle that you define.</p> <p>Backups transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, the “expire after days” setting must be 90 days greater than the “transition to cold after days” setting. The “transition to cold after days” setting cannot be changed after a backup has been transitioned to cold.</p> <p>Only Amazon EFS file system backups can be transitioned to cold storage.</p> <p>Does not support continuous backups.</p>
     async fn update_recovery_point_lifecycle(
         &self,
         input: UpdateRecoveryPointLifecycleInput,
@@ -5508,7 +5633,7 @@ impl Backup for BackupClient {
         }
     }
 
-    /// <p>Deletes the recovery point specified by a recovery point ID.</p>
+    /// <p>Deletes the recovery point specified by a recovery point ID.</p> <p>If the recovery point ID belongs to a continuous backup, calling this endpoint deletes the existing continuous backup and stops future continuous backup.</p>
     #[allow(unused_mut)]
     async fn delete_recovery_point(
         &self,
@@ -5629,7 +5754,7 @@ impl Backup for BackupClient {
         }
     }
 
-    /// <p>The current feature settings for the AWS Account.</p>
+    /// <p>Describes the global settings of the AWS account, including whether it is opted in to cross-account backup.</p>
     #[allow(unused_mut)]
     async fn describe_global_settings(
         &self,
@@ -5777,6 +5902,37 @@ impl Backup for BackupClient {
         }
     }
 
+    /// <p>Deletes the specified continuous backup recovery point from AWS Backup and releases control of that continuous backup to the source service, such as Amazon RDS. The source service will continue to create and retain continuous backups using the lifecycle that you specified in your original backup plan.</p> <p>Does not support snapshot backup recovery points.</p>
+    #[allow(unused_mut)]
+    async fn disassociate_recovery_point(
+        &self,
+        input: DisassociateRecoveryPointInput,
+    ) -> Result<(), RusotoError<DisassociateRecoveryPointError>> {
+        let request_uri = format!(
+            "/backup-vaults/{backup_vault_name}/recovery-points/{recovery_point_arn}/disassociate",
+            backup_vault_name = input.backup_vault_name,
+            recovery_point_arn = input.recovery_point_arn
+        );
+
+        let mut request = SignedRequest::new("POST", "backup", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateRecoveryPointError::from_response(response))
+        }
+    }
+
     /// <p>Returns the backup plan that is specified by the plan ID as a backup template.</p>
     #[allow(unused_mut)]
     async fn export_backup_plan_template(
@@ -5808,7 +5964,7 @@ impl Backup for BackupClient {
         }
     }
 
-    /// <p>Returns <code>BackupPlan</code> details for the specified <code>BackupPlanId</code>. Returns the body of a backup plan in JSON format, in addition to plan metadata.</p>
+    /// <p>Returns <code>BackupPlan</code> details for the specified <code>BackupPlanId</code>. The details are the body of a backup plan in JSON format, in addition to plan metadata.</p>
     #[allow(unused_mut)]
     async fn get_backup_plan(
         &self,
@@ -6063,7 +6219,7 @@ impl Backup for BackupClient {
         }
     }
 
-    /// <p>Returns a list of existing backup jobs for an authenticated account.</p>
+    /// <p>Returns a list of existing backup jobs for an authenticated account for the last 30 days. For a longer period of time, consider using these <a href="https://docs.aws.amazon.com/aws-backup/latest/devguide/monitoring.html">monitoring tools</a>.</p>
     #[allow(unused_mut)]
     async fn list_backup_jobs(
         &self,
@@ -6694,7 +6850,7 @@ impl Backup for BackupClient {
         }
     }
 
-    /// <p>Starts a job to create a one-time copy of the specified resource.</p>
+    /// <p>Starts a job to create a one-time copy of the specified resource.</p> <p>Does not support continuous backups.</p>
     #[allow(unused_mut)]
     async fn start_copy_job(
         &self,
@@ -6725,7 +6881,7 @@ impl Backup for BackupClient {
         }
     }
 
-    /// <p>Recovers the saved resource identified by an Amazon Resource Name (ARN). </p>
+    /// <p>Recovers the saved resource identified by an Amazon Resource Name (ARN).</p>
     #[allow(unused_mut)]
     async fn start_restore_job(
         &self,
@@ -6880,7 +7036,7 @@ impl Backup for BackupClient {
         }
     }
 
-    /// <p>Updates the current global settings for the AWS Account. Use the <code>DescribeGlobalSettings</code> API to determine the current settings.</p>
+    /// <p>Updates the current global settings for the AWS account. Use the <code>DescribeGlobalSettings</code> API to determine the current settings.</p>
     #[allow(unused_mut)]
     async fn update_global_settings(
         &self,
@@ -6910,7 +7066,7 @@ impl Backup for BackupClient {
         }
     }
 
-    /// <p>Sets the transition lifecycle of a recovery point.</p> <p>The lifecycle defines when a protected resource is transitioned to cold storage and when it expires. AWS Backup transitions and expires backups automatically according to the lifecycle that you define. </p> <p>Backups transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, the “expire after days” setting must be 90 days greater than the “transition to cold after days” setting. The “transition to cold after days” setting cannot be changed after a backup has been transitioned to cold. </p>
+    /// <p>Sets the transition lifecycle of a recovery point.</p> <p>The lifecycle defines when a protected resource is transitioned to cold storage and when it expires. AWS Backup transitions and expires backups automatically according to the lifecycle that you define.</p> <p>Backups transitioned to cold storage must be stored in cold storage for a minimum of 90 days. Therefore, the “expire after days” setting must be 90 days greater than the “transition to cold after days” setting. The “transition to cold after days” setting cannot be changed after a backup has been transitioned to cold.</p> <p>Only Amazon EFS file system backups can be transitioned to cold storage.</p> <p>Does not support continuous backups.</p>
     #[allow(unused_mut)]
     async fn update_recovery_point_lifecycle(
         &self,

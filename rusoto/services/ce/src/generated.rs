@@ -186,6 +186,9 @@ pub struct CostCategory {
     /// <p> The unique identifier for your Cost Category. </p>
     #[serde(rename = "CostCategoryArn")]
     pub cost_category_arn: String,
+    #[serde(rename = "DefaultValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_value: Option<String>,
     /// <p> The Cost Category's effective end date.</p>
     #[serde(rename = "EffectiveEnd")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -204,6 +207,19 @@ pub struct CostCategory {
     /// <p> Rules are processed in order. If there are multiple rules that match the line item, then the first rule to match is used to determine that Cost Category value. </p>
     #[serde(rename = "Rules")]
     pub rules: Vec<CostCategoryRule>,
+}
+
+/// <p>When creating or updating a cost category, you can define the <code>CostCategoryRule</code> rule type as <code>INHERITED_VALUE</code>. This rule type adds the flexibility of defining a rule that dynamically inherits the cost category value from the dimension value defined by <code>CostCategoryInheritedValueDimension</code>. For example, if you wanted to dynamically group costs based on the value of a specific tag key, you would first choose an inherited value rule type, then choose the tag dimension and specify the tag key to use.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct CostCategoryInheritedValueDimension {
+    /// <p>The key to extract cost category values.</p>
+    #[serde(rename = "DimensionKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dimension_key: Option<String>,
+    /// <p>The name of dimension for which to group costs.</p> <p>If you specify <code>LINKED_ACCOUNT_NAME</code>, the cost category value will be based on account name. If you specify <code>TAG</code>, the cost category value will be based on the value of the specified tag key.</p>
+    #[serde(rename = "DimensionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dimension_name: Option<String>,
 }
 
 /// <p> The list of processing statuses for Cost Management products for a specific cost category. </p>
@@ -228,6 +244,9 @@ pub struct CostCategoryReference {
     #[serde(rename = "CostCategoryArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cost_category_arn: Option<String>,
+    #[serde(rename = "DefaultValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_value: Option<String>,
     /// <p> The Cost Category's effective end date.</p>
     #[serde(rename = "EffectiveEnd")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -256,20 +275,30 @@ pub struct CostCategoryReference {
 /// <p>Rules are processed in order. If there are multiple rules that match the line item, then the first rule to match is used to determine that Cost Category value.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CostCategoryRule {
+    /// <p>The value the line item will be categorized as, if the line item contains the matched dimension.</p>
+    #[serde(rename = "InheritedValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub inherited_value: Option<CostCategoryInheritedValueDimension>,
     /// <p>An <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Expression.html">Expression</a> object used to categorize costs. This supports dimensions, tags, and nested expressions. Currently the only dimensions supported are <code>LINKED_ACCOUNT</code>, <code>SERVICE_CODE</code>, <code>RECORD_TYPE</code>, and <code>LINKED_ACCOUNT_NAME</code>.</p> <p>Root level <code>OR</code> is not supported. We recommend that you create a separate rule instead.</p> <p> <code>RECORD_TYPE</code> is a dimension used for Cost Explorer APIs, and is also supported for Cost Category expressions. This dimension uses different terms, depending on whether you're using the console or API/JSON editor. For a detailed comparison, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/manage-cost-categories.html#cost-categories-terms">Term Comparisons</a> in the <i>AWS Billing and Cost Management User Guide</i>.</p>
     #[serde(rename = "Rule")]
-    pub rule: Expression,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule: Option<Expression>,
+    /// <p>You can define the <code>CostCategoryRule</code> rule type as either <code>REGULAR</code> or <code>INHERITED_VALUE</code>. The <code>INHERITED_VALUE</code> rule type adds the flexibility of defining a rule that dynamically inherits the cost category value from the dimension value defined by <code>CostCategoryInheritedValueDimension</code>. For example, if you wanted to dynamically group costs based on the value of a specific tag key, you would first choose an inherited value rule type, then choose the tag dimension and specify the tag key to use.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
     #[serde(rename = "Value")]
-    pub value: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
 }
 
-/// <p>The Cost Categories values used for filtering the costs.</p>
+/// <p>The Cost Categories values used for filtering the costs.</p> <p>If <code>Values</code> and <code>Key</code> are not specified, the <code>ABSENT</code> <code>MatchOption</code> is applied to all Cost Categories. That is, filtering on resources that are not mapped to any Cost Categories.</p> <p>If <code>Values</code> is provided and <code>Key</code> is not specified, the <code>ABSENT</code> <code>MatchOption</code> is applied to the Cost Categories <code>Key</code> only. That is, filtering on resources without the given Cost Categories key.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CostCategoryValues {
     #[serde(rename = "Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    /// <p> The match options that you can use to filter your results. MatchOptions is only applicable for only applicable for actions related to cost category. The default values for <code>MatchOptions</code> is <code>EQUALS</code> and <code>CASE_SENSITIVE</code>. </p>
+    /// <p> The match options that you can use to filter your results. MatchOptions is only applicable for actions related to cost category. The default values for <code>MatchOptions</code> is <code>EQUALS</code> and <code>CASE_SENSITIVE</code>. </p>
     #[serde(rename = "MatchOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub match_options: Option<Vec<String>>,
@@ -404,6 +433,9 @@ pub struct CreateAnomalySubscriptionResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateCostCategoryDefinitionRequest {
+    #[serde(rename = "DefaultValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_value: Option<String>,
     #[serde(rename = "Name")]
     pub name: String,
     #[serde(rename = "RuleVersion")]
@@ -476,13 +508,13 @@ pub struct CurrentInstance {
     pub total_running_hours_in_lookback_period: Option<String>,
 }
 
-/// <p>The time period that you want the usage and costs for. </p>
+/// <p>The time period of the request. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DateInterval {
-    /// <p>The end of the time period that you want the usage and costs for. The end date is exclusive. For example, if <code>end</code> is <code>2017-05-01</code>, AWS retrieves cost and usage data from the start date up to, but not including, <code>2017-05-01</code>.</p>
+    /// <p>The end of the time period. The end date is exclusive. For example, if <code>end</code> is <code>2017-05-01</code>, AWS retrieves cost and usage data from the start date up to, but not including, <code>2017-05-01</code>.</p>
     #[serde(rename = "End")]
     pub end: String,
-    /// <p>The beginning of the time period that you want the usage and costs for. The start date is inclusive. For example, if <code>start</code> is <code>2017-01-01</code>, AWS retrieves cost and usage data starting at <code>2017-01-01</code> up to the end date.</p>
+    /// <p>The beginning of the time period. The start date is inclusive. For example, if <code>start</code> is <code>2017-01-01</code>, AWS retrieves cost and usage data starting at <code>2017-01-01</code> up to the end date. The start date must be equal to or no later than the current date to avoid a validation error.</p>
     #[serde(rename = "Start")]
     pub start: String,
 }
@@ -581,6 +613,28 @@ pub struct DimensionValuesWithAttributes {
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+/// <p> The field that contains a list of disk (local storage) metrics associated with the current instance. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DiskResourceUtilization {
+    /// <p> The maximum read throughput operations per second. </p>
+    #[serde(rename = "DiskReadBytesPerSecond")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disk_read_bytes_per_second: Option<String>,
+    /// <p> The maximum number of read operations per second. </p>
+    #[serde(rename = "DiskReadOpsPerSecond")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disk_read_ops_per_second: Option<String>,
+    /// <p> The maximum write throughput operations per second. </p>
+    #[serde(rename = "DiskWriteBytesPerSecond")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disk_write_bytes_per_second: Option<String>,
+    /// <p> The maximum number of write operations per second. </p>
+    #[serde(rename = "DiskWriteOpsPerSecond")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disk_write_ops_per_second: Option<String>,
 }
 
 /// <p> The EBS field that contains a list of EBS metrics associated with the current instance. </p>
@@ -689,6 +743,10 @@ pub struct EC2ResourceDetails {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EC2ResourceUtilization {
+    /// <p> The field that contains a list of disk (local storage) metrics associated with the current instance. </p>
+    #[serde(rename = "DiskResourceUtilization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disk_resource_utilization: Option<DiskResourceUtilization>,
     /// <p> The EBS field that contains a list of EBS metrics associated with the current instance. </p>
     #[serde(rename = "EBSResourceUtilization")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -705,6 +763,10 @@ pub struct EC2ResourceUtilization {
     #[serde(rename = "MaxStorageUtilizationPercentage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_storage_utilization_percentage: Option<String>,
+    /// <p> The network field that contains a list of network metrics associated with the current instance. </p>
+    #[serde(rename = "NetworkResourceUtilization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_resource_utilization: Option<NetworkResourceUtilization>,
 }
 
 /// <p>The Amazon EC2 hardware specifications that you want AWS to provide recommendations for.</p>
@@ -772,7 +834,7 @@ pub struct ElastiCacheInstanceDetails {
     pub size_flex_eligible: Option<bool>,
 }
 
-/// <p><p>Use <code>Expression</code> to filter by cost or by usage. There are two patterns: </p> <ul> <li> <p>Simple dimension values - You can set the dimension name and values for the filters that you plan to use. For example, you can filter for <code>REGION==us-east-1 OR REGION==us-west-1</code>. For <code>GetRightsizingRecommendation</code>, the Region is a full name (for example, <code>REGION==US East (N. Virginia)</code>. The <code>Expression</code> example looks like:</p> <p> <code>{ &quot;Dimensions&quot;: { &quot;Key&quot;: &quot;REGION&quot;, &quot;Values&quot;: [ &quot;us-east-1&quot;, “us-west-1” ] } }</code> </p> <p>The list of dimension values are OR&#39;d together to retrieve cost or usage data. You can create <code>Expression</code> and <code>DimensionValues</code> objects using either <code>with<em></code> methods or <code>set</em></code> methods in multiple lines. </p> </li> <li> <p>Compound dimension values with logical operations - You can use multiple <code>Expression</code> types and the logical operators <code>AND/OR/NOT</code> to create a list of one or more <code>Expression</code> objects. This allows you to filter on more advanced options. For example, you can filter on <code>((REGION == us-east-1 OR REGION == us-west-1) OR (TAG.Type == Type1)) AND (USAGE<em>TYPE != DataTransfer)</code>. The <code>Expression</code> for that looks like this:</p> <p> <code>{ &quot;And&quot;: [ {&quot;Or&quot;: [ {&quot;Dimensions&quot;: { &quot;Key&quot;: &quot;REGION&quot;, &quot;Values&quot;: [ &quot;us-east-1&quot;, &quot;us-west-1&quot; ] }}, {&quot;Tags&quot;: { &quot;Key&quot;: &quot;TagName&quot;, &quot;Values&quot;: [&quot;Value1&quot;] } } ]}, {&quot;Not&quot;: {&quot;Dimensions&quot;: { &quot;Key&quot;: &quot;USAGE</em>TYPE&quot;, &quot;Values&quot;: [&quot;DataTransfer&quot;] }}} ] } </code> </p> <note> <p>Because each <code>Expression</code> can have only one operator, the service returns an error if more than one is specified. The following example shows an <code>Expression</code> object that creates an error.</p> </note> <p> <code> { &quot;And&quot;: [ ... ], &quot;DimensionValues&quot;: { &quot;Dimension&quot;: &quot;USAGE<em>TYPE&quot;, &quot;Values&quot;: [ &quot;DataTransfer&quot; ] } } </code> </p> </li> </ul> <note> <p>For <code>GetRightsizingRecommendation</code> action, a combination of OR and NOT is not supported. OR is not supported between different dimensions, or dimensions and tags. NOT operators aren&#39;t supported. Dimensions are also limited to <code>LINKED</em>ACCOUNT</code>, <code>REGION</code>, or <code>RIGHTSIZING_TYPE</code>.</p> </note></p>
+/// <p><p>Use <code>Expression</code> to filter by cost or by usage. There are two patterns: </p> <ul> <li> <p>Simple dimension values - You can set the dimension name and values for the filters that you plan to use. For example, you can filter for <code>REGION==us-east-1 OR REGION==us-west-1</code>. For <code>GetRightsizingRecommendation</code>, the Region is a full name (for example, <code>REGION==US East (N. Virginia)</code>. The <code>Expression</code> example looks like:</p> <p> <code>{ &quot;Dimensions&quot;: { &quot;Key&quot;: &quot;REGION&quot;, &quot;Values&quot;: [ &quot;us-east-1&quot;, “us-west-1” ] } }</code> </p> <p>The list of dimension values are OR&#39;d together to retrieve cost or usage data. You can create <code>Expression</code> and <code>DimensionValues</code> objects using either <code>with<em></code> methods or <code>set</em></code> methods in multiple lines. </p> </li> <li> <p>Compound dimension values with logical operations - You can use multiple <code>Expression</code> types and the logical operators <code>AND/OR/NOT</code> to create a list of one or more <code>Expression</code> objects. This allows you to filter on more advanced options. For example, you can filter on <code>((REGION == us-east-1 OR REGION == us-west-1) OR (TAG.Type == Type1)) AND (USAGE<em>TYPE != DataTransfer)</code>. The <code>Expression</code> for that looks like this:</p> <p> <code>{ &quot;And&quot;: [ {&quot;Or&quot;: [ {&quot;Dimensions&quot;: { &quot;Key&quot;: &quot;REGION&quot;, &quot;Values&quot;: [ &quot;us-east-1&quot;, &quot;us-west-1&quot; ] }}, {&quot;Tags&quot;: { &quot;Key&quot;: &quot;TagName&quot;, &quot;Values&quot;: [&quot;Value1&quot;] } } ]}, {&quot;Not&quot;: {&quot;Dimensions&quot;: { &quot;Key&quot;: &quot;USAGE</em>TYPE&quot;, &quot;Values&quot;: [&quot;DataTransfer&quot;] }}} ] } </code> </p> <note> <p>Because each <code>Expression</code> can have only one operator, the service returns an error if more than one is specified. The following example shows an <code>Expression</code> object that creates an error.</p> </note> <p> <code> { &quot;And&quot;: [ ... ], &quot;DimensionValues&quot;: { &quot;Dimension&quot;: &quot;USAGE<em>TYPE&quot;, &quot;Values&quot;: [ &quot;DataTransfer&quot; ] } } </code> </p> </li> </ul> <note> <p>For the <code>GetRightsizingRecommendation</code> action, a combination of OR and NOT is not supported. OR is not supported between different dimensions, or dimensions and tags. NOT operators aren&#39;t supported. Dimensions are also limited to <code>LINKED</em>ACCOUNT</code>, <code>REGION</code>, or <code>RIGHTSIZING<em>TYPE</code>.</p> <p>For the <code>GetReservationPurchaseRecommendation</code> action, only NOT is supported. AND and OR are not supported. Dimensions are limited to <code>LINKED</em>ACCOUNT</code>.</p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Expression {
     /// <p>Return results that match both <code>Dimension</code> objects.</p>
@@ -934,8 +996,7 @@ pub struct GetCostAndUsageRequest {
     pub filter: Option<Expression>,
     /// <p>Sets the AWS cost granularity to <code>MONTHLY</code> or <code>DAILY</code>, or <code>HOURLY</code>. If <code>Granularity</code> isn't set, the response object doesn't include the <code>Granularity</code>, either <code>MONTHLY</code> or <code>DAILY</code>, or <code>HOURLY</code>. </p>
     #[serde(rename = "Granularity")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub granularity: Option<String>,
+    pub granularity: String,
     /// <p>You can group AWS costs using up to two different groups, either dimensions, tag keys, cost categories, or any two group by types.</p> <p>When you group by tag key, you get all tag values, including empty strings.</p> <p>Valid values are <code>AZ</code>, <code>INSTANCE_TYPE</code>, <code>LEGAL_ENTITY_NAME</code>, <code>LINKED_ACCOUNT</code>, <code>OPERATION</code>, <code>PLATFORM</code>, <code>PURCHASE_TYPE</code>, <code>SERVICE</code>, <code>TAGS</code>, <code>TENANCY</code>, <code>RECORD_TYPE</code>, and <code>USAGE_TYPE</code>.</p>
     #[serde(rename = "GroupBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -955,6 +1016,10 @@ pub struct GetCostAndUsageRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCostAndUsageResponse {
+    /// <p>The attributes that apply to a specific dimension value. For example, if the value is a linked account, the attribute is that account name.</p>
+    #[serde(rename = "DimensionValueAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dimension_value_attributes: Option<Vec<DimensionValuesWithAttributes>>,
     /// <p>The groups that are specified by the <code>Filter</code> or <code>GroupBy</code> parameters in the request.</p>
     #[serde(rename = "GroupDefinitions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -977,8 +1042,7 @@ pub struct GetCostAndUsageWithResourcesRequest {
     pub filter: Expression,
     /// <p>Sets the AWS cost granularity to <code>MONTHLY</code>, <code>DAILY</code>, or <code>HOURLY</code>. If <code>Granularity</code> isn't set, the response object doesn't include the <code>Granularity</code>, <code>MONTHLY</code>, <code>DAILY</code>, or <code>HOURLY</code>. </p>
     #[serde(rename = "Granularity")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub granularity: Option<String>,
+    pub granularity: String,
     /// <p>You can group Amazon Web Services costs using up to two different groups: <code>DIMENSION</code>, <code>TAG</code>, <code>COST_CATEGORY</code>.</p>
     #[serde(rename = "GroupBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -999,6 +1063,10 @@ pub struct GetCostAndUsageWithResourcesRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetCostAndUsageWithResourcesResponse {
+    /// <p>The attributes that apply to a specific dimension value. For example, if the value is a linked account, the attribute is that account name.</p>
+    #[serde(rename = "DimensionValueAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dimension_value_attributes: Option<Vec<DimensionValuesWithAttributes>>,
     /// <p>The groups that are specified by the <code>Filter</code> or <code>GroupBy</code> parameters in the request.</p>
     #[serde(rename = "GroupDefinitions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1015,8 +1083,60 @@ pub struct GetCostAndUsageWithResourcesResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetCostCategoriesRequest {
+    #[serde(rename = "CostCategoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cost_category_name: Option<String>,
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<Expression>,
+    /// <p>This field is only used when <code>SortBy</code> is provided in the request.</p> <p>The maximum number of objects that to be returned for this request. If <code>MaxResults</code> is not specified with <code>SortBy</code>, the request will return 1000 results as the default value for this parameter.</p> <p>For <code>GetCostCategories</code>, MaxResults has an upper limit of 1000.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If the number of objects that are still available for retrieval exceeds the limit, AWS returns a NextPageToken value in the response. To retrieve the next batch of objects, provide the NextPageToken from the prior call in your next request.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+    /// <p>The value that you want to search the filter values for.</p> <p>If you do not specify a <code>CostCategoryName</code>, <code>SearchString</code> will be used to filter Cost Category names that match the <code>SearchString</code> pattern. If you do specifiy a <code>CostCategoryName</code>, <code>SearchString</code> will be used to filter Cost Category values that match the <code>SearchString</code> pattern.</p>
+    #[serde(rename = "SearchString")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub search_string: Option<String>,
+    /// <p>The value by which you want to sort the data.</p> <p>The key represents cost and usage metrics. The following values are supported:</p> <ul> <li> <p> <code>BlendedCost</code> </p> </li> <li> <p> <code>UnblendedCost</code> </p> </li> <li> <p> <code>AmortizedCost</code> </p> </li> <li> <p> <code>NetAmortizedCost</code> </p> </li> <li> <p> <code>NetUnblendedCost</code> </p> </li> <li> <p> <code>UsageQuantity</code> </p> </li> <li> <p> <code>NormalizedUsageAmount</code> </p> </li> </ul> <p>Supported values for <code>SortOrder</code> are <code>ASCENDING</code> or <code>DESCENDING</code>.</p> <p>When using <code>SortBy</code>, <code>NextPageToken</code> and <code>SearchString</code> are not supported.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<Vec<SortDefinition>>,
+    #[serde(rename = "TimePeriod")]
+    pub time_period: DateInterval,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetCostCategoriesResponse {
+    /// <p>The names of the Cost Categories.</p>
+    #[serde(rename = "CostCategoryNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cost_category_names: Option<Vec<String>>,
+    /// <p>The Cost Category values.</p> <p> <code>CostCategoryValues</code> are not returned if <code>CostCategoryName</code> is not specified in the request. </p>
+    #[serde(rename = "CostCategoryValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cost_category_values: Option<Vec<String>>,
+    /// <p>If the number of objects that are still available for retrieval exceeds the limit, AWS returns a NextPageToken value in the response. To retrieve the next batch of objects, provide the marker from the prior call in your next request.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+    /// <p>The number of objects returned.</p>
+    #[serde(rename = "ReturnSize")]
+    pub return_size: i64,
+    /// <p>The total number of objects.</p>
+    #[serde(rename = "TotalSize")]
+    pub total_size: i64,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCostForecastRequest {
-    /// <p>The filters that you want to use to filter your forecast. Cost Explorer API supports all of the Cost Explorer filters.</p>
+    /// <p><p>The filters that you want to use to filter your forecast. The <code>GetCostForecast</code> API supports filtering by the following dimensions:</p> <ul> <li> <p> <code>AZ</code> </p> </li> <li> <p> <code>INSTANCE<em>TYPE</code> </p> </li> <li> <p> <code>LINKED</em>ACCOUNT</code> </p> </li> <li> <p> <code>LINKED<em>ACCOUNT</em>NAME</code> </p> </li> <li> <p> <code>OPERATION</code> </p> </li> <li> <p> <code>PURCHASE<em>TYPE</code> </p> </li> <li> <p> <code>REGION</code> </p> </li> <li> <p> <code>SERVICE</code> </p> </li> <li> <p> <code>USAGE</em>TYPE</code> </p> </li> <li> <p> <code>USAGE<em>TYPE</em>GROUP</code> </p> </li> <li> <p> <code>RECORD<em>TYPE</code> </p> </li> <li> <p> <code>OPERATING</em>SYSTEM</code> </p> </li> <li> <p> <code>TENANCY</code> </p> </li> <li> <p> <code>SCOPE</code> </p> </li> <li> <p> <code>PLATFORM</code> </p> </li> <li> <p> <code>SUBSCRIPTION<em>ID</code> </p> </li> <li> <p> <code>LEGAL</em>ENTITY<em>NAME</code> </p> </li> <li> <p> <code>DEPLOYMENT</em>OPTION</code> </p> </li> <li> <p> <code>DATABASE<em>ENGINE</code> </p> </li> <li> <p> <code>INSTANCE</em>TYPE<em>FAMILY</code> </p> </li> <li> <p> <code>BILLING</em>ENTITY</code> </p> </li> <li> <p> <code>RESERVATION<em>ID</code> </p> </li> <li> <p> <code>SAVINGS</em>PLAN_ARN</code> </p> </li> </ul></p>
     #[serde(rename = "Filter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<Expression>,
@@ -1058,6 +1178,13 @@ pub struct GetDimensionValuesRequest {
     /// <p>The name of the dimension. Each <code>Dimension</code> is available for a different <code>Context</code>. For more information, see <code>Context</code>. </p>
     #[serde(rename = "Dimension")]
     pub dimension: String,
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<Expression>,
+    /// <p>This field is only used when SortBy is provided in the request. The maximum number of objects that to be returned for this request. If MaxResults is not specified with SortBy, the request will return 1000 results as the default value for this parameter.</p> <p>For <code>GetDimensionValues</code>, MaxResults has an upper limit of 1000.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
     /// <p>The token to retrieve the next set of results. AWS provides the token when the response from a previous call has more results than the maximum page size.</p>
     #[serde(rename = "NextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1066,6 +1193,10 @@ pub struct GetDimensionValuesRequest {
     #[serde(rename = "SearchString")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub search_string: Option<String>,
+    /// <p>The value by which you want to sort the data.</p> <p>The key represents cost and usage metrics. The following values are supported:</p> <ul> <li> <p> <code>BlendedCost</code> </p> </li> <li> <p> <code>UnblendedCost</code> </p> </li> <li> <p> <code>AmortizedCost</code> </p> </li> <li> <p> <code>NetAmortizedCost</code> </p> </li> <li> <p> <code>NetUnblendedCost</code> </p> </li> <li> <p> <code>UsageQuantity</code> </p> </li> <li> <p> <code>NormalizedUsageAmount</code> </p> </li> </ul> <p>Supported values for <code>SortOrder</code> are <code>ASCENDING</code> or <code>DESCENDING</code>.</p> <p>When you specify a <code>SortBy</code> paramater, the context must be <code>COST_AND_USAGE</code>. Further, when using <code>SortBy</code>, <code>NextPageToken</code> and <code>SearchString</code> are not supported.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<Vec<SortDefinition>>,
     /// <p>The start and end dates for retrieving the dimension values. The start date is inclusive, but the end date is exclusive. For example, if <code>start</code> is <code>2017-01-01</code> and <code>end</code> is <code>2017-05-01</code>, then the cost and usage data is retrieved from <code>2017-01-01</code> up to and including <code>2017-04-30</code> but not including <code>2017-05-01</code>.</p>
     #[serde(rename = "TimePeriod")]
     pub time_period: DateInterval,
@@ -1105,6 +1236,10 @@ pub struct GetReservationCoverageRequest {
     #[serde(rename = "GroupBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_by: Option<Vec<GroupDefinition>>,
+    /// <p>The maximum number of objects that you returned for this request. If more objects are available, in the response, AWS provides a NextPageToken value that you can use in a subsequent call to get the next batch of objects.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
     /// <p>The measurement that you want your reservation coverage reported in.</p> <p>Valid values are <code>Hour</code>, <code>Unit</code>, and <code>Cost</code>. You can use multiple values in a request.</p>
     #[serde(rename = "Metrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1113,6 +1248,10 @@ pub struct GetReservationCoverageRequest {
     #[serde(rename = "NextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
+    /// <p>The value by which you want to sort the data.</p> <p>The following values are supported for <code>Key</code>:</p> <ul> <li> <p> <code>OnDemandCost</code> </p> </li> <li> <p> <code>CoverageHoursPercentage</code> </p> </li> <li> <p> <code>OnDemandHours</code> </p> </li> <li> <p> <code>ReservedHours</code> </p> </li> <li> <p> <code>TotalRunningHours</code> </p> </li> <li> <p> <code>CoverageNormalizedUnitsPercentage</code> </p> </li> <li> <p> <code>OnDemandNormalizedUnits</code> </p> </li> <li> <p> <code>ReservedNormalizedUnits</code> </p> </li> <li> <p> <code>TotalRunningNormalizedUnits</code> </p> </li> <li> <p> <code>Time</code> </p> </li> </ul> <p>Supported values for <code>SortOrder</code> are <code>ASCENDING</code> or <code>DESCENDING</code>.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<SortDefinition>,
     /// <p>The start and end dates of the period that you want to retrieve data about reservation coverage for. You can retrieve data for a maximum of 13 months: the last 12 months and the current month. The start date is inclusive, but the end date is exclusive. For example, if <code>start</code> is <code>2017-01-01</code> and <code>end</code> is <code>2017-05-01</code>, then the cost and usage data is retrieved from <code>2017-01-01</code> up to and including <code>2017-04-30</code> but not including <code>2017-05-01</code>. </p>
     #[serde(rename = "TimePeriod")]
     pub time_period: DateInterval,
@@ -1145,6 +1284,9 @@ pub struct GetReservationPurchaseRecommendationRequest {
     #[serde(rename = "AccountScope")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_scope: Option<String>,
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<Expression>,
     /// <p>The number of previous days that you want AWS to consider when it calculates your recommendations.</p>
     #[serde(rename = "LookbackPeriodInDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1206,10 +1348,18 @@ pub struct GetReservationUtilizationRequest {
     #[serde(rename = "GroupBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_by: Option<Vec<GroupDefinition>>,
+    /// <p>The maximum number of objects that you returned for this request. If more objects are available, in the response, AWS provides a NextPageToken value that you can use in a subsequent call to get the next batch of objects.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
     /// <p>The token to retrieve the next set of results. AWS provides the token when the response from a previous call has more results than the maximum page size.</p>
     #[serde(rename = "NextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
+    /// <p>The value by which you want to sort the data.</p> <p>The following values are supported for <code>Key</code>:</p> <ul> <li> <p> <code>UtilizationPercentage</code> </p> </li> <li> <p> <code>UtilizationPercentageInUnits</code> </p> </li> <li> <p> <code>PurchasedHours</code> </p> </li> <li> <p> <code>PurchasedUnits</code> </p> </li> <li> <p> <code>TotalActualHours</code> </p> </li> <li> <p> <code>TotalActualUnits</code> </p> </li> <li> <p> <code>UnusedHours</code> </p> </li> <li> <p> <code>UnusedUnits</code> </p> </li> <li> <p> <code>OnDemandCostOfRIHoursUsed</code> </p> </li> <li> <p> <code>NetRISavings</code> </p> </li> <li> <p> <code>TotalPotentialRISavings</code> </p> </li> <li> <p> <code>AmortizedUpfrontFee</code> </p> </li> <li> <p> <code>AmortizedRecurringFee</code> </p> </li> <li> <p> <code>TotalAmortizedFee</code> </p> </li> <li> <p> <code>RICostForUnusedHours</code> </p> </li> <li> <p> <code>RealizedSavings</code> </p> </li> <li> <p> <code>UnrealizedSavings</code> </p> </li> </ul> <p>Supported values for <code>SortOrder</code> are <code>ASCENDING</code> or <code>DESCENDING</code>.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<SortDefinition>,
     /// <p>Sets the start and end dates for retrieving RI utilization. The start date is inclusive, but the end date is exclusive. For example, if <code>start</code> is <code>2017-01-01</code> and <code>end</code> is <code>2017-05-01</code>, then the cost and usage data is retrieved from <code>2017-01-01</code> up to and including <code>2017-04-30</code> but not including <code>2017-05-01</code>. </p>
     #[serde(rename = "TimePeriod")]
     pub time_period: DateInterval,
@@ -1306,6 +1456,10 @@ pub struct GetSavingsPlansCoverageRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>The value by which you want to sort the data.</p> <p>The following values are supported for <code>Key</code>:</p> <ul> <li> <p> <code>SpendCoveredBySavingsPlan</code> </p> </li> <li> <p> <code>OnDemandCost</code> </p> </li> <li> <p> <code>CoveragePercentage</code> </p> </li> <li> <p> <code>TotalCost</code> </p> </li> <li> <p> <code>InstanceFamily</code> </p> </li> <li> <p> <code>Region</code> </p> </li> <li> <p> <code>Service</code> </p> </li> </ul> <p>Supported values for <code>SortOrder</code> are <code>ASCENDING</code> or <code>DESCENDING</code>.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<SortDefinition>,
     /// <p>The time period that you want the usage and costs for. The <code>Start</code> date must be within 13 months. The <code>End</code> date must be after the <code>Start</code> date, and before the current date. Future dates can't be used as an <code>End</code> date.</p>
     #[serde(rename = "TimePeriod")]
     pub time_period: DateInterval,
@@ -1376,6 +1530,10 @@ pub struct GetSavingsPlansPurchaseRecommendationResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSavingsPlansUtilizationDetailsRequest {
+    /// <p>The data type.</p>
+    #[serde(rename = "DataType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_type: Option<Vec<String>>,
     /// <p>Filters Savings Plans utilization coverage data for active Savings Plans dimensions. You can filter data with the following dimensions:</p> <ul> <li> <p> <code>LINKED_ACCOUNT</code> </p> </li> <li> <p> <code>SAVINGS_PLAN_ARN</code> </p> </li> <li> <p> <code>REGION</code> </p> </li> <li> <p> <code>PAYMENT_OPTION</code> </p> </li> <li> <p> <code>INSTANCE_TYPE_FAMILY</code> </p> </li> </ul> <p> <code>GetSavingsPlansUtilizationDetails</code> uses the same <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_Expression.html">Expression</a> object as the other operations, but only <code>AND</code> is supported among each dimension.</p>
     #[serde(rename = "Filter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1388,6 +1546,10 @@ pub struct GetSavingsPlansUtilizationDetailsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>The value by which you want to sort the data.</p> <p>The following values are supported for <code>Key</code>:</p> <ul> <li> <p> <code>UtilizationPercentage</code> </p> </li> <li> <p> <code>TotalCommitment</code> </p> </li> <li> <p> <code>UsedCommitment</code> </p> </li> <li> <p> <code>UnusedCommitment</code> </p> </li> <li> <p> <code>NetSavings</code> </p> </li> <li> <p> <code>AmortizedRecurringCommitment</code> </p> </li> <li> <p> <code>AmortizedUpfrontCommitment</code> </p> </li> </ul> <p>Supported values for <code>SortOrder</code> are <code>ASCENDING</code> or <code>DESCENDING</code>.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<SortDefinition>,
     /// <p>The time period that you want the usage and costs for. The <code>Start</code> date must be within 13 months. The <code>End</code> date must be after the <code>Start</code> date, and before the current date. Future dates can't be used as an <code>End</code> date.</p>
     #[serde(rename = "TimePeriod")]
     pub time_period: DateInterval,
@@ -1422,6 +1584,10 @@ pub struct GetSavingsPlansUtilizationRequest {
     #[serde(rename = "Granularity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub granularity: Option<String>,
+    /// <p>The value by which you want to sort the data.</p> <p>The following values are supported for <code>Key</code>:</p> <ul> <li> <p> <code>UtilizationPercentage</code> </p> </li> <li> <p> <code>TotalCommitment</code> </p> </li> <li> <p> <code>UsedCommitment</code> </p> </li> <li> <p> <code>UnusedCommitment</code> </p> </li> <li> <p> <code>NetSavings</code> </p> </li> </ul> <p>Supported values for <code>SortOrder</code> are <code>ASCENDING</code> or <code>DESCENDING</code>.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<SortDefinition>,
     /// <p>The time period that you want the usage and costs for. The <code>Start</code> date must be within 13 months. The <code>End</code> date must be after the <code>Start</code> date, and before the current date. Future dates can't be used as an <code>End</code> date.</p>
     #[serde(rename = "TimePeriod")]
     pub time_period: DateInterval,
@@ -1442,6 +1608,13 @@ pub struct GetSavingsPlansUtilizationResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetTagsRequest {
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<Expression>,
+    /// <p>This field is only used when SortBy is provided in the request. The maximum number of objects that to be returned for this request. If MaxResults is not specified with SortBy, the request will return 1000 results as the default value for this parameter.</p> <p>For <code>GetTags</code>, MaxResults has an upper limit of 1000.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
     /// <p>The token to retrieve the next set of results. AWS provides the token when the response from a previous call has more results than the maximum page size.</p>
     #[serde(rename = "NextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1450,6 +1623,10 @@ pub struct GetTagsRequest {
     #[serde(rename = "SearchString")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub search_string: Option<String>,
+    /// <p>The value by which you want to sort the data.</p> <p>The key represents cost and usage metrics. The following values are supported:</p> <ul> <li> <p> <code>BlendedCost</code> </p> </li> <li> <p> <code>UnblendedCost</code> </p> </li> <li> <p> <code>AmortizedCost</code> </p> </li> <li> <p> <code>NetAmortizedCost</code> </p> </li> <li> <p> <code>NetUnblendedCost</code> </p> </li> <li> <p> <code>UsageQuantity</code> </p> </li> <li> <p> <code>NormalizedUsageAmount</code> </p> </li> </ul> <p>Supported values for <code>SortOrder</code> are <code>ASCENDING</code> or <code>DESCENDING</code>.</p> <p>When using <code>SortBy</code>, <code>NextPageToken</code> and <code>SearchString</code> are not supported.</p>
+    #[serde(rename = "SortBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_by: Option<Vec<SortDefinition>>,
     /// <p>The key of the tag that you want to return values for.</p>
     #[serde(rename = "TagKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1480,7 +1657,7 @@ pub struct GetTagsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetUsageForecastRequest {
-    /// <p>The filters that you want to use to filter your forecast. Cost Explorer API supports all of the Cost Explorer filters.</p>
+    /// <p><p>The filters that you want to use to filter your forecast. The <code>GetUsageForecast</code> API supports filtering by the following dimensions:</p> <ul> <li> <p> <code>AZ</code> </p> </li> <li> <p> <code>INSTANCE<em>TYPE</code> </p> </li> <li> <p> <code>LINKED</em>ACCOUNT</code> </p> </li> <li> <p> <code>LINKED<em>ACCOUNT</em>NAME</code> </p> </li> <li> <p> <code>OPERATION</code> </p> </li> <li> <p> <code>PURCHASE<em>TYPE</code> </p> </li> <li> <p> <code>REGION</code> </p> </li> <li> <p> <code>SERVICE</code> </p> </li> <li> <p> <code>USAGE</em>TYPE</code> </p> </li> <li> <p> <code>USAGE<em>TYPE</em>GROUP</code> </p> </li> <li> <p> <code>RECORD<em>TYPE</code> </p> </li> <li> <p> <code>OPERATING</em>SYSTEM</code> </p> </li> <li> <p> <code>TENANCY</code> </p> </li> <li> <p> <code>SCOPE</code> </p> </li> <li> <p> <code>PLATFORM</code> </p> </li> <li> <p> <code>SUBSCRIPTION<em>ID</code> </p> </li> <li> <p> <code>LEGAL</em>ENTITY<em>NAME</code> </p> </li> <li> <p> <code>DEPLOYMENT</em>OPTION</code> </p> </li> <li> <p> <code>DATABASE<em>ENGINE</code> </p> </li> <li> <p> <code>INSTANCE</em>TYPE<em>FAMILY</code> </p> </li> <li> <p> <code>BILLING</em>ENTITY</code> </p> </li> <li> <p> <code>RESERVATION<em>ID</code> </p> </li> <li> <p> <code>SAVINGS</em>PLAN_ARN</code> </p> </li> </ul></p>
     #[serde(rename = "Filter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<Expression>,
@@ -1632,6 +1809,28 @@ pub struct ModifyRecommendationDetail {
     pub target_instances: Option<Vec<TargetInstance>>,
 }
 
+/// <p> The network field that contains a list of network metrics associated with the current instance. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct NetworkResourceUtilization {
+    /// <p> The network ingress throughput utilization measured in Bytes per second. </p>
+    #[serde(rename = "NetworkInBytesPerSecond")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_in_bytes_per_second: Option<String>,
+    /// <p> The network outgress throughput utilization measured in Bytes per second. </p>
+    #[serde(rename = "NetworkOutBytesPerSecond")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_out_bytes_per_second: Option<String>,
+    /// <p> The network ingress packets measured in packets per second. </p>
+    #[serde(rename = "NetworkPacketsInPerSecond")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_packets_in_per_second: Option<String>,
+    /// <p> The network outgress packets measured in packets per second. </p>
+    #[serde(rename = "NetworkPacketsOutPerSecond")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_packets_out_per_second: Option<String>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ProvideAnomalyFeedbackRequest {
@@ -1747,6 +1946,14 @@ pub struct ReservationAggregates {
     #[serde(rename = "PurchasedUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub purchased_units: Option<String>,
+    /// <p>The cost of unused hours for your reservation.</p>
+    #[serde(rename = "RICostForUnusedHours")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ri_cost_for_unused_hours: Option<String>,
+    /// <p>The realized savings due to purchasing and using a reservation.</p>
+    #[serde(rename = "RealizedSavings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub realized_savings: Option<String>,
     /// <p>The total number of reservation hours that you used.</p>
     #[serde(rename = "TotalActualHours")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1763,6 +1970,10 @@ pub struct ReservationAggregates {
     #[serde(rename = "TotalPotentialRISavings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub total_potential_ri_savings: Option<String>,
+    /// <p>The unrealized savings due to purchasing and using a reservation.</p>
+    #[serde(rename = "UnrealizedSavings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unrealized_savings: Option<String>,
     /// <p>The number of reservation hours that you didn't use.</p>
     #[serde(rename = "UnusedHours")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2019,6 +2230,10 @@ pub struct RightsizingRecommendation {
     #[serde(rename = "CurrentInstance")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub current_instance: Option<CurrentInstance>,
+    /// <p> The list of possible reasons why the recommendation is generated such as under or over utilization of specific metrics (for example, CPU, Memory, Network). </p>
+    #[serde(rename = "FindingReasonCodes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub finding_reason_codes: Option<Vec<String>>,
     /// <p> Details for modification recommendations. </p>
     #[serde(rename = "ModifyRecommendationDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2466,6 +2681,19 @@ pub struct ServiceSpecification {
     pub ec2_specification: Option<EC2Specification>,
 }
 
+/// <p>The details of how to sort the data.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct SortDefinition {
+    /// <p>The key by which to sort the data.</p>
+    #[serde(rename = "Key")]
+    pub key: String,
+    /// <p>The order in which to sort the data.</p>
+    #[serde(rename = "SortOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sort_order: Option<String>,
+}
+
 /// <p> The recipient of <code>AnomalySubscription</code> notifications. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Subscriber {
@@ -2483,7 +2711,7 @@ pub struct Subscriber {
     pub type_: Option<String>,
 }
 
-/// <p>The values that are available for a tag.</p>
+/// <p>The values that are available for a tag.</p> <p>If <code>Values</code> and <code>Key</code> are not specified, the <code>ABSENT</code> <code>MatchOption</code> is applied to all tags. That is, filtering on resources with no tags.</p> <p>If <code>Values</code> is provided and <code>Key</code> is not specified, the <code>ABSENT</code> <code>MatchOption</code> is applied to the tag <code>Key</code> only. That is, filtering on resources without the given tag key.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TagValues {
     /// <p>The key for the tag.</p>
@@ -2524,6 +2752,10 @@ pub struct TargetInstance {
     #[serde(rename = "ExpectedResourceUtilization")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expected_resource_utilization: Option<ResourceUtilization>,
+    /// <p> Explains the actions you might need to take in order to successfully migrate your workloads from the current instance type to the recommended instance type. </p>
+    #[serde(rename = "PlatformDifferences")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub platform_differences: Option<Vec<String>>,
     /// <p> Details on the target instance type. </p>
     #[serde(rename = "ResourceDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2622,6 +2854,9 @@ pub struct UpdateCostCategoryDefinitionRequest {
     /// <p>The unique identifier for your Cost Category.</p>
     #[serde(rename = "CostCategoryArn")]
     pub cost_category_arn: String,
+    #[serde(rename = "DefaultValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_value: Option<String>,
     #[serde(rename = "RuleVersion")]
     pub rule_version: String,
     /// <p>The <code>Expression</code> object used to categorize costs. For more information, see <a href="https://docs.aws.amazon.com/aws-cost-management/latest/APIReference/API_CostCategoryRule.html">CostCategoryRule </a>. </p>
@@ -3188,6 +3423,60 @@ impl fmt::Display for GetCostAndUsageWithResourcesError {
     }
 }
 impl Error for GetCostAndUsageWithResourcesError {}
+/// Errors returned by GetCostCategories
+#[derive(Debug, PartialEq)]
+pub enum GetCostCategoriesError {
+    /// <p>The requested report expired. Update the date interval and try again.</p>
+    BillExpiration(String),
+    /// <p>The requested data is unavailable.</p>
+    DataUnavailable(String),
+    /// <p>The pagination token is invalid. Try again without a pagination token.</p>
+    InvalidNextToken(String),
+    /// <p>You made too many calls in a short period of time. Try again later.</p>
+    LimitExceeded(String),
+    /// <p>Your request parameters changed between pages. Try again with the old parameters or without a pagination token.</p>
+    RequestChanged(String),
+}
+
+impl GetCostCategoriesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetCostCategoriesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "BillExpirationException" => {
+                    return RusotoError::Service(GetCostCategoriesError::BillExpiration(err.msg))
+                }
+                "DataUnavailableException" => {
+                    return RusotoError::Service(GetCostCategoriesError::DataUnavailable(err.msg))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(GetCostCategoriesError::InvalidNextToken(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(GetCostCategoriesError::LimitExceeded(err.msg))
+                }
+                "RequestChangedException" => {
+                    return RusotoError::Service(GetCostCategoriesError::RequestChanged(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetCostCategoriesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetCostCategoriesError::BillExpiration(ref cause) => write!(f, "{}", cause),
+            GetCostCategoriesError::DataUnavailable(ref cause) => write!(f, "{}", cause),
+            GetCostCategoriesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            GetCostCategoriesError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            GetCostCategoriesError::RequestChanged(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetCostCategoriesError {}
 /// Errors returned by GetCostForecast
 #[derive(Debug, PartialEq)]
 pub enum GetCostForecastError {
@@ -4048,6 +4337,12 @@ pub trait CostExplorer {
         input: GetCostAndUsageWithResourcesRequest,
     ) -> Result<GetCostAndUsageWithResourcesResponse, RusotoError<GetCostAndUsageWithResourcesError>>;
 
+    /// <p><p>Retrieves an array of Cost Category names and values incurred cost.</p> <note> <p>If some Cost Category names and values are not associated with any cost, they will not be returned by this API.</p> </note></p>
+    async fn get_cost_categories(
+        &self,
+        input: GetCostCategoriesRequest,
+    ) -> Result<GetCostCategoriesResponse, RusotoError<GetCostCategoriesError>>;
+
     /// <p>Retrieves a forecast for how much Amazon Web Services predicts that you will spend over the forecast time period that you select, based on your past costs. </p>
     async fn get_cost_forecast(
         &self,
@@ -4457,6 +4752,24 @@ impl CostExplorer for CostExplorerClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<GetCostAndUsageWithResourcesResponse, _>()
+    }
+
+    /// <p><p>Retrieves an array of Cost Category names and values incurred cost.</p> <note> <p>If some Cost Category names and values are not associated with any cost, they will not be returned by this API.</p> </note></p>
+    async fn get_cost_categories(
+        &self,
+        input: GetCostCategoriesRequest,
+    ) -> Result<GetCostCategoriesResponse, RusotoError<GetCostCategoriesError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSInsightsIndexService.GetCostCategories");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetCostCategoriesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetCostCategoriesResponse, _>()
     }
 
     /// <p>Retrieves a forecast for how much Amazon Web Services predicts that you will spend over the forecast time period that you select, based on your past costs. </p>

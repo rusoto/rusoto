@@ -32,6 +32,10 @@ pub struct AssociateRepositoryRequest {
     #[serde(rename = "ClientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
+    /// <p><p>A <code>KMSKeyDetails</code> object that contains:</p> <ul> <li> <p>The encryption option for this repository association. It is either owned by AWS Key Management Service (KMS) (<code>AWS<em>OWNED</em>CMK</code>) or customer managed (<code>CUSTOMER<em>MANAGED</em>CMK</code>).</p> </li> <li> <p>The ID of the AWS KMS key that is associated with this respository association.</p> </li> </ul></p>
+    #[serde(rename = "KMSKeyDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_details: Option<KMSKeyDetails>,
     /// <p>The repository to associate.</p>
     #[serde(rename = "Repository")]
     pub repository: Repository,
@@ -54,7 +58,30 @@ pub struct AssociateRepositoryResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p>Information about an AWS CodeCommit repository. The CodeCommit repository must be in the same AWS Region and AWS account where its CodeGuru Reviewer code reviews are configured. </p>
+/// <p> A type of <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_SourceCodeType"> <code>SourceCodeType</code> </a> that specifies a code diff between a source and destination branch in an associated repository. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct BranchDiffSourceCodeType {
+    /// <p>The destination branch for a diff in an associated repository.</p>
+    #[serde(rename = "DestinationBranchName")]
+    pub destination_branch_name: String,
+    /// <p>The source branch for a diff in an associated repository.</p>
+    #[serde(rename = "SourceBranchName")]
+    pub source_branch_name: String,
+}
+
+/// <p><p>Code artifacts are source code artifacts and build artifacts used in a repository analysis or a pull request review.</p> <ul> <li> <p>Source code artifacts are source code files in a Git repository that are compressed into a .zip file.</p> </li> <li> <p>Build artifacts are .jar or .class files that are compressed in a .zip file.</p> </li> </ul></p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct CodeArtifacts {
+    /// <p>The S3 object key for a build artifacts .zip file that contains .jar or .class files. This is required for a code review with security analysis. For more information, see <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/code-review-security.html">Create code reviews with security analysis</a> in the <i>Amazon CodeGuru Reviewer User Guide</i>.</p>
+    #[serde(rename = "BuildArtifactsObjectKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub build_artifacts_object_key: Option<String>,
+    /// <p>The S3 object key for a source code .zip file. This is required for all code reviews.</p>
+    #[serde(rename = "SourceCodeArtifactsObjectKey")]
+    pub source_code_artifacts_object_key: String,
+}
+
+/// <p>Information about an AWS CodeCommit repository. The CodeCommit repository must be in the same AWS Region and AWS account where its CodeGuru Reviewer code reviews are configured.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CodeCommitRepository {
@@ -67,6 +94,10 @@ pub struct CodeCommitRepository {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CodeReview {
+    /// <p>They types of analysis performed during a repository analysis or a pull request review. You can specify either <code>Security</code>, <code>CodeQuality</code>, or both.</p>
+    #[serde(rename = "AnalysisTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analysis_types: Option<Vec<String>>,
     /// <p> The Amazon Resource Name (ARN) of the <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_RepositoryAssociation.html"> <code>RepositoryAssociation</code> </a> that contains the reviewed source code. You can retrieve associated repository ARNs by calling <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_ListRepositoryAssociations.html"> <code>ListRepositoryAssociations</code> </a>. </p>
     #[serde(rename = "AssociationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -91,7 +122,7 @@ pub struct CodeReview {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The owner of the repository. For an AWS CodeCommit repository, this is the AWS account ID of the account that owns the repository. For a GitHub, GitHub Enterprise Server, or Bitbucket repository, this is the username for the account that owns the repository.</p>
+    /// <p>The owner of the repository. For an AWS CodeCommit repository, this is the AWS account ID of the account that owns the repository. For a GitHub, GitHub Enterprise Server, or Bitbucket repository, this is the username for the account that owns the repository. For an S3 repository, it can be the username or AWS account ID.</p>
     #[serde(rename = "Owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
@@ -149,7 +180,7 @@ pub struct CodeReviewSummary {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The owner of the repository. For an AWS CodeCommit repository, this is the AWS account ID of the account that owns the repository. For a GitHub, GitHub Enterprise Server, or Bitbucket repository, this is the username for the account that owns the repository.</p>
+    /// <p>The owner of the repository. For an AWS CodeCommit repository, this is the AWS account ID of the account that owns the repository. For a GitHub, GitHub Enterprise Server, or Bitbucket repository, this is the username for the account that owns the repository. For an S3 repository, it can be the username or AWS account ID.</p>
     #[serde(rename = "Owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
@@ -165,6 +196,9 @@ pub struct CodeReviewSummary {
     #[serde(rename = "RepositoryName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_name: Option<String>,
+    #[serde(rename = "SourceCodeType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_code_type: Option<SourceCodeType>,
     /// <p><p> The state of the code review. </p> <p>The valid code review states are:</p> <ul> <li> <p> <code>Completed</code>: The code review is complete. </p> </li> <li> <p> <code>Pending</code>: The code review started and has not completed or failed. </p> </li> <li> <p> <code>Failed</code>: The code review failed. </p> </li> <li> <p> <code>Deleting</code>: The code review is being deleted. </p> </li> </ul></p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -175,24 +209,31 @@ pub struct CodeReviewSummary {
     pub type_: Option<String>,
 }
 
-/// <p><p> The type of a code review. There are two code review types: </p> <ul> <li> <p> <code>PullRequest</code> - A code review that is automatically triggered by a pull request on an assocaited repository. Because this type of code review is automatically generated, you cannot specify this code review type using <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_CreateCodeReview"> <code>CreateCodeReview</code> </a>. </p> </li> <li> <p> <code>RepositoryAnalysis</code> - A code review that analyzes all code under a specified branch in an associated respository. The assocated repository is specified using its ARN in <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_CreateCodeReview"> <code>CreateCodeReview</code> </a>. </p> </li> </ul></p>
+/// <p><p> The type of a code review. There are two code review types: </p> <ul> <li> <p> <code>PullRequest</code> - A code review that is automatically triggered by a pull request on an associated repository. </p> </li> <li> <p> <code>RepositoryAnalysis</code> - A code review that analyzes all code under a specified branch in an associated repository. The associated repository is specified using its ARN in <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_CreateCodeReview"> <code>CreateCodeReview</code> </a>. </p> </li> </ul></p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CodeReviewType {
-    /// <p> A code review that analyzes all code under a specified branch in an associated respository. The assocated repository is specified using its ARN in <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_CreateCodeReview"> <code>CreateCodeReview</code> </a>. </p>
+    /// <p>They types of analysis performed during a repository analysis or a pull request review. You can specify either <code>Security</code>, <code>CodeQuality</code>, or both.</p>
+    #[serde(rename = "AnalysisTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub analysis_types: Option<Vec<String>>,
+    /// <p> A code review that analyzes all code under a specified branch in an associated repository. The associated repository is specified using its ARN in <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_CreateCodeReview"> <code>CreateCodeReview</code> </a>. </p>
     #[serde(rename = "RepositoryAnalysis")]
     pub repository_analysis: RepositoryAnalysis,
 }
 
-/// <p> A type of <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_SourceCodeType"> <code>SourceCodeType</code> </a> that specifies the commit diff for a pull request on an associated repository. </p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+/// <p> A type of <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_SourceCodeType"> <code>SourceCodeType</code> </a> that specifies the commit diff for a pull request on an associated repository. The <code>SourceCommit</code> and <code>DestinationCommit</code> fields are required to do a pull request code review. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CommitDiffSourceCodeType {
-    /// <p> The SHA of the destination commit used to generate a commit diff. </p>
+    /// <p> The SHA of the destination commit used to generate a commit diff. This field is required for a pull request code review. </p>
     #[serde(rename = "DestinationCommit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_commit: Option<String>,
-    /// <p> The SHA of the source commit used to generate a commit diff. </p>
+    /// <p>The SHA of the merge base of a commit.</p>
+    #[serde(rename = "MergeBaseCommit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub merge_base_commit: Option<String>,
+    /// <p> The SHA of the source commit used to generate a commit diff. This field is required for a pull request code review. </p>
     #[serde(rename = "SourceCommit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_commit: Option<String>,
@@ -305,6 +346,32 @@ pub struct DisassociateRepositoryResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>Information about an event. The event might be a push, pull request, scheduled request, or another type of event.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct EventInfo {
+    /// <p>The name of the event. The possible names are <code>pull_request</code>, <code>workflow_dispatch</code>, <code>schedule</code>, and <code>push</code> </p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The state of an event. The state might be open, closed, or another state.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+}
+
+/// <p><p>An object that contains:</p> <ul> <li> <p>The encryption option for a repository association. It is either owned by AWS Key Management Service (KMS) (<code>AWS<em>OWNED</em>CMK</code>) or customer managed (<code>CUSTOMER<em>MANAGED</em>CMK</code>).</p> </li> <li> <p>The ID of the AWS KMS key that is associated with a respository association.</p> </li> </ul></p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct KMSKeyDetails {
+    /// <p>The encryption option for a repository association. It is either owned by AWS Key Management Service (KMS) (<code>AWS_OWNED_CMK</code>) or customer managed (<code>CUSTOMER_MANAGED_CMK</code>).</p>
+    #[serde(rename = "EncryptionOption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_option: Option<String>,
+    /// <p>The ID of the AWS KMS key that is associated with a respository association.</p>
+    #[serde(rename = "KMSKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -583,6 +650,10 @@ pub struct RecommendationSummary {
     #[serde(rename = "FilePath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_path: Option<String>,
+    /// <p>The type of a recommendation.</p>
+    #[serde(rename = "RecommendationCategory")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recommendation_category: Option<String>,
     /// <p> The recommendation ID that can be used to track the provided recommendations. Later on it can be used to collect the feedback. </p>
     #[serde(rename = "RecommendationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -609,15 +680,22 @@ pub struct Repository {
     #[serde(rename = "GitHubEnterpriseServer")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub git_hub_enterprise_server: Option<ThirdPartySourceRepository>,
+    #[serde(rename = "S3Bucket")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_bucket: Option<S3Repository>,
 }
 
-/// <p> A code review type that analyzes all code under a specified branch in an associated respository. The assocated repository is specified using its ARN when you call <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_CreateCodeReview"> <code>CreateCodeReview</code> </a>. </p>
+/// <p> A code review type that analyzes all code under a specified branch in an associated repository. The associated repository is specified using its ARN when you call <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_CreateCodeReview"> <code>CreateCodeReview</code> </a>. </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RepositoryAnalysis {
     /// <p> A <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_SourceCodeType"> <code>SourceCodeType</code> </a> that specifies the tip of a branch in an associated repository. </p>
     #[serde(rename = "RepositoryHead")]
-    pub repository_head: RepositoryHeadSourceCodeType,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub repository_head: Option<RepositoryHeadSourceCodeType>,
+    #[serde(rename = "SourceCodeType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_code_type: Option<SourceCodeType>,
 }
 
 /// <p>Information about a repository association. The <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_DescribeRepositoryAssociation.html"> <code>DescribeRepositoryAssociation</code> </a> operation returns a <code>RepositoryAssociation</code> object.</p>
@@ -640,6 +718,10 @@ pub struct RepositoryAssociation {
     #[serde(rename = "CreatedTimeStamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time_stamp: Option<f64>,
+    /// <p><p>A <code>KMSKeyDetails</code> object that contains:</p> <ul> <li> <p>The encryption option for this repository association. It is either owned by AWS Key Management Service (KMS) (<code>AWS<em>OWNED</em>CMK</code>) or customer managed (<code>CUSTOMER<em>MANAGED</em>CMK</code>).</p> </li> <li> <p>The ID of the AWS KMS key that is associated with this respository association.</p> </li> </ul></p>
+    #[serde(rename = "KMSKeyDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_details: Option<KMSKeyDetails>,
     /// <p>The time, in milliseconds since the epoch, when the repository association was last updated.</p>
     #[serde(rename = "LastUpdatedTimeStamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -648,7 +730,7 @@ pub struct RepositoryAssociation {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The owner of the repository. For an AWS CodeCommit repository, this is the AWS account ID of the account that owns the repository. For a GitHub, GitHub Enterprise Server, or Bitbucket repository, this is the username for the account that owns the repository.</p>
+    /// <p>The owner of the repository. For an AWS CodeCommit repository, this is the AWS account ID of the account that owns the repository. For a GitHub, GitHub Enterprise Server, or Bitbucket repository, this is the username for the account that owns the repository. For an S3 repository, it can be the username or AWS account ID.</p>
     #[serde(rename = "Owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
@@ -656,6 +738,9 @@ pub struct RepositoryAssociation {
     #[serde(rename = "ProviderType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_type: Option<String>,
+    #[serde(rename = "S3RepositoryDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_repository_details: Option<S3RepositoryDetails>,
     /// <p><p>The state of the repository association.</p> <p>The valid repository association states are:</p> <ul> <li> <p> <b>Associated</b>: The repository association is complete. </p> </li> <li> <p> <b>Associating</b>: CodeGuru Reviewer is: </p> <ul> <li> <p> Setting up pull request notifications. This is required for pull requests to trigger a CodeGuru Reviewer review. </p> <note> <p> If your repository <code>ProviderType</code> is <code>GitHub</code>, <code>GitHub Enterprise Server</code>, or <code>Bitbucket</code>, CodeGuru Reviewer creates webhooks in your repository to trigger CodeGuru Reviewer reviews. If you delete these webhooks, reviews of code in your repository cannot be triggered. </p> </note> </li> <li> <p> Setting up source code access. This is required for CodeGuru Reviewer to securely clone code in your repository. </p> </li> </ul> </li> <li> <p> <b>Failed</b>: The repository failed to associate or disassociate. </p> </li> <li> <p> <b>Disassociating</b>: CodeGuru Reviewer is removing the repository&#39;s pull request notifications and source code access. </p> </li> <li> <p> <b>Disassociated</b>: CodeGuru Reviewer successfully disassociated the repository. You can create a new association with this repository if you want to review source code in it later. You can control access to code reviews created in an associated repository with tags after it has been disassociated. For more information, see <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/auth-and-access-control-using-tags.html">Using tags to control access to associated repositories</a> in the <i>Amazon CodeGuru Reviewer User Guide</i>. </p> </li> </ul></p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -690,7 +775,7 @@ pub struct RepositoryAssociationSummary {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The owner of the repository. For an AWS CodeCommit repository, this is the AWS account ID of the account that owns the repository. For a GitHub, GitHub Enterprise Server, or Bitbucket repository, this is the username for the account that owns the repository.</p>
+    /// <p>The owner of the repository. For an AWS CodeCommit repository, this is the AWS account ID of the account that owns the repository. For a GitHub, GitHub Enterprise Server, or Bitbucket repository, this is the username for the account that owns the repository. For an S3 repository, it can be the username or AWS account ID.</p>
     #[serde(rename = "Owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
@@ -712,10 +797,71 @@ pub struct RepositoryHeadSourceCodeType {
     pub branch_name: String,
 }
 
-/// <p> Specifies the source code that is analyzed in a code review. A code review can analyze the source code that is specified using a pull request diff or a branch in an associated repository. </p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+/// <p>Metadata that is associated with a code review. This applies to both pull request and repository analysis code reviews.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct RequestMetadata {
+    /// <p>Information about the event associated with a code review.</p>
+    #[serde(rename = "EventInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_info: Option<EventInfo>,
+    /// <p>The ID of the request. This is required for a pull request code review.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>An identifier, such as a name or account ID, that is associated with the requester. The <code>Requester</code> is used to capture the <code>author/actor</code> name of the event request.</p>
+    #[serde(rename = "Requester")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub requester: Option<String>,
+    /// <p>The name of the repository vendor used to upload code to an S3 bucket for a CI/CD code review. For example, if code and artifacts are uploaded to an S3 bucket for a CI/CD code review by GitHub scripts from a GitHub repository, then the repository association's <code>ProviderType</code> is <code>S3Bucket</code> and the CI/CD repository vendor name is GitHub. For more information, see the definition for <code>ProviderType</code> in <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_RepositoryAssociation.html">RepositoryAssociation</a>. </p>
+    #[serde(rename = "VendorName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vendor_name: Option<String>,
+}
+
+/// <p> Information about an associated repository in an S3 bucket. The associated repository contains a source code .zip file and a build artifacts .zip file that contains .jar or .class files. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct S3BucketRepository {
+    /// <p> An <code>S3RepositoryDetails</code> object that specifies the name of an S3 bucket and a <code>CodeArtifacts</code> object. The <code>CodeArtifacts</code> object includes the S3 object keys for a source code .zip file and for a build artifacts .zip file. </p>
+    #[serde(rename = "Details")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub details: Option<S3RepositoryDetails>,
+    /// <p> The name of the repository when the <code>ProviderType</code> is <code>S3Bucket</code>. </p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+/// <p> Information about a repository in an S3 bucket. </p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct S3Repository {
+    /// <p>The name of the S3 bucket used for associating a new S3 repository. It must begin with <code>codeguru-reviewer-</code>. </p>
+    #[serde(rename = "BucketName")]
+    pub bucket_name: String,
+    /// <p> The name of the repository in the S3 bucket. </p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+/// <p> Specifies the name of an S3 bucket and a <code>CodeArtifacts</code> object that contains the S3 object keys for a source code .zip file and for a build artifacts .zip file that contains .jar or .class files. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct S3RepositoryDetails {
+    /// <p>The name of the S3 bucket used for associating a new S3 repository. It must begin with <code>codeguru-reviewer-</code>. </p>
+    #[serde(rename = "BucketName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bucket_name: Option<String>,
+    /// <p> A <code>CodeArtifacts</code> object. The <code>CodeArtifacts</code> object includes the S3 object key for a source code .zip file and for a build artifacts .zip file that contains .jar or .class files. </p>
+    #[serde(rename = "CodeArtifacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code_artifacts: Option<CodeArtifacts>,
+}
+
+/// <p> Specifies the source code that is analyzed in a code review. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SourceCodeType {
+    /// <p> A type of <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_SourceCodeType"> <code>SourceCodeType</code> </a> that specifies a source branch name and a destination branch name in an associated repository. </p>
+    #[serde(rename = "BranchDiff")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub branch_diff: Option<BranchDiffSourceCodeType>,
     /// <p> A <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_SourceCodeType"> <code>SourceCodeType</code> </a> that specifies a commit diff created by a pull request on an associated repository. </p>
     #[serde(rename = "CommitDiff")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -723,6 +869,14 @@ pub struct SourceCodeType {
     #[serde(rename = "RepositoryHead")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repository_head: Option<RepositoryHeadSourceCodeType>,
+    /// <p>Metadata that is associated with a code review. This applies to any type of code review supported by CodeGuru Reviewer. The <code>RequestMetadaa</code> field captures any event metadata. For example, it might capture metadata associated with an event trigger, such as a push or a pull request. </p>
+    #[serde(rename = "RequestMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_metadata: Option<RequestMetadata>,
+    /// <p> Information about an associated repository in an S3 bucket that includes its name and an <code>S3RepositoryDetails</code> object. The <code>S3RepositoryDetails</code> object includes the name of an S3 bucket, an S3 key for a source code .zip file, and an S3 key for a build artifacts .zip file. <code>S3BucketRepository</code> is required in <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_SourceCodeType"> <code>SourceCodeType</code> </a> for <code>S3BucketRepository</code> based code reviews. </p>
+    #[serde(rename = "S3BucketRepository")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_bucket_repository: Option<S3BucketRepository>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -750,7 +904,7 @@ pub struct ThirdPartySourceRepository {
     /// <p> The name of the third party source repository. </p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p> The owner of the repository. For a GitHub, GitHub Enterprise, or Bitbucket repository, this is the username for the account that owns the repository. </p>
+    /// <p> The owner of the repository. For a GitHub, GitHub Enterprise, or Bitbucket repository, this is the username for the account that owns the repository. For an S3 repository, this can be the username or AWS account ID. </p>
     #[serde(rename = "Owner")]
     pub owner: String,
 }
@@ -1457,13 +1611,13 @@ impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the CodeGuruReviewer API. CodeGuruReviewer clients implement this trait.
 #[async_trait]
 pub trait CodeGuruReviewer {
-    /// <p><p> Use to associate an AWS CodeCommit repository or a repostory managed by AWS CodeStar Connections with Amazon CodeGuru Reviewer. When you associate a repository, CodeGuru Reviewer reviews source code changes in the repository&#39;s pull requests and provides automatic recommendations. You can view recommendations using the CodeGuru Reviewer console. For more information, see <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/recommendations.html">Recommendations in Amazon CodeGuru Reviewer</a> in the <i>Amazon CodeGuru Reviewer User Guide.</i> </p> <p>If you associate a CodeCommit repository, it must be in the same AWS Region and AWS account where its CodeGuru Reviewer code reviews are configured.</p> <p>Bitbucket and GitHub Enterprise Server repositories are managed by AWS CodeStar Connections to connect to CodeGuru Reviewer. For more information, see <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/reviewer-ug/step-one.html#select-repository-source-provider">Connect to a repository source provider</a> in the <i>Amazon CodeGuru Reviewer User Guide.</i> </p> <note> <p> You cannot use the CodeGuru Reviewer SDK or the AWS CLI to associate a GitHub repository with Amazon CodeGuru Reviewer. To associate a GitHub repository, use the console. For more information, see <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/getting-started-with-guru.html">Getting started with CodeGuru Reviewer</a> in the <i>CodeGuru Reviewer User Guide.</i> </p> </note></p>
+    /// <p><p> Use to associate an AWS CodeCommit repository or a repostory managed by AWS CodeStar Connections with Amazon CodeGuru Reviewer. When you associate a repository, CodeGuru Reviewer reviews source code changes in the repository&#39;s pull requests and provides automatic recommendations. You can view recommendations using the CodeGuru Reviewer console. For more information, see <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/recommendations.html">Recommendations in Amazon CodeGuru Reviewer</a> in the <i>Amazon CodeGuru Reviewer User Guide.</i> </p> <p>If you associate a CodeCommit or S3 repository, it must be in the same AWS Region and AWS account where its CodeGuru Reviewer code reviews are configured.</p> <p>Bitbucket and GitHub Enterprise Server repositories are managed by AWS CodeStar Connections to connect to CodeGuru Reviewer. For more information, see <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/getting-started-associate-repository.html">Associate a repository</a> in the <i>Amazon CodeGuru Reviewer User Guide.</i> </p> <note> <p> You cannot use the CodeGuru Reviewer SDK or the AWS CLI to associate a GitHub repository with Amazon CodeGuru Reviewer. To associate a GitHub repository, use the console. For more information, see <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/getting-started-with-guru.html">Getting started with CodeGuru Reviewer</a> in the <i>CodeGuru Reviewer User Guide.</i> </p> </note></p>
     async fn associate_repository(
         &self,
         input: AssociateRepositoryRequest,
     ) -> Result<AssociateRepositoryResponse, RusotoError<AssociateRepositoryError>>;
 
-    /// <p> Use to create a code review with a <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_CodeReviewType.html"> <code>CodeReviewType</code> </a> of <code>RepositoryAnalysis</code>. This type of code review analyzes all code under a specified branch in an associated repository. <code>PullRequest</code> code reviews are automatically triggered by a pull request so cannot be created using this method. </p>
+    /// <p> Use to create a code review with a <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_CodeReviewType.html"> <code>CodeReviewType</code> </a> of <code>RepositoryAnalysis</code>. This type of code review analyzes all code under a specified branch in an associated repository. <code>PullRequest</code> code reviews are automatically triggered by a pull request. </p>
     async fn create_code_review(
         &self,
         input: CreateCodeReviewRequest,
@@ -1587,7 +1741,7 @@ impl CodeGuruReviewerClient {
 
 #[async_trait]
 impl CodeGuruReviewer for CodeGuruReviewerClient {
-    /// <p><p> Use to associate an AWS CodeCommit repository or a repostory managed by AWS CodeStar Connections with Amazon CodeGuru Reviewer. When you associate a repository, CodeGuru Reviewer reviews source code changes in the repository&#39;s pull requests and provides automatic recommendations. You can view recommendations using the CodeGuru Reviewer console. For more information, see <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/recommendations.html">Recommendations in Amazon CodeGuru Reviewer</a> in the <i>Amazon CodeGuru Reviewer User Guide.</i> </p> <p>If you associate a CodeCommit repository, it must be in the same AWS Region and AWS account where its CodeGuru Reviewer code reviews are configured.</p> <p>Bitbucket and GitHub Enterprise Server repositories are managed by AWS CodeStar Connections to connect to CodeGuru Reviewer. For more information, see <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/reviewer-ug/step-one.html#select-repository-source-provider">Connect to a repository source provider</a> in the <i>Amazon CodeGuru Reviewer User Guide.</i> </p> <note> <p> You cannot use the CodeGuru Reviewer SDK or the AWS CLI to associate a GitHub repository with Amazon CodeGuru Reviewer. To associate a GitHub repository, use the console. For more information, see <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/getting-started-with-guru.html">Getting started with CodeGuru Reviewer</a> in the <i>CodeGuru Reviewer User Guide.</i> </p> </note></p>
+    /// <p><p> Use to associate an AWS CodeCommit repository or a repostory managed by AWS CodeStar Connections with Amazon CodeGuru Reviewer. When you associate a repository, CodeGuru Reviewer reviews source code changes in the repository&#39;s pull requests and provides automatic recommendations. You can view recommendations using the CodeGuru Reviewer console. For more information, see <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/recommendations.html">Recommendations in Amazon CodeGuru Reviewer</a> in the <i>Amazon CodeGuru Reviewer User Guide.</i> </p> <p>If you associate a CodeCommit or S3 repository, it must be in the same AWS Region and AWS account where its CodeGuru Reviewer code reviews are configured.</p> <p>Bitbucket and GitHub Enterprise Server repositories are managed by AWS CodeStar Connections to connect to CodeGuru Reviewer. For more information, see <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/getting-started-associate-repository.html">Associate a repository</a> in the <i>Amazon CodeGuru Reviewer User Guide.</i> </p> <note> <p> You cannot use the CodeGuru Reviewer SDK or the AWS CLI to associate a GitHub repository with Amazon CodeGuru Reviewer. To associate a GitHub repository, use the console. For more information, see <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/getting-started-with-guru.html">Getting started with CodeGuru Reviewer</a> in the <i>CodeGuru Reviewer User Guide.</i> </p> </note></p>
     #[allow(unused_mut)]
     async fn associate_repository(
         &self,
@@ -1619,7 +1773,7 @@ impl CodeGuruReviewer for CodeGuruReviewerClient {
         }
     }
 
-    /// <p> Use to create a code review with a <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_CodeReviewType.html"> <code>CodeReviewType</code> </a> of <code>RepositoryAnalysis</code>. This type of code review analyzes all code under a specified branch in an associated repository. <code>PullRequest</code> code reviews are automatically triggered by a pull request so cannot be created using this method. </p>
+    /// <p> Use to create a code review with a <a href="https://docs.aws.amazon.com/codeguru/latest/reviewer-api/API_CodeReviewType.html"> <code>CodeReviewType</code> </a> of <code>RepositoryAnalysis</code>. This type of code review analyzes all code under a specified branch in an associated repository. <code>PullRequest</code> code reviews are automatically triggered by a pull request. </p>
     #[allow(unused_mut)]
     async fn create_code_review(
         &self,

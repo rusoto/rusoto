@@ -12,7 +12,7 @@
 #![doc(
     html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
 )]
-//! <p><fullname>AWS Glue</fullname> <p>Defines the public endpoint for the AWS Glue service.</p></p>
+//! <p><fullname>Glue</fullname> <p>Defines the public endpoint for the Glue service.</p></p>
 //!
 //! If you're using the service, you're probably looking for [GlueClient](struct.GlueClient.html) and [Glue](trait.Glue.html).
 

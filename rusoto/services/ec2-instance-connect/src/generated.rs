@@ -58,16 +58,16 @@ use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SendSSHPublicKeyRequest {
-    /// <p>The availability zone the EC2 instance was launched in.</p>
+    /// <p>The Availability Zone in which the EC2 instance was launched.</p>
     #[serde(rename = "AvailabilityZone")]
     pub availability_zone: String,
-    /// <p>The EC2 instance you wish to publish the SSH key to.</p>
+    /// <p>The ID of the EC2 instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>The OS user on the EC2 instance whom the key may be used to authenticate as.</p>
+    /// <p>The OS user on the EC2 instance for whom the key can be used to authenticate.</p>
     #[serde(rename = "InstanceOSUser")]
     pub instance_os_user: String,
-    /// <p>The public key to be published to the instance. To use it after publication you must have the matching private key.</p>
+    /// <p>The public key material. To use the public key, you must have the matching private key.</p>
     #[serde(rename = "SSHPublicKey")]
     pub ssh_public_key: String,
 }
@@ -75,11 +75,39 @@ pub struct SendSSHPublicKeyRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SendSSHPublicKeyResponse {
-    /// <p>The request ID as logged by EC2 Connect. Please provide this when contacting AWS Support.</p>
+    /// <p>The ID of the request. Please provide this ID when contacting AWS Support for assistance.</p>
     #[serde(rename = "RequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
-    /// <p>Indicates request success.</p>
+    /// <p>Is true if the request succeeds and an error otherwise.</p>
+    #[serde(rename = "Success")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub success: Option<bool>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct SendSerialConsoleSSHPublicKeyRequest {
+    /// <p>The ID of the EC2 instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    /// <p>The public key material. To use the public key, you must have the matching private key. For information about the supported key formats and lengths, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#how-to-generate-your-own-key-and-import-it-to-aws">Requirements for key pairs</a> in the <i>Amazon EC2 User Guide</i>.</p>
+    #[serde(rename = "SSHPublicKey")]
+    pub ssh_public_key: String,
+    /// <p>The serial port of the EC2 instance. Currently only port 0 is supported.</p> <p>Default: 0</p>
+    #[serde(rename = "SerialPort")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub serial_port: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SendSerialConsoleSSHPublicKeyResponse {
+    /// <p>The ID of the request. Please provide this ID when contacting AWS Support for assistance.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>Is true if the request succeeds and an error otherwise.</p>
     #[serde(rename = "Success")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub success: Option<bool>,
@@ -88,15 +116,15 @@ pub struct SendSSHPublicKeyResponse {
 /// Errors returned by SendSSHPublicKey
 #[derive(Debug, PartialEq)]
 pub enum SendSSHPublicKeyError {
-    /// <p>Indicates that either your AWS credentials are invalid or you do not have access to the EC2 instance.</p>
+    /// <p>Either your AWS credentials are not valid or you do not have access to the EC2 instance.</p>
     Auth(String),
-    /// <p>Indicates that the instance requested was not found in the given zone. Check that you have provided a valid instance ID and the correct zone.</p>
+    /// <p>The specified instance was not found.</p>
     EC2InstanceNotFound(String),
-    /// <p>Indicates that you provided bad input. Ensure you have a valid instance ID, the correct zone, and a valid SSH public key.</p>
+    /// <p>One of the parameters is not valid.</p>
     InvalidArgs(String),
-    /// <p>Indicates that the service encountered an error. Follow the message's instructions and try again.</p>
+    /// <p>The service encountered an error. Follow the instructions in the error message and try again.</p>
     Service(String),
-    /// <p>Indicates you have been making requests too frequently and have been throttled. Wait for a while and try again. If higher call volume is warranted contact AWS Support.</p>
+    /// <p>The requests were made too frequently and have been throttled. Wait a while and try again. To increase the limit on your request frequency, contact AWS Support.</p>
     Throttling(String),
 }
 
@@ -141,14 +169,133 @@ impl fmt::Display for SendSSHPublicKeyError {
     }
 }
 impl Error for SendSSHPublicKeyError {}
+/// Errors returned by SendSerialConsoleSSHPublicKey
+#[derive(Debug, PartialEq)]
+pub enum SendSerialConsoleSSHPublicKeyError {
+    /// <p>Either your AWS credentials are not valid or you do not have access to the EC2 instance.</p>
+    Auth(String),
+    /// <p>The specified instance was not found.</p>
+    EC2InstanceNotFound(String),
+    /// <p>The instance type is not supported for connecting via the serial console. Only Nitro instance types are currently supported.</p>
+    EC2InstanceTypeInvalid(String),
+    /// <p>One of the parameters is not valid.</p>
+    InvalidArgs(String),
+    /// <p>Your account is not authorized to use the EC2 Serial Console. To authorize your account, run the EnableSerialConsoleAccess API. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_EnableSerialConsoleAccess.html">EnableSerialConsoleAccess</a> in the <i>Amazon EC2 API Reference</i>.</p>
+    SerialConsoleAccessDisabled(String),
+    /// <p>The instance currently has 1 active serial console session. Only 1 session is supported at a time.</p>
+    SerialConsoleSessionLimitExceeded(String),
+    /// <p>Unable to start a serial console session. Please try again.</p>
+    SerialConsoleSessionUnavailable(String),
+    /// <p>The service encountered an error. Follow the instructions in the error message and try again.</p>
+    Service(String),
+    /// <p>The requests were made too frequently and have been throttled. Wait a while and try again. To increase the limit on your request frequency, contact AWS Support.</p>
+    Throttling(String),
+}
+
+impl SendSerialConsoleSSHPublicKeyError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<SendSerialConsoleSSHPublicKeyError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AuthException" => {
+                    return RusotoError::Service(SendSerialConsoleSSHPublicKeyError::Auth(err.msg))
+                }
+                "EC2InstanceNotFoundException" => {
+                    return RusotoError::Service(
+                        SendSerialConsoleSSHPublicKeyError::EC2InstanceNotFound(err.msg),
+                    )
+                }
+                "EC2InstanceTypeInvalidException" => {
+                    return RusotoError::Service(
+                        SendSerialConsoleSSHPublicKeyError::EC2InstanceTypeInvalid(err.msg),
+                    )
+                }
+                "InvalidArgsException" => {
+                    return RusotoError::Service(SendSerialConsoleSSHPublicKeyError::InvalidArgs(
+                        err.msg,
+                    ))
+                }
+                "SerialConsoleAccessDisabledException" => {
+                    return RusotoError::Service(
+                        SendSerialConsoleSSHPublicKeyError::SerialConsoleAccessDisabled(err.msg),
+                    )
+                }
+                "SerialConsoleSessionLimitExceededException" => {
+                    return RusotoError::Service(
+                        SendSerialConsoleSSHPublicKeyError::SerialConsoleSessionLimitExceeded(
+                            err.msg,
+                        ),
+                    )
+                }
+                "SerialConsoleSessionUnavailableException" => {
+                    return RusotoError::Service(
+                        SendSerialConsoleSSHPublicKeyError::SerialConsoleSessionUnavailable(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(SendSerialConsoleSSHPublicKeyError::Service(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(SendSerialConsoleSSHPublicKeyError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for SendSerialConsoleSSHPublicKeyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            SendSerialConsoleSSHPublicKeyError::Auth(ref cause) => write!(f, "{}", cause),
+            SendSerialConsoleSSHPublicKeyError::EC2InstanceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SendSerialConsoleSSHPublicKeyError::EC2InstanceTypeInvalid(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SendSerialConsoleSSHPublicKeyError::InvalidArgs(ref cause) => write!(f, "{}", cause),
+            SendSerialConsoleSSHPublicKeyError::SerialConsoleAccessDisabled(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SendSerialConsoleSSHPublicKeyError::SerialConsoleSessionLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SendSerialConsoleSSHPublicKeyError::SerialConsoleSessionUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            SendSerialConsoleSSHPublicKeyError::Service(ref cause) => write!(f, "{}", cause),
+            SendSerialConsoleSSHPublicKeyError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for SendSerialConsoleSSHPublicKeyError {}
 /// Trait representing the capabilities of the EC2 Instance Connect API. EC2 Instance Connect clients implement this trait.
 #[async_trait]
 pub trait Ec2InstanceConnect {
-    /// <p>Pushes an SSH public key to a particular OS user on a given EC2 instance for 60 seconds.</p>
+    /// <p>Pushes an SSH public key to the specified EC2 instance for use by the specified user. The key remains for 60 seconds. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Connect-using-EC2-Instance-Connect.html">Connect to your Linux instance using EC2 Instance Connect</a> in the <i>Amazon EC2 User Guide</i>.</p>
     async fn send_ssh_public_key(
         &self,
         input: SendSSHPublicKeyRequest,
     ) -> Result<SendSSHPublicKeyResponse, RusotoError<SendSSHPublicKeyError>>;
+
+    /// <p>Pushes an SSH public key to the specified EC2 instance. The key remains for 60 seconds, which gives you 60 seconds to establish a serial console connection to the instance using SSH. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-serial-console.html">EC2 Serial Console</a> in the <i>Amazon EC2 User Guide</i>.</p>
+    async fn send_serial_console_ssh_public_key(
+        &self,
+        input: SendSerialConsoleSSHPublicKeyRequest,
+    ) -> Result<
+        SendSerialConsoleSSHPublicKeyResponse,
+        RusotoError<SendSerialConsoleSSHPublicKeyError>,
+    >;
 }
 /// A client for the EC2 Instance Connect API.
 #[derive(Clone)]
@@ -190,7 +337,7 @@ impl Ec2InstanceConnectClient {
 
 #[async_trait]
 impl Ec2InstanceConnect for Ec2InstanceConnectClient {
-    /// <p>Pushes an SSH public key to a particular OS user on a given EC2 instance for 60 seconds.</p>
+    /// <p>Pushes an SSH public key to the specified EC2 instance for use by the specified user. The key remains for 60 seconds. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Connect-using-EC2-Instance-Connect.html">Connect to your Linux instance using EC2 Instance Connect</a> in the <i>Amazon EC2 User Guide</i>.</p>
     async fn send_ssh_public_key(
         &self,
         input: SendSSHPublicKeyRequest,
@@ -209,5 +356,30 @@ impl Ec2InstanceConnect for Ec2InstanceConnectClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<SendSSHPublicKeyResponse, _>()
+    }
+
+    /// <p>Pushes an SSH public key to the specified EC2 instance. The key remains for 60 seconds, which gives you 60 seconds to establish a serial console connection to the instance using SSH. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-serial-console.html">EC2 Serial Console</a> in the <i>Amazon EC2 User Guide</i>.</p>
+    async fn send_serial_console_ssh_public_key(
+        &self,
+        input: SendSerialConsoleSSHPublicKeyRequest,
+    ) -> Result<
+        SendSerialConsoleSSHPublicKeyResponse,
+        RusotoError<SendSerialConsoleSSHPublicKeyError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSEC2InstanceConnectService.SendSerialConsoleSSHPublicKey",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, SendSerialConsoleSSHPublicKeyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<SendSerialConsoleSSHPublicKeyResponse, _>()
     }
 }

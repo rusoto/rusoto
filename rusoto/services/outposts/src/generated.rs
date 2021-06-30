@@ -220,6 +220,9 @@ pub struct Outpost {
     #[serde(rename = "OwnerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_id: Option<String>,
+    #[serde(rename = "SiteArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub site_arn: Option<String>,
     #[serde(rename = "SiteId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub site_id: Option<String>,
@@ -242,6 +245,9 @@ pub struct Site {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    #[serde(rename = "SiteArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub site_arn: Option<String>,
     #[serde(rename = "SiteId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub site_id: Option<String>,
@@ -286,6 +292,8 @@ pub struct UntagResourceResponse {}
 pub enum CreateOutpostError {
     /// <p>You do not have permission to perform this operation.</p>
     AccessDenied(String),
+    /// <p>Updating or deleting this resource can cause an inconsistent state.</p>
+    Conflict(String),
     /// <p>An internal error has occurred.</p>
     InternalServer(String),
     /// <p>The specified request is not valid.</p>
@@ -300,6 +308,9 @@ impl CreateOutpostError {
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(CreateOutpostError::AccessDenied(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateOutpostError::Conflict(err.msg))
                 }
                 "InternalServerException" => {
                     return RusotoError::Service(CreateOutpostError::InternalServer(err.msg))
@@ -322,6 +333,7 @@ impl fmt::Display for CreateOutpostError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             CreateOutpostError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateOutpostError::Conflict(ref cause) => write!(f, "{}", cause),
             CreateOutpostError::InternalServer(ref cause) => write!(f, "{}", cause),
             CreateOutpostError::NotFound(ref cause) => write!(f, "{}", cause),
             CreateOutpostError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
@@ -334,6 +346,8 @@ impl Error for CreateOutpostError {}
 pub enum DeleteOutpostError {
     /// <p>You do not have permission to perform this operation.</p>
     AccessDenied(String),
+    /// <p>Updating or deleting this resource can cause an inconsistent state.</p>
+    Conflict(String),
     /// <p>An internal error has occurred.</p>
     InternalServer(String),
     /// <p>The specified request is not valid.</p>
@@ -346,6 +360,9 @@ impl DeleteOutpostError {
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteOutpostError::AccessDenied(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(DeleteOutpostError::Conflict(err.msg))
                 }
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteOutpostError::InternalServer(err.msg))
@@ -365,6 +382,7 @@ impl fmt::Display for DeleteOutpostError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteOutpostError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteOutpostError::Conflict(ref cause) => write!(f, "{}", cause),
             DeleteOutpostError::InternalServer(ref cause) => write!(f, "{}", cause),
             DeleteOutpostError::NotFound(ref cause) => write!(f, "{}", cause),
         }
@@ -376,6 +394,8 @@ impl Error for DeleteOutpostError {}
 pub enum DeleteSiteError {
     /// <p>You do not have permission to perform this operation.</p>
     AccessDenied(String),
+    /// <p>Updating or deleting this resource can cause an inconsistent state.</p>
+    Conflict(String),
     /// <p>An internal error has occurred.</p>
     InternalServer(String),
     /// <p>The specified request is not valid.</p>
@@ -388,6 +408,9 @@ impl DeleteSiteError {
             match err.typ.as_str() {
                 "AccessDeniedException" => {
                     return RusotoError::Service(DeleteSiteError::AccessDenied(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(DeleteSiteError::Conflict(err.msg))
                 }
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteSiteError::InternalServer(err.msg))
@@ -407,6 +430,7 @@ impl fmt::Display for DeleteSiteError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteSiteError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteSiteError::Conflict(ref cause) => write!(f, "{}", cause),
             DeleteSiteError::InternalServer(ref cause) => write!(f, "{}", cause),
             DeleteSiteError::NotFound(ref cause) => write!(f, "{}", cause),
         }

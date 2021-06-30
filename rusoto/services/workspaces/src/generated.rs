@@ -153,9 +153,8 @@ pub struct ClientPropertiesResult {
     pub resource_id: Option<String>,
 }
 
-/// <p>Describes the compute type.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+/// <p>Describes the compute type of the bundle.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ComputeType {
     /// <p>The compute type.</p>
     #[serde(rename = "Name")]
@@ -320,6 +319,39 @@ pub struct CreateTagsResult {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateWorkspaceBundleRequest {
+    /// <p>The description of the bundle.</p>
+    #[serde(rename = "BundleDescription")]
+    pub bundle_description: String,
+    /// <p>The name of the bundle.</p>
+    #[serde(rename = "BundleName")]
+    pub bundle_name: String,
+    #[serde(rename = "ComputeType")]
+    pub compute_type: ComputeType,
+    /// <p>The identifier of the image that is used to create the bundle.</p>
+    #[serde(rename = "ImageId")]
+    pub image_id: String,
+    #[serde(rename = "RootStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub root_storage: Option<RootStorage>,
+    /// <p><p>The tags associated with the bundle.</p> <note> <p>To add tags at the same time when you&#39;re creating the bundle, you must create an IAM policy that grants your IAM user permissions to use <code>workspaces:CreateTags</code>. </p> </note></p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    #[serde(rename = "UserStorage")]
+    pub user_storage: UserStorage,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateWorkspaceBundleResult {
+    #[serde(rename = "WorkspaceBundle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub workspace_bundle: Option<WorkspaceBundle>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWorkspacesRequest {
     /// <p>The WorkSpaces to create. You can specify up to 25 WorkSpaces.</p>
     #[serde(rename = "Workspaces")]
@@ -410,6 +442,19 @@ pub struct DeleteTagsResult {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteWorkspaceBundleRequest {
+    /// <p>The identifier of the bundle.</p>
+    #[serde(rename = "BundleId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bundle_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteWorkspaceBundleResult {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWorkspaceImageRequest {
     /// <p>The identifier of the image.</p>
     #[serde(rename = "ImageId")]
@@ -448,7 +493,7 @@ pub struct DescribeAccountModificationsResult {
     #[serde(rename = "AccountModifications")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_modifications: Option<Vec<AccountModification>>,
-    /// <p>The token to use to retrieve the next set of results, or null if no more results are available.</p>
+    /// <p>The token to use to retrieve the next page of results. This value is null when there are no more results to return. </p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -515,7 +560,7 @@ pub struct DescribeConnectionAliasPermissionsResult {
     #[serde(rename = "ConnectionAliasPermissions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_alias_permissions: Option<Vec<ConnectionAliasPermission>>,
-    /// <p>The token to use to retrieve the next set of results, or null if no more results are available.</p>
+    /// <p>The token to use to retrieve the next page of results. This value is null when there are no more results to return. </p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -549,7 +594,7 @@ pub struct DescribeConnectionAliasesResult {
     #[serde(rename = "ConnectionAliases")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_aliases: Option<Vec<ConnectionAlias>>,
-    /// <p>The token to use to retrieve the next set of results, or null if no more results are available.</p>
+    /// <p>The token to use to retrieve the next page of results. This value is null when there are no more results to return. </p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -575,7 +620,7 @@ pub struct DescribeIpGroupsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeIpGroupsResult {
-    /// <p>The token to use to retrieve the next set of results, or null if no more results are available.</p>
+    /// <p>The token to use to retrieve the next page of results. This value is null when there are no more results to return. </p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -613,7 +658,7 @@ pub struct DescribeWorkspaceBundlesRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The owner of the bundles. You cannot combine this parameter with any other filter.</p> <p>Specify <code>AMAZON</code> to describe the bundles provided by AWS or null to describe the bundles that belong to your account.</p>
+    /// <p>The owner of the bundles. You cannot combine this parameter with any other filter.</p> <p>To describe the bundles provided by AWS, specify <code>AMAZON</code>. To describe the bundles that belong to your account, don't specify a value.</p>
     #[serde(rename = "Owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
@@ -626,7 +671,7 @@ pub struct DescribeWorkspaceBundlesResult {
     #[serde(rename = "Bundles")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bundles: Option<Vec<WorkspaceBundle>>,
-    /// <p>The token to use to retrieve the next set of results, or null if there are no more results available. This token is valid for one day and must be used within that time frame.</p>
+    /// <p>The token to use to retrieve the next page of results. This value is null when there are no more results to return. This token is valid for one day and must be used within that time frame.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -656,7 +701,7 @@ pub struct DescribeWorkspaceDirectoriesResult {
     #[serde(rename = "Directories")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub directories: Option<Vec<WorkspaceDirectory>>,
-    /// <p>The token to use to retrieve the next set of results, or null if no more results are available.</p>
+    /// <p>The token to use to retrieve the next page of results. This value is null when there are no more results to return. </p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -689,7 +734,7 @@ pub struct DescribeWorkspaceImagePermissionsResult {
     #[serde(rename = "ImagePermissions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_permissions: Option<Vec<ImagePermission>>,
-    /// <p>The token to use to retrieve the next set of results, or null if no more results are available.</p>
+    /// <p>The token to use to retrieve the next page of results. This value is null when there are no more results to return. </p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -723,7 +768,7 @@ pub struct DescribeWorkspaceImagesResult {
     #[serde(rename = "Images")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub images: Option<Vec<WorkspaceImage>>,
-    /// <p>The token to use to retrieve the next set of results, or null if no more results are available.</p>
+    /// <p>The token to use to retrieve the next page of results. This value is null when there are no more results to return. </p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -766,7 +811,7 @@ pub struct DescribeWorkspacesConnectionStatusRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorkspacesConnectionStatusResult {
-    /// <p>The token to use to retrieve the next set of results, or null if no more results are available.</p>
+    /// <p>The token to use to retrieve the next page of results. This value is null when there are no more results to return. </p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -808,7 +853,7 @@ pub struct DescribeWorkspacesRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeWorkspacesResult {
-    /// <p>The token to use to retrieve the next set of results, or null if no more results are available.</p>
+    /// <p>The token to use to retrieve the next page of results. This value is null when there are no more results to return. </p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -961,7 +1006,7 @@ pub struct ListAvailableManagementCidrRangesResult {
     #[serde(rename = "ManagementCidrRanges")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub management_cidr_ranges: Option<Vec<String>>,
-    /// <p>The token to use to retrieve the next set of results, or null if no more results are available.</p>
+    /// <p>The token to use to retrieve the next page of results. This value is null when there are no more results to return. </p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1233,8 +1278,7 @@ pub struct RevokeIpRulesRequest {
 pub struct RevokeIpRulesResult {}
 
 /// <p>Describes the root volume for a WorkSpace bundle.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RootStorage {
     /// <p>The size of the root volume.</p>
     #[serde(rename = "Capacity")]
@@ -1401,6 +1445,23 @@ pub struct UpdateRulesOfIpGroupResult {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateWorkspaceBundleRequest {
+    /// <p>The identifier of the bundle.</p>
+    #[serde(rename = "BundleId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bundle_id: Option<String>,
+    /// <p>The identifier of the image.</p>
+    #[serde(rename = "ImageId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateWorkspaceBundleResult {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateWorkspaceImagePermissionRequest {
     /// <p>The permission to copy the image. This permission can be revoked only after an image has been shared.</p>
     #[serde(rename = "AllowCopyImage")]
@@ -1417,11 +1478,10 @@ pub struct UpdateWorkspaceImagePermissionRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateWorkspaceImagePermissionResult {}
 
-/// <p>Describes the user storage for a WorkSpace bundle.</p>
-#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
-#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+/// <p>Describes the user volume for a WorkSpace bundle.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct UserStorage {
-    /// <p>The size of the user storage.</p>
+    /// <p>The size of the user volume.</p>
     #[serde(rename = "Capacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub capacity: Option<String>,
@@ -1508,6 +1568,10 @@ pub struct WorkspaceAccessProperties {
     #[serde(rename = "DeviceTypeIos")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub device_type_ios: Option<String>,
+    /// <p>Indicates whether users can use Linux clients to access their WorkSpaces.</p>
+    #[serde(rename = "DeviceTypeLinux")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_type_linux: Option<String>,
     /// <p>Indicates whether users can use macOS clients to access their WorkSpaces. To restrict WorkSpaces access to trusted devices (also known as managed devices) with valid certificates, specify a value of <code>TRUST</code>. For more information, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/trusted-devices.html">Restrict WorkSpaces Access to Trusted Devices</a>. </p>
     #[serde(rename = "DeviceTypeOsx")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1530,19 +1594,23 @@ pub struct WorkspaceAccessProperties {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WorkspaceBundle {
-    /// <p>The bundle identifier.</p>
+    /// <p>The identifier of the bundle.</p>
     #[serde(rename = "BundleId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bundle_id: Option<String>,
-    /// <p>The compute type. For more information, see <a href="http://aws.amazon.com/workspaces/details/#Amazon_WorkSpaces_Bundles">Amazon WorkSpaces Bundles</a>.</p>
+    /// <p>The compute type of the bundle. For more information, see <a href="http://aws.amazon.com/workspaces/details/#Amazon_WorkSpaces_Bundles">Amazon WorkSpaces Bundles</a>.</p>
     #[serde(rename = "ComputeType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_type: Option<ComputeType>,
-    /// <p>A description.</p>
+    /// <p>The time when the bundle was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The description of the bundle.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The image identifier of the bundle.</p>
+    /// <p>The identifier of the image that was used to create the bundle.</p>
     #[serde(rename = "ImageId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_id: Option<String>,
@@ -1562,7 +1630,7 @@ pub struct WorkspaceBundle {
     #[serde(rename = "RootStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub root_storage: Option<RootStorage>,
-    /// <p>The size of the user storage.</p>
+    /// <p>The size of the user volume.</p>
     #[serde(rename = "UserStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_storage: Option<UserStorage>,
@@ -2269,6 +2337,76 @@ impl fmt::Display for CreateTagsError {
     }
 }
 impl Error for CreateTagsError {}
+/// Errors returned by CreateWorkspaceBundle
+#[derive(Debug, PartialEq)]
+pub enum CreateWorkspaceBundleError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>The specified resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>Your resource limits have been exceeded.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+    /// <p>The specified resource is not available.</p>
+    ResourceUnavailable(String),
+}
+
+impl CreateWorkspaceBundleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateWorkspaceBundleError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateWorkspaceBundleError::AccessDenied(err.msg))
+                }
+                "InvalidParameterValuesException" => {
+                    return RusotoError::Service(
+                        CreateWorkspaceBundleError::InvalidParameterValues(err.msg),
+                    )
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(CreateWorkspaceBundleError::ResourceAlreadyExists(
+                        err.msg,
+                    ))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(CreateWorkspaceBundleError::ResourceLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateWorkspaceBundleError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(CreateWorkspaceBundleError::ResourceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateWorkspaceBundleError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateWorkspaceBundleError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateWorkspaceBundleError::InvalidParameterValues(ref cause) => write!(f, "{}", cause),
+            CreateWorkspaceBundleError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateWorkspaceBundleError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateWorkspaceBundleError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateWorkspaceBundleError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateWorkspaceBundleError {}
 /// Errors returned by CreateWorkspaces
 #[derive(Debug, PartialEq)]
 pub enum CreateWorkspacesError {
@@ -2465,6 +2603,60 @@ impl fmt::Display for DeleteTagsError {
     }
 }
 impl Error for DeleteTagsError {}
+/// Errors returned by DeleteWorkspaceBundle
+#[derive(Debug, PartialEq)]
+pub enum DeleteWorkspaceBundleError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>The resource is associated with a directory.</p>
+    ResourceAssociated(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteWorkspaceBundleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteWorkspaceBundleError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteWorkspaceBundleError::AccessDenied(err.msg))
+                }
+                "InvalidParameterValuesException" => {
+                    return RusotoError::Service(
+                        DeleteWorkspaceBundleError::InvalidParameterValues(err.msg),
+                    )
+                }
+                "ResourceAssociatedException" => {
+                    return RusotoError::Service(DeleteWorkspaceBundleError::ResourceAssociated(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteWorkspaceBundleError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteWorkspaceBundleError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteWorkspaceBundleError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteWorkspaceBundleError::InvalidParameterValues(ref cause) => write!(f, "{}", cause),
+            DeleteWorkspaceBundleError::ResourceAssociated(ref cause) => write!(f, "{}", cause),
+            DeleteWorkspaceBundleError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteWorkspaceBundleError {}
 /// Errors returned by DeleteWorkspaceImage
 #[derive(Debug, PartialEq)]
 pub enum DeleteWorkspaceImageError {
@@ -4349,6 +4541,60 @@ impl fmt::Display for UpdateRulesOfIpGroupError {
     }
 }
 impl Error for UpdateRulesOfIpGroupError {}
+/// Errors returned by UpdateWorkspaceBundle
+#[derive(Debug, PartialEq)]
+pub enum UpdateWorkspaceBundleError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+    /// <p>The specified resource is not available.</p>
+    ResourceUnavailable(String),
+}
+
+impl UpdateWorkspaceBundleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateWorkspaceBundleError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UpdateWorkspaceBundleError::AccessDenied(err.msg))
+                }
+                "InvalidParameterValuesException" => {
+                    return RusotoError::Service(
+                        UpdateWorkspaceBundleError::InvalidParameterValues(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateWorkspaceBundleError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ResourceUnavailableException" => {
+                    return RusotoError::Service(UpdateWorkspaceBundleError::ResourceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateWorkspaceBundleError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateWorkspaceBundleError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateWorkspaceBundleError::InvalidParameterValues(ref cause) => write!(f, "{}", cause),
+            UpdateWorkspaceBundleError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateWorkspaceBundleError::ResourceUnavailable(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateWorkspaceBundleError {}
 /// Errors returned by UpdateWorkspaceImagePermission
 #[derive(Debug, PartialEq)]
 pub enum UpdateWorkspaceImagePermissionError {
@@ -4468,6 +4714,12 @@ pub trait Workspaces {
         input: CreateTagsRequest,
     ) -> Result<CreateTagsResult, RusotoError<CreateTagsError>>;
 
+    /// <p>Creates the specified WorkSpace bundle. For more information about creating WorkSpace bundles, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/create-custom-bundle.html"> Create a Custom WorkSpaces Image and Bundle</a>.</p>
+    async fn create_workspace_bundle(
+        &self,
+        input: CreateWorkspaceBundleRequest,
+    ) -> Result<CreateWorkspaceBundleResult, RusotoError<CreateWorkspaceBundleError>>;
+
     /// <p>Creates one or more WorkSpaces.</p> <p>This operation is asynchronous and returns before the WorkSpaces are created.</p>
     async fn create_workspaces(
         &self,
@@ -4491,6 +4743,12 @@ pub trait Workspaces {
         &self,
         input: DeleteTagsRequest,
     ) -> Result<DeleteTagsResult, RusotoError<DeleteTagsError>>;
+
+    /// <p>Deletes the specified WorkSpace bundle. For more information about deleting WorkSpace bundles, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/delete_bundle.html"> Delete a Custom WorkSpaces Bundle or Image</a>.</p>
+    async fn delete_workspace_bundle(
+        &self,
+        input: DeleteWorkspaceBundleRequest,
+    ) -> Result<DeleteWorkspaceBundleResult, RusotoError<DeleteWorkspaceBundleError>>;
 
     /// <p>Deletes the specified image from your account. To delete an image, you must first delete any bundles that are associated with the image and unshare the image if it is shared with other accounts. </p>
     async fn delete_workspace_image(
@@ -4740,6 +4998,12 @@ pub trait Workspaces {
         input: UpdateRulesOfIpGroupRequest,
     ) -> Result<UpdateRulesOfIpGroupResult, RusotoError<UpdateRulesOfIpGroupError>>;
 
+    /// <p><p>Updates a WorkSpace bundle with a new image. For more information about updating WorkSpace bundles, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/update-custom-bundle.html"> Update a Custom WorkSpaces Bundle</a>.</p> <important> <p>Existing WorkSpaces aren&#39;t automatically updated when you update the bundle that they&#39;re based on. To update existing WorkSpaces that are based on a bundle that you&#39;ve updated, you must either rebuild the WorkSpaces or delete and recreate them.</p> </important></p>
+    async fn update_workspace_bundle(
+        &self,
+        input: UpdateWorkspaceBundleRequest,
+    ) -> Result<UpdateWorkspaceBundleResult, RusotoError<UpdateWorkspaceBundleError>>;
+
     /// <p><p>Shares or unshares an image with one account in the same AWS Region by specifying whether that account has permission to copy the image. If the copy image permission is granted, the image is shared with that account. If the copy image permission is revoked, the image is unshared with the account.</p> <p>After an image has been shared, the recipient account can copy the image to other AWS Regions as needed.</p> <note> <p>In the China (Ningxia) Region, you can copy images only within the same Region.</p> <p>In the AWS GovCloud (US-West) Region, to copy images to and from other AWS Regions, contact AWS Support.</p> </note> <p>For more information about sharing images, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/share-custom-image.html"> Share or Unshare a Custom WorkSpaces Image</a>.</p> <note> <ul> <li> <p>To delete an image that has been shared, you must unshare the image before you delete it.</p> </li> <li> <p>Sharing Bring Your Own License (BYOL) images across AWS accounts isn&#39;t supported at this time in the AWS GovCloud (US-West) Region. To share BYOL images across accounts in the AWS GovCloud (US-West) Region, contact AWS Support.</p> </li> </ul> </note></p>
     async fn update_workspace_image_permission(
         &self,
@@ -4916,6 +5180,24 @@ impl Workspaces for WorkspacesClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateTagsResult, _>()
     }
 
+    /// <p>Creates the specified WorkSpace bundle. For more information about creating WorkSpace bundles, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/create-custom-bundle.html"> Create a Custom WorkSpaces Image and Bundle</a>.</p>
+    async fn create_workspace_bundle(
+        &self,
+        input: CreateWorkspaceBundleRequest,
+    ) -> Result<CreateWorkspaceBundleResult, RusotoError<CreateWorkspaceBundleError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "WorkspacesService.CreateWorkspaceBundle");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateWorkspaceBundleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateWorkspaceBundleResult, _>()
+    }
+
     /// <p>Creates one or more WorkSpaces.</p> <p>This operation is asynchronous and returns before the WorkSpaces are created.</p>
     async fn create_workspaces(
         &self,
@@ -4986,6 +5268,24 @@ impl Workspaces for WorkspacesClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteTagsResult, _>()
+    }
+
+    /// <p>Deletes the specified WorkSpace bundle. For more information about deleting WorkSpace bundles, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/delete_bundle.html"> Delete a Custom WorkSpaces Bundle or Image</a>.</p>
+    async fn delete_workspace_bundle(
+        &self,
+        input: DeleteWorkspaceBundleRequest,
+    ) -> Result<DeleteWorkspaceBundleResult, RusotoError<DeleteWorkspaceBundleError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "WorkspacesService.DeleteWorkspaceBundle");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteWorkspaceBundleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteWorkspaceBundleResult, _>()
     }
 
     /// <p>Deletes the specified image from your account. To delete an image, you must first delete any bundles that are associated with the image and unshare the image if it is shared with other accounts. </p>
@@ -5779,6 +6079,24 @@ impl Workspaces for WorkspacesClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateRulesOfIpGroupResult, _>()
+    }
+
+    /// <p><p>Updates a WorkSpace bundle with a new image. For more information about updating WorkSpace bundles, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/update-custom-bundle.html"> Update a Custom WorkSpaces Bundle</a>.</p> <important> <p>Existing WorkSpaces aren&#39;t automatically updated when you update the bundle that they&#39;re based on. To update existing WorkSpaces that are based on a bundle that you&#39;ve updated, you must either rebuild the WorkSpaces or delete and recreate them.</p> </important></p>
+    async fn update_workspace_bundle(
+        &self,
+        input: UpdateWorkspaceBundleRequest,
+    ) -> Result<UpdateWorkspaceBundleResult, RusotoError<UpdateWorkspaceBundleError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "WorkspacesService.UpdateWorkspaceBundle");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateWorkspaceBundleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateWorkspaceBundleResult, _>()
     }
 
     /// <p><p>Shares or unshares an image with one account in the same AWS Region by specifying whether that account has permission to copy the image. If the copy image permission is granted, the image is shared with that account. If the copy image permission is revoked, the image is unshared with the account.</p> <p>After an image has been shared, the recipient account can copy the image to other AWS Regions as needed.</p> <note> <p>In the China (Ningxia) Region, you can copy images only within the same Region.</p> <p>In the AWS GovCloud (US-West) Region, to copy images to and from other AWS Regions, contact AWS Support.</p> </note> <p>For more information about sharing images, see <a href="https://docs.aws.amazon.com/workspaces/latest/adminguide/share-custom-image.html"> Share or Unshare a Custom WorkSpaces Image</a>.</p> <note> <ul> <li> <p>To delete an image that has been shared, you must unshare the image before you delete it.</p> </li> <li> <p>Sharing Bring Your Own License (BYOL) images across AWS accounts isn&#39;t supported at this time in the AWS GovCloud (US-West) Region. To share BYOL images across accounts in the AWS GovCloud (US-West) Region, contact AWS Support.</p> </li> </ul> </note></p>

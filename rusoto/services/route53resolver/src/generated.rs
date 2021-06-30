@@ -53,6 +53,43 @@ impl Route53ResolverClient {
 use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AssociateFirewallRuleGroupRequest {
+    /// <p>A unique string that identifies the request and that allows failed requests to be retried without the risk of running the operation twice. <code>CreatorRequestId</code> can be any unique string, for example, a date/time stamp. </p>
+    #[serde(rename = "CreatorRequestId")]
+    pub creator_request_id: String,
+    /// <p>The unique identifier of the firewall rule group. </p>
+    #[serde(rename = "FirewallRuleGroupId")]
+    pub firewall_rule_group_id: String,
+    /// <p>If enabled, this setting disallows modification or removal of the association, to help prevent against accidentally altering DNS firewall protections. When you create the association, the default setting is <code>DISABLED</code>. </p>
+    #[serde(rename = "MutationProtection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mutation_protection: Option<String>,
+    /// <p>A name that lets you identify the association, to manage and use it.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The setting that determines the processing order of the rule group among the rule groups that you associate with the specified VPC. DNS Firewall filters VPC traffic starting from the rule group with the lowest numeric priority setting. </p> <p>You must specify a unique priority for each rule group that you associate with a single VPC. To make it easier to insert rule groups later, leave space between the numbers, for example, use 101, 200, and so on. You can change the priority setting for a rule group association after you create it.</p> <p>The allowed values for <code>Priority</code> are between 100 and 9900.</p>
+    #[serde(rename = "Priority")]
+    pub priority: i64,
+    /// <p>A list of the tag keys and values that you want to associate with the rule group association. </p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>The unique identifier of the VPC that you want to associate with the rule group. </p>
+    #[serde(rename = "VpcId")]
+    pub vpc_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AssociateFirewallRuleGroupResponse {
+    /// <p>The association that you just created. The association has an ID that you can use to identify it in other requests, like update and delete.</p>
+    #[serde(rename = "FirewallRuleGroupAssociation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub firewall_rule_group_association: Option<FirewallRuleGroupAssociation>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateResolverEndpointIpAddressRequest {
     /// <p>Either the IPv4 address that you want to add to a Resolver endpoint or a subnet ID. If you specify a subnet ID, Resolver chooses an IP address for you from the available IPs in the specified subnet.</p>
     #[serde(rename = "IpAddress")]
@@ -117,8 +154,104 @@ pub struct AssociateResolverRuleResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateFirewallDomainListRequest {
+    /// <p>A unique string that identifies the request and that allows you to retry failed requests without the risk of running the operation twice. <code>CreatorRequestId</code> can be any unique string, for example, a date/time stamp. </p>
+    #[serde(rename = "CreatorRequestId")]
+    pub creator_request_id: String,
+    /// <p>A name that lets you identify the domain list to manage and use it.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>A list of the tag keys and values that you want to associate with the domain list. </p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateFirewallDomainListResponse {
+    /// <p>The domain list that you just created.</p>
+    #[serde(rename = "FirewallDomainList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub firewall_domain_list: Option<FirewallDomainList>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateFirewallRuleGroupRequest {
+    /// <p>A unique string defined by you to identify the request. This allows you to retry failed requests without the risk of running the operation twice. This can be any unique string, for example, a timestamp. </p>
+    #[serde(rename = "CreatorRequestId")]
+    pub creator_request_id: String,
+    /// <p>A name that lets you identify the rule group, to manage and use it.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>A list of the tag keys and values that you want to associate with the rule group. </p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateFirewallRuleGroupResponse {
+    /// <p>A collection of rules used to filter DNS network traffic. </p>
+    #[serde(rename = "FirewallRuleGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub firewall_rule_group: Option<FirewallRuleGroup>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateFirewallRuleRequest {
+    /// <p><p>The action that DNS Firewall should take on a DNS query when it matches one of the domains in the rule&#39;s domain list:</p> <ul> <li> <p> <code>ALLOW</code> - Permit the request to go through.</p> </li> <li> <p> <code>ALERT</code> - Permit the request and send metrics and logs to Cloud Watch.</p> </li> <li> <p> <code>BLOCK</code> - Disallow the request. This option requires additional details in the rule&#39;s <code>BlockResponse</code>. </p> </li> </ul></p>
+    #[serde(rename = "Action")]
+    pub action: String,
+    /// <p>The DNS record's type. This determines the format of the record value that you provided in <code>BlockOverrideDomain</code>. Used for the rule action <code>BLOCK</code> with a <code>BlockResponse</code> setting of <code>OVERRIDE</code>.</p> <p>This setting is required if the <code>BlockResponse</code> setting is <code>OVERRIDE</code>.</p>
+    #[serde(rename = "BlockOverrideDnsType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub block_override_dns_type: Option<String>,
+    /// <p>The custom DNS record to send back in response to the query. Used for the rule action <code>BLOCK</code> with a <code>BlockResponse</code> setting of <code>OVERRIDE</code>.</p> <p>This setting is required if the <code>BlockResponse</code> setting is <code>OVERRIDE</code>.</p>
+    #[serde(rename = "BlockOverrideDomain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub block_override_domain: Option<String>,
+    /// <p>The recommended amount of time, in seconds, for the DNS resolver or web browser to cache the provided override record. Used for the rule action <code>BLOCK</code> with a <code>BlockResponse</code> setting of <code>OVERRIDE</code>.</p> <p>This setting is required if the <code>BlockResponse</code> setting is <code>OVERRIDE</code>.</p>
+    #[serde(rename = "BlockOverrideTtl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub block_override_ttl: Option<i64>,
+    /// <p>The way that you want DNS Firewall to block the request, used with the rule action setting <code>BLOCK</code>. </p> <ul> <li> <p> <code>NODATA</code> - Respond indicating that the query was successful, but no response is available for it.</p> </li> <li> <p> <code>NXDOMAIN</code> - Respond indicating that the domain name that's in the query doesn't exist.</p> </li> <li> <p> <code>OVERRIDE</code> - Provide a custom override in the response. This option requires custom handling details in the rule's <code>BlockOverride*</code> settings. </p> </li> </ul> <p>This setting is required if the rule action setting is <code>BLOCK</code>.</p>
+    #[serde(rename = "BlockResponse")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub block_response: Option<String>,
+    /// <p>A unique string that identifies the request and that allows you to retry failed requests without the risk of running the operation twice. <code>CreatorRequestId</code> can be any unique string, for example, a date/time stamp. </p>
+    #[serde(rename = "CreatorRequestId")]
+    pub creator_request_id: String,
+    /// <p>The ID of the domain list that you want to use in the rule. </p>
+    #[serde(rename = "FirewallDomainListId")]
+    pub firewall_domain_list_id: String,
+    /// <p>The unique identifier of the firewall rule group where you want to create the rule. </p>
+    #[serde(rename = "FirewallRuleGroupId")]
+    pub firewall_rule_group_id: String,
+    /// <p>A name that lets you identify the rule in the rule group.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The setting that determines the processing order of the rule in the rule group. DNS Firewall processes the rules in a rule group by order of priority, starting from the lowest setting.</p> <p>You must specify a unique priority for each rule in a rule group. To make it easier to insert rules later, leave space between the numbers, for example, use 100, 200, and so on. You can change the priority setting for the rules in a rule group at any time.</p>
+    #[serde(rename = "Priority")]
+    pub priority: i64,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateFirewallRuleResponse {
+    /// <p>The firewall rule that you just created. </p>
+    #[serde(rename = "FirewallRule")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub firewall_rule: Option<FirewallRule>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResolverEndpointRequest {
-    /// <p>A unique string that identifies the request and that allows failed requests to be retried without the risk of executing the operation twice. <code>CreatorRequestId</code> can be any unique string, for example, a date/time stamp. </p>
+    /// <p>A unique string that identifies the request and that allows failed requests to be retried without the risk of running the operation twice. <code>CreatorRequestId</code> can be any unique string, for example, a date/time stamp. </p>
     #[serde(rename = "CreatorRequestId")]
     pub creator_request_id: String,
     /// <p><p>Specify the applicable value:</p> <ul> <li> <p> <code>INBOUND</code>: Resolver forwards DNS queries to the DNS service for a VPC from your network</p> </li> <li> <p> <code>OUTBOUND</code>: Resolver forwards DNS queries from the DNS service for a VPC to your network</p> </li> </ul></p>
@@ -152,13 +285,13 @@ pub struct CreateResolverEndpointResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResolverQueryLogConfigRequest {
-    /// <p>A unique string that identifies the request and that allows failed requests to be retried without the risk of executing the operation twice. <code>CreatorRequestId</code> can be any unique string, for example, a date/time stamp. </p>
+    /// <p>A unique string that identifies the request and that allows failed requests to be retried without the risk of running the operation twice. <code>CreatorRequestId</code> can be any unique string, for example, a date/time stamp. </p>
     #[serde(rename = "CreatorRequestId")]
     pub creator_request_id: String,
     /// <p><p>The ARN of the resource that you want Resolver to send query logs. You can send query logs to an S3 bucket, a CloudWatch Logs log group, or a Kinesis Data Firehose delivery stream. Examples of valid values include the following:</p> <ul> <li> <p> <b>S3 bucket</b>: </p> <p> <code>arn:aws:s3:::examplebucket</code> </p> <p>You can optionally append a file prefix to the end of the ARN.</p> <p> <code>arn:aws:s3:::examplebucket/development/</code> </p> </li> <li> <p> <b>CloudWatch Logs log group</b>: </p> <p> <code>arn:aws:logs:us-west-1:123456789012:log-group:/mystack-testgroup-12ABC1AB12A1:*</code> </p> </li> <li> <p> <b>Kinesis Data Firehose delivery stream</b>:</p> <p> <code>arn:aws:kinesis:us-east-2:0123456789:stream/my<em>stream</em>name</code> </p> </li> </ul></p>
     #[serde(rename = "DestinationArn")]
     pub destination_arn: String,
-    /// <p>The name that you want to give the query logging configuration</p>
+    /// <p>The name that you want to give the query logging configuration.</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>A list of the tag keys and values that you want to associate with the query logging configuration.</p>
@@ -179,7 +312,7 @@ pub struct CreateResolverQueryLogConfigResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateResolverRuleRequest {
-    /// <p>A unique string that identifies the request and that allows failed requests to be retried without the risk of executing the operation twice. <code>CreatorRequestId</code> can be any unique string, for example, a date/time stamp. </p>
+    /// <p>A unique string that identifies the request and that allows failed requests to be retried without the risk of running the operation twice. <code>CreatorRequestId</code> can be any unique string, for example, a date/time stamp. </p>
     #[serde(rename = "CreatorRequestId")]
     pub creator_request_id: String,
     /// <p>DNS queries for this domain name are forwarded to the IP addresses that you specify in <code>TargetIps</code>. If a query matches multiple Resolver rules (example.com and www.example.com), outbound DNS queries are routed using the Resolver rule that contains the most specific domain name (www.example.com).</p>
@@ -200,7 +333,7 @@ pub struct CreateResolverRuleRequest {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>The IPs that you want Resolver to forward DNS queries to. You can specify only IPv4 addresses. Separate IP addresses with a comma.</p> <p> <code>TargetIps</code> is available only when the value of <code>Rule type</code> is <code>FORWARD</code>.</p>
+    /// <p>The IPs that you want Resolver to forward DNS queries to. You can specify only IPv4 addresses. Separate IP addresses with a space.</p> <p> <code>TargetIps</code> is available only when the value of <code>Rule type</code> is <code>FORWARD</code>.</p>
     #[serde(rename = "TargetIps")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_ips: Option<Vec<TargetAddress>>,
@@ -213,6 +346,60 @@ pub struct CreateResolverRuleResponse {
     #[serde(rename = "ResolverRule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resolver_rule: Option<ResolverRule>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteFirewallDomainListRequest {
+    /// <p>The ID of the domain list that you want to delete. </p>
+    #[serde(rename = "FirewallDomainListId")]
+    pub firewall_domain_list_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteFirewallDomainListResponse {
+    /// <p>The domain list that you just deleted. </p>
+    #[serde(rename = "FirewallDomainList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub firewall_domain_list: Option<FirewallDomainList>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteFirewallRuleGroupRequest {
+    /// <p>The unique identifier of the firewall rule group that you want to delete. </p>
+    #[serde(rename = "FirewallRuleGroupId")]
+    pub firewall_rule_group_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteFirewallRuleGroupResponse {
+    /// <p>A collection of rules used to filter DNS network traffic. </p>
+    #[serde(rename = "FirewallRuleGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub firewall_rule_group: Option<FirewallRuleGroup>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteFirewallRuleRequest {
+    /// <p>The ID of the domain list that's used in the rule. </p>
+    #[serde(rename = "FirewallDomainListId")]
+    pub firewall_domain_list_id: String,
+    /// <p>The unique identifier of the firewall rule group that you want to delete the rule from. </p>
+    #[serde(rename = "FirewallRuleGroupId")]
+    pub firewall_rule_group_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteFirewallRuleResponse {
+    /// <p>The specification for the firewall rule that you just deleted.</p>
+    #[serde(rename = "FirewallRule")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub firewall_rule: Option<FirewallRule>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -264,6 +451,23 @@ pub struct DeleteResolverRuleResponse {
     #[serde(rename = "ResolverRule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resolver_rule: Option<ResolverRule>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DisassociateFirewallRuleGroupRequest {
+    /// <p>The identifier of the <a>FirewallRuleGroupAssociation</a>. </p>
+    #[serde(rename = "FirewallRuleGroupAssociationId")]
+    pub firewall_rule_group_association_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DisassociateFirewallRuleGroupResponse {
+    /// <p>The firewall rule group association that you just removed. </p>
+    #[serde(rename = "FirewallRuleGroupAssociation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub firewall_rule_group_association: Option<FirewallRuleGroupAssociation>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -338,6 +542,377 @@ pub struct Filter {
     #[serde(rename = "Values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
+}
+
+/// <p>Configuration of the firewall behavior provided by DNS Firewall for a single VPC from Amazon Virtual Private Cloud (Amazon VPC). </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FirewallConfig {
+    /// <p>Determines how DNS Firewall operates during failures, for example when all traffic that is sent to DNS Firewall fails to receive a reply. </p> <ul> <li> <p>By default, fail open is disabled, which means the failure mode is closed. This approach favors security over availability. DNS Firewall returns a failure error when it is unable to properly evaluate a query. </p> </li> <li> <p>If you enable this option, the failure mode is open. This approach favors availability over security. DNS Firewall allows queries to proceed if it is unable to properly evaluate them. </p> </li> </ul> <p>This behavior is only enforced for VPCs that have at least one DNS Firewall rule group association. </p>
+    #[serde(rename = "FirewallFailOpen")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub firewall_fail_open: Option<String>,
+    /// <p>The ID of the firewall configuration.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The AWS account ID of the owner of the VPC that this firewall configuration applies to.</p>
+    #[serde(rename = "OwnerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner_id: Option<String>,
+    /// <p>The ID of the VPC that this firewall configuration applies to.</p>
+    #[serde(rename = "ResourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_id: Option<String>,
+}
+
+/// <p>High-level information about a list of firewall domains for use in a <a>FirewallRule</a>. This is returned by <a>GetFirewallDomainList</a>.</p> <p>To retrieve the domains that are defined for this domain list, call <a>ListFirewallDomains</a>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FirewallDomainList {
+    /// <p>The Amazon Resource Name (ARN) of the firewall domain list.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The date and time that the domain list was created, in Unix time format and Coordinated Universal Time (UTC). </p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<String>,
+    /// <p>A unique string defined by you to identify the request. This allows you to retry failed requests without the risk of running the operation twice. This can be any unique string, for example, a timestamp. </p>
+    #[serde(rename = "CreatorRequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creator_request_id: Option<String>,
+    /// <p>The number of domain names that are specified in the domain list.</p>
+    #[serde(rename = "DomainCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_count: Option<i64>,
+    /// <p>The ID of the domain list. </p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The owner of the list, used only for lists that are not managed by you. For example, the managed domain list <code>AWSManagedDomainsMalwareDomainList</code> has the managed owner name <code>Route 53 Resolver DNS Firewall</code>.</p>
+    #[serde(rename = "ManagedOwnerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub managed_owner_name: Option<String>,
+    /// <p>The date and time that the domain list was last modified, in Unix time format and Coordinated Universal Time (UTC). </p>
+    #[serde(rename = "ModificationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub modification_time: Option<String>,
+    /// <p>The name of the domain list. </p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The status of the domain list. </p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>Additional information about the status of the list, if available.</p>
+    #[serde(rename = "StatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_message: Option<String>,
+}
+
+/// <p>Minimal high-level information for a firewall domain list. The action <a>ListFirewallDomainLists</a> returns an array of these objects. </p> <p>To retrieve full information for a firewall domain list, call <a>GetFirewallDomainList</a> and <a>ListFirewallDomains</a>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FirewallDomainListMetadata {
+    /// <p>The Amazon Resource Name (ARN) of the firewall domain list metadata.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>A unique string defined by you to identify the request. This allows you to retry failed requests without the risk of running the operation twice. This can be any unique string, for example, a timestamp. </p>
+    #[serde(rename = "CreatorRequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creator_request_id: Option<String>,
+    /// <p>The ID of the domain list. </p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The owner of the list, used only for lists that are not managed by you. For example, the managed domain list <code>AWSManagedDomainsMalwareDomainList</code> has the managed owner name <code>Route 53 Resolver DNS Firewall</code>.</p>
+    #[serde(rename = "ManagedOwnerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub managed_owner_name: Option<String>,
+    /// <p>The name of the domain list. </p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+/// <p>A single firewall rule in a rule group.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FirewallRule {
+    /// <p><p>The action that DNS Firewall should take on a DNS query when it matches one of the domains in the rule&#39;s domain list:</p> <ul> <li> <p> <code>ALLOW</code> - Permit the request to go through.</p> </li> <li> <p> <code>ALERT</code> - Permit the request to go through but send an alert to the logs.</p> </li> <li> <p> <code>BLOCK</code> - Disallow the request. If this is specified, additional handling details are provided in the rule&#39;s <code>BlockResponse</code> setting. </p> </li> </ul></p>
+    #[serde(rename = "Action")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action: Option<String>,
+    /// <p>The DNS record's type. This determines the format of the record value that you provided in <code>BlockOverrideDomain</code>. Used for the rule action <code>BLOCK</code> with a <code>BlockResponse</code> setting of <code>OVERRIDE</code>.</p>
+    #[serde(rename = "BlockOverrideDnsType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub block_override_dns_type: Option<String>,
+    /// <p>The custom DNS record to send back in response to the query. Used for the rule action <code>BLOCK</code> with a <code>BlockResponse</code> setting of <code>OVERRIDE</code>.</p>
+    #[serde(rename = "BlockOverrideDomain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub block_override_domain: Option<String>,
+    /// <p>The recommended amount of time, in seconds, for the DNS resolver or web browser to cache the provided override record. Used for the rule action <code>BLOCK</code> with a <code>BlockResponse</code> setting of <code>OVERRIDE</code>.</p>
+    #[serde(rename = "BlockOverrideTtl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub block_override_ttl: Option<i64>,
+    /// <p><p>The way that you want DNS Firewall to block the request. Used for the rule action setting <code>BLOCK</code>.</p> <ul> <li> <p> <code>NODATA</code> - Respond indicating that the query was successful, but no response is available for it.</p> </li> <li> <p> <code>NXDOMAIN</code> - Respond indicating that the domain name that&#39;s in the query doesn&#39;t exist.</p> </li> <li> <p> <code>OVERRIDE</code> - Provide a custom override in the response. This option requires custom handling details in the rule&#39;s <code>BlockOverride*</code> settings. </p> </li> </ul></p>
+    #[serde(rename = "BlockResponse")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub block_response: Option<String>,
+    /// <p>The date and time that the rule was created, in Unix time format and Coordinated Universal Time (UTC). </p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<String>,
+    /// <p>A unique string defined by you to identify the request. This allows you to retry failed requests without the risk of executing the operation twice. This can be any unique string, for example, a timestamp. </p>
+    #[serde(rename = "CreatorRequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creator_request_id: Option<String>,
+    /// <p>The ID of the domain list that's used in the rule. </p>
+    #[serde(rename = "FirewallDomainListId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub firewall_domain_list_id: Option<String>,
+    /// <p>The unique identifier of the firewall rule group of the rule. </p>
+    #[serde(rename = "FirewallRuleGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub firewall_rule_group_id: Option<String>,
+    /// <p>The date and time that the rule was last modified, in Unix time format and Coordinated Universal Time (UTC).</p>
+    #[serde(rename = "ModificationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub modification_time: Option<String>,
+    /// <p>The name of the rule. </p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The priority of the rule in the rule group. This value must be unique within the rule group. DNS Firewall processes the rules in a rule group by order of priority, starting from the lowest setting.</p>
+    #[serde(rename = "Priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
+}
+
+/// <p>High-level information for a firewall rule group. A firewall rule group is a collection of rules that DNS Firewall uses to filter DNS network traffic for a VPC. To retrieve the rules for the rule group, call <a>ListFirewallRules</a>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FirewallRuleGroup {
+    /// <p>The ARN (Amazon Resource Name) of the rule group.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The date and time that the rule group was created, in Unix time format and Coordinated Universal Time (UTC). </p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<String>,
+    /// <p>A unique string defined by you to identify the request. This allows you to retry failed requests without the risk of running the operation twice. This can be any unique string, for example, a timestamp. </p>
+    #[serde(rename = "CreatorRequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creator_request_id: Option<String>,
+    /// <p>The ID of the rule group. </p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The date and time that the rule group was last modified, in Unix time format and Coordinated Universal Time (UTC).</p>
+    #[serde(rename = "ModificationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub modification_time: Option<String>,
+    /// <p>The name of the rule group.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The AWS account ID for the account that created the rule group. When a rule group is shared with your account, this is the account that has shared the rule group with you. </p>
+    #[serde(rename = "OwnerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner_id: Option<String>,
+    /// <p>The number of rules in the rule group.</p>
+    #[serde(rename = "RuleCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_count: Option<i64>,
+    /// <p>Whether the rule group is shared with other AWS accounts, or was shared with the current account by another AWS account. Sharing is configured through AWS Resource Access Manager (AWS RAM).</p>
+    #[serde(rename = "ShareStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub share_status: Option<String>,
+    /// <p>The status of the domain list. </p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>Additional information about the status of the rule group, if available.</p>
+    #[serde(rename = "StatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_message: Option<String>,
+}
+
+/// <p>An association between a firewall rule group and a VPC, which enables DNS filtering for the VPC. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FirewallRuleGroupAssociation {
+    /// <p>The Amazon Resource Name (ARN) of the firewall rule group association.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The date and time that the association was created, in Unix time format and Coordinated Universal Time (UTC). </p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<String>,
+    /// <p>A unique string defined by you to identify the request. This allows you to retry failed requests without the risk of running the operation twice. This can be any unique string, for example, a timestamp. </p>
+    #[serde(rename = "CreatorRequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creator_request_id: Option<String>,
+    /// <p>The unique identifier of the firewall rule group. </p>
+    #[serde(rename = "FirewallRuleGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub firewall_rule_group_id: Option<String>,
+    /// <p>The identifier for the association.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The owner of the association, used only for associations that are not managed by you. If you use AWS Firewall Manager to manage your DNS Firewalls, then this reports Firewall Manager as the managed owner.</p>
+    #[serde(rename = "ManagedOwnerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub managed_owner_name: Option<String>,
+    /// <p>The date and time that the association was last modified, in Unix time format and Coordinated Universal Time (UTC).</p>
+    #[serde(rename = "ModificationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub modification_time: Option<String>,
+    /// <p>If enabled, this setting disallows modification or removal of the association, to help prevent against accidentally altering DNS firewall protections. </p>
+    #[serde(rename = "MutationProtection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mutation_protection: Option<String>,
+    /// <p>The name of the association.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The setting that determines the processing order of the rule group among the rule groups that are associated with a single VPC. DNS Firewall filters VPC traffic starting from rule group with the lowest numeric priority setting. </p>
+    #[serde(rename = "Priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
+    /// <p>The current status of the association.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>Additional information about the status of the response, if available.</p>
+    #[serde(rename = "StatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_message: Option<String>,
+    /// <p>The unique identifier of the VPC that is associated with the rule group. </p>
+    #[serde(rename = "VpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_id: Option<String>,
+}
+
+/// <p>Minimal high-level information for a firewall rule group. The action <a>ListFirewallRuleGroups</a> returns an array of these objects. </p> <p>To retrieve full information for a firewall rule group, call <a>GetFirewallRuleGroup</a> and <a>ListFirewallRules</a>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FirewallRuleGroupMetadata {
+    /// <p>The ARN (Amazon Resource Name) of the rule group.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>A unique string defined by you to identify the request. This allows you to retry failed requests without the risk of running the operation twice. This can be any unique string, for example, a timestamp. </p>
+    #[serde(rename = "CreatorRequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creator_request_id: Option<String>,
+    /// <p>The ID of the rule group. </p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The name of the rule group.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The AWS account ID for the account that created the rule group. When a rule group is shared with your account, this is the account that has shared the rule group with you. </p>
+    #[serde(rename = "OwnerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner_id: Option<String>,
+    /// <p>Whether the rule group is shared with other AWS accounts, or was shared with the current account by another AWS account. Sharing is configured through AWS Resource Access Manager (AWS RAM).</p>
+    #[serde(rename = "ShareStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub share_status: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetFirewallConfigRequest {
+    /// <p>The ID of the VPC from Amazon VPC that the configuration is for.</p>
+    #[serde(rename = "ResourceId")]
+    pub resource_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetFirewallConfigResponse {
+    /// <p>Configuration of the firewall behavior provided by DNS Firewall for a single VPC from AmazonVPC. </p>
+    #[serde(rename = "FirewallConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub firewall_config: Option<FirewallConfig>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetFirewallDomainListRequest {
+    /// <p>The ID of the domain list. </p>
+    #[serde(rename = "FirewallDomainListId")]
+    pub firewall_domain_list_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetFirewallDomainListResponse {
+    /// <p>The domain list that you requested. </p>
+    #[serde(rename = "FirewallDomainList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub firewall_domain_list: Option<FirewallDomainList>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetFirewallRuleGroupAssociationRequest {
+    /// <p>The identifier of the <a>FirewallRuleGroupAssociation</a>. </p>
+    #[serde(rename = "FirewallRuleGroupAssociationId")]
+    pub firewall_rule_group_association_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetFirewallRuleGroupAssociationResponse {
+    /// <p>The association that you requested. </p>
+    #[serde(rename = "FirewallRuleGroupAssociation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub firewall_rule_group_association: Option<FirewallRuleGroupAssociation>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetFirewallRuleGroupPolicyRequest {
+    /// <p>The ARN (Amazon Resource Name) for the rule group.</p>
+    #[serde(rename = "Arn")]
+    pub arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetFirewallRuleGroupPolicyResponse {
+    /// <p>The AWS Identity and Access Management (AWS IAM) policy for sharing the specified rule group. You can use the policy to share the rule group using AWS Resource Access Manager (AWS RAM). </p>
+    #[serde(rename = "FirewallRuleGroupPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub firewall_rule_group_policy: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetFirewallRuleGroupRequest {
+    /// <p>The unique identifier of the firewall rule group. </p>
+    #[serde(rename = "FirewallRuleGroupId")]
+    pub firewall_rule_group_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetFirewallRuleGroupResponse {
+    /// <p>A collection of rules used to filter DNS network traffic. </p>
+    #[serde(rename = "FirewallRuleGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub firewall_rule_group: Option<FirewallRuleGroup>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -476,6 +1051,41 @@ pub struct GetResolverRuleResponse {
     pub resolver_rule: Option<ResolverRule>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ImportFirewallDomainsRequest {
+    /// <p>The fully qualified URL or URI of the file stored in Amazon Simple Storage Service (Amazon S3) that contains the list of domains to import.</p> <p>The file must be in an S3 bucket that's in the same Region as your DNS Firewall. The file must be a text file and must contain a single domain per line.</p>
+    #[serde(rename = "DomainFileUrl")]
+    pub domain_file_url: String,
+    /// <p>The ID of the domain list that you want to modify with the import operation.</p>
+    #[serde(rename = "FirewallDomainListId")]
+    pub firewall_domain_list_id: String,
+    /// <p>What you want DNS Firewall to do with the domains that are listed in the file. This must be set to <code>REPLACE</code>, which updates the domain list to exactly match the list in the file. </p>
+    #[serde(rename = "Operation")]
+    pub operation: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ImportFirewallDomainsResponse {
+    /// <p>The Id of the firewall domain list that DNS Firewall just updated.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The name of the domain list. </p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p> </p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>Additional information about the status of the list, if available.</p>
+    #[serde(rename = "StatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_message: Option<String>,
+}
+
 /// <p>In a <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_CreateResolverEndpoint.html">CreateResolverEndpoint</a> request, the IP address that DNS queries originate from (for outbound endpoints) or that you forward DNS queries to (for inbound endpoints). <code>IpAddressRequest</code> also includes the ID of the subnet that contains the IP address.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -539,6 +1149,192 @@ pub struct IpAddressUpdate {
     #[serde(rename = "SubnetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListFirewallConfigsRequest {
+    /// <p>The maximum number of objects that you want Resolver to return for this request. If more objects are available, in the response, Resolver provides a <code>NextToken</code> value that you can use in a subsequent call to get the next batch of objects.</p> <p>If you don't specify a value for <code>MaxResults</code>, Resolver returns up to 100 objects. </p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>For the first call to this list request, omit this value.</p> <p>When you request a list of objects, Resolver returns at most the number of objects specified in <code>MaxResults</code>. If more objects are available for retrieval, Resolver returns a <code>NextToken</code> value in the response. To retrieve the next batch of objects, use the token that was returned for the prior request in your next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListFirewallConfigsResponse {
+    /// <p>The configurations for the firewall behavior provided by DNS Firewall for VPCs from Amazon Virtual Private Cloud (Amazon VPC). </p>
+    #[serde(rename = "FirewallConfigs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub firewall_configs: Option<Vec<FirewallConfig>>,
+    /// <p>If objects are still available for retrieval, Resolver returns this token in the response. To retrieve the next batch of objects, provide this token in your next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListFirewallDomainListsRequest {
+    /// <p>The maximum number of objects that you want Resolver to return for this request. If more objects are available, in the response, Resolver provides a <code>NextToken</code> value that you can use in a subsequent call to get the next batch of objects.</p> <p>If you don't specify a value for <code>MaxResults</code>, Resolver returns up to 100 objects. </p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>For the first call to this list request, omit this value.</p> <p>When you request a list of objects, Resolver returns at most the number of objects specified in <code>MaxResults</code>. If more objects are available for retrieval, Resolver returns a <code>NextToken</code> value in the response. To retrieve the next batch of objects, use the token that was returned for the prior request in your next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListFirewallDomainListsResponse {
+    /// <p>A list of the domain lists that you have defined. </p> <p>This might be a partial list of the domain lists that you've defined. For information, see <code>MaxResults</code>. </p>
+    #[serde(rename = "FirewallDomainLists")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub firewall_domain_lists: Option<Vec<FirewallDomainListMetadata>>,
+    /// <p>If objects are still available for retrieval, Resolver returns this token in the response. To retrieve the next batch of objects, provide this token in your next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListFirewallDomainsRequest {
+    /// <p>The ID of the domain list whose domains you want to retrieve. </p>
+    #[serde(rename = "FirewallDomainListId")]
+    pub firewall_domain_list_id: String,
+    /// <p>The maximum number of objects that you want Resolver to return for this request. If more objects are available, in the response, Resolver provides a <code>NextToken</code> value that you can use in a subsequent call to get the next batch of objects.</p> <p>If you don't specify a value for <code>MaxResults</code>, Resolver returns up to 100 objects. </p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>For the first call to this list request, omit this value.</p> <p>When you request a list of objects, Resolver returns at most the number of objects specified in <code>MaxResults</code>. If more objects are available for retrieval, Resolver returns a <code>NextToken</code> value in the response. To retrieve the next batch of objects, use the token that was returned for the prior request in your next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListFirewallDomainsResponse {
+    /// <p>A list of the domains in the firewall domain list. </p> <p>This might be a partial list of the domains that you've defined in the domain list. For information, see <code>MaxResults</code>. </p>
+    #[serde(rename = "Domains")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domains: Option<Vec<String>>,
+    /// <p>If objects are still available for retrieval, Resolver returns this token in the response. To retrieve the next batch of objects, provide this token in your next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListFirewallRuleGroupAssociationsRequest {
+    /// <p>The unique identifier of the firewall rule group that you want to retrieve the associations for. Leave this blank to retrieve associations for any rule group. </p>
+    #[serde(rename = "FirewallRuleGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub firewall_rule_group_id: Option<String>,
+    /// <p>The maximum number of objects that you want Resolver to return for this request. If more objects are available, in the response, Resolver provides a <code>NextToken</code> value that you can use in a subsequent call to get the next batch of objects.</p> <p>If you don't specify a value for <code>MaxResults</code>, Resolver returns up to 100 objects. </p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>For the first call to this list request, omit this value.</p> <p>When you request a list of objects, Resolver returns at most the number of objects specified in <code>MaxResults</code>. If more objects are available for retrieval, Resolver returns a <code>NextToken</code> value in the response. To retrieve the next batch of objects, use the token that was returned for the prior request in your next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The setting that determines the processing order of the rule group among the rule groups that are associated with a single VPC. DNS Firewall filters VPC traffic starting from the rule group with the lowest numeric priority setting. </p>
+    #[serde(rename = "Priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
+    /// <p>The association <code>Status</code> setting that you want DNS Firewall to filter on for the list. If you don't specify this, then DNS Firewall returns all associations, regardless of status.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The unique identifier of the VPC that you want to retrieve the associations for. Leave this blank to retrieve associations for any VPC. </p>
+    #[serde(rename = "VpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListFirewallRuleGroupAssociationsResponse {
+    /// <p>A list of your firewall rule group associations.</p> <p>This might be a partial list of the associations that you have defined. For information, see <code>MaxResults</code>. </p>
+    #[serde(rename = "FirewallRuleGroupAssociations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub firewall_rule_group_associations: Option<Vec<FirewallRuleGroupAssociation>>,
+    /// <p>If objects are still available for retrieval, Resolver returns this token in the response. To retrieve the next batch of objects, provide this token in your next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListFirewallRuleGroupsRequest {
+    /// <p>The maximum number of objects that you want Resolver to return for this request. If more objects are available, in the response, Resolver provides a <code>NextToken</code> value that you can use in a subsequent call to get the next batch of objects.</p> <p>If you don't specify a value for <code>MaxResults</code>, Resolver returns up to 100 objects. </p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>For the first call to this list request, omit this value.</p> <p>When you request a list of objects, Resolver returns at most the number of objects specified in <code>MaxResults</code>. If more objects are available for retrieval, Resolver returns a <code>NextToken</code> value in the response. To retrieve the next batch of objects, use the token that was returned for the prior request in your next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListFirewallRuleGroupsResponse {
+    /// <p>A list of your firewall rule groups.</p> <p>This might be a partial list of the rule groups that you have defined. For information, see <code>MaxResults</code>. </p>
+    #[serde(rename = "FirewallRuleGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub firewall_rule_groups: Option<Vec<FirewallRuleGroupMetadata>>,
+    /// <p>If objects are still available for retrieval, Resolver returns this token in the response. To retrieve the next batch of objects, provide this token in your next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListFirewallRulesRequest {
+    /// <p><p>Optional additional filter for the rules to retrieve.</p> <p>The action that DNS Firewall should take on a DNS query when it matches one of the domains in the rule&#39;s domain list:</p> <ul> <li> <p> <code>ALLOW</code> - Permit the request to go through.</p> </li> <li> <p> <code>ALERT</code> - Permit the request to go through but send an alert to the logs.</p> </li> <li> <p> <code>BLOCK</code> - Disallow the request. If this is specified, additional handling details are provided in the rule&#39;s <code>BlockResponse</code> setting. </p> </li> </ul></p>
+    #[serde(rename = "Action")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action: Option<String>,
+    /// <p>The unique identifier of the firewall rule group that you want to retrieve the rules for. </p>
+    #[serde(rename = "FirewallRuleGroupId")]
+    pub firewall_rule_group_id: String,
+    /// <p>The maximum number of objects that you want Resolver to return for this request. If more objects are available, in the response, Resolver provides a <code>NextToken</code> value that you can use in a subsequent call to get the next batch of objects.</p> <p>If you don't specify a value for <code>MaxResults</code>, Resolver returns up to 100 objects. </p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>For the first call to this list request, omit this value.</p> <p>When you request a list of objects, Resolver returns at most the number of objects specified in <code>MaxResults</code>. If more objects are available for retrieval, Resolver returns a <code>NextToken</code> value in the response. To retrieve the next batch of objects, use the token that was returned for the prior request in your next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Optional additional filter for the rules to retrieve.</p> <p>The setting that determines the processing order of the rules in a rule group. DNS Firewall processes the rules in a rule group by order of priority, starting from the lowest setting.</p>
+    #[serde(rename = "Priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListFirewallRulesResponse {
+    /// <p>A list of the rules that you have defined. </p> <p>This might be a partial list of the firewall rules that you've defined. For information, see <code>MaxResults</code>. </p>
+    #[serde(rename = "FirewallRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub firewall_rules: Option<Vec<FirewallRule>>,
+    /// <p>If objects are still available for retrieval, Resolver returns this token in the response. To retrieve the next batch of objects, provide this token in your next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -829,6 +1625,26 @@ pub struct ListTagsForResourceResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutFirewallRuleGroupPolicyRequest {
+    /// <p>The ARN (Amazon Resource Name) for the rule group that you want to share.</p>
+    #[serde(rename = "Arn")]
+    pub arn: String,
+    /// <p>The AWS Identity and Access Management (AWS IAM) policy to attach to the rule group.</p>
+    #[serde(rename = "FirewallRuleGroupPolicy")]
+    pub firewall_rule_group_policy: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutFirewallRuleGroupPolicyResponse {
+    /// <p><p/></p>
+    #[serde(rename = "ReturnValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub return_value: Option<bool>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutResolverQueryLogConfigPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the account that you want to share rules with.</p>
     #[serde(rename = "Arn")]
@@ -903,7 +1719,7 @@ pub struct ResolverEndpoint {
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<String>,
-    /// <p>A unique string that identifies the request that created the Resolver endpoint. The <code>CreatorRequestId</code> allows failed requests to be retried without the risk of executing the operation twice.</p>
+    /// <p>A unique string that identifies the request that created the Resolver endpoint. The <code>CreatorRequestId</code> allows failed requests to be retried without the risk of running the operation twice.</p>
     #[serde(rename = "CreatorRequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creator_request_id: Option<String>,
@@ -961,7 +1777,7 @@ pub struct ResolverQueryLogConfig {
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<String>,
-    /// <p>A unique string that identifies the request that created the query logging configuration. The <code>CreatorRequestId</code> allows failed requests to be retried without the risk of executing the operation twice.</p>
+    /// <p>A unique string that identifies the request that created the query logging configuration. The <code>CreatorRequestId</code> allows failed requests to be retried without the risk of running the operation twice.</p>
     #[serde(rename = "CreatorRequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creator_request_id: Option<String>,
@@ -1037,7 +1853,7 @@ pub struct ResolverRule {
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<String>,
-    /// <p>A unique string that you specified when you created the Resolver rule. <code>CreatorRequestId</code> identifies the request and allows failed requests to be retried without the risk of executing the operation twice. </p>
+    /// <p>A unique string that you specified when you created the Resolver rule. <code>CreatorRequestId</code> identifies the request and allows failed requests to be retried without the risk of running the operation twice. </p>
     #[serde(rename = "CreatorRequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creator_request_id: Option<String>,
@@ -1069,7 +1885,7 @@ pub struct ResolverRule {
     #[serde(rename = "RuleType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rule_type: Option<String>,
-    /// <p>Whether the rules is shared and, if so, whether the current account is sharing the rule with another account, or another account is sharing the rule with the current account.</p>
+    /// <p>Whether the rule is shared and, if so, whether the current account is sharing the rule with another account, or another account is sharing the rule with the current account.</p>
     #[serde(rename = "ShareStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub share_status: Option<String>,
@@ -1190,6 +2006,138 @@ pub struct UntagResourceResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateFirewallConfigRequest {
+    /// <p>Determines how Route 53 Resolver handles queries during failures, for example when all traffic that is sent to DNS Firewall fails to receive a reply. </p> <ul> <li> <p>By default, fail open is disabled, which means the failure mode is closed. This approach favors security over availability. DNS Firewall blocks queries that it is unable to evaluate properly. </p> </li> <li> <p>If you enable this option, the failure mode is open. This approach favors availability over security. DNS Firewall allows queries to proceed if it is unable to properly evaluate them. </p> </li> </ul> <p>This behavior is only enforced for VPCs that have at least one DNS Firewall rule group association. </p>
+    #[serde(rename = "FirewallFailOpen")]
+    pub firewall_fail_open: String,
+    /// <p>The ID of the VPC that the configuration is for.</p>
+    #[serde(rename = "ResourceId")]
+    pub resource_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateFirewallConfigResponse {
+    /// <p>Configuration of the firewall behavior provided by DNS Firewall for a single VPC. </p>
+    #[serde(rename = "FirewallConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub firewall_config: Option<FirewallConfig>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateFirewallDomainsRequest {
+    /// <p><p>A list of domains to use in the update operation.</p> <p>Each domain specification in your domain list must satisfy the following requirements: </p> <ul> <li> <p>It can optionally start with <code>*</code> (asterisk).</p> </li> <li> <p>With the exception of the optional starting asterisk, it must only contain the following characters: <code>A-Z</code>, <code>a-z</code>, <code>0-9</code>, <code>-</code> (hyphen).</p> </li> <li> <p>It must be from 1-255 characters in length. </p> </li> </ul></p>
+    #[serde(rename = "Domains")]
+    pub domains: Vec<String>,
+    /// <p>The ID of the domain list whose domains you want to update. </p>
+    #[serde(rename = "FirewallDomainListId")]
+    pub firewall_domain_list_id: String,
+    /// <p><p>What you want DNS Firewall to do with the domains that you are providing: </p> <ul> <li> <p> <code>ADD</code> - Add the domains to the ones that are already in the domain list. </p> </li> <li> <p> <code>REMOVE</code> - Search the domain list for the domains and remove them from the list.</p> </li> <li> <p> <code>REPLACE</code> - Update the domain list to exactly match the list that you are providing. </p> </li> </ul></p>
+    #[serde(rename = "Operation")]
+    pub operation: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateFirewallDomainsResponse {
+    /// <p>The ID of the firewall domain list that DNS Firewall just updated.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The name of the domain list. </p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p> </p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>Additional information about the status of the list, if available.</p>
+    #[serde(rename = "StatusMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_message: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateFirewallRuleGroupAssociationRequest {
+    /// <p>The identifier of the <a>FirewallRuleGroupAssociation</a>. </p>
+    #[serde(rename = "FirewallRuleGroupAssociationId")]
+    pub firewall_rule_group_association_id: String,
+    /// <p>If enabled, this setting disallows modification or removal of the association, to help prevent against accidentally altering DNS firewall protections. </p>
+    #[serde(rename = "MutationProtection")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mutation_protection: Option<String>,
+    /// <p>The name of the rule group association.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The setting that determines the processing order of the rule group among the rule groups that you associate with the specified VPC. DNS Firewall filters VPC traffic starting from the rule group with the lowest numeric priority setting. </p> <p>You must specify a unique priority for each rule group that you associate with a single VPC. To make it easier to insert rule groups later, leave space between the numbers, for example, use 100, 200, and so on. You can change the priority setting for a rule group association after you create it.</p>
+    #[serde(rename = "Priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateFirewallRuleGroupAssociationResponse {
+    /// <p>The association that you just updated. </p>
+    #[serde(rename = "FirewallRuleGroupAssociation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub firewall_rule_group_association: Option<FirewallRuleGroupAssociation>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateFirewallRuleRequest {
+    /// <p><p>The action that DNS Firewall should take on a DNS query when it matches one of the domains in the rule&#39;s domain list:</p> <ul> <li> <p> <code>ALLOW</code> - Permit the request to go through.</p> </li> <li> <p> <code>ALERT</code> - Permit the request to go through but send an alert to the logs.</p> </li> <li> <p> <code>BLOCK</code> - Disallow the request. This option requires additional details in the rule&#39;s <code>BlockResponse</code>. </p> </li> </ul></p>
+    #[serde(rename = "Action")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action: Option<String>,
+    /// <p>The DNS record's type. This determines the format of the record value that you provided in <code>BlockOverrideDomain</code>. Used for the rule action <code>BLOCK</code> with a <code>BlockResponse</code> setting of <code>OVERRIDE</code>.</p>
+    #[serde(rename = "BlockOverrideDnsType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub block_override_dns_type: Option<String>,
+    /// <p>The custom DNS record to send back in response to the query. Used for the rule action <code>BLOCK</code> with a <code>BlockResponse</code> setting of <code>OVERRIDE</code>.</p>
+    #[serde(rename = "BlockOverrideDomain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub block_override_domain: Option<String>,
+    /// <p>The recommended amount of time, in seconds, for the DNS resolver or web browser to cache the provided override record. Used for the rule action <code>BLOCK</code> with a <code>BlockResponse</code> setting of <code>OVERRIDE</code>.</p>
+    #[serde(rename = "BlockOverrideTtl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub block_override_ttl: Option<i64>,
+    /// <p><p>The way that you want DNS Firewall to block the request. Used for the rule action setting <code>BLOCK</code>.</p> <ul> <li> <p> <code>NODATA</code> - Respond indicating that the query was successful, but no response is available for it.</p> </li> <li> <p> <code>NXDOMAIN</code> - Respond indicating that the domain name that&#39;s in the query doesn&#39;t exist.</p> </li> <li> <p> <code>OVERRIDE</code> - Provide a custom override in the response. This option requires custom handling details in the rule&#39;s <code>BlockOverride*</code> settings. </p> </li> </ul></p>
+    #[serde(rename = "BlockResponse")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub block_response: Option<String>,
+    /// <p>The ID of the domain list to use in the rule. </p>
+    #[serde(rename = "FirewallDomainListId")]
+    pub firewall_domain_list_id: String,
+    /// <p>The unique identifier of the firewall rule group for the rule. </p>
+    #[serde(rename = "FirewallRuleGroupId")]
+    pub firewall_rule_group_id: String,
+    /// <p>The name of the rule.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The setting that determines the processing order of the rule in the rule group. DNS Firewall processes the rules in a rule group by order of priority, starting from the lowest setting.</p> <p>You must specify a unique priority for each rule in a rule group. To make it easier to insert rules later, leave space between the numbers, for example, use 100, 200, and so on. You can change the priority setting for the rules in a rule group at any time.</p>
+    #[serde(rename = "Priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateFirewallRuleResponse {
+    /// <p>The firewall rule that you just updated. </p>
+    #[serde(rename = "FirewallRule")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub firewall_rule: Option<FirewallRule>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateResolverDnssecConfigRequest {
     /// <p>The ID of the virtual private cloud (VPC) that you're updating the DNSSEC validation status for.</p>
     #[serde(rename = "ResourceId")]
@@ -1249,6 +2197,80 @@ pub struct UpdateResolverRuleResponse {
     pub resolver_rule: Option<ResolverRule>,
 }
 
+/// Errors returned by AssociateFirewallRuleGroup
+#[derive(Debug, PartialEq)]
+pub enum AssociateFirewallRuleGroupError {
+    /// <p>The current account doesn't have the IAM permissions required to perform the specified Resolver operation.</p>
+    AccessDenied(String),
+    /// <p><p/></p>
+    Conflict(String),
+    /// <p>We encountered an unknown error. Try again in a few minutes.</p>
+    InternalServiceError(String),
+    /// <p>The request caused one or more limits to be exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource doesn't exist.</p>
+    ResourceNotFound(String),
+    /// <p>The request was throttled. Try again in a few minutes.</p>
+    Throttling(String),
+}
+
+impl AssociateFirewallRuleGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AssociateFirewallRuleGroupError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(AssociateFirewallRuleGroupError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(AssociateFirewallRuleGroupError::Conflict(err.msg))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        AssociateFirewallRuleGroupError::InternalServiceError(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(AssociateFirewallRuleGroupError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(AssociateFirewallRuleGroupError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(AssociateFirewallRuleGroupError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for AssociateFirewallRuleGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AssociateFirewallRuleGroupError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            AssociateFirewallRuleGroupError::Conflict(ref cause) => write!(f, "{}", cause),
+            AssociateFirewallRuleGroupError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateFirewallRuleGroupError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AssociateFirewallRuleGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AssociateFirewallRuleGroupError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for AssociateFirewallRuleGroupError {}
 /// Errors returned by AssociateResolverEndpointIpAddress
 #[derive(Debug, PartialEq)]
 pub enum AssociateResolverEndpointIpAddressError {
@@ -1531,6 +2553,172 @@ impl fmt::Display for AssociateResolverRuleError {
     }
 }
 impl Error for AssociateResolverRuleError {}
+/// Errors returned by CreateFirewallDomainList
+#[derive(Debug, PartialEq)]
+pub enum CreateFirewallDomainListError {
+    /// <p>The current account doesn't have the IAM permissions required to perform the specified Resolver operation.</p>
+    AccessDenied(String),
+    /// <p>We encountered an unknown error. Try again in a few minutes.</p>
+    InternalServiceError(String),
+    /// <p>The request caused one or more limits to be exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The request was throttled. Try again in a few minutes.</p>
+    Throttling(String),
+}
+
+impl CreateFirewallDomainListError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFirewallDomainListError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateFirewallDomainListError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        CreateFirewallDomainListError::InternalServiceError(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateFirewallDomainListError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateFirewallDomainListError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateFirewallDomainListError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateFirewallDomainListError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateFirewallDomainListError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateFirewallDomainListError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateFirewallDomainListError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateFirewallDomainListError {}
+/// Errors returned by CreateFirewallRule
+#[derive(Debug, PartialEq)]
+pub enum CreateFirewallRuleError {
+    /// <p>The current account doesn't have the IAM permissions required to perform the specified Resolver operation.</p>
+    AccessDenied(String),
+    /// <p>We encountered an unknown error. Try again in a few minutes.</p>
+    InternalServiceError(String),
+    /// <p>The request caused one or more limits to be exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource doesn't exist.</p>
+    ResourceNotFound(String),
+    /// <p>The request was throttled. Try again in a few minutes.</p>
+    Throttling(String),
+}
+
+impl CreateFirewallRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFirewallRuleError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateFirewallRuleError::AccessDenied(err.msg))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(CreateFirewallRuleError::InternalServiceError(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateFirewallRuleError::LimitExceeded(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateFirewallRuleError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateFirewallRuleError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateFirewallRuleError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateFirewallRuleError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateFirewallRuleError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            CreateFirewallRuleError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateFirewallRuleError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateFirewallRuleError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateFirewallRuleError {}
+/// Errors returned by CreateFirewallRuleGroup
+#[derive(Debug, PartialEq)]
+pub enum CreateFirewallRuleGroupError {
+    /// <p>The current account doesn't have the IAM permissions required to perform the specified Resolver operation.</p>
+    AccessDenied(String),
+    /// <p>We encountered an unknown error. Try again in a few minutes.</p>
+    InternalServiceError(String),
+    /// <p>The request caused one or more limits to be exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The request was throttled. Try again in a few minutes.</p>
+    Throttling(String),
+}
+
+impl CreateFirewallRuleGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFirewallRuleGroupError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateFirewallRuleGroupError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        CreateFirewallRuleGroupError::InternalServiceError(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateFirewallRuleGroupError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateFirewallRuleGroupError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateFirewallRuleGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateFirewallRuleGroupError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateFirewallRuleGroupError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            CreateFirewallRuleGroupError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateFirewallRuleGroupError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateFirewallRuleGroupError {}
 /// Errors returned by CreateResolverEndpoint
 #[derive(Debug, PartialEq)]
 pub enum CreateResolverEndpointError {
@@ -1781,6 +2969,178 @@ impl fmt::Display for CreateResolverRuleError {
     }
 }
 impl Error for CreateResolverRuleError {}
+/// Errors returned by DeleteFirewallDomainList
+#[derive(Debug, PartialEq)]
+pub enum DeleteFirewallDomainListError {
+    /// <p>The current account doesn't have the IAM permissions required to perform the specified Resolver operation.</p>
+    AccessDenied(String),
+    /// <p><p/></p>
+    Conflict(String),
+    /// <p>We encountered an unknown error. Try again in a few minutes.</p>
+    InternalServiceError(String),
+    /// <p>The specified resource doesn't exist.</p>
+    ResourceNotFound(String),
+    /// <p>The request was throttled. Try again in a few minutes.</p>
+    Throttling(String),
+}
+
+impl DeleteFirewallDomainListError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFirewallDomainListError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteFirewallDomainListError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(DeleteFirewallDomainListError::Conflict(err.msg))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        DeleteFirewallDomainListError::InternalServiceError(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteFirewallDomainListError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteFirewallDomainListError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteFirewallDomainListError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteFirewallDomainListError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteFirewallDomainListError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteFirewallDomainListError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteFirewallDomainListError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteFirewallDomainListError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteFirewallDomainListError {}
+/// Errors returned by DeleteFirewallRule
+#[derive(Debug, PartialEq)]
+pub enum DeleteFirewallRuleError {
+    /// <p>The current account doesn't have the IAM permissions required to perform the specified Resolver operation.</p>
+    AccessDenied(String),
+    /// <p>We encountered an unknown error. Try again in a few minutes.</p>
+    InternalServiceError(String),
+    /// <p>The specified resource doesn't exist.</p>
+    ResourceNotFound(String),
+    /// <p>The request was throttled. Try again in a few minutes.</p>
+    Throttling(String),
+}
+
+impl DeleteFirewallRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFirewallRuleError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteFirewallRuleError::AccessDenied(err.msg))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(DeleteFirewallRuleError::InternalServiceError(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteFirewallRuleError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteFirewallRuleError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteFirewallRuleError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteFirewallRuleError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteFirewallRuleError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            DeleteFirewallRuleError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteFirewallRuleError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteFirewallRuleError {}
+/// Errors returned by DeleteFirewallRuleGroup
+#[derive(Debug, PartialEq)]
+pub enum DeleteFirewallRuleGroupError {
+    /// <p>The current account doesn't have the IAM permissions required to perform the specified Resolver operation.</p>
+    AccessDenied(String),
+    /// <p><p/></p>
+    Conflict(String),
+    /// <p>We encountered an unknown error. Try again in a few minutes.</p>
+    InternalServiceError(String),
+    /// <p>The specified resource doesn't exist.</p>
+    ResourceNotFound(String),
+    /// <p>The request was throttled. Try again in a few minutes.</p>
+    Throttling(String),
+}
+
+impl DeleteFirewallRuleGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFirewallRuleGroupError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteFirewallRuleGroupError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(DeleteFirewallRuleGroupError::Conflict(err.msg))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        DeleteFirewallRuleGroupError::InternalServiceError(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteFirewallRuleGroupError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteFirewallRuleGroupError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteFirewallRuleGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteFirewallRuleGroupError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteFirewallRuleGroupError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteFirewallRuleGroupError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            DeleteFirewallRuleGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteFirewallRuleGroupError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteFirewallRuleGroupError {}
 /// Errors returned by DeleteResolverEndpoint
 #[derive(Debug, PartialEq)]
 pub enum DeleteResolverEndpointError {
@@ -1979,6 +3339,76 @@ impl fmt::Display for DeleteResolverRuleError {
     }
 }
 impl Error for DeleteResolverRuleError {}
+/// Errors returned by DisassociateFirewallRuleGroup
+#[derive(Debug, PartialEq)]
+pub enum DisassociateFirewallRuleGroupError {
+    /// <p>The current account doesn't have the IAM permissions required to perform the specified Resolver operation.</p>
+    AccessDenied(String),
+    /// <p><p/></p>
+    Conflict(String),
+    /// <p>We encountered an unknown error. Try again in a few minutes.</p>
+    InternalServiceError(String),
+    /// <p>The specified resource doesn't exist.</p>
+    ResourceNotFound(String),
+    /// <p>The request was throttled. Try again in a few minutes.</p>
+    Throttling(String),
+}
+
+impl DisassociateFirewallRuleGroupError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisassociateFirewallRuleGroupError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DisassociateFirewallRuleGroupError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(DisassociateFirewallRuleGroupError::Conflict(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        DisassociateFirewallRuleGroupError::InternalServiceError(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DisassociateFirewallRuleGroupError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DisassociateFirewallRuleGroupError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DisassociateFirewallRuleGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DisassociateFirewallRuleGroupError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DisassociateFirewallRuleGroupError::Conflict(ref cause) => write!(f, "{}", cause),
+            DisassociateFirewallRuleGroupError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateFirewallRuleGroupError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateFirewallRuleGroupError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DisassociateFirewallRuleGroupError {}
 /// Errors returned by DisassociateResolverEndpointIpAddress
 #[derive(Debug, PartialEq)]
 pub enum DisassociateResolverEndpointIpAddressError {
@@ -2207,6 +3637,282 @@ impl fmt::Display for DisassociateResolverRuleError {
     }
 }
 impl Error for DisassociateResolverRuleError {}
+/// Errors returned by GetFirewallConfig
+#[derive(Debug, PartialEq)]
+pub enum GetFirewallConfigError {
+    /// <p>The current account doesn't have the IAM permissions required to perform the specified Resolver operation.</p>
+    AccessDenied(String),
+    /// <p>We encountered an unknown error. Try again in a few minutes.</p>
+    InternalServiceError(String),
+    /// <p>The specified resource doesn't exist.</p>
+    ResourceNotFound(String),
+    /// <p>The request was throttled. Try again in a few minutes.</p>
+    Throttling(String),
+}
+
+impl GetFirewallConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFirewallConfigError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(GetFirewallConfigError::AccessDenied(err.msg))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(GetFirewallConfigError::InternalServiceError(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetFirewallConfigError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(GetFirewallConfigError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetFirewallConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetFirewallConfigError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetFirewallConfigError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            GetFirewallConfigError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetFirewallConfigError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetFirewallConfigError {}
+/// Errors returned by GetFirewallDomainList
+#[derive(Debug, PartialEq)]
+pub enum GetFirewallDomainListError {
+    /// <p>The current account doesn't have the IAM permissions required to perform the specified Resolver operation.</p>
+    AccessDenied(String),
+    /// <p>We encountered an unknown error. Try again in a few minutes.</p>
+    InternalServiceError(String),
+    /// <p>The specified resource doesn't exist.</p>
+    ResourceNotFound(String),
+    /// <p>The request was throttled. Try again in a few minutes.</p>
+    Throttling(String),
+}
+
+impl GetFirewallDomainListError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFirewallDomainListError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(GetFirewallDomainListError::AccessDenied(err.msg))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(GetFirewallDomainListError::InternalServiceError(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetFirewallDomainListError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(GetFirewallDomainListError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetFirewallDomainListError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetFirewallDomainListError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetFirewallDomainListError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            GetFirewallDomainListError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetFirewallDomainListError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetFirewallDomainListError {}
+/// Errors returned by GetFirewallRuleGroup
+#[derive(Debug, PartialEq)]
+pub enum GetFirewallRuleGroupError {
+    /// <p>The current account doesn't have the IAM permissions required to perform the specified Resolver operation.</p>
+    AccessDenied(String),
+    /// <p>We encountered an unknown error. Try again in a few minutes.</p>
+    InternalServiceError(String),
+    /// <p>The specified resource doesn't exist.</p>
+    ResourceNotFound(String),
+    /// <p>The request was throttled. Try again in a few minutes.</p>
+    Throttling(String),
+}
+
+impl GetFirewallRuleGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFirewallRuleGroupError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(GetFirewallRuleGroupError::AccessDenied(err.msg))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(GetFirewallRuleGroupError::InternalServiceError(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetFirewallRuleGroupError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(GetFirewallRuleGroupError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetFirewallRuleGroupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetFirewallRuleGroupError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetFirewallRuleGroupError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            GetFirewallRuleGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetFirewallRuleGroupError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetFirewallRuleGroupError {}
+/// Errors returned by GetFirewallRuleGroupAssociation
+#[derive(Debug, PartialEq)]
+pub enum GetFirewallRuleGroupAssociationError {
+    /// <p>The current account doesn't have the IAM permissions required to perform the specified Resolver operation.</p>
+    AccessDenied(String),
+    /// <p>We encountered an unknown error. Try again in a few minutes.</p>
+    InternalServiceError(String),
+    /// <p>The specified resource doesn't exist.</p>
+    ResourceNotFound(String),
+    /// <p>The request was throttled. Try again in a few minutes.</p>
+    Throttling(String),
+}
+
+impl GetFirewallRuleGroupAssociationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetFirewallRuleGroupAssociationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        GetFirewallRuleGroupAssociationError::AccessDenied(err.msg),
+                    )
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        GetFirewallRuleGroupAssociationError::InternalServiceError(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        GetFirewallRuleGroupAssociationError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(GetFirewallRuleGroupAssociationError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetFirewallRuleGroupAssociationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetFirewallRuleGroupAssociationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetFirewallRuleGroupAssociationError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetFirewallRuleGroupAssociationError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetFirewallRuleGroupAssociationError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetFirewallRuleGroupAssociationError {}
+/// Errors returned by GetFirewallRuleGroupPolicy
+#[derive(Debug, PartialEq)]
+pub enum GetFirewallRuleGroupPolicyError {
+    /// <p>The current account doesn't have the IAM permissions required to perform the specified Resolver operation.</p>
+    AccessDenied(String),
+    /// <p>We encountered an unknown error. Try again in a few minutes.</p>
+    InternalServiceError(String),
+    /// <p>The specified resource doesn't exist.</p>
+    ResourceNotFound(String),
+    /// <p>The request was throttled. Try again in a few minutes.</p>
+    Throttling(String),
+}
+
+impl GetFirewallRuleGroupPolicyError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetFirewallRuleGroupPolicyError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(GetFirewallRuleGroupPolicyError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        GetFirewallRuleGroupPolicyError::InternalServiceError(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetFirewallRuleGroupPolicyError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(GetFirewallRuleGroupPolicyError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetFirewallRuleGroupPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetFirewallRuleGroupPolicyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetFirewallRuleGroupPolicyError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetFirewallRuleGroupPolicyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetFirewallRuleGroupPolicyError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetFirewallRuleGroupPolicyError {}
 /// Errors returned by GetResolverDnssecConfig
 #[derive(Debug, PartialEq)]
 pub enum GetResolverDnssecConfigError {
@@ -2723,6 +4429,360 @@ impl fmt::Display for GetResolverRulePolicyError {
     }
 }
 impl Error for GetResolverRulePolicyError {}
+/// Errors returned by ImportFirewallDomains
+#[derive(Debug, PartialEq)]
+pub enum ImportFirewallDomainsError {
+    /// <p>The current account doesn't have the IAM permissions required to perform the specified Resolver operation.</p>
+    AccessDenied(String),
+    /// <p><p/></p>
+    Conflict(String),
+    /// <p>We encountered an unknown error. Try again in a few minutes.</p>
+    InternalServiceError(String),
+    /// <p>The request caused one or more limits to be exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource doesn't exist.</p>
+    ResourceNotFound(String),
+    /// <p>The request was throttled. Try again in a few minutes.</p>
+    Throttling(String),
+}
+
+impl ImportFirewallDomainsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportFirewallDomainsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ImportFirewallDomainsError::AccessDenied(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(ImportFirewallDomainsError::Conflict(err.msg))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(ImportFirewallDomainsError::InternalServiceError(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(ImportFirewallDomainsError::LimitExceeded(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ImportFirewallDomainsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ImportFirewallDomainsError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ImportFirewallDomainsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ImportFirewallDomainsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ImportFirewallDomainsError::Conflict(ref cause) => write!(f, "{}", cause),
+            ImportFirewallDomainsError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            ImportFirewallDomainsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ImportFirewallDomainsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ImportFirewallDomainsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ImportFirewallDomainsError {}
+/// Errors returned by ListFirewallConfigs
+#[derive(Debug, PartialEq)]
+pub enum ListFirewallConfigsError {
+    /// <p>The current account doesn't have the IAM permissions required to perform the specified Resolver operation.</p>
+    AccessDenied(String),
+    /// <p>We encountered an unknown error. Try again in a few minutes.</p>
+    InternalServiceError(String),
+    /// <p>The request was throttled. Try again in a few minutes.</p>
+    Throttling(String),
+}
+
+impl ListFirewallConfigsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFirewallConfigsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ListFirewallConfigsError::AccessDenied(err.msg))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(ListFirewallConfigsError::InternalServiceError(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListFirewallConfigsError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListFirewallConfigsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListFirewallConfigsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListFirewallConfigsError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            ListFirewallConfigsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListFirewallConfigsError {}
+/// Errors returned by ListFirewallDomainLists
+#[derive(Debug, PartialEq)]
+pub enum ListFirewallDomainListsError {
+    /// <p>The current account doesn't have the IAM permissions required to perform the specified Resolver operation.</p>
+    AccessDenied(String),
+    /// <p>We encountered an unknown error. Try again in a few minutes.</p>
+    InternalServiceError(String),
+    /// <p>The request was throttled. Try again in a few minutes.</p>
+    Throttling(String),
+}
+
+impl ListFirewallDomainListsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFirewallDomainListsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ListFirewallDomainListsError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        ListFirewallDomainListsError::InternalServiceError(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListFirewallDomainListsError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListFirewallDomainListsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListFirewallDomainListsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListFirewallDomainListsError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            ListFirewallDomainListsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListFirewallDomainListsError {}
+/// Errors returned by ListFirewallDomains
+#[derive(Debug, PartialEq)]
+pub enum ListFirewallDomainsError {
+    /// <p>The current account doesn't have the IAM permissions required to perform the specified Resolver operation.</p>
+    AccessDenied(String),
+    /// <p>We encountered an unknown error. Try again in a few minutes.</p>
+    InternalServiceError(String),
+    /// <p>The specified resource doesn't exist.</p>
+    ResourceNotFound(String),
+    /// <p>The request was throttled. Try again in a few minutes.</p>
+    Throttling(String),
+}
+
+impl ListFirewallDomainsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFirewallDomainsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ListFirewallDomainsError::AccessDenied(err.msg))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(ListFirewallDomainsError::InternalServiceError(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListFirewallDomainsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListFirewallDomainsError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListFirewallDomainsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListFirewallDomainsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListFirewallDomainsError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            ListFirewallDomainsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListFirewallDomainsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListFirewallDomainsError {}
+/// Errors returned by ListFirewallRuleGroupAssociations
+#[derive(Debug, PartialEq)]
+pub enum ListFirewallRuleGroupAssociationsError {
+    /// <p>The current account doesn't have the IAM permissions required to perform the specified Resolver operation.</p>
+    AccessDenied(String),
+    /// <p>We encountered an unknown error. Try again in a few minutes.</p>
+    InternalServiceError(String),
+    /// <p>The request was throttled. Try again in a few minutes.</p>
+    Throttling(String),
+}
+
+impl ListFirewallRuleGroupAssociationsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListFirewallRuleGroupAssociationsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        ListFirewallRuleGroupAssociationsError::AccessDenied(err.msg),
+                    )
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        ListFirewallRuleGroupAssociationsError::InternalServiceError(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(
+                        ListFirewallRuleGroupAssociationsError::Throttling(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListFirewallRuleGroupAssociationsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListFirewallRuleGroupAssociationsError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListFirewallRuleGroupAssociationsError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListFirewallRuleGroupAssociationsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListFirewallRuleGroupAssociationsError {}
+/// Errors returned by ListFirewallRuleGroups
+#[derive(Debug, PartialEq)]
+pub enum ListFirewallRuleGroupsError {
+    /// <p>The current account doesn't have the IAM permissions required to perform the specified Resolver operation.</p>
+    AccessDenied(String),
+    /// <p>We encountered an unknown error. Try again in a few minutes.</p>
+    InternalServiceError(String),
+    /// <p>The request was throttled. Try again in a few minutes.</p>
+    Throttling(String),
+}
+
+impl ListFirewallRuleGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFirewallRuleGroupsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ListFirewallRuleGroupsError::AccessDenied(err.msg))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(ListFirewallRuleGroupsError::InternalServiceError(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListFirewallRuleGroupsError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListFirewallRuleGroupsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListFirewallRuleGroupsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListFirewallRuleGroupsError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            ListFirewallRuleGroupsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListFirewallRuleGroupsError {}
+/// Errors returned by ListFirewallRules
+#[derive(Debug, PartialEq)]
+pub enum ListFirewallRulesError {
+    /// <p>The current account doesn't have the IAM permissions required to perform the specified Resolver operation.</p>
+    AccessDenied(String),
+    /// <p>We encountered an unknown error. Try again in a few minutes.</p>
+    InternalServiceError(String),
+    /// <p>The specified resource doesn't exist.</p>
+    ResourceNotFound(String),
+    /// <p>The request was throttled. Try again in a few minutes.</p>
+    Throttling(String),
+}
+
+impl ListFirewallRulesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFirewallRulesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ListFirewallRulesError::AccessDenied(err.msg))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(ListFirewallRulesError::InternalServiceError(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListFirewallRulesError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListFirewallRulesError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListFirewallRulesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListFirewallRulesError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListFirewallRulesError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            ListFirewallRulesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListFirewallRulesError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListFirewallRulesError {}
 /// Errors returned by ListResolverDnssecConfigs
 #[derive(Debug, PartialEq)]
 pub enum ListResolverDnssecConfigsError {
@@ -3291,6 +5351,66 @@ impl fmt::Display for ListTagsForResourceError {
     }
 }
 impl Error for ListTagsForResourceError {}
+/// Errors returned by PutFirewallRuleGroupPolicy
+#[derive(Debug, PartialEq)]
+pub enum PutFirewallRuleGroupPolicyError {
+    /// <p>The current account doesn't have the IAM permissions required to perform the specified Resolver operation.</p>
+    AccessDenied(String),
+    /// <p>We encountered an unknown error. Try again in a few minutes.</p>
+    InternalServiceError(String),
+    /// <p>The specified resource doesn't exist.</p>
+    ResourceNotFound(String),
+    /// <p>The request was throttled. Try again in a few minutes.</p>
+    Throttling(String),
+}
+
+impl PutFirewallRuleGroupPolicyError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutFirewallRuleGroupPolicyError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(PutFirewallRuleGroupPolicyError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        PutFirewallRuleGroupPolicyError::InternalServiceError(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(PutFirewallRuleGroupPolicyError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(PutFirewallRuleGroupPolicyError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutFirewallRuleGroupPolicyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutFirewallRuleGroupPolicyError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            PutFirewallRuleGroupPolicyError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutFirewallRuleGroupPolicyError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            PutFirewallRuleGroupPolicyError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PutFirewallRuleGroupPolicyError {}
 /// Errors returned by PutResolverQueryLogConfigPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutResolverQueryLogConfigPolicyError {
@@ -3551,6 +5671,252 @@ impl fmt::Display for UntagResourceError {
     }
 }
 impl Error for UntagResourceError {}
+/// Errors returned by UpdateFirewallConfig
+#[derive(Debug, PartialEq)]
+pub enum UpdateFirewallConfigError {
+    /// <p>The current account doesn't have the IAM permissions required to perform the specified Resolver operation.</p>
+    AccessDenied(String),
+    /// <p>We encountered an unknown error. Try again in a few minutes.</p>
+    InternalServiceError(String),
+    /// <p>The specified resource doesn't exist.</p>
+    ResourceNotFound(String),
+    /// <p>The request was throttled. Try again in a few minutes.</p>
+    Throttling(String),
+}
+
+impl UpdateFirewallConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFirewallConfigError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UpdateFirewallConfigError::AccessDenied(err.msg))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(UpdateFirewallConfigError::InternalServiceError(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateFirewallConfigError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateFirewallConfigError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateFirewallConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateFirewallConfigError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateFirewallConfigError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            UpdateFirewallConfigError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateFirewallConfigError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateFirewallConfigError {}
+/// Errors returned by UpdateFirewallDomains
+#[derive(Debug, PartialEq)]
+pub enum UpdateFirewallDomainsError {
+    /// <p>The current account doesn't have the IAM permissions required to perform the specified Resolver operation.</p>
+    AccessDenied(String),
+    /// <p><p/></p>
+    Conflict(String),
+    /// <p>We encountered an unknown error. Try again in a few minutes.</p>
+    InternalServiceError(String),
+    /// <p>The request caused one or more limits to be exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource doesn't exist.</p>
+    ResourceNotFound(String),
+    /// <p>The request was throttled. Try again in a few minutes.</p>
+    Throttling(String),
+}
+
+impl UpdateFirewallDomainsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFirewallDomainsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UpdateFirewallDomainsError::AccessDenied(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateFirewallDomainsError::Conflict(err.msg))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(UpdateFirewallDomainsError::InternalServiceError(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(UpdateFirewallDomainsError::LimitExceeded(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateFirewallDomainsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateFirewallDomainsError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateFirewallDomainsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateFirewallDomainsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateFirewallDomainsError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateFirewallDomainsError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            UpdateFirewallDomainsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateFirewallDomainsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateFirewallDomainsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateFirewallDomainsError {}
+/// Errors returned by UpdateFirewallRule
+#[derive(Debug, PartialEq)]
+pub enum UpdateFirewallRuleError {
+    /// <p>The current account doesn't have the IAM permissions required to perform the specified Resolver operation.</p>
+    AccessDenied(String),
+    /// <p><p/></p>
+    Conflict(String),
+    /// <p>We encountered an unknown error. Try again in a few minutes.</p>
+    InternalServiceError(String),
+    /// <p>The specified resource doesn't exist.</p>
+    ResourceNotFound(String),
+    /// <p>The request was throttled. Try again in a few minutes.</p>
+    Throttling(String),
+}
+
+impl UpdateFirewallRuleError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFirewallRuleError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UpdateFirewallRuleError::AccessDenied(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateFirewallRuleError::Conflict(err.msg))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(UpdateFirewallRuleError::InternalServiceError(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateFirewallRuleError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateFirewallRuleError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateFirewallRuleError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateFirewallRuleError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateFirewallRuleError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateFirewallRuleError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            UpdateFirewallRuleError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateFirewallRuleError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateFirewallRuleError {}
+/// Errors returned by UpdateFirewallRuleGroupAssociation
+#[derive(Debug, PartialEq)]
+pub enum UpdateFirewallRuleGroupAssociationError {
+    /// <p>The current account doesn't have the IAM permissions required to perform the specified Resolver operation.</p>
+    AccessDenied(String),
+    /// <p><p/></p>
+    Conflict(String),
+    /// <p>We encountered an unknown error. Try again in a few minutes.</p>
+    InternalServiceError(String),
+    /// <p>The specified resource doesn't exist.</p>
+    ResourceNotFound(String),
+    /// <p>The request was throttled. Try again in a few minutes.</p>
+    Throttling(String),
+}
+
+impl UpdateFirewallRuleGroupAssociationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateFirewallRuleGroupAssociationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        UpdateFirewallRuleGroupAssociationError::AccessDenied(err.msg),
+                    )
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateFirewallRuleGroupAssociationError::Conflict(
+                        err.msg,
+                    ))
+                }
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(
+                        UpdateFirewallRuleGroupAssociationError::InternalServiceError(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        UpdateFirewallRuleGroupAssociationError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(
+                        UpdateFirewallRuleGroupAssociationError::Throttling(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateFirewallRuleGroupAssociationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateFirewallRuleGroupAssociationError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateFirewallRuleGroupAssociationError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateFirewallRuleGroupAssociationError::InternalServiceError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateFirewallRuleGroupAssociationError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateFirewallRuleGroupAssociationError::Throttling(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdateFirewallRuleGroupAssociationError {}
 /// Errors returned by UpdateResolverDnssecConfig
 #[derive(Debug, PartialEq)]
 pub enum UpdateResolverDnssecConfigError {
@@ -3762,6 +6128,12 @@ impl Error for UpdateResolverRuleError {}
 /// Trait representing the capabilities of the Route53Resolver API. Route53Resolver clients implement this trait.
 #[async_trait]
 pub trait Route53Resolver {
+    /// <p>Associates a <a>FirewallRuleGroup</a> with a VPC, to provide DNS filtering for the VPC. </p>
+    async fn associate_firewall_rule_group(
+        &self,
+        input: AssociateFirewallRuleGroupRequest,
+    ) -> Result<AssociateFirewallRuleGroupResponse, RusotoError<AssociateFirewallRuleGroupError>>;
+
     /// <p>Adds IP addresses to an inbound or an outbound Resolver endpoint. If you want to add more than one IP address, submit one <code>AssociateResolverEndpointIpAddress</code> request for each IP address.</p> <p>To remove an IP address from an endpoint, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_DisassociateResolverEndpointIpAddress.html">DisassociateResolverEndpointIpAddress</a>. </p>
     async fn associate_resolver_endpoint_ip_address(
         &self,
@@ -3786,6 +6158,24 @@ pub trait Route53Resolver {
         input: AssociateResolverRuleRequest,
     ) -> Result<AssociateResolverRuleResponse, RusotoError<AssociateResolverRuleError>>;
 
+    /// <p>Creates an empty firewall domain list for use in DNS Firewall rules. You can populate the domains for the new list with a file, using <a>ImportFirewallDomains</a>, or with domain strings, using <a>UpdateFirewallDomains</a>. </p>
+    async fn create_firewall_domain_list(
+        &self,
+        input: CreateFirewallDomainListRequest,
+    ) -> Result<CreateFirewallDomainListResponse, RusotoError<CreateFirewallDomainListError>>;
+
+    /// <p>Creates a single DNS Firewall rule in the specified rule group, using the specified domain list.</p>
+    async fn create_firewall_rule(
+        &self,
+        input: CreateFirewallRuleRequest,
+    ) -> Result<CreateFirewallRuleResponse, RusotoError<CreateFirewallRuleError>>;
+
+    /// <p>Creates an empty DNS Firewall rule group for filtering DNS network traffic in a VPC. You can add rules to the new rule group by calling <a>CreateFirewallRule</a>. </p>
+    async fn create_firewall_rule_group(
+        &self,
+        input: CreateFirewallRuleGroupRequest,
+    ) -> Result<CreateFirewallRuleGroupResponse, RusotoError<CreateFirewallRuleGroupError>>;
+
     /// <p><p>Creates a Resolver endpoint. There are two types of Resolver endpoints, inbound and outbound:</p> <ul> <li> <p>An <i>inbound Resolver endpoint</i> forwards DNS queries to the DNS service for a VPC from your network.</p> </li> <li> <p>An <i>outbound Resolver endpoint</i> forwards DNS queries from the DNS service for a VPC to your network.</p> </li> </ul></p>
     async fn create_resolver_endpoint(
         &self,
@@ -3803,6 +6193,24 @@ pub trait Route53Resolver {
         &self,
         input: CreateResolverRuleRequest,
     ) -> Result<CreateResolverRuleResponse, RusotoError<CreateResolverRuleError>>;
+
+    /// <p>Deletes the specified domain list. </p>
+    async fn delete_firewall_domain_list(
+        &self,
+        input: DeleteFirewallDomainListRequest,
+    ) -> Result<DeleteFirewallDomainListResponse, RusotoError<DeleteFirewallDomainListError>>;
+
+    /// <p>Deletes the specified firewall rule.</p>
+    async fn delete_firewall_rule(
+        &self,
+        input: DeleteFirewallRuleRequest,
+    ) -> Result<DeleteFirewallRuleResponse, RusotoError<DeleteFirewallRuleError>>;
+
+    /// <p>Deletes the specified firewall rule group. </p>
+    async fn delete_firewall_rule_group(
+        &self,
+        input: DeleteFirewallRuleGroupRequest,
+    ) -> Result<DeleteFirewallRuleGroupResponse, RusotoError<DeleteFirewallRuleGroupError>>;
 
     /// <p><p>Deletes a Resolver endpoint. The effect of deleting a Resolver endpoint depends on whether it&#39;s an inbound or an outbound Resolver endpoint:</p> <ul> <li> <p> <b>Inbound</b>: DNS queries from your network are no longer routed to the DNS service for the specified VPC.</p> </li> <li> <p> <b>Outbound</b>: DNS queries from a VPC are no longer routed to your network.</p> </li> </ul></p>
     async fn delete_resolver_endpoint(
@@ -3822,6 +6230,15 @@ pub trait Route53Resolver {
         input: DeleteResolverRuleRequest,
     ) -> Result<DeleteResolverRuleResponse, RusotoError<DeleteResolverRuleError>>;
 
+    /// <p>Disassociates a <a>FirewallRuleGroup</a> from a VPC, to remove DNS filtering from the VPC. </p>
+    async fn disassociate_firewall_rule_group(
+        &self,
+        input: DisassociateFirewallRuleGroupRequest,
+    ) -> Result<
+        DisassociateFirewallRuleGroupResponse,
+        RusotoError<DisassociateFirewallRuleGroupError>,
+    >;
+
     /// <p>Removes IP addresses from an inbound or an outbound Resolver endpoint. If you want to remove more than one IP address, submit one <code>DisassociateResolverEndpointIpAddress</code> request for each IP address.</p> <p>To add an IP address to an endpoint, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_AssociateResolverEndpointIpAddress.html">AssociateResolverEndpointIpAddress</a>. </p>
     async fn disassociate_resolver_endpoint_ip_address(
         &self,
@@ -3831,7 +6248,7 @@ pub trait Route53Resolver {
         RusotoError<DisassociateResolverEndpointIpAddressError>,
     >;
 
-    /// <p><p>Disassociates a VPC from a query logging configuration.</p> <note> <p>Before you can delete a query logging configuration, you must first disassociate all VPCs from the configuration. If you used Resource Access Manager (RAM) to share a query logging configuration with other accounts, VPCs can be disassociated from the configuration in the following ways:</p> <ul> <li> <p>The accounts that you shared the configuration with can disassociate VPCs from the configuration.</p> </li> <li> <p>You can stop sharing the configuration.</p> </li> </ul> </note></p>
+    /// <p><p>Disassociates a VPC from a query logging configuration.</p> <note> <p>Before you can delete a query logging configuration, you must first disassociate all VPCs from the configuration. If you used AWS Resource Access Manager (AWS RAM) to share a query logging configuration with other accounts, VPCs can be disassociated from the configuration in the following ways:</p> <ul> <li> <p>The accounts that you shared the configuration with can disassociate VPCs from the configuration.</p> </li> <li> <p>You can stop sharing the configuration.</p> </li> </ul> </note></p>
     async fn disassociate_resolver_query_log_config(
         &self,
         input: DisassociateResolverQueryLogConfigRequest,
@@ -3845,6 +6262,39 @@ pub trait Route53Resolver {
         &self,
         input: DisassociateResolverRuleRequest,
     ) -> Result<DisassociateResolverRuleResponse, RusotoError<DisassociateResolverRuleError>>;
+
+    /// <p>Retrieves the configuration of the firewall behavior provided by DNS Firewall for a single VPC from Amazon Virtual Private Cloud (Amazon VPC). </p>
+    async fn get_firewall_config(
+        &self,
+        input: GetFirewallConfigRequest,
+    ) -> Result<GetFirewallConfigResponse, RusotoError<GetFirewallConfigError>>;
+
+    /// <p>Retrieves the specified firewall domain list.</p>
+    async fn get_firewall_domain_list(
+        &self,
+        input: GetFirewallDomainListRequest,
+    ) -> Result<GetFirewallDomainListResponse, RusotoError<GetFirewallDomainListError>>;
+
+    /// <p>Retrieves the specified firewall rule group. </p>
+    async fn get_firewall_rule_group(
+        &self,
+        input: GetFirewallRuleGroupRequest,
+    ) -> Result<GetFirewallRuleGroupResponse, RusotoError<GetFirewallRuleGroupError>>;
+
+    /// <p>Retrieves a firewall rule group association, which enables DNS filtering for a VPC with one rule group. A VPC can have more than one firewall rule group association, and a rule group can be associated with more than one VPC.</p>
+    async fn get_firewall_rule_group_association(
+        &self,
+        input: GetFirewallRuleGroupAssociationRequest,
+    ) -> Result<
+        GetFirewallRuleGroupAssociationResponse,
+        RusotoError<GetFirewallRuleGroupAssociationError>,
+    >;
+
+    /// <p>Returns the AWS Identity and Access Management (AWS IAM) policy for sharing the specified rule group. You can use the policy to share the rule group using AWS Resource Access Manager (AWS RAM). </p>
+    async fn get_firewall_rule_group_policy(
+        &self,
+        input: GetFirewallRuleGroupPolicyRequest,
+    ) -> Result<GetFirewallRuleGroupPolicyResponse, RusotoError<GetFirewallRuleGroupPolicyError>>;
 
     /// <p>Gets DNSSEC validation information for a specified resource.</p>
     async fn get_resolver_dnssec_config(
@@ -3900,6 +6350,51 @@ pub trait Route53Resolver {
         input: GetResolverRulePolicyRequest,
     ) -> Result<GetResolverRulePolicyResponse, RusotoError<GetResolverRulePolicyError>>;
 
+    /// <p><p>Imports domain names from a file into a domain list, for use in a DNS firewall rule group. </p> <p>Each domain specification in your domain list must satisfy the following requirements: </p> <ul> <li> <p>It can optionally start with <code>*</code> (asterisk).</p> </li> <li> <p>With the exception of the optional starting asterisk, it must only contain the following characters: <code>A-Z</code>, <code>a-z</code>, <code>0-9</code>, <code>-</code> (hyphen).</p> </li> <li> <p>It must be from 1-255 characters in length. </p> </li> </ul></p>
+    async fn import_firewall_domains(
+        &self,
+        input: ImportFirewallDomainsRequest,
+    ) -> Result<ImportFirewallDomainsResponse, RusotoError<ImportFirewallDomainsError>>;
+
+    /// <p>Retrieves the firewall configurations that you have defined. DNS Firewall uses the configurations to manage firewall behavior for your VPCs. </p> <p>A single call might return only a partial list of the configurations. For information, see <code>MaxResults</code>. </p>
+    async fn list_firewall_configs(
+        &self,
+        input: ListFirewallConfigsRequest,
+    ) -> Result<ListFirewallConfigsResponse, RusotoError<ListFirewallConfigsError>>;
+
+    /// <p>Retrieves the firewall domain lists that you have defined. For each firewall domain list, you can retrieve the domains that are defined for a list by calling <a>ListFirewallDomains</a>. </p> <p>A single call to this list operation might return only a partial list of the domain lists. For information, see <code>MaxResults</code>. </p>
+    async fn list_firewall_domain_lists(
+        &self,
+        input: ListFirewallDomainListsRequest,
+    ) -> Result<ListFirewallDomainListsResponse, RusotoError<ListFirewallDomainListsError>>;
+
+    /// <p>Retrieves the domains that you have defined for the specified firewall domain list. </p> <p>A single call might return only a partial list of the domains. For information, see <code>MaxResults</code>. </p>
+    async fn list_firewall_domains(
+        &self,
+        input: ListFirewallDomainsRequest,
+    ) -> Result<ListFirewallDomainsResponse, RusotoError<ListFirewallDomainsError>>;
+
+    /// <p>Retrieves the firewall rule group associations that you have defined. Each association enables DNS filtering for a VPC with one rule group. </p> <p>A single call might return only a partial list of the associations. For information, see <code>MaxResults</code>. </p>
+    async fn list_firewall_rule_group_associations(
+        &self,
+        input: ListFirewallRuleGroupAssociationsRequest,
+    ) -> Result<
+        ListFirewallRuleGroupAssociationsResponse,
+        RusotoError<ListFirewallRuleGroupAssociationsError>,
+    >;
+
+    /// <p>Retrieves the minimal high-level information for the rule groups that you have defined. </p> <p>A single call might return only a partial list of the rule groups. For information, see <code>MaxResults</code>. </p>
+    async fn list_firewall_rule_groups(
+        &self,
+        input: ListFirewallRuleGroupsRequest,
+    ) -> Result<ListFirewallRuleGroupsResponse, RusotoError<ListFirewallRuleGroupsError>>;
+
+    /// <p>Retrieves the firewall rules that you have defined for the specified firewall rule group. DNS Firewall uses the rules in a rule group to filter DNS network traffic for a VPC. </p> <p>A single call might return only a partial list of the rules. For information, see <code>MaxResults</code>. </p>
+    async fn list_firewall_rules(
+        &self,
+        input: ListFirewallRulesRequest,
+    ) -> Result<ListFirewallRulesResponse, RusotoError<ListFirewallRulesError>>;
+
     /// <p>Lists the configurations for DNSSEC validation that are associated with the current AWS account.</p>
     async fn list_resolver_dnssec_configs(
         &self,
@@ -3954,6 +6449,12 @@ pub trait Route53Resolver {
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
+    /// <p>Attaches an AWS Identity and Access Management (AWS IAM) policy for sharing the rule group. You can use the policy to share the rule group using AWS Resource Access Manager (AWS RAM). </p>
+    async fn put_firewall_rule_group_policy(
+        &self,
+        input: PutFirewallRuleGroupPolicyRequest,
+    ) -> Result<PutFirewallRuleGroupPolicyResponse, RusotoError<PutFirewallRuleGroupPolicyError>>;
+
     /// <p>Specifies an AWS account that you want to share a query logging configuration with, the query logging configuration that you want to share, and the operations that you want the account to be able to perform on the configuration.</p>
     async fn put_resolver_query_log_config_policy(
         &self,
@@ -3980,6 +6481,33 @@ pub trait Route53Resolver {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+
+    /// <p>Updates the configuration of the firewall behavior provided by DNS Firewall for a single VPC from Amazon Virtual Private Cloud (Amazon VPC). </p>
+    async fn update_firewall_config(
+        &self,
+        input: UpdateFirewallConfigRequest,
+    ) -> Result<UpdateFirewallConfigResponse, RusotoError<UpdateFirewallConfigError>>;
+
+    /// <p>Updates the firewall domain list from an array of domain specifications. </p>
+    async fn update_firewall_domains(
+        &self,
+        input: UpdateFirewallDomainsRequest,
+    ) -> Result<UpdateFirewallDomainsResponse, RusotoError<UpdateFirewallDomainsError>>;
+
+    /// <p>Updates the specified firewall rule. </p>
+    async fn update_firewall_rule(
+        &self,
+        input: UpdateFirewallRuleRequest,
+    ) -> Result<UpdateFirewallRuleResponse, RusotoError<UpdateFirewallRuleError>>;
+
+    /// <p>Changes the association of a <a>FirewallRuleGroup</a> with a VPC. The association enables DNS filtering for the VPC. </p>
+    async fn update_firewall_rule_group_association(
+        &self,
+        input: UpdateFirewallRuleGroupAssociationRequest,
+    ) -> Result<
+        UpdateFirewallRuleGroupAssociationResponse,
+        RusotoError<UpdateFirewallRuleGroupAssociationError>,
+    >;
 
     /// <p>Updates an existing DNSSEC validation configuration. If there is no existing DNSSEC validation configuration, one is created.</p>
     async fn update_resolver_dnssec_config(
@@ -4039,6 +6567,26 @@ impl Route53ResolverClient {
 
 #[async_trait]
 impl Route53Resolver for Route53ResolverClient {
+    /// <p>Associates a <a>FirewallRuleGroup</a> with a VPC, to provide DNS filtering for the VPC. </p>
+    async fn associate_firewall_rule_group(
+        &self,
+        input: AssociateFirewallRuleGroupRequest,
+    ) -> Result<AssociateFirewallRuleGroupResponse, RusotoError<AssociateFirewallRuleGroupError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Route53Resolver.AssociateFirewallRuleGroup");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, AssociateFirewallRuleGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<AssociateFirewallRuleGroupResponse, _>()
+    }
+
     /// <p>Adds IP addresses to an inbound or an outbound Resolver endpoint. If you want to add more than one IP address, submit one <code>AssociateResolverEndpointIpAddress</code> request for each IP address.</p> <p>To remove an IP address from an endpoint, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_DisassociateResolverEndpointIpAddress.html">DisassociateResolverEndpointIpAddress</a>. </p>
     async fn associate_resolver_endpoint_ip_address(
         &self,
@@ -4111,6 +6659,62 @@ impl Route53Resolver for Route53ResolverClient {
             .deserialize::<AssociateResolverRuleResponse, _>()
     }
 
+    /// <p>Creates an empty firewall domain list for use in DNS Firewall rules. You can populate the domains for the new list with a file, using <a>ImportFirewallDomains</a>, or with domain strings, using <a>UpdateFirewallDomains</a>. </p>
+    async fn create_firewall_domain_list(
+        &self,
+        input: CreateFirewallDomainListRequest,
+    ) -> Result<CreateFirewallDomainListResponse, RusotoError<CreateFirewallDomainListError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Route53Resolver.CreateFirewallDomainList");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateFirewallDomainListError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateFirewallDomainListResponse, _>()
+    }
+
+    /// <p>Creates a single DNS Firewall rule in the specified rule group, using the specified domain list.</p>
+    async fn create_firewall_rule(
+        &self,
+        input: CreateFirewallRuleRequest,
+    ) -> Result<CreateFirewallRuleResponse, RusotoError<CreateFirewallRuleError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Route53Resolver.CreateFirewallRule");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateFirewallRuleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateFirewallRuleResponse, _>()
+    }
+
+    /// <p>Creates an empty DNS Firewall rule group for filtering DNS network traffic in a VPC. You can add rules to the new rule group by calling <a>CreateFirewallRule</a>. </p>
+    async fn create_firewall_rule_group(
+        &self,
+        input: CreateFirewallRuleGroupRequest,
+    ) -> Result<CreateFirewallRuleGroupResponse, RusotoError<CreateFirewallRuleGroupError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Route53Resolver.CreateFirewallRuleGroup");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateFirewallRuleGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateFirewallRuleGroupResponse, _>()
+    }
+
     /// <p><p>Creates a Resolver endpoint. There are two types of Resolver endpoints, inbound and outbound:</p> <ul> <li> <p>An <i>inbound Resolver endpoint</i> forwards DNS queries to the DNS service for a VPC from your network.</p> </li> <li> <p>An <i>outbound Resolver endpoint</i> forwards DNS queries from the DNS service for a VPC to your network.</p> </li> </ul></p>
     async fn create_resolver_endpoint(
         &self,
@@ -4169,6 +6773,62 @@ impl Route53Resolver for Route53ResolverClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateResolverRuleResponse, _>()
+    }
+
+    /// <p>Deletes the specified domain list. </p>
+    async fn delete_firewall_domain_list(
+        &self,
+        input: DeleteFirewallDomainListRequest,
+    ) -> Result<DeleteFirewallDomainListResponse, RusotoError<DeleteFirewallDomainListError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Route53Resolver.DeleteFirewallDomainList");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteFirewallDomainListError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteFirewallDomainListResponse, _>()
+    }
+
+    /// <p>Deletes the specified firewall rule.</p>
+    async fn delete_firewall_rule(
+        &self,
+        input: DeleteFirewallRuleRequest,
+    ) -> Result<DeleteFirewallRuleResponse, RusotoError<DeleteFirewallRuleError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Route53Resolver.DeleteFirewallRule");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteFirewallRuleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteFirewallRuleResponse, _>()
+    }
+
+    /// <p>Deletes the specified firewall rule group. </p>
+    async fn delete_firewall_rule_group(
+        &self,
+        input: DeleteFirewallRuleGroupRequest,
+    ) -> Result<DeleteFirewallRuleGroupResponse, RusotoError<DeleteFirewallRuleGroupError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Route53Resolver.DeleteFirewallRuleGroup");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteFirewallRuleGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteFirewallRuleGroupResponse, _>()
     }
 
     /// <p><p>Deletes a Resolver endpoint. The effect of deleting a Resolver endpoint depends on whether it&#39;s an inbound or an outbound Resolver endpoint:</p> <ul> <li> <p> <b>Inbound</b>: DNS queries from your network are no longer routed to the DNS service for the specified VPC.</p> </li> <li> <p> <b>Outbound</b>: DNS queries from a VPC are no longer routed to your network.</p> </li> </ul></p>
@@ -4231,6 +6891,31 @@ impl Route53Resolver for Route53ResolverClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteResolverRuleResponse, _>()
     }
 
+    /// <p>Disassociates a <a>FirewallRuleGroup</a> from a VPC, to remove DNS filtering from the VPC. </p>
+    async fn disassociate_firewall_rule_group(
+        &self,
+        input: DisassociateFirewallRuleGroupRequest,
+    ) -> Result<
+        DisassociateFirewallRuleGroupResponse,
+        RusotoError<DisassociateFirewallRuleGroupError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "Route53Resolver.DisassociateFirewallRuleGroup",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DisassociateFirewallRuleGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DisassociateFirewallRuleGroupResponse, _>()
+    }
+
     /// <p>Removes IP addresses from an inbound or an outbound Resolver endpoint. If you want to remove more than one IP address, submit one <code>DisassociateResolverEndpointIpAddress</code> request for each IP address.</p> <p>To add an IP address to an endpoint, see <a href="https://docs.aws.amazon.com/Route53/latest/APIReference/API_route53resolver_AssociateResolverEndpointIpAddress.html">AssociateResolverEndpointIpAddress</a>. </p>
     async fn disassociate_resolver_endpoint_ip_address(
         &self,
@@ -4259,7 +6944,7 @@ impl Route53Resolver for Route53ResolverClient {
             .deserialize::<DisassociateResolverEndpointIpAddressResponse, _>()
     }
 
-    /// <p><p>Disassociates a VPC from a query logging configuration.</p> <note> <p>Before you can delete a query logging configuration, you must first disassociate all VPCs from the configuration. If you used Resource Access Manager (RAM) to share a query logging configuration with other accounts, VPCs can be disassociated from the configuration in the following ways:</p> <ul> <li> <p>The accounts that you shared the configuration with can disassociate VPCs from the configuration.</p> </li> <li> <p>You can stop sharing the configuration.</p> </li> </ul> </note></p>
+    /// <p><p>Disassociates a VPC from a query logging configuration.</p> <note> <p>Before you can delete a query logging configuration, you must first disassociate all VPCs from the configuration. If you used AWS Resource Access Manager (AWS RAM) to share a query logging configuration with other accounts, VPCs can be disassociated from the configuration in the following ways:</p> <ul> <li> <p>The accounts that you shared the configuration with can disassociate VPCs from the configuration.</p> </li> <li> <p>You can stop sharing the configuration.</p> </li> </ul> </note></p>
     async fn disassociate_resolver_query_log_config(
         &self,
         input: DisassociateResolverQueryLogConfigRequest,
@@ -4304,6 +6989,107 @@ impl Route53Resolver for Route53ResolverClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<DisassociateResolverRuleResponse, _>()
+    }
+
+    /// <p>Retrieves the configuration of the firewall behavior provided by DNS Firewall for a single VPC from Amazon Virtual Private Cloud (Amazon VPC). </p>
+    async fn get_firewall_config(
+        &self,
+        input: GetFirewallConfigRequest,
+    ) -> Result<GetFirewallConfigResponse, RusotoError<GetFirewallConfigError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Route53Resolver.GetFirewallConfig");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetFirewallConfigError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetFirewallConfigResponse, _>()
+    }
+
+    /// <p>Retrieves the specified firewall domain list.</p>
+    async fn get_firewall_domain_list(
+        &self,
+        input: GetFirewallDomainListRequest,
+    ) -> Result<GetFirewallDomainListResponse, RusotoError<GetFirewallDomainListError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Route53Resolver.GetFirewallDomainList");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetFirewallDomainListError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetFirewallDomainListResponse, _>()
+    }
+
+    /// <p>Retrieves the specified firewall rule group. </p>
+    async fn get_firewall_rule_group(
+        &self,
+        input: GetFirewallRuleGroupRequest,
+    ) -> Result<GetFirewallRuleGroupResponse, RusotoError<GetFirewallRuleGroupError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Route53Resolver.GetFirewallRuleGroup");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetFirewallRuleGroupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetFirewallRuleGroupResponse, _>()
+    }
+
+    /// <p>Retrieves a firewall rule group association, which enables DNS filtering for a VPC with one rule group. A VPC can have more than one firewall rule group association, and a rule group can be associated with more than one VPC.</p>
+    async fn get_firewall_rule_group_association(
+        &self,
+        input: GetFirewallRuleGroupAssociationRequest,
+    ) -> Result<
+        GetFirewallRuleGroupAssociationResponse,
+        RusotoError<GetFirewallRuleGroupAssociationError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "Route53Resolver.GetFirewallRuleGroupAssociation",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetFirewallRuleGroupAssociationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetFirewallRuleGroupAssociationResponse, _>()
+    }
+
+    /// <p>Returns the AWS Identity and Access Management (AWS IAM) policy for sharing the specified rule group. You can use the policy to share the rule group using AWS Resource Access Manager (AWS RAM). </p>
+    async fn get_firewall_rule_group_policy(
+        &self,
+        input: GetFirewallRuleGroupPolicyRequest,
+    ) -> Result<GetFirewallRuleGroupPolicyResponse, RusotoError<GetFirewallRuleGroupPolicyError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Route53Resolver.GetFirewallRuleGroupPolicy");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetFirewallRuleGroupPolicyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetFirewallRuleGroupPolicyResponse, _>()
     }
 
     /// <p>Gets DNSSEC validation information for a specified resource.</p>
@@ -4471,6 +7257,145 @@ impl Route53Resolver for Route53ResolverClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<GetResolverRulePolicyResponse, _>()
+    }
+
+    /// <p><p>Imports domain names from a file into a domain list, for use in a DNS firewall rule group. </p> <p>Each domain specification in your domain list must satisfy the following requirements: </p> <ul> <li> <p>It can optionally start with <code>*</code> (asterisk).</p> </li> <li> <p>With the exception of the optional starting asterisk, it must only contain the following characters: <code>A-Z</code>, <code>a-z</code>, <code>0-9</code>, <code>-</code> (hyphen).</p> </li> <li> <p>It must be from 1-255 characters in length. </p> </li> </ul></p>
+    async fn import_firewall_domains(
+        &self,
+        input: ImportFirewallDomainsRequest,
+    ) -> Result<ImportFirewallDomainsResponse, RusotoError<ImportFirewallDomainsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Route53Resolver.ImportFirewallDomains");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ImportFirewallDomainsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ImportFirewallDomainsResponse, _>()
+    }
+
+    /// <p>Retrieves the firewall configurations that you have defined. DNS Firewall uses the configurations to manage firewall behavior for your VPCs. </p> <p>A single call might return only a partial list of the configurations. For information, see <code>MaxResults</code>. </p>
+    async fn list_firewall_configs(
+        &self,
+        input: ListFirewallConfigsRequest,
+    ) -> Result<ListFirewallConfigsResponse, RusotoError<ListFirewallConfigsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Route53Resolver.ListFirewallConfigs");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListFirewallConfigsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListFirewallConfigsResponse, _>()
+    }
+
+    /// <p>Retrieves the firewall domain lists that you have defined. For each firewall domain list, you can retrieve the domains that are defined for a list by calling <a>ListFirewallDomains</a>. </p> <p>A single call to this list operation might return only a partial list of the domain lists. For information, see <code>MaxResults</code>. </p>
+    async fn list_firewall_domain_lists(
+        &self,
+        input: ListFirewallDomainListsRequest,
+    ) -> Result<ListFirewallDomainListsResponse, RusotoError<ListFirewallDomainListsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Route53Resolver.ListFirewallDomainLists");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListFirewallDomainListsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListFirewallDomainListsResponse, _>()
+    }
+
+    /// <p>Retrieves the domains that you have defined for the specified firewall domain list. </p> <p>A single call might return only a partial list of the domains. For information, see <code>MaxResults</code>. </p>
+    async fn list_firewall_domains(
+        &self,
+        input: ListFirewallDomainsRequest,
+    ) -> Result<ListFirewallDomainsResponse, RusotoError<ListFirewallDomainsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Route53Resolver.ListFirewallDomains");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListFirewallDomainsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListFirewallDomainsResponse, _>()
+    }
+
+    /// <p>Retrieves the firewall rule group associations that you have defined. Each association enables DNS filtering for a VPC with one rule group. </p> <p>A single call might return only a partial list of the associations. For information, see <code>MaxResults</code>. </p>
+    async fn list_firewall_rule_group_associations(
+        &self,
+        input: ListFirewallRuleGroupAssociationsRequest,
+    ) -> Result<
+        ListFirewallRuleGroupAssociationsResponse,
+        RusotoError<ListFirewallRuleGroupAssociationsError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "Route53Resolver.ListFirewallRuleGroupAssociations",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ListFirewallRuleGroupAssociationsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListFirewallRuleGroupAssociationsResponse, _>()
+    }
+
+    /// <p>Retrieves the minimal high-level information for the rule groups that you have defined. </p> <p>A single call might return only a partial list of the rule groups. For information, see <code>MaxResults</code>. </p>
+    async fn list_firewall_rule_groups(
+        &self,
+        input: ListFirewallRuleGroupsRequest,
+    ) -> Result<ListFirewallRuleGroupsResponse, RusotoError<ListFirewallRuleGroupsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Route53Resolver.ListFirewallRuleGroups");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListFirewallRuleGroupsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListFirewallRuleGroupsResponse, _>()
+    }
+
+    /// <p>Retrieves the firewall rules that you have defined for the specified firewall rule group. DNS Firewall uses the rules in a rule group to filter DNS network traffic for a VPC. </p> <p>A single call might return only a partial list of the rules. For information, see <code>MaxResults</code>. </p>
+    async fn list_firewall_rules(
+        &self,
+        input: ListFirewallRulesRequest,
+    ) -> Result<ListFirewallRulesResponse, RusotoError<ListFirewallRulesError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Route53Resolver.ListFirewallRules");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListFirewallRulesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListFirewallRulesResponse, _>()
     }
 
     /// <p>Lists the configurations for DNSSEC validation that are associated with the current AWS account.</p>
@@ -4647,6 +7572,26 @@ impl Route53Resolver for Route53ResolverClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceResponse, _>()
     }
 
+    /// <p>Attaches an AWS Identity and Access Management (AWS IAM) policy for sharing the rule group. You can use the policy to share the rule group using AWS Resource Access Manager (AWS RAM). </p>
+    async fn put_firewall_rule_group_policy(
+        &self,
+        input: PutFirewallRuleGroupPolicyRequest,
+    ) -> Result<PutFirewallRuleGroupPolicyResponse, RusotoError<PutFirewallRuleGroupPolicyError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Route53Resolver.PutFirewallRuleGroupPolicy");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, PutFirewallRuleGroupPolicyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<PutFirewallRuleGroupPolicyResponse, _>()
+    }
+
     /// <p>Specifies an AWS account that you want to share a query logging configuration with, the query logging configuration that you want to share, and the operations that you want the account to be able to perform on the configuration.</p>
     async fn put_resolver_query_log_config_policy(
         &self,
@@ -4725,6 +7670,90 @@ impl Route53Resolver for Route53ResolverClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
+    }
+
+    /// <p>Updates the configuration of the firewall behavior provided by DNS Firewall for a single VPC from Amazon Virtual Private Cloud (Amazon VPC). </p>
+    async fn update_firewall_config(
+        &self,
+        input: UpdateFirewallConfigRequest,
+    ) -> Result<UpdateFirewallConfigResponse, RusotoError<UpdateFirewallConfigError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Route53Resolver.UpdateFirewallConfig");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateFirewallConfigError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateFirewallConfigResponse, _>()
+    }
+
+    /// <p>Updates the firewall domain list from an array of domain specifications. </p>
+    async fn update_firewall_domains(
+        &self,
+        input: UpdateFirewallDomainsRequest,
+    ) -> Result<UpdateFirewallDomainsResponse, RusotoError<UpdateFirewallDomainsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Route53Resolver.UpdateFirewallDomains");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateFirewallDomainsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateFirewallDomainsResponse, _>()
+    }
+
+    /// <p>Updates the specified firewall rule. </p>
+    async fn update_firewall_rule(
+        &self,
+        input: UpdateFirewallRuleRequest,
+    ) -> Result<UpdateFirewallRuleResponse, RusotoError<UpdateFirewallRuleError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Route53Resolver.UpdateFirewallRule");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateFirewallRuleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateFirewallRuleResponse, _>()
+    }
+
+    /// <p>Changes the association of a <a>FirewallRuleGroup</a> with a VPC. The association enables DNS filtering for the VPC. </p>
+    async fn update_firewall_rule_group_association(
+        &self,
+        input: UpdateFirewallRuleGroupAssociationRequest,
+    ) -> Result<
+        UpdateFirewallRuleGroupAssociationResponse,
+        RusotoError<UpdateFirewallRuleGroupAssociationError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "Route53Resolver.UpdateFirewallRuleGroupAssociation",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                UpdateFirewallRuleGroupAssociationError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateFirewallRuleGroupAssociationResponse, _>()
     }
 
     /// <p>Updates an existing DNSSEC validation configuration. If there is no existing DNSSEC validation configuration, one is created.</p>

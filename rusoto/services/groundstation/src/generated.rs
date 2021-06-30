@@ -92,6 +92,10 @@ pub struct ConfigDetails {
     #[serde(rename = "endpointDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_details: Option<EndpointDetails>,
+    /// <p>Details for an S3 recording <code>Config</code> in a contact.</p>
+    #[serde(rename = "s3RecordingDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s_3_recording_details: Option<S3RecordingDetails>,
 }
 
 /// <p><p/></p>
@@ -153,6 +157,10 @@ pub struct ConfigTypeData {
     #[serde(rename = "dataflowEndpointConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dataflow_endpoint_config: Option<DataflowEndpointConfig>,
+    /// <p>Information about an S3 recording <code>Config</code>.</p>
+    #[serde(rename = "s3RecordingConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s_3_recording_config: Option<S3RecordingConfig>,
     /// <p>Object that determines whether tracking should be used during a contact executed with this <code>Config</code> in the mission profile. </p>
     #[serde(rename = "trackingConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1038,6 +1046,35 @@ pub struct ReserveContactRequest {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>Information about an S3 recording <code>Config</code>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct S3RecordingConfig {
+    /// <p>ARN of the bucket to record to.</p>
+    #[serde(rename = "bucketArn")]
+    pub bucket_arn: String,
+    /// <p>S3 Key prefix to prefice data files.</p>
+    #[serde(rename = "prefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prefix: Option<String>,
+    /// <p>ARN of the role Ground Station assumes to write data to the bucket.</p>
+    #[serde(rename = "roleArn")]
+    pub role_arn: String,
+}
+
+/// <p>Details about an S3 recording <code>Config</code> used in a contact.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct S3RecordingDetails {
+    /// <p>ARN of the bucket used.</p>
+    #[serde(rename = "bucketArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bucket_arn: Option<String>,
+    /// <p>Template of the S3 key used.</p>
+    #[serde(rename = "keyTemplate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key_template: Option<String>,
 }
 
 /// <p>Item in a list of satellites.</p>

@@ -358,7 +358,7 @@ pub struct CreateEventSourceMappingRequest {
     #[serde(rename = "Topics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub topics: Option<Vec<String>>,
-    /// <p>(Streams) The duration of a processing window in seconds. The range is between 1 second up to 15 minutes.</p>
+    /// <p>(Streams) The duration in seconds of a processing window. The range is between 1 second up to 900 seconds.</p>
     #[serde(rename = "TumblingWindowInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tumbling_window_in_seconds: Option<i64>,
@@ -397,7 +397,7 @@ pub struct CreateFunctionRequest {
     #[serde(rename = "Handler")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub handler: Option<String>,
-    /// <p>Configuration values that override the container image Dockerfile.</p>
+    /// <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/images-parms.html">Container image configuration values</a> that override the values in the container image Dockerfile.</p>
     #[serde(rename = "ImageConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_config: Option<ImageConfig>,
@@ -683,7 +683,7 @@ pub struct EventSourceMappingConfiguration {
     #[serde(rename = "Topics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub topics: Option<Vec<String>>,
-    /// <p>(Streams) The duration of a processing window in seconds. The range is between 1 second up to 15 minutes.</p>
+    /// <p>(Streams) The duration in seconds of a processing window. The range is between 1 second up to 900 seconds.</p>
     #[serde(rename = "TumblingWindowInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tumbling_window_in_seconds: Option<i64>,
@@ -1202,7 +1202,7 @@ pub struct GetProvisionedConcurrencyConfigResponse {
     pub status_reason: Option<String>,
 }
 
-/// <p>Configuration values that override the container image Dockerfile settings. See <a href="https://docs.aws.amazon.com/lambda/latest/dg/images-parms.html">Container settings</a>. </p>
+/// <p>Configuration values that override the container image Dockerfile settings. See <a href="https://docs.aws.amazon.com/lambda/latest/dg/images-create.html#images-parms">Container settings</a>. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ImageConfig {
     /// <p>Specifies parameters that you want to pass in with ENTRYPOINT. </p>
@@ -1609,7 +1609,7 @@ pub struct ListFunctionsRequest {
     #[serde(rename = "MasterRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub master_region: Option<String>,
-    /// <p>The maximum number of functions to return.</p>
+    /// <p>The maximum number of functions to return in the response. Note that <code>ListFunctions</code> returns a maximum of 50 items in each response, even if you set the number higher.</p>
     #[serde(rename = "MaxItems")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_items: Option<i64>,
@@ -2048,7 +2048,7 @@ pub struct SelfManagedEventSource {
 /// <p>You can specify the authentication protocol, or the VPC components to secure access to your event source.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SourceAccessConfiguration {
-    /// <p><p>The type of authentication protocol or the VPC components for your event source. For example: <code>&quot;Type&quot;:&quot;SASL<em>SCRAM</em>512<em>AUTH&quot;</code>.</p> <ul> <li> <p> <code>BASIC</em>AUTH</code> - (MQ) The Secrets Manager secret that stores your broker credentials.</p> </li> <li> <p> <code>VPC<em>SUBNET</code> - The subnets associated with your VPC. Lambda connects to these subnets to fetch data from your Kafka cluster.</p> </li> <li> <p> <code>VPC</em>SECURITY<em>GROUP</code> - The VPC security group used to manage access to your Kafka brokers.</p> </li> <li> <p> <code>SASL</em>SCRAM<em>256</em>AUTH</code> - The ARN of your secret key used for SASL SCRAM-256 authentication of your Kafka brokers.</p> </li> <li> <p> <code>SASL<em>SCRAM</em>512_AUTH</code> - The ARN of your secret key used for SASL SCRAM-512 authentication of your Kafka brokers.</p> </li> </ul></p>
+    /// <p><p>The type of authentication protocol or the VPC components for your event source. For example: <code>&quot;Type&quot;:&quot;SASL<em>SCRAM</em>512<em>AUTH&quot;</code>.</p> <ul> <li> <p> <code>BASIC</em>AUTH</code> - (MQ) The Secrets Manager secret that stores your broker credentials.</p> </li> <li> <p> <code>VPC<em>SUBNET</code> - The subnets associated with your VPC. Lambda connects to these subnets to fetch data from your Self-Managed Apache Kafka cluster.</p> </li> <li> <p> <code>VPC</em>SECURITY<em>GROUP</code> - The VPC security group used to manage access to your Self-Managed Apache Kafka brokers.</p> </li> <li> <p> <code>SASL</em>SCRAM<em>256</em>AUTH</code> - The Secrets Manager ARN of your secret key used for SASL SCRAM-256 authentication of your Self-Managed Apache Kafka brokers.</p> </li> <li> <p> <code>SASL<em>SCRAM</em>512_AUTH</code> - The Secrets Manager ARN of your secret key used for SASL SCRAM-512 authentication of your Self-Managed Apache Kafka brokers.</p> </li> </ul></p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -2202,7 +2202,7 @@ pub struct UpdateEventSourceMappingRequest {
     #[serde(rename = "SourceAccessConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_access_configurations: Option<Vec<SourceAccessConfiguration>>,
-    /// <p>(Streams) The duration of a processing window in seconds. The range is between 1 second up to 15 minutes.</p>
+    /// <p>(Streams) The duration in seconds of a processing window. The range is between 1 second up to 900 seconds.</p>
     #[serde(rename = "TumblingWindowInSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tumbling_window_in_seconds: Option<i64>,
@@ -2282,7 +2282,7 @@ pub struct UpdateFunctionConfigurationRequest {
     #[serde(rename = "Handler")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub handler: Option<String>,
-    /// <p>Configuration values that override the container image Dockerfile.</p>
+    /// <p> <a href="https://docs.aws.amazon.com/lambda/latest/dg/images-parms.html">Container image configuration values</a> that override the values in the container image Dockerfile.</p>
     #[serde(rename = "ImageConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_config: Option<ImageConfig>,
@@ -6158,7 +6158,7 @@ pub trait Lambda {
         RusotoError<ListFunctionEventInvokeConfigsError>,
     >;
 
-    /// <p>Returns a list of Lambda functions, with the version-specific configuration of each. Lambda returns up to 50 functions per call.</p> <p>Set <code>FunctionVersion</code> to <code>ALL</code> to include all published versions of each function in addition to the unpublished version. To get more information about a function or version, use <a>GetFunction</a>.</p>
+    /// <p><p>Returns a list of Lambda functions, with the version-specific configuration of each. Lambda returns up to 50 functions per call.</p> <p>Set <code>FunctionVersion</code> to <code>ALL</code> to include all published versions of each function in addition to the unpublished version. </p> <note> <p>The <code>ListFunctions</code> action returns a subset of the <a>FunctionConfiguration</a> fields. To get the additional fields (State, StateReasonCode, StateReason, LastUpdateStatus, LastUpdateStatusReason, LastUpdateStatusReasonCode) for a function or version, use <a>GetFunction</a>.</p> </note></p>
     async fn list_functions(
         &self,
         input: ListFunctionsRequest,
@@ -7571,7 +7571,7 @@ impl Lambda for LambdaClient {
         }
     }
 
-    /// <p>Returns a list of Lambda functions, with the version-specific configuration of each. Lambda returns up to 50 functions per call.</p> <p>Set <code>FunctionVersion</code> to <code>ALL</code> to include all published versions of each function in addition to the unpublished version. To get more information about a function or version, use <a>GetFunction</a>.</p>
+    /// <p><p>Returns a list of Lambda functions, with the version-specific configuration of each. Lambda returns up to 50 functions per call.</p> <p>Set <code>FunctionVersion</code> to <code>ALL</code> to include all published versions of each function in addition to the unpublished version. </p> <note> <p>The <code>ListFunctions</code> action returns a subset of the <a>FunctionConfiguration</a> fields. To get the additional fields (State, StateReasonCode, StateReason, LastUpdateStatus, LastUpdateStatusReason, LastUpdateStatusReasonCode) for a function or version, use <a>GetFunction</a>.</p> </note></p>
     #[allow(unused_mut)]
     async fn list_functions(
         &self,

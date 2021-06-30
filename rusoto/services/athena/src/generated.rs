@@ -163,7 +163,7 @@ pub struct CreateDataCatalogInput {
     /// <p>The name of the data catalog to create. The catalog name must be unique for the AWS account and can use a maximum of 128 alphanumeric, underscore, at sign, or hyphen characters.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p><p>Specifies the Lambda function or functions to use for creating the data catalog. This is a mapping whose values depend on the catalog type. </p> <ul> <li> <p>For the <code>HIVE</code> data catalog type, use the following syntax. The <code>metadata-function</code> parameter is required. <code>The sdk-version</code> parameter is optional and defaults to the currently supported version.</p> <p> <code>metadata-function=<i>lambda<em>arn</i>, sdk-version=<i>version</em>number</i> </code> </p> </li> <li> <p>For the <code>LAMBDA</code> data catalog type, use one of the following sets of required parameters, but not both.</p> <ul> <li> <p>If you have one Lambda function that processes metadata and another for reading the actual data, use the following syntax. Both parameters are required.</p> <p> <code>metadata-function=<i>lambda<em>arn</i>, record-function=<i>lambda</em>arn</i> </code> </p> </li> <li> <p> If you have a composite Lambda function that processes both metadata and data, use the following syntax to specify your Lambda function.</p> <p> <code>function=<i>lambda_arn</i> </code> </p> </li> </ul> </li> <li> <p>The <code>GLUE</code> type has no parameters.</p> </li> </ul></p>
+    /// <p><p>Specifies the Lambda function or functions to use for creating the data catalog. This is a mapping whose values depend on the catalog type. </p> <ul> <li> <p>For the <code>HIVE</code> data catalog type, use the following syntax. The <code>metadata-function</code> parameter is required. <code>The sdk-version</code> parameter is optional and defaults to the currently supported version.</p> <p> <code>metadata-function=<i>lambda<em>arn</i>, sdk-version=<i>version</em>number</i> </code> </p> </li> <li> <p>For the <code>LAMBDA</code> data catalog type, use one of the following sets of required parameters, but not both.</p> <ul> <li> <p>If you have one Lambda function that processes metadata and another for reading the actual data, use the following syntax. Both parameters are required.</p> <p> <code>metadata-function=<i>lambda<em>arn</i>, record-function=<i>lambda</em>arn</i> </code> </p> </li> <li> <p> If you have a composite Lambda function that processes both metadata and data, use the following syntax to specify your Lambda function.</p> <p> <code>function=<i>lambda_arn</i> </code> </p> </li> </ul> </li> </ul></p>
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
@@ -171,7 +171,7 @@ pub struct CreateDataCatalogInput {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>The type of data catalog to create: <code>LAMBDA</code> for a federated catalog, <code>GLUE</code> for AWS Glue Catalog, or <code>HIVE</code> for an external hive metastore.</p>
+    /// <p><p>The type of data catalog to create: <code>LAMBDA</code> for a federated catalog or <code>HIVE</code> for an external hive metastore.</p> <note> <p>Do not use the <code>GLUE</code> type. This refers to the <code>AwsDataCatalog</code> that already exists in your account, of which you can have only one. Specifying the <code>GLUE</code> type will result in an <code>INVALID_INPUT</code> error.</p> </note></p>
     #[serde(rename = "Type")]
     pub type_: String,
 }
@@ -217,6 +217,28 @@ pub struct CreateNamedQueryOutput {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreatePreparedStatementInput {
+    /// <p>The description of the prepared statement.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The query string for the prepared statement.</p>
+    #[serde(rename = "QueryStatement")]
+    pub query_statement: String,
+    /// <p>The name of the prepared statement.</p>
+    #[serde(rename = "StatementName")]
+    pub statement_name: String,
+    /// <p>The name of the workgroup to which the prepared statement belongs.</p>
+    #[serde(rename = "WorkGroup")]
+    pub work_group: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreatePreparedStatementOutput {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateWorkGroupInput {
     /// <p>The configuration for the workgroup, which includes the location in Amazon S3 where query results are stored, the encryption configuration, if any, used for encrypting query results, whether the Amazon CloudWatch Metrics are enabled for the workgroup, the limit for the amount of bytes scanned (cutoff) per query, if it is specified, and whether workgroup's settings (specified with EnforceWorkGroupConfiguration) in the WorkGroupConfiguration override client-side settings. See <a>WorkGroupConfiguration$EnforceWorkGroupConfiguration</a>.</p>
     #[serde(rename = "Configuration")]
@@ -250,11 +272,11 @@ pub struct DataCatalog {
     /// <p>The name of the data catalog. The catalog name must be unique for the AWS account and can use a maximum of 128 alphanumeric, underscore, at sign, or hyphen characters.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p><p>Specifies the Lambda function or functions to use for the data catalog. This is a mapping whose values depend on the catalog type. </p> <ul> <li> <p>For the <code>HIVE</code> data catalog type, use the following syntax. The <code>metadata-function</code> parameter is required. <code>The sdk-version</code> parameter is optional and defaults to the currently supported version.</p> <p> <code>metadata-function=<i>lambda<em>arn</i>, sdk-version=<i>version</em>number</i> </code> </p> </li> <li> <p>For the <code>LAMBDA</code> data catalog type, use one of the following sets of required parameters, but not both.</p> <ul> <li> <p>If you have one Lambda function that processes metadata and another for reading the actual data, use the following syntax. Both parameters are required.</p> <p> <code>metadata-function=<i>lambda<em>arn</i>, record-function=<i>lambda</em>arn</i> </code> </p> </li> <li> <p> If you have a composite Lambda function that processes both metadata and data, use the following syntax to specify your Lambda function.</p> <p> <code>function=<i>lambda_arn</i> </code> </p> </li> </ul> </li> <li> <p>The <code>GLUE</code> type has no parameters.</p> </li> </ul></p>
+    /// <p><p>Specifies the Lambda function or functions to use for the data catalog. This is a mapping whose values depend on the catalog type. </p> <ul> <li> <p>For the <code>HIVE</code> data catalog type, use the following syntax. The <code>metadata-function</code> parameter is required. <code>The sdk-version</code> parameter is optional and defaults to the currently supported version.</p> <p> <code>metadata-function=<i>lambda<em>arn</i>, sdk-version=<i>version</em>number</i> </code> </p> </li> <li> <p>For the <code>LAMBDA</code> data catalog type, use one of the following sets of required parameters, but not both.</p> <ul> <li> <p>If you have one Lambda function that processes metadata and another for reading the actual data, use the following syntax. Both parameters are required.</p> <p> <code>metadata-function=<i>lambda<em>arn</i>, record-function=<i>lambda</em>arn</i> </code> </p> </li> <li> <p> If you have a composite Lambda function that processes both metadata and data, use the following syntax to specify your Lambda function.</p> <p> <code>function=<i>lambda_arn</i> </code> </p> </li> </ul> </li> </ul></p>
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The type of data catalog: <code>LAMBDA</code> for a federated catalog, <code>GLUE</code> for AWS Glue Catalog, or <code>HIVE</code> for an external hive metastore.</p>
+    /// <p>The type of data catalog: <code>LAMBDA</code> for a federated catalog or <code>HIVE</code> for an external hive metastore. <code>GLUE</code> refers to the <code>AwsDataCatalog</code> that already exists in your account, of which you can have only one.</p>
     #[serde(rename = "Type")]
     pub type_: String,
 }
@@ -326,8 +348,23 @@ pub struct DeleteNamedQueryOutput {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeletePreparedStatementInput {
+    /// <p>The name of the prepared statement to delete.</p>
+    #[serde(rename = "StatementName")]
+    pub statement_name: String,
+    /// <p>The workgroup to which the statement to be deleted belongs.</p>
+    #[serde(rename = "WorkGroup")]
+    pub work_group: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeletePreparedStatementOutput {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteWorkGroupInput {
-    /// <p>The option to delete the workgroup and its contents even if the workgroup contains any named queries.</p>
+    /// <p>The option to delete the workgroup and its contents even if the workgroup contains any named queries or query executions.</p>
     #[serde(rename = "RecursiveDeleteOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recursive_delete_option: Option<bool>,
@@ -350,6 +387,19 @@ pub struct EncryptionConfiguration {
     #[serde(rename = "KmsKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key: Option<String>,
+}
+
+/// <p>The Athena engine version for running queries.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct EngineVersion {
+    /// <p>Read only. The engine version on which the query runs. If the user requests a valid engine version other than Auto, the effective engine version is the same as the engine version that the user requested. If the user requests Auto, the effective engine version is chosen by Athena. When a request to update the engine version is made by a <code>CreateWorkGroup</code> or <code>UpdateWorkGroup</code> operation, the <code>EffectiveEngineVersion</code> field is ignored.</p>
+    #[serde(rename = "EffectiveEngineVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub effective_engine_version: Option<String>,
+    /// <p>The engine version requested by the user. Possible values are determined by the output of <code>ListEngineVersions</code>, including Auto. The default is Auto.</p>
+    #[serde(rename = "SelectedEngineVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub selected_engine_version: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -404,6 +454,26 @@ pub struct GetNamedQueryOutput {
     #[serde(rename = "NamedQuery")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub named_query: Option<NamedQuery>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetPreparedStatementInput {
+    /// <p>The name of the prepared statement to retrieve.</p>
+    #[serde(rename = "StatementName")]
+    pub statement_name: String,
+    /// <p>The workgroup to which the statement to be retrieved belongs.</p>
+    #[serde(rename = "WorkGroup")]
+    pub work_group: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetPreparedStatementOutput {
+    /// <p>The name of the prepared statement that was retrieved.</p>
+    #[serde(rename = "PreparedStatement")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prepared_statement: Option<PreparedStatement>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -553,6 +623,32 @@ pub struct ListDatabasesOutput {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListEngineVersionsInput {
+    /// <p>The maximum number of engine versions to return in this request.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the <code>NextToken</code> from the response object of the previous page call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListEngineVersionsOutput {
+    /// <p>A list of engine versions that are available to choose from.</p>
+    #[serde(rename = "EngineVersions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_versions: Option<Vec<EngineVersion>>,
+    /// <p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the <code>NextToken</code> from the response object of the previous page call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListNamedQueriesInput {
     /// <p>The maximum number of queries to return in this request.</p>
     #[serde(rename = "MaxResults")]
@@ -579,6 +675,35 @@ pub struct ListNamedQueriesOutput {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListPreparedStatementsInput {
+    /// <p>The maximum number of results to return in this request.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the <code>NextToken</code> from the response object of the previous page call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The workgroup to list the prepared statements for.</p>
+    #[serde(rename = "WorkGroup")]
+    pub work_group: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListPreparedStatementsOutput {
+    /// <p>A token generated by the Athena service that specifies where to continue pagination if a previous request was truncated. To obtain the next set of pages, pass in the <code>NextToken</code> from the response object of the previous page call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The list of prepared statements for the workgroup.</p>
+    #[serde(rename = "PreparedStatements")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prepared_statements: Option<Vec<PreparedStatementSummary>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -696,7 +821,7 @@ pub struct ListWorkGroupsOutput {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The list of workgroups, including their names, descriptions, creation times, and states.</p>
+    /// <p>A list of <a>WorkGroupSummary</a> objects that include the names, descriptions, creation times, and states for each workgroup.</p>
     #[serde(rename = "WorkGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub work_groups: Option<Vec<WorkGroupSummary>>,
@@ -729,10 +854,54 @@ pub struct NamedQuery {
     pub work_group: Option<String>,
 }
 
+/// <p>A prepared SQL statement for use with Athena.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PreparedStatement {
+    /// <p>The description of the prepared statement.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The last modified time of the prepared statement.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The query string for the prepared statement.</p>
+    #[serde(rename = "QueryStatement")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_statement: Option<String>,
+    /// <p>The name of the prepared statement.</p>
+    #[serde(rename = "StatementName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub statement_name: Option<String>,
+    /// <p>The name of the workgroup to which the prepared statement belongs.</p>
+    #[serde(rename = "WorkGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub work_group_name: Option<String>,
+}
+
+/// <p>The name and last modified time of the prepared statement.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PreparedStatementSummary {
+    /// <p>The last modified time of the prepared statement.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The name of the prepared statement.</p>
+    #[serde(rename = "StatementName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub statement_name: Option<String>,
+}
+
 /// <p>Information about a single instance of a query execution.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QueryExecution {
+    /// <p>The engine version that executed the query.</p>
+    #[serde(rename = "EngineVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_version: Option<EngineVersion>,
     /// <p>The SQL query statements which the query execution ran.</p>
     #[serde(rename = "Query")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1072,11 +1241,11 @@ pub struct UpdateDataCatalogInput {
     /// <p>The name of the data catalog to update. The catalog name must be unique for the AWS account and can use a maximum of 128 alphanumeric, underscore, at sign, or hyphen characters.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p><p>Specifies the Lambda function or functions to use for updating the data catalog. This is a mapping whose values depend on the catalog type. </p> <ul> <li> <p>For the <code>HIVE</code> data catalog type, use the following syntax. The <code>metadata-function</code> parameter is required. <code>The sdk-version</code> parameter is optional and defaults to the currently supported version.</p> <p> <code>metadata-function=<i>lambda<em>arn</i>, sdk-version=<i>version</em>number</i> </code> </p> </li> <li> <p>For the <code>LAMBDA</code> data catalog type, use one of the following sets of required parameters, but not both.</p> <ul> <li> <p>If you have one Lambda function that processes metadata and another for reading the actual data, use the following syntax. Both parameters are required.</p> <p> <code>metadata-function=<i>lambda<em>arn</i>, record-function=<i>lambda</em>arn</i> </code> </p> </li> <li> <p> If you have a composite Lambda function that processes both metadata and data, use the following syntax to specify your Lambda function.</p> <p> <code>function=<i>lambda_arn</i> </code> </p> </li> </ul> </li> <li> <p>The <code>GLUE</code> type has no parameters.</p> </li> </ul></p>
+    /// <p><p>Specifies the Lambda function or functions to use for updating the data catalog. This is a mapping whose values depend on the catalog type. </p> <ul> <li> <p>For the <code>HIVE</code> data catalog type, use the following syntax. The <code>metadata-function</code> parameter is required. <code>The sdk-version</code> parameter is optional and defaults to the currently supported version.</p> <p> <code>metadata-function=<i>lambda<em>arn</i>, sdk-version=<i>version</em>number</i> </code> </p> </li> <li> <p>For the <code>LAMBDA</code> data catalog type, use one of the following sets of required parameters, but not both.</p> <ul> <li> <p>If you have one Lambda function that processes metadata and another for reading the actual data, use the following syntax. Both parameters are required.</p> <p> <code>metadata-function=<i>lambda<em>arn</i>, record-function=<i>lambda</em>arn</i> </code> </p> </li> <li> <p> If you have a composite Lambda function that processes both metadata and data, use the following syntax to specify your Lambda function.</p> <p> <code>function=<i>lambda_arn</i> </code> </p> </li> </ul> </li> </ul></p>
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Specifies the type of data catalog to update. Specify <code>LAMBDA</code> for a federated catalog, <code>GLUE</code> for AWS Glue Catalog, or <code>HIVE</code> for an external hive metastore.</p>
+    /// <p><p>Specifies the type of data catalog to update. Specify <code>LAMBDA</code> for a federated catalog or <code>HIVE</code> for an external hive metastore.</p> <note> <p>Do not use the <code>GLUE</code> type. This refers to the <code>AwsDataCatalog</code> that already exists in your account, of which you can have only one. Specifying the <code>GLUE</code> type will result in an <code>INVALID_INPUT</code> error.</p> </note></p>
     #[serde(rename = "Type")]
     pub type_: String,
 }
@@ -1084,6 +1253,28 @@ pub struct UpdateDataCatalogInput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDataCatalogOutput {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdatePreparedStatementInput {
+    /// <p>The description of the prepared statement.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The query string for the prepared statement.</p>
+    #[serde(rename = "QueryStatement")]
+    pub query_statement: String,
+    /// <p>The name of the prepared statement.</p>
+    #[serde(rename = "StatementName")]
+    pub statement_name: String,
+    /// <p>The workgroup for the prepared statement.</p>
+    #[serde(rename = "WorkGroup")]
+    pub work_group: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdatePreparedStatementOutput {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1145,6 +1336,10 @@ pub struct WorkGroupConfiguration {
     #[serde(rename = "EnforceWorkGroupConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enforce_work_group_configuration: Option<bool>,
+    /// <p>The engine version that all queries running on the workgroup use. Queries on the <code>AmazonAthenaPreviewFunctionality</code> workgroup run on the preview engine regardless of this setting.</p>
+    #[serde(rename = "EngineVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_version: Option<EngineVersion>,
     /// <p>Indicates that the Amazon CloudWatch metrics are enabled for the workgroup.</p>
     #[serde(rename = "PublishCloudWatchMetricsEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1171,6 +1366,10 @@ pub struct WorkGroupConfigurationUpdates {
     #[serde(rename = "EnforceWorkGroupConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enforce_work_group_configuration: Option<bool>,
+    /// <p>The engine version requested when a workgroup is updated. After the update, all queries on the workgroup run on the requested engine version. If no value was previously set, the default is Auto. Queries on the <code>AmazonAthenaPreviewFunctionality</code> workgroup run on the preview engine regardless of this setting.</p>
+    #[serde(rename = "EngineVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_version: Option<EngineVersion>,
     /// <p>Indicates whether this workgroup enables publishing metrics to Amazon CloudWatch.</p>
     #[serde(rename = "PublishCloudWatchMetricsEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1201,6 +1400,10 @@ pub struct WorkGroupSummary {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>The engine version setting for all queries on the workgroup. Queries on the <code>AmazonAthenaPreviewFunctionality</code> workgroup run on the preview engine regardless of this setting.</p>
+    #[serde(rename = "EngineVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_version: Option<EngineVersion>,
     /// <p>The name of the workgroup.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1359,6 +1562,46 @@ impl fmt::Display for CreateNamedQueryError {
     }
 }
 impl Error for CreateNamedQueryError {}
+/// Errors returned by CreatePreparedStatement
+#[derive(Debug, PartialEq)]
+pub enum CreatePreparedStatementError {
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    InternalServer(String),
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    InvalidRequest(String),
+}
+
+impl CreatePreparedStatementError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePreparedStatementError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(CreatePreparedStatementError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(CreatePreparedStatementError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreatePreparedStatementError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreatePreparedStatementError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CreatePreparedStatementError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreatePreparedStatementError {}
 /// Errors returned by CreateWorkGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateWorkGroupError {
@@ -1467,6 +1710,54 @@ impl fmt::Display for DeleteNamedQueryError {
     }
 }
 impl Error for DeleteNamedQueryError {}
+/// Errors returned by DeletePreparedStatement
+#[derive(Debug, PartialEq)]
+pub enum DeletePreparedStatementError {
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    InternalServer(String),
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    InvalidRequest(String),
+    /// <p>A resource, such as a workgroup, was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeletePreparedStatementError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePreparedStatementError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(DeletePreparedStatementError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DeletePreparedStatementError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeletePreparedStatementError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeletePreparedStatementError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeletePreparedStatementError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeletePreparedStatementError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeletePreparedStatementError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeletePreparedStatementError {}
 /// Errors returned by DeleteWorkGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteWorkGroupError {
@@ -1617,6 +1908,50 @@ impl fmt::Display for GetNamedQueryError {
     }
 }
 impl Error for GetNamedQueryError {}
+/// Errors returned by GetPreparedStatement
+#[derive(Debug, PartialEq)]
+pub enum GetPreparedStatementError {
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    InternalServer(String),
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    InvalidRequest(String),
+    /// <p>A resource, such as a workgroup, was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl GetPreparedStatementError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetPreparedStatementError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(GetPreparedStatementError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(GetPreparedStatementError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetPreparedStatementError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetPreparedStatementError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetPreparedStatementError::InternalServer(ref cause) => write!(f, "{}", cause),
+            GetPreparedStatementError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            GetPreparedStatementError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetPreparedStatementError {}
 /// Errors returned by GetQueryExecution
 #[derive(Debug, PartialEq)]
 pub enum GetQueryExecutionError {
@@ -1845,6 +2180,42 @@ impl fmt::Display for ListDatabasesError {
     }
 }
 impl Error for ListDatabasesError {}
+/// Errors returned by ListEngineVersions
+#[derive(Debug, PartialEq)]
+pub enum ListEngineVersionsError {
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    InternalServer(String),
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    InvalidRequest(String),
+}
+
+impl ListEngineVersionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListEngineVersionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(ListEngineVersionsError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListEngineVersionsError::InvalidRequest(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListEngineVersionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListEngineVersionsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListEngineVersionsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListEngineVersionsError {}
 /// Errors returned by ListNamedQueries
 #[derive(Debug, PartialEq)]
 pub enum ListNamedQueriesError {
@@ -1881,6 +2252,46 @@ impl fmt::Display for ListNamedQueriesError {
     }
 }
 impl Error for ListNamedQueriesError {}
+/// Errors returned by ListPreparedStatements
+#[derive(Debug, PartialEq)]
+pub enum ListPreparedStatementsError {
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    InternalServer(String),
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    InvalidRequest(String),
+}
+
+impl ListPreparedStatementsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListPreparedStatementsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(ListPreparedStatementsError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListPreparedStatementsError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListPreparedStatementsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListPreparedStatementsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListPreparedStatementsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListPreparedStatementsError {}
 /// Errors returned by ListQueryExecutions
 #[derive(Debug, PartialEq)]
 pub enum ListQueryExecutionsError {
@@ -2237,6 +2648,54 @@ impl fmt::Display for UpdateDataCatalogError {
     }
 }
 impl Error for UpdateDataCatalogError {}
+/// Errors returned by UpdatePreparedStatement
+#[derive(Debug, PartialEq)]
+pub enum UpdatePreparedStatementError {
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    InternalServer(String),
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    InvalidRequest(String),
+    /// <p>A resource, such as a workgroup, was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl UpdatePreparedStatementError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePreparedStatementError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(UpdatePreparedStatementError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdatePreparedStatementError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdatePreparedStatementError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdatePreparedStatementError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdatePreparedStatementError::InternalServer(ref cause) => write!(f, "{}", cause),
+            UpdatePreparedStatementError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdatePreparedStatementError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdatePreparedStatementError {}
 /// Errors returned by UpdateWorkGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateWorkGroupError {
@@ -2300,6 +2759,12 @@ pub trait Athena {
         input: CreateNamedQueryInput,
     ) -> Result<CreateNamedQueryOutput, RusotoError<CreateNamedQueryError>>;
 
+    /// <p>Creates a prepared statement for use with SQL queries in Athena.</p>
+    async fn create_prepared_statement(
+        &self,
+        input: CreatePreparedStatementInput,
+    ) -> Result<CreatePreparedStatementOutput, RusotoError<CreatePreparedStatementError>>;
+
     /// <p>Creates a workgroup with the specified name.</p>
     async fn create_work_group(
         &self,
@@ -2318,6 +2783,12 @@ pub trait Athena {
         input: DeleteNamedQueryInput,
     ) -> Result<DeleteNamedQueryOutput, RusotoError<DeleteNamedQueryError>>;
 
+    /// <p>Deletes the prepared statement with the specified name from the specified workgroup.</p>
+    async fn delete_prepared_statement(
+        &self,
+        input: DeletePreparedStatementInput,
+    ) -> Result<DeletePreparedStatementOutput, RusotoError<DeletePreparedStatementError>>;
+
     /// <p>Deletes the workgroup with the specified name. The primary workgroup cannot be deleted.</p>
     async fn delete_work_group(
         &self,
@@ -2330,7 +2801,7 @@ pub trait Athena {
         input: GetDataCatalogInput,
     ) -> Result<GetDataCatalogOutput, RusotoError<GetDataCatalogError>>;
 
-    /// <p>Returns a database object for the specfied database and data catalog.</p>
+    /// <p>Returns a database object for the specified database and data catalog.</p>
     async fn get_database(
         &self,
         input: GetDatabaseInput,
@@ -2341,6 +2812,12 @@ pub trait Athena {
         &self,
         input: GetNamedQueryInput,
     ) -> Result<GetNamedQueryOutput, RusotoError<GetNamedQueryError>>;
+
+    /// <p>Retrieves the prepared statement with the specified name from the specified workgroup.</p>
+    async fn get_prepared_statement(
+        &self,
+        input: GetPreparedStatementInput,
+    ) -> Result<GetPreparedStatementOutput, RusotoError<GetPreparedStatementError>>;
 
     /// <p>Returns information about a single execution of a query if you have access to the workgroup in which the query ran. Each time a query executes, information about the query execution is saved with a unique ID.</p>
     async fn get_query_execution(
@@ -2378,11 +2855,23 @@ pub trait Athena {
         input: ListDatabasesInput,
     ) -> Result<ListDatabasesOutput, RusotoError<ListDatabasesError>>;
 
+    /// <p>Returns a list of engine versions that are available to choose from, including the Auto option.</p>
+    async fn list_engine_versions(
+        &self,
+        input: ListEngineVersionsInput,
+    ) -> Result<ListEngineVersionsOutput, RusotoError<ListEngineVersionsError>>;
+
     /// <p>Provides a list of available query IDs only for queries saved in the specified workgroup. Requires that you have access to the specified workgroup. If a workgroup is not specified, lists the saved queries for the primary workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     async fn list_named_queries(
         &self,
         input: ListNamedQueriesInput,
     ) -> Result<ListNamedQueriesOutput, RusotoError<ListNamedQueriesError>>;
+
+    /// <p>Lists the prepared statements in the specfied workgroup.</p>
+    async fn list_prepared_statements(
+        &self,
+        input: ListPreparedStatementsInput,
+    ) -> Result<ListPreparedStatementsOutput, RusotoError<ListPreparedStatementsError>>;
 
     /// <p>Provides a list of available query execution IDs for the queries in the specified workgroup. If a workgroup is not specified, returns a list of query execution IDs for the primary workgroup. Requires you to have access to the workgroup in which the queries ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     async fn list_query_executions(
@@ -2437,6 +2926,12 @@ pub trait Athena {
         &self,
         input: UpdateDataCatalogInput,
     ) -> Result<UpdateDataCatalogOutput, RusotoError<UpdateDataCatalogError>>;
+
+    /// <p>Updates a prepared statement.</p>
+    async fn update_prepared_statement(
+        &self,
+        input: UpdatePreparedStatementInput,
+    ) -> Result<UpdatePreparedStatementOutput, RusotoError<UpdatePreparedStatementError>>;
 
     /// <p>Updates the workgroup with the specified name. The workgroup's name cannot be changed.</p>
     async fn update_work_group(
@@ -2557,6 +3052,25 @@ impl Athena for AthenaClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateNamedQueryOutput, _>()
     }
 
+    /// <p>Creates a prepared statement for use with SQL queries in Athena.</p>
+    async fn create_prepared_statement(
+        &self,
+        input: CreatePreparedStatementInput,
+    ) -> Result<CreatePreparedStatementOutput, RusotoError<CreatePreparedStatementError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonAthena.CreatePreparedStatement");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreatePreparedStatementError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreatePreparedStatementOutput, _>()
+    }
+
     /// <p>Creates a workgroup with the specified name.</p>
     async fn create_work_group(
         &self,
@@ -2611,6 +3125,25 @@ impl Athena for AthenaClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteNamedQueryOutput, _>()
     }
 
+    /// <p>Deletes the prepared statement with the specified name from the specified workgroup.</p>
+    async fn delete_prepared_statement(
+        &self,
+        input: DeletePreparedStatementInput,
+    ) -> Result<DeletePreparedStatementOutput, RusotoError<DeletePreparedStatementError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonAthena.DeletePreparedStatement");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeletePreparedStatementError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeletePreparedStatementOutput, _>()
+    }
+
     /// <p>Deletes the workgroup with the specified name. The primary workgroup cannot be deleted.</p>
     async fn delete_work_group(
         &self,
@@ -2647,7 +3180,7 @@ impl Athena for AthenaClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetDataCatalogOutput, _>()
     }
 
-    /// <p>Returns a database object for the specfied database and data catalog.</p>
+    /// <p>Returns a database object for the specified database and data catalog.</p>
     async fn get_database(
         &self,
         input: GetDatabaseInput,
@@ -2681,6 +3214,24 @@ impl Athena for AthenaClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<GetNamedQueryOutput, _>()
+    }
+
+    /// <p>Retrieves the prepared statement with the specified name from the specified workgroup.</p>
+    async fn get_prepared_statement(
+        &self,
+        input: GetPreparedStatementInput,
+    ) -> Result<GetPreparedStatementOutput, RusotoError<GetPreparedStatementError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonAthena.GetPreparedStatement");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetPreparedStatementError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetPreparedStatementOutput, _>()
     }
 
     /// <p>Returns information about a single execution of a query if you have access to the workgroup in which the query ran. Each time a query executes, information about the query execution is saved with a unique ID.</p>
@@ -2791,6 +3342,24 @@ impl Athena for AthenaClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListDatabasesOutput, _>()
     }
 
+    /// <p>Returns a list of engine versions that are available to choose from, including the Auto option.</p>
+    async fn list_engine_versions(
+        &self,
+        input: ListEngineVersionsInput,
+    ) -> Result<ListEngineVersionsOutput, RusotoError<ListEngineVersionsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonAthena.ListEngineVersions");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListEngineVersionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListEngineVersionsOutput, _>()
+    }
+
     /// <p>Provides a list of available query IDs only for queries saved in the specified workgroup. Requires that you have access to the specified workgroup. If a workgroup is not specified, lists the saved queries for the primary workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     async fn list_named_queries(
         &self,
@@ -2807,6 +3376,25 @@ impl Athena for AthenaClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListNamedQueriesOutput, _>()
+    }
+
+    /// <p>Lists the prepared statements in the specfied workgroup.</p>
+    async fn list_prepared_statements(
+        &self,
+        input: ListPreparedStatementsInput,
+    ) -> Result<ListPreparedStatementsOutput, RusotoError<ListPreparedStatementsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonAthena.ListPreparedStatements");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListPreparedStatementsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListPreparedStatementsOutput, _>()
     }
 
     /// <p>Provides a list of available query execution IDs for the queries in the specified workgroup. If a workgroup is not specified, returns a list of query execution IDs for the primary workgroup. Requires you to have access to the workgroup in which the queries ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
@@ -2969,6 +3557,25 @@ impl Athena for AthenaClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateDataCatalogOutput, _>()
+    }
+
+    /// <p>Updates a prepared statement.</p>
+    async fn update_prepared_statement(
+        &self,
+        input: UpdatePreparedStatementInput,
+    ) -> Result<UpdatePreparedStatementOutput, RusotoError<UpdatePreparedStatementError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonAthena.UpdatePreparedStatement");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdatePreparedStatementError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdatePreparedStatementOutput, _>()
     }
 
     /// <p>Updates the workgroup with the specified name. The workgroup's name cannot be changed.</p>

@@ -165,6 +165,54 @@ pub struct DimensionKeyDescription {
     pub total: Option<f64>,
 }
 
+/// <p>An object that describes the details for a specified dimension.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DimensionKeyDetail {
+    /// <p>The full name of the dimension. The full name includes the group name and key name. The only valid value is <code>db.sql.statement</code>. </p>
+    #[serde(rename = "Dimension")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dimension: Option<String>,
+    /// <p><p>The status of the dimension detail data. Possible values include the following:</p> <ul> <li> <p> <code>AVAILABLE</code> - The dimension detail data is ready to be retrieved.</p> </li> <li> <p> <code>PROCESSING</code> - The dimension detail data isn&#39;t ready to be retrieved because more processing time is required. If the requested detail data for <code>db.sql.statement</code> has the status <code>PROCESSING</code>, Performance Insights returns the truncated query.</p> </li> <li> <p> <code>UNAVAILABLE</code> - The dimension detail data could not be collected successfully.</p> </li> </ul></p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The value of the dimension detail data. For the <code>db.sql.statement</code> dimension, this value is either the full or truncated SQL query, depending on the return status.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetDimensionKeyDetailsRequest {
+    /// <p>The name of the dimension group. The only valid value is <code>db.sql</code>. Performance Insights searches the specified group for the dimension group ID.</p>
+    #[serde(rename = "Group")]
+    pub group: String,
+    /// <p>The ID of the dimension group from which to retrieve dimension details. For dimension group <code>db.sql</code>, the group ID is <code>db.sql.id</code>.</p>
+    #[serde(rename = "GroupIdentifier")]
+    pub group_identifier: String,
+    /// <p>The ID for a data source from which to gather dimension data. This ID must be immutable and unique within an AWS Region. When a DB instance is the data source, specify its <code>DbiResourceId</code> value. For example, specify <code>db-ABCDEFGHIJKLMNOPQRSTU1VW2X</code>. </p>
+    #[serde(rename = "Identifier")]
+    pub identifier: String,
+    /// <p>A list of dimensions to retrieve the detail data for within the given dimension group. For the dimension group <code>db.sql</code>, specify either the full dimension name <code>db.sql.statement</code> or the short dimension name <code>statement</code>. If you don't specify this parameter, Performance Insights returns all dimension data within the specified dimension group.</p>
+    #[serde(rename = "RequestedDimensions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub requested_dimensions: Option<Vec<String>>,
+    /// <p>The AWS service for which Performance Insights returns data. The only valid value is <code>RDS</code>.</p>
+    #[serde(rename = "ServiceType")]
+    pub service_type: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetDimensionKeyDetailsResponse {
+    /// <p>The details for the requested dimensions.</p>
+    #[serde(rename = "Dimensions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dimensions: Option<Vec<DimensionKeyDetail>>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetResourceMetricsRequest {
@@ -321,6 +369,54 @@ impl fmt::Display for DescribeDimensionKeysError {
     }
 }
 impl Error for DescribeDimensionKeysError {}
+/// Errors returned by GetDimensionKeyDetails
+#[derive(Debug, PartialEq)]
+pub enum GetDimensionKeyDetailsError {
+    /// <p>The request failed due to an unknown error.</p>
+    InternalServiceError(String),
+    /// <p>One of the arguments provided is invalid for this request.</p>
+    InvalidArgument(String),
+    /// <p>The user is not authorized to perform this request.</p>
+    NotAuthorized(String),
+}
+
+impl GetDimensionKeyDetailsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetDimensionKeyDetailsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServiceError" => {
+                    return RusotoError::Service(GetDimensionKeyDetailsError::InternalServiceError(
+                        err.msg,
+                    ))
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(GetDimensionKeyDetailsError::InvalidArgument(
+                        err.msg,
+                    ))
+                }
+                "NotAuthorizedException" => {
+                    return RusotoError::Service(GetDimensionKeyDetailsError::NotAuthorized(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetDimensionKeyDetailsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetDimensionKeyDetailsError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            GetDimensionKeyDetailsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            GetDimensionKeyDetailsError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetDimensionKeyDetailsError {}
 /// Errors returned by GetResourceMetrics
 #[derive(Debug, PartialEq)]
 pub enum GetResourceMetricsError {
@@ -373,6 +469,12 @@ pub trait PerformanceInsights {
         &self,
         input: DescribeDimensionKeysRequest,
     ) -> Result<DescribeDimensionKeysResponse, RusotoError<DescribeDimensionKeysError>>;
+
+    /// <p>Get the attributes of the specified dimension group for a DB instance or data source. For example, if you specify a SQL ID, <code>GetDimensionKeyDetails</code> retrieves the full text of the dimension <code>db.sql.statement</code> associated with this ID. This operation is useful because <code>GetResourceMetrics</code> and <code>DescribeDimensionKeys</code> don't support retrieval of large SQL statement text.</p>
+    async fn get_dimension_key_details(
+        &self,
+        input: GetDimensionKeyDetailsRequest,
+    ) -> Result<GetDimensionKeyDetailsResponse, RusotoError<GetDimensionKeyDetailsError>>;
 
     /// <p><p>Retrieve Performance Insights metrics for a set of data sources, over a time period. You can provide specific dimension groups and dimensions, and provide aggregation and filtering criteria for each group.</p> <note> <p>Each response element returns a maximum of 500 bytes. For larger elements, such as SQL statements, only the first 500 bytes are returned.</p> </note></p>
     async fn get_resource_metrics(
@@ -440,6 +542,28 @@ impl PerformanceInsights for PerformanceInsightsClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<DescribeDimensionKeysResponse, _>()
+    }
+
+    /// <p>Get the attributes of the specified dimension group for a DB instance or data source. For example, if you specify a SQL ID, <code>GetDimensionKeyDetails</code> retrieves the full text of the dimension <code>db.sql.statement</code> associated with this ID. This operation is useful because <code>GetResourceMetrics</code> and <code>DescribeDimensionKeys</code> don't support retrieval of large SQL statement text.</p>
+    async fn get_dimension_key_details(
+        &self,
+        input: GetDimensionKeyDetailsRequest,
+    ) -> Result<GetDimensionKeyDetailsResponse, RusotoError<GetDimensionKeyDetailsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "PerformanceInsightsv20180227.GetDimensionKeyDetails",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetDimensionKeyDetailsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetDimensionKeyDetailsResponse, _>()
     }
 
     /// <p><p>Retrieve Performance Insights metrics for a set of data sources, over a time period. You can provide specific dimension groups and dimensions, and provide aggregation and filtering criteria for each group.</p> <note> <p>Each response element returns a maximum of 500 bytes. For larger elements, such as SQL statements, only the first 500 bytes are returned.</p> </note></p>

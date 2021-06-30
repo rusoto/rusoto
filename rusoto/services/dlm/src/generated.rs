@@ -81,6 +81,10 @@ pub struct CreateRule {
     #[serde(rename = "IntervalUnit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub interval_unit: Option<String>,
+    /// <p>Specifies the destination for snapshots created by the policy. To create snapshots in the same Region as the source resource, specify <code>CLOUD</code>. To create snapshots on the same Outpost as the source resource, specify <code>OUTPOST_LOCAL</code>. If you omit this parameter, <code>CLOUD</code> is used by default.</p> <p>If the policy targets resources in an AWS Region, then you must create snapshots in the same Region as the source resource. </p> <p>If the policy targets resources on an Outpost, then you can create snapshots on the same Outpost as the source resource, or in the Region of that Outpost.</p>
+    #[serde(rename = "Location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location: Option<String>,
     /// <p>The time, in UTC, to start the operation. The supported format is hh:mm.</p> <p>The operation occurs within a one-hour window following the specified time. If you do not specify a time, Amazon DLM selects a time within the next 24 hours.</p>
     #[serde(rename = "Times")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -132,9 +136,14 @@ pub struct CrossRegionCopyRule {
     #[serde(rename = "RetainRule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retain_rule: Option<CrossRegionCopyRetainRule>,
-    /// <p>The target Region.</p>
+    /// <p>The Amazon Resource Name (ARN) of the target AWS Outpost for the snapshot copies.</p> <p>If you specify an ARN, you must omit <b>TargetRegion</b>. You cannot specify a target Region and a target Outpost in the same rule.</p>
+    #[serde(rename = "Target")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target: Option<String>,
+    /// <p>The target Region for the snapshot copies.</p> <p>If you specify a target Region, you must omit <b>Target</b>. You cannot specify a target Region and a target Outpost in the same rule.</p>
     #[serde(rename = "TargetRegion")]
-    pub target_region: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_region: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -379,6 +388,10 @@ pub struct PolicyDetails {
     #[serde(rename = "PolicyType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_type: Option<String>,
+    /// <p>The location of the resources to backup. If the source resources are located in an AWS Region, specify <code>CLOUD</code>. If the source resources are located on an AWS Outpost in your account, specify <code>OUTPOST</code>. </p> <p>If you specify <code>OUTPOST</code>, Amazon Data Lifecycle Manager backs up all resources of the specified type with matching target tags across all of the Outposts in your account.</p>
+    #[serde(rename = "ResourceLocations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_locations: Option<Vec<String>>,
     /// <p>The target resource type for snapshot and AMI lifecycle policies. Use <code>VOLUME </code>to create snapshots of individual volumes or use <code>INSTANCE</code> to create multi-volume snapshots from the volumes for an instance.</p> <p>This parameter is required for snapshot and AMI policies only. If you are creating an event-based policy, omit this parameter.</p>
     #[serde(rename = "ResourceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -421,7 +434,7 @@ pub struct Schedule {
     #[serde(rename = "CreateRule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_rule: Option<CreateRule>,
-    /// <p>The rule for cross-Region snapshot copies.</p>
+    /// <p>The rule for cross-Region snapshot copies.</p> <p>You can only specify cross-Region copy rules for policies that create snapshots in a Region. If the policy creates snapshots on an Outpost, then you cannot copy the snapshots to a Region or to an Outpost. If the policy creates snapshots in a Region, then snapshots can be copied to up to three Regions or Outposts.</p>
     #[serde(rename = "CrossRegionCopyRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cross_region_copy_rules: Option<Vec<CrossRegionCopyRule>>,

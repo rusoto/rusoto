@@ -131,6 +131,10 @@ pub struct ReportDefinition {
     /// <p>A list of strings that indicate additional content that Amazon Web Services includes in the report, such as individual resource IDs. </p>
     #[serde(rename = "AdditionalSchemaElements")]
     pub additional_schema_elements: Vec<String>,
+    /// <p> The Amazon resource name of the billing view. You can get this value by using the billing view service public APIs. </p>
+    #[serde(rename = "BillingViewArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_view_arn: Option<String>,
     #[serde(rename = "Compression")]
     pub compression: String,
     #[serde(rename = "Format")]

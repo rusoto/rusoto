@@ -413,12 +413,14 @@ impl BooleanSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CacheBehavior {
     pub allowed_methods: Option<AllowedMethods>,
-    /// <p>The unique identifier of the cache policy that is attached to this cache behavior. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html#cache-key-create-cache-policy">Creating cache policies</a> or <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-cache-policies.html">Using the managed cache policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    /// <p>The unique identifier of the cache policy that is attached to this cache behavior. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html#cache-key-create-cache-policy">Creating cache policies</a> or <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-cache-policies.html">Using the managed cache policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>A <code>CacheBehavior</code> must include either a <code>CachePolicyId</code> or <code>ForwardedValues</code>. We recommend that you use a <code>CachePolicyId</code>.</p>
     pub cache_policy_id: Option<String>,
     /// <p>Whether you want CloudFront to automatically compress certain files for this cache behavior. If so, specify true; if not, specify false. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html">Serving Compressed Files</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub compress: Option<bool>,
     /// <p>The value of <code>ID</code> for the field-level encryption configuration that you want CloudFront to use for encrypting specific fields of data for this cache behavior.</p>
     pub field_level_encryption_id: Option<String>,
+    /// <p>A list of CloudFront functions that are associated with this cache behavior. CloudFront functions must be published to the <code>LIVE</code> stage to associate them with a cache behavior.</p>
+    pub function_associations: Option<FunctionAssociations>,
     /// <p>A complex type that contains zero or more Lambda function associations for a cache behavior.</p>
     pub lambda_function_associations: Option<LambdaFunctionAssociations>,
     /// <p>The unique identifier of the origin request policy that is attached to this cache behavior. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-origin-requests.html#origin-request-create-origin-request-policy">Creating origin request policies</a> or <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-origin-request-policies.html">Using the managed origin request policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
@@ -467,6 +469,13 @@ impl CacheBehaviorDeserializer {
                         "FieldLevelEncryptionId",
                         stack,
                     )?);
+                }
+                "FunctionAssociations" => {
+                    obj.function_associations =
+                        Some(FunctionAssociationsDeserializer::deserialize(
+                            "FunctionAssociations",
+                            stack,
+                        )?);
                 }
                 "LambdaFunctionAssociations" => {
                     obj.lambda_function_associations =
@@ -546,6 +555,9 @@ impl CacheBehaviorSerializer {
         }
         if let Some(ref value) = obj.field_level_encryption_id {
             write_characters_element(writer, "FieldLevelEncryptionId", &value)?;
+        }
+        if let Some(ref value) = obj.function_associations {
+            &FunctionAssociationsSerializer::serialize(&mut writer, "FunctionAssociations", value)?;
         }
         if let Some(ref value) = obj.lambda_function_associations {
             &LambdaFunctionAssociationsSerializer::serialize(
@@ -718,7 +730,7 @@ impl CachePolicyDeserializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CachePolicyConfig {
-    /// <p>A comment to describe the cache policy.</p>
+    /// <p>A comment to describe the cache policy. The comment cannot be longer than 128 characters.</p>
     pub comment: Option<String>,
     /// <p>The default amount of time, in seconds, that you want objects to stay in the CloudFront cache before CloudFront sends another request to the origin to see if the object has been updated. CloudFront uses this value as the object’s time to live (TTL) only when the origin does <i>not</i> send <code>Cache-Control</code> or <code>Expires</code> headers with the object. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/Expiration.html">Managing How Long Content Stays in an Edge Cache (Expiration)</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>The default value for this field is 86400 seconds (one day). If the value of <code>MinTTL</code> is more than 86400 seconds, then the default value for this field is the same as the value of <code>MinTTL</code>.</p>
     pub default_ttl: Option<i64>,
@@ -1292,7 +1304,7 @@ impl CloudFrontOriginAccessIdentityDeserializer {
 pub struct CloudFrontOriginAccessIdentityConfig {
     /// <p>A unique value (for example, a date-time stamp) that ensures that the request can't be replayed.</p> <p>If the value of <code>CallerReference</code> is new (regardless of the content of the <code>CloudFrontOriginAccessIdentityConfig</code> object), a new origin access identity is created.</p> <p>If the <code>CallerReference</code> is a value already sent in a previous identity request, and the content of the <code>CloudFrontOriginAccessIdentityConfig</code> is identical to the original request (ignoring white space), the response includes the same information returned to the original request. </p> <p>If the <code>CallerReference</code> is a value you already sent in a previous request to create an identity, but the content of the <code>CloudFrontOriginAccessIdentityConfig</code> is different from the original request, CloudFront returns a <code>CloudFrontOriginAccessIdentityAlreadyExists</code> error. </p>
     pub caller_reference: String,
-    /// <p>Any comments you want to include about the origin access identity. </p>
+    /// <p>A comment to describe the origin access identity. The comment cannot be longer than 128 characters.</p>
     pub comment: String,
 }
 
@@ -2041,6 +2053,64 @@ impl CreateFieldLevelEncryptionProfileResultDeserializer {
         })
     }
 }
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateFunctionRequest {
+    /// <p>The function code. For more information about writing a CloudFront function, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/writing-function-code.html">Writing function code for CloudFront Functions</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    pub function_code: bytes::Bytes,
+    /// <p>Configuration information about the function, including an optional comment and the function’s runtime.</p>
+    pub function_config: FunctionConfig,
+    /// <p>A name to identify the function.</p>
+    pub name: String,
+}
+
+pub struct CreateFunctionRequestSerializer;
+impl CreateFunctionRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &CreateFunctionRequest,
+        xmlns: &str,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name).default_ns(xmlns))?;
+        FunctionBlobSerializer::serialize(&mut writer, "FunctionCode", &obj.function_code)?;
+        FunctionConfigSerializer::serialize(&mut writer, "FunctionConfig", &obj.function_config)?;
+        FunctionNameSerializer::serialize(&mut writer, "Name", &obj.name)?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct CreateFunctionResult {
+    /// <p>The version identifier for the current version of the CloudFront function.</p>
+    pub e_tag: Option<String>,
+    /// <p>Contains configuration information and metadata about a CloudFront function.</p>
+    pub function_summary: Option<FunctionSummary>,
+    /// <p>The URL of the CloudFront function. Use the URL to manage the function with the CloudFront API.</p>
+    pub location: Option<String>,
+}
+
+#[allow(dead_code)]
+struct CreateFunctionResultDeserializer;
+impl CreateFunctionResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateFunctionResult, XmlParseError> {
+        Ok(CreateFunctionResult {
+            function_summary: Some(FunctionSummaryDeserializer::deserialize(
+                "FunctionSummary",
+                stack,
+            )?),
+            ..CreateFunctionResult::default()
+        })
+    }
+}
 /// <p>The request to create an invalidation.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2677,12 +2747,14 @@ impl CustomOriginConfigSerializer {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DefaultCacheBehavior {
     pub allowed_methods: Option<AllowedMethods>,
-    /// <p>The unique identifier of the cache policy that is attached to the default cache behavior. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html#cache-key-create-cache-policy">Creating cache policies</a> or <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-cache-policies.html">Using the managed cache policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    /// <p>The unique identifier of the cache policy that is attached to the default cache behavior. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-the-cache-key.html#cache-key-create-cache-policy">Creating cache policies</a> or <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-cache-policies.html">Using the managed cache policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>A <code>DefaultCacheBehavior</code> must include either a <code>CachePolicyId</code> or <code>ForwardedValues</code>. We recommend that you use a <code>CachePolicyId</code>.</p>
     pub cache_policy_id: Option<String>,
     /// <p>Whether you want CloudFront to automatically compress certain files for this cache behavior. If so, specify <code>true</code>; if not, specify <code>false</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/ServingCompressedFiles.html">Serving Compressed Files</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub compress: Option<bool>,
     /// <p>The value of <code>ID</code> for the field-level encryption configuration that you want CloudFront to use for encrypting specific fields of data for the default cache behavior.</p>
     pub field_level_encryption_id: Option<String>,
+    /// <p>A list of CloudFront functions that are associated with this cache behavior. CloudFront functions must be published to the <code>LIVE</code> stage to associate them with a cache behavior.</p>
+    pub function_associations: Option<FunctionAssociations>,
     /// <p>A complex type that contains zero or more Lambda function associations for a cache behavior.</p>
     pub lambda_function_associations: Option<LambdaFunctionAssociations>,
     /// <p>The unique identifier of the origin request policy that is attached to the default cache behavior. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/controlling-origin-requests.html#origin-request-create-origin-request-policy">Creating origin request policies</a> or <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/using-managed-origin-request-policies.html">Using the managed origin request policies</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
@@ -2729,6 +2801,13 @@ impl DefaultCacheBehaviorDeserializer {
                         "FieldLevelEncryptionId",
                         stack,
                     )?);
+                }
+                "FunctionAssociations" => {
+                    obj.function_associations =
+                        Some(FunctionAssociationsDeserializer::deserialize(
+                            "FunctionAssociations",
+                            stack,
+                        )?);
                 }
                 "LambdaFunctionAssociations" => {
                     obj.lambda_function_associations =
@@ -2806,6 +2885,9 @@ impl DefaultCacheBehaviorSerializer {
         if let Some(ref value) = obj.field_level_encryption_id {
             write_characters_element(writer, "FieldLevelEncryptionId", &value)?;
         }
+        if let Some(ref value) = obj.function_associations {
+            &FunctionAssociationsSerializer::serialize(&mut writer, "FunctionAssociations", value)?;
+        }
         if let Some(ref value) = obj.lambda_function_associations {
             &LambdaFunctionAssociationsSerializer::serialize(
                 &mut writer,
@@ -2879,6 +2961,15 @@ pub struct DeleteFieldLevelEncryptionProfileRequest {
     pub id: String,
     /// <p>The value of the <code>ETag</code> header that you received when retrieving the profile to delete. For example: <code>E2QWRUHAPOMQZL</code>.</p>
     pub if_match: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteFunctionRequest {
+    /// <p>The current version (<code>ETag</code> value) of the function that you are deleting, which you can get using <code>DescribeFunction</code>.</p>
+    pub if_match: String,
+    /// <p>The name of the function that you are deleting.</p>
+    pub name: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -2977,6 +3068,41 @@ pub struct DeleteStreamingDistributionRequest {
     pub if_match: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeFunctionRequest {
+    /// <p>The name of the function that you are getting information about.</p>
+    pub name: String,
+    /// <p>The function’s stage, either <code>DEVELOPMENT</code> or <code>LIVE</code>.</p>
+    pub stage: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct DescribeFunctionResult {
+    /// <p>The version identifier for the current version of the CloudFront function.</p>
+    pub e_tag: Option<String>,
+    /// <p>Contains configuration information and metadata about a CloudFront function.</p>
+    pub function_summary: Option<FunctionSummary>,
+}
+
+#[allow(dead_code)]
+struct DescribeFunctionResultDeserializer;
+impl DescribeFunctionResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeFunctionResult, XmlParseError> {
+        Ok(DescribeFunctionResult {
+            function_summary: Some(FunctionSummaryDeserializer::deserialize(
+                "FunctionSummary",
+                stack,
+            )?),
+            ..DescribeFunctionResult::default()
+        })
+    }
+}
 /// <p>A distribution tells CloudFront where you want content to be delivered from, and the details about how to track and manage content delivery.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -3073,7 +3199,7 @@ pub struct DistributionConfig {
     pub cache_behaviors: Option<CacheBehaviors>,
     /// <p>A unique value (for example, a date-time stamp) that ensures that the request can't be replayed.</p> <p>If the value of <code>CallerReference</code> is new (regardless of the content of the <code>DistributionConfig</code> object), CloudFront creates a new distribution.</p> <p>If <code>CallerReference</code> is a value that you already sent in a previous request to create a distribution, CloudFront returns a <code>DistributionAlreadyExists</code> error.</p>
     pub caller_reference: String,
-    /// <p>Any comments you want to include about the distribution.</p> <p>If you don't want to specify a comment, include an empty <code>Comment</code> element.</p> <p>To delete an existing comment, update the distribution configuration and include an empty <code>Comment</code> element.</p> <p>To add or change a comment, update the distribution configuration and specify the new comment.</p>
+    /// <p>An optional comment to describe the distribution. The comment cannot be longer than 128 characters.</p>
     pub comment: String,
     /// <p>A complex type that controls the following:</p> <ul> <li> <p>Whether CloudFront replaces HTTP status codes in the 4xx and 5xx range with custom error messages before returning the response to the viewer.</p> </li> <li> <p>How long CloudFront caches HTTP status codes in the 4xx and 5xx range.</p> </li> </ul> <p>For more information about custom error pages, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/custom-error-pages.html">Customizing Error Responses</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
     pub custom_error_responses: Option<CustomErrorResponses>,
@@ -3898,7 +4024,7 @@ impl FieldLevelEncryptionDeserializer {
 pub struct FieldLevelEncryptionConfig {
     /// <p>A unique number that ensures the request can't be replayed.</p>
     pub caller_reference: String,
-    /// <p>An optional comment about the configuration.</p>
+    /// <p>An optional comment about the configuration. The comment cannot be longer than 128 characters.</p>
     pub comment: Option<String>,
     /// <p>A complex data type that specifies when to forward content if a content type isn't recognized and profiles to use as by default in a request if a query argument doesn't specify a profile to use.</p>
     pub content_type_profile_config: Option<ContentTypeProfileConfig>,
@@ -4086,7 +4212,7 @@ impl FieldLevelEncryptionProfileDeserializer {
 pub struct FieldLevelEncryptionProfileConfig {
     /// <p>A unique number that ensures that the request can't be replayed.</p>
     pub caller_reference: String,
-    /// <p>An optional comment for the field-level encryption profile.</p>
+    /// <p>An optional comment for the field-level encryption profile. The comment cannot be longer than 128 characters.</p>
     pub comment: Option<String>,
     /// <p>A complex data type of encryption entities for the field-level encryption profile that include the public key ID, provider, and field patterns for specifying which fields to encrypt with this key.</p>
     pub encryption_entities: EncryptionEntities,
@@ -4212,7 +4338,7 @@ impl FieldLevelEncryptionProfileListDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FieldLevelEncryptionProfileSummary {
-    /// <p>An optional comment for the field-level encryption profile summary.</p>
+    /// <p>An optional comment for the field-level encryption profile summary. The comment cannot be longer than 128 characters.</p>
     pub comment: Option<String>,
     /// <p>A complex data type of encryption entities for the field-level encryption profile that include the public key ID, provider, and field patterns for specifying which fields to encrypt with this key.</p>
     pub encryption_entities: EncryptionEntities,
@@ -4288,7 +4414,7 @@ impl FieldLevelEncryptionProfileSummaryListDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct FieldLevelEncryptionSummary {
-    /// <p>An optional comment about the field-level encryption item.</p>
+    /// <p>An optional comment about the field-level encryption item. The comment cannot be longer than 128 characters.</p>
     pub comment: Option<String>,
     /// <p> A summary of a content type-profile mapping. </p>
     pub content_type_profile_config: Option<ContentTypeProfileConfig>,
@@ -4536,6 +4662,513 @@ pub struct ForwardedValues {
     pub query_string_cache_keys: Option<QueryStringCacheKeys>,
 }
 
+#[allow(dead_code)]
+struct FunctionARNDeserializer;
+impl FunctionARNDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+
+pub struct FunctionARNSerializer;
+impl FunctionARNSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        write_characters_element(writer, name, obj)
+    }
+}
+
+/// <p>A CloudFront function that is associated with a cache behavior in a CloudFront distribution.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct FunctionAssociation {
+    /// <p>The event type of the function, either <code>viewer-request</code> or <code>viewer-response</code>. You cannot use origin-facing event types (<code>origin-request</code> and <code>origin-response</code>) with a CloudFront function.</p>
+    pub event_type: String,
+    /// <p>The Amazon Resource Name (ARN) of the function.</p>
+    pub function_arn: String,
+}
+
+#[allow(dead_code)]
+struct FunctionAssociationDeserializer;
+impl FunctionAssociationDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<FunctionAssociation, XmlParseError> {
+        deserialize_elements::<_, FunctionAssociation, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "EventType" => {
+                    obj.event_type = EventTypeDeserializer::deserialize("EventType", stack)?;
+                }
+                "FunctionARN" => {
+                    obj.function_arn = FunctionARNDeserializer::deserialize("FunctionARN", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+
+pub struct FunctionAssociationSerializer;
+impl FunctionAssociationSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &FunctionAssociation,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        write_characters_element(writer, "EventType", &obj.event_type)?;
+        write_characters_element(writer, "FunctionARN", &obj.function_arn)?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+#[allow(dead_code)]
+struct FunctionAssociationListDeserializer;
+impl FunctionAssociationListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<FunctionAssociation>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "FunctionAssociation" {
+                obj.push(FunctionAssociationDeserializer::deserialize(
+                    "FunctionAssociation",
+                    stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+
+pub struct FunctionAssociationListSerializer;
+impl FunctionAssociationListSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &Vec<FunctionAssociation>,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        for element in obj {
+            FunctionAssociationSerializer::serialize(writer, "FunctionAssociation", element)?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())?;
+        Ok(())
+    }
+}
+
+/// <p>A list of CloudFront functions that are associated with a cache behavior in a CloudFront distribution. CloudFront functions must be published to the <code>LIVE</code> stage to associate them with a cache behavior.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct FunctionAssociations {
+    /// <p>The CloudFront functions that are associated with a cache behavior in a CloudFront distribution. CloudFront functions must be published to the <code>LIVE</code> stage to associate them with a cache behavior.</p>
+    pub items: Option<Vec<FunctionAssociation>>,
+    /// <p>The number of CloudFront functions in the list.</p>
+    pub quantity: i64,
+}
+
+#[allow(dead_code)]
+struct FunctionAssociationsDeserializer;
+impl FunctionAssociationsDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<FunctionAssociations, XmlParseError> {
+        deserialize_elements::<_, FunctionAssociations, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Items" => {
+                    obj.items.get_or_insert(vec![]).extend(
+                        FunctionAssociationListDeserializer::deserialize("Items", stack)?,
+                    );
+                }
+                "Quantity" => {
+                    obj.quantity = IntegerDeserializer::deserialize("Quantity", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+
+pub struct FunctionAssociationsSerializer;
+impl FunctionAssociationsSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &FunctionAssociations,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        if let Some(ref value) = obj.items {
+            &FunctionAssociationListSerializer::serialize(&mut writer, "Items", value)?;
+        }
+        write_characters_element(writer, "Quantity", &obj.quantity.to_string())?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+pub struct FunctionBlobSerializer;
+impl FunctionBlobSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &bytes::Bytes,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        write_characters_element(
+            writer,
+            name,
+            std::str::from_utf8(obj).expect("Not a UTF-8 string"),
+        )
+    }
+}
+
+/// <p>Contains configuration information about a CloudFront function.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct FunctionConfig {
+    /// <p>A comment to describe the function.</p>
+    pub comment: String,
+    /// <p>The function’s runtime environment. The only valid value is <code>cloudfront-js-1.0</code>.</p>
+    pub runtime: String,
+}
+
+#[allow(dead_code)]
+struct FunctionConfigDeserializer;
+impl FunctionConfigDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<FunctionConfig, XmlParseError> {
+        deserialize_elements::<_, FunctionConfig, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Comment" => {
+                    obj.comment = StringDeserializer::deserialize("Comment", stack)?;
+                }
+                "Runtime" => {
+                    obj.runtime = FunctionRuntimeDeserializer::deserialize("Runtime", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+
+pub struct FunctionConfigSerializer;
+impl FunctionConfigSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &FunctionConfig,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        write_characters_element(writer, "Comment", &obj.comment)?;
+        write_characters_element(writer, "Runtime", &obj.runtime)?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+pub struct FunctionEventObjectSerializer;
+impl FunctionEventObjectSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &bytes::Bytes,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        write_characters_element(
+            writer,
+            name,
+            std::str::from_utf8(obj).expect("Not a UTF-8 string"),
+        )
+    }
+}
+
+#[allow(dead_code)]
+struct FunctionExecutionLogListDeserializer;
+impl FunctionExecutionLogListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(StringDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>A list of CloudFront functions.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct FunctionList {
+    /// <p>Contains the functions in the list.</p>
+    pub items: Option<Vec<FunctionSummary>>,
+    /// <p>The maximum number of functions requested.</p>
+    pub max_items: i64,
+    /// <p>If there are more items in the list than are in this response, this element is present. It contains the value that you should use in the <code>Marker</code> field of a subsequent request to continue listing functions where you left off.</p>
+    pub next_marker: Option<String>,
+    /// <p>The number of functions returned in the response.</p>
+    pub quantity: i64,
+}
+
+#[allow(dead_code)]
+struct FunctionListDeserializer;
+impl FunctionListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<FunctionList, XmlParseError> {
+        deserialize_elements::<_, FunctionList, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Items" => {
+                    obj.items.get_or_insert(vec![]).extend(
+                        FunctionSummaryListDeserializer::deserialize("Items", stack)?,
+                    );
+                }
+                "MaxItems" => {
+                    obj.max_items = IntegerDeserializer::deserialize("MaxItems", stack)?;
+                }
+                "NextMarker" => {
+                    obj.next_marker = Some(StringDeserializer::deserialize("NextMarker", stack)?);
+                }
+                "Quantity" => {
+                    obj.quantity = IntegerDeserializer::deserialize("Quantity", stack)?;
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>Contains metadata about a CloudFront function.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct FunctionMetadata {
+    /// <p>The date and time when the function was created.</p>
+    pub created_time: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the function. The ARN uniquely identifies the function.</p>
+    pub function_arn: String,
+    /// <p>The date and time when the function was most recently updated.</p>
+    pub last_modified_time: String,
+    /// <p>The stage that the function is in, either <code>DEVELOPMENT</code> or <code>LIVE</code>.</p> <p>When a function is in the <code>DEVELOPMENT</code> stage, you can test the function with <code>TestFunction</code>, and update it with <code>UpdateFunction</code>.</p> <p>When a function is in the <code>LIVE</code> stage, you can attach the function to a distribution’s cache behavior, using the function’s ARN.</p>
+    pub stage: Option<String>,
+}
+
+#[allow(dead_code)]
+struct FunctionMetadataDeserializer;
+impl FunctionMetadataDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<FunctionMetadata, XmlParseError> {
+        deserialize_elements::<_, FunctionMetadata, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "CreatedTime" => {
+                    obj.created_time =
+                        Some(TimestampDeserializer::deserialize("CreatedTime", stack)?);
+                }
+                "FunctionARN" => {
+                    obj.function_arn = StringDeserializer::deserialize("FunctionARN", stack)?;
+                }
+                "LastModifiedTime" => {
+                    obj.last_modified_time =
+                        TimestampDeserializer::deserialize("LastModifiedTime", stack)?;
+                }
+                "Stage" => {
+                    obj.stage = Some(FunctionStageDeserializer::deserialize("Stage", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct FunctionNameDeserializer;
+impl FunctionNameDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+
+pub struct FunctionNameSerializer;
+impl FunctionNameSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        write_characters_element(writer, name, obj)
+    }
+}
+
+#[allow(dead_code)]
+struct FunctionRuntimeDeserializer;
+impl FunctionRuntimeDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+
+pub struct FunctionRuntimeSerializer;
+impl FunctionRuntimeSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        write_characters_element(writer, name, obj)
+    }
+}
+
+#[allow(dead_code)]
+struct FunctionStageDeserializer;
+impl FunctionStageDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+
+pub struct FunctionStageSerializer;
+impl FunctionStageSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        write_characters_element(writer, name, obj)
+    }
+}
+
+/// <p>Contains configuration information and metadata about a CloudFront function.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct FunctionSummary {
+    /// <p>Contains configuration information about a CloudFront function.</p>
+    pub function_config: FunctionConfig,
+    /// <p>Contains metadata about a CloudFront function.</p>
+    pub function_metadata: FunctionMetadata,
+    /// <p>The name of the CloudFront function.</p>
+    pub name: String,
+    /// <p>The status of the CloudFront function.</p>
+    pub status: Option<String>,
+}
+
+#[allow(dead_code)]
+struct FunctionSummaryDeserializer;
+impl FunctionSummaryDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<FunctionSummary, XmlParseError> {
+        deserialize_elements::<_, FunctionSummary, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "FunctionConfig" => {
+                    obj.function_config =
+                        FunctionConfigDeserializer::deserialize("FunctionConfig", stack)?;
+                }
+                "FunctionMetadata" => {
+                    obj.function_metadata =
+                        FunctionMetadataDeserializer::deserialize("FunctionMetadata", stack)?;
+                }
+                "Name" => {
+                    obj.name = FunctionNameDeserializer::deserialize("Name", stack)?;
+                }
+                "Status" => {
+                    obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct FunctionSummaryListDeserializer;
+impl FunctionSummaryListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<FunctionSummary>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "FunctionSummary" {
+                obj.push(FunctionSummaryDeserializer::deserialize(
+                    "FunctionSummary",
+                    stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
 /// <p>A complex type that controls the countries in which your content is distributed. CloudFront determines the location of your users using <code>MaxMind</code> GeoIP databases. </p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -4968,6 +5601,25 @@ impl GetFieldLevelEncryptionResultDeserializer {
         })
     }
 }
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetFunctionRequest {
+    /// <p>The name of the function whose code you are getting.</p>
+    pub name: String,
+    /// <p>The function’s stage, either <code>DEVELOPMENT</code> or <code>LIVE</code>.</p>
+    pub stage: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+pub struct GetFunctionResult {
+    /// <p>The content type (media type) of the response.</p>
+    pub content_type: Option<String>,
+    /// <p>The version identifier for the current version of the CloudFront function.</p>
+    pub e_tag: Option<String>,
+    /// <p>The function code of a CloudFront function.</p>
+    pub function_code: Option<bytes::Bytes>,
+}
+
 /// <p>The request to get an invalidation's information. </p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -5815,7 +6467,7 @@ impl KeyGroupDeserializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct KeyGroupConfig {
-    /// <p>A comment to describe the key group.</p>
+    /// <p>A comment to describe the key group. The comment cannot be longer than 128 characters.</p>
     pub comment: Option<String>,
     /// <p>A list of the identifiers of the public keys in the key group.</p>
     pub items: Vec<String>,
@@ -6640,6 +7292,41 @@ impl ListFieldLevelEncryptionProfilesResultDeserializer {
                 )?,
             ),
             ..ListFieldLevelEncryptionProfilesResult::default()
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListFunctionsRequest {
+    /// <p>Use this field when paginating results to indicate where to begin in your list of functions. The response includes functions in the list that occur after the marker. To get the next page of the list, set this field’s value to the value of <code>NextMarker</code> from the current page’s response.</p>
+    pub marker: Option<String>,
+    /// <p>The maximum number of functions that you want in the response.</p>
+    pub max_items: Option<String>,
+    /// <p>An optional filter to return only the functions that are in the specified stage, either <code>DEVELOPMENT</code> or <code>LIVE</code>.</p>
+    pub stage: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct ListFunctionsResult {
+    /// <p>A list of CloudFront functions.</p>
+    pub function_list: Option<FunctionList>,
+}
+
+#[allow(dead_code)]
+struct ListFunctionsResultDeserializer;
+impl ListFunctionsResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListFunctionsResult, XmlParseError> {
+        Ok(ListFunctionsResult {
+            function_list: Some(FunctionListDeserializer::deserialize(
+                "FunctionList",
+                stack,
+            )?),
+            ..ListFunctionsResult::default()
         })
     }
 }
@@ -7831,7 +8518,7 @@ impl OriginRequestPolicyDeserializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OriginRequestPolicyConfig {
-    /// <p>A comment to describe the origin request policy.</p>
+    /// <p>A comment to describe the origin request policy. The comment cannot be longer than 128 characters.</p>
     pub comment: Option<String>,
     /// <p>The cookies from viewer requests to include in origin requests.</p>
     pub cookies_config: OriginRequestPolicyCookiesConfig,
@@ -8775,7 +9462,7 @@ impl PublicKeyDeserializer {
 pub struct PublicKeyConfig {
     /// <p>A string included in the request to help make sure that the request can’t be replayed.</p>
     pub caller_reference: String,
-    /// <p>A comment to describe the public key.</p>
+    /// <p>A comment to describe the public key. The comment cannot be longer than 128 characters.</p>
     pub comment: Option<String>,
     /// <p>The public key that you can use with <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/PrivateContent.html">signed URLs and signed cookies</a>, or with <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/field-level-encryption.html">field-level encryption</a>.</p>
     pub encoded_key: String,
@@ -8922,7 +9609,7 @@ impl PublicKeyListDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct PublicKeySummary {
-    /// <p>A comment to describe the public key.</p>
+    /// <p>A comment to describe the public key. The comment cannot be longer than 128 characters.</p>
     pub comment: Option<String>,
     /// <p>The date and time when the public key was uploaded.</p>
     pub created_time: String,
@@ -8983,6 +9670,39 @@ impl PublicKeySummaryListDeserializer {
                 skip_tree(stack);
             }
             Ok(())
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PublishFunctionRequest {
+    /// <p>The current version (<code>ETag</code> value) of the function that you are publishing, which you can get using <code>DescribeFunction</code>.</p>
+    pub if_match: String,
+    /// <p>The name of the function that you are publishing.</p>
+    pub name: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct PublishFunctionResult {
+    /// <p>Contains configuration information and metadata about a CloudFront function.</p>
+    pub function_summary: Option<FunctionSummary>,
+}
+
+#[allow(dead_code)]
+struct PublishFunctionResultDeserializer;
+impl PublishFunctionResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PublishFunctionResult, XmlParseError> {
+        Ok(PublishFunctionResult {
+            function_summary: Some(FunctionSummaryDeserializer::deserialize(
+                "FunctionSummary",
+                stack,
+            )?),
+            ..PublishFunctionResult::default()
         })
     }
 }
@@ -10584,6 +11304,122 @@ impl TagsSerializer {
     }
 }
 
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TestFunctionRequest {
+    /// <p>The event object to test the function with. For more information about the structure of the event object, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/managing-functions.html#test-function">Testing functions</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    pub event_object: bytes::Bytes,
+    /// <p>The current version (<code>ETag</code> value) of the function that you are testing, which you can get using <code>DescribeFunction</code>.</p>
+    pub if_match: String,
+    /// <p>The name of the function that you are testing.</p>
+    pub name: String,
+    /// <p>The stage of the function that you are testing, either <code>DEVELOPMENT</code> or <code>LIVE</code>.</p>
+    pub stage: Option<String>,
+}
+
+pub struct TestFunctionRequestSerializer;
+impl TestFunctionRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &TestFunctionRequest,
+        xmlns: &str,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name).default_ns(xmlns))?;
+        FunctionEventObjectSerializer::serialize(&mut writer, "EventObject", &obj.event_object)?;
+        if let Some(ref value) = obj.stage {
+            &FunctionStageSerializer::serialize(&mut writer, "Stage", value)?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct TestFunctionResult {
+    /// <p>An object that represents the result of running the function with the provided event object.</p>
+    pub test_result: Option<TestResult>,
+}
+
+#[allow(dead_code)]
+struct TestFunctionResultDeserializer;
+impl TestFunctionResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TestFunctionResult, XmlParseError> {
+        Ok(TestFunctionResult {
+            test_result: Some(TestResultDeserializer::deserialize("TestResult", stack)?),
+            ..TestFunctionResult::default()
+        })
+    }
+}
+/// <p>Contains the result of testing a CloudFront function with <code>TestFunction</code>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct TestResult {
+    /// <p>The amount of time that the function took to run as a percentage of the maximum allowed time. For example, a compute utilization of 35 means that the function completed in 35% of the maximum allowed time.</p>
+    pub compute_utilization: Option<String>,
+    /// <p>If the result of testing the function was an error, this field contains the error message.</p>
+    pub function_error_message: Option<String>,
+    /// <p>Contains the log lines that the function wrote (if any) when running the test.</p>
+    pub function_execution_logs: Option<Vec<String>>,
+    /// <p>The event object returned by the function. For more information about the structure of the event object, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/functions-event-structure.html">Event object structure</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    pub function_output: Option<String>,
+    /// <p>Contains configuration information and metadata about the CloudFront function that was tested.</p>
+    pub function_summary: Option<FunctionSummary>,
+}
+
+#[allow(dead_code)]
+struct TestResultDeserializer;
+impl TestResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<TestResult, XmlParseError> {
+        deserialize_elements::<_, TestResult, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "ComputeUtilization" => {
+                    obj.compute_utilization = Some(StringDeserializer::deserialize(
+                        "ComputeUtilization",
+                        stack,
+                    )?);
+                }
+                "FunctionErrorMessage" => {
+                    obj.function_error_message = Some(StringDeserializer::deserialize(
+                        "FunctionErrorMessage",
+                        stack,
+                    )?);
+                }
+                "FunctionExecutionLogs" => {
+                    obj.function_execution_logs.get_or_insert(vec![]).extend(
+                        FunctionExecutionLogListDeserializer::deserialize(
+                            "FunctionExecutionLogs",
+                            stack,
+                        )?,
+                    );
+                }
+                "FunctionOutput" => {
+                    obj.function_output =
+                        Some(StringDeserializer::deserialize("FunctionOutput", stack)?);
+                }
+                "FunctionSummary" => {
+                    obj.function_summary = Some(FunctionSummaryDeserializer::deserialize(
+                        "FunctionSummary",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
 #[allow(dead_code)]
 struct TimestampDeserializer;
 impl TimestampDeserializer {
@@ -10957,6 +11793,63 @@ impl UpdateFieldLevelEncryptionProfileResultDeserializer {
 }
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateFunctionRequest {
+    /// <p>The function code. For more information about writing a CloudFront function, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/writing-function-code.html">Writing function code for CloudFront Functions</a> in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    pub function_code: bytes::Bytes,
+    /// <p>Configuration information about the function.</p>
+    pub function_config: FunctionConfig,
+    /// <p>The current version (<code>ETag</code> value) of the function that you are updating, which you can get using <code>DescribeFunction</code>.</p>
+    pub if_match: String,
+    /// <p>The name of the function that you are updating.</p>
+    pub name: String,
+}
+
+pub struct UpdateFunctionRequestSerializer;
+impl UpdateFunctionRequestSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &UpdateFunctionRequest,
+        xmlns: &str,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name).default_ns(xmlns))?;
+        FunctionBlobSerializer::serialize(&mut writer, "FunctionCode", &obj.function_code)?;
+        FunctionConfigSerializer::serialize(&mut writer, "FunctionConfig", &obj.function_config)?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct UpdateFunctionResult {
+    /// <p>The version identifier for the current version of the CloudFront function.</p>
+    pub e_tag: Option<String>,
+    /// <p>Contains configuration information and metadata about a CloudFront function.</p>
+    pub function_summary: Option<FunctionSummary>,
+}
+
+#[allow(dead_code)]
+struct UpdateFunctionResultDeserializer;
+impl UpdateFunctionResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<UpdateFunctionResult, XmlParseError> {
+        Ok(UpdateFunctionResult {
+            function_summary: Some(FunctionSummaryDeserializer::deserialize(
+                "FunctionSummary",
+                stack,
+            )?),
+            ..UpdateFunctionResult::default()
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateKeyGroupRequest {
     /// <p>The identifier of the key group that you are updating.</p>
     pub id: String,
@@ -11183,11 +12076,11 @@ impl UpdateStreamingDistributionResultDeserializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ViewerCertificate {
-    /// <p>If the distribution uses <code>Aliases</code> (alternate domain names or CNAMEs) and the SSL/TLS certificate is stored in <a href="https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html">AWS Certificate Manager (ACM)</a>, provide the Amazon Resource Name (ARN) of the ACM certificate. CloudFront only supports ACM certificates in the US East (N. Virginia) Region (<code>us-east-1</code>).</p> <p>If you specify an ACM certificate ARN, you must also specify values for <code>MinimumProtocolVerison</code> and <code>SSLSupportMethod</code>. </p>
+    /// <p>If the distribution uses <code>Aliases</code> (alternate domain names or CNAMEs) and the SSL/TLS certificate is stored in <a href="https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html">AWS Certificate Manager (ACM)</a>, provide the Amazon Resource Name (ARN) of the ACM certificate. CloudFront only supports ACM certificates in the US East (N. Virginia) Region (<code>us-east-1</code>).</p> <p>If you specify an ACM certificate ARN, you must also specify values for <code>MinimumProtocolVersion</code> and <code>SSLSupportMethod</code>. </p>
     pub acm_certificate_arn: Option<String>,
     /// <p><p>If the distribution uses the CloudFront domain name such as <code>d111111abcdef8.cloudfront.net</code>, set this field to <code>true</code>.</p> <p>If the distribution uses <code>Aliases</code> (alternate domain names or CNAMEs), set this field to <code>false</code> and specify values for the following fields:</p> <ul> <li> <p> <code>ACMCertificateArn</code> or <code>IAMCertificateId</code> (specify a value for one, not both)</p> </li> <li> <p> <code>MinimumProtocolVersion</code> </p> </li> <li> <p> <code>SSLSupportMethod</code> </p> </li> </ul></p>
     pub cloud_front_default_certificate: Option<bool>,
-    /// <p>If the distribution uses <code>Aliases</code> (alternate domain names or CNAMEs) and the SSL/TLS certificate is stored in <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">AWS Identity and Access Management (AWS IAM)</a>, provide the ID of the IAM certificate.</p> <p>If you specify an IAM certificate ID, you must also specify values for <code>MinimumProtocolVerison</code> and <code>SSLSupportMethod</code>. </p>
+    /// <p>If the distribution uses <code>Aliases</code> (alternate domain names or CNAMEs) and the SSL/TLS certificate is stored in <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">AWS Identity and Access Management (AWS IAM)</a>, provide the ID of the IAM certificate.</p> <p>If you specify an IAM certificate ID, you must also specify values for <code>MinimumProtocolVersion</code> and <code>SSLSupportMethod</code>. </p>
     pub iam_certificate_id: Option<String>,
     /// <p>If the distribution uses <code>Aliases</code> (alternate domain names or CNAMEs), specify the security policy that you want CloudFront to use for HTTPS connections with viewers. The security policy determines two settings:</p> <ul> <li> <p>The minimum SSL/TLS protocol that CloudFront can use to communicate with viewers.</p> </li> <li> <p>The ciphers that CloudFront can use to encrypt the content that it returns to viewers.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-web-values-specify.html#DownloadDistValues-security-policy">Security Policy</a> and <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/secure-connections-supported-viewer-protocols-ciphers.html#secure-connections-supported-ciphers">Supported Protocols and Ciphers Between Viewers and CloudFront</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <note> <p>On the CloudFront console, this setting is called <b>Security Policy</b>.</p> </note> <p>When you’re using SNI only (you set <code>SSLSupportMethod</code> to <code>sni-only</code>), you must specify <code>TLSv1</code> or higher. </p> <p>If the distribution uses the CloudFront domain name such as <code>d111111abcdef8.cloudfront.net</code> (you set <code>CloudFrontDefaultCertificate</code> to <code>true</code>), CloudFront automatically sets the security policy to <code>TLSv1</code> regardless of the value that you set here.</p>
     pub minimum_protocol_version: Option<String>,
@@ -11480,6 +12373,8 @@ pub enum CreateDistributionError {
     InvalidErrorCode(String),
     /// <p>Your request contains forward cookies option which doesn't match with the expectation for the <code>whitelisted</code> list of cookie names. Either list of cookie names has been specified when not allowed or list of cookie names is missing when expected.</p>
     InvalidForwardCookies(String),
+    /// <p>A CloudFront function association is invalid.</p>
+    InvalidFunctionAssociation(String),
     /// <p>The specified geo restriction parameter is not valid.</p>
     InvalidGeoRestrictionParameter(String),
     /// <p>The headers specified are not valid for an Amazon S3 origin.</p>
@@ -11524,6 +12419,10 @@ pub enum CreateDistributionError {
     NoSuchOrigin(String),
     /// <p>The origin request policy does not exist.</p>
     NoSuchOriginRequestPolicy(String),
+    /// <p>The real-time log configuration does not exist.</p>
+    NoSuchRealtimeLogConfig(String),
+    /// <p>The specified real-time log configuration belongs to a different AWS account.</p>
+    RealtimeLogConfigOwnerMismatch(String),
     /// <p>You cannot create more cache behaviors for the distribution.</p>
     TooManyCacheBehaviors(String),
     /// <p>You cannot create anymore custom SSL/TLS certificates.</p>
@@ -11542,10 +12441,14 @@ pub enum CreateDistributionError {
     TooManyDistributionsAssociatedToKeyGroup(String),
     /// <p>The maximum number of distributions have been associated with the specified origin request policy. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
     TooManyDistributionsAssociatedToOriginRequestPolicy(String),
+    /// <p>You have reached the maximum number of distributions that are associated with a CloudFront function. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyDistributionsWithFunctionAssociations(String),
     /// <p>Processing your request would cause the maximum number of distributions with Lambda function associations per owner to be exceeded.</p>
     TooManyDistributionsWithLambdaAssociations(String),
     /// <p>The maximum number of distributions have been associated with the specified Lambda function.</p>
     TooManyDistributionsWithSingleFunctionARN(String),
+    /// <p>You have reached the maximum number of CloudFront function associations for this distribution. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyFunctionAssociations(String),
     /// <p>Your request contains too many headers in forwarded values.</p>
     TooManyHeadersInForwardedValues(String),
     /// <p>The number of key groups referenced by this distribution is more than the maximum allowed. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
@@ -11576,7 +12479,7 @@ impl CreateDistributionError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(CreateDistributionError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(CreateDistributionError::CNAMEAlreadyExists(parsed_error.message)),"DistributionAlreadyExists" => return RusotoError::Service(CreateDistributionError::DistributionAlreadyExists(parsed_error.message)),"IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior" => return RusotoError::Service(CreateDistributionError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateDistributionError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateDistributionError::InvalidArgument(parsed_error.message)),"InvalidDefaultRootObject" => return RusotoError::Service(CreateDistributionError::InvalidDefaultRootObject(parsed_error.message)),"InvalidErrorCode" => return RusotoError::Service(CreateDistributionError::InvalidErrorCode(parsed_error.message)),"InvalidForwardCookies" => return RusotoError::Service(CreateDistributionError::InvalidForwardCookies(parsed_error.message)),"InvalidGeoRestrictionParameter" => return RusotoError::Service(CreateDistributionError::InvalidGeoRestrictionParameter(parsed_error.message)),"InvalidHeadersForS3Origin" => return RusotoError::Service(CreateDistributionError::InvalidHeadersForS3Origin(parsed_error.message)),"InvalidLambdaFunctionAssociation" => return RusotoError::Service(CreateDistributionError::InvalidLambdaFunctionAssociation(parsed_error.message)),"InvalidLocationCode" => return RusotoError::Service(CreateDistributionError::InvalidLocationCode(parsed_error.message)),"InvalidMinimumProtocolVersion" => return RusotoError::Service(CreateDistributionError::InvalidMinimumProtocolVersion(parsed_error.message)),"InvalidOrigin" => return RusotoError::Service(CreateDistributionError::InvalidOrigin(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(CreateDistributionError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidOriginKeepaliveTimeout" => return RusotoError::Service(CreateDistributionError::InvalidOriginKeepaliveTimeout(parsed_error.message)),"InvalidOriginReadTimeout" => return RusotoError::Service(CreateDistributionError::InvalidOriginReadTimeout(parsed_error.message)),"InvalidProtocolSettings" => return RusotoError::Service(CreateDistributionError::InvalidProtocolSettings(parsed_error.message)),"InvalidQueryStringParameters" => return RusotoError::Service(CreateDistributionError::InvalidQueryStringParameters(parsed_error.message)),"InvalidRelativePath" => return RusotoError::Service(CreateDistributionError::InvalidRelativePath(parsed_error.message)),"InvalidRequiredProtocol" => return RusotoError::Service(CreateDistributionError::InvalidRequiredProtocol(parsed_error.message)),"InvalidResponseCode" => return RusotoError::Service(CreateDistributionError::InvalidResponseCode(parsed_error.message)),"InvalidTTLOrder" => return RusotoError::Service(CreateDistributionError::InvalidTTLOrder(parsed_error.message)),"InvalidViewerCertificate" => return RusotoError::Service(CreateDistributionError::InvalidViewerCertificate(parsed_error.message)),"InvalidWebACLId" => return RusotoError::Service(CreateDistributionError::InvalidWebACLId(parsed_error.message)),"MissingBody" => return RusotoError::Service(CreateDistributionError::MissingBody(parsed_error.message)),"NoSuchCachePolicy" => return RusotoError::Service(CreateDistributionError::NoSuchCachePolicy(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchOrigin" => return RusotoError::Service(CreateDistributionError::NoSuchOrigin(parsed_error.message)),"NoSuchOriginRequestPolicy" => return RusotoError::Service(CreateDistributionError::NoSuchOriginRequestPolicy(parsed_error.message)),"TooManyCacheBehaviors" => return RusotoError::Service(CreateDistributionError::TooManyCacheBehaviors(parsed_error.message)),"TooManyCertificates" => return RusotoError::Service(CreateDistributionError::TooManyCertificates(parsed_error.message)),"TooManyCookieNamesInWhiteList" => return RusotoError::Service(CreateDistributionError::TooManyCookieNamesInWhiteList(parsed_error.message)),"TooManyDistributionCNAMEs" => return RusotoError::Service(CreateDistributionError::TooManyDistributionCNAMEs(parsed_error.message)),"TooManyDistributions" => return RusotoError::Service(CreateDistributionError::TooManyDistributions(parsed_error.message)),"TooManyDistributionsAssociatedToCachePolicy" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsAssociatedToCachePolicy(parsed_error.message)),"TooManyDistributionsAssociatedToFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(parsed_error.message)),"TooManyDistributionsAssociatedToKeyGroup" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsAssociatedToKeyGroup(parsed_error.message)),"TooManyDistributionsAssociatedToOriginRequestPolicy" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsAssociatedToOriginRequestPolicy(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsWithLambdaAssociations(parsed_error.message)),"TooManyDistributionsWithSingleFunctionARN" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsWithSingleFunctionARN(parsed_error.message)),"TooManyHeadersInForwardedValues" => return RusotoError::Service(CreateDistributionError::TooManyHeadersInForwardedValues(parsed_error.message)),"TooManyKeyGroupsAssociatedToDistribution" => return RusotoError::Service(CreateDistributionError::TooManyKeyGroupsAssociatedToDistribution(parsed_error.message)),"TooManyLambdaFunctionAssociations" => return RusotoError::Service(CreateDistributionError::TooManyLambdaFunctionAssociations(parsed_error.message)),"TooManyOriginCustomHeaders" => return RusotoError::Service(CreateDistributionError::TooManyOriginCustomHeaders(parsed_error.message)),"TooManyOriginGroupsPerDistribution" => return RusotoError::Service(CreateDistributionError::TooManyOriginGroupsPerDistribution(parsed_error.message)),"TooManyOrigins" => return RusotoError::Service(CreateDistributionError::TooManyOrigins(parsed_error.message)),"TooManyQueryStringParameters" => return RusotoError::Service(CreateDistributionError::TooManyQueryStringParameters(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(CreateDistributionError::TooManyTrustedSigners(parsed_error.message)),"TrustedKeyGroupDoesNotExist" => return RusotoError::Service(CreateDistributionError::TrustedKeyGroupDoesNotExist(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(CreateDistributionError::TrustedSignerDoesNotExist(parsed_error.message)),_ => {}
+                                    "AccessDenied" => return RusotoError::Service(CreateDistributionError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(CreateDistributionError::CNAMEAlreadyExists(parsed_error.message)),"DistributionAlreadyExists" => return RusotoError::Service(CreateDistributionError::DistributionAlreadyExists(parsed_error.message)),"IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior" => return RusotoError::Service(CreateDistributionError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateDistributionError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateDistributionError::InvalidArgument(parsed_error.message)),"InvalidDefaultRootObject" => return RusotoError::Service(CreateDistributionError::InvalidDefaultRootObject(parsed_error.message)),"InvalidErrorCode" => return RusotoError::Service(CreateDistributionError::InvalidErrorCode(parsed_error.message)),"InvalidForwardCookies" => return RusotoError::Service(CreateDistributionError::InvalidForwardCookies(parsed_error.message)),"InvalidFunctionAssociation" => return RusotoError::Service(CreateDistributionError::InvalidFunctionAssociation(parsed_error.message)),"InvalidGeoRestrictionParameter" => return RusotoError::Service(CreateDistributionError::InvalidGeoRestrictionParameter(parsed_error.message)),"InvalidHeadersForS3Origin" => return RusotoError::Service(CreateDistributionError::InvalidHeadersForS3Origin(parsed_error.message)),"InvalidLambdaFunctionAssociation" => return RusotoError::Service(CreateDistributionError::InvalidLambdaFunctionAssociation(parsed_error.message)),"InvalidLocationCode" => return RusotoError::Service(CreateDistributionError::InvalidLocationCode(parsed_error.message)),"InvalidMinimumProtocolVersion" => return RusotoError::Service(CreateDistributionError::InvalidMinimumProtocolVersion(parsed_error.message)),"InvalidOrigin" => return RusotoError::Service(CreateDistributionError::InvalidOrigin(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(CreateDistributionError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidOriginKeepaliveTimeout" => return RusotoError::Service(CreateDistributionError::InvalidOriginKeepaliveTimeout(parsed_error.message)),"InvalidOriginReadTimeout" => return RusotoError::Service(CreateDistributionError::InvalidOriginReadTimeout(parsed_error.message)),"InvalidProtocolSettings" => return RusotoError::Service(CreateDistributionError::InvalidProtocolSettings(parsed_error.message)),"InvalidQueryStringParameters" => return RusotoError::Service(CreateDistributionError::InvalidQueryStringParameters(parsed_error.message)),"InvalidRelativePath" => return RusotoError::Service(CreateDistributionError::InvalidRelativePath(parsed_error.message)),"InvalidRequiredProtocol" => return RusotoError::Service(CreateDistributionError::InvalidRequiredProtocol(parsed_error.message)),"InvalidResponseCode" => return RusotoError::Service(CreateDistributionError::InvalidResponseCode(parsed_error.message)),"InvalidTTLOrder" => return RusotoError::Service(CreateDistributionError::InvalidTTLOrder(parsed_error.message)),"InvalidViewerCertificate" => return RusotoError::Service(CreateDistributionError::InvalidViewerCertificate(parsed_error.message)),"InvalidWebACLId" => return RusotoError::Service(CreateDistributionError::InvalidWebACLId(parsed_error.message)),"MissingBody" => return RusotoError::Service(CreateDistributionError::MissingBody(parsed_error.message)),"NoSuchCachePolicy" => return RusotoError::Service(CreateDistributionError::NoSuchCachePolicy(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchOrigin" => return RusotoError::Service(CreateDistributionError::NoSuchOrigin(parsed_error.message)),"NoSuchOriginRequestPolicy" => return RusotoError::Service(CreateDistributionError::NoSuchOriginRequestPolicy(parsed_error.message)),"NoSuchRealtimeLogConfig" => return RusotoError::Service(CreateDistributionError::NoSuchRealtimeLogConfig(parsed_error.message)),"RealtimeLogConfigOwnerMismatch" => return RusotoError::Service(CreateDistributionError::RealtimeLogConfigOwnerMismatch(parsed_error.message)),"TooManyCacheBehaviors" => return RusotoError::Service(CreateDistributionError::TooManyCacheBehaviors(parsed_error.message)),"TooManyCertificates" => return RusotoError::Service(CreateDistributionError::TooManyCertificates(parsed_error.message)),"TooManyCookieNamesInWhiteList" => return RusotoError::Service(CreateDistributionError::TooManyCookieNamesInWhiteList(parsed_error.message)),"TooManyDistributionCNAMEs" => return RusotoError::Service(CreateDistributionError::TooManyDistributionCNAMEs(parsed_error.message)),"TooManyDistributions" => return RusotoError::Service(CreateDistributionError::TooManyDistributions(parsed_error.message)),"TooManyDistributionsAssociatedToCachePolicy" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsAssociatedToCachePolicy(parsed_error.message)),"TooManyDistributionsAssociatedToFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(parsed_error.message)),"TooManyDistributionsAssociatedToKeyGroup" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsAssociatedToKeyGroup(parsed_error.message)),"TooManyDistributionsAssociatedToOriginRequestPolicy" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsAssociatedToOriginRequestPolicy(parsed_error.message)),"TooManyDistributionsWithFunctionAssociations" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsWithFunctionAssociations(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsWithLambdaAssociations(parsed_error.message)),"TooManyDistributionsWithSingleFunctionARN" => return RusotoError::Service(CreateDistributionError::TooManyDistributionsWithSingleFunctionARN(parsed_error.message)),"TooManyFunctionAssociations" => return RusotoError::Service(CreateDistributionError::TooManyFunctionAssociations(parsed_error.message)),"TooManyHeadersInForwardedValues" => return RusotoError::Service(CreateDistributionError::TooManyHeadersInForwardedValues(parsed_error.message)),"TooManyKeyGroupsAssociatedToDistribution" => return RusotoError::Service(CreateDistributionError::TooManyKeyGroupsAssociatedToDistribution(parsed_error.message)),"TooManyLambdaFunctionAssociations" => return RusotoError::Service(CreateDistributionError::TooManyLambdaFunctionAssociations(parsed_error.message)),"TooManyOriginCustomHeaders" => return RusotoError::Service(CreateDistributionError::TooManyOriginCustomHeaders(parsed_error.message)),"TooManyOriginGroupsPerDistribution" => return RusotoError::Service(CreateDistributionError::TooManyOriginGroupsPerDistribution(parsed_error.message)),"TooManyOrigins" => return RusotoError::Service(CreateDistributionError::TooManyOrigins(parsed_error.message)),"TooManyQueryStringParameters" => return RusotoError::Service(CreateDistributionError::TooManyQueryStringParameters(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(CreateDistributionError::TooManyTrustedSigners(parsed_error.message)),"TrustedKeyGroupDoesNotExist" => return RusotoError::Service(CreateDistributionError::TrustedKeyGroupDoesNotExist(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(CreateDistributionError::TrustedSignerDoesNotExist(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -11604,6 +12507,7 @@ CreateDistributionError::InvalidArgument(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::InvalidDefaultRootObject(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::InvalidErrorCode(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::InvalidForwardCookies(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::InvalidFunctionAssociation(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::InvalidGeoRestrictionParameter(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::InvalidHeadersForS3Origin(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::InvalidLambdaFunctionAssociation(ref cause) => write!(f, "{}", cause),
@@ -11626,6 +12530,8 @@ CreateDistributionError::NoSuchCachePolicy(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::NoSuchFieldLevelEncryptionConfig(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::NoSuchOrigin(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::NoSuchOriginRequestPolicy(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::NoSuchRealtimeLogConfig(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::RealtimeLogConfigOwnerMismatch(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::TooManyCacheBehaviors(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::TooManyCertificates(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::TooManyCookieNamesInWhiteList(ref cause) => write!(f, "{}", cause),
@@ -11635,8 +12541,10 @@ CreateDistributionError::TooManyDistributionsAssociatedToCachePolicy(ref cause) 
 CreateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::TooManyDistributionsAssociatedToKeyGroup(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::TooManyDistributionsAssociatedToOriginRequestPolicy(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyDistributionsWithFunctionAssociations(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::TooManyDistributionsWithLambdaAssociations(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::TooManyDistributionsWithSingleFunctionARN(ref cause) => write!(f, "{}", cause),
+CreateDistributionError::TooManyFunctionAssociations(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::TooManyHeadersInForwardedValues(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::TooManyKeyGroupsAssociatedToDistribution(ref cause) => write!(f, "{}", cause),
 CreateDistributionError::TooManyLambdaFunctionAssociations(ref cause) => write!(f, "{}", cause),
@@ -11672,6 +12580,8 @@ pub enum CreateDistributionWithTagsError {
     InvalidErrorCode(String),
     /// <p>Your request contains forward cookies option which doesn't match with the expectation for the <code>whitelisted</code> list of cookie names. Either list of cookie names has been specified when not allowed or list of cookie names is missing when expected.</p>
     InvalidForwardCookies(String),
+    /// <p>A CloudFront function association is invalid.</p>
+    InvalidFunctionAssociation(String),
     /// <p>The specified geo restriction parameter is not valid.</p>
     InvalidGeoRestrictionParameter(String),
     /// <p>The headers specified are not valid for an Amazon S3 origin.</p>
@@ -11718,6 +12628,10 @@ pub enum CreateDistributionWithTagsError {
     NoSuchOrigin(String),
     /// <p>The origin request policy does not exist.</p>
     NoSuchOriginRequestPolicy(String),
+    /// <p>The real-time log configuration does not exist.</p>
+    NoSuchRealtimeLogConfig(String),
+    /// <p>The specified real-time log configuration belongs to a different AWS account.</p>
+    RealtimeLogConfigOwnerMismatch(String),
     /// <p>You cannot create more cache behaviors for the distribution.</p>
     TooManyCacheBehaviors(String),
     /// <p>You cannot create anymore custom SSL/TLS certificates.</p>
@@ -11736,10 +12650,14 @@ pub enum CreateDistributionWithTagsError {
     TooManyDistributionsAssociatedToKeyGroup(String),
     /// <p>The maximum number of distributions have been associated with the specified origin request policy. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
     TooManyDistributionsAssociatedToOriginRequestPolicy(String),
+    /// <p>You have reached the maximum number of distributions that are associated with a CloudFront function. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyDistributionsWithFunctionAssociations(String),
     /// <p>Processing your request would cause the maximum number of distributions with Lambda function associations per owner to be exceeded.</p>
     TooManyDistributionsWithLambdaAssociations(String),
     /// <p>The maximum number of distributions have been associated with the specified Lambda function.</p>
     TooManyDistributionsWithSingleFunctionARN(String),
+    /// <p>You have reached the maximum number of CloudFront function associations for this distribution. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyFunctionAssociations(String),
     /// <p>Your request contains too many headers in forwarded values.</p>
     TooManyHeadersInForwardedValues(String),
     /// <p>The number of key groups referenced by this distribution is more than the maximum allowed. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
@@ -11772,7 +12690,7 @@ impl CreateDistributionWithTagsError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(CreateDistributionWithTagsError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(CreateDistributionWithTagsError::CNAMEAlreadyExists(parsed_error.message)),"DistributionAlreadyExists" => return RusotoError::Service(CreateDistributionWithTagsError::DistributionAlreadyExists(parsed_error.message)),"IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior" => return RusotoError::Service(CreateDistributionWithTagsError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateDistributionWithTagsError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidArgument(parsed_error.message)),"InvalidDefaultRootObject" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidDefaultRootObject(parsed_error.message)),"InvalidErrorCode" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidErrorCode(parsed_error.message)),"InvalidForwardCookies" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidForwardCookies(parsed_error.message)),"InvalidGeoRestrictionParameter" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidGeoRestrictionParameter(parsed_error.message)),"InvalidHeadersForS3Origin" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidHeadersForS3Origin(parsed_error.message)),"InvalidLambdaFunctionAssociation" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidLambdaFunctionAssociation(parsed_error.message)),"InvalidLocationCode" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidLocationCode(parsed_error.message)),"InvalidMinimumProtocolVersion" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidMinimumProtocolVersion(parsed_error.message)),"InvalidOrigin" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOrigin(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidOriginKeepaliveTimeout" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOriginKeepaliveTimeout(parsed_error.message)),"InvalidOriginReadTimeout" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOriginReadTimeout(parsed_error.message)),"InvalidProtocolSettings" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidProtocolSettings(parsed_error.message)),"InvalidQueryStringParameters" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidQueryStringParameters(parsed_error.message)),"InvalidRelativePath" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidRelativePath(parsed_error.message)),"InvalidRequiredProtocol" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidRequiredProtocol(parsed_error.message)),"InvalidResponseCode" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidResponseCode(parsed_error.message)),"InvalidTTLOrder" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidTTLOrder(parsed_error.message)),"InvalidTagging" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidTagging(parsed_error.message)),"InvalidViewerCertificate" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidViewerCertificate(parsed_error.message)),"InvalidWebACLId" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidWebACLId(parsed_error.message)),"MissingBody" => return RusotoError::Service(CreateDistributionWithTagsError::MissingBody(parsed_error.message)),"NoSuchCachePolicy" => return RusotoError::Service(CreateDistributionWithTagsError::NoSuchCachePolicy(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionWithTagsError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchOrigin" => return RusotoError::Service(CreateDistributionWithTagsError::NoSuchOrigin(parsed_error.message)),"NoSuchOriginRequestPolicy" => return RusotoError::Service(CreateDistributionWithTagsError::NoSuchOriginRequestPolicy(parsed_error.message)),"TooManyCacheBehaviors" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyCacheBehaviors(parsed_error.message)),"TooManyCertificates" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyCertificates(parsed_error.message)),"TooManyCookieNamesInWhiteList" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyCookieNamesInWhiteList(parsed_error.message)),"TooManyDistributionCNAMEs" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionCNAMEs(parsed_error.message)),"TooManyDistributions" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributions(parsed_error.message)),"TooManyDistributionsAssociatedToCachePolicy" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsAssociatedToCachePolicy(parsed_error.message)),"TooManyDistributionsAssociatedToFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(parsed_error.message)),"TooManyDistributionsAssociatedToKeyGroup" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsAssociatedToKeyGroup(parsed_error.message)),"TooManyDistributionsAssociatedToOriginRequestPolicy" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsAssociatedToOriginRequestPolicy(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsWithLambdaAssociations(parsed_error.message)),"TooManyDistributionsWithSingleFunctionARN" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsWithSingleFunctionARN(parsed_error.message)),"TooManyHeadersInForwardedValues" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyHeadersInForwardedValues(parsed_error.message)),"TooManyKeyGroupsAssociatedToDistribution" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyKeyGroupsAssociatedToDistribution(parsed_error.message)),"TooManyLambdaFunctionAssociations" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyLambdaFunctionAssociations(parsed_error.message)),"TooManyOriginCustomHeaders" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyOriginCustomHeaders(parsed_error.message)),"TooManyOriginGroupsPerDistribution" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyOriginGroupsPerDistribution(parsed_error.message)),"TooManyOrigins" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyOrigins(parsed_error.message)),"TooManyQueryStringParameters" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyQueryStringParameters(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyTrustedSigners(parsed_error.message)),"TrustedKeyGroupDoesNotExist" => return RusotoError::Service(CreateDistributionWithTagsError::TrustedKeyGroupDoesNotExist(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(CreateDistributionWithTagsError::TrustedSignerDoesNotExist(parsed_error.message)),_ => {}
+                                    "AccessDenied" => return RusotoError::Service(CreateDistributionWithTagsError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(CreateDistributionWithTagsError::CNAMEAlreadyExists(parsed_error.message)),"DistributionAlreadyExists" => return RusotoError::Service(CreateDistributionWithTagsError::DistributionAlreadyExists(parsed_error.message)),"IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior" => return RusotoError::Service(CreateDistributionWithTagsError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(CreateDistributionWithTagsError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidArgument(parsed_error.message)),"InvalidDefaultRootObject" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidDefaultRootObject(parsed_error.message)),"InvalidErrorCode" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidErrorCode(parsed_error.message)),"InvalidForwardCookies" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidForwardCookies(parsed_error.message)),"InvalidFunctionAssociation" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidFunctionAssociation(parsed_error.message)),"InvalidGeoRestrictionParameter" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidGeoRestrictionParameter(parsed_error.message)),"InvalidHeadersForS3Origin" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidHeadersForS3Origin(parsed_error.message)),"InvalidLambdaFunctionAssociation" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidLambdaFunctionAssociation(parsed_error.message)),"InvalidLocationCode" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidLocationCode(parsed_error.message)),"InvalidMinimumProtocolVersion" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidMinimumProtocolVersion(parsed_error.message)),"InvalidOrigin" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOrigin(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidOriginKeepaliveTimeout" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOriginKeepaliveTimeout(parsed_error.message)),"InvalidOriginReadTimeout" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidOriginReadTimeout(parsed_error.message)),"InvalidProtocolSettings" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidProtocolSettings(parsed_error.message)),"InvalidQueryStringParameters" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidQueryStringParameters(parsed_error.message)),"InvalidRelativePath" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidRelativePath(parsed_error.message)),"InvalidRequiredProtocol" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidRequiredProtocol(parsed_error.message)),"InvalidResponseCode" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidResponseCode(parsed_error.message)),"InvalidTTLOrder" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidTTLOrder(parsed_error.message)),"InvalidTagging" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidTagging(parsed_error.message)),"InvalidViewerCertificate" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidViewerCertificate(parsed_error.message)),"InvalidWebACLId" => return RusotoError::Service(CreateDistributionWithTagsError::InvalidWebACLId(parsed_error.message)),"MissingBody" => return RusotoError::Service(CreateDistributionWithTagsError::MissingBody(parsed_error.message)),"NoSuchCachePolicy" => return RusotoError::Service(CreateDistributionWithTagsError::NoSuchCachePolicy(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionWithTagsError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchOrigin" => return RusotoError::Service(CreateDistributionWithTagsError::NoSuchOrigin(parsed_error.message)),"NoSuchOriginRequestPolicy" => return RusotoError::Service(CreateDistributionWithTagsError::NoSuchOriginRequestPolicy(parsed_error.message)),"NoSuchRealtimeLogConfig" => return RusotoError::Service(CreateDistributionWithTagsError::NoSuchRealtimeLogConfig(parsed_error.message)),"RealtimeLogConfigOwnerMismatch" => return RusotoError::Service(CreateDistributionWithTagsError::RealtimeLogConfigOwnerMismatch(parsed_error.message)),"TooManyCacheBehaviors" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyCacheBehaviors(parsed_error.message)),"TooManyCertificates" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyCertificates(parsed_error.message)),"TooManyCookieNamesInWhiteList" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyCookieNamesInWhiteList(parsed_error.message)),"TooManyDistributionCNAMEs" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionCNAMEs(parsed_error.message)),"TooManyDistributions" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributions(parsed_error.message)),"TooManyDistributionsAssociatedToCachePolicy" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsAssociatedToCachePolicy(parsed_error.message)),"TooManyDistributionsAssociatedToFieldLevelEncryptionConfig" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(parsed_error.message)),"TooManyDistributionsAssociatedToKeyGroup" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsAssociatedToKeyGroup(parsed_error.message)),"TooManyDistributionsAssociatedToOriginRequestPolicy" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsAssociatedToOriginRequestPolicy(parsed_error.message)),"TooManyDistributionsWithFunctionAssociations" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsWithFunctionAssociations(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsWithLambdaAssociations(parsed_error.message)),"TooManyDistributionsWithSingleFunctionARN" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyDistributionsWithSingleFunctionARN(parsed_error.message)),"TooManyFunctionAssociations" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyFunctionAssociations(parsed_error.message)),"TooManyHeadersInForwardedValues" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyHeadersInForwardedValues(parsed_error.message)),"TooManyKeyGroupsAssociatedToDistribution" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyKeyGroupsAssociatedToDistribution(parsed_error.message)),"TooManyLambdaFunctionAssociations" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyLambdaFunctionAssociations(parsed_error.message)),"TooManyOriginCustomHeaders" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyOriginCustomHeaders(parsed_error.message)),"TooManyOriginGroupsPerDistribution" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyOriginGroupsPerDistribution(parsed_error.message)),"TooManyOrigins" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyOrigins(parsed_error.message)),"TooManyQueryStringParameters" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyQueryStringParameters(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(CreateDistributionWithTagsError::TooManyTrustedSigners(parsed_error.message)),"TrustedKeyGroupDoesNotExist" => return RusotoError::Service(CreateDistributionWithTagsError::TrustedKeyGroupDoesNotExist(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(CreateDistributionWithTagsError::TrustedSignerDoesNotExist(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -11800,6 +12718,7 @@ CreateDistributionWithTagsError::InvalidArgument(ref cause) => write!(f, "{}", c
 CreateDistributionWithTagsError::InvalidDefaultRootObject(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::InvalidErrorCode(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::InvalidForwardCookies(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::InvalidFunctionAssociation(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::InvalidGeoRestrictionParameter(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::InvalidHeadersForS3Origin(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::InvalidLambdaFunctionAssociation(ref cause) => write!(f, "{}", cause),
@@ -11823,6 +12742,8 @@ CreateDistributionWithTagsError::NoSuchCachePolicy(ref cause) => write!(f, "{}",
 CreateDistributionWithTagsError::NoSuchFieldLevelEncryptionConfig(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::NoSuchOrigin(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::NoSuchOriginRequestPolicy(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::NoSuchRealtimeLogConfig(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::RealtimeLogConfigOwnerMismatch(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::TooManyCacheBehaviors(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::TooManyCertificates(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::TooManyCookieNamesInWhiteList(ref cause) => write!(f, "{}", cause),
@@ -11832,8 +12753,10 @@ CreateDistributionWithTagsError::TooManyDistributionsAssociatedToCachePolicy(ref
 CreateDistributionWithTagsError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::TooManyDistributionsAssociatedToKeyGroup(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::TooManyDistributionsAssociatedToOriginRequestPolicy(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyDistributionsWithFunctionAssociations(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::TooManyDistributionsWithLambdaAssociations(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::TooManyDistributionsWithSingleFunctionARN(ref cause) => write!(f, "{}", cause),
+CreateDistributionWithTagsError::TooManyFunctionAssociations(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::TooManyHeadersInForwardedValues(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::TooManyKeyGroupsAssociatedToDistribution(ref cause) => write!(f, "{}", cause),
 CreateDistributionWithTagsError::TooManyLambdaFunctionAssociations(ref cause) => write!(f, "{}", cause),
@@ -11972,6 +12895,74 @@ CreateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionProfiles(ref 
     }
 }
 impl Error for CreateFieldLevelEncryptionProfileError {}
+/// Errors returned by CreateFunction
+#[derive(Debug, PartialEq)]
+pub enum CreateFunctionError {
+    /// <p>A function with the same name already exists in this AWS account. To create a function, you must provide a unique name. To update an existing function, use <code>UpdateFunction</code>.</p>
+    FunctionAlreadyExists(String),
+    /// <p>The function is too large. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    FunctionSizeLimitExceeded(String),
+    /// <p>An argument is invalid.</p>
+    InvalidArgument(String),
+    /// <p>You have reached the maximum number of CloudFront functions for this AWS account. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyFunctions(String),
+}
+
+impl CreateFunctionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFunctionError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "FunctionAlreadyExists" => {
+                        return RusotoError::Service(CreateFunctionError::FunctionAlreadyExists(
+                            parsed_error.message,
+                        ))
+                    }
+                    "FunctionSizeLimitExceeded" => {
+                        return RusotoError::Service(
+                            CreateFunctionError::FunctionSizeLimitExceeded(parsed_error.message),
+                        )
+                    }
+                    "InvalidArgument" => {
+                        return RusotoError::Service(CreateFunctionError::InvalidArgument(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TooManyFunctions" => {
+                        return RusotoError::Service(CreateFunctionError::TooManyFunctions(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for CreateFunctionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateFunctionError::FunctionAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateFunctionError::FunctionSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateFunctionError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            CreateFunctionError::TooManyFunctions(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateFunctionError {}
 /// Errors returned by CreateInvalidation
 #[derive(Debug, PartialEq)]
 pub enum CreateInvalidationError {
@@ -12143,6 +13134,8 @@ pub enum CreateMonitoringSubscriptionError {
     AccessDenied(String),
     /// <p>The specified distribution does not exist.</p>
     NoSuchDistribution(String),
+    /// <p>This operation is not supported in this region.</p>
+    UnsupportedOperation(String),
 }
 
 impl CreateMonitoringSubscriptionError {
@@ -12163,6 +13156,13 @@ impl CreateMonitoringSubscriptionError {
                     "NoSuchDistribution" => {
                         return RusotoError::Service(
                             CreateMonitoringSubscriptionError::NoSuchDistribution(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "UnsupportedOperation" => {
+                        return RusotoError::Service(
+                            CreateMonitoringSubscriptionError::UnsupportedOperation(
                                 parsed_error.message,
                             ),
                         )
@@ -12188,6 +13188,9 @@ impl fmt::Display for CreateMonitoringSubscriptionError {
         match *self {
             CreateMonitoringSubscriptionError::AccessDenied(ref cause) => write!(f, "{}", cause),
             CreateMonitoringSubscriptionError::NoSuchDistribution(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateMonitoringSubscriptionError::UnsupportedOperation(ref cause) => {
                 write!(f, "{}", cause)
             }
         }
@@ -12734,7 +13737,7 @@ pub enum DeleteCachePolicyError {
     InvalidIfMatchVersion(String),
     /// <p>The cache policy does not exist.</p>
     NoSuchCachePolicy(String),
-    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
+    /// <p>The precondition in one or more of the request fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
 }
 
@@ -12816,7 +13819,7 @@ pub enum DeleteCloudFrontOriginAccessIdentityError {
     InvalidIfMatchVersion(String),
     /// <p>The specified origin access identity does not exist.</p>
     NoSuchCloudFrontOriginAccessIdentity(String),
-    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
+    /// <p>The precondition in one or more of the request fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
 }
 
@@ -12879,7 +13882,7 @@ pub enum DeleteDistributionError {
     InvalidIfMatchVersion(String),
     /// <p>The specified distribution does not exist.</p>
     NoSuchDistribution(String),
-    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
+    /// <p>The precondition in one or more of the request fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
 }
 
@@ -12955,7 +13958,7 @@ pub enum DeleteFieldLevelEncryptionConfigError {
     InvalidIfMatchVersion(String),
     /// <p>The specified configuration for field-level encryption doesn't exist.</p>
     NoSuchFieldLevelEncryptionConfig(String),
-    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
+    /// <p>The precondition in one or more of the request fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
 }
 
@@ -13053,7 +14056,7 @@ pub enum DeleteFieldLevelEncryptionProfileError {
     InvalidIfMatchVersion(String),
     /// <p>The specified profile for field-level encryption doesn't exist.</p>
     NoSuchFieldLevelEncryptionProfile(String),
-    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
+    /// <p>The precondition in one or more of the request fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
 }
 
@@ -13136,6 +14139,74 @@ impl fmt::Display for DeleteFieldLevelEncryptionProfileError {
     }
 }
 impl Error for DeleteFieldLevelEncryptionProfileError {}
+/// Errors returned by DeleteFunction
+#[derive(Debug, PartialEq)]
+pub enum DeleteFunctionError {
+    /// <p>Cannot delete the function because it’s attached to one or more cache behaviors.</p>
+    FunctionInUse(String),
+    /// <p>The <code>If-Match</code> version is missing or not valid.</p>
+    InvalidIfMatchVersion(String),
+    /// <p>The function does not exist.</p>
+    NoSuchFunctionExists(String),
+    /// <p>The precondition in one or more of the request fields evaluated to <code>false</code>.</p>
+    PreconditionFailed(String),
+}
+
+impl DeleteFunctionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFunctionError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "FunctionInUse" => {
+                        return RusotoError::Service(DeleteFunctionError::FunctionInUse(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidIfMatchVersion" => {
+                        return RusotoError::Service(DeleteFunctionError::InvalidIfMatchVersion(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchFunctionExists" => {
+                        return RusotoError::Service(DeleteFunctionError::NoSuchFunctionExists(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PreconditionFailed" => {
+                        return RusotoError::Service(DeleteFunctionError::PreconditionFailed(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DeleteFunctionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteFunctionError::FunctionInUse(ref cause) => write!(f, "{}", cause),
+            DeleteFunctionError::InvalidIfMatchVersion(ref cause) => write!(f, "{}", cause),
+            DeleteFunctionError::NoSuchFunctionExists(ref cause) => write!(f, "{}", cause),
+            DeleteFunctionError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteFunctionError {}
 /// Errors returned by DeleteKeyGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteKeyGroupError {
@@ -13143,7 +14214,7 @@ pub enum DeleteKeyGroupError {
     InvalidIfMatchVersion(String),
     /// <p>A resource that was specified is not valid.</p>
     NoSuchResource(String),
-    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
+    /// <p>The precondition in one or more of the request fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
     /// <p>Cannot delete this resource because it is in use.</p>
     ResourceInUse(String),
@@ -13211,6 +14282,8 @@ pub enum DeleteMonitoringSubscriptionError {
     AccessDenied(String),
     /// <p>The specified distribution does not exist.</p>
     NoSuchDistribution(String),
+    /// <p>This operation is not supported in this region.</p>
+    UnsupportedOperation(String),
 }
 
 impl DeleteMonitoringSubscriptionError {
@@ -13231,6 +14304,13 @@ impl DeleteMonitoringSubscriptionError {
                     "NoSuchDistribution" => {
                         return RusotoError::Service(
                             DeleteMonitoringSubscriptionError::NoSuchDistribution(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "UnsupportedOperation" => {
+                        return RusotoError::Service(
+                            DeleteMonitoringSubscriptionError::UnsupportedOperation(
                                 parsed_error.message,
                             ),
                         )
@@ -13258,6 +14338,9 @@ impl fmt::Display for DeleteMonitoringSubscriptionError {
             DeleteMonitoringSubscriptionError::NoSuchDistribution(ref cause) => {
                 write!(f, "{}", cause)
             }
+            DeleteMonitoringSubscriptionError::UnsupportedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
@@ -13275,7 +14358,7 @@ pub enum DeleteOriginRequestPolicyError {
     NoSuchOriginRequestPolicy(String),
     /// <p>Cannot delete the origin request policy because it is attached to one or more cache behaviors.</p>
     OriginRequestPolicyInUse(String),
-    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
+    /// <p>The precondition in one or more of the request fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
 }
 
@@ -13369,7 +14452,7 @@ pub enum DeletePublicKeyError {
     InvalidIfMatchVersion(String),
     /// <p>The specified public key doesn't exist.</p>
     NoSuchPublicKey(String),
-    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
+    /// <p>The precondition in one or more of the request fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
     /// <p>The specified public key is in use. </p>
     PublicKeyInUse(String),
@@ -13521,7 +14604,7 @@ pub enum DeleteStreamingDistributionError {
     InvalidIfMatchVersion(String),
     /// <p>The specified streaming distribution does not exist.</p>
     NoSuchStreamingDistribution(String),
-    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
+    /// <p>The precondition in one or more of the request fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
     /// <p>The specified CloudFront distribution is not disabled. You must disable the distribution before you can delete it.</p>
     StreamingDistributionNotDisabled(String),
@@ -13606,6 +14689,50 @@ impl fmt::Display for DeleteStreamingDistributionError {
     }
 }
 impl Error for DeleteStreamingDistributionError {}
+/// Errors returned by DescribeFunction
+#[derive(Debug, PartialEq)]
+pub enum DescribeFunctionError {
+    /// <p>The function does not exist.</p>
+    NoSuchFunctionExists(String),
+}
+
+impl DescribeFunctionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFunctionError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchFunctionExists" => {
+                        return RusotoError::Service(DescribeFunctionError::NoSuchFunctionExists(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DescribeFunctionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeFunctionError::NoSuchFunctionExists(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeFunctionError {}
 /// Errors returned by GetCachePolicy
 #[derive(Debug, PartialEq)]
 pub enum GetCachePolicyError {
@@ -14130,6 +15257,50 @@ impl fmt::Display for GetFieldLevelEncryptionProfileConfigError {
     }
 }
 impl Error for GetFieldLevelEncryptionProfileConfigError {}
+/// Errors returned by GetFunction
+#[derive(Debug, PartialEq)]
+pub enum GetFunctionError {
+    /// <p>The function does not exist.</p>
+    NoSuchFunctionExists(String),
+}
+
+impl GetFunctionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetFunctionError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchFunctionExists" => {
+                        return RusotoError::Service(GetFunctionError::NoSuchFunctionExists(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for GetFunctionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetFunctionError::NoSuchFunctionExists(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetFunctionError {}
 /// Errors returned by GetInvalidation
 #[derive(Debug, PartialEq)]
 pub enum GetInvalidationError {
@@ -14285,6 +15456,8 @@ pub enum GetMonitoringSubscriptionError {
     AccessDenied(String),
     /// <p>The specified distribution does not exist.</p>
     NoSuchDistribution(String),
+    /// <p>This operation is not supported in this region.</p>
+    UnsupportedOperation(String),
 }
 
 impl GetMonitoringSubscriptionError {
@@ -14303,6 +15476,13 @@ impl GetMonitoringSubscriptionError {
                     "NoSuchDistribution" => {
                         return RusotoError::Service(
                             GetMonitoringSubscriptionError::NoSuchDistribution(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "UnsupportedOperation" => {
+                        return RusotoError::Service(
+                            GetMonitoringSubscriptionError::UnsupportedOperation(
                                 parsed_error.message,
                             ),
                         )
@@ -14328,6 +15508,9 @@ impl fmt::Display for GetMonitoringSubscriptionError {
         match *self {
             GetMonitoringSubscriptionError::AccessDenied(ref cause) => write!(f, "{}", cause),
             GetMonitoringSubscriptionError::NoSuchDistribution(ref cause) => write!(f, "{}", cause),
+            GetMonitoringSubscriptionError::UnsupportedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
         }
     }
 }
@@ -15284,6 +16467,50 @@ impl fmt::Display for ListFieldLevelEncryptionProfilesError {
     }
 }
 impl Error for ListFieldLevelEncryptionProfilesError {}
+/// Errors returned by ListFunctions
+#[derive(Debug, PartialEq)]
+pub enum ListFunctionsError {
+    /// <p>An argument is invalid.</p>
+    InvalidArgument(String),
+}
+
+impl ListFunctionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFunctionsError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidArgument" => {
+                        return RusotoError::Service(ListFunctionsError::InvalidArgument(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ListFunctionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListFunctionsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListFunctionsError {}
 /// Errors returned by ListInvalidations
 #[derive(Debug, PartialEq)]
 pub enum ListInvalidationsError {
@@ -15674,6 +16901,74 @@ impl fmt::Display for ListTagsForResourceError {
     }
 }
 impl Error for ListTagsForResourceError {}
+/// Errors returned by PublishFunction
+#[derive(Debug, PartialEq)]
+pub enum PublishFunctionError {
+    /// <p>An argument is invalid.</p>
+    InvalidArgument(String),
+    /// <p>The <code>If-Match</code> version is missing or not valid.</p>
+    InvalidIfMatchVersion(String),
+    /// <p>The function does not exist.</p>
+    NoSuchFunctionExists(String),
+    /// <p>The precondition in one or more of the request fields evaluated to <code>false</code>.</p>
+    PreconditionFailed(String),
+}
+
+impl PublishFunctionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PublishFunctionError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidArgument" => {
+                        return RusotoError::Service(PublishFunctionError::InvalidArgument(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidIfMatchVersion" => {
+                        return RusotoError::Service(PublishFunctionError::InvalidIfMatchVersion(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchFunctionExists" => {
+                        return RusotoError::Service(PublishFunctionError::NoSuchFunctionExists(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PreconditionFailed" => {
+                        return RusotoError::Service(PublishFunctionError::PreconditionFailed(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for PublishFunctionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PublishFunctionError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            PublishFunctionError::InvalidIfMatchVersion(ref cause) => write!(f, "{}", cause),
+            PublishFunctionError::NoSuchFunctionExists(ref cause) => write!(f, "{}", cause),
+            PublishFunctionError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PublishFunctionError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -15742,6 +17037,74 @@ impl fmt::Display for TagResourceError {
     }
 }
 impl Error for TagResourceError {}
+/// Errors returned by TestFunction
+#[derive(Debug, PartialEq)]
+pub enum TestFunctionError {
+    /// <p>An argument is invalid.</p>
+    InvalidArgument(String),
+    /// <p>The <code>If-Match</code> version is missing or not valid.</p>
+    InvalidIfMatchVersion(String),
+    /// <p>The function does not exist.</p>
+    NoSuchFunctionExists(String),
+    /// <p>The CloudFront function failed.</p>
+    TestFunctionFailed(String),
+}
+
+impl TestFunctionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TestFunctionError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidArgument" => {
+                        return RusotoError::Service(TestFunctionError::InvalidArgument(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidIfMatchVersion" => {
+                        return RusotoError::Service(TestFunctionError::InvalidIfMatchVersion(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchFunctionExists" => {
+                        return RusotoError::Service(TestFunctionError::NoSuchFunctionExists(
+                            parsed_error.message,
+                        ))
+                    }
+                    "TestFunctionFailed" => {
+                        return RusotoError::Service(TestFunctionError::TestFunctionFailed(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for TestFunctionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            TestFunctionError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            TestFunctionError::InvalidIfMatchVersion(ref cause) => write!(f, "{}", cause),
+            TestFunctionError::NoSuchFunctionExists(ref cause) => write!(f, "{}", cause),
+            TestFunctionError::TestFunctionFailed(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for TestFunctionError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
@@ -15827,7 +17190,7 @@ pub enum UpdateCachePolicyError {
     InvalidIfMatchVersion(String),
     /// <p>The cache policy does not exist.</p>
     NoSuchCachePolicy(String),
-    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
+    /// <p>The precondition in one or more of the request fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
     /// <p>The number of cookies in the cache policy exceeds the maximum. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
     TooManyCookiesInCachePolicy(String),
@@ -15963,7 +17326,7 @@ pub enum UpdateCloudFrontOriginAccessIdentityError {
     MissingBody(String),
     /// <p>The specified origin access identity does not exist.</p>
     NoSuchCloudFrontOriginAccessIdentity(String),
-    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
+    /// <p>The precondition in one or more of the request fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
 }
 
@@ -16045,6 +17408,8 @@ pub enum UpdateDistributionError {
     InvalidErrorCode(String),
     /// <p>Your request contains forward cookies option which doesn't match with the expectation for the <code>whitelisted</code> list of cookie names. Either list of cookie names has been specified when not allowed or list of cookie names is missing when expected.</p>
     InvalidForwardCookies(String),
+    /// <p>A CloudFront function association is invalid.</p>
+    InvalidFunctionAssociation(String),
     /// <p>The specified geo restriction parameter is not valid.</p>
     InvalidGeoRestrictionParameter(String),
     /// <p>The headers specified are not valid for an Amazon S3 origin.</p>
@@ -16089,8 +17454,12 @@ pub enum UpdateDistributionError {
     NoSuchOrigin(String),
     /// <p>The origin request policy does not exist.</p>
     NoSuchOriginRequestPolicy(String),
-    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
+    /// <p>The real-time log configuration does not exist.</p>
+    NoSuchRealtimeLogConfig(String),
+    /// <p>The precondition in one or more of the request fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
+    /// <p>The specified real-time log configuration belongs to a different AWS account.</p>
+    RealtimeLogConfigOwnerMismatch(String),
     /// <p>You cannot create more cache behaviors for the distribution.</p>
     TooManyCacheBehaviors(String),
     /// <p>You cannot create anymore custom SSL/TLS certificates.</p>
@@ -16107,10 +17476,14 @@ pub enum UpdateDistributionError {
     TooManyDistributionsAssociatedToKeyGroup(String),
     /// <p>The maximum number of distributions have been associated with the specified origin request policy. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
     TooManyDistributionsAssociatedToOriginRequestPolicy(String),
+    /// <p>You have reached the maximum number of distributions that are associated with a CloudFront function. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyDistributionsWithFunctionAssociations(String),
     /// <p>Processing your request would cause the maximum number of distributions with Lambda function associations per owner to be exceeded.</p>
     TooManyDistributionsWithLambdaAssociations(String),
     /// <p>The maximum number of distributions have been associated with the specified Lambda function.</p>
     TooManyDistributionsWithSingleFunctionARN(String),
+    /// <p>You have reached the maximum number of CloudFront function associations for this distribution. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    TooManyFunctionAssociations(String),
     /// <p>Your request contains too many headers in forwarded values.</p>
     TooManyHeadersInForwardedValues(String),
     /// <p>The number of key groups referenced by this distribution is more than the maximum allowed. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
@@ -16141,7 +17514,7 @@ impl UpdateDistributionError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AccessDenied" => return RusotoError::Service(UpdateDistributionError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(UpdateDistributionError::CNAMEAlreadyExists(parsed_error.message)),"IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior" => return RusotoError::Service(UpdateDistributionError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(parsed_error.message)),"IllegalUpdate" => return RusotoError::Service(UpdateDistributionError::IllegalUpdate(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(UpdateDistributionError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(UpdateDistributionError::InvalidArgument(parsed_error.message)),"InvalidDefaultRootObject" => return RusotoError::Service(UpdateDistributionError::InvalidDefaultRootObject(parsed_error.message)),"InvalidErrorCode" => return RusotoError::Service(UpdateDistributionError::InvalidErrorCode(parsed_error.message)),"InvalidForwardCookies" => return RusotoError::Service(UpdateDistributionError::InvalidForwardCookies(parsed_error.message)),"InvalidGeoRestrictionParameter" => return RusotoError::Service(UpdateDistributionError::InvalidGeoRestrictionParameter(parsed_error.message)),"InvalidHeadersForS3Origin" => return RusotoError::Service(UpdateDistributionError::InvalidHeadersForS3Origin(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(UpdateDistributionError::InvalidIfMatchVersion(parsed_error.message)),"InvalidLambdaFunctionAssociation" => return RusotoError::Service(UpdateDistributionError::InvalidLambdaFunctionAssociation(parsed_error.message)),"InvalidLocationCode" => return RusotoError::Service(UpdateDistributionError::InvalidLocationCode(parsed_error.message)),"InvalidMinimumProtocolVersion" => return RusotoError::Service(UpdateDistributionError::InvalidMinimumProtocolVersion(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(UpdateDistributionError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidOriginKeepaliveTimeout" => return RusotoError::Service(UpdateDistributionError::InvalidOriginKeepaliveTimeout(parsed_error.message)),"InvalidOriginReadTimeout" => return RusotoError::Service(UpdateDistributionError::InvalidOriginReadTimeout(parsed_error.message)),"InvalidQueryStringParameters" => return RusotoError::Service(UpdateDistributionError::InvalidQueryStringParameters(parsed_error.message)),"InvalidRelativePath" => return RusotoError::Service(UpdateDistributionError::InvalidRelativePath(parsed_error.message)),"InvalidRequiredProtocol" => return RusotoError::Service(UpdateDistributionError::InvalidRequiredProtocol(parsed_error.message)),"InvalidResponseCode" => return RusotoError::Service(UpdateDistributionError::InvalidResponseCode(parsed_error.message)),"InvalidTTLOrder" => return RusotoError::Service(UpdateDistributionError::InvalidTTLOrder(parsed_error.message)),"InvalidViewerCertificate" => return RusotoError::Service(UpdateDistributionError::InvalidViewerCertificate(parsed_error.message)),"InvalidWebACLId" => return RusotoError::Service(UpdateDistributionError::InvalidWebACLId(parsed_error.message)),"MissingBody" => return RusotoError::Service(UpdateDistributionError::MissingBody(parsed_error.message)),"NoSuchCachePolicy" => return RusotoError::Service(UpdateDistributionError::NoSuchCachePolicy(parsed_error.message)),"NoSuchDistribution" => return RusotoError::Service(UpdateDistributionError::NoSuchDistribution(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(UpdateDistributionError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchOrigin" => return RusotoError::Service(UpdateDistributionError::NoSuchOrigin(parsed_error.message)),"NoSuchOriginRequestPolicy" => return RusotoError::Service(UpdateDistributionError::NoSuchOriginRequestPolicy(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(UpdateDistributionError::PreconditionFailed(parsed_error.message)),"TooManyCacheBehaviors" => return RusotoError::Service(UpdateDistributionError::TooManyCacheBehaviors(parsed_error.message)),"TooManyCertificates" => return RusotoError::Service(UpdateDistributionError::TooManyCertificates(parsed_error.message)),"TooManyCookieNamesInWhiteList" => return RusotoError::Service(UpdateDistributionError::TooManyCookieNamesInWhiteList(parsed_error.message)),"TooManyDistributionCNAMEs" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionCNAMEs(parsed_error.message)),"TooManyDistributionsAssociatedToCachePolicy" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsAssociatedToCachePolicy(parsed_error.message)),"TooManyDistributionsAssociatedToFieldLevelEncryptionConfig" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(parsed_error.message)),"TooManyDistributionsAssociatedToKeyGroup" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsAssociatedToKeyGroup(parsed_error.message)),"TooManyDistributionsAssociatedToOriginRequestPolicy" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsAssociatedToOriginRequestPolicy(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsWithLambdaAssociations(parsed_error.message)),"TooManyDistributionsWithSingleFunctionARN" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsWithSingleFunctionARN(parsed_error.message)),"TooManyHeadersInForwardedValues" => return RusotoError::Service(UpdateDistributionError::TooManyHeadersInForwardedValues(parsed_error.message)),"TooManyKeyGroupsAssociatedToDistribution" => return RusotoError::Service(UpdateDistributionError::TooManyKeyGroupsAssociatedToDistribution(parsed_error.message)),"TooManyLambdaFunctionAssociations" => return RusotoError::Service(UpdateDistributionError::TooManyLambdaFunctionAssociations(parsed_error.message)),"TooManyOriginCustomHeaders" => return RusotoError::Service(UpdateDistributionError::TooManyOriginCustomHeaders(parsed_error.message)),"TooManyOriginGroupsPerDistribution" => return RusotoError::Service(UpdateDistributionError::TooManyOriginGroupsPerDistribution(parsed_error.message)),"TooManyOrigins" => return RusotoError::Service(UpdateDistributionError::TooManyOrigins(parsed_error.message)),"TooManyQueryStringParameters" => return RusotoError::Service(UpdateDistributionError::TooManyQueryStringParameters(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(UpdateDistributionError::TooManyTrustedSigners(parsed_error.message)),"TrustedKeyGroupDoesNotExist" => return RusotoError::Service(UpdateDistributionError::TrustedKeyGroupDoesNotExist(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(UpdateDistributionError::TrustedSignerDoesNotExist(parsed_error.message)),_ => {}
+                                    "AccessDenied" => return RusotoError::Service(UpdateDistributionError::AccessDenied(parsed_error.message)),"CNAMEAlreadyExists" => return RusotoError::Service(UpdateDistributionError::CNAMEAlreadyExists(parsed_error.message)),"IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior" => return RusotoError::Service(UpdateDistributionError::IllegalFieldLevelEncryptionConfigAssociationWithCacheBehavior(parsed_error.message)),"IllegalUpdate" => return RusotoError::Service(UpdateDistributionError::IllegalUpdate(parsed_error.message)),"InconsistentQuantities" => return RusotoError::Service(UpdateDistributionError::InconsistentQuantities(parsed_error.message)),"InvalidArgument" => return RusotoError::Service(UpdateDistributionError::InvalidArgument(parsed_error.message)),"InvalidDefaultRootObject" => return RusotoError::Service(UpdateDistributionError::InvalidDefaultRootObject(parsed_error.message)),"InvalidErrorCode" => return RusotoError::Service(UpdateDistributionError::InvalidErrorCode(parsed_error.message)),"InvalidForwardCookies" => return RusotoError::Service(UpdateDistributionError::InvalidForwardCookies(parsed_error.message)),"InvalidFunctionAssociation" => return RusotoError::Service(UpdateDistributionError::InvalidFunctionAssociation(parsed_error.message)),"InvalidGeoRestrictionParameter" => return RusotoError::Service(UpdateDistributionError::InvalidGeoRestrictionParameter(parsed_error.message)),"InvalidHeadersForS3Origin" => return RusotoError::Service(UpdateDistributionError::InvalidHeadersForS3Origin(parsed_error.message)),"InvalidIfMatchVersion" => return RusotoError::Service(UpdateDistributionError::InvalidIfMatchVersion(parsed_error.message)),"InvalidLambdaFunctionAssociation" => return RusotoError::Service(UpdateDistributionError::InvalidLambdaFunctionAssociation(parsed_error.message)),"InvalidLocationCode" => return RusotoError::Service(UpdateDistributionError::InvalidLocationCode(parsed_error.message)),"InvalidMinimumProtocolVersion" => return RusotoError::Service(UpdateDistributionError::InvalidMinimumProtocolVersion(parsed_error.message)),"InvalidOriginAccessIdentity" => return RusotoError::Service(UpdateDistributionError::InvalidOriginAccessIdentity(parsed_error.message)),"InvalidOriginKeepaliveTimeout" => return RusotoError::Service(UpdateDistributionError::InvalidOriginKeepaliveTimeout(parsed_error.message)),"InvalidOriginReadTimeout" => return RusotoError::Service(UpdateDistributionError::InvalidOriginReadTimeout(parsed_error.message)),"InvalidQueryStringParameters" => return RusotoError::Service(UpdateDistributionError::InvalidQueryStringParameters(parsed_error.message)),"InvalidRelativePath" => return RusotoError::Service(UpdateDistributionError::InvalidRelativePath(parsed_error.message)),"InvalidRequiredProtocol" => return RusotoError::Service(UpdateDistributionError::InvalidRequiredProtocol(parsed_error.message)),"InvalidResponseCode" => return RusotoError::Service(UpdateDistributionError::InvalidResponseCode(parsed_error.message)),"InvalidTTLOrder" => return RusotoError::Service(UpdateDistributionError::InvalidTTLOrder(parsed_error.message)),"InvalidViewerCertificate" => return RusotoError::Service(UpdateDistributionError::InvalidViewerCertificate(parsed_error.message)),"InvalidWebACLId" => return RusotoError::Service(UpdateDistributionError::InvalidWebACLId(parsed_error.message)),"MissingBody" => return RusotoError::Service(UpdateDistributionError::MissingBody(parsed_error.message)),"NoSuchCachePolicy" => return RusotoError::Service(UpdateDistributionError::NoSuchCachePolicy(parsed_error.message)),"NoSuchDistribution" => return RusotoError::Service(UpdateDistributionError::NoSuchDistribution(parsed_error.message)),"NoSuchFieldLevelEncryptionConfig" => return RusotoError::Service(UpdateDistributionError::NoSuchFieldLevelEncryptionConfig(parsed_error.message)),"NoSuchOrigin" => return RusotoError::Service(UpdateDistributionError::NoSuchOrigin(parsed_error.message)),"NoSuchOriginRequestPolicy" => return RusotoError::Service(UpdateDistributionError::NoSuchOriginRequestPolicy(parsed_error.message)),"NoSuchRealtimeLogConfig" => return RusotoError::Service(UpdateDistributionError::NoSuchRealtimeLogConfig(parsed_error.message)),"PreconditionFailed" => return RusotoError::Service(UpdateDistributionError::PreconditionFailed(parsed_error.message)),"RealtimeLogConfigOwnerMismatch" => return RusotoError::Service(UpdateDistributionError::RealtimeLogConfigOwnerMismatch(parsed_error.message)),"TooManyCacheBehaviors" => return RusotoError::Service(UpdateDistributionError::TooManyCacheBehaviors(parsed_error.message)),"TooManyCertificates" => return RusotoError::Service(UpdateDistributionError::TooManyCertificates(parsed_error.message)),"TooManyCookieNamesInWhiteList" => return RusotoError::Service(UpdateDistributionError::TooManyCookieNamesInWhiteList(parsed_error.message)),"TooManyDistributionCNAMEs" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionCNAMEs(parsed_error.message)),"TooManyDistributionsAssociatedToCachePolicy" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsAssociatedToCachePolicy(parsed_error.message)),"TooManyDistributionsAssociatedToFieldLevelEncryptionConfig" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(parsed_error.message)),"TooManyDistributionsAssociatedToKeyGroup" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsAssociatedToKeyGroup(parsed_error.message)),"TooManyDistributionsAssociatedToOriginRequestPolicy" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsAssociatedToOriginRequestPolicy(parsed_error.message)),"TooManyDistributionsWithFunctionAssociations" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsWithFunctionAssociations(parsed_error.message)),"TooManyDistributionsWithLambdaAssociations" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsWithLambdaAssociations(parsed_error.message)),"TooManyDistributionsWithSingleFunctionARN" => return RusotoError::Service(UpdateDistributionError::TooManyDistributionsWithSingleFunctionARN(parsed_error.message)),"TooManyFunctionAssociations" => return RusotoError::Service(UpdateDistributionError::TooManyFunctionAssociations(parsed_error.message)),"TooManyHeadersInForwardedValues" => return RusotoError::Service(UpdateDistributionError::TooManyHeadersInForwardedValues(parsed_error.message)),"TooManyKeyGroupsAssociatedToDistribution" => return RusotoError::Service(UpdateDistributionError::TooManyKeyGroupsAssociatedToDistribution(parsed_error.message)),"TooManyLambdaFunctionAssociations" => return RusotoError::Service(UpdateDistributionError::TooManyLambdaFunctionAssociations(parsed_error.message)),"TooManyOriginCustomHeaders" => return RusotoError::Service(UpdateDistributionError::TooManyOriginCustomHeaders(parsed_error.message)),"TooManyOriginGroupsPerDistribution" => return RusotoError::Service(UpdateDistributionError::TooManyOriginGroupsPerDistribution(parsed_error.message)),"TooManyOrigins" => return RusotoError::Service(UpdateDistributionError::TooManyOrigins(parsed_error.message)),"TooManyQueryStringParameters" => return RusotoError::Service(UpdateDistributionError::TooManyQueryStringParameters(parsed_error.message)),"TooManyTrustedSigners" => return RusotoError::Service(UpdateDistributionError::TooManyTrustedSigners(parsed_error.message)),"TrustedKeyGroupDoesNotExist" => return RusotoError::Service(UpdateDistributionError::TrustedKeyGroupDoesNotExist(parsed_error.message)),"TrustedSignerDoesNotExist" => return RusotoError::Service(UpdateDistributionError::TrustedSignerDoesNotExist(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -16169,6 +17542,7 @@ UpdateDistributionError::InvalidArgument(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::InvalidDefaultRootObject(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::InvalidErrorCode(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::InvalidForwardCookies(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::InvalidFunctionAssociation(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::InvalidGeoRestrictionParameter(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::InvalidHeadersForS3Origin(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::InvalidIfMatchVersion(ref cause) => write!(f, "{}", cause),
@@ -16191,7 +17565,9 @@ UpdateDistributionError::NoSuchDistribution(ref cause) => write!(f, "{}", cause)
 UpdateDistributionError::NoSuchFieldLevelEncryptionConfig(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::NoSuchOrigin(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::NoSuchOriginRequestPolicy(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::NoSuchRealtimeLogConfig(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::RealtimeLogConfigOwnerMismatch(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::TooManyCacheBehaviors(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::TooManyCertificates(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::TooManyCookieNamesInWhiteList(ref cause) => write!(f, "{}", cause),
@@ -16200,8 +17576,10 @@ UpdateDistributionError::TooManyDistributionsAssociatedToCachePolicy(ref cause) 
 UpdateDistributionError::TooManyDistributionsAssociatedToFieldLevelEncryptionConfig(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::TooManyDistributionsAssociatedToKeyGroup(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::TooManyDistributionsAssociatedToOriginRequestPolicy(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyDistributionsWithFunctionAssociations(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::TooManyDistributionsWithLambdaAssociations(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::TooManyDistributionsWithSingleFunctionARN(ref cause) => write!(f, "{}", cause),
+UpdateDistributionError::TooManyFunctionAssociations(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::TooManyHeadersInForwardedValues(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::TooManyKeyGroupsAssociatedToDistribution(ref cause) => write!(f, "{}", cause),
 UpdateDistributionError::TooManyLambdaFunctionAssociations(ref cause) => write!(f, "{}", cause),
@@ -16233,7 +17611,7 @@ pub enum UpdateFieldLevelEncryptionConfigError {
     NoSuchFieldLevelEncryptionConfig(String),
     /// <p>The specified profile for field-level encryption doesn't exist.</p>
     NoSuchFieldLevelEncryptionProfile(String),
-    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
+    /// <p>The precondition in one or more of the request fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
     /// <p>No profile specified for the field-level encryption query argument.</p>
     QueryArgProfileEmpty(String),
@@ -16308,7 +17686,7 @@ pub enum UpdateFieldLevelEncryptionProfileError {
     NoSuchFieldLevelEncryptionProfile(String),
     /// <p>The specified public key doesn't exist.</p>
     NoSuchPublicKey(String),
-    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
+    /// <p>The precondition in one or more of the request fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
     /// <p>The maximum number of encryption entities for field-level encryption have been created.</p>
     TooManyFieldLevelEncryptionEncryptionEntities(String),
@@ -16361,6 +17739,82 @@ UpdateFieldLevelEncryptionProfileError::TooManyFieldLevelEncryptionFieldPatterns
     }
 }
 impl Error for UpdateFieldLevelEncryptionProfileError {}
+/// Errors returned by UpdateFunction
+#[derive(Debug, PartialEq)]
+pub enum UpdateFunctionError {
+    /// <p>The function is too large. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
+    FunctionSizeLimitExceeded(String),
+    /// <p>An argument is invalid.</p>
+    InvalidArgument(String),
+    /// <p>The <code>If-Match</code> version is missing or not valid.</p>
+    InvalidIfMatchVersion(String),
+    /// <p>The function does not exist.</p>
+    NoSuchFunctionExists(String),
+    /// <p>The precondition in one or more of the request fields evaluated to <code>false</code>.</p>
+    PreconditionFailed(String),
+}
+
+impl UpdateFunctionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFunctionError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "FunctionSizeLimitExceeded" => {
+                        return RusotoError::Service(
+                            UpdateFunctionError::FunctionSizeLimitExceeded(parsed_error.message),
+                        )
+                    }
+                    "InvalidArgument" => {
+                        return RusotoError::Service(UpdateFunctionError::InvalidArgument(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidIfMatchVersion" => {
+                        return RusotoError::Service(UpdateFunctionError::InvalidIfMatchVersion(
+                            parsed_error.message,
+                        ))
+                    }
+                    "NoSuchFunctionExists" => {
+                        return RusotoError::Service(UpdateFunctionError::NoSuchFunctionExists(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PreconditionFailed" => {
+                        return RusotoError::Service(UpdateFunctionError::PreconditionFailed(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for UpdateFunctionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateFunctionError::FunctionSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateFunctionError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            UpdateFunctionError::InvalidIfMatchVersion(ref cause) => write!(f, "{}", cause),
+            UpdateFunctionError::NoSuchFunctionExists(ref cause) => write!(f, "{}", cause),
+            UpdateFunctionError::PreconditionFailed(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateFunctionError {}
 /// Errors returned by UpdateKeyGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateKeyGroupError {
@@ -16372,7 +17826,7 @@ pub enum UpdateKeyGroupError {
     KeyGroupAlreadyExists(String),
     /// <p>A resource that was specified is not valid.</p>
     NoSuchResource(String),
-    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
+    /// <p>The precondition in one or more of the request fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
     /// <p>The number of public keys in this key group is more than the maximum allowed. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
     TooManyPublicKeysInKeyGroup(String),
@@ -16462,7 +17916,7 @@ pub enum UpdateOriginRequestPolicyError {
     NoSuchOriginRequestPolicy(String),
     /// <p>An origin request policy with this name already exists. You must provide a unique name. To modify an existing origin request policy, use <code>UpdateOriginRequestPolicy</code>.</p>
     OriginRequestPolicyAlreadyExists(String),
-    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
+    /// <p>The precondition in one or more of the request fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
     /// <p>The number of cookies in the origin request policy exceeds the maximum. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/cloudfront-limits.html">Quotas</a> (formerly known as limits) in the <i>Amazon CloudFront Developer Guide</i>.</p>
     TooManyCookiesInOriginRequestPolicy(String),
@@ -16612,7 +18066,7 @@ pub enum UpdatePublicKeyError {
     InvalidIfMatchVersion(String),
     /// <p>The specified public key doesn't exist.</p>
     NoSuchPublicKey(String),
-    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
+    /// <p>The precondition in one or more of the request fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
 }
 
@@ -16778,7 +18232,7 @@ pub enum UpdateStreamingDistributionError {
     MissingBody(String),
     /// <p>The specified streaming distribution does not exist.</p>
     NoSuchStreamingDistribution(String),
-    /// <p>The precondition given in one or more of the request header fields evaluated to <code>false</code>.</p>
+    /// <p>The precondition in one or more of the request fields evaluated to <code>false</code>.</p>
     PreconditionFailed(String),
     /// <p>Your request contains more CNAMEs than are allowed per distribution.</p>
     TooManyStreamingDistributionCNAMEs(String),
@@ -16983,6 +18437,12 @@ pub trait CloudFront {
         RusotoError<CreateFieldLevelEncryptionProfileError>,
     >;
 
+    /// <p>Creates a CloudFront function.</p> <p>To create a function, you provide the function code and some configuration information about the function. The response contains an Amazon Resource Name (ARN) that uniquely identifies the function.</p> <p>When you create a function, it’s in the <code>DEVELOPMENT</code> stage. In this stage, you can test the function with <code>TestFunction</code>, and update it with <code>UpdateFunction</code>.</p> <p>When you’re ready to use your function with a CloudFront distribution, use <code>PublishFunction</code> to copy the function from the <code>DEVELOPMENT</code> stage to <code>LIVE</code>. When it’s live, you can attach the function to a distribution’s cache behavior, using the function’s ARN.</p>
+    async fn create_function(
+        &self,
+        input: CreateFunctionRequest,
+    ) -> Result<CreateFunctionResult, RusotoError<CreateFunctionError>>;
+
     /// <p>Create a new invalidation. </p>
     async fn create_invalidation(
         &self,
@@ -17019,13 +18479,13 @@ pub trait CloudFront {
         input: CreateRealtimeLogConfigRequest,
     ) -> Result<CreateRealtimeLogConfigResult, RusotoError<CreateRealtimeLogConfigError>>;
 
-    /// <p><p>Creates a new RTMP distribution. An RTMP distribution is similar to a web distribution, but an RTMP distribution streams media files using the Adobe Real-Time Messaging Protocol (RTMP) instead of serving files using HTTP. </p> <p>To create a new distribution, submit a <code>POST</code> request to the <i>CloudFront API version</i>/distribution resource. The request body must include a document with a <i>StreamingDistributionConfig</i> element. The response echoes the <code>StreamingDistributionConfig</code> element and returns other information about the RTMP distribution.</p> <p>To get the status of your request, use the <i>GET StreamingDistribution</i> API action. When the value of <code>Enabled</code> is <code>true</code> and the value of <code>Status</code> is <code>Deployed</code>, your distribution is ready. A distribution usually deploys in less than 15 minutes.</p> <p>For more information about web distributions, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-rtmp.html">Working with RTMP Distributions</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a web distribution or an RTMP distribution, and when you invalidate objects. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there&#39;s a mismatch between the number of values you say you&#39;re specifying in the <code>Quantity</code> element and the number of values specified.</p> </important></p>
+    /// <p>This API is deprecated. Amazon CloudFront is deprecating real-time messaging protocol (RTMP) distributions on December 31, 2020. For more information, <a href="http://forums.aws.amazon.com/ann.jspa?annID=7356">read the announcement</a> on the Amazon CloudFront discussion forum.</p>
     async fn create_streaming_distribution(
         &self,
         input: CreateStreamingDistributionRequest,
     ) -> Result<CreateStreamingDistributionResult, RusotoError<CreateStreamingDistributionError>>;
 
-    /// <p>Create a new streaming distribution with tags.</p>
+    /// <p>This API is deprecated. Amazon CloudFront is deprecating real-time messaging protocol (RTMP) distributions on December 31, 2020. For more information, <a href="http://forums.aws.amazon.com/ann.jspa?annID=7356">read the announcement</a> on the Amazon CloudFront discussion forum.</p>
     async fn create_streaming_distribution_with_tags(
         &self,
         input: CreateStreamingDistributionWithTagsRequest,
@@ -17064,6 +18524,12 @@ pub trait CloudFront {
         input: DeleteFieldLevelEncryptionProfileRequest,
     ) -> Result<(), RusotoError<DeleteFieldLevelEncryptionProfileError>>;
 
+    /// <p>Deletes a CloudFront function.</p> <p>You cannot delete a function if it’s associated with a cache behavior. First, update your distributions to remove the function association from all cache behaviors, then delete the function.</p> <p>To delete a function, you must provide the function’s name and version (<code>ETag</code> value). To get these values, you can use <code>ListFunctions</code> and <code>DescribeFunction</code>.</p>
+    async fn delete_function(
+        &self,
+        input: DeleteFunctionRequest,
+    ) -> Result<(), RusotoError<DeleteFunctionError>>;
+
     /// <p>Deletes a key group.</p> <p>You cannot delete a key group that is referenced in a cache behavior. First update your distributions to remove the key group from all cache behaviors, then delete the key group.</p> <p>To delete a key group, you must provide the key group’s identifier and version. To get these values, use <code>ListKeyGroups</code> followed by <code>GetKeyGroup</code> or <code>GetKeyGroupConfig</code>.</p>
     async fn delete_key_group(
         &self,
@@ -17099,6 +18565,12 @@ pub trait CloudFront {
         &self,
         input: DeleteStreamingDistributionRequest,
     ) -> Result<(), RusotoError<DeleteStreamingDistributionError>>;
+
+    /// <p>Gets configuration information and metadata about a CloudFront function, but not the function’s code. To get a function’s code, use <code>GetFunction</code>.</p> <p>To get configuration information and metadata about a function, you must provide the function’s name and stage. To get these values, you can use <code>ListFunctions</code>.</p>
+    async fn describe_function(
+        &self,
+        input: DescribeFunctionRequest,
+    ) -> Result<DescribeFunctionResult, RusotoError<DescribeFunctionError>>;
 
     /// <p>Gets a cache policy, including the following metadata:</p> <ul> <li> <p>The policy’s identifier.</p> </li> <li> <p>The date and time when the policy was last modified.</p> </li> </ul> <p>To get a cache policy, you must provide the policy’s identifier. If the cache policy is attached to a distribution’s cache behavior, you can get the policy’s identifier using <code>ListDistributions</code> or <code>GetDistribution</code>. If the cache policy is not attached to a cache behavior, you can get the identifier using <code>ListCachePolicies</code>.</p>
     async fn get_cache_policy(
@@ -17171,6 +18643,12 @@ pub trait CloudFront {
         GetFieldLevelEncryptionProfileConfigResult,
         RusotoError<GetFieldLevelEncryptionProfileConfigError>,
     >;
+
+    /// <p>Gets the code of a CloudFront function. To get configuration information and metadata about a function, use <code>DescribeFunction</code>.</p> <p>To get a function’s code, you must provide the function’s name and stage. To get these values, you can use <code>ListFunctions</code>.</p>
+    async fn get_function(
+        &self,
+        input: GetFunctionRequest,
+    ) -> Result<GetFunctionResult, RusotoError<GetFunctionError>>;
 
     /// <p>Get the information about an invalidation. </p>
     async fn get_invalidation(
@@ -17319,6 +18797,12 @@ pub trait CloudFront {
         RusotoError<ListFieldLevelEncryptionProfilesError>,
     >;
 
+    /// <p>Gets a list of all CloudFront functions in your AWS account.</p> <p>You can optionally apply a filter to return only the functions that are in the specified stage, either <code>DEVELOPMENT</code> or <code>LIVE</code>.</p> <p>You can optionally specify the maximum number of items to receive in the response. If the total number of items in the list exceeds the maximum that you specify, or the default maximum, the response is paginated. To get the next page of items, send a subsequent request that specifies the <code>NextMarker</code> value from the current response as the <code>Marker</code> value in the subsequent request.</p>
+    async fn list_functions(
+        &self,
+        input: ListFunctionsRequest,
+    ) -> Result<ListFunctionsResult, RusotoError<ListFunctionsError>>;
+
     /// <p>Lists invalidation batches. </p>
     async fn list_invalidations(
         &self,
@@ -17361,11 +18845,23 @@ pub trait CloudFront {
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResult, RusotoError<ListTagsForResourceError>>;
 
+    /// <p>Publishes a CloudFront function by copying the function code from the <code>DEVELOPMENT</code> stage to <code>LIVE</code>. This automatically updates all cache behaviors that are using this function to use the newly published copy in the <code>LIVE</code> stage.</p> <p>When a function is published to the <code>LIVE</code> stage, you can attach the function to a distribution’s cache behavior, using the function’s Amazon Resource Name (ARN).</p> <p>To publish a function, you must provide the function’s name and version (<code>ETag</code> value). To get these values, you can use <code>ListFunctions</code> and <code>DescribeFunction</code>.</p>
+    async fn publish_function(
+        &self,
+        input: PublishFunctionRequest,
+    ) -> Result<PublishFunctionResult, RusotoError<PublishFunctionError>>;
+
     /// <p>Add tags to a CloudFront resource.</p>
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
     ) -> Result<(), RusotoError<TagResourceError>>;
+
+    /// <p>Tests a CloudFront function.</p> <p>To test a function, you provide an <i>event object</i> that represents an HTTP request or response that your CloudFront distribution could receive in production. CloudFront runs the function, passing it the event object that you provided, and returns the function’s result (the modified event object) in the response. The response also contains function logs and error messages, if any exist. For more information about testing functions, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/managing-functions.html#test-function">Testing functions</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>To test a function, you provide the function’s name and version (<code>ETag</code> value) along with the event object. To get the function’s name and version, you can use <code>ListFunctions</code> and <code>DescribeFunction</code>.</p>
+    async fn test_function(
+        &self,
+        input: TestFunctionRequest,
+    ) -> Result<TestFunctionResult, RusotoError<TestFunctionError>>;
 
     /// <p>Remove tags from a CloudFront resource.</p>
     async fn untag_resource(
@@ -17411,6 +18907,12 @@ pub trait CloudFront {
         UpdateFieldLevelEncryptionProfileResult,
         RusotoError<UpdateFieldLevelEncryptionProfileError>,
     >;
+
+    /// <p>Updates a CloudFront function.</p> <p>You can update a function’s code or the comment that describes the function. You cannot update a function’s name.</p> <p>To update a function, you provide the function’s name and version (<code>ETag</code> value) along with the updated function code. To get the name and version, you can use <code>ListFunctions</code> and <code>DescribeFunction</code>.</p>
+    async fn update_function(
+        &self,
+        input: UpdateFunctionRequest,
+    ) -> Result<UpdateFunctionResult, RusotoError<UpdateFunctionError>>;
 
     /// <p><p>Updates a key group.</p> <p>When you update a key group, all the fields are updated with the values provided in the request. You cannot update some fields independent of others. To update a key group:</p> <ol> <li> <p>Get the current key group with <code>GetKeyGroup</code> or <code>GetKeyGroupConfig</code>.</p> </li> <li> <p>Locally modify the fields in the key group that you want to update. For example, add or remove public key IDs.</p> </li> <li> <p>Call <code>UpdateKeyGroup</code> with the entire key group object, including the fields that you modified and those that you didn’t.</p> </li> </ol></p>
     async fn update_key_group(
@@ -17705,6 +19207,40 @@ impl CloudFront for CloudFrontClient {
         Ok(result)
     }
 
+    /// <p>Creates a CloudFront function.</p> <p>To create a function, you provide the function code and some configuration information about the function. The response contains an Amazon Resource Name (ARN) that uniquely identifies the function.</p> <p>When you create a function, it’s in the <code>DEVELOPMENT</code> stage. In this stage, you can test the function with <code>TestFunction</code>, and update it with <code>UpdateFunction</code>.</p> <p>When you’re ready to use your function with a CloudFront distribution, use <code>PublishFunction</code> to copy the function from the <code>DEVELOPMENT</code> stage to <code>LIVE</code>. When it’s live, you can attach the function to a distribution’s cache behavior, using the function’s ARN.</p>
+    #[allow(unused_variables, warnings)]
+    async fn create_function(
+        &self,
+        input: CreateFunctionRequest,
+    ) -> Result<CreateFunctionResult, RusotoError<CreateFunctionError>> {
+        let request_uri = "/2020-05-31/function";
+
+        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
+
+        let mut writer = EventWriter::new(Vec::new());
+        CreateFunctionRequestSerializer::serialize(
+            &mut writer,
+            "CreateFunctionRequest",
+            &input,
+            "http://cloudfront.amazonaws.com/doc/2020-05-31/",
+        );
+        request.set_payload(Some(writer.into_inner()));
+
+        let mut response = self
+            .sign_and_dispatch(request, CreateFunctionError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            CreateFunctionResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag");
+        result.location = response.headers.remove("Location"); // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Create a new invalidation. </p>
     #[allow(unused_variables, warnings)]
     async fn create_invalidation(
@@ -17904,7 +19440,7 @@ impl CloudFront for CloudFrontClient {
         Ok(result)
     }
 
-    /// <p><p>Creates a new RTMP distribution. An RTMP distribution is similar to a web distribution, but an RTMP distribution streams media files using the Adobe Real-Time Messaging Protocol (RTMP) instead of serving files using HTTP. </p> <p>To create a new distribution, submit a <code>POST</code> request to the <i>CloudFront API version</i>/distribution resource. The request body must include a document with a <i>StreamingDistributionConfig</i> element. The response echoes the <code>StreamingDistributionConfig</code> element and returns other information about the RTMP distribution.</p> <p>To get the status of your request, use the <i>GET StreamingDistribution</i> API action. When the value of <code>Enabled</code> is <code>true</code> and the value of <code>Status</code> is <code>Deployed</code>, your distribution is ready. A distribution usually deploys in less than 15 minutes.</p> <p>For more information about web distributions, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/distribution-rtmp.html">Working with RTMP Distributions</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <important> <p>Beginning with the 2012-05-05 version of the CloudFront API, we made substantial changes to the format of the XML document that you include in the request body when you create or update a web distribution or an RTMP distribution, and when you invalidate objects. With previous versions of the API, we discovered that it was too easy to accidentally delete one or more values for an element that accepts multiple values, for example, CNAMEs and trusted signers. Our changes for the 2012-05-05 release are intended to prevent these accidental deletions and to notify you when there&#39;s a mismatch between the number of values you say you&#39;re specifying in the <code>Quantity</code> element and the number of values specified.</p> </important></p>
+    /// <p>This API is deprecated. Amazon CloudFront is deprecating real-time messaging protocol (RTMP) distributions on December 31, 2020. For more information, <a href="http://forums.aws.amazon.com/ann.jspa?annID=7356">read the announcement</a> on the Amazon CloudFront discussion forum.</p>
     #[allow(unused_variables, warnings)]
     async fn create_streaming_distribution(
         &self,
@@ -17938,7 +19474,7 @@ impl CloudFront for CloudFrontClient {
         Ok(result)
     }
 
-    /// <p>Create a new streaming distribution with tags.</p>
+    /// <p>This API is deprecated. Amazon CloudFront is deprecating real-time messaging protocol (RTMP) distributions on December 31, 2020. For more information, <a href="http://forums.aws.amazon.com/ann.jspa?annID=7356">read the announcement</a> on the Amazon CloudFront discussion forum.</p>
     #[allow(unused_variables, warnings)]
     async fn create_streaming_distribution_with_tags(
         &self,
@@ -18098,6 +19634,26 @@ impl CloudFront for CloudFrontClient {
         Ok(())
     }
 
+    /// <p>Deletes a CloudFront function.</p> <p>You cannot delete a function if it’s associated with a cache behavior. First, update your distributions to remove the function association from all cache behaviors, then delete the function.</p> <p>To delete a function, you must provide the function’s name and version (<code>ETag</code> value). To get these values, you can use <code>ListFunctions</code> and <code>DescribeFunction</code>.</p>
+    #[allow(unused_variables, warnings)]
+    async fn delete_function(
+        &self,
+        input: DeleteFunctionRequest,
+    ) -> Result<(), RusotoError<DeleteFunctionError>> {
+        let request_uri = format!("/2020-05-31/function/{name}", name = input.name);
+
+        let mut request = SignedRequest::new("DELETE", "cloudfront", &self.region, &request_uri);
+
+        request.add_header("If-Match", &input.if_match.to_string());
+
+        let mut response = self
+            .sign_and_dispatch(request, DeleteFunctionError::from_response)
+            .await?;
+
+        std::mem::drop(response);
+        Ok(())
+    }
+
     /// <p>Deletes a key group.</p> <p>You cannot delete a key group that is referenced in a cache behavior. First update your distributions to remove the key group from all cache behaviors, then delete the key group.</p> <p>To delete a key group, you must provide the key group’s identifier and version. To get these values, use <code>ListKeyGroups</code> followed by <code>GetKeyGroup</code> or <code>GetKeyGroupConfig</code>.</p>
     #[allow(unused_variables, warnings)]
     async fn delete_key_group(
@@ -18227,6 +19783,36 @@ impl CloudFront for CloudFrontClient {
 
         std::mem::drop(response);
         Ok(())
+    }
+
+    /// <p>Gets configuration information and metadata about a CloudFront function, but not the function’s code. To get a function’s code, use <code>GetFunction</code>.</p> <p>To get configuration information and metadata about a function, you must provide the function’s name and stage. To get these values, you can use <code>ListFunctions</code>.</p>
+    #[allow(unused_variables, warnings)]
+    async fn describe_function(
+        &self,
+        input: DescribeFunctionRequest,
+    ) -> Result<DescribeFunctionResult, RusotoError<DescribeFunctionError>> {
+        let request_uri = format!("/2020-05-31/function/{name}/describe", name = input.name);
+
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.stage {
+            params.put("Stage", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .sign_and_dispatch(request, DescribeFunctionError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            DescribeFunctionResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETag"); // parse non-payload
+        Ok(result)
     }
 
     /// <p>Gets a cache policy, including the following metadata:</p> <ul> <li> <p>The policy’s identifier.</p> </li> <li> <p>The date and time when the policy was last modified.</p> </li> </ul> <p>To get a cache policy, you must provide the policy’s identifier. If the cache policy is attached to a distribution’s cache behavior, you can get the policy’s identifier using <code>ListDistributions</code> or <code>GetDistribution</code>. If the cache policy is not attached to a cache behavior, you can get the identifier using <code>ListCachePolicies</code>.</p>
@@ -18509,6 +20095,35 @@ impl CloudFront for CloudFrontClient {
         .await?;
         let mut result = result;
         result.e_tag = response.headers.remove("ETag"); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Gets the code of a CloudFront function. To get configuration information and metadata about a function, use <code>DescribeFunction</code>.</p> <p>To get a function’s code, you must provide the function’s name and stage. To get these values, you can use <code>ListFunctions</code>.</p>
+    #[allow(unused_variables, warnings)]
+    async fn get_function(
+        &self,
+        input: GetFunctionRequest,
+    ) -> Result<GetFunctionResult, RusotoError<GetFunctionError>> {
+        let request_uri = format!("/2020-05-31/function/{name}", name = input.name);
+
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.stage {
+            params.put("Stage", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .sign_and_dispatch(request, GetFunctionError::from_response)
+            .await?;
+
+        let mut response = response;
+        let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        let mut result = GetFunctionResult::default();
+        result.function_code = Some(response.body);
+        result.content_type = response.headers.remove("Content-Type");
+        result.e_tag = response.headers.remove("ETag");
         Ok(result)
     }
 
@@ -19191,6 +20806,42 @@ impl CloudFront for CloudFrontClient {
         Ok(result)
     }
 
+    /// <p>Gets a list of all CloudFront functions in your AWS account.</p> <p>You can optionally apply a filter to return only the functions that are in the specified stage, either <code>DEVELOPMENT</code> or <code>LIVE</code>.</p> <p>You can optionally specify the maximum number of items to receive in the response. If the total number of items in the list exceeds the maximum that you specify, or the default maximum, the response is paginated. To get the next page of items, send a subsequent request that specifies the <code>NextMarker</code> value from the current response as the <code>Marker</code> value in the subsequent request.</p>
+    #[allow(unused_variables, warnings)]
+    async fn list_functions(
+        &self,
+        input: ListFunctionsRequest,
+    ) -> Result<ListFunctionsResult, RusotoError<ListFunctionsError>> {
+        let request_uri = "/2020-05-31/function";
+
+        let mut request = SignedRequest::new("GET", "cloudfront", &self.region, &request_uri);
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.marker {
+            params.put("Marker", x);
+        }
+        if let Some(ref x) = input.max_items {
+            params.put("MaxItems", x);
+        }
+        if let Some(ref x) = input.stage {
+            params.put("Stage", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .sign_and_dispatch(request, ListFunctionsError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            ListFunctionsResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Lists invalidation batches. </p>
     #[allow(unused_variables, warnings)]
     async fn list_invalidations(
@@ -19424,6 +21075,32 @@ impl CloudFront for CloudFrontClient {
         Ok(result)
     }
 
+    /// <p>Publishes a CloudFront function by copying the function code from the <code>DEVELOPMENT</code> stage to <code>LIVE</code>. This automatically updates all cache behaviors that are using this function to use the newly published copy in the <code>LIVE</code> stage.</p> <p>When a function is published to the <code>LIVE</code> stage, you can attach the function to a distribution’s cache behavior, using the function’s Amazon Resource Name (ARN).</p> <p>To publish a function, you must provide the function’s name and version (<code>ETag</code> value). To get these values, you can use <code>ListFunctions</code> and <code>DescribeFunction</code>.</p>
+    #[allow(unused_variables, warnings)]
+    async fn publish_function(
+        &self,
+        input: PublishFunctionRequest,
+    ) -> Result<PublishFunctionResult, RusotoError<PublishFunctionError>> {
+        let request_uri = format!("/2020-05-31/function/{name}/publish", name = input.name);
+
+        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
+
+        request.add_header("If-Match", &input.if_match.to_string());
+
+        let mut response = self
+            .sign_and_dispatch(request, PublishFunctionError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            PublishFunctionResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Add tags to a CloudFront resource.</p>
     #[allow(unused_variables, warnings)]
     async fn tag_resource(
@@ -19448,6 +21125,41 @@ impl CloudFront for CloudFrontClient {
 
         std::mem::drop(response);
         Ok(())
+    }
+
+    /// <p>Tests a CloudFront function.</p> <p>To test a function, you provide an <i>event object</i> that represents an HTTP request or response that your CloudFront distribution could receive in production. CloudFront runs the function, passing it the event object that you provided, and returns the function’s result (the modified event object) in the response. The response also contains function logs and error messages, if any exist. For more information about testing functions, see <a href="https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/managing-functions.html#test-function">Testing functions</a> in the <i>Amazon CloudFront Developer Guide</i>.</p> <p>To test a function, you provide the function’s name and version (<code>ETag</code> value) along with the event object. To get the function’s name and version, you can use <code>ListFunctions</code> and <code>DescribeFunction</code>.</p>
+    #[allow(unused_variables, warnings)]
+    async fn test_function(
+        &self,
+        input: TestFunctionRequest,
+    ) -> Result<TestFunctionResult, RusotoError<TestFunctionError>> {
+        let request_uri = format!("/2020-05-31/function/{name}/test", name = input.name);
+
+        let mut request = SignedRequest::new("POST", "cloudfront", &self.region, &request_uri);
+
+        request.add_header("If-Match", &input.if_match.to_string());
+
+        let mut writer = EventWriter::new(Vec::new());
+        TestFunctionRequestSerializer::serialize(
+            &mut writer,
+            "TestFunctionRequest",
+            &input,
+            "http://cloudfront.amazonaws.com/doc/2020-05-31/",
+        );
+        request.set_payload(Some(writer.into_inner()));
+
+        let mut response = self
+            .sign_and_dispatch(request, TestFunctionError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            TestFunctionResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        // parse non-payload
+        Ok(result)
     }
 
     /// <p>Remove tags from a CloudFront resource.</p>
@@ -19673,6 +21385,41 @@ impl CloudFront for CloudFrontClient {
         .await?;
         let mut result = result;
         result.e_tag = response.headers.remove("ETag"); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Updates a CloudFront function.</p> <p>You can update a function’s code or the comment that describes the function. You cannot update a function’s name.</p> <p>To update a function, you provide the function’s name and version (<code>ETag</code> value) along with the updated function code. To get the name and version, you can use <code>ListFunctions</code> and <code>DescribeFunction</code>.</p>
+    #[allow(unused_variables, warnings)]
+    async fn update_function(
+        &self,
+        input: UpdateFunctionRequest,
+    ) -> Result<UpdateFunctionResult, RusotoError<UpdateFunctionError>> {
+        let request_uri = format!("/2020-05-31/function/{name}", name = input.name);
+
+        let mut request = SignedRequest::new("PUT", "cloudfront", &self.region, &request_uri);
+
+        request.add_header("If-Match", &input.if_match.to_string());
+
+        let mut writer = EventWriter::new(Vec::new());
+        UpdateFunctionRequestSerializer::serialize(
+            &mut writer,
+            "UpdateFunctionRequest",
+            &input,
+            "http://cloudfront.amazonaws.com/doc/2020-05-31/",
+        );
+        request.set_payload(Some(writer.into_inner()));
+
+        let mut response = self
+            .sign_and_dispatch(request, UpdateFunctionError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            UpdateFunctionResultDeserializer::deserialize(actual_tag_name, stack)
+        })
+        .await?;
+        let mut result = result;
+        result.e_tag = response.headers.remove("ETtag"); // parse non-payload
         Ok(result)
     }
 

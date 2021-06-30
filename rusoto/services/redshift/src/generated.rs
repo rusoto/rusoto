@@ -243,6 +243,59 @@ impl AccountsWithRestoreAccessListDeserializer {
         })
     }
 }
+/// <p>The AQUA (Advanced Query Accelerator) configuration of the cluster.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct AquaConfiguration {
+    /// <p><p>The value represents how the cluster is configured to use AQUA. Possible values include the following.</p> <ul> <li> <p>enabled - Use AQUA if it is available for the current AWS Region and Amazon Redshift node type.</p> </li> <li> <p>disabled - Don&#39;t use AQUA. </p> </li> <li> <p>auto - Amazon Redshift determines whether to use AQUA.</p> </li> </ul></p>
+    pub aqua_configuration_status: Option<String>,
+    /// <p><p>The value indicates the status of AQUA on the cluster. Possible values include the following.</p> <ul> <li> <p>enabled - AQUA is enabled.</p> </li> <li> <p>disabled - AQUA is not enabled. </p> </li> <li> <p>applying - AQUA status is being applied. </p> </li> </ul></p>
+    pub aqua_status: Option<String>,
+}
+
+#[allow(dead_code)]
+struct AquaConfigurationDeserializer;
+impl AquaConfigurationDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AquaConfiguration, XmlParseError> {
+        deserialize_elements::<_, AquaConfiguration, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "AquaConfigurationStatus" => {
+                    obj.aqua_configuration_status =
+                        Some(AquaConfigurationStatusDeserializer::deserialize(
+                            "AquaConfigurationStatus",
+                            stack,
+                        )?);
+                }
+                "AquaStatus" => {
+                    obj.aqua_status =
+                        Some(AquaStatusDeserializer::deserialize("AquaStatus", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct AquaConfigurationStatusDeserializer;
+impl AquaConfigurationStatusDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+#[allow(dead_code)]
+struct AquaStatusDeserializer;
+impl AquaStatusDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
 #[allow(dead_code)]
 struct AssociatedClusterListDeserializer;
 impl AssociatedClusterListDeserializer {
@@ -346,6 +399,14 @@ impl AttributeValueTargetDeserializer {
         })
     }
 }
+#[allow(dead_code)]
+struct AuthorizationStatusDeserializer;
+impl AuthorizationStatusDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
 /// <p><p/></p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -428,6 +489,40 @@ impl AuthorizeClusterSecurityGroupIngressResultDeserializer {
         )
     }
 }
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AuthorizeEndpointAccessMessage {
+    /// <p>The AWS account ID to grant access to.</p>
+    pub account: String,
+    /// <p>The cluster identifier of the cluster to grant access to.</p>
+    pub cluster_identifier: Option<String>,
+    /// <p>The virtual private cloud (VPC) identifiers to grant access to.</p>
+    pub vpc_ids: Option<Vec<String>>,
+}
+
+/// Serialize `AuthorizeEndpointAccessMessage` contents to a `SignedRequest`.
+struct AuthorizeEndpointAccessMessageSerializer;
+impl AuthorizeEndpointAccessMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &AuthorizeEndpointAccessMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "Account"), &obj.account);
+        if let Some(ref field_value) = obj.cluster_identifier {
+            params.put(&format!("{}{}", prefix, "ClusterIdentifier"), &field_value);
+        }
+        if let Some(ref field_value) = obj.vpc_ids {
+            VpcIdentifierListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "VpcIdentifier"),
+                field_value,
+            );
+        }
+    }
+}
+
 /// <p><p/></p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -781,6 +876,8 @@ impl CancelResizeMessageSerializer {
 pub struct Cluster {
     /// <p>A boolean value that, if <code>true</code>, indicates that major version upgrades will be applied automatically to the cluster during the maintenance window. </p>
     pub allow_version_upgrade: Option<bool>,
+    /// <p>The AQUA (Advanced Query Accelerator) configuration of the cluster.</p>
+    pub aqua_configuration: Option<AquaConfiguration>,
     /// <p>The number of days that automatic cluster snapshots are retained.</p>
     pub automated_snapshot_retention_period: Option<i64>,
     /// <p>The name of the Availability Zone in which the cluster is located.</p>
@@ -871,6 +968,8 @@ pub struct Cluster {
     pub snapshot_schedule_state: Option<String>,
     /// <p>The list of tags for the cluster.</p>
     pub tags: Option<Vec<Tag>>,
+    /// <p>The total storage capacity of the cluster in megabytes. </p>
+    pub total_storage_capacity_in_mega_bytes: Option<i64>,
     /// <p>The identifier of the VPC the cluster is in, if the cluster is in a VPC.</p>
     pub vpc_id: Option<String>,
     /// <p>A list of Amazon Virtual Private Cloud (Amazon VPC) security groups that are associated with the cluster. This parameter is returned only if the cluster is in a VPC.</p>
@@ -890,6 +989,12 @@ impl ClusterDeserializer {
                 "AllowVersionUpgrade" => {
                     obj.allow_version_upgrade = Some(BooleanDeserializer::deserialize(
                         "AllowVersionUpgrade",
+                        stack,
+                    )?);
+                }
+                "AquaConfiguration" => {
+                    obj.aqua_configuration = Some(AquaConfigurationDeserializer::deserialize(
+                        "AquaConfiguration",
                         stack,
                     )?);
                 }
@@ -1128,6 +1233,13 @@ impl ClusterDeserializer {
                     obj.tags
                         .get_or_insert(vec![])
                         .extend(TagListDeserializer::deserialize("Tags", stack)?);
+                }
+                "TotalStorageCapacityInMegaBytes" => {
+                    obj.total_storage_capacity_in_mega_bytes =
+                        Some(LongOptionalDeserializer::deserialize(
+                            "TotalStorageCapacityInMegaBytes",
+                            stack,
+                        )?);
                 }
                 "VpcId" => {
                     obj.vpc_id = Some(StringDeserializer::deserialize("VpcId", stack)?);
@@ -2352,7 +2464,9 @@ pub struct CreateClusterMessage {
     pub additional_info: Option<String>,
     /// <p>If <code>true</code>, major version upgrades can be applied during the maintenance window to the Amazon Redshift engine that is running on the cluster.</p> <p>When a new major version of the Amazon Redshift engine is released, you can request that the service automatically apply upgrades during the maintenance window to the Amazon Redshift engine that is running on your cluster.</p> <p>Default: <code>true</code> </p>
     pub allow_version_upgrade: Option<bool>,
-    /// <p>The number of days that automated snapshots are retained. If the value is 0, automated snapshots are disabled. Even if automated snapshots are disabled, you can still create manual snapshots when you want with <a>CreateClusterSnapshot</a>. </p> <p>Default: <code>1</code> </p> <p>Constraints: Must be a value from 0 to 35.</p>
+    /// <p><p>The value represents how the cluster is configured to use AQUA (Advanced Query Accelerator) when it is created. Possible values include the following.</p> <ul> <li> <p>enabled - Use AQUA if it is available for the current AWS Region and Amazon Redshift node type.</p> </li> <li> <p>disabled - Don&#39;t use AQUA. </p> </li> <li> <p>auto - Amazon Redshift determines whether to use AQUA.</p> </li> </ul></p>
+    pub aqua_configuration_status: Option<String>,
+    /// <p>The number of days that automated snapshots are retained. If the value is 0, automated snapshots are disabled. Even if automated snapshots are disabled, you can still create manual snapshots when you want with <a>CreateClusterSnapshot</a>. </p> <p>You can't disable automated snapshots for RA3 node types. Set the automated retention period from 1-35 days.</p> <p>Default: <code>1</code> </p> <p>Constraints: Must be a value from 0 to 35.</p>
     pub automated_snapshot_retention_period: Option<i64>,
     /// <p>The EC2 Availability Zone (AZ) in which you want Amazon Redshift to provision the cluster. For example, if you have several EC2 instances running in a specific Availability Zone, then you might want the cluster to be provisioned in the same zone in order to decrease network latency.</p> <p>Default: A random, system-chosen Availability Zone in the region that is specified by the endpoint.</p> <p>Example: <code>us-east-2d</code> </p> <p>Constraint: The specified Availability Zone must be in the same region as the current endpoint.</p>
     pub availability_zone: Option<String>,
@@ -2427,6 +2541,12 @@ impl CreateClusterMessageSerializer {
         if let Some(ref field_value) = obj.allow_version_upgrade {
             params.put(
                 &format!("{}{}", prefix, "AllowVersionUpgrade"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.aqua_configuration_status {
+            params.put(
+                &format!("{}{}", prefix, "AquaConfigurationStatus"),
                 &field_value,
             );
         }
@@ -2868,6 +2988,51 @@ impl CreateClusterSubnetGroupResultDeserializer {
         )
     }
 }
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateEndpointAccessMessage {
+    /// <p>The cluster identifier of the cluster to access.</p>
+    pub cluster_identifier: Option<String>,
+    /// <p>The Redshift-managed VPC endpoint name.</p> <p>An endpoint name must contain 1-30 characters. Valid characters are A-Z, a-z, 0-9, and hyphen(-). The first character must be a letter. The name can't contain two consecutive hyphens or end with a hyphen.</p>
+    pub endpoint_name: String,
+    /// <p>The AWS account ID of the owner of the cluster. This is only required if the cluster is in another AWS account.</p>
+    pub resource_owner: Option<String>,
+    /// <p>The subnet group from which Amazon Redshift chooses the subnet to deploy the endpoint.</p>
+    pub subnet_group_name: String,
+    /// <p>The security group that defines the ports, protocols, and sources for inbound traffic that you are authorizing into your endpoint.</p>
+    pub vpc_security_group_ids: Option<Vec<String>>,
+}
+
+/// Serialize `CreateEndpointAccessMessage` contents to a `SignedRequest`.
+struct CreateEndpointAccessMessageSerializer;
+impl CreateEndpointAccessMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateEndpointAccessMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.cluster_identifier {
+            params.put(&format!("{}{}", prefix, "ClusterIdentifier"), &field_value);
+        }
+        params.put(&format!("{}{}", prefix, "EndpointName"), &obj.endpoint_name);
+        if let Some(ref field_value) = obj.resource_owner {
+            params.put(&format!("{}{}", prefix, "ResourceOwner"), &field_value);
+        }
+        params.put(
+            &format!("{}{}", prefix, "SubnetGroupName"),
+            &obj.subnet_group_name,
+        );
+        if let Some(ref field_value) = obj.vpc_security_group_ids {
+            VpcSecurityGroupIdListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "VpcSecurityGroupId"),
+                field_value,
+            );
+        }
+    }
+}
+
 /// <p><p/></p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -3818,6 +3983,26 @@ impl DeleteClusterSubnetGroupMessageSerializer {
     }
 }
 
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteEndpointAccessMessage {
+    /// <p>The Redshift-managed VPC endpoint to delete.</p>
+    pub endpoint_name: String,
+}
+
+/// Serialize `DeleteEndpointAccessMessage` contents to a `SignedRequest`.
+struct DeleteEndpointAccessMessageSerializer;
+impl DeleteEndpointAccessMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteEndpointAccessMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "EndpointName"), &obj.endpoint_name);
+    }
+}
+
 /// <p><p/></p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -4547,6 +4732,95 @@ impl DescribeDefaultClusterParametersResultDeserializer {
         )
     }
 }
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeEndpointAccessMessage {
+    /// <p>The cluster identifier associated with the described endpoint.</p>
+    pub cluster_identifier: Option<String>,
+    /// <p>The name of the endpoint to be described.</p>
+    pub endpoint_name: Option<String>,
+    /// <p>An optional pagination token provided by a previous <code>DescribeEndpointAccess</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by the <code>MaxRecords</code> parameter.</p>
+    pub marker: Option<String>,
+    /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a <code>Marker</code> is included in the response so that the remaining results can be retrieved.</p>
+    pub max_records: Option<i64>,
+    /// <p>The AWS account ID of the owner of the cluster.</p>
+    pub resource_owner: Option<String>,
+    /// <p>The virtual private cloud (VPC) identifier with access to the cluster.</p>
+    pub vpc_id: Option<String>,
+}
+
+/// Serialize `DescribeEndpointAccessMessage` contents to a `SignedRequest`.
+struct DescribeEndpointAccessMessageSerializer;
+impl DescribeEndpointAccessMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeEndpointAccessMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.cluster_identifier {
+            params.put(&format!("{}{}", prefix, "ClusterIdentifier"), &field_value);
+        }
+        if let Some(ref field_value) = obj.endpoint_name {
+            params.put(&format!("{}{}", prefix, "EndpointName"), &field_value);
+        }
+        if let Some(ref field_value) = obj.marker {
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_records {
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
+        }
+        if let Some(ref field_value) = obj.resource_owner {
+            params.put(&format!("{}{}", prefix, "ResourceOwner"), &field_value);
+        }
+        if let Some(ref field_value) = obj.vpc_id {
+            params.put(&format!("{}{}", prefix, "VpcId"), &field_value);
+        }
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeEndpointAuthorizationMessage {
+    /// <p>The AWS account ID of either the cluster owner (grantor) or grantee. If <code>Grantee</code> parameter is true, then the <code>Account</code> value is of the grantor.</p>
+    pub account: Option<String>,
+    /// <p>The cluster identifier of the cluster to access.</p>
+    pub cluster_identifier: Option<String>,
+    /// <p>Indicates whether to check authorization from a grantor or grantee point of view. If true, Amazon Redshift returns endpoint authorizations that you've been granted. If false (default), checks authorization from a grantor point of view.</p>
+    pub grantee: Option<bool>,
+    /// <p>An optional pagination token provided by a previous <code>DescribeEndpointAuthorization</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by the <code>MaxRecords</code> parameter.</p>
+    pub marker: Option<String>,
+    /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a <code>Marker</code> is included in the response so that the remaining results can be retrieved.</p>
+    pub max_records: Option<i64>,
+}
+
+/// Serialize `DescribeEndpointAuthorizationMessage` contents to a `SignedRequest`.
+struct DescribeEndpointAuthorizationMessageSerializer;
+impl DescribeEndpointAuthorizationMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeEndpointAuthorizationMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.account {
+            params.put(&format!("{}{}", prefix, "Account"), &field_value);
+        }
+        if let Some(ref field_value) = obj.cluster_identifier {
+            params.put(&format!("{}{}", prefix, "ClusterIdentifier"), &field_value);
+        }
+        if let Some(ref field_value) = obj.grantee {
+            params.put(&format!("{}{}", prefix, "Grantee"), &field_value);
+        }
+        if let Some(ref field_value) = obj.marker {
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_records {
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
+        }
+    }
+}
+
 /// <p><p/></p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -4898,6 +5172,77 @@ impl DescribeOrderableClusterOptionsMessageSerializer {
     }
 }
 
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribePartnersInputMessage {
+    /// <p>The AWS account ID that owns the cluster.</p>
+    pub account_id: String,
+    /// <p>The cluster identifier of the cluster whose partner integration is being described.</p>
+    pub cluster_identifier: String,
+    /// <p>The name of the database whose partner integration is being described. If database name is not specified, then all databases in the cluster are described.</p>
+    pub database_name: Option<String>,
+    /// <p>The name of the partner that is being described. If partner name is not specified, then all partner integrations are described.</p>
+    pub partner_name: Option<String>,
+}
+
+/// Serialize `DescribePartnersInputMessage` contents to a `SignedRequest`.
+struct DescribePartnersInputMessageSerializer;
+impl DescribePartnersInputMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribePartnersInputMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "AccountId"), &obj.account_id);
+        params.put(
+            &format!("{}{}", prefix, "ClusterIdentifier"),
+            &obj.cluster_identifier,
+        );
+        if let Some(ref field_value) = obj.database_name {
+            params.put(&format!("{}{}", prefix, "DatabaseName"), &field_value);
+        }
+        if let Some(ref field_value) = obj.partner_name {
+            params.put(&format!("{}{}", prefix, "PartnerName"), &field_value);
+        }
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct DescribePartnersOutputMessage {
+    /// <p>A list of partner integrations.</p>
+    pub partner_integration_info_list: Option<Vec<PartnerIntegrationInfo>>,
+}
+
+#[allow(dead_code)]
+struct DescribePartnersOutputMessageDeserializer;
+impl DescribePartnersOutputMessageDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribePartnersOutputMessage, XmlParseError> {
+        deserialize_elements::<_, DescribePartnersOutputMessage, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "PartnerIntegrationInfoList" => {
+                        obj.partner_integration_info_list
+                            .get_or_insert(vec![])
+                            .extend(PartnerIntegrationInfoListDeserializer::deserialize(
+                                "PartnerIntegrationInfoList",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p><p/></p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -5699,7 +6044,7 @@ pub struct Endpoint {
     /// <p>The port that the database engine is listening on.</p>
     pub port: Option<i64>,
     /// <p>Describes a connection endpoint.</p>
-    pub vpc_endpoints: Option<Vec<SpartaProxyVpcEndpoint>>,
+    pub vpc_endpoints: Option<Vec<VpcEndpoint>>,
 }
 
 #[allow(dead_code)]
@@ -5720,10 +6065,282 @@ impl EndpointDeserializer {
                 }
                 "VpcEndpoints" => {
                     obj.vpc_endpoints.get_or_insert(vec![]).extend(
-                        SpartaProxyVpcEndpointListDeserializer::deserialize("VpcEndpoints", stack)?,
+                        VpcEndpointsListDeserializer::deserialize("VpcEndpoints", stack)?,
                     );
                 }
                 _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>Describes a Redshift-managed VPC endpoint.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct EndpointAccess {
+    /// <p>The DNS address of the endpoint.</p>
+    pub address: Option<String>,
+    /// <p>The cluster identifier of the cluster associated with the endpoint.</p>
+    pub cluster_identifier: Option<String>,
+    /// <p>The time (UTC) that the endpoint was created.</p>
+    pub endpoint_create_time: Option<String>,
+    /// <p>The name of the endpoint.</p>
+    pub endpoint_name: Option<String>,
+    /// <p>The status of the endpoint.</p>
+    pub endpoint_status: Option<String>,
+    /// <p>The port number on which the cluster accepts incoming connections.</p>
+    pub port: Option<i64>,
+    /// <p>The AWS account ID of the owner of the cluster.</p>
+    pub resource_owner: Option<String>,
+    /// <p>The subnet group name where Amazon Redshift chooses to deploy the endpoint.</p>
+    pub subnet_group_name: Option<String>,
+    pub vpc_endpoint: Option<VpcEndpoint>,
+    /// <p>The security groups associated with the endpoint.</p>
+    pub vpc_security_groups: Option<Vec<VpcSecurityGroupMembership>>,
+}
+
+#[allow(dead_code)]
+struct EndpointAccessDeserializer;
+impl EndpointAccessDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EndpointAccess, XmlParseError> {
+        deserialize_elements::<_, EndpointAccess, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Address" => {
+                    obj.address = Some(StringDeserializer::deserialize("Address", stack)?);
+                }
+                "ClusterIdentifier" => {
+                    obj.cluster_identifier =
+                        Some(StringDeserializer::deserialize("ClusterIdentifier", stack)?);
+                }
+                "EndpointCreateTime" => {
+                    obj.endpoint_create_time = Some(TStampDeserializer::deserialize(
+                        "EndpointCreateTime",
+                        stack,
+                    )?);
+                }
+                "EndpointName" => {
+                    obj.endpoint_name =
+                        Some(StringDeserializer::deserialize("EndpointName", stack)?);
+                }
+                "EndpointStatus" => {
+                    obj.endpoint_status =
+                        Some(StringDeserializer::deserialize("EndpointStatus", stack)?);
+                }
+                "Port" => {
+                    obj.port = Some(IntegerDeserializer::deserialize("Port", stack)?);
+                }
+                "ResourceOwner" => {
+                    obj.resource_owner =
+                        Some(StringDeserializer::deserialize("ResourceOwner", stack)?);
+                }
+                "SubnetGroupName" => {
+                    obj.subnet_group_name =
+                        Some(StringDeserializer::deserialize("SubnetGroupName", stack)?);
+                }
+                "VpcEndpoint" => {
+                    obj.vpc_endpoint =
+                        Some(VpcEndpointDeserializer::deserialize("VpcEndpoint", stack)?);
+                }
+                "VpcSecurityGroups" => {
+                    obj.vpc_security_groups.get_or_insert(vec![]).extend(
+                        VpcSecurityGroupMembershipListDeserializer::deserialize(
+                            "VpcSecurityGroups",
+                            stack,
+                        )?,
+                    );
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct EndpointAccessList {
+    /// <p>The list of endpoints with access to the cluster.</p>
+    pub endpoint_access_list: Option<Vec<EndpointAccess>>,
+    /// <p>An optional pagination token provided by a previous <code>DescribeEndpointAccess</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by the <code>MaxRecords</code> parameter.</p>
+    pub marker: Option<String>,
+}
+
+#[allow(dead_code)]
+struct EndpointAccessListDeserializer;
+impl EndpointAccessListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EndpointAccessList, XmlParseError> {
+        deserialize_elements::<_, EndpointAccessList, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "EndpointAccessList" => {
+                    obj.endpoint_access_list.get_or_insert(vec![]).extend(
+                        EndpointAccessesDeserializer::deserialize("EndpointAccessList", stack)?,
+                    );
+                }
+                "Marker" => {
+                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct EndpointAccessesDeserializer;
+impl EndpointAccessesDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<EndpointAccess>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(EndpointAccessDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>Describes an endpoint authorization for authorizing Redshift-managed VPC endpoint access to a cluster across AWS accounts.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct EndpointAuthorization {
+    /// <p>Indicates whether all VPCs in the grantee account are allowed access to the cluster.</p>
+    pub allowed_all_vp_cs: Option<bool>,
+    /// <p>The VPCs allowed access to the cluster.</p>
+    pub allowed_vp_cs: Option<Vec<String>>,
+    /// <p>The time (UTC) when the authorization was created.</p>
+    pub authorize_time: Option<String>,
+    /// <p>The cluster identifier.</p>
+    pub cluster_identifier: Option<String>,
+    /// <p>The status of the cluster.</p>
+    pub cluster_status: Option<String>,
+    /// <p>The number of Redshift-managed VPC endpoints created for the authorization.</p>
+    pub endpoint_count: Option<i64>,
+    /// <p>The AWS account ID of the grantee of the cluster.</p>
+    pub grantee: Option<String>,
+    /// <p>The AWS account ID of the cluster owner.</p>
+    pub grantor: Option<String>,
+    /// <p>The status of the authorization action.</p>
+    pub status: Option<String>,
+}
+
+#[allow(dead_code)]
+struct EndpointAuthorizationDeserializer;
+impl EndpointAuthorizationDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EndpointAuthorization, XmlParseError> {
+        deserialize_elements::<_, EndpointAuthorization, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "AllowedAllVPCs" => {
+                    obj.allowed_all_vp_cs =
+                        Some(BooleanDeserializer::deserialize("AllowedAllVPCs", stack)?);
+                }
+                "AllowedVPCs" => {
+                    obj.allowed_vp_cs.get_or_insert(vec![]).extend(
+                        VpcIdentifierListDeserializer::deserialize("AllowedVPCs", stack)?,
+                    );
+                }
+                "AuthorizeTime" => {
+                    obj.authorize_time =
+                        Some(TStampDeserializer::deserialize("AuthorizeTime", stack)?);
+                }
+                "ClusterIdentifier" => {
+                    obj.cluster_identifier =
+                        Some(StringDeserializer::deserialize("ClusterIdentifier", stack)?);
+                }
+                "ClusterStatus" => {
+                    obj.cluster_status =
+                        Some(StringDeserializer::deserialize("ClusterStatus", stack)?);
+                }
+                "EndpointCount" => {
+                    obj.endpoint_count =
+                        Some(IntegerDeserializer::deserialize("EndpointCount", stack)?);
+                }
+                "Grantee" => {
+                    obj.grantee = Some(StringDeserializer::deserialize("Grantee", stack)?);
+                }
+                "Grantor" => {
+                    obj.grantor = Some(StringDeserializer::deserialize("Grantor", stack)?);
+                }
+                "Status" => {
+                    obj.status = Some(AuthorizationStatusDeserializer::deserialize(
+                        "Status", stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct EndpointAuthorizationList {
+    /// <p>The authorizations to an endpoint.</p>
+    pub endpoint_authorization_list: Option<Vec<EndpointAuthorization>>,
+    /// <p>An optional pagination token provided by a previous <code>DescribeEndpointAuthorization</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by the <code>MaxRecords</code> parameter.</p>
+    pub marker: Option<String>,
+}
+
+#[allow(dead_code)]
+struct EndpointAuthorizationListDeserializer;
+impl EndpointAuthorizationListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EndpointAuthorizationList, XmlParseError> {
+        deserialize_elements::<_, EndpointAuthorizationList, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "EndpointAuthorizationList" => {
+                        obj.endpoint_authorization_list
+                            .get_or_insert(vec![])
+                            .extend(EndpointAuthorizationsDeserializer::deserialize(
+                                "EndpointAuthorizationList",
+                                stack,
+                            )?);
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[allow(dead_code)]
+struct EndpointAuthorizationsDeserializer;
+impl EndpointAuthorizationsDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<EndpointAuthorization>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(EndpointAuthorizationDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
             }
             Ok(())
         })
@@ -6842,6 +7459,70 @@ impl ModeDeserializer {
 }
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ModifyAquaInputMessage {
+    /// <p><p>The new value of AQUA configuration status. Possible values include the following.</p> <ul> <li> <p>enabled - Use AQUA if it is available for the current AWS Region and Amazon Redshift node type.</p> </li> <li> <p>disabled - Don&#39;t use AQUA. </p> </li> <li> <p>auto - Amazon Redshift determines whether to use AQUA.</p> </li> </ul></p>
+    pub aqua_configuration_status: Option<String>,
+    /// <p>The identifier of the cluster to be modified.</p>
+    pub cluster_identifier: String,
+}
+
+/// Serialize `ModifyAquaInputMessage` contents to a `SignedRequest`.
+struct ModifyAquaInputMessageSerializer;
+impl ModifyAquaInputMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyAquaInputMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.aqua_configuration_status {
+            params.put(
+                &format!("{}{}", prefix, "AquaConfigurationStatus"),
+                &field_value,
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "ClusterIdentifier"),
+            &obj.cluster_identifier,
+        );
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct ModifyAquaOutputMessage {
+    /// <p>The updated AQUA configuration of the cluster. </p>
+    pub aqua_configuration: Option<AquaConfiguration>,
+}
+
+#[allow(dead_code)]
+struct ModifyAquaOutputMessageDeserializer;
+impl ModifyAquaOutputMessageDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyAquaOutputMessage, XmlParseError> {
+        deserialize_elements::<_, ModifyAquaOutputMessage, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "AquaConfiguration" => {
+                        obj.aqua_configuration = Some(AquaConfigurationDeserializer::deserialize(
+                            "AquaConfiguration",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyClusterDbRevisionMessage {
     /// <p>The unique identifier of a cluster whose database revision you want to modify. </p> <p>Example: <code>examplecluster</code> </p>
     pub cluster_identifier: String,
@@ -7064,7 +7745,7 @@ impl ModifyClusterMaintenanceResultDeserializer {
 pub struct ModifyClusterMessage {
     /// <p>If <code>true</code>, major version upgrades will be applied automatically to the cluster during the maintenance window. </p> <p>Default: <code>false</code> </p>
     pub allow_version_upgrade: Option<bool>,
-    /// <p>The number of days that automated snapshots are retained. If the value is 0, automated snapshots are disabled. Even if automated snapshots are disabled, you can still create manual snapshots when you want with <a>CreateClusterSnapshot</a>. </p> <p>If you decrease the automated snapshot retention period from its current value, existing automated snapshots that fall outside of the new retention period will be immediately deleted.</p> <p>Default: Uses existing setting.</p> <p>Constraints: Must be a value from 0 to 35.</p>
+    /// <p>The number of days that automated snapshots are retained. If the value is 0, automated snapshots are disabled. Even if automated snapshots are disabled, you can still create manual snapshots when you want with <a>CreateClusterSnapshot</a>. </p> <p>If you decrease the automated snapshot retention period from its current value, existing automated snapshots that fall outside of the new retention period will be immediately deleted.</p> <p>You can't disable automated snapshots for RA3 node types. Set the automated retention period from 1-35 days.</p> <p>Default: Uses existing setting.</p> <p>Constraints: Must be a value from 0 to 35.</p>
     pub automated_snapshot_retention_period: Option<i64>,
     /// <p>The option to initiate relocation for an Amazon Redshift cluster to the target Availability Zone.</p>
     pub availability_zone: Option<String>,
@@ -7466,6 +8147,35 @@ impl ModifyClusterSubnetGroupResultDeserializer {
         )
     }
 }
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ModifyEndpointAccessMessage {
+    /// <p>The endpoint to be modified.</p>
+    pub endpoint_name: String,
+    /// <p>The complete list of VPC security groups associated with the endpoint after the endpoint is modified.</p>
+    pub vpc_security_group_ids: Option<Vec<String>>,
+}
+
+/// Serialize `ModifyEndpointAccessMessage` contents to a `SignedRequest`.
+struct ModifyEndpointAccessMessageSerializer;
+impl ModifyEndpointAccessMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyEndpointAccessMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "EndpointName"), &obj.endpoint_name);
+        if let Some(ref field_value) = obj.vpc_security_group_ids {
+            VpcSecurityGroupIdListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "VpcSecurityGroupId"),
+                field_value,
+            );
+        }
+    }
+}
+
 /// <p><p/></p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -7752,6 +8462,74 @@ impl ModifyUsageLimitMessageSerializer {
     }
 }
 
+/// <p>Describes a network interface. </p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct NetworkInterface {
+    /// <p>The Availability Zone. </p>
+    pub availability_zone: Option<String>,
+    /// <p>The network interface identifier. </p>
+    pub network_interface_id: Option<String>,
+    /// <p>The IPv4 address of the network interface within the subnet. </p>
+    pub private_ip_address: Option<String>,
+    /// <p>The subnet identifier. </p>
+    pub subnet_id: Option<String>,
+}
+
+#[allow(dead_code)]
+struct NetworkInterfaceDeserializer;
+impl NetworkInterfaceDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<NetworkInterface, XmlParseError> {
+        deserialize_elements::<_, NetworkInterface, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "AvailabilityZone" => {
+                    obj.availability_zone =
+                        Some(StringDeserializer::deserialize("AvailabilityZone", stack)?);
+                }
+                "NetworkInterfaceId" => {
+                    obj.network_interface_id = Some(StringDeserializer::deserialize(
+                        "NetworkInterfaceId",
+                        stack,
+                    )?);
+                }
+                "PrivateIpAddress" => {
+                    obj.private_ip_address =
+                        Some(StringDeserializer::deserialize("PrivateIpAddress", stack)?);
+                }
+                "SubnetId" => {
+                    obj.subnet_id = Some(StringDeserializer::deserialize("SubnetId", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct NetworkInterfaceListDeserializer;
+impl NetworkInterfaceListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<NetworkInterface>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "NetworkInterface" {
+                obj.push(NetworkInterfaceDeserializer::deserialize(
+                    "NetworkInterface",
+                    stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
 /// <p>A list of node configurations.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -8038,7 +8816,7 @@ pub struct Parameter {
     pub minimum_engine_version: Option<String>,
     /// <p>The name of the parameter.</p>
     pub parameter_name: Option<String>,
-    /// <p>The value of the parameter.</p>
+    /// <p>The value of the parameter. If <code>ParameterName</code> is <code>wlm_json_configuration</code>, then the maximum size of <code>ParameterValue</code> is 8000 characters.</p>
     pub parameter_value: Option<String>,
     /// <p>The source of the parameter value, such as "engine-default" or "user".</p>
     pub source: Option<String>,
@@ -8199,6 +8977,200 @@ impl ParametersListSerializer {
     }
 }
 
+#[allow(dead_code)]
+struct PartnerIntegrationDatabaseNameDeserializer;
+impl PartnerIntegrationDatabaseNameDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+/// <p>Describes a partner integration.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct PartnerIntegrationInfo {
+    /// <p>The date (UTC) that the partner integration was created.</p>
+    pub created_at: Option<String>,
+    /// <p>The name of the database that receives data from a partner.</p>
+    pub database_name: Option<String>,
+    /// <p>The name of the partner.</p>
+    pub partner_name: Option<String>,
+    /// <p>The partner integration status.</p>
+    pub status: Option<String>,
+    /// <p>The status message provided by the partner.</p>
+    pub status_message: Option<String>,
+    /// <p>The date (UTC) that the partner integration status was last updated by the partner.</p>
+    pub updated_at: Option<String>,
+}
+
+#[allow(dead_code)]
+struct PartnerIntegrationInfoDeserializer;
+impl PartnerIntegrationInfoDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PartnerIntegrationInfo, XmlParseError> {
+        deserialize_elements::<_, PartnerIntegrationInfo, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "CreatedAt" => {
+                    obj.created_at = Some(TStampDeserializer::deserialize("CreatedAt", stack)?);
+                }
+                "DatabaseName" => {
+                    obj.database_name =
+                        Some(PartnerIntegrationDatabaseNameDeserializer::deserialize(
+                            "DatabaseName",
+                            stack,
+                        )?);
+                }
+                "PartnerName" => {
+                    obj.partner_name =
+                        Some(PartnerIntegrationPartnerNameDeserializer::deserialize(
+                            "PartnerName",
+                            stack,
+                        )?);
+                }
+                "Status" => {
+                    obj.status = Some(PartnerIntegrationStatusDeserializer::deserialize(
+                        "Status", stack,
+                    )?);
+                }
+                "StatusMessage" => {
+                    obj.status_message =
+                        Some(PartnerIntegrationStatusMessageDeserializer::deserialize(
+                            "StatusMessage",
+                            stack,
+                        )?);
+                }
+                "UpdatedAt" => {
+                    obj.updated_at = Some(TStampDeserializer::deserialize("UpdatedAt", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct PartnerIntegrationInfoListDeserializer;
+impl PartnerIntegrationInfoListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<PartnerIntegrationInfo>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "PartnerIntegrationInfo" {
+                obj.push(PartnerIntegrationInfoDeserializer::deserialize(
+                    "PartnerIntegrationInfo",
+                    stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PartnerIntegrationInputMessage {
+    /// <p>The AWS account ID that owns the cluster.</p>
+    pub account_id: String,
+    /// <p>The cluster identifier of the cluster that receives data from the partner.</p>
+    pub cluster_identifier: String,
+    /// <p>The name of the database that receives data from the partner.</p>
+    pub database_name: String,
+    /// <p>The name of the partner that is authorized to send data.</p>
+    pub partner_name: String,
+}
+
+/// Serialize `PartnerIntegrationInputMessage` contents to a `SignedRequest`.
+struct PartnerIntegrationInputMessageSerializer;
+impl PartnerIntegrationInputMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &PartnerIntegrationInputMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "AccountId"), &obj.account_id);
+        params.put(
+            &format!("{}{}", prefix, "ClusterIdentifier"),
+            &obj.cluster_identifier,
+        );
+        params.put(&format!("{}{}", prefix, "DatabaseName"), &obj.database_name);
+        params.put(&format!("{}{}", prefix, "PartnerName"), &obj.partner_name);
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct PartnerIntegrationOutputMessage {
+    /// <p>The name of the database that receives data from the partner.</p>
+    pub database_name: Option<String>,
+    /// <p>The name of the partner that is authorized to send data.</p>
+    pub partner_name: Option<String>,
+}
+
+#[allow(dead_code)]
+struct PartnerIntegrationOutputMessageDeserializer;
+impl PartnerIntegrationOutputMessageDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PartnerIntegrationOutputMessage, XmlParseError> {
+        deserialize_elements::<_, PartnerIntegrationOutputMessage, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "DatabaseName" => {
+                        obj.database_name =
+                            Some(PartnerIntegrationDatabaseNameDeserializer::deserialize(
+                                "DatabaseName",
+                                stack,
+                            )?);
+                    }
+                    "PartnerName" => {
+                        obj.partner_name =
+                            Some(PartnerIntegrationPartnerNameDeserializer::deserialize(
+                                "PartnerName",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[allow(dead_code)]
+struct PartnerIntegrationPartnerNameDeserializer;
+impl PartnerIntegrationPartnerNameDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+#[allow(dead_code)]
+struct PartnerIntegrationStatusDeserializer;
+impl PartnerIntegrationStatusDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+#[allow(dead_code)]
+struct PartnerIntegrationStatusMessageDeserializer;
+impl PartnerIntegrationStatusMessageDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
 /// <p>Describes a pause cluster operation. For example, a scheduled action to run the <code>PauseCluster</code> API operation. </p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -9208,7 +10180,9 @@ pub struct RestoreFromClusterSnapshotMessage {
     pub additional_info: Option<String>,
     /// <p>If <code>true</code>, major version upgrades can be applied during the maintenance window to the Amazon Redshift engine that is running on the cluster. </p> <p>Default: <code>true</code> </p>
     pub allow_version_upgrade: Option<bool>,
-    /// <p>The number of days that automated snapshots are retained. If the value is 0, automated snapshots are disabled. Even if automated snapshots are disabled, you can still create manual snapshots when you want with <a>CreateClusterSnapshot</a>. </p> <p>Default: The value selected for the cluster from which the snapshot was taken.</p> <p>Constraints: Must be a value from 0 to 35.</p>
+    /// <p><p>The value represents how the cluster is configured to use AQUA (Advanced Query Accelerator) after the cluster is restored. Possible values include the following.</p> <ul> <li> <p>enabled - Use AQUA if it is available for the current AWS Region and Amazon Redshift node type.</p> </li> <li> <p>disabled - Don&#39;t use AQUA. </p> </li> <li> <p>auto - Amazon Redshift determines whether to use AQUA.</p> </li> </ul></p>
+    pub aqua_configuration_status: Option<String>,
+    /// <p>The number of days that automated snapshots are retained. If the value is 0, automated snapshots are disabled. Even if automated snapshots are disabled, you can still create manual snapshots when you want with <a>CreateClusterSnapshot</a>. </p> <p>You can't disable automated snapshots for RA3 node types. Set the automated retention period from 1-35 days.</p> <p>Default: The value selected for the cluster from which the snapshot was taken.</p> <p>Constraints: Must be a value from 0 to 35.</p>
     pub automated_snapshot_retention_period: Option<i64>,
     /// <p>The Amazon EC2 Availability Zone in which to restore the cluster.</p> <p>Default: A random, system-chosen Availability Zone.</p> <p>Example: <code>us-east-2a</code> </p>
     pub availability_zone: Option<String>,
@@ -9275,6 +10249,12 @@ impl RestoreFromClusterSnapshotMessageSerializer {
         if let Some(ref field_value) = obj.allow_version_upgrade {
             params.put(
                 &format!("{}{}", prefix, "AllowVersionUpgrade"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.aqua_configuration_status {
+            params.put(
+                &format!("{}{}", prefix, "AquaConfigurationStatus"),
                 &field_value,
             );
         }
@@ -9503,6 +10483,8 @@ impl RestoreStatusDeserializer {
 pub struct RestoreTableFromClusterSnapshotMessage {
     /// <p>The identifier of the Amazon Redshift cluster to restore the table to.</p>
     pub cluster_identifier: String,
+    /// <p>Indicates whether name identifiers for database, schema, and table are case sensitive. If <code>true</code>, the names are case sensitive. If <code>false</code> (default), the names are not case sensitive.</p>
+    pub enable_case_sensitive_identifier: Option<bool>,
     /// <p>The name of the table to create as a result of the current request.</p>
     pub new_table_name: String,
     /// <p>The identifier of the snapshot to restore the table from. This snapshot must have been created from the Amazon Redshift cluster specified by the <code>ClusterIdentifier</code> parameter.</p>
@@ -9532,6 +10514,12 @@ impl RestoreTableFromClusterSnapshotMessageSerializer {
             &format!("{}{}", prefix, "ClusterIdentifier"),
             &obj.cluster_identifier,
         );
+        if let Some(ref field_value) = obj.enable_case_sensitive_identifier {
+            params.put(
+                &format!("{}{}", prefix, "EnableCaseSensitiveIdentifier"),
+                &field_value,
+            );
+        }
         params.put(
             &format!("{}{}", prefix, "NewTableName"),
             &obj.new_table_name,
@@ -9804,6 +10792,47 @@ impl RevokeClusterSecurityGroupIngressResultDeserializer {
         )
     }
 }
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RevokeEndpointAccessMessage {
+    /// <p>The AWS account ID whose access is to be revoked.</p>
+    pub account: Option<String>,
+    /// <p>The cluster to revoke access from.</p>
+    pub cluster_identifier: Option<String>,
+    /// <p>Indicates whether to force the revoke action. If true, the Redshift-managed VPC endpoints associated with the endpoint authorization are also deleted.</p>
+    pub force: Option<bool>,
+    /// <p>The virtual private cloud (VPC) identifiers for which access is to be revoked.</p>
+    pub vpc_ids: Option<Vec<String>>,
+}
+
+/// Serialize `RevokeEndpointAccessMessage` contents to a `SignedRequest`.
+struct RevokeEndpointAccessMessageSerializer;
+impl RevokeEndpointAccessMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &RevokeEndpointAccessMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.account {
+            params.put(&format!("{}{}", prefix, "Account"), &field_value);
+        }
+        if let Some(ref field_value) = obj.cluster_identifier {
+            params.put(&format!("{}{}", prefix, "ClusterIdentifier"), &field_value);
+        }
+        if let Some(ref field_value) = obj.force {
+            params.put(&format!("{}{}", prefix, "Force"), &field_value);
+        }
+        if let Some(ref field_value) = obj.vpc_ids {
+            VpcIdentifierListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "VpcIdentifier"),
+                field_value,
+            );
+        }
+    }
+}
+
 /// <p><p/></p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -10949,55 +11978,6 @@ impl SourceTypeDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
-/// <p>The connection endpoint for connecting an Amazon Redshift cluster through the proxy.</p>
-#[derive(Clone, Debug, Default, PartialEq)]
-#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
-pub struct SpartaProxyVpcEndpoint {
-    /// <p>The connection endpoint ID for connecting an Amazon Redshift cluster through the proxy.</p>
-    pub vpc_endpoint_id: Option<String>,
-}
-
-#[allow(dead_code)]
-struct SpartaProxyVpcEndpointDeserializer;
-impl SpartaProxyVpcEndpointDeserializer {
-    #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<SpartaProxyVpcEndpoint, XmlParseError> {
-        deserialize_elements::<_, SpartaProxyVpcEndpoint, _>(tag_name, stack, |name, stack, obj| {
-            match name {
-                "VpcEndpointId" => {
-                    obj.vpc_endpoint_id =
-                        Some(StringDeserializer::deserialize("VpcEndpointId", stack)?);
-                }
-                _ => skip_tree(stack),
-            }
-            Ok(())
-        })
-    }
-}
-#[allow(dead_code)]
-struct SpartaProxyVpcEndpointListDeserializer;
-impl SpartaProxyVpcEndpointListDeserializer {
-    #[allow(dead_code, unused_variables)]
-    fn deserialize<T: Peek + Next>(
-        tag_name: &str,
-        stack: &mut T,
-    ) -> Result<Vec<SpartaProxyVpcEndpoint>, XmlParseError> {
-        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
-            if name == "SpartaProxyVpcEndpoint" {
-                obj.push(SpartaProxyVpcEndpointDeserializer::deserialize(
-                    "SpartaProxyVpcEndpoint",
-                    stack,
-                )?);
-            } else {
-                skip_tree(stack);
-            }
-            Ok(())
-        })
-    }
-}
 #[allow(dead_code)]
 struct StringDeserializer;
 impl StringDeserializer {
@@ -11620,6 +12600,46 @@ impl TrackListMessageDeserializer {
         })
     }
 }
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdatePartnerStatusInputMessage {
+    /// <p>The AWS account ID that owns the cluster.</p>
+    pub account_id: String,
+    /// <p>The cluster identifier of the cluster whose partner integration status is being updated.</p>
+    pub cluster_identifier: String,
+    /// <p>The name of the database whose partner integration status is being updated.</p>
+    pub database_name: String,
+    /// <p>The name of the partner whose integration status is being updated.</p>
+    pub partner_name: String,
+    /// <p>The value of the updated status.</p>
+    pub status: String,
+    /// <p>The status message provided by the partner.</p>
+    pub status_message: Option<String>,
+}
+
+/// Serialize `UpdatePartnerStatusInputMessage` contents to a `SignedRequest`.
+struct UpdatePartnerStatusInputMessageSerializer;
+impl UpdatePartnerStatusInputMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &UpdatePartnerStatusInputMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "AccountId"), &obj.account_id);
+        params.put(
+            &format!("{}{}", prefix, "ClusterIdentifier"),
+            &obj.cluster_identifier,
+        );
+        params.put(&format!("{}{}", prefix, "DatabaseName"), &obj.database_name);
+        params.put(&format!("{}{}", prefix, "PartnerName"), &obj.partner_name);
+        params.put(&format!("{}{}", prefix, "Status"), &obj.status);
+        if let Some(ref field_value) = obj.status_message {
+            params.put(&format!("{}{}", prefix, "StatusMessage"), &field_value);
+        }
+    }
+}
+
 /// <p>A maintenance track that you can switch the current track to.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -11836,6 +12856,94 @@ impl ValueStringListSerializer {
     }
 }
 
+/// <p>The connection endpoint for connecting to an Amazon Redshift cluster through the proxy.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct VpcEndpoint {
+    /// <p>One or more network interfaces of the endpoint. Also known as an interface endpoint. </p>
+    pub network_interfaces: Option<Vec<NetworkInterface>>,
+    /// <p>The connection endpoint ID for connecting an Amazon Redshift cluster through the proxy.</p>
+    pub vpc_endpoint_id: Option<String>,
+    /// <p>The VPC identifier that the endpoint is associated. </p>
+    pub vpc_id: Option<String>,
+}
+
+#[allow(dead_code)]
+struct VpcEndpointDeserializer;
+impl VpcEndpointDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<VpcEndpoint, XmlParseError> {
+        deserialize_elements::<_, VpcEndpoint, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "NetworkInterfaces" => {
+                    obj.network_interfaces.get_or_insert(vec![]).extend(
+                        NetworkInterfaceListDeserializer::deserialize("NetworkInterfaces", stack)?,
+                    );
+                }
+                "VpcEndpointId" => {
+                    obj.vpc_endpoint_id =
+                        Some(StringDeserializer::deserialize("VpcEndpointId", stack)?);
+                }
+                "VpcId" => {
+                    obj.vpc_id = Some(StringDeserializer::deserialize("VpcId", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct VpcEndpointsListDeserializer;
+impl VpcEndpointsListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<VpcEndpoint>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "VpcEndpoint" {
+                obj.push(VpcEndpointDeserializer::deserialize("VpcEndpoint", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct VpcIdentifierListDeserializer;
+impl VpcIdentifierListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "VpcIdentifier" {
+                obj.push(StringDeserializer::deserialize("VpcIdentifier", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+
+/// Serialize `VpcIdentifierList` contents to a `SignedRequest`.
+struct VpcIdentifierListSerializer;
+impl VpcIdentifierListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
 /// Serialize `VpcSecurityGroupIdList` contents to a `SignedRequest`.
 struct VpcSecurityGroupIdListSerializer;
 impl VpcSecurityGroupIdListSerializer {
@@ -12029,6 +13137,70 @@ impl fmt::Display for AcceptReservedNodeExchangeError {
     }
 }
 impl Error for AcceptReservedNodeExchangeError {}
+/// Errors returned by AddPartner
+#[derive(Debug, PartialEq)]
+pub enum AddPartnerError {
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    ClusterNotFoundFault(String),
+    /// <p>The name of the partner was not found.</p>
+    PartnerNotFoundFault(String),
+    /// <p>The partner integration is not authorized.</p>
+    UnauthorizedPartnerIntegrationFault(String),
+}
+
+impl AddPartnerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddPartnerError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return RusotoError::Service(AddPartnerError::ClusterNotFoundFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PartnerNotFound" => {
+                        return RusotoError::Service(AddPartnerError::PartnerNotFoundFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnauthorizedPartnerIntegration" => {
+                        return RusotoError::Service(
+                            AddPartnerError::UnauthorizedPartnerIntegrationFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for AddPartnerError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AddPartnerError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            AddPartnerError::PartnerNotFoundFault(ref cause) => write!(f, "{}", cause),
+            AddPartnerError::UnauthorizedPartnerIntegrationFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for AddPartnerError {}
 /// Errors returned by AuthorizeClusterSecurityGroupIngress
 #[derive(Debug, PartialEq)]
 pub enum AuthorizeClusterSecurityGroupIngressError {
@@ -12087,6 +13259,70 @@ impl fmt::Display for AuthorizeClusterSecurityGroupIngressError {
     }
 }
 impl Error for AuthorizeClusterSecurityGroupIngressError {}
+/// Errors returned by AuthorizeEndpointAccess
+#[derive(Debug, PartialEq)]
+pub enum AuthorizeEndpointAccessError {
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    ClusterNotFoundFault(String),
+    /// <p>The authorization already exists for this endpoint.</p>
+    EndpointAuthorizationAlreadyExistsFault(String),
+    /// <p>The number of endpoint authorizations per cluster has exceeded its limit.</p>
+    EndpointAuthorizationsPerClusterLimitExceededFault(String),
+    /// <p>The status of the authorization is not valid.</p>
+    InvalidAuthorizationStateFault(String),
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
+    InvalidClusterStateFault(String),
+    /// <p>The requested operation isn't supported.</p>
+    UnsupportedOperationFault(String),
+}
+
+impl AuthorizeEndpointAccessError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AuthorizeEndpointAccessError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "ClusterNotFound" => return RusotoError::Service(AuthorizeEndpointAccessError::ClusterNotFoundFault(parsed_error.message)),"EndpointAuthorizationAlreadyExists" => return RusotoError::Service(AuthorizeEndpointAccessError::EndpointAuthorizationAlreadyExistsFault(parsed_error.message)),"EndpointAuthorizationsPerClusterLimitExceeded" => return RusotoError::Service(AuthorizeEndpointAccessError::EndpointAuthorizationsPerClusterLimitExceededFault(parsed_error.message)),"InvalidAuthorizationState" => return RusotoError::Service(AuthorizeEndpointAccessError::InvalidAuthorizationStateFault(parsed_error.message)),"InvalidClusterState" => return RusotoError::Service(AuthorizeEndpointAccessError::InvalidClusterStateFault(parsed_error.message)),"UnsupportedOperation" => return RusotoError::Service(AuthorizeEndpointAccessError::UnsupportedOperationFault(parsed_error.message)),_ => {}
+                                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for AuthorizeEndpointAccessError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AuthorizeEndpointAccessError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            AuthorizeEndpointAccessError::EndpointAuthorizationAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AuthorizeEndpointAccessError::EndpointAuthorizationsPerClusterLimitExceededFault(
+                ref cause,
+            ) => write!(f, "{}", cause),
+            AuthorizeEndpointAccessError::InvalidAuthorizationStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AuthorizeEndpointAccessError::InvalidClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AuthorizeEndpointAccessError::UnsupportedOperationFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for AuthorizeEndpointAccessError {}
 /// Errors returned by AuthorizeSnapshotAccess
 #[derive(Debug, PartialEq)]
 pub enum AuthorizeSnapshotAccessError {
@@ -13093,6 +14329,154 @@ impl fmt::Display for CreateClusterSubnetGroupError {
     }
 }
 impl Error for CreateClusterSubnetGroupError {}
+/// Errors returned by CreateEndpointAccess
+#[derive(Debug, PartialEq)]
+pub enum CreateEndpointAccessError {
+    /// <p>You are not authorized to access the cluster.</p>
+    AccessToClusterDeniedFault(String),
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    ClusterNotFoundFault(String),
+    /// <p>The cluster subnet group name does not refer to an existing cluster subnet group.</p>
+    ClusterSubnetGroupNotFoundFault(String),
+    /// <p>The account already has a Redshift-managed VPC endpoint with the given identifier.</p>
+    EndpointAlreadyExistsFault(String),
+    /// <p>The number of Redshift-managed VPC endpoints per authorization has exceeded its limit.</p>
+    EndpointsPerAuthorizationLimitExceededFault(String),
+    /// <p>The number of Redshift-managed VPC endpoints per cluster has exceeded its limit.</p>
+    EndpointsPerClusterLimitExceededFault(String),
+    /// <p>The state of the cluster security group is not <code>available</code>. </p>
+    InvalidClusterSecurityGroupStateFault(String),
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
+    InvalidClusterStateFault(String),
+    /// <p>Your account is not authorized to perform the requested operation.</p>
+    UnauthorizedOperation(String),
+    /// <p>The requested operation isn't supported.</p>
+    UnsupportedOperationFault(String),
+}
+
+impl CreateEndpointAccessError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEndpointAccessError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AccessToClusterDenied" => {
+                        return RusotoError::Service(
+                            CreateEndpointAccessError::AccessToClusterDeniedFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ClusterNotFound" => {
+                        return RusotoError::Service(
+                            CreateEndpointAccessError::ClusterNotFoundFault(parsed_error.message),
+                        )
+                    }
+                    "ClusterSubnetGroupNotFoundFault" => {
+                        return RusotoError::Service(
+                            CreateEndpointAccessError::ClusterSubnetGroupNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "EndpointAlreadyExists" => {
+                        return RusotoError::Service(
+                            CreateEndpointAccessError::EndpointAlreadyExistsFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "EndpointsPerAuthorizationLimitExceeded" => {
+                        return RusotoError::Service(
+                            CreateEndpointAccessError::EndpointsPerAuthorizationLimitExceededFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "EndpointsPerClusterLimitExceeded" => {
+                        return RusotoError::Service(
+                            CreateEndpointAccessError::EndpointsPerClusterLimitExceededFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidClusterSecurityGroupState" => {
+                        return RusotoError::Service(
+                            CreateEndpointAccessError::InvalidClusterSecurityGroupStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidClusterState" => {
+                        return RusotoError::Service(
+                            CreateEndpointAccessError::InvalidClusterStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "UnauthorizedOperation" => {
+                        return RusotoError::Service(
+                            CreateEndpointAccessError::UnauthorizedOperation(parsed_error.message),
+                        )
+                    }
+                    "UnsupportedOperation" => {
+                        return RusotoError::Service(
+                            CreateEndpointAccessError::UnsupportedOperationFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for CreateEndpointAccessError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateEndpointAccessError::AccessToClusterDeniedFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateEndpointAccessError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateEndpointAccessError::ClusterSubnetGroupNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateEndpointAccessError::EndpointAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateEndpointAccessError::EndpointsPerAuthorizationLimitExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateEndpointAccessError::EndpointsPerClusterLimitExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateEndpointAccessError::InvalidClusterSecurityGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateEndpointAccessError::InvalidClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateEndpointAccessError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+            CreateEndpointAccessError::UnsupportedOperationFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateEndpointAccessError {}
 /// Errors returned by CreateEventSubscription
 #[derive(Debug, PartialEq)]
 pub enum CreateEventSubscriptionError {
@@ -14211,6 +15595,94 @@ impl fmt::Display for DeleteClusterSubnetGroupError {
     }
 }
 impl Error for DeleteClusterSubnetGroupError {}
+/// Errors returned by DeleteEndpointAccess
+#[derive(Debug, PartialEq)]
+pub enum DeleteEndpointAccessError {
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    ClusterNotFoundFault(String),
+    /// <p>The endpoint name doesn't refer to an existing endpoint.</p>
+    EndpointNotFoundFault(String),
+    /// <p>The state of the cluster security group is not <code>available</code>. </p>
+    InvalidClusterSecurityGroupStateFault(String),
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
+    InvalidClusterStateFault(String),
+    /// <p>The status of the endpoint is not valid.</p>
+    InvalidEndpointStateFault(String),
+}
+
+impl DeleteEndpointAccessError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEndpointAccessError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return RusotoError::Service(
+                            DeleteEndpointAccessError::ClusterNotFoundFault(parsed_error.message),
+                        )
+                    }
+                    "EndpointNotFound" => {
+                        return RusotoError::Service(
+                            DeleteEndpointAccessError::EndpointNotFoundFault(parsed_error.message),
+                        )
+                    }
+                    "InvalidClusterSecurityGroupState" => {
+                        return RusotoError::Service(
+                            DeleteEndpointAccessError::InvalidClusterSecurityGroupStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidClusterState" => {
+                        return RusotoError::Service(
+                            DeleteEndpointAccessError::InvalidClusterStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidEndpointState" => {
+                        return RusotoError::Service(
+                            DeleteEndpointAccessError::InvalidEndpointStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DeleteEndpointAccessError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteEndpointAccessError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            DeleteEndpointAccessError::EndpointNotFoundFault(ref cause) => write!(f, "{}", cause),
+            DeleteEndpointAccessError::InvalidClusterSecurityGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteEndpointAccessError::InvalidClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteEndpointAccessError::InvalidEndpointStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteEndpointAccessError {}
 /// Errors returned by DeleteEventSubscription
 #[derive(Debug, PartialEq)]
 pub enum DeleteEventSubscriptionError {
@@ -14393,6 +15865,70 @@ impl fmt::Display for DeleteHsmConfigurationError {
     }
 }
 impl Error for DeleteHsmConfigurationError {}
+/// Errors returned by DeletePartner
+#[derive(Debug, PartialEq)]
+pub enum DeletePartnerError {
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    ClusterNotFoundFault(String),
+    /// <p>The name of the partner was not found.</p>
+    PartnerNotFoundFault(String),
+    /// <p>The partner integration is not authorized.</p>
+    UnauthorizedPartnerIntegrationFault(String),
+}
+
+impl DeletePartnerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeletePartnerError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return RusotoError::Service(DeletePartnerError::ClusterNotFoundFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "PartnerNotFound" => {
+                        return RusotoError::Service(DeletePartnerError::PartnerNotFoundFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnauthorizedPartnerIntegration" => {
+                        return RusotoError::Service(
+                            DeletePartnerError::UnauthorizedPartnerIntegrationFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DeletePartnerError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeletePartnerError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            DeletePartnerError::PartnerNotFoundFault(ref cause) => write!(f, "{}", cause),
+            DeletePartnerError::UnauthorizedPartnerIntegrationFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeletePartnerError {}
 /// Errors returned by DeleteScheduledAction
 #[derive(Debug, PartialEq)]
 pub enum DeleteScheduledActionError {
@@ -15245,6 +16781,134 @@ impl fmt::Display for DescribeDefaultClusterParametersError {
     }
 }
 impl Error for DescribeDefaultClusterParametersError {}
+/// Errors returned by DescribeEndpointAccess
+#[derive(Debug, PartialEq)]
+pub enum DescribeEndpointAccessError {
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    ClusterNotFoundFault(String),
+    /// <p>The endpoint name doesn't refer to an existing endpoint.</p>
+    EndpointNotFoundFault(String),
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
+    InvalidClusterStateFault(String),
+}
+
+impl DescribeEndpointAccessError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeEndpointAccessError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return RusotoError::Service(
+                            DescribeEndpointAccessError::ClusterNotFoundFault(parsed_error.message),
+                        )
+                    }
+                    "EndpointNotFound" => {
+                        return RusotoError::Service(
+                            DescribeEndpointAccessError::EndpointNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidClusterState" => {
+                        return RusotoError::Service(
+                            DescribeEndpointAccessError::InvalidClusterStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DescribeEndpointAccessError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeEndpointAccessError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            DescribeEndpointAccessError::EndpointNotFoundFault(ref cause) => write!(f, "{}", cause),
+            DescribeEndpointAccessError::InvalidClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeEndpointAccessError {}
+/// Errors returned by DescribeEndpointAuthorization
+#[derive(Debug, PartialEq)]
+pub enum DescribeEndpointAuthorizationError {
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    ClusterNotFoundFault(String),
+    /// <p>The requested operation isn't supported.</p>
+    UnsupportedOperationFault(String),
+}
+
+impl DescribeEndpointAuthorizationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeEndpointAuthorizationError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return RusotoError::Service(
+                            DescribeEndpointAuthorizationError::ClusterNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "UnsupportedOperation" => {
+                        return RusotoError::Service(
+                            DescribeEndpointAuthorizationError::UnsupportedOperationFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DescribeEndpointAuthorizationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeEndpointAuthorizationError::ClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeEndpointAuthorizationError::UnsupportedOperationFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeEndpointAuthorizationError {}
 /// Errors returned by DescribeEventCategories
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventCategoriesError {}
@@ -15655,6 +17319,62 @@ impl fmt::Display for DescribeOrderableClusterOptionsError {
     }
 }
 impl Error for DescribeOrderableClusterOptionsError {}
+/// Errors returned by DescribePartners
+#[derive(Debug, PartialEq)]
+pub enum DescribePartnersError {
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    ClusterNotFoundFault(String),
+    /// <p>The partner integration is not authorized.</p>
+    UnauthorizedPartnerIntegrationFault(String),
+}
+
+impl DescribePartnersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribePartnersError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return RusotoError::Service(DescribePartnersError::ClusterNotFoundFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UnauthorizedPartnerIntegration" => {
+                        return RusotoError::Service(
+                            DescribePartnersError::UnauthorizedPartnerIntegrationFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DescribePartnersError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribePartnersError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            DescribePartnersError::UnauthorizedPartnerIntegrationFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribePartnersError {}
 /// Errors returned by DescribeReservedNodeOfferings
 #[derive(Debug, PartialEq)]
 pub enum DescribeReservedNodeOfferingsError {
@@ -16202,6 +17922,8 @@ impl Error for DescribeUsageLimitsError {}
 pub enum DisableLoggingError {
     /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
     ClusterNotFoundFault(String),
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
+    InvalidClusterStateFault(String),
 }
 
 impl DisableLoggingError {
@@ -16214,6 +17936,11 @@ impl DisableLoggingError {
                 match &parsed_error.code[..] {
                     "ClusterNotFound" => {
                         return RusotoError::Service(DisableLoggingError::ClusterNotFoundFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidClusterState" => {
+                        return RusotoError::Service(DisableLoggingError::InvalidClusterStateFault(
                             parsed_error.message,
                         ))
                     }
@@ -16237,6 +17964,7 @@ impl fmt::Display for DisableLoggingError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DisableLoggingError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            DisableLoggingError::InvalidClusterStateFault(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -16717,6 +18445,76 @@ impl fmt::Display for GetReservedNodeExchangeOfferingsError {
     }
 }
 impl Error for GetReservedNodeExchangeOfferingsError {}
+/// Errors returned by ModifyAquaConfiguration
+#[derive(Debug, PartialEq)]
+pub enum ModifyAquaConfigurationError {
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    ClusterNotFoundFault(String),
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
+    InvalidClusterStateFault(String),
+    /// <p>The requested operation isn't supported.</p>
+    UnsupportedOperationFault(String),
+}
+
+impl ModifyAquaConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyAquaConfigurationError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return RusotoError::Service(
+                            ModifyAquaConfigurationError::ClusterNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidClusterState" => {
+                        return RusotoError::Service(
+                            ModifyAquaConfigurationError::InvalidClusterStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "UnsupportedOperation" => {
+                        return RusotoError::Service(
+                            ModifyAquaConfigurationError::UnsupportedOperationFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ModifyAquaConfigurationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ModifyAquaConfigurationError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ModifyAquaConfigurationError::InvalidClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyAquaConfigurationError::UnsupportedOperationFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ModifyAquaConfigurationError {}
 /// Errors returned by ModifyCluster
 #[derive(Debug, PartialEq)]
 pub enum ModifyClusterError {
@@ -17408,6 +19206,102 @@ impl fmt::Display for ModifyClusterSubnetGroupError {
     }
 }
 impl Error for ModifyClusterSubnetGroupError {}
+/// Errors returned by ModifyEndpointAccess
+#[derive(Debug, PartialEq)]
+pub enum ModifyEndpointAccessError {
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    ClusterNotFoundFault(String),
+    /// <p>The endpoint name doesn't refer to an existing endpoint.</p>
+    EndpointNotFoundFault(String),
+    /// <p>The state of the cluster security group is not <code>available</code>. </p>
+    InvalidClusterSecurityGroupStateFault(String),
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
+    InvalidClusterStateFault(String),
+    /// <p>The status of the endpoint is not valid.</p>
+    InvalidEndpointStateFault(String),
+    /// <p>Your account is not authorized to perform the requested operation.</p>
+    UnauthorizedOperation(String),
+}
+
+impl ModifyEndpointAccessError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyEndpointAccessError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return RusotoError::Service(
+                            ModifyEndpointAccessError::ClusterNotFoundFault(parsed_error.message),
+                        )
+                    }
+                    "EndpointNotFound" => {
+                        return RusotoError::Service(
+                            ModifyEndpointAccessError::EndpointNotFoundFault(parsed_error.message),
+                        )
+                    }
+                    "InvalidClusterSecurityGroupState" => {
+                        return RusotoError::Service(
+                            ModifyEndpointAccessError::InvalidClusterSecurityGroupStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidClusterState" => {
+                        return RusotoError::Service(
+                            ModifyEndpointAccessError::InvalidClusterStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidEndpointState" => {
+                        return RusotoError::Service(
+                            ModifyEndpointAccessError::InvalidEndpointStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "UnauthorizedOperation" => {
+                        return RusotoError::Service(
+                            ModifyEndpointAccessError::UnauthorizedOperation(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ModifyEndpointAccessError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ModifyEndpointAccessError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ModifyEndpointAccessError::EndpointNotFoundFault(ref cause) => write!(f, "{}", cause),
+            ModifyEndpointAccessError::InvalidClusterSecurityGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyEndpointAccessError::InvalidClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyEndpointAccessError::InvalidEndpointStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyEndpointAccessError::UnauthorizedOperation(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ModifyEndpointAccessError {}
 /// Errors returned by ModifyEventSubscription
 #[derive(Debug, PartialEq)]
 pub enum ModifyEventSubscriptionError {
@@ -18750,6 +20644,118 @@ impl fmt::Display for RevokeClusterSecurityGroupIngressError {
     }
 }
 impl Error for RevokeClusterSecurityGroupIngressError {}
+/// Errors returned by RevokeEndpointAccess
+#[derive(Debug, PartialEq)]
+pub enum RevokeEndpointAccessError {
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    ClusterNotFoundFault(String),
+    /// <p>The authorization for this endpoint can't be found.</p>
+    EndpointAuthorizationNotFoundFault(String),
+    /// <p>The endpoint name doesn't refer to an existing endpoint.</p>
+    EndpointNotFoundFault(String),
+    /// <p>The status of the authorization is not valid.</p>
+    InvalidAuthorizationStateFault(String),
+    /// <p>The state of the cluster security group is not <code>available</code>. </p>
+    InvalidClusterSecurityGroupStateFault(String),
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
+    InvalidClusterStateFault(String),
+    /// <p>The status of the endpoint is not valid.</p>
+    InvalidEndpointStateFault(String),
+}
+
+impl RevokeEndpointAccessError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RevokeEndpointAccessError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return RusotoError::Service(
+                            RevokeEndpointAccessError::ClusterNotFoundFault(parsed_error.message),
+                        )
+                    }
+                    "EndpointAuthorizationNotFound" => {
+                        return RusotoError::Service(
+                            RevokeEndpointAccessError::EndpointAuthorizationNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "EndpointNotFound" => {
+                        return RusotoError::Service(
+                            RevokeEndpointAccessError::EndpointNotFoundFault(parsed_error.message),
+                        )
+                    }
+                    "InvalidAuthorizationState" => {
+                        return RusotoError::Service(
+                            RevokeEndpointAccessError::InvalidAuthorizationStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidClusterSecurityGroupState" => {
+                        return RusotoError::Service(
+                            RevokeEndpointAccessError::InvalidClusterSecurityGroupStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidClusterState" => {
+                        return RusotoError::Service(
+                            RevokeEndpointAccessError::InvalidClusterStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidEndpointState" => {
+                        return RusotoError::Service(
+                            RevokeEndpointAccessError::InvalidEndpointStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for RevokeEndpointAccessError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            RevokeEndpointAccessError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            RevokeEndpointAccessError::EndpointAuthorizationNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RevokeEndpointAccessError::EndpointNotFoundFault(ref cause) => write!(f, "{}", cause),
+            RevokeEndpointAccessError::InvalidAuthorizationStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RevokeEndpointAccessError::InvalidClusterSecurityGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RevokeEndpointAccessError::InvalidClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RevokeEndpointAccessError::InvalidEndpointStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for RevokeEndpointAccessError {}
 /// Errors returned by RevokeSnapshotAccess
 #[derive(Debug, PartialEq)]
 pub enum RevokeSnapshotAccessError {
@@ -18888,6 +20894,70 @@ impl fmt::Display for RotateEncryptionKeyError {
     }
 }
 impl Error for RotateEncryptionKeyError {}
+/// Errors returned by UpdatePartnerStatus
+#[derive(Debug, PartialEq)]
+pub enum UpdatePartnerStatusError {
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    ClusterNotFoundFault(String),
+    /// <p>The name of the partner was not found.</p>
+    PartnerNotFoundFault(String),
+    /// <p>The partner integration is not authorized.</p>
+    UnauthorizedPartnerIntegrationFault(String),
+}
+
+impl UpdatePartnerStatusError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdatePartnerStatusError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return RusotoError::Service(
+                            UpdatePartnerStatusError::ClusterNotFoundFault(parsed_error.message),
+                        )
+                    }
+                    "PartnerNotFound" => {
+                        return RusotoError::Service(
+                            UpdatePartnerStatusError::PartnerNotFoundFault(parsed_error.message),
+                        )
+                    }
+                    "UnauthorizedPartnerIntegration" => {
+                        return RusotoError::Service(
+                            UpdatePartnerStatusError::UnauthorizedPartnerIntegrationFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for UpdatePartnerStatusError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdatePartnerStatusError::ClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            UpdatePartnerStatusError::PartnerNotFoundFault(ref cause) => write!(f, "{}", cause),
+            UpdatePartnerStatusError::UnauthorizedPartnerIntegrationFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdatePartnerStatusError {}
 /// Trait representing the capabilities of the Amazon Redshift API. Amazon Redshift clients implement this trait.
 #[async_trait]
 pub trait Redshift {
@@ -18897,6 +20967,12 @@ pub trait Redshift {
         input: AcceptReservedNodeExchangeInputMessage,
     ) -> Result<AcceptReservedNodeExchangeOutputMessage, RusotoError<AcceptReservedNodeExchangeError>>;
 
+    /// <p>Adds a partner integration to a cluster. This operation authorizes a partner to push status updates for the specified database. To complete the integration, you also set up the integration on the partner website.</p>
+    async fn add_partner(
+        &self,
+        input: PartnerIntegrationInputMessage,
+    ) -> Result<PartnerIntegrationOutputMessage, RusotoError<AddPartnerError>>;
+
     /// <p>Adds an inbound (ingress) rule to an Amazon Redshift security group. Depending on whether the application accessing your cluster is running on the Internet or an Amazon EC2 instance, you can authorize inbound access to either a Classless Interdomain Routing (CIDR)/Internet Protocol (IP) range or to an Amazon EC2 security group. You can add as many as 20 ingress rules to an Amazon Redshift security group.</p> <p>If you authorize access to an Amazon EC2 security group, specify <i>EC2SecurityGroupName</i> and <i>EC2SecurityGroupOwnerId</i>. The Amazon EC2 security group and Amazon Redshift cluster must be in the same AWS Region. </p> <p>If you authorize access to a CIDR/IP address range, specify <i>CIDRIP</i>. For an overview of CIDR blocks, see the Wikipedia article on <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Classless Inter-Domain Routing</a>. </p> <p>You must also associate the security group with a cluster so that clients running on these IP addresses or the EC2 instance are authorized to connect to the cluster. For information about managing security groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Working with Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     async fn authorize_cluster_security_group_ingress(
         &self,
@@ -18905,6 +20981,12 @@ pub trait Redshift {
         AuthorizeClusterSecurityGroupIngressResult,
         RusotoError<AuthorizeClusterSecurityGroupIngressError>,
     >;
+
+    /// <p>Grants access to a cluster.</p>
+    async fn authorize_endpoint_access(
+        &self,
+        input: AuthorizeEndpointAccessMessage,
+    ) -> Result<EndpointAuthorization, RusotoError<AuthorizeEndpointAccessError>>;
 
     /// <p>Authorizes the specified AWS customer account to restore the specified snapshot.</p> <p> For more information about working with snapshots, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     async fn authorize_snapshot_access(
@@ -18969,13 +21051,19 @@ pub trait Redshift {
         input: CreateClusterSubnetGroupMessage,
     ) -> Result<CreateClusterSubnetGroupResult, RusotoError<CreateClusterSubnetGroupError>>;
 
+    /// <p>Creates a Redshift-managed VPC endpoint.</p>
+    async fn create_endpoint_access(
+        &self,
+        input: CreateEndpointAccessMessage,
+    ) -> Result<EndpointAccess, RusotoError<CreateEndpointAccessError>>;
+
     /// <p>Creates an Amazon Redshift event notification subscription. This action requires an ARN (Amazon Resource Name) of an Amazon SNS topic created by either the Amazon Redshift console, the Amazon SNS console, or the Amazon SNS API. To obtain an ARN with Amazon SNS, you must create a topic in Amazon SNS and subscribe to the topic. The ARN is displayed in the SNS console.</p> <p>You can specify the source type, and lists of Amazon Redshift source IDs, event categories, and event severities. Notifications will be sent for all events you want that match those criteria. For example, you can specify source type = cluster, source ID = my-cluster-1 and mycluster2, event categories = Availability, Backup, and severity = ERROR. The subscription will only send notifications for those ERROR events in the Availability and Backup categories for the specified clusters.</p> <p>If you specify both the source type and source IDs, such as source type = cluster and source identifier = my-cluster-1, notifications will be sent for all the cluster events for my-cluster-1. If you specify a source type but do not specify a source identifier, you will receive notice of the events for the objects of that type in your AWS account. If you do not specify either the SourceType nor the SourceIdentifier, you will be notified of events generated from all Amazon Redshift sources belonging to your AWS account. You must specify a source type if you specify a source ID.</p>
     async fn create_event_subscription(
         &self,
         input: CreateEventSubscriptionMessage,
     ) -> Result<CreateEventSubscriptionResult, RusotoError<CreateEventSubscriptionError>>;
 
-    /// <p>Creates an HSM client certificate that an Amazon Redshift cluster will use to connect to the client's HSM in order to store and retrieve the keys used to encrypt the cluster databases.</p> <p>The command returns a public key, which you must store in the HSM. In addition to creating the HSM certificate, you must create an Amazon Redshift HSM configuration that provides a cluster the information needed to store and use encryption keys in the HSM. For more information, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-HSM.html">Hardware Security Modules</a> in the Amazon Redshift Cluster Management Guide.</p>
+    /// <p>Creates an HSM client certificate that an Amazon Redshift cluster will use to connect to the client's HSM in order to store and retrieve the keys used to encrypt the cluster databases.</p> <p>The command returns a public key, which you must store in the HSM. In addition to creating the HSM certificate, you must create an Amazon Redshift HSM configuration that provides a cluster the information needed to store and use encryption keys in the HSM. For more information, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html#working-with-HSM">Hardware Security Modules</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     async fn create_hsm_client_certificate(
         &self,
         input: CreateHsmClientCertificateMessage,
@@ -19047,6 +21135,12 @@ pub trait Redshift {
         input: DeleteClusterSubnetGroupMessage,
     ) -> Result<(), RusotoError<DeleteClusterSubnetGroupError>>;
 
+    /// <p>Deletes a Redshift-managed VPC endpoint.</p>
+    async fn delete_endpoint_access(
+        &self,
+        input: DeleteEndpointAccessMessage,
+    ) -> Result<EndpointAccess, RusotoError<DeleteEndpointAccessError>>;
+
     /// <p>Deletes an Amazon Redshift event notification subscription.</p>
     async fn delete_event_subscription(
         &self,
@@ -19064,6 +21158,12 @@ pub trait Redshift {
         &self,
         input: DeleteHsmConfigurationMessage,
     ) -> Result<(), RusotoError<DeleteHsmConfigurationError>>;
+
+    /// <p>Deletes a partner integration from a cluster. Data can still flow to the cluster until the integration is deleted at the partner's website.</p>
+    async fn delete_partner(
+        &self,
+        input: PartnerIntegrationInputMessage,
+    ) -> Result<PartnerIntegrationOutputMessage, RusotoError<DeletePartnerError>>;
 
     /// <p>Deletes a scheduled action. </p>
     async fn delete_scheduled_action(
@@ -19164,6 +21264,18 @@ pub trait Redshift {
         RusotoError<DescribeDefaultClusterParametersError>,
     >;
 
+    /// <p>Describes a Redshift-managed VPC endpoint.</p>
+    async fn describe_endpoint_access(
+        &self,
+        input: DescribeEndpointAccessMessage,
+    ) -> Result<EndpointAccessList, RusotoError<DescribeEndpointAccessError>>;
+
+    /// <p>Describes an endpoint authorization.</p>
+    async fn describe_endpoint_authorization(
+        &self,
+        input: DescribeEndpointAuthorizationMessage,
+    ) -> Result<EndpointAuthorizationList, RusotoError<DescribeEndpointAuthorizationError>>;
+
     /// <p>Displays a list of event categories for all event source types, or for a specified source type. For a list of the event categories and source types, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-event-notifications.html">Amazon Redshift Event Notifications</a>.</p>
     async fn describe_event_categories(
         &self,
@@ -19211,6 +21323,12 @@ pub trait Redshift {
         &self,
         input: DescribeOrderableClusterOptionsMessage,
     ) -> Result<OrderableClusterOptionsMessage, RusotoError<DescribeOrderableClusterOptionsError>>;
+
+    /// <p>Returns information about the partner integrations defined for a cluster.</p>
+    async fn describe_partners(
+        &self,
+        input: DescribePartnersInputMessage,
+    ) -> Result<DescribePartnersOutputMessage, RusotoError<DescribePartnersError>>;
 
     /// <p>Returns a list of the available reserved node offerings by Amazon Redshift with their descriptions including the node type, the fixed and recurring costs of reserving the node and duration the node will be reserved for you. These descriptions help you determine which reserve node offering you want to purchase. You then use the unique offering ID in you call to <a>PurchaseReservedNodeOffering</a> to reserve one or more nodes for your Amazon Redshift cluster. </p> <p> For more information about reserved node offerings, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     async fn describe_reserved_node_offerings(
@@ -19310,6 +21428,12 @@ pub trait Redshift {
         RusotoError<GetReservedNodeExchangeOfferingsError>,
     >;
 
+    /// <p>Modifies whether a cluster can use AQUA (Advanced Query Accelerator). </p>
+    async fn modify_aqua_configuration(
+        &self,
+        input: ModifyAquaInputMessage,
+    ) -> Result<ModifyAquaOutputMessage, RusotoError<ModifyAquaConfigurationError>>;
+
     /// <p>Modifies the settings for a cluster.</p> <p>You can also change node type and the number of nodes to scale up or down the cluster. When resizing a cluster, you must specify both the number of nodes and the node type even if one of the parameters does not change.</p> <p>You can add another security or parameter group, or change the master user password. Resetting a cluster password or modifying the security groups associated with a cluster do not need a reboot. However, modifying a parameter group requires a reboot for parameters to take effect. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     async fn modify_cluster(
         &self,
@@ -19357,6 +21481,12 @@ pub trait Redshift {
         &self,
         input: ModifyClusterSubnetGroupMessage,
     ) -> Result<ModifyClusterSubnetGroupResult, RusotoError<ModifyClusterSubnetGroupError>>;
+
+    /// <p>Modifies a Redshift-managed VPC endpoint.</p>
+    async fn modify_endpoint_access(
+        &self,
+        input: ModifyEndpointAccessMessage,
+    ) -> Result<EndpointAccess, RusotoError<ModifyEndpointAccessError>>;
 
     /// <p>Modifies an existing Amazon Redshift event notification subscription.</p>
     async fn modify_event_subscription(
@@ -19451,6 +21581,12 @@ pub trait Redshift {
         RusotoError<RevokeClusterSecurityGroupIngressError>,
     >;
 
+    /// <p>Revokes access to a cluster.</p>
+    async fn revoke_endpoint_access(
+        &self,
+        input: RevokeEndpointAccessMessage,
+    ) -> Result<EndpointAuthorization, RusotoError<RevokeEndpointAccessError>>;
+
     /// <p>Removes the ability of the specified AWS customer account to restore the specified snapshot. If the account is currently restoring the snapshot, the restore will run to completion.</p> <p> For more information about working with snapshots, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     async fn revoke_snapshot_access(
         &self,
@@ -19462,6 +21598,12 @@ pub trait Redshift {
         &self,
         input: RotateEncryptionKeyMessage,
     ) -> Result<RotateEncryptionKeyResult, RusotoError<RotateEncryptionKeyError>>;
+
+    /// <p>Updates the status of a partner integration.</p>
+    async fn update_partner_status(
+        &self,
+        input: UpdatePartnerStatusInputMessage,
+    ) -> Result<PartnerIntegrationOutputMessage, RusotoError<UpdatePartnerStatusError>>;
 }
 /// A client for the Amazon Redshift API.
 #[derive(Clone)]
@@ -19537,6 +21679,39 @@ impl Redshift for RedshiftClient {
         Ok(result)
     }
 
+    /// <p>Adds a partner integration to a cluster. This operation authorizes a partner to push status updates for the specified database. To complete the integration, you also set up the integration on the partner website.</p>
+    async fn add_partner(
+        &self,
+        input: PartnerIntegrationInputMessage,
+    ) -> Result<PartnerIntegrationOutputMessage, RusotoError<AddPartnerError>> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let params = self.new_params("AddPartner");
+        let mut params = params;
+        PartnerIntegrationInputMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, AddPartnerError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = PartnerIntegrationOutputMessageDeserializer::deserialize(
+                "AddPartnerResult",
+                stack,
+            )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Adds an inbound (ingress) rule to an Amazon Redshift security group. Depending on whether the application accessing your cluster is running on the Internet or an Amazon EC2 instance, you can authorize inbound access to either a Classless Interdomain Routing (CIDR)/Internet Protocol (IP) range or to an Amazon EC2 security group. You can add as many as 20 ingress rules to an Amazon Redshift security group.</p> <p>If you authorize access to an Amazon EC2 security group, specify <i>EC2SecurityGroupName</i> and <i>EC2SecurityGroupOwnerId</i>. The Amazon EC2 security group and Amazon Redshift cluster must be in the same AWS Region. </p> <p>If you authorize access to a CIDR/IP address range, specify <i>CIDRIP</i>. For an overview of CIDR blocks, see the Wikipedia article on <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Classless Inter-Domain Routing</a>. </p> <p>You must also associate the security group with a cluster so that clients running on these IP addresses or the EC2 instance are authorized to connect to the cluster. For information about managing security groups, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Working with Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     async fn authorize_cluster_security_group_ingress(
         &self,
@@ -19564,6 +21739,39 @@ impl Redshift for RedshiftClient {
             xml_util::start_element(actual_tag_name, stack)?;
             let result = AuthorizeClusterSecurityGroupIngressResultDeserializer::deserialize(
                 "AuthorizeClusterSecurityGroupIngressResult",
+                stack,
+            )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Grants access to a cluster.</p>
+    async fn authorize_endpoint_access(
+        &self,
+        input: AuthorizeEndpointAccessMessage,
+    ) -> Result<EndpointAuthorization, RusotoError<AuthorizeEndpointAccessError>> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let params = self.new_params("AuthorizeEndpointAccess");
+        let mut params = params;
+        AuthorizeEndpointAccessMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, AuthorizeEndpointAccessError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = EndpointAuthorizationDeserializer::deserialize(
+                "AuthorizeEndpointAccessResult",
                 stack,
             )?;
             skip_tree(stack);
@@ -19908,6 +22116,37 @@ impl Redshift for RedshiftClient {
         Ok(result)
     }
 
+    /// <p>Creates a Redshift-managed VPC endpoint.</p>
+    async fn create_endpoint_access(
+        &self,
+        input: CreateEndpointAccessMessage,
+    ) -> Result<EndpointAccess, RusotoError<CreateEndpointAccessError>> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let params = self.new_params("CreateEndpointAccess");
+        let mut params = params;
+        CreateEndpointAccessMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, CreateEndpointAccessError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                EndpointAccessDeserializer::deserialize("CreateEndpointAccessResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Creates an Amazon Redshift event notification subscription. This action requires an ARN (Amazon Resource Name) of an Amazon SNS topic created by either the Amazon Redshift console, the Amazon SNS console, or the Amazon SNS API. To obtain an ARN with Amazon SNS, you must create a topic in Amazon SNS and subscribe to the topic. The ARN is displayed in the SNS console.</p> <p>You can specify the source type, and lists of Amazon Redshift source IDs, event categories, and event severities. Notifications will be sent for all events you want that match those criteria. For example, you can specify source type = cluster, source ID = my-cluster-1 and mycluster2, event categories = Availability, Backup, and severity = ERROR. The subscription will only send notifications for those ERROR events in the Availability and Backup categories for the specified clusters.</p> <p>If you specify both the source type and source IDs, such as source type = cluster and source identifier = my-cluster-1, notifications will be sent for all the cluster events for my-cluster-1. If you specify a source type but do not specify a source identifier, you will receive notice of the events for the objects of that type in your AWS account. If you do not specify either the SourceType nor the SourceIdentifier, you will be notified of events generated from all Amazon Redshift sources belonging to your AWS account. You must specify a source type if you specify a source ID.</p>
     async fn create_event_subscription(
         &self,
@@ -19941,7 +22180,7 @@ impl Redshift for RedshiftClient {
         Ok(result)
     }
 
-    /// <p>Creates an HSM client certificate that an Amazon Redshift cluster will use to connect to the client's HSM in order to store and retrieve the keys used to encrypt the cluster databases.</p> <p>The command returns a public key, which you must store in the HSM. In addition to creating the HSM certificate, you must create an Amazon Redshift HSM configuration that provides a cluster the information needed to store and use encryption keys in the HSM. For more information, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-HSM.html">Hardware Security Modules</a> in the Amazon Redshift Cluster Management Guide.</p>
+    /// <p>Creates an HSM client certificate that an Amazon Redshift cluster will use to connect to the client's HSM in order to store and retrieve the keys used to encrypt the cluster databases.</p> <p>The command returns a public key, which you must store in the HSM. In addition to creating the HSM certificate, you must create an Amazon Redshift HSM configuration that provides a cluster the information needed to store and use encryption keys in the HSM. For more information, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-db-encryption.html#working-with-HSM">Hardware Security Modules</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     async fn create_hsm_client_certificate(
         &self,
         input: CreateHsmClientCertificateMessage,
@@ -20277,6 +22516,37 @@ impl Redshift for RedshiftClient {
         Ok(())
     }
 
+    /// <p>Deletes a Redshift-managed VPC endpoint.</p>
+    async fn delete_endpoint_access(
+        &self,
+        input: DeleteEndpointAccessMessage,
+    ) -> Result<EndpointAccess, RusotoError<DeleteEndpointAccessError>> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let params = self.new_params("DeleteEndpointAccess");
+        let mut params = params;
+        DeleteEndpointAccessMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, DeleteEndpointAccessError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                EndpointAccessDeserializer::deserialize("DeleteEndpointAccessResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Deletes an Amazon Redshift event notification subscription.</p>
     async fn delete_event_subscription(
         &self,
@@ -20335,6 +22605,39 @@ impl Redshift for RedshiftClient {
 
         std::mem::drop(response);
         Ok(())
+    }
+
+    /// <p>Deletes a partner integration from a cluster. Data can still flow to the cluster until the integration is deleted at the partner's website.</p>
+    async fn delete_partner(
+        &self,
+        input: PartnerIntegrationInputMessage,
+    ) -> Result<PartnerIntegrationOutputMessage, RusotoError<DeletePartnerError>> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let params = self.new_params("DeletePartner");
+        let mut params = params;
+        PartnerIntegrationInputMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, DeletePartnerError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = PartnerIntegrationOutputMessageDeserializer::deserialize(
+                "DeletePartnerResult",
+                stack,
+            )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes a scheduled action. </p>
@@ -20800,6 +23103,70 @@ impl Redshift for RedshiftClient {
         Ok(result)
     }
 
+    /// <p>Describes a Redshift-managed VPC endpoint.</p>
+    async fn describe_endpoint_access(
+        &self,
+        input: DescribeEndpointAccessMessage,
+    ) -> Result<EndpointAccessList, RusotoError<DescribeEndpointAccessError>> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let params = self.new_params("DescribeEndpointAccess");
+        let mut params = params;
+        DescribeEndpointAccessMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, DescribeEndpointAccessError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                EndpointAccessListDeserializer::deserialize("DescribeEndpointAccessResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Describes an endpoint authorization.</p>
+    async fn describe_endpoint_authorization(
+        &self,
+        input: DescribeEndpointAuthorizationMessage,
+    ) -> Result<EndpointAuthorizationList, RusotoError<DescribeEndpointAuthorizationError>> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let params = self.new_params("DescribeEndpointAuthorization");
+        let mut params = params;
+        DescribeEndpointAuthorizationMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, DescribeEndpointAuthorizationError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = EndpointAuthorizationListDeserializer::deserialize(
+                "DescribeEndpointAuthorizationResult",
+                stack,
+            )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Displays a list of event categories for all event source types, or for a specified source type. For a list of the event categories and source types, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-event-notifications.html">Amazon Redshift Event Notifications</a>.</p>
     async fn describe_event_categories(
         &self,
@@ -21052,6 +23419,39 @@ impl Redshift for RedshiftClient {
             xml_util::start_element(actual_tag_name, stack)?;
             let result = OrderableClusterOptionsMessageDeserializer::deserialize(
                 "DescribeOrderableClusterOptionsResult",
+                stack,
+            )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Returns information about the partner integrations defined for a cluster.</p>
+    async fn describe_partners(
+        &self,
+        input: DescribePartnersInputMessage,
+    ) -> Result<DescribePartnersOutputMessage, RusotoError<DescribePartnersError>> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let params = self.new_params("DescribePartners");
+        let mut params = params;
+        DescribePartnersInputMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, DescribePartnersError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DescribePartnersOutputMessageDeserializer::deserialize(
+                "DescribePartnersResult",
                 stack,
             )?;
             skip_tree(stack);
@@ -21581,6 +23981,39 @@ impl Redshift for RedshiftClient {
         Ok(result)
     }
 
+    /// <p>Modifies whether a cluster can use AQUA (Advanced Query Accelerator). </p>
+    async fn modify_aqua_configuration(
+        &self,
+        input: ModifyAquaInputMessage,
+    ) -> Result<ModifyAquaOutputMessage, RusotoError<ModifyAquaConfigurationError>> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let params = self.new_params("ModifyAquaConfiguration");
+        let mut params = params;
+        ModifyAquaInputMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, ModifyAquaConfigurationError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ModifyAquaOutputMessageDeserializer::deserialize(
+                "ModifyAquaConfigurationResult",
+                stack,
+            )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Modifies the settings for a cluster.</p> <p>You can also change node type and the number of nodes to scale up or down the cluster. When resizing a cluster, you must specify both the number of nodes and the node type even if one of the parameters does not change.</p> <p>You can add another security or parameter group, or change the master user password. Resetting a cluster password or modifying the security groups associated with a cluster do not need a reboot. However, modifying a parameter group requires a reboot for parameters to take effect. For more information about managing clusters, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     async fn modify_cluster(
         &self,
@@ -21821,6 +24254,37 @@ impl Redshift for RedshiftClient {
                 "ModifyClusterSubnetGroupResult",
                 stack,
             )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Modifies a Redshift-managed VPC endpoint.</p>
+    async fn modify_endpoint_access(
+        &self,
+        input: ModifyEndpointAccessMessage,
+    ) -> Result<EndpointAccess, RusotoError<ModifyEndpointAccessError>> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let params = self.new_params("ModifyEndpointAccess");
+        let mut params = params;
+        ModifyEndpointAccessMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, ModifyEndpointAccessError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                EndpointAccessDeserializer::deserialize("ModifyEndpointAccessResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
             Ok(result)
@@ -22295,6 +24759,39 @@ impl Redshift for RedshiftClient {
         Ok(result)
     }
 
+    /// <p>Revokes access to a cluster.</p>
+    async fn revoke_endpoint_access(
+        &self,
+        input: RevokeEndpointAccessMessage,
+    ) -> Result<EndpointAuthorization, RusotoError<RevokeEndpointAccessError>> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let params = self.new_params("RevokeEndpointAccess");
+        let mut params = params;
+        RevokeEndpointAccessMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, RevokeEndpointAccessError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = EndpointAuthorizationDeserializer::deserialize(
+                "RevokeEndpointAccessResult",
+                stack,
+            )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Removes the ability of the specified AWS customer account to restore the specified snapshot. If the account is currently restoring the snapshot, the restore will run to completion.</p> <p> For more information about working with snapshots, go to <a href="https://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     async fn revoke_snapshot_access(
         &self,
@@ -22349,6 +24846,39 @@ impl Redshift for RedshiftClient {
             xml_util::start_element(actual_tag_name, stack)?;
             let result = RotateEncryptionKeyResultDeserializer::deserialize(
                 "RotateEncryptionKeyResult",
+                stack,
+            )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Updates the status of a partner integration.</p>
+    async fn update_partner_status(
+        &self,
+        input: UpdatePartnerStatusInputMessage,
+    ) -> Result<PartnerIntegrationOutputMessage, RusotoError<UpdatePartnerStatusError>> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let params = self.new_params("UpdatePartnerStatus");
+        let mut params = params;
+        UpdatePartnerStatusInputMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, UpdatePartnerStatusError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = PartnerIntegrationOutputMessageDeserializer::deserialize(
+                "UpdatePartnerStatusResult",
                 stack,
             )?;
             skip_tree(stack);

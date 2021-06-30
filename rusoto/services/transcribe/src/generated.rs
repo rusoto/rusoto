@@ -181,14 +181,14 @@ pub struct CreateVocabularyFilterResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVocabularyRequest {
-    /// <p>The language code of the vocabulary entries.</p>
+    /// <p>The language code of the vocabulary entries. For a list of languages and their corresponding language codes, see <a>what-is-transcribe</a>.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>An array of strings that contains the vocabulary entries. </p>
     #[serde(rename = "Phrases")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub phrases: Option<Vec<String>>,
-    /// <p>The S3 location of the text file that contains the definition of the custom vocabulary. The URI must be in the same region as the API endpoint that you are calling. The general form is </p> <p>For more information about S3 object names, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#object-keys">Object Keys</a> in the <i>Amazon S3 Developer Guide</i>.</p> <p>For more information about custom vocabularies, see <a href="http://docs.aws.amazon.com/transcribe/latest/dg/how-it-works.html#how-vocabulary">Custom Vocabularies</a>.</p>
+    /// <p>The S3 location of the text file that contains the definition of the custom vocabulary. The URI must be in the same region as the API endpoint that you are calling. The general form is </p> <p>For more information about S3 object names, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#object-keys">Object Keys</a> in the <i>Amazon S3 Developer Guide</i>.</p> <p>For more information about custom vocabularies, see <a href="http://docs.aws.amazon.com/transcribe/latest/dg/how-vocabulary">Custom Vocabularies</a>.</p>
     #[serde(rename = "VocabularyFileUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vocabulary_file_uri: Option<String>,
@@ -737,6 +737,10 @@ pub struct MedicalTranscriptionJob {
     #[serde(rename = "CompletionTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub completion_time: Option<f64>,
+    /// <p>Shows the type of content that you've configured Amazon Transcribe Medical to identify in a transcription job. If the value is <code>PHI</code>, you've configured the job to identify personal health information (PHI) in the transcription output.</p>
+    #[serde(rename = "ContentIdentificationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_identification_type: Option<String>,
     /// <p>A timestamp that shows when the job was created.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -798,6 +802,10 @@ pub struct MedicalTranscriptionJobSummary {
     #[serde(rename = "CompletionTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub completion_time: Option<f64>,
+    /// <p>Shows the type of information you've configured Amazon Transcribe Medical to identify in a transcription job. If the value is <code>PHI</code>, you've configured the transcription job to identify personal health information (PHI).</p>
+    #[serde(rename = "ContentIdentificationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_identification_type: Option<String>,
     /// <p>A timestamp that shows when the medical transcription job was created.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -897,7 +905,7 @@ pub struct Settings {
     #[serde(rename = "ShowSpeakerLabels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub show_speaker_labels: Option<bool>,
-    /// <p>Set to <code>mask</code> to remove filtered text from the transcript and replace it with three asterisks ("***") as placeholder text. Set to <code>remove</code> to remove filtered text from the transcript without using placeholder text.</p>
+    /// <p>Set to <code>mask</code> to remove filtered text from the transcript and replace it with three asterisks ("***") as placeholder text. Set to <code>remove</code> to remove filtered text from the transcript without using placeholder text. Set to <code>tag</code> to mark the word in the transcription output that matches the vocabulary filter. When you set the filter method to <code>tag</code>, the words matching your vocabulary filter are not masked or removed.</p>
     #[serde(rename = "VocabularyFilterMethod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vocabulary_filter_method: Option<String>,
@@ -914,6 +922,10 @@ pub struct Settings {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartMedicalTranscriptionJobRequest {
+    /// <p>You can configure Amazon Transcribe Medical to label content in the transcription output. If you specify <code>PHI</code>, Amazon Transcribe Medical labels the personal health information (PHI) that it identifies in the transcription output.</p>
+    #[serde(rename = "ContentIdentificationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_identification_type: Option<String>,
     /// <p>The language code for the language spoken in the input media file. US English (en-US) is the valid value for medical transcription jobs. Any other value you enter for language code results in a <code>BadRequestException</code> error.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
@@ -977,7 +989,7 @@ pub struct StartTranscriptionJobRequest {
     #[serde(rename = "JobExecutionSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_execution_settings: Option<JobExecutionSettings>,
-    /// <p>The language code for the language used in the input media file.</p>
+    /// <p>The language code for the language used in the input media file.</p> <p>To transcribe speech in Modern Standard Arabic (ar-SA), your audio or video file must be encoded at a sample rate of 16000 Hz or higher.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub language_code: Option<String>,
@@ -1247,7 +1259,7 @@ pub struct UpdateVocabularyFilterResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateVocabularyRequest {
-    /// <p>The language code of the vocabulary entries.</p>
+    /// <p>The language code of the vocabulary entries. For a list of languages and their corresponding language codes, see <a>what-is-transcribe</a>.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>An array of strings containing the vocabulary entries.</p>
@@ -2671,7 +2683,7 @@ pub trait Transcribe {
         input: CreateMedicalVocabularyRequest,
     ) -> Result<CreateMedicalVocabularyResponse, RusotoError<CreateMedicalVocabularyError>>;
 
-    /// <p>Creates a new custom vocabulary that you can use to change the way Amazon Transcribe handles transcription of an audio file. </p>
+    /// <p>Creates a new custom vocabulary that you can use to change the way Amazon Transcribe handles transcription of an audio file.</p>
     async fn create_vocabulary(
         &self,
         input: CreateVocabularyRequest,
@@ -2797,7 +2809,7 @@ pub trait Transcribe {
         input: StartMedicalTranscriptionJobRequest,
     ) -> Result<StartMedicalTranscriptionJobResponse, RusotoError<StartMedicalTranscriptionJobError>>;
 
-    /// <p>Starts an asynchronous job to transcribe speech to text. </p>
+    /// <p>Starts an asynchronous job to transcribe speech to text.</p>
     async fn start_transcription_job(
         &self,
         input: StartTranscriptionJobRequest,
@@ -2898,7 +2910,7 @@ impl Transcribe for TranscribeClient {
             .deserialize::<CreateMedicalVocabularyResponse, _>()
     }
 
-    /// <p>Creates a new custom vocabulary that you can use to change the way Amazon Transcribe handles transcription of an audio file. </p>
+    /// <p>Creates a new custom vocabulary that you can use to change the way Amazon Transcribe handles transcription of an audio file.</p>
     async fn create_vocabulary(
         &self,
         input: CreateVocabularyRequest,
@@ -3282,7 +3294,7 @@ impl Transcribe for TranscribeClient {
             .deserialize::<StartMedicalTranscriptionJobResponse, _>()
     }
 
-    /// <p>Starts an asynchronous job to transcribe speech to text. </p>
+    /// <p>Starts an asynchronous job to transcribe speech to text.</p>
     async fn start_transcription_job(
         &self,
         input: StartTranscriptionJobRequest,

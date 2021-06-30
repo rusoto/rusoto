@@ -21,6 +21,7 @@ pub fn generate_response_headers_parser(
 
     let parser_pieces = members
         .iter()
+        .filter(|(_, member)| member.deprecated != Some(true))
         .filter_map(
             |(member_name, member)| match member.location.as_ref().map(String::as_ref) {
                 Some("header") => Some(parse_single_header(service, shape, member_name, member)),

@@ -346,6 +346,26 @@ pub struct ClassifyDocumentResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ContainsPiiEntitiesRequest {
+    /// <p>The language of the input documents.</p>
+    #[serde(rename = "LanguageCode")]
+    pub language_code: String,
+    /// <p>Creates a new document classification request to analyze a single document in real-time, returning personally identifiable information (PII) entity labels.</p>
+    #[serde(rename = "Text")]
+    pub text: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ContainsPiiEntitiesResponse {
+    /// <p>The labels used in the document being analyzed. Individual labels represent personally identifiable information (PII) entity types.</p>
+    #[serde(rename = "Labels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub labels: Option<Vec<EntityLabel>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDocumentClassifierRequest {
     /// <p>A unique identifier for the request. If you don't set the client request token, Amazon Comprehend generates one.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -367,6 +387,10 @@ pub struct CreateDocumentClassifierRequest {
     #[serde(rename = "Mode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mode: Option<String>,
+    /// <p><p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt trained custom models. The ModelKmsKeyId can be either of the following formats:</p> <ul> <li> <p>KMS Key ID: <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> </ul></p>
+    #[serde(rename = "ModelKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_kms_key_id: Option<String>,
     /// <p>Enables the addition of output results configuration parameters for custom classifier jobs.</p>
     #[serde(rename = "OutputDataConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -401,6 +425,10 @@ pub struct CreateEndpointRequest {
     #[serde(rename = "ClientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the AWS identity and Access Management (IAM) role that grants Amazon Comprehend read access to trained custom models encrypted with a customer managed key (ModelKmsKeyId).</p>
+    #[serde(rename = "DataAccessRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_access_role_arn: Option<String>,
     /// <p> The desired number of inference units to be used by the model using this endpoint. Each inference unit represents of a throughput of 100 characters per second.</p>
     #[serde(rename = "DesiredInferenceUnits")]
     pub desired_inference_units: i64,
@@ -441,6 +469,10 @@ pub struct CreateEntityRecognizerRequest {
     /// <p> You can specify any of the following languages supported by Amazon Comprehend: English ("en"), Spanish ("es"), French ("fr"), Italian ("it"), German ("de"), or Portuguese ("pt"). All documents must be in the same language.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
+    /// <p><p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt trained custom models. The ModelKmsKeyId can be either of the following formats</p> <ul> <li> <p>KMS Key ID: <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> </ul></p>
+    #[serde(rename = "ModelKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_kms_key_id: Option<String>,
     /// <p>The name given to the newly created recognizer. Recognizer names can be a maximum of 256 characters. Alphanumeric characters, hyphens (-) and underscores (_) are allowed. The name must be unique in the account/region.</p>
     #[serde(rename = "RecognizerName")]
     pub recognizer_name: String,
@@ -993,6 +1025,10 @@ pub struct DocumentClassifierProperties {
     #[serde(rename = "Mode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mode: Option<String>,
+    /// <p><p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt trained custom models. The ModelKmsKeyId can be either of the following formats:</p> <ul> <li> <p>KMS Key ID: <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> </ul></p>
+    #[serde(rename = "ModelKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_kms_key_id: Option<String>,
     /// <p> Provides output results configuration parameters for custom classifier jobs.</p>
     #[serde(rename = "OutputDataConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1157,6 +1193,10 @@ pub struct EndpointProperties {
     #[serde(rename = "CurrentInferenceUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub current_inference_units: Option<i64>,
+    /// <p>The Amazon Resource Name (ARN) of the AWS identity and Access Management (IAM) role that grants Amazon Comprehend read access to trained custom models encrypted with a customer managed key (ModelKmsKeyId).</p>
+    #[serde(rename = "DataAccessRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_access_role_arn: Option<String>,
     /// <p>The desired number of inference units to be used by the model using this endpoint. Each inference unit represents of a throughput of 100 characters per second.</p>
     #[serde(rename = "DesiredInferenceUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1287,6 +1327,20 @@ pub struct Entity {
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
+}
+
+/// <p>Specifies one of the label or labels that categorize the personally identifiable information (PII) entity being analyzed.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct EntityLabel {
+    /// <p>The name of the label.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The level of confidence that Amazon Comprehend has in the accuracy of the detection.</p>
+    #[serde(rename = "Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub score: Option<f32>,
 }
 
 /// <p>Describes the annotations associated with a entity recognizer.</p>
@@ -1445,6 +1499,10 @@ pub struct EntityRecognizerProperties {
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
+    /// <p><p>ID for the AWS Key Management Service (KMS) key that Amazon Comprehend uses to encrypt trained custom models. The ModelKmsKeyId can be either of the following formats: </p> <ul> <li> <p>KMS Key ID: <code>&quot;1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> <li> <p>Amazon Resource Name (ARN) of a KMS Key: <code>&quot;arn:aws:kms:us-west-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab&quot;</code> </p> </li> </ul></p>
+    #[serde(rename = "ModelKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub model_kms_key_id: Option<String>,
     /// <p> Provides information about an entity recognizer.</p>
     #[serde(rename = "RecognizerMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3045,7 +3103,7 @@ pub enum BatchDetectEntitiesError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English, Spanish, French, Italian, German, or Portuguese are accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For custom entity recognition APIs, only English, Spanish, French, Italian, German, or Portuguese are accepted. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -3105,7 +3163,7 @@ pub enum BatchDetectKeyPhrasesError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English, Spanish, French, Italian, German, or Portuguese are accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For custom entity recognition APIs, only English, Spanish, French, Italian, German, or Portuguese are accepted. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -3169,7 +3227,7 @@ pub enum BatchDetectSentimentError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English, Spanish, French, Italian, German, or Portuguese are accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For custom entity recognition APIs, only English, Spanish, French, Italian, German, or Portuguese are accepted. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -3229,7 +3287,7 @@ pub enum BatchDetectSyntaxError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English, Spanish, French, Italian, German, or Portuguese are accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For custom entity recognition APIs, only English, Spanish, French, Italian, German, or Portuguese are accepted. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -3330,6 +3388,58 @@ impl fmt::Display for ClassifyDocumentError {
     }
 }
 impl Error for ClassifyDocumentError {}
+/// Errors returned by ContainsPiiEntities
+#[derive(Debug, PartialEq)]
+pub enum ContainsPiiEntitiesError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
+    TextSizeLimitExceeded(String),
+    /// <p>Amazon Comprehend can't process the language of the input text. For custom entity recognition APIs, only English, Spanish, French, Italian, German, or Portuguese are accepted. For a list of supported languages, see <a>supported-languages</a>. </p>
+    UnsupportedLanguage(String),
+}
+
+impl ContainsPiiEntitiesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ContainsPiiEntitiesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(ContainsPiiEntitiesError::InternalServer(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ContainsPiiEntitiesError::InvalidRequest(err.msg))
+                }
+                "TextSizeLimitExceededException" => {
+                    return RusotoError::Service(ContainsPiiEntitiesError::TextSizeLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "UnsupportedLanguageException" => {
+                    return RusotoError::Service(ContainsPiiEntitiesError::UnsupportedLanguage(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ContainsPiiEntitiesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ContainsPiiEntitiesError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ContainsPiiEntitiesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ContainsPiiEntitiesError::TextSizeLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ContainsPiiEntitiesError::UnsupportedLanguage(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ContainsPiiEntitiesError {}
 /// Errors returned by CreateDocumentClassifier
 #[derive(Debug, PartialEq)]
 pub enum CreateDocumentClassifierError {
@@ -3347,7 +3457,7 @@ pub enum CreateDocumentClassifierError {
     TooManyRequests(String),
     /// <p>The request contains more tags than can be associated with a resource (50 tags per resource). The maximum number of tags includes both existing tags and those included in your current request. </p>
     TooManyTags(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English, Spanish, French, Italian, German, or Portuguese are accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For custom entity recognition APIs, only English, Spanish, French, Italian, German, or Portuguese are accepted. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -3511,7 +3621,7 @@ pub enum CreateEntityRecognizerError {
     TooManyRequests(String),
     /// <p>The request contains more tags than can be associated with a resource (50 tags per resource). The maximum number of tags includes both existing tags and those included in your current request. </p>
     TooManyTags(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English, Spanish, French, Italian, German, or Portuguese are accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For custom entity recognition APIs, only English, Spanish, French, Italian, German, or Portuguese are accepted. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -4493,7 +4603,7 @@ pub enum DetectEntitiesError {
     ResourceUnavailable(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English, Spanish, French, Italian, German, or Portuguese are accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For custom entity recognition APIs, only English, Spanish, French, Italian, German, or Portuguese are accepted. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -4547,7 +4657,7 @@ pub enum DetectKeyPhrasesError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English, Spanish, French, Italian, German, or Portuguese are accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For custom entity recognition APIs, only English, Spanish, French, Italian, German, or Portuguese are accepted. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -4599,7 +4709,7 @@ pub enum DetectPiiEntitiesError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English, Spanish, French, Italian, German, or Portuguese are accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For custom entity recognition APIs, only English, Spanish, French, Italian, German, or Portuguese are accepted. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -4651,7 +4761,7 @@ pub enum DetectSentimentError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English, Spanish, French, Italian, German, or Portuguese are accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For custom entity recognition APIs, only English, Spanish, French, Italian, German, or Portuguese are accepted. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -4701,7 +4811,7 @@ pub enum DetectSyntaxError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English, Spanish, French, Italian, German, or Portuguese are accepted. For most other APIs, such as those for Custom Classification, Amazon Comprehend accepts text in all supported languages. For a list of supported languages, see <a>supported-languages</a>. </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For custom entity recognition APIs, only English, Spanish, French, Italian, German, or Portuguese are accepted. For a list of supported languages, see <a>supported-languages</a>. </p>
     UnsupportedLanguage(String),
 }
 
@@ -6561,6 +6671,12 @@ pub trait Comprehend {
         input: ClassifyDocumentRequest,
     ) -> Result<ClassifyDocumentResponse, RusotoError<ClassifyDocumentError>>;
 
+    /// <p>Analyzes input text for the presence of personally identifiable information (PII) and returns the labels of identified PII entity types such as name, address, bank account number, or phone number.</p>
+    async fn contains_pii_entities(
+        &self,
+        input: ContainsPiiEntitiesRequest,
+    ) -> Result<ContainsPiiEntitiesResponse, RusotoError<ContainsPiiEntitiesError>>;
+
     /// <p>Creates a new document classifier that you can use to categorize documents. To create a classifier, you provide a set of training documents that labeled with the categories that you want to use. After the classifier is trained you can use it to categorize a set of labeled documents into the categories. For more information, see <a>how-document-classification</a>.</p>
     async fn create_document_classifier(
         &self,
@@ -7071,6 +7187,24 @@ impl Comprehend for ComprehendClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ClassifyDocumentResponse, _>()
+    }
+
+    /// <p>Analyzes input text for the presence of personally identifiable information (PII) and returns the labels of identified PII entity types such as name, address, bank account number, or phone number.</p>
+    async fn contains_pii_entities(
+        &self,
+        input: ContainsPiiEntitiesRequest,
+    ) -> Result<ContainsPiiEntitiesResponse, RusotoError<ContainsPiiEntitiesError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "Comprehend_20171127.ContainsPiiEntities");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ContainsPiiEntitiesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ContainsPiiEntitiesResponse, _>()
     }
 
     /// <p>Creates a new document classifier that you can use to categorize documents. To create a classifier, you provide a set of training documents that labeled with the categories that you want to use. After the classifier is trained you can use it to categorize a set of labeled documents into the categories. For more information, see <a>how-document-classification</a>.</p>

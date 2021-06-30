@@ -1185,6 +1185,8 @@ impl Error for CreateProfilingGroupError {}
 /// Errors returned by DeleteProfilingGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteProfilingGroupError {
+    /// <p>The requested operation would cause a conflict with the current state of a service resource associated with the request. Resolve the conflict before retrying this request. </p>
+    Conflict(String),
     /// <p>The server encountered an internal error and is unable to complete the request.</p>
     InternalServer(String),
     /// <p>The resource specified in the request does not exist.</p>
@@ -1197,6 +1199,9 @@ impl DeleteProfilingGroupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteProfilingGroupError> {
         if let Some(err) = proto::json::Error::parse_rest(&res) {
             match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(DeleteProfilingGroupError::Conflict(err.msg))
+                }
                 "InternalServerException" => {
                     return RusotoError::Service(DeleteProfilingGroupError::InternalServer(err.msg))
                 }
@@ -1219,6 +1224,7 @@ impl fmt::Display for DeleteProfilingGroupError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            DeleteProfilingGroupError::Conflict(ref cause) => write!(f, "{}", cause),
             DeleteProfilingGroupError::InternalServer(ref cause) => write!(f, "{}", cause),
             DeleteProfilingGroupError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             DeleteProfilingGroupError::Throttling(ref cause) => write!(f, "{}", cause),
@@ -2019,7 +2025,7 @@ pub trait CodeGuruProfiler {
         input: BatchGetFrameMetricDataRequest,
     ) -> Result<BatchGetFrameMetricDataResponse, RusotoError<BatchGetFrameMetricDataError>>;
 
-    /// <p> Used by profiler agents to report their current state and to receive remote configuration updates. For example, <code>ConfigureAgent</code> can be used to tell and agent whether to profile or not and for how long to return profiling data. </p>
+    /// <p> Used by profiler agents to report their current state and to receive remote configuration updates. For example, <code>ConfigureAgent</code> can be used to tell an agent whether to profile or not and for how long to return profiling data. </p>
     async fn configure_agent(
         &self,
         input: ConfigureAgentRequest,
@@ -2273,7 +2279,7 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
         }
     }
 
-    /// <p> Used by profiler agents to report their current state and to receive remote configuration updates. For example, <code>ConfigureAgent</code> can be used to tell and agent whether to profile or not and for how long to return profiling data. </p>
+    /// <p> Used by profiler agents to report their current state and to receive remote configuration updates. For example, <code>ConfigureAgent</code> can be used to tell an agent whether to profile or not and for how long to return profiling data. </p>
     #[allow(unused_mut)]
     async fn configure_agent(
         &self,

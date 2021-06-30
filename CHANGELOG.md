@@ -5,6 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+- Update to botocore 1.20.102
 - Update to `serde_urlencoded` 0.7
 - Update to `rustc_version` 0.4
 - Update to `shlex` 1.0

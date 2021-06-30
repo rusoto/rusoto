@@ -924,6 +924,11 @@ pub struct GetBootstrapBrokersResponse {
     #[serde(rename = "BootstrapBrokerString")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bootstrap_broker_string: Option<String>,
+    /// <pre><code>        &lt;p&gt;A string that contains one or more DNS names (or IP addresses) and SASL IAM port pairs.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "BootstrapBrokerStringSaslIam")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bootstrap_broker_string_sasl_iam: Option<String>,
     /// <pre><code>        &lt;p&gt;A string containing one or more DNS names (or IP) and Sasl Scram port pairs.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "BootstrapBrokerStringSaslScram")]
@@ -954,6 +959,17 @@ pub struct GetCompatibleKafkaVersionsResponse {
     #[serde(rename = "CompatibleKafkaVersions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compatible_kafka_versions: Option<Vec<CompatibleKafkaVersion>>,
+}
+
+/// <pre><code>        &lt;p&gt;Details for IAM access control.&lt;/p&gt;
+/// </code></pre>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Iam {
+    /// <pre><code>        &lt;p&gt;Indicates whether IAM access control is enabled.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "Enabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
 }
 
 /// <pre><code>        &lt;p&gt;Indicates whether you want to enable or disable the JMX Exporter.&lt;/p&gt;
@@ -1269,6 +1285,11 @@ pub struct MutableClusterInfo {
     #[serde(rename = "EnhancedMonitoring")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enhanced_monitoring: Option<String>,
+    /// <pre><code>        &lt;p&gt;Information about the Amazon MSK broker type.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "InstanceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_type: Option<String>,
     /// <pre><code>        &lt;p&gt;The Kafka version.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "KafkaVersion")]
@@ -1449,6 +1470,11 @@ pub struct S3 {
 /// </code></pre>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Sasl {
+    /// <pre><code>        &lt;p&gt;Indicates whether IAM access control is enabled.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "Iam")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iam: Option<Iam>,
     /// <pre><code>        &lt;p&gt;Details for SASL/SCRAM client authentication.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "Scram")]
@@ -1619,6 +1645,38 @@ pub struct UpdateBrokerStorageRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateBrokerStorageResponse {
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_arn: Option<String>,
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster operation.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterOperationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_operation_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateBrokerTypeRequest {
+    /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) that uniquely identifies the cluster.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "ClusterArn")]
+    pub cluster_arn: String,
+    /// <pre><code>        &lt;p&gt;The cluster version that you want to change. After this operation completes successfully, the cluster will have a new version.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "CurrentVersion")]
+    pub current_version: String,
+    /// <pre><code>        &lt;p&gt;The Amazon MSK broker type that you want all of the brokers in this cluster to be.&lt;/p&gt;
+    /// </code></pre>
+    #[serde(rename = "TargetInstanceType")]
+    pub target_instance_type: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateBrokerTypeResponse {
     /// <pre><code>        &lt;p&gt;The Amazon Resource Name (ARN) of the cluster.&lt;/p&gt;
     /// </code></pre>
     #[serde(rename = "ClusterArn")]
@@ -3443,6 +3501,81 @@ impl fmt::Display for UpdateBrokerStorageError {
     }
 }
 impl Error for UpdateBrokerStorageError {}
+/// Errors returned by UpdateBrokerType
+#[derive(Debug, PartialEq)]
+pub enum UpdateBrokerTypeError {
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    BadRequest(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Forbidden(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    InternalServerError(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    NotFound(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    ServiceUnavailable(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    TooManyRequests(String),
+    /// <pre><code>        &lt;p&gt;Returns information about an error.&lt;/p&gt;
+    /// </code></pre>
+    Unauthorized(String),
+}
+
+impl UpdateBrokerTypeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateBrokerTypeError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateBrokerTypeError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UpdateBrokerTypeError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(UpdateBrokerTypeError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateBrokerTypeError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(UpdateBrokerTypeError::ServiceUnavailable(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UpdateBrokerTypeError::TooManyRequests(err.msg))
+                }
+                "UnauthorizedException" => {
+                    return RusotoError::Service(UpdateBrokerTypeError::Unauthorized(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateBrokerTypeError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateBrokerTypeError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateBrokerTypeError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateBrokerTypeError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateBrokerTypeError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateBrokerTypeError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateBrokerTypeError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            UpdateBrokerTypeError::Unauthorized(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateBrokerTypeError {}
 /// Errors returned by UpdateClusterConfiguration
 #[derive(Debug, PartialEq)]
 pub enum UpdateClusterConfigurationError {
@@ -3920,6 +4053,13 @@ pub trait Kafka {
         &self,
         input: UpdateBrokerStorageRequest,
     ) -> Result<UpdateBrokerStorageResponse, RusotoError<UpdateBrokerStorageError>>;
+
+    /// <pre><code>        &lt;p&gt;Updates EC2 instance type.&lt;/p&gt;
+    /// </code></pre>
+    async fn update_broker_type(
+        &self,
+        input: UpdateBrokerTypeRequest,
+    ) -> Result<UpdateBrokerTypeResponse, RusotoError<UpdateBrokerTypeError>>;
 
     /// <pre><code>        &lt;p&gt;Updates the cluster with the configuration that is specified in the request body.&lt;/p&gt;
     /// </code></pre>
@@ -4863,6 +5003,41 @@ impl Kafka for KafkaClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateBrokerStorageError::from_response(response))
+        }
+    }
+
+    /// <pre><code>        &lt;p&gt;Updates EC2 instance type.&lt;/p&gt;
+    /// </code></pre>
+    #[allow(unused_mut)]
+    async fn update_broker_type(
+        &self,
+        input: UpdateBrokerTypeRequest,
+    ) -> Result<UpdateBrokerTypeResponse, RusotoError<UpdateBrokerTypeError>> {
+        let request_uri = format!(
+            "/v1/clusters/{cluster_arn}/nodes/type",
+            cluster_arn = input.cluster_arn
+        );
+
+        let mut request = SignedRequest::new("PUT", "kafka", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateBrokerTypeResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateBrokerTypeError::from_response(response))
         }
     }
 

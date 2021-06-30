@@ -124,6 +124,7 @@ pub struct AutoScalingGroupProvider {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AutoScalingGroupProviderUpdate {
+    /// <p>The managed scaling settings for the Auto Scaling group capacity provider.</p>
     #[serde(rename = "managedScaling")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub managed_scaling: Option<ManagedScaling>,
@@ -183,17 +184,17 @@ pub struct CapacityProvider {
     pub update_status_reason: Option<String>,
 }
 
-/// <p>The details of a capacity provider strategy.</p>
+/// <p>The details of a capacity provider strategy. A capacity provider strategy can be set when using the <a>RunTask</a> or <a>CreateCluster</a> APIs or as the default capacity provider strategy for a cluster with the <a>CreateCluster</a> API.</p> <p>Only capacity providers that are already associated with a cluster and have an <code>ACTIVE</code> or <code>UPDATING</code> status can be used in a capacity provider strategy. The <a>PutClusterCapacityProviders</a> API is used to associate a capacity provider with a cluster.</p> <p>If specifying a capacity provider that uses an Auto Scaling group, the capacity provider must already be created. New Auto Scaling group capacity providers can be created with the <a>CreateCapacityProvider</a> API operation.</p> <p>To use a AWS Fargate capacity provider, specify either the <code>FARGATE</code> or <code>FARGATE_SPOT</code> capacity providers. The AWS Fargate capacity providers are available to all accounts and only need to be associated with a cluster to be used in a capacity provider strategy.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CapacityProviderStrategyItem {
-    /// <p>The <i>base</i> value designates how many tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a <i>base</i> defined.</p>
+    /// <p>The <i>base</i> value designates how many tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a <i>base</i> defined. If no value is specified, the default value of <code>0</code> is used.</p>
     #[serde(rename = "base")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub base: Option<i64>,
     /// <p>The short name of the capacity provider.</p>
     #[serde(rename = "capacityProvider")]
     pub capacity_provider: String,
-    /// <p>The <i>weight</i> value designates the relative percentage of the total number of tasks launched that should use the specified capacity provider.</p> <p>For example, if you have a strategy that contains two capacity providers and both have a weight of <code>1</code>, then when the <code>base</code> is satisfied, the tasks will be split evenly across the two capacity providers. Using that same logic, if you specify a weight of <code>1</code> for <i>capacityProviderA</i> and a weight of <code>4</code> for <i>capacityProviderB</i>, then for every one task that is run using <i>capacityProviderA</i>, four tasks would use <i>capacityProviderB</i>.</p>
+    /// <p>The <i>weight</i> value designates the relative percentage of the total number of tasks launched that should use the specified capacity provider. The <code>weight</code> value is taken into consideration after the <code>base</code> value, if defined, is satisfied.</p> <p>If no <code>weight</code> value is specified, the default value of <code>0</code> is used. When multiple capacity providers are specified within a capacity provider strategy, at least one of the capacity providers must have a weight value greater than zero and any capacity providers with a weight of <code>0</code> will not be used to place tasks. If you specify multiple capacity providers in a strategy that all have a weight of <code>0</code>, any <code>RunTask</code> or <code>CreateService</code> actions using the capacity provider strategy will fail.</p> <p>An example scenario for using weights is defining a strategy that contains two capacity providers and both have a weight of <code>1</code>, then when the <code>base</code> is satisfied, the tasks will be split evenly across the two capacity providers. Using that same logic, if you specify a weight of <code>1</code> for <i>capacityProviderA</i> and a weight of <code>4</code> for <i>capacityProviderB</i>, then for every one task that is run using <i>capacityProviderA</i>, four tasks would use <i>capacityProviderB</i>.</p>
     #[serde(rename = "weight")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub weight: Option<i64>,
@@ -227,6 +228,10 @@ pub struct Cluster {
     #[serde(rename = "clusterName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster_name: Option<String>,
+    /// <p>The execute command configuration for the cluster.</p>
+    #[serde(rename = "configuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration: Option<ClusterConfiguration>,
     /// <p>The default capacity provider strategy for the cluster. When services or tasks are run in the cluster with no launch type or capacity provider strategy specified, the default capacity provider strategy is used.</p>
     #[serde(rename = "defaultCapacityProviderStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -259,6 +264,15 @@ pub struct Cluster {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+/// <p>The execute command configuration for the cluster.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ClusterConfiguration {
+    /// <p>The details of the execute command configuration.</p>
+    #[serde(rename = "executeCommandConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execute_command_configuration: Option<ExecuteCommandConfiguration>,
 }
 
 /// <p>The settings to use when creating a cluster. This parameter is used to enable CloudWatch Container Insights for a cluster.</p>
@@ -310,6 +324,10 @@ pub struct Container {
     #[serde(rename = "lastStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_status: Option<String>,
+    /// <p>The details of any Amazon ECS managed agents associated with the container.</p>
+    #[serde(rename = "managedAgents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub managed_agents: Option<Vec<ManagedAgent>>,
     /// <p>The hard limit (in MiB) of memory set for the container.</p>
     #[serde(rename = "memory")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -359,15 +377,15 @@ pub struct ContainerDefinition {
     #[serde(rename = "dependsOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub depends_on: Option<Vec<ContainerDependency>>,
-    /// <p><p>When this parameter is true, networking is disabled within the container. This parameter maps to <code>NetworkDisabled</code> in the <a href="https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.35/">Docker Remote API</a>.</p> <note> <p>This parameter is not supported for Windows containers or tasks that use the awsvpc network mode.</p> </note></p>
+    /// <p><p>When this parameter is true, networking is disabled within the container. This parameter maps to <code>NetworkDisabled</code> in the <a href="https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.35/">Docker Remote API</a>.</p> <note> <p>This parameter is not supported for Windows containers.</p> </note></p>
     #[serde(rename = "disableNetworking")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disable_networking: Option<bool>,
-    /// <p><p>A list of DNS search domains that are presented to the container. This parameter maps to <code>DnsSearch</code> in the <a href="https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.35/">Docker Remote API</a> and the <code>--dns-search</code> option to <a href="https://docs.docker.com/engine/reference/run/#security-configuration">docker run</a>.</p> <note> <p>This parameter is not supported for Windows containers or tasks that use the awsvpc network mode.</p> </note></p>
+    /// <p><p>A list of DNS search domains that are presented to the container. This parameter maps to <code>DnsSearch</code> in the <a href="https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.35/">Docker Remote API</a> and the <code>--dns-search</code> option to <a href="https://docs.docker.com/engine/reference/run/#security-configuration">docker run</a>.</p> <note> <p>This parameter is not supported for Windows containers.</p> </note></p>
     #[serde(rename = "dnsSearchDomains")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dns_search_domains: Option<Vec<String>>,
-    /// <p><p>A list of DNS servers that are presented to the container. This parameter maps to <code>Dns</code> in the <a href="https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.35/">Docker Remote API</a> and the <code>--dns</code> option to <a href="https://docs.docker.com/engine/reference/run/#security-configuration">docker run</a>.</p> <note> <p>This parameter is not supported for Windows containers or tasks that use the awsvpc network mode.</p> </note></p>
+    /// <p><p>A list of DNS servers that are presented to the container. This parameter maps to <code>Dns</code> in the <a href="https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.35/">Docker Remote API</a> and the <code>--dns</code> option to <a href="https://docs.docker.com/engine/reference/run/#security-configuration">docker run</a>.</p> <note> <p>This parameter is not supported for Windows containers.</p> </note></p>
     #[serde(rename = "dnsServers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dns_servers: Option<Vec<String>>,
@@ -387,7 +405,7 @@ pub struct ContainerDefinition {
     #[serde(rename = "environment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment: Option<Vec<KeyValuePair>>,
-    /// <p>A list of files containing the environment variables to pass to a container. This parameter maps to the <code>--env-file</code> option to <a href="https://docs.docker.com/engine/reference/run/#security-configuration">docker run</a>.</p> <p>You can specify up to ten environment files. The file must have a <code>.env</code> file extension. Each line in an environment file should contain an environment variable in <code>VARIABLE=VALUE</code> format. Lines beginning with <code>#</code> are treated as comments and are ignored. For more information on the environment variable file syntax, see <a href="https://docs.docker.com/compose/env-file/">Declare default environment variables in file</a>.</p> <p>If there are environment variables specified using the <code>environment</code> parameter in a container definition, they take precedence over the variables contained within an environment file. If multiple environment files are specified that contain the same variable, they are processed from the top down. It is recommended to use unique variable names. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/taskdef-envfiles.html">Specifying Environment Variables</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>This field is not valid for containers in tasks using the Fargate launch type.</p>
+    /// <p>A list of files containing the environment variables to pass to a container. This parameter maps to the <code>--env-file</code> option to <a href="https://docs.docker.com/engine/reference/run/#security-configuration">docker run</a>.</p> <p>You can specify up to ten environment files. The file must have a <code>.env</code> file extension. Each line in an environment file should contain an environment variable in <code>VARIABLE=VALUE</code> format. Lines beginning with <code>#</code> are treated as comments and are ignored. For more information on the environment variable file syntax, see <a href="https://docs.docker.com/compose/env-file/">Declare default environment variables in file</a>.</p> <p>If there are environment variables specified using the <code>environment</code> parameter in a container definition, they take precedence over the variables contained within an environment file. If multiple environment files are specified that contain the same variable, they are processed from the top down. It is recommended to use unique variable names. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/taskdef-envfiles.html">Specifying Environment Variables</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "environmentFiles")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment_files: Option<Vec<EnvironmentFile>>,
@@ -419,7 +437,7 @@ pub struct ContainerDefinition {
     #[serde(rename = "interactive")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub interactive: Option<bool>,
-    /// <p><p>The <code>links</code> parameter allows containers to communicate with each other without the need for port mappings. This parameter is only supported if the network mode of a task definition is <code>bridge</code>. The <code>name:internalName</code> construct is analogous to <code>name:alias</code> in Docker links. Up to 255 letters (uppercase and lowercase), numbers, and hyphens are allowed. For more information about linking Docker containers, go to <a href="https://docs.docker.com/network/links/">Legacy container links</a> in the Docker documentation. This parameter maps to <code>Links</code> in the <a href="https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.35/">Docker Remote API</a> and the <code>--link</code> option to <a href="https://docs.docker.com/engine/reference/run/#security-configuration">docker run</a>.</p> <note> <p>This parameter is not supported for Windows containers or tasks that use the awsvpc network mode.</p> </note> <important> <p>Containers that are collocated on a single container instance may be able to communicate with each other without requiring links or host port mappings. Network isolation is achieved on the container instance using security groups and VPC settings.</p> </important></p>
+    /// <p><p>The <code>links</code> parameter allows containers to communicate with each other without the need for port mappings. This parameter is only supported if the network mode of a task definition is <code>bridge</code>. The <code>name:internalName</code> construct is analogous to <code>name:alias</code> in Docker links. Up to 255 letters (uppercase and lowercase), numbers, underscores, and hyphens are allowed. For more information about linking Docker containers, go to <a href="https://docs.docker.com/network/links/">Legacy container links</a> in the Docker documentation. This parameter maps to <code>Links</code> in the <a href="https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.35/">Docker Remote API</a> and the <code>--link</code> option to <a href="https://docs.docker.com/engine/reference/run/#security-configuration">docker run</a>.</p> <note> <p>This parameter is not supported for Windows containers.</p> </note> <important> <p>Containers that are collocated on a single container instance may be able to communicate with each other without requiring links or host port mappings. Network isolation is achieved on the container instance using security groups and VPC settings.</p> </important></p>
     #[serde(rename = "links")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub links: Option<Vec<String>>,
@@ -443,7 +461,7 @@ pub struct ContainerDefinition {
     #[serde(rename = "mountPoints")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mount_points: Option<Vec<MountPoint>>,
-    /// <p>The name of a container. If you are linking multiple containers together in a task definition, the <code>name</code> of one container can be entered in the <code>links</code> of another container to connect the containers. Up to 255 letters (uppercase and lowercase), numbers, and hyphens are allowed. This parameter maps to <code>name</code> in the <a href="https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.35/">Docker Remote API</a> and the <code>--name</code> option to <a href="https://docs.docker.com/engine/reference/run/#security-configuration">docker run</a>. </p>
+    /// <p>The name of a container. If you are linking multiple containers together in a task definition, the <code>name</code> of one container can be entered in the <code>links</code> of another container to connect the containers. Up to 255 letters (uppercase and lowercase), numbers, underscores, and hyphens are allowed. This parameter maps to <code>name</code> in the <a href="https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.35/">Docker Remote API</a> and the <code>--name</code> option to <a href="https://docs.docker.com/engine/reference/run/#security-configuration">docker run</a>. </p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -451,7 +469,7 @@ pub struct ContainerDefinition {
     #[serde(rename = "portMappings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub port_mappings: Option<Vec<PortMapping>>,
-    /// <p><p>When this parameter is true, the container is given elevated privileges on the host container instance (similar to the <code>root</code> user). This parameter maps to <code>Privileged</code> in the <a href="https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.35/">Docker Remote API</a> and the <code>--privileged</code> option to <a href="https://docs.docker.com/engine/reference/run/#security-configuration">docker run</a>.</p> <note> <p>This parameter is not supported for Windows containers or tasks using the Fargate launch type.</p> </note></p>
+    /// <p><p>When this parameter is true, the container is given elevated privileges on the host container instance (similar to the <code>root</code> user). This parameter maps to <code>Privileged</code> in the <a href="https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.35/">Docker Remote API</a> and the <code>--privileged</code> option to <a href="https://docs.docker.com/engine/reference/run/#security-configuration">docker run</a>.</p> <note> <p>This parameter is not supported for Windows containers or tasks run on AWS Fargate.</p> </note></p>
     #[serde(rename = "privileged")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub privileged: Option<bool>,
@@ -459,7 +477,7 @@ pub struct ContainerDefinition {
     #[serde(rename = "pseudoTerminal")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pseudo_terminal: Option<bool>,
-    /// <p><p>When this parameter is true, the container is given read-only access to its root file system. This parameter maps to <code>ReadonlyRootfs</code> in the <a href="https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.35/">Docker Remote API</a> and the <code>--read-only</code> option to <a href="https://docs.docker.com/engine/reference/run/#security-configuration">docker run</a>.</p> <note> <p>This parameter is not supported for Windows containers or tasks that use the awsvpc network mode.</p> </note></p>
+    /// <p><p>When this parameter is true, the container is given read-only access to its root file system. This parameter maps to <code>ReadonlyRootfs</code> in the <a href="https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.35/">Docker Remote API</a> and the <code>--read-only</code> option to <a href="https://docs.docker.com/engine/reference/run/#security-configuration">docker run</a>.</p> <note> <p>This parameter is not supported for Windows containers.</p> </note></p>
     #[serde(rename = "readonlyRootFilesystem")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub readonly_root_filesystem: Option<bool>,
@@ -487,11 +505,11 @@ pub struct ContainerDefinition {
     #[serde(rename = "systemControls")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub system_controls: Option<Vec<SystemControl>>,
-    /// <p><p>A list of <code>ulimits</code> to set in the container. If a ulimit value is specified in a task definition, it will override the default values set by Docker. This parameter maps to <code>Ulimits</code> in the <a href="https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.35/">Docker Remote API</a> and the <code>--ulimit</code> option to <a href="https://docs.docker.com/engine/reference/run/#security-configuration">docker run</a>. Valid naming values are displayed in the <a>Ulimit</a> data type. This parameter requires version 1.18 of the Docker Remote API or greater on your container instance. To check the Docker Remote API version on your container instance, log in to your container instance and run the following command: <code>sudo docker version --format &#39;{{.Server.APIVersion}}&#39;</code> </p> <note> <p>This parameter is not supported for Windows containers or tasks that use the awsvpc network mode.</p> </note></p>
+    /// <p><p>A list of <code>ulimits</code> to set in the container. If a ulimit value is specified in a task definition, it will override the default values set by Docker. This parameter maps to <code>Ulimits</code> in the <a href="https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.35/">Docker Remote API</a> and the <code>--ulimit</code> option to <a href="https://docs.docker.com/engine/reference/run/#security-configuration">docker run</a>. Valid naming values are displayed in the <a>Ulimit</a> data type.</p> <p>Amazon ECS tasks hosted on Fargate use the default resource limit values set by the operating system with the exception of the <code>nofile</code> resource limit parameter which Fargate overrides. The <code>nofile</code> resource limit sets a restriction on the number of open files that a container can use. The default <code>nofile</code> soft limit is <code>1024</code> and hard limit is <code>4096</code>.</p> <p>This parameter requires version 1.18 of the Docker Remote API or greater on your container instance. To check the Docker Remote API version on your container instance, log in to your container instance and run the following command: <code>sudo docker version --format &#39;{{.Server.APIVersion}}&#39;</code> </p> <note> <p>This parameter is not supported for Windows containers.</p> </note></p>
     #[serde(rename = "ulimits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ulimits: Option<Vec<Ulimit>>,
-    /// <p><p>The user to use inside the container. This parameter maps to <code>User</code> in the <a href="https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.35/">Docker Remote API</a> and the <code>--user</code> option to <a href="https://docs.docker.com/engine/reference/run/#security-configuration">docker run</a>.</p> <important> <p>When running tasks using the <code>host</code> network mode, you should not run containers using the root user (UID 0). It is considered best practice to use a non-root user.</p> </important> <p>You can specify the <code>user</code> using the following formats. If specifying a UID or GID, you must specify it as a positive integer.</p> <ul> <li> <p> <code>user</code> </p> </li> <li> <p> <code>user:group</code> </p> </li> <li> <p> <code>uid</code> </p> </li> <li> <p> <code>uid:gid</code> </p> </li> <li> <p> <code>user:gid</code> </p> </li> <li> <p> <code>uid:group</code> </p> </li> </ul> <note> <p>This parameter is not supported for Windows containers or tasks that use the awsvpc network mode.</p> </note></p>
+    /// <p><p>The user to use inside the container. This parameter maps to <code>User</code> in the <a href="https://docs.docker.com/engine/api/v1.35/#operation/ContainerCreate">Create a container</a> section of the <a href="https://docs.docker.com/engine/api/v1.35/">Docker Remote API</a> and the <code>--user</code> option to <a href="https://docs.docker.com/engine/reference/run/#security-configuration">docker run</a>.</p> <important> <p>When running tasks using the <code>host</code> network mode, you should not run containers using the root user (UID 0). It is considered best practice to use a non-root user.</p> </important> <p>You can specify the <code>user</code> using the following formats. If specifying a UID or GID, you must specify it as a positive integer.</p> <ul> <li> <p> <code>user</code> </p> </li> <li> <p> <code>user:group</code> </p> </li> <li> <p> <code>uid</code> </p> </li> <li> <p> <code>uid:gid</code> </p> </li> <li> <p> <code>user:gid</code> </p> </li> <li> <p> <code>uid:group</code> </p> </li> </ul> <note> <p>This parameter is not supported for Windows containers.</p> </note></p>
     #[serde(rename = "user")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user: Option<String>,
@@ -544,7 +562,7 @@ pub struct ContainerInstance {
     #[serde(rename = "containerInstanceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub container_instance_arn: Option<String>,
-    /// <p>The EC2 instance ID of the container instance.</p>
+    /// <p>The ID of the container instance. For Amazon EC2 instances, this value is the Amazon EC2 instance ID. For external instances, this value is the AWS Systems Manager managed instance ID.</p>
     #[serde(rename = "ec2InstanceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_instance_id: Option<String>,
@@ -688,15 +706,19 @@ pub struct CreateCapacityProviderResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateClusterRequest {
-    /// <p>The short name of one or more capacity providers to associate with the cluster.</p> <p>If specifying a capacity provider that uses an Auto Scaling group, the capacity provider must already be created and not already associated with another cluster. New capacity providers can be created with the <a>CreateCapacityProvider</a> API operation.</p> <p>To use a AWS Fargate capacity provider, specify either the <code>FARGATE</code> or <code>FARGATE_SPOT</code> capacity providers. The AWS Fargate capacity providers are available to all accounts and only need to be associated with a cluster to be used.</p> <p>The <a>PutClusterCapacityProviders</a> API operation is used to update the list of available capacity providers for a cluster after the cluster is created.</p>
+    /// <p>The short name of one or more capacity providers to associate with the cluster. A capacity provider must be associated with a cluster before it can be included as part of the default capacity provider strategy of the cluster or used in a capacity provider strategy when calling the <a>CreateService</a> or <a>RunTask</a> actions.</p> <p>If specifying a capacity provider that uses an Auto Scaling group, the capacity provider must already be created and not already associated with another cluster. New Auto Scaling group capacity providers can be created with the <a>CreateCapacityProvider</a> API operation.</p> <p>To use a AWS Fargate capacity provider, specify either the <code>FARGATE</code> or <code>FARGATE_SPOT</code> capacity providers. The AWS Fargate capacity providers are available to all accounts and only need to be associated with a cluster to be used.</p> <p>The <a>PutClusterCapacityProviders</a> API operation is used to update the list of available capacity providers for a cluster after the cluster is created.</p>
     #[serde(rename = "capacityProviders")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub capacity_providers: Option<Vec<String>>,
-    /// <p>The name of your cluster. If you do not specify a name for your cluster, you create a cluster named <code>default</code>. Up to 255 letters (uppercase and lowercase), numbers, and hyphens are allowed. </p>
+    /// <p>The name of your cluster. If you do not specify a name for your cluster, you create a cluster named <code>default</code>. Up to 255 letters (uppercase and lowercase), numbers, underscores, and hyphens are allowed. </p>
     #[serde(rename = "clusterName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster_name: Option<String>,
-    /// <p>The capacity provider strategy to use by default for the cluster.</p> <p>When creating a service or running a task on a cluster, if no capacity provider or launch type is specified then the default capacity provider strategy for the cluster is used.</p> <p>A capacity provider strategy consists of one or more capacity providers along with the <code>base</code> and <code>weight</code> to assign to them. A capacity provider must be associated with the cluster to be used in a capacity provider strategy. The <a>PutClusterCapacityProviders</a> API is used to associate a capacity provider with a cluster. Only capacity providers with an <code>ACTIVE</code> or <code>UPDATING</code> status can be used.</p> <p>If specifying a capacity provider that uses an Auto Scaling group, the capacity provider must already be created. New capacity providers can be created with the <a>CreateCapacityProvider</a> API operation.</p> <p>To use a AWS Fargate capacity provider, specify either the <code>FARGATE</code> or <code>FARGATE_SPOT</code> capacity providers. The AWS Fargate capacity providers are available to all accounts and only need to be associated with a cluster to be used.</p> <p>If a default capacity provider strategy is not defined for a cluster during creation, it can be defined later with the <a>PutClusterCapacityProviders</a> API operation.</p>
+    /// <p>The execute command configuration for the cluster.</p>
+    #[serde(rename = "configuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration: Option<ClusterConfiguration>,
+    /// <p>The capacity provider strategy to set as the default for the cluster. When a default capacity provider strategy is set for a cluster, when calling the <a>RunTask</a> or <a>CreateService</a> APIs wtih no capacity provider strategy or launch type specified, the default capacity provider strategy for the cluster is used.</p> <p>If a default capacity provider strategy is not defined for a cluster during creation, it can be defined later with the <a>PutClusterCapacityProviders</a> API operation.</p>
     #[serde(rename = "defaultCapacityProviderStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_capacity_provider_strategy: Option<Vec<CapacityProviderStrategyItem>>,
@@ -722,7 +744,7 @@ pub struct CreateClusterResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateServiceRequest {
-    /// <p>The capacity provider strategy to use for the service.</p> <p>A capacity provider strategy consists of one or more capacity providers along with the <code>base</code> and <code>weight</code> to assign to them. A capacity provider must be associated with the cluster to be used in a capacity provider strategy. The <a>PutClusterCapacityProviders</a> API is used to associate a capacity provider with a cluster. Only capacity providers with an <code>ACTIVE</code> or <code>UPDATING</code> status can be used.</p> <p>If a <code>capacityProviderStrategy</code> is specified, the <code>launchType</code> parameter must be omitted. If no <code>capacityProviderStrategy</code> or <code>launchType</code> is specified, the <code>defaultCapacityProviderStrategy</code> for the cluster is used.</p> <p>If specifying a capacity provider that uses an Auto Scaling group, the capacity provider must already be created. New capacity providers can be created with the <a>CreateCapacityProvider</a> API operation.</p> <p>To use a AWS Fargate capacity provider, specify either the <code>FARGATE</code> or <code>FARGATE_SPOT</code> capacity providers. The AWS Fargate capacity providers are available to all accounts and only need to be associated with a cluster to be used.</p> <p>The <a>PutClusterCapacityProviders</a> API operation is used to update the list of available capacity providers for a cluster after the cluster is created.</p>
+    /// <p>The capacity provider strategy to use for the service.</p> <p>If a <code>capacityProviderStrategy</code> is specified, the <code>launchType</code> parameter must be omitted. If no <code>capacityProviderStrategy</code> or <code>launchType</code> is specified, the <code>defaultCapacityProviderStrategy</code> for the cluster is used.</p>
     #[serde(rename = "capacityProviderStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub capacity_provider_strategy: Option<Vec<CapacityProviderStrategyItem>>,
@@ -738,7 +760,7 @@ pub struct CreateServiceRequest {
     #[serde(rename = "deploymentConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_configuration: Option<DeploymentConfiguration>,
-    /// <p>The deployment controller to use for the service.</p>
+    /// <p>The deployment controller to use for the service. If no deployment controller is specified, the default value of <code>ECS</code> is used.</p>
     #[serde(rename = "deploymentController")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_controller: Option<DeploymentController>,
@@ -750,19 +772,23 @@ pub struct CreateServiceRequest {
     #[serde(rename = "enableECSManagedTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_ecs_managed_tags: Option<bool>,
+    /// <p>Whether or not the execute command functionality is enabled for the service. If <code>true</code>, this enables execute command functionality on all containers in the service tasks.</p>
+    #[serde(rename = "enableExecuteCommand")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_execute_command: Option<bool>,
     /// <p>The period of time, in seconds, that the Amazon ECS service scheduler should ignore unhealthy Elastic Load Balancing target health checks after a task has first started. This is only used when your service is configured to use a load balancer. If your service has a load balancer defined and you don't specify a health check grace period value, the default value of <code>0</code> is used.</p> <p>If your service's tasks take a while to start and respond to Elastic Load Balancing health checks, you can specify a health check grace period of up to 2,147,483,647 seconds. During that time, the Amazon ECS service scheduler ignores health check status. This grace period can prevent the service scheduler from marking tasks as unhealthy and stopping them before they have time to come up.</p>
     #[serde(rename = "healthCheckGracePeriodSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub health_check_grace_period_seconds: Option<i64>,
-    /// <p>The launch type on which to run your service. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS Launch Types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>If a <code>launchType</code> is specified, the <code>capacityProviderStrategy</code> parameter must be omitted.</p>
+    /// <p>The infrastructure on which to run your service. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS launch types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>The <code>FARGATE</code> launch type runs your tasks on AWS Fargate On-Demand infrastructure.</p> <note> <p>Fargate Spot infrastructure is available for use but a capacity provider strategy must be used. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/userguide/fargate-capacity-providers.html">AWS Fargate capacity providers</a> in the <i>Amazon ECS User Guide for AWS Fargate</i>.</p> </note> <p>The <code>EC2</code> launch type runs your tasks on Amazon EC2 instances registered to your cluster.</p> <p>The <code>EXTERNAL</code> launch type runs your tasks on your on-premise server or virtual machine (VM) capacity registered to your cluster.</p> <p>A service can use either a launch type or a capacity provider strategy. If a <code>launchType</code> is specified, the <code>capacityProviderStrategy</code> parameter must be omitted.</p>
     #[serde(rename = "launchType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub launch_type: Option<String>,
-    /// <p>A load balancer object representing the load balancers to use with your service. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-load-balancing.html">Service Load Balancing</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>If the service is using the rolling update (<code>ECS</code>) deployment controller and using either an Application Load Balancer or Network Load Balancer, you must specify one or more target group ARNs to attach to the service. The service-linked role is required for services that make use of multiple target groups. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html">Using Service-Linked Roles for Amazon ECS</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>If the service is using the <code>CODE_DEPLOY</code> deployment controller, the service is required to use either an Application Load Balancer or Network Load Balancer. When creating an AWS CodeDeploy deployment group, you specify two target groups (referred to as a <code>targetGroupPair</code>). During a deployment, AWS CodeDeploy determines which task set in your service has the status <code>PRIMARY</code> and associates one target group with it, and then associates the other target group with the replacement task set. The load balancer can also have up to two listeners: a required listener for production traffic and an optional listener that allows you perform validation tests with Lambda functions before routing production traffic to it.</p> <p>After you create a service using the <code>ECS</code> deployment controller, the load balancer name or target group ARN, container name, and container port specified in the service definition are immutable. If you are using the <code>CODE_DEPLOY</code> deployment controller, these values can be changed when updating the service.</p> <p>For Application Load Balancers and Network Load Balancers, this object must contain the load balancer target group ARN, the container name (as it appears in a container definition), and the container port to access from the load balancer. The load balancer name parameter must be omitted. When a task from this service is placed on a container instance, the container instance and port combination is registered as a target in the target group specified here.</p> <p>For Classic Load Balancers, this object must contain the load balancer name, the container name (as it appears in a container definition), and the container port to access from the load balancer. The target group ARN parameter must be omitted. When a task from this service is placed on a container instance, the container instance is registered with the load balancer specified here.</p> <p>Services with tasks that use the <code>awsvpc</code> network mode (for example, those with the Fargate launch type) only support Application Load Balancers and Network Load Balancers. Classic Load Balancers are not supported. Also, when you create any target groups for these services, you must choose <code>ip</code> as the target type, not <code>instance</code>, because tasks that use the <code>awsvpc</code> network mode are associated with an elastic network interface, not an Amazon EC2 instance.</p>
+    /// <p>A load balancer object representing the load balancers to use with your service. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-load-balancing.html">Service Load Balancing</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>If the service is using the rolling update (<code>ECS</code>) deployment controller and using either an Application Load Balancer or Network Load Balancer, you must specify one or more target group ARNs to attach to the service. The service-linked role is required for services that make use of multiple target groups. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html">Using service-linked roles for Amazon ECS</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>If the service is using the <code>CODE_DEPLOY</code> deployment controller, the service is required to use either an Application Load Balancer or Network Load Balancer. When creating an AWS CodeDeploy deployment group, you specify two target groups (referred to as a <code>targetGroupPair</code>). During a deployment, AWS CodeDeploy determines which task set in your service has the status <code>PRIMARY</code> and associates one target group with it, and then associates the other target group with the replacement task set. The load balancer can also have up to two listeners: a required listener for production traffic and an optional listener that allows you perform validation tests with Lambda functions before routing production traffic to it.</p> <p>After you create a service using the <code>ECS</code> deployment controller, the load balancer name or target group ARN, container name, and container port specified in the service definition are immutable. If you are using the <code>CODE_DEPLOY</code> deployment controller, these values can be changed when updating the service.</p> <p>For Application Load Balancers and Network Load Balancers, this object must contain the load balancer target group ARN, the container name (as it appears in a container definition), and the container port to access from the load balancer. The load balancer name parameter must be omitted. When a task from this service is placed on a container instance, the container instance and port combination is registered as a target in the target group specified here.</p> <p>For Classic Load Balancers, this object must contain the load balancer name, the container name (as it appears in a container definition), and the container port to access from the load balancer. The target group ARN parameter must be omitted. When a task from this service is placed on a container instance, the container instance is registered with the load balancer specified here.</p> <p>Services with tasks that use the <code>awsvpc</code> network mode (for example, those with the Fargate launch type) only support Application Load Balancers and Network Load Balancers. Classic Load Balancers are not supported. Also, when you create any target groups for these services, you must choose <code>ip</code> as the target type, not <code>instance</code>, because tasks that use the <code>awsvpc</code> network mode are associated with an elastic network interface, not an Amazon EC2 instance.</p>
     #[serde(rename = "loadBalancers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub load_balancers: Option<Vec<LoadBalancer>>,
-    /// <p>The network configuration for the service. This parameter is required for task definitions that use the <code>awsvpc</code> network mode to receive their own elastic network interface, and it is not supported for other network modes. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html">Task Networking</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
+    /// <p>The network configuration for the service. This parameter is required for task definitions that use the <code>awsvpc</code> network mode to receive their own elastic network interface, and it is not supported for other network modes. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-networking.html">Task networking</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "networkConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub network_configuration: Option<NetworkConfiguration>,
@@ -774,7 +800,7 @@ pub struct CreateServiceRequest {
     #[serde(rename = "placementStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub placement_strategy: Option<Vec<PlacementStrategy>>,
-    /// <p>The platform version that your tasks in the service are running on. A platform version is specified only for tasks using the Fargate launch type. If one isn't specified, the <code>LATEST</code> platform version is used by default. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html">AWS Fargate Platform Versions</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
+    /// <p>The platform version that your tasks in the service are running on. A platform version is specified only for tasks using the Fargate launch type. If one isn't specified, the <code>LATEST</code> platform version is used by default. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html">AWS Fargate platform versions</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "platformVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub platform_version: Option<String>,
@@ -782,7 +808,7 @@ pub struct CreateServiceRequest {
     #[serde(rename = "propagateTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub propagate_tags: Option<String>,
-    /// <p>The name or full Amazon Resource Name (ARN) of the IAM role that allows Amazon ECS to make calls to your load balancer on your behalf. This parameter is only permitted if you are using a load balancer with your service and your task definition does not use the <code>awsvpc</code> network mode. If you specify the <code>role</code> parameter, you must also specify a load balancer object with the <code>loadBalancers</code> parameter.</p> <important> <p>If your account has already created the Amazon ECS service-linked role, that role is used by default for your service unless you specify a role here. The service-linked role is required if your task definition uses the <code>awsvpc</code> network mode or if the service is configured to use service discovery, an external deployment controller, multiple target groups, or Elastic Inference accelerators in which case you should not specify a role here. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html">Using Service-Linked Roles for Amazon ECS</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> </important> <p>If your specified role has a path other than <code>/</code>, then you must either specify the full role ARN (this is recommended) or prefix the role name with the path. For example, if a role with the name <code>bar</code> has a path of <code>/foo/</code> then you would specify <code>/foo/bar</code> as the role name. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html#identifiers-friendly-names">Friendly Names and Paths</a> in the <i>IAM User Guide</i>.</p>
+    /// <p>The name or full Amazon Resource Name (ARN) of the IAM role that allows Amazon ECS to make calls to your load balancer on your behalf. This parameter is only permitted if you are using a load balancer with your service and your task definition does not use the <code>awsvpc</code> network mode. If you specify the <code>role</code> parameter, you must also specify a load balancer object with the <code>loadBalancers</code> parameter.</p> <important> <p>If your account has already created the Amazon ECS service-linked role, that role is used by default for your service unless you specify a role here. The service-linked role is required if your task definition uses the <code>awsvpc</code> network mode or if the service is configured to use service discovery, an external deployment controller, multiple target groups, or Elastic Inference accelerators in which case you should not specify a role here. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using-service-linked-roles.html">Using service-linked roles for Amazon ECS</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> </important> <p>If your specified role has a path other than <code>/</code>, then you must either specify the full role ARN (this is recommended) or prefix the role name with the path. For example, if a role with the name <code>bar</code> has a path of <code>/foo/</code> then you would specify <code>/foo/bar</code> as the role name. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_identifiers.html#identifiers-friendly-names">Friendly names and paths</a> in the <i>IAM User Guide</i>.</p>
     #[serde(rename = "role")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
@@ -790,10 +816,10 @@ pub struct CreateServiceRequest {
     #[serde(rename = "schedulingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scheduling_strategy: Option<String>,
-    /// <p>The name of your service. Up to 255 letters (uppercase and lowercase), numbers, and hyphens are allowed. Service names must be unique within a cluster, but you can have similarly named services in multiple clusters within a Region or across multiple Regions.</p>
+    /// <p>The name of your service. Up to 255 letters (uppercase and lowercase), numbers, underscores, and hyphens are allowed. Service names must be unique within a cluster, but you can have similarly named services in multiple clusters within a Region or across multiple Regions.</p>
     #[serde(rename = "serviceName")]
     pub service_name: String,
-    /// <p><p>The details of the service discovery registries to assign to this service. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-discovery.html">Service Discovery</a>.</p> <note> <p>Service discovery is supported for Fargate tasks if you are using platform version v1.1.0 or later. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html">AWS Fargate Platform Versions</a>.</p> </note></p>
+    /// <p><p>The details of the service discovery registry to associate with this service. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-discovery.html">Service discovery</a>.</p> <note> <p>Each service may be associated with one service registry. Multiple service registries per service isn&#39;t supported.</p> </note></p>
     #[serde(rename = "serviceRegistries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_registries: Option<Vec<ServiceRegistry>>,
@@ -842,6 +868,7 @@ pub struct CreateTaskSetRequest {
     #[serde(rename = "loadBalancers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub load_balancers: Option<Vec<LoadBalancer>>,
+    /// <p>An object representing the network configuration for a task set.</p>
     #[serde(rename = "networkConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub network_configuration: Option<NetworkConfiguration>,
@@ -849,6 +876,7 @@ pub struct CreateTaskSetRequest {
     #[serde(rename = "platformVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub platform_version: Option<String>,
+    /// <p>A floating-point percentage of the desired number of tasks to place and keep running in the task set.</p>
     #[serde(rename = "scale")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scale: Option<Scale>,
@@ -871,6 +899,7 @@ pub struct CreateTaskSetRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateTaskSetResponse {
+    /// <p>Information about a set of Amazon ECS tasks in either an AWS CodeDeploy or an <code>EXTERNAL</code> deployment. A task set includes details such as the desired number of tasks, how many tasks are running, and whether the task set serves production traffic.</p>
     #[serde(rename = "taskSet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_set: Option<TaskSet>,
@@ -929,6 +958,7 @@ pub struct DeleteCapacityProviderRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteCapacityProviderResponse {
+    /// <p>The details of the capacity provider.</p>
     #[serde(rename = "capacityProvider")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub capacity_provider: Option<CapacityProvider>,
@@ -997,6 +1027,7 @@ pub struct DeleteTaskSetRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteTaskSetResponse {
+    /// <p>Details about the task set.</p>
     #[serde(rename = "taskSet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_set: Option<TaskSet>,
@@ -1191,7 +1222,7 @@ pub struct DescribeClustersRequest {
     #[serde(rename = "clusters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub clusters: Option<Vec<String>>,
-    /// <p>Whether to include additional information about your clusters in the response. If this field is omitted, the attachments, statistics, and tags are not included.</p> <p>If <code>ATTACHMENTS</code> is specified, the attachments for the container instances or tasks within the cluster are included.</p> <p>If <code>SETTINGS</code> is specified, the settings for the cluster are included.</p> <p>If <code>STATISTICS</code> is specified, the following additional information, separated by launch type, is included:</p> <ul> <li> <p>runningEC2TasksCount</p> </li> <li> <p>runningFargateTasksCount</p> </li> <li> <p>pendingEC2TasksCount</p> </li> <li> <p>pendingFargateTasksCount</p> </li> <li> <p>activeEC2ServiceCount</p> </li> <li> <p>activeFargateServiceCount</p> </li> <li> <p>drainingEC2ServiceCount</p> </li> <li> <p>drainingFargateServiceCount</p> </li> </ul> <p>If <code>TAGS</code> is specified, the metadata tags associated with the cluster are included.</p>
+    /// <p>Whether to include additional information about the clusters in the response. If this field is omitted, this information isn't included.</p> <p>If <code>ATTACHMENTS</code> is specified, the attachments for the container instances or tasks within the cluster are included.</p> <p>If <code>SETTINGS</code> is specified, the settings for the cluster are included.</p> <p>If <code>STATISTICS</code> is specified, the task and service count is included, separated by launch type.</p> <p>If <code>TAGS</code> is specified, the metadata tags associated with the cluster are included.</p>
     #[serde(rename = "include")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include: Option<Vec<String>>,
@@ -1458,7 +1489,7 @@ pub struct EFSVolumeConfiguration {
     pub transit_encryption_port: Option<i64>,
 }
 
-/// <p>A list of files containing the environment variables to pass to a container. You can specify up to ten environment files. The file must have a <code>.env</code> file extension. Each line in an environment file should contain an environment variable in <code>VARIABLE=VALUE</code> format. Lines beginning with <code>#</code> are treated as comments and are ignored. For more information on the environment variable file syntax, see <a href="https://docs.docker.com/compose/env-file/">Declare default environment variables in file</a>.</p> <p>If there are environment variables specified using the <code>environment</code> parameter in a container definition, they take precedence over the variables contained within an environment file. If multiple environment files are specified that contain the same variable, they are processed from the top down. It is recommended to use unique variable names. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/taskdef-envfiles.html">Specifying Environment Variables</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>This field is not valid for containers in tasks using the Fargate launch type.</p>
+/// <p>A list of files containing the environment variables to pass to a container. You can specify up to ten environment files. The file must have a <code>.env</code> file extension. Each line in an environment file should contain an environment variable in <code>VARIABLE=VALUE</code> format. Lines beginning with <code>#</code> are treated as comments and are ignored. For more information on the environment variable file syntax, see <a href="https://docs.docker.com/compose/env-file/">Declare default environment variables in file</a>.</p> <p>If there are environment variables specified using the <code>environment</code> parameter in a container definition, they take precedence over the variables contained within an environment file. If multiple environment files are specified that contain the same variable, they are processed from the top down. It is recommended to use unique variable names. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/taskdef-envfiles.html">Specifying environment variables</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>This field is only valid for containers in Fargate tasks that use platform version <code>1.4.0</code> or later.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EnvironmentFile {
     /// <p>The file type to use. The only supported value is <code>s3</code>.</p>
@@ -1467,6 +1498,107 @@ pub struct EnvironmentFile {
     /// <p>The Amazon Resource Name (ARN) of the Amazon S3 object containing the environment variable file.</p>
     #[serde(rename = "value")]
     pub value: String,
+}
+
+/// <p><p>The amount of ephemeral storage to allocate for the task. This parameter is used to expand the total amount of ephemeral storage available, beyond the default amount, for tasks hosted on AWS Fargate. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/userguide/using_data_volumes.html">Fargate task storage</a> in the <i>Amazon ECS User Guide for AWS Fargate</i>.</p> <note> <p>This parameter is only supported for tasks hosted on AWS Fargate using platform version <code>1.4.0</code> or later.</p> </note></p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct EphemeralStorage {
+    /// <p>The total amount, in GiB, of ephemeral storage to set for the task. The minimum supported value is <code>21</code> GiB and the maximum supported value is <code>200</code> GiB.</p>
+    #[serde(rename = "sizeInGiB")]
+    pub size_in_gi_b: i64,
+}
+
+/// <p>The details of the execute command configuration.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ExecuteCommandConfiguration {
+    /// <p>Specify an AWS Key Management Service key ID to encrypt the data between the local client and the container.</p>
+    #[serde(rename = "kmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+    /// <p>The log configuration for the results of the execute command actions. The logs can be sent to CloudWatch Logs or an Amazon S3 bucket. When <code>logging=OVERRIDE</code> is specified, a <code>logConfiguration</code> must be provided.</p>
+    #[serde(rename = "logConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_configuration: Option<ExecuteCommandLogConfiguration>,
+    /// <p><p>The log setting to use for redirecting logs for your execute command results. The following log settings are available.</p> <ul> <li> <p> <code>NONE</code>: The execute command session is not logged.</p> </li> <li> <p> <code>DEFAULT</code>: The <code>awslogs</code> configuration in the task definition is used. If no logging parameter is specified, it defaults to this value. If no <code>awslogs</code> log driver is configured in the task definition, the output won&#39;t be logged.</p> </li> <li> <p> <code>OVERRIDE</code>: Specify the logging details as a part of <code>logConfiguration</code>. If the <code>OVERRIDE</code> logging option is specified, the <code>logConfiguration</code> is required.</p> </li> </ul></p>
+    #[serde(rename = "logging")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub logging: Option<String>,
+}
+
+/// <p>The log configuration for the results of the execute command actions. The logs can be sent to CloudWatch Logs or an Amazon S3 bucket.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ExecuteCommandLogConfiguration {
+    /// <p>Whether or not to enable encryption on the CloudWatch logs. If not specified, encryption will be disabled.</p>
+    #[serde(rename = "cloudWatchEncryptionEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_encryption_enabled: Option<bool>,
+    /// <p><p>The name of the CloudWatch log group to send logs to.</p> <note> <p>The CloudWatch log group must already be created.</p> </note></p>
+    #[serde(rename = "cloudWatchLogGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_log_group_name: Option<String>,
+    /// <p><p>The name of the S3 bucket to send logs to.</p> <note> <p>The S3 bucket must already be created.</p> </note></p>
+    #[serde(rename = "s3BucketName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s_3_bucket_name: Option<String>,
+    /// <p>Whether or not to enable encryption on the CloudWatch logs. If not specified, encryption will be disabled.</p>
+    #[serde(rename = "s3EncryptionEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s_3_encryption_enabled: Option<bool>,
+    /// <p>An optional folder in the S3 bucket to place logs in.</p>
+    #[serde(rename = "s3KeyPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s_3_key_prefix: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ExecuteCommandRequest {
+    /// <p>The Amazon Resource Name (ARN) or short name of the cluster the task is running in. If you do not specify a cluster, the default cluster is assumed.</p>
+    #[serde(rename = "cluster")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster: Option<String>,
+    /// <p>The command to run on the container.</p>
+    #[serde(rename = "command")]
+    pub command: String,
+    /// <p>The name of the container to execute the command on. A container name only needs to be specified for tasks containing multiple containers.</p>
+    #[serde(rename = "container")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container: Option<String>,
+    /// <p>Use this flag to run your command in interactive mode.</p>
+    #[serde(rename = "interactive")]
+    pub interactive: bool,
+    /// <p>The Amazon Resource Name (ARN) or ID of the task the container is part of.</p>
+    #[serde(rename = "task")]
+    pub task: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ExecuteCommandResponse {
+    /// <p>The Amazon Resource Name (ARN) of the cluster.</p>
+    #[serde(rename = "clusterArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_arn: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the container.</p>
+    #[serde(rename = "containerArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_arn: Option<String>,
+    /// <p>The name of the container.</p>
+    #[serde(rename = "containerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_name: Option<String>,
+    /// <p>Whether or not the execute command session is running in interactive mode. Amazon ECS only supports initiating interactive sessions, so you must specify <code>true</code> for this value.</p>
+    #[serde(rename = "interactive")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interactive: Option<bool>,
+    /// <p>The details of the SSM session that was created for this instance of execute-command.</p>
+    #[serde(rename = "session")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub session: Option<Session>,
+    /// <p>The Amazon Resource Name (ARN) of the task.</p>
+    #[serde(rename = "taskArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_arn: Option<String>,
 }
 
 /// <p>The authorization configuration details for Amazon FSx for Windows File Server file system. See <a href="https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_FSxWindowsFileServerVolumeConfiguration.html">FSxWindowsFileServerVolumeConfiguration</a> in the <i>Amazon Elastic Container Service API Reference</i>.</p> <p>For more information and the input format, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/wfsx-volumes.html">Amazon FSx for Windows File Server Volumes</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
@@ -1515,7 +1647,7 @@ pub struct Failure {
 /// <p>The FireLens configuration for the container. This is used to specify and configure a log router for container logs. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_firelens.html">Custom Log Routing</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FirelensConfiguration {
-    /// <p>The options to use when configuring the log router. This field is optional and can be used to specify a custom configuration file or to add additional metadata, such as the task, task definition, cluster, and container instance details to the log event. If specified, the syntax to use is <code>"options":{"enable-ecs-log-metadata":"true|false","config-file-type:"s3|file","config-file-value":"arn:aws:s3:::mybucket/fluent.conf|filepath"}</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_firelens.html#firelens-taskdef">Creating a Task Definition that Uses a FireLens Configuration</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
+    /// <p><p>The options to use when configuring the log router. This field is optional and can be used to specify a custom configuration file or to add additional metadata, such as the task, task definition, cluster, and container instance details to the log event. If specified, the syntax to use is <code>&quot;options&quot;:{&quot;enable-ecs-log-metadata&quot;:&quot;true|false&quot;,&quot;config-file-type:&quot;s3|file&quot;,&quot;config-file-value&quot;:&quot;arn:aws:s3:::mybucket/fluent.conf|filepath&quot;}</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_firelens.html#firelens-taskdef">Creating a Task Definition that Uses a FireLens Configuration</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <note> <p>Tasks hosted on AWS Fargate only support the <code>file</code> configuration file type.</p> </note></p>
     #[serde(rename = "options")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub options: Option<::std::collections::HashMap<String, String>>,
@@ -1670,7 +1802,7 @@ pub struct ListAccountSettingsRequest {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The ARN of the principal, which can be an IAM user, IAM role, or the root user. If this field is omitted, the account settings are listed only for the authenticated user.</p>
+    /// <p><p>The ARN of the principal, which can be an IAM user, IAM role, or the root user. If this field is omitted, the account settings are listed only for the authenticated user.</p> <note> <p>Federated users assume the account setting of the root user and can&#39;t have explicit account settings set for them.</p> </note></p>
     #[serde(rename = "principalArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub principal_arn: Option<String>,
@@ -1801,11 +1933,11 @@ pub struct ListContainerInstancesResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListServicesRequest {
-    /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the services to list. If you do not specify a cluster, the default cluster is assumed.</p>
+    /// <p>The short name or full Amazon Resource Name (ARN) of the cluster to use when filtering the <code>ListServices</code> results. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "cluster")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster: Option<String>,
-    /// <p>The launch type for the services to list.</p>
+    /// <p>The launch type to use when filtering the <code>ListServices</code> results.</p>
     #[serde(rename = "launchType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub launch_type: Option<String>,
@@ -1817,7 +1949,7 @@ pub struct ListServicesRequest {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The scheduling strategy for services to list.</p>
+    /// <p>The scheduling strategy to use when filtering the <code>ListServices</code> results.</p>
     #[serde(rename = "schedulingStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scheduling_strategy: Option<String>,
@@ -1928,23 +2060,23 @@ pub struct ListTaskDefinitionsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTasksRequest {
-    /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the tasks to list. If you do not specify a cluster, the default cluster is assumed.</p>
+    /// <p>The short name or full Amazon Resource Name (ARN) of the cluster to use when filtering the <code>ListTasks</code> results. If you do not specify a cluster, the default cluster is assumed.</p>
     #[serde(rename = "cluster")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster: Option<String>,
-    /// <p>The container instance ID or full ARN of the container instance with which to filter the <code>ListTasks</code> results. Specifying a <code>containerInstance</code> limits the results to tasks that belong to that container instance.</p>
+    /// <p>The container instance ID or full ARN of the container instance to use when filtering the <code>ListTasks</code> results. Specifying a <code>containerInstance</code> limits the results to tasks that belong to that container instance.</p>
     #[serde(rename = "containerInstance")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub container_instance: Option<String>,
-    /// <p><p>The task desired status with which to filter the <code>ListTasks</code> results. Specifying a <code>desiredStatus</code> of <code>STOPPED</code> limits the results to tasks that Amazon ECS has set the desired status to <code>STOPPED</code>. This can be useful for debugging tasks that are not starting properly or have died or finished. The default status filter is <code>RUNNING</code>, which shows tasks that Amazon ECS has set the desired status to <code>RUNNING</code>.</p> <note> <p>Although you can filter results based on a desired status of <code>PENDING</code>, this does not return any results. Amazon ECS never sets the desired status of a task to that value (only a task&#39;s <code>lastStatus</code> may have a value of <code>PENDING</code>).</p> </note></p>
+    /// <p><p>The task desired status to use when filtering the <code>ListTasks</code> results. Specifying a <code>desiredStatus</code> of <code>STOPPED</code> limits the results to tasks that Amazon ECS has set the desired status to <code>STOPPED</code>. This can be useful for debugging tasks that are not starting properly or have died or finished. The default status filter is <code>RUNNING</code>, which shows tasks that Amazon ECS has set the desired status to <code>RUNNING</code>.</p> <note> <p>Although you can filter results based on a desired status of <code>PENDING</code>, this does not return any results. Amazon ECS never sets the desired status of a task to that value (only a task&#39;s <code>lastStatus</code> may have a value of <code>PENDING</code>).</p> </note></p>
     #[serde(rename = "desiredStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub desired_status: Option<String>,
-    /// <p>The name of the family with which to filter the <code>ListTasks</code> results. Specifying a <code>family</code> limits the results to tasks that belong to that family.</p>
+    /// <p>The name of the task definition family to use when filtering the <code>ListTasks</code> results. Specifying a <code>family</code> limits the results to tasks that belong to that family.</p>
     #[serde(rename = "family")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub family: Option<String>,
-    /// <p>The launch type for services to list.</p>
+    /// <p>The launch type to use when filtering the <code>ListTasks</code> results.</p>
     #[serde(rename = "launchType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub launch_type: Option<String>,
@@ -1956,7 +2088,7 @@ pub struct ListTasksRequest {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The name of the service with which to filter the <code>ListTasks</code> results. Specifying a <code>serviceName</code> limits the results to tasks that belong to that service.</p>
+    /// <p>The name of the service to use when filtering the <code>ListTasks</code> results. Specifying a <code>serviceName</code> limits the results to tasks that belong to that service.</p>
     #[serde(rename = "serviceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_name: Option<String>,
@@ -2014,6 +2146,47 @@ pub struct LogConfiguration {
     #[serde(rename = "secretOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secret_options: Option<Vec<Secret>>,
+}
+
+/// <p>Details about the managed agent status for the container.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ManagedAgent {
+    /// <p>The Unix timestamp for when the managed agent was last started.</p>
+    #[serde(rename = "lastStartedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_started_at: Option<f64>,
+    /// <p>The last known status of the managed agent.</p>
+    #[serde(rename = "lastStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_status: Option<String>,
+    /// <p>The name of the managed agent. When the execute command feature is enabled, the managed agent name is <code>ExecuteCommandAgent</code>.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The reason for why the managed agent is in the state it is in.</p>
+    #[serde(rename = "reason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reason: Option<String>,
+}
+
+/// <p>An object representing a change in state for a managed agent.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ManagedAgentStateChange {
+    /// <p>The name of the container associated with the managed agent.</p>
+    #[serde(rename = "containerName")]
+    pub container_name: String,
+    /// <p>The name of the managed agent.</p>
+    #[serde(rename = "managedAgentName")]
+    pub managed_agent_name: String,
+    /// <p>The reason for the status of the managed agent.</p>
+    #[serde(rename = "reason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reason: Option<String>,
+    /// <p>The status of the managed agent.</p>
+    #[serde(rename = "status")]
+    pub status: String,
 }
 
 /// <p>The managed scaling settings for the Auto Scaling group capacity provider.</p> <p>When managed scaling is enabled, Amazon ECS manages the scale-in and scale-out actions of the Auto Scaling group. Amazon ECS manages a target tracking scaling policy using an Amazon ECS-managed CloudWatch metric with the specified <code>targetCapacity</code> value as the target value for the metric. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/asg-capacity-providers.html#asg-capacity-providers-managed-scaling">Using Managed Scaling</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>If managed scaling is disabled, the user must manage the scaling of the Auto Scaling group.</p>
@@ -2144,7 +2317,7 @@ pub struct PlatformDevice {
     pub type_: String,
 }
 
-/// <p>Port mappings allow containers to access ports on the host container instance to send or receive traffic. Port mappings are specified as part of the container definition.</p> <p>If you are using containers in a task with the <code>awsvpc</code> or <code>host</code> network mode, exposed ports should be specified using <code>containerPort</code>. The <code>hostPort</code> can be left blank or it must be the same value as the <code>containerPort</code>.</p> <p>After a task reaches the <code>RUNNING</code> status, manual and automatic host and container port assignments are visible in the <code>networkBindings</code> section of <a>DescribeTasks</a> API responses.</p>
+/// <p>Port mappings allow containers to access ports on the host container instance to send or receive traffic. Port mappings are specified as part of the container definition.</p> <p>If you are using containers in a task with the <code>awsvpc</code> or <code>host</code> network mode, exposed ports should be specified using <code>containerPort</code>. The <code>hostPort</code> can be left blank or it must be the same value as the <code>containerPort</code>.</p> <note> <p>You cannot expose the same container port for multiple protocols. An error will be returned if this is attempted</p> </note> <p>After a task reaches the <code>RUNNING</code> status, manual and automatic host and container port assignments are visible in the <code>networkBindings</code> section of <a>DescribeTasks</a> API responses.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PortMapping {
     /// <p>The port number on the container that is bound to the user-specified or automatically assigned host port.</p> <p>If you are using containers in a task with the <code>awsvpc</code> or <code>host</code> network mode, exposed ports should be specified using <code>containerPort</code>.</p> <p>If you are using containers in a task with the <code>bridge</code> network mode and you specify a container port and not a host port, your container automatically receives a host port in the ephemeral port range. For more information, see <code>hostPort</code>. Port mappings that are automatically assigned in this way do not count toward the 100 reserved ports limit of a container instance.</p>
@@ -2191,6 +2364,7 @@ pub struct PutAccountSettingDefaultRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAccountSettingDefaultResponse {
+    /// <p>The current setting for a resource.</p>
     #[serde(rename = "setting")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub setting: Option<Setting>,
@@ -2202,7 +2376,7 @@ pub struct PutAccountSettingRequest {
     /// <p>The Amazon ECS resource name for which to modify the account setting. If <code>serviceLongArnFormat</code> is specified, the ARN for your Amazon ECS services is affected. If <code>taskLongArnFormat</code> is specified, the ARN and resource ID for your Amazon ECS tasks is affected. If <code>containerInstanceLongArnFormat</code> is specified, the ARN and resource ID for your Amazon ECS container instances is affected. If <code>awsvpcTrunking</code> is specified, the elastic network interface (ENI) limit for your Amazon ECS container instances is affected. If <code>containerInsights</code> is specified, the default setting for CloudWatch Container Insights for your clusters is affected.</p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p>The ARN of the principal, which can be an IAM user, IAM role, or the root user. If you specify the root user, it modifies the account setting for all IAM users, IAM roles, and the root user of the account unless an IAM user or role explicitly overrides these settings. If this field is omitted, the setting is changed only for the authenticated user.</p>
+    /// <p><p>The ARN of the principal, which can be an IAM user, IAM role, or the root user. If you specify the root user, it modifies the account setting for all IAM users, IAM roles, and the root user of the account unless an IAM user or role explicitly overrides these settings. If this field is omitted, the setting is changed only for the authenticated user.</p> <note> <p>Federated users assume the account setting of the root user and can&#39;t have explicit account settings set for them.</p> </note></p>
     #[serde(rename = "principalArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub principal_arn: Option<String>,
@@ -2258,6 +2432,7 @@ pub struct PutClusterCapacityProvidersRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutClusterCapacityProvidersResponse {
+    /// <p>Details about the cluster.</p>
     #[serde(rename = "cluster")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster: Option<Cluster>,
@@ -2323,18 +2498,22 @@ pub struct RegisterTaskDefinitionRequest {
     #[serde(rename = "cpu")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cpu: Option<String>,
+    /// <p><p>The amount of ephemeral storage to allocate for the task. This parameter is used to expand the total amount of ephemeral storage available, beyond the default amount, for tasks hosted on AWS Fargate. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/userguide/using_data_volumes.html">Fargate task storage</a> in the <i>Amazon ECS User Guide for AWS Fargate</i>.</p> <note> <p>This parameter is only supported for tasks hosted on AWS Fargate using platform version <code>1.4.0</code> or later.</p> </note></p>
+    #[serde(rename = "ephemeralStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ephemeral_storage: Option<EphemeralStorage>,
     /// <p>The Amazon Resource Name (ARN) of the task execution role that grants the Amazon ECS container agent permission to make AWS API calls on your behalf. The task execution IAM role is required depending on the requirements of your task. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_execution_IAM_role.html">Amazon ECS task execution IAM role</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "executionRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_role_arn: Option<String>,
-    /// <p>You must specify a <code>family</code> for a task definition, which allows you to track multiple versions of the same task definition. The <code>family</code> is used as a name for your task definition. Up to 255 letters (uppercase and lowercase), numbers, and hyphens are allowed.</p>
+    /// <p>You must specify a <code>family</code> for a task definition, which allows you to track multiple versions of the same task definition. The <code>family</code> is used as a name for your task definition. Up to 255 letters (uppercase and lowercase), numbers, underscores, and hyphens are allowed.</p>
     #[serde(rename = "family")]
     pub family: String,
     /// <p>The Elastic Inference accelerators to use for the containers in the task.</p>
     #[serde(rename = "inferenceAccelerators")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inference_accelerators: Option<Vec<InferenceAccelerator>>,
-    /// <p><p>The IPC resource namespace to use for the containers in the task. The valid values are <code>host</code>, <code>task</code>, or <code>none</code>. If <code>host</code> is specified, then all containers within the tasks that specified the <code>host</code> IPC mode on the same container instance share the same IPC resources with the host Amazon EC2 instance. If <code>task</code> is specified, all containers within the specified task share the same IPC resources. If <code>none</code> is specified, then IPC resources within the containers of a task are private and not shared with other containers in a task or on the container instance. If no value is specified, then the IPC resource namespace sharing depends on the Docker daemon setting on the container instance. For more information, see <a href="https://docs.docker.com/engine/reference/run/#ipc-settings---ipc">IPC settings</a> in the <i>Docker run reference</i>.</p> <p>If the <code>host</code> IPC mode is used, be aware that there is a heightened risk of undesired IPC namespace expose. For more information, see <a href="https://docs.docker.com/engine/security/security/">Docker security</a>.</p> <p>If you are setting namespaced kernel parameters using <code>systemControls</code> for the containers in the task, the following will apply to your IPC resource namespace. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html">System Controls</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <ul> <li> <p>For tasks that use the <code>host</code> IPC mode, IPC namespace related <code>systemControls</code> are not supported.</p> </li> <li> <p>For tasks that use the <code>task</code> IPC mode, IPC namespace related <code>systemControls</code> will apply to all containers within a task.</p> </li> </ul> <note> <p>This parameter is not supported for Windows containers or tasks using the Fargate launch type.</p> </note></p>
+    /// <p><p>The IPC resource namespace to use for the containers in the task. The valid values are <code>host</code>, <code>task</code>, or <code>none</code>. If <code>host</code> is specified, then all containers within the tasks that specified the <code>host</code> IPC mode on the same container instance share the same IPC resources with the host Amazon EC2 instance. If <code>task</code> is specified, all containers within the specified task share the same IPC resources. If <code>none</code> is specified, then IPC resources within the containers of a task are private and not shared with other containers in a task or on the container instance. If no value is specified, then the IPC resource namespace sharing depends on the Docker daemon setting on the container instance. For more information, see <a href="https://docs.docker.com/engine/reference/run/#ipc-settings---ipc">IPC settings</a> in the <i>Docker run reference</i>.</p> <p>If the <code>host</code> IPC mode is used, be aware that there is a heightened risk of undesired IPC namespace expose. For more information, see <a href="https://docs.docker.com/engine/security/security/">Docker security</a>.</p> <p>If you are setting namespaced kernel parameters using <code>systemControls</code> for the containers in the task, the following will apply to your IPC resource namespace. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html">System Controls</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <ul> <li> <p>For tasks that use the <code>host</code> IPC mode, IPC namespace related <code>systemControls</code> are not supported.</p> </li> <li> <p>For tasks that use the <code>task</code> IPC mode, IPC namespace related <code>systemControls</code> will apply to all containers within a task.</p> </li> </ul> <note> <p>This parameter is not supported for Windows containers or tasks run on AWS Fargate.</p> </note></p>
     #[serde(rename = "ipcMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ipc_mode: Option<String>,
@@ -2346,7 +2525,7 @@ pub struct RegisterTaskDefinitionRequest {
     #[serde(rename = "networkMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub network_mode: Option<String>,
-    /// <p><p>The process namespace to use for the containers in the task. The valid values are <code>host</code> or <code>task</code>. If <code>host</code> is specified, then all containers within the tasks that specified the <code>host</code> PID mode on the same container instance share the same process namespace with the host Amazon EC2 instance. If <code>task</code> is specified, all containers within the specified task share the same process namespace. If no value is specified, the default is a private namespace. For more information, see <a href="https://docs.docker.com/engine/reference/run/#pid-settings---pid">PID settings</a> in the <i>Docker run reference</i>.</p> <p>If the <code>host</code> PID mode is used, be aware that there is a heightened risk of undesired process namespace expose. For more information, see <a href="https://docs.docker.com/engine/security/security/">Docker security</a>.</p> <note> <p>This parameter is not supported for Windows containers or tasks using the Fargate launch type.</p> </note></p>
+    /// <p><p>The process namespace to use for the containers in the task. The valid values are <code>host</code> or <code>task</code>. If <code>host</code> is specified, then all containers within the tasks that specified the <code>host</code> PID mode on the same container instance share the same process namespace with the host Amazon EC2 instance. If <code>task</code> is specified, all containers within the specified task share the same process namespace. If no value is specified, the default is a private namespace. For more information, see <a href="https://docs.docker.com/engine/reference/run/#pid-settings---pid">PID settings</a> in the <i>Docker run reference</i>.</p> <p>If the <code>host</code> PID mode is used, be aware that there is a heightened risk of undesired process namespace expose. For more information, see <a href="https://docs.docker.com/engine/security/security/">Docker security</a>.</p> <note> <p>This parameter is not supported for Windows containers or tasks run on AWS Fargate.</p> </note></p>
     #[serde(rename = "pidMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pid_mode: Option<String>,
@@ -2354,10 +2533,11 @@ pub struct RegisterTaskDefinitionRequest {
     #[serde(rename = "placementConstraints")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub placement_constraints: Option<Vec<TaskDefinitionPlacementConstraint>>,
+    /// <p>The configuration details for the App Mesh proxy.</p> <p>For tasks hosted on Amazon EC2 instances, the container instances require at least version <code>1.26.0</code> of the container agent and at least version <code>1.26.0-1</code> of the <code>ecs-init</code> package to enable a proxy configuration. If your container instances are launched from the Amazon ECS-optimized AMI version <code>20190301</code> or later, then they contain the required versions of the container agent and <code>ecs-init</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-ami-versions.html">Amazon ECS-optimized AMI versions</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "proxyConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub proxy_configuration: Option<ProxyConfiguration>,
-    /// <p>The task launch type that Amazon ECS should validate the task definition against. This ensures that the task definition parameters are compatible with the specified launch type. If no value is specified, it defaults to <code>EC2</code>.</p>
+    /// <p>The task launch type that Amazon ECS should validate the task definition against. A client exception is returned if the task definition doesn't validate against the compatibilities specified. If no value is specified, the parameter is omitted from the response.</p>
     #[serde(rename = "requiresCompatibilities")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub requires_compatibilities: Option<Vec<String>>,
@@ -2439,7 +2619,7 @@ pub struct ResourceRequirement {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RunTaskRequest {
-    /// <p>The capacity provider strategy to use for the task.</p> <p>A capacity provider strategy consists of one or more capacity providers along with the <code>base</code> and <code>weight</code> to assign to them. A capacity provider must be associated with the cluster to be used in a capacity provider strategy. The <a>PutClusterCapacityProviders</a> API is used to associate a capacity provider with a cluster. Only capacity providers with an <code>ACTIVE</code> or <code>UPDATING</code> status can be used.</p> <p>If a <code>capacityProviderStrategy</code> is specified, the <code>launchType</code> parameter must be omitted. If no <code>capacityProviderStrategy</code> or <code>launchType</code> is specified, the <code>defaultCapacityProviderStrategy</code> for the cluster is used.</p> <p>If specifying a capacity provider that uses an Auto Scaling group, the capacity provider must already be created. New capacity providers can be created with the <a>CreateCapacityProvider</a> API operation.</p> <p>To use a AWS Fargate capacity provider, specify either the <code>FARGATE</code> or <code>FARGATE_SPOT</code> capacity providers. The AWS Fargate capacity providers are available to all accounts and only need to be associated with a cluster to be used.</p> <p>The <a>PutClusterCapacityProviders</a> API operation is used to update the list of available capacity providers for a cluster after the cluster is created.</p>
+    /// <p>The capacity provider strategy to use for the task.</p> <p>If a <code>capacityProviderStrategy</code> is specified, the <code>launchType</code> parameter must be omitted. If no <code>capacityProviderStrategy</code> or <code>launchType</code> is specified, the <code>defaultCapacityProviderStrategy</code> for the cluster is used.</p>
     #[serde(rename = "capacityProviderStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub capacity_provider_strategy: Option<Vec<CapacityProviderStrategyItem>>,
@@ -2455,11 +2635,15 @@ pub struct RunTaskRequest {
     #[serde(rename = "enableECSManagedTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_ecs_managed_tags: Option<bool>,
+    /// <p>Whether or not to enable the execute command functionality for the containers in this task. If <code>true</code>, this enables execute command functionality on all containers in the task.</p>
+    #[serde(rename = "enableExecuteCommand")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_execute_command: Option<bool>,
     /// <p>The name of the task group to associate with the task. The default value is the family name of the task definition (for example, family:my-family-name).</p>
     #[serde(rename = "group")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group: Option<String>,
-    /// <p>The launch type on which to run your task. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS Launch Types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>If a <code>launchType</code> is specified, the <code>capacityProviderStrategy</code> parameter must be omitted.</p>
+    /// <p>The infrastructure on which to run your standalone task. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS launch types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>The <code>FARGATE</code> launch type runs your tasks on AWS Fargate On-Demand infrastructure.</p> <note> <p>Fargate Spot infrastructure is available for use but a capacity provider strategy must be used. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/userguide/fargate-capacity-providers.html">AWS Fargate capacity providers</a> in the <i>Amazon ECS User Guide for AWS Fargate</i>.</p> </note> <p>The <code>EC2</code> launch type runs your tasks on Amazon EC2 instances registered to your cluster.</p> <p>The <code>EXTERNAL</code> launch type runs your tasks on your on-premise server or virtual machine (VM) capacity registered to your cluster.</p> <p>A task can use either a launch type or a capacity provider strategy. If a <code>launchType</code> is specified, the <code>capacityProviderStrategy</code> parameter must be omitted.</p>
     #[serde(rename = "launchType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub launch_type: Option<String>,
@@ -2581,6 +2765,10 @@ pub struct Service {
     #[serde(rename = "enableECSManagedTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_ecs_managed_tags: Option<bool>,
+    /// <p>Whether or not the execute command functionality is enabled for the service. If <code>true</code>, the execute command functionality is enabled for all containers in tasks as part of the service.</p>
+    #[serde(rename = "enableExecuteCommand")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_execute_command: Option<bool>,
     /// <p>The event stream for your service. A maximum of 100 of the latest events are displayed.</p>
     #[serde(rename = "events")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2589,7 +2777,7 @@ pub struct Service {
     #[serde(rename = "healthCheckGracePeriodSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub health_check_grace_period_seconds: Option<i64>,
-    /// <p>The launch type on which your service is running. If no value is specified, it will default to <code>EC2</code>. Valid values include <code>EC2</code> and <code>FARGATE</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS Launch Types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
+    /// <p>The infrastructure on which your service is running. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS launch types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "launchType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub launch_type: Option<String>,
@@ -2637,7 +2825,7 @@ pub struct Service {
     #[serde(rename = "serviceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_arn: Option<String>,
-    /// <p>The name of your service. Up to 255 letters (uppercase and lowercase), numbers, and hyphens are allowed. Service names must be unique within a cluster, but you can have similarly named services in multiple clusters within a Region or across multiple Regions.</p>
+    /// <p>The name of your service. Up to 255 letters (uppercase and lowercase), numbers, underscores, and hyphens are allowed. Service names must be unique within a cluster, but you can have similarly named services in multiple clusters within a Region or across multiple Regions.</p>
     #[serde(rename = "serviceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_name: Option<String>,
@@ -2702,6 +2890,24 @@ pub struct ServiceRegistry {
     pub registry_arn: Option<String>,
 }
 
+/// <p>The details of the execute command session.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Session {
+    /// <p>The ID of the execute command session.</p>
+    #[serde(rename = "sessionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub session_id: Option<String>,
+    /// <p>A URL back to managed agent on the container that the SSM Session Manager client uses to send commands and receive output from the container.</p>
+    #[serde(rename = "streamUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_url: Option<String>,
+    /// <p>An encrypted token value containing session and caller information. Used to authenticate the connection to the container.</p>
+    #[serde(rename = "tokenValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub token_value: Option<String>,
+}
+
 /// <p>The current account setting for a resource.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2734,6 +2940,10 @@ pub struct StartTaskRequest {
     #[serde(rename = "enableECSManagedTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_ecs_managed_tags: Option<bool>,
+    /// <p>Whether or not the execute command functionality is enabled for the task. If <code>true</code>, this enables execute command functionality on all containers in the task.</p>
+    #[serde(rename = "enableExecuteCommand")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_execute_command: Option<bool>,
     /// <p>The name of the task group to associate with the task. The default value is the family name of the task definition (for example, family:my-family-name).</p>
     #[serde(rename = "group")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2891,6 +3101,10 @@ pub struct SubmitTaskStateChangeRequest {
     #[serde(rename = "executionStoppedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_stopped_at: Option<f64>,
+    /// <p>The details for the managed agent associated with the task.</p>
+    #[serde(rename = "managedAgents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub managed_agents: Option<Vec<ManagedAgentStateChange>>,
     /// <p>The Unix timestamp for when the container image pull began.</p>
     #[serde(rename = "pullStartedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3015,6 +3229,14 @@ pub struct Task {
     #[serde(rename = "desiredStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub desired_status: Option<String>,
+    /// <p>Whether or not execute command functionality is enabled for this task. If <code>true</code>, this enables execute command functionality on all containers in the task.</p>
+    #[serde(rename = "enableExecuteCommand")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_execute_command: Option<bool>,
+    /// <p>The ephemeral storage settings for the task.</p>
+    #[serde(rename = "ephemeralStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ephemeral_storage: Option<EphemeralStorage>,
     /// <p>The Unix timestamp for when the task execution stopped.</p>
     #[serde(rename = "executionStoppedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3035,7 +3257,7 @@ pub struct Task {
     #[serde(rename = "lastStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_status: Option<String>,
-    /// <p>The launch type on which your task is running. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS Launch Types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
+    /// <p>The infrastructure on which your task is running. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS launch types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "launchType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub launch_type: Option<String>,
@@ -3105,7 +3327,7 @@ pub struct Task {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TaskDefinition {
-    /// <p>The launch type to use with your task. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS Launch Types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
+    /// <p>The task launch types the task definition validated against during task definition registration. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS launch types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "compatibilities")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compatibilities: Option<Vec<String>>,
@@ -3117,6 +3339,14 @@ pub struct TaskDefinition {
     #[serde(rename = "cpu")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cpu: Option<String>,
+    /// <p>The Unix timestamp for when the task definition was deregistered.</p>
+    #[serde(rename = "deregisteredAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deregistered_at: Option<f64>,
+    /// <p>The ephemeral storage settings to use for tasks run with the task definition.</p>
+    #[serde(rename = "ephemeralStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ephemeral_storage: Option<EphemeralStorage>,
     /// <p>The Amazon Resource Name (ARN) of the task execution role that grants the Amazon ECS container agent permission to make AWS API calls on your behalf. The task execution IAM role is required depending on the requirements of your task. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_execution_IAM_role.html">Amazon ECS task execution IAM role</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "executionRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3129,11 +3359,11 @@ pub struct TaskDefinition {
     #[serde(rename = "inferenceAccelerators")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inference_accelerators: Option<Vec<InferenceAccelerator>>,
-    /// <p><p>The IPC resource namespace to use for the containers in the task. The valid values are <code>host</code>, <code>task</code>, or <code>none</code>. If <code>host</code> is specified, then all containers within the tasks that specified the <code>host</code> IPC mode on the same container instance share the same IPC resources with the host Amazon EC2 instance. If <code>task</code> is specified, all containers within the specified task share the same IPC resources. If <code>none</code> is specified, then IPC resources within the containers of a task are private and not shared with other containers in a task or on the container instance. If no value is specified, then the IPC resource namespace sharing depends on the Docker daemon setting on the container instance. For more information, see <a href="https://docs.docker.com/engine/reference/run/#ipc-settings---ipc">IPC settings</a> in the <i>Docker run reference</i>.</p> <p>If the <code>host</code> IPC mode is used, be aware that there is a heightened risk of undesired IPC namespace expose. For more information, see <a href="https://docs.docker.com/engine/security/security/">Docker security</a>.</p> <p>If you are setting namespaced kernel parameters using <code>systemControls</code> for the containers in the task, the following will apply to your IPC resource namespace. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html">System Controls</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <ul> <li> <p>For tasks that use the <code>host</code> IPC mode, IPC namespace related <code>systemControls</code> are not supported.</p> </li> <li> <p>For tasks that use the <code>task</code> IPC mode, IPC namespace related <code>systemControls</code> will apply to all containers within a task.</p> </li> </ul> <note> <p>This parameter is not supported for Windows containers or tasks using the Fargate launch type.</p> </note></p>
+    /// <p><p>The IPC resource namespace to use for the containers in the task. The valid values are <code>host</code>, <code>task</code>, or <code>none</code>. If <code>host</code> is specified, then all containers within the tasks that specified the <code>host</code> IPC mode on the same container instance share the same IPC resources with the host Amazon EC2 instance. If <code>task</code> is specified, all containers within the specified task share the same IPC resources. If <code>none</code> is specified, then IPC resources within the containers of a task are private and not shared with other containers in a task or on the container instance. If no value is specified, then the IPC resource namespace sharing depends on the Docker daemon setting on the container instance. For more information, see <a href="https://docs.docker.com/engine/reference/run/#ipc-settings---ipc">IPC settings</a> in the <i>Docker run reference</i>.</p> <p>If the <code>host</code> IPC mode is used, be aware that there is a heightened risk of undesired IPC namespace expose. For more information, see <a href="https://docs.docker.com/engine/security/security/">Docker security</a>.</p> <p>If you are setting namespaced kernel parameters using <code>systemControls</code> for the containers in the task, the following will apply to your IPC resource namespace. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definition_parameters.html">System Controls</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <ul> <li> <p>For tasks that use the <code>host</code> IPC mode, IPC namespace related <code>systemControls</code> are not supported.</p> </li> <li> <p>For tasks that use the <code>task</code> IPC mode, IPC namespace related <code>systemControls</code> will apply to all containers within a task.</p> </li> </ul> <note> <p>This parameter is not supported for Windows containers or tasks run on AWS Fargate.</p> </note></p>
     #[serde(rename = "ipcMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ipc_mode: Option<String>,
-    /// <p><p>The amount (in MiB) of memory used by the task.</p> <p>If using the EC2 launch type, you must specify either a task-level memory value or a container-level memory value. This field is optional and any value can be used. If a task-level memory value is specified then the container-level memory value is optional. For more information regarding container-level memory and memory reservation, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ContainerDefinition.html">ContainerDefinition</a>.</p> <p>If using the Fargate launch type, this field is required and you must use one of the following values, which determines your range of valid values for the <code>cpu</code> parameter:</p> <ul> <li> <p>512 (0.5 GB), 1024 (1 GB), 2048 (2 GB) - Available <code>cpu</code> values: 256 (.25 vCPU)</p> </li> <li> <p>1024 (1 GB), 2048 (2 GB), 3072 (3 GB), 4096 (4 GB) - Available <code>cpu</code> values: 512 (.5 vCPU)</p> </li> <li> <p>2048 (2 GB), 3072 (3 GB), 4096 (4 GB), 5120 (5 GB), 6144 (6 GB), 7168 (7 GB), 8192 (8 GB) - Available <code>cpu</code> values: 1024 (1 vCPU)</p> </li> <li> <p>Between 4096 (4 GB) and 16384 (16 GB) in increments of 1024 (1 GB) - Available <code>cpu</code> values: 2048 (2 vCPU)</p> </li> <li> <p>Between 8192 (8 GB) and 30720 (30 GB) in increments of 1024 (1 GB) - Available <code>cpu</code> values: 4096 (4 vCPU)</p> </li> </ul></p>
+    /// <p><p>The amount (in MiB) of memory used by the task.</p> <p>If your tasks will be run on Amazon EC2 instances, you must specify either a task-level memory value or a container-level memory value. This field is optional and any value can be used. If a task-level memory value is specified then the container-level memory value is optional. For more information regarding container-level memory and memory reservation, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_ContainerDefinition.html">ContainerDefinition</a>.</p> <p>If your tasks will be run on AWS Fargate, this field is required and you must use one of the following values, which determines your range of valid values for the <code>cpu</code> parameter:</p> <ul> <li> <p>512 (0.5 GB), 1024 (1 GB), 2048 (2 GB) - Available <code>cpu</code> values: 256 (.25 vCPU)</p> </li> <li> <p>1024 (1 GB), 2048 (2 GB), 3072 (3 GB), 4096 (4 GB) - Available <code>cpu</code> values: 512 (.5 vCPU)</p> </li> <li> <p>2048 (2 GB), 3072 (3 GB), 4096 (4 GB), 5120 (5 GB), 6144 (6 GB), 7168 (7 GB), 8192 (8 GB) - Available <code>cpu</code> values: 1024 (1 vCPU)</p> </li> <li> <p>Between 4096 (4 GB) and 16384 (16 GB) in increments of 1024 (1 GB) - Available <code>cpu</code> values: 2048 (2 vCPU)</p> </li> <li> <p>Between 8192 (8 GB) and 30720 (30 GB) in increments of 1024 (1 GB) - Available <code>cpu</code> values: 4096 (4 vCPU)</p> </li> </ul></p>
     #[serde(rename = "memory")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub memory: Option<String>,
@@ -3141,11 +3371,11 @@ pub struct TaskDefinition {
     #[serde(rename = "networkMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub network_mode: Option<String>,
-    /// <p><p>The process namespace to use for the containers in the task. The valid values are <code>host</code> or <code>task</code>. If <code>host</code> is specified, then all containers within the tasks that specified the <code>host</code> PID mode on the same container instance share the same process namespace with the host Amazon EC2 instance. If <code>task</code> is specified, all containers within the specified task share the same process namespace. If no value is specified, the default is a private namespace. For more information, see <a href="https://docs.docker.com/engine/reference/run/#pid-settings---pid">PID settings</a> in the <i>Docker run reference</i>.</p> <p>If the <code>host</code> PID mode is used, be aware that there is a heightened risk of undesired process namespace expose. For more information, see <a href="https://docs.docker.com/engine/security/security/">Docker security</a>.</p> <note> <p>This parameter is not supported for Windows containers or tasks using the Fargate launch type.</p> </note></p>
+    /// <p><p>The process namespace to use for the containers in the task. The valid values are <code>host</code> or <code>task</code>. If <code>host</code> is specified, then all containers within the tasks that specified the <code>host</code> PID mode on the same container instance share the same process namespace with the host Amazon EC2 instance. If <code>task</code> is specified, all containers within the specified task share the same process namespace. If no value is specified, the default is a private namespace. For more information, see <a href="https://docs.docker.com/engine/reference/run/#pid-settings---pid">PID settings</a> in the <i>Docker run reference</i>.</p> <p>If the <code>host</code> PID mode is used, be aware that there is a heightened risk of undesired process namespace expose. For more information, see <a href="https://docs.docker.com/engine/security/security/">Docker security</a>.</p> <note> <p>This parameter is not supported for Windows containers or tasks run on AWS Fargate.</p> </note></p>
     #[serde(rename = "pidMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pid_mode: Option<String>,
-    /// <p>An array of placement constraint objects to use for tasks. This field is not valid if you are using the Fargate launch type for your task.</p>
+    /// <p><p>An array of placement constraint objects to use for tasks.</p> <note> <p>This parameter is not supported for tasks run on AWS Fargate.</p> </note></p>
     #[serde(rename = "placementConstraints")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub placement_constraints: Option<Vec<TaskDefinitionPlacementConstraint>>,
@@ -3153,11 +3383,19 @@ pub struct TaskDefinition {
     #[serde(rename = "proxyConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub proxy_configuration: Option<ProxyConfiguration>,
-    /// <p>The container instance attributes required by your task. This field is not valid if you are using the Fargate launch type for your task.</p>
+    /// <p>The Unix timestamp for when the task definition was registered.</p>
+    #[serde(rename = "registeredAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registered_at: Option<f64>,
+    /// <p>The principal that registered the task definition.</p>
+    #[serde(rename = "registeredBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub registered_by: Option<String>,
+    /// <p><p>The container instance attributes required by your task. When an Amazon EC2 instance is registered to your cluster, the Amazon ECS container agent assigns some standard attributes to the instance. You can apply custom attributes, specified as key-value pairs using the Amazon ECS console or the <a>PutAttributes</a> API. These attributes are used when considering task placement for tasks hosted on Amazon EC2 instances. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-placement-constraints.html#attributes">Attributes</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <note> <p>This parameter is not supported for tasks run on AWS Fargate.</p> </note></p>
     #[serde(rename = "requiresAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub requires_attributes: Option<Vec<Attribute>>,
-    /// <p>The launch type the task requires. If no value is specified, it will default to <code>EC2</code>. Valid values include <code>EC2</code> and <code>FARGATE</code>.</p>
+    /// <p>The task launch types the task definition was validated against. To determine which task launch types the task definition is validated for, see the <a>TaskDefinition$compatibilities</a> parameter.</p>
     #[serde(rename = "requiresCompatibilities")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub requires_compatibilities: Option<Vec<String>>,
@@ -3173,20 +3411,20 @@ pub struct TaskDefinition {
     #[serde(rename = "taskDefinitionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_definition_arn: Option<String>,
-    /// <p>The short name or full Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that grants containers in the task permission to call AWS APIs on your behalf. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html">Amazon ECS Task Role</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>IAM roles for tasks on Windows require that the <code>-EnableTaskIAMRole</code> option is set when you launch the Amazon ECS-optimized Windows AMI. Your containers must also run some configuration code in order to take advantage of the feature. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/windows_task_IAM_roles.html">Windows IAM Roles for Tasks</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
+    /// <p>The short name or full Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that grants containers in the task permission to call AWS APIs on your behalf. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-iam-roles.html">Amazon ECS Task Role</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <p>IAM roles for tasks on Windows require that the <code>-EnableTaskIAMRole</code> option is set when you launch the Amazon ECS-optimized Windows AMI. Your containers must also run some configuration code in order to take advantage of the feature. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/windows_task_IAM_roles.html">Windows IAM roles for tasks</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "taskRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_role_arn: Option<String>,
-    /// <p>The list of volume definitions for the task.</p> <p>If your tasks are using the Fargate launch type, the <code>host</code> and <code>sourcePath</code> parameters are not supported.</p> <p>For more information about volume definition parameters and defaults, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_definitions.html">Amazon ECS Task Definitions</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
+    /// <p><p>The list of data volume definitions for the task. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_data_volumes.html">Using data volumes in tasks</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <note> <p>The <code>host</code> and <code>sourcePath</code> parameters are not supported for tasks run on AWS Fargate.</p> </note></p>
     #[serde(rename = "volumes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volumes: Option<Vec<Volume>>,
 }
 
-/// <p><p>An object representing a constraint on task placement in the task definition. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-placement-constraints.html">Task Placement Constraints</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <note> <p>If you are using the Fargate launch type, task placement constraints are not supported.</p> </note></p>
+/// <p><p>An object representing a constraint on task placement in the task definition. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-placement-constraints.html">Task placement constraints</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <note> <p>Task placement constraints are not supported for tasks run on AWS Fargate.</p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TaskDefinitionPlacementConstraint {
-    /// <p>A cluster query language expression to apply to the constraint. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-query-language.html">Cluster Query Language</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
+    /// <p>A cluster query language expression to apply to the constraint. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-query-language.html">Cluster query language</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "expression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expression: Option<String>,
@@ -3207,6 +3445,10 @@ pub struct TaskOverride {
     #[serde(rename = "cpu")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cpu: Option<String>,
+    /// <p><p>The ephemeral storage setting override for the task.</p> <note> <p>This parameter is only supported for tasks hosted on AWS Fargate using platform version <code>1.4.0</code> or later.</p> </note></p>
+    #[serde(rename = "ephemeralStorage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ephemeral_storage: Option<EphemeralStorage>,
     /// <p>The Amazon Resource Name (ARN) of the task execution IAM role override for the task.</p>
     #[serde(rename = "executionRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3253,7 +3495,7 @@ pub struct TaskSet {
     #[serde(rename = "id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The launch type the tasks in the task set are using. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS Launch Types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
+    /// <p>The launch type the tasks in the task set are using. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_types.html">Amazon ECS launch types</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "launchType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub launch_type: Option<String>,
@@ -3269,7 +3511,7 @@ pub struct TaskSet {
     #[serde(rename = "pendingCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pending_count: Option<i64>,
-    /// <p>The platform version on which the tasks in the task set are running. A platform version is only specified for tasks using the Fargate launch type. If one is not specified, the <code>LATEST</code> platform version is used by default. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html">AWS Fargate Platform Versions</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
+    /// <p>The AWS Fargate platform version on which the tasks in the task set are running. A platform version is only specified for tasks run on AWS Fargate. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html">AWS Fargate platform versions</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "platformVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub platform_version: Option<String>,
@@ -3285,7 +3527,7 @@ pub struct TaskSet {
     #[serde(rename = "serviceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_arn: Option<String>,
-    /// <p>The details of the service discovery registries to assign to this task set. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-discovery.html">Service Discovery</a>.</p>
+    /// <p>The details of the service discovery registries to assign to this task set. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/service-discovery.html">Service discovery</a>.</p>
     #[serde(rename = "serviceRegistries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_registries: Option<Vec<ServiceRegistry>>,
@@ -3338,7 +3580,7 @@ pub struct Tmpfs {
     pub size: i64,
 }
 
-/// <p>The <code>ulimit</code> settings to pass to the container.</p>
+/// <p>The <code>ulimit</code> settings to pass to the container.</p> <p>Amazon ECS tasks hosted on Fargate use the default resource limit values set by the operating system with the exception of the <code>nofile</code> resource limit parameter which Fargate overrides. The <code>nofile</code> resource limit sets a restriction on the number of open files that a container can use. The default <code>nofile</code> soft limit is <code>1024</code> and hard limit is <code>4096</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Ulimit {
     /// <p>The hard limit for the ulimit type.</p>
@@ -3370,10 +3612,10 @@ pub struct UntagResourceResponse {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateCapacityProviderRequest {
-    /// <p>The name of the capacity provider to update.</p>
+    /// <p>An object representing the parameters to update for the Auto Scaling group capacity provider.</p>
     #[serde(rename = "autoScalingGroupProvider")]
     pub auto_scaling_group_provider: AutoScalingGroupProviderUpdate,
-    /// <p>An object representing the parameters to update for the Auto Scaling group capacity provider.</p>
+    /// <p>The name of the capacity provider to update.</p>
     #[serde(rename = "name")]
     pub name: String,
 }
@@ -3381,9 +3623,35 @@ pub struct UpdateCapacityProviderRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateCapacityProviderResponse {
+    /// <p>Details about the capacity provider.</p>
     #[serde(rename = "capacityProvider")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub capacity_provider: Option<CapacityProvider>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateClusterRequest {
+    /// <p>The name of the cluster to modify the settings for.</p>
+    #[serde(rename = "cluster")]
+    pub cluster: String,
+    /// <p>The execute command configuration for the cluster.</p>
+    #[serde(rename = "configuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration: Option<ClusterConfiguration>,
+    /// <p>The cluster settings for your cluster.</p>
+    #[serde(rename = "settings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub settings: Option<Vec<ClusterSetting>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateClusterResponse {
+    /// <p>Details about the cluster.</p>
+    #[serde(rename = "cluster")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster: Option<Cluster>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3400,6 +3668,7 @@ pub struct UpdateClusterSettingsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateClusterSettingsResponse {
+    /// <p>Details about the cluster</p>
     #[serde(rename = "cluster")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster: Option<Cluster>,
@@ -3471,6 +3740,7 @@ pub struct UpdateServicePrimaryTaskSetRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateServicePrimaryTaskSetResponse {
+    /// <p>Details about the task set.</p>
     #[serde(rename = "taskSet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_set: Option<TaskSet>,
@@ -3495,6 +3765,10 @@ pub struct UpdateServiceRequest {
     #[serde(rename = "desiredCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub desired_count: Option<i64>,
+    /// <p>If <code>true</code>, this enables execute command functionality on all task containers.</p> <p>If you do not want to override the value that was set when the service was created, you can set this to <code>null</code> when performing this action.</p>
+    #[serde(rename = "enableExecuteCommand")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_execute_command: Option<bool>,
     /// <p>Whether to force a new deployment of the service. Deployments are not forced by default. You can use this option to trigger a new deployment with no service definition changes. For example, you can update a service's tasks to use a newer Docker image with the same image/tag combination (<code>my_image:latest</code>) or to roll Fargate tasks onto a newer platform version.</p>
     #[serde(rename = "forceNewDeployment")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3503,6 +3777,7 @@ pub struct UpdateServiceRequest {
     #[serde(rename = "healthCheckGracePeriodSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub health_check_grace_period_seconds: Option<i64>,
+    /// <p>An object representing the network configuration for the service.</p>
     #[serde(rename = "networkConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub network_configuration: Option<NetworkConfiguration>,
@@ -3542,6 +3817,7 @@ pub struct UpdateTaskSetRequest {
     /// <p>The short name or full Amazon Resource Name (ARN) of the cluster that hosts the service that the task set exists in.</p>
     #[serde(rename = "cluster")]
     pub cluster: String,
+    /// <p>A floating-point percentage of the desired number of tasks to place and keep running in the task set.</p>
     #[serde(rename = "scale")]
     pub scale: Scale,
     /// <p>The short name or full Amazon Resource Name (ARN) of the service that the task set exists in.</p>
@@ -3555,6 +3831,7 @@ pub struct UpdateTaskSetRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateTaskSetResponse {
+    /// <p>Details about the task set.</p>
     #[serde(rename = "taskSet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_set: Option<TaskSet>,
@@ -3580,7 +3857,7 @@ pub struct VersionInfo {
 /// <p>A data volume used in a task definition. For tasks that use the Amazon Elastic File System (Amazon EFS), specify an <code>efsVolumeConfiguration</code>. For Windows tasks that use Amazon FSx for Windows File Server file system, specify a <code>fsxWindowsFileServerVolumeConfiguration</code>. For tasks that use a Docker volume, specify a <code>DockerVolumeConfiguration</code>. For tasks that use a bind mount host volume, specify a <code>host</code> and optional <code>sourcePath</code>. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/using_data_volumes.html">Using Data Volumes in Tasks</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Volume {
-    /// <p>This parameter is specified when you are using Docker volumes. Docker volumes are only supported when you are using the EC2 launch type. Windows containers only support the use of the <code>local</code> driver. To use bind mounts, specify the <code>host</code> parameter instead.</p>
+    /// <p><p>This parameter is specified when you are using Docker volumes.</p> <p>Windows containers only support the use of the <code>local</code> driver. To use bind mounts, specify the <code>host</code> parameter instead.</p> <note> <p>Docker volumes are not supported by tasks run on AWS Fargate.</p> </note></p>
     #[serde(rename = "dockerVolumeConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub docker_volume_configuration: Option<DockerVolumeConfiguration>,
@@ -3597,7 +3874,7 @@ pub struct Volume {
     #[serde(rename = "host")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub host: Option<HostVolumeProperties>,
-    /// <p>The name of the volume. Up to 255 letters (uppercase and lowercase), numbers, and hyphens are allowed. This name is referenced in the <code>sourceVolume</code> parameter of container definition <code>mountPoints</code>.</p>
+    /// <p>The name of the volume. Up to 255 letters (uppercase and lowercase), numbers, underscores, and hyphens are allowed. This name is referenced in the <code>sourceVolume</code> parameter of container definition <code>mountPoints</code>.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -4708,6 +4985,66 @@ impl fmt::Display for DiscoverPollEndpointError {
     }
 }
 impl Error for DiscoverPollEndpointError {}
+/// Errors returned by ExecuteCommand
+#[derive(Debug, PartialEq)]
+pub enum ExecuteCommandError {
+    /// <p>You do not have authorization to perform the requested action.</p>
+    AccessDenied(String),
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
+    Client(String),
+    /// <p>The specified cluster could not be found. You can view your available clusters with <a>ListClusters</a>. Amazon ECS clusters are Region-specific.</p>
+    ClusterNotFound(String),
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>These errors are usually caused by a server issue.</p>
+    Server(String),
+    /// <p>The target container is not properly configured with the execute command agent or the container is no longer active or running.</p>
+    TargetNotConnected(String),
+}
+
+impl ExecuteCommandError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ExecuteCommandError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ExecuteCommandError::AccessDenied(err.msg))
+                }
+                "ClientException" => {
+                    return RusotoError::Service(ExecuteCommandError::Client(err.msg))
+                }
+                "ClusterNotFoundException" => {
+                    return RusotoError::Service(ExecuteCommandError::ClusterNotFound(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(ExecuteCommandError::InvalidParameter(err.msg))
+                }
+                "ServerException" => {
+                    return RusotoError::Service(ExecuteCommandError::Server(err.msg))
+                }
+                "TargetNotConnectedException" => {
+                    return RusotoError::Service(ExecuteCommandError::TargetNotConnected(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ExecuteCommandError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ExecuteCommandError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ExecuteCommandError::Client(ref cause) => write!(f, "{}", cause),
+            ExecuteCommandError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            ExecuteCommandError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ExecuteCommandError::Server(ref cause) => write!(f, "{}", cause),
+            ExecuteCommandError::TargetNotConnected(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ExecuteCommandError {}
 /// Errors returned by ListAccountSettings
 #[derive(Debug, PartialEq)]
 pub enum ListAccountSettingsError {
@@ -5882,6 +6219,54 @@ impl fmt::Display for UpdateCapacityProviderError {
     }
 }
 impl Error for UpdateCapacityProviderError {}
+/// Errors returned by UpdateCluster
+#[derive(Debug, PartialEq)]
+pub enum UpdateClusterError {
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an identifier that is not valid.</p>
+    Client(String),
+    /// <p>The specified cluster could not be found. You can view your available clusters with <a>ListClusters</a>. Amazon ECS clusters are Region-specific.</p>
+    ClusterNotFound(String),
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>These errors are usually caused by a server issue.</p>
+    Server(String),
+}
+
+impl UpdateClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateClusterError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ClientException" => {
+                    return RusotoError::Service(UpdateClusterError::Client(err.msg))
+                }
+                "ClusterNotFoundException" => {
+                    return RusotoError::Service(UpdateClusterError::ClusterNotFound(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(UpdateClusterError::InvalidParameter(err.msg))
+                }
+                "ServerException" => {
+                    return RusotoError::Service(UpdateClusterError::Server(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateClusterError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateClusterError::Client(ref cause) => write!(f, "{}", cause),
+            UpdateClusterError::ClusterNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateClusterError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateClusterError::Server(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateClusterError {}
 /// Errors returned by UpdateClusterSettings
 #[derive(Debug, PartialEq)]
 pub enum UpdateClusterSettingsError {
@@ -6413,7 +6798,7 @@ pub trait Ecs {
         input: DescribeClustersRequest,
     ) -> Result<DescribeClustersResponse, RusotoError<DescribeClustersError>>;
 
-    /// <p>Describes Amazon Elastic Container Service container instances. Returns metadata about registered and remaining resources on each container instance requested.</p>
+    /// <p>Describes one or more container instances. Returns metadata about each container instance requested.</p>
     async fn describe_container_instances(
         &self,
         input: DescribeContainerInstancesRequest,
@@ -6449,6 +6834,12 @@ pub trait Ecs {
         input: DiscoverPollEndpointRequest,
     ) -> Result<DiscoverPollEndpointResponse, RusotoError<DiscoverPollEndpointError>>;
 
+    /// <p>Runs a command remotely on a container within a task.</p>
+    async fn execute_command(
+        &self,
+        input: ExecuteCommandRequest,
+    ) -> Result<ExecuteCommandResponse, RusotoError<ExecuteCommandError>>;
+
     /// <p>Lists the account settings for a specified principal.</p>
     async fn list_account_settings(
         &self,
@@ -6473,7 +6864,7 @@ pub trait Ecs {
         input: ListContainerInstancesRequest,
     ) -> Result<ListContainerInstancesResponse, RusotoError<ListContainerInstancesError>>;
 
-    /// <p>Lists the services that are running in a specified cluster.</p>
+    /// <p>Returns a list of services. You can filter the results by cluster, launch type, and scheduling strategy.</p>
     async fn list_services(
         &self,
         input: ListServicesRequest,
@@ -6497,7 +6888,7 @@ pub trait Ecs {
         input: ListTaskDefinitionsRequest,
     ) -> Result<ListTaskDefinitionsResponse, RusotoError<ListTaskDefinitionsError>>;
 
-    /// <p>Returns a list of tasks for a specified cluster. You can filter the results by family name, by a particular container instance, or by the desired status of the task with the <code>family</code>, <code>containerInstance</code>, and <code>desiredStatus</code> parameters.</p> <p>Recently stopped tasks might appear in the returned results. Currently, stopped tasks appear in the returned results for at least one hour. </p>
+    /// <p>Returns a list of tasks. You can filter the results by cluster, task definition family, container instance, launch type, what IAM principal started the task, or by the desired status of the task.</p> <p>Recently stopped tasks might appear in the returned results. Currently, stopped tasks appear in the returned results for at least one hour.</p>
     async fn list_tasks(
         &self,
         input: ListTasksRequest,
@@ -6593,13 +6984,19 @@ pub trait Ecs {
         input: UpdateCapacityProviderRequest,
     ) -> Result<UpdateCapacityProviderResponse, RusotoError<UpdateCapacityProviderError>>;
 
+    /// <p>Updates the cluster.</p>
+    async fn update_cluster(
+        &self,
+        input: UpdateClusterRequest,
+    ) -> Result<UpdateClusterResponse, RusotoError<UpdateClusterError>>;
+
     /// <p>Modifies the settings to use for a cluster.</p>
     async fn update_cluster_settings(
         &self,
         input: UpdateClusterSettingsRequest,
     ) -> Result<UpdateClusterSettingsResponse, RusotoError<UpdateClusterSettingsError>>;
 
-    /// <p>Updates the Amazon ECS container agent on a specified container instance. Updating the Amazon ECS container agent does not interrupt running tasks or services on the container instance. The process for updating the agent differs depending on whether your container instance was launched with the Amazon ECS-optimized AMI or another operating system.</p> <p> <code>UpdateContainerAgent</code> requires the Amazon ECS-optimized AMI or Amazon Linux with the <code>ecs-init</code> service installed and running. For help updating the Amazon ECS container agent on other operating systems, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-update.html#manually_update_agent">Manually Updating the Amazon ECS Container Agent</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
+    /// <p>Updates the Amazon ECS container agent on a specified container instance. Updating the Amazon ECS container agent does not interrupt running tasks or services on the container instance. The process for updating the agent differs depending on whether your container instance was launched with the Amazon ECS-optimized AMI or another operating system.</p> <note> <p>The <code>UpdateContainerAgent</code> API isn't supported for container instances using the Amazon ECS-optimized Amazon Linux 2 (arm64) AMI. To update the container agent, you can update the <code>ecs-init</code> package which will update the agent. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/agent-update-ecs-ami.html">Updating the Amazon ECS container agent</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> </note> <p>The <code>UpdateContainerAgent</code> API requires an Amazon ECS-optimized AMI or Amazon Linux AMI with the <code>ecs-init</code> service installed and running. For help updating the Amazon ECS container agent on other operating systems, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-update.html#manually_update_agent">Manually updating the Amazon ECS container agent</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     async fn update_container_agent(
         &self,
         input: UpdateContainerAgentRequest,
@@ -6974,7 +7371,7 @@ impl Ecs for EcsClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeClustersResponse, _>()
     }
 
-    /// <p>Describes Amazon Elastic Container Service container instances. Returns metadata about registered and remaining resources on each container instance requested.</p>
+    /// <p>Describes one or more container instances. Returns metadata about each container instance requested.</p>
     async fn describe_container_instances(
         &self,
         input: DescribeContainerInstancesRequest,
@@ -7104,6 +7501,27 @@ impl Ecs for EcsClient {
             .deserialize::<DiscoverPollEndpointResponse, _>()
     }
 
+    /// <p>Runs a command remotely on a container within a task.</p>
+    async fn execute_command(
+        &self,
+        input: ExecuteCommandRequest,
+    ) -> Result<ExecuteCommandResponse, RusotoError<ExecuteCommandError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerServiceV20141113.ExecuteCommand",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ExecuteCommandError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ExecuteCommandResponse, _>()
+    }
+
     /// <p>Lists the account settings for a specified principal.</p>
     async fn list_account_settings(
         &self,
@@ -7189,7 +7607,7 @@ impl Ecs for EcsClient {
             .deserialize::<ListContainerInstancesResponse, _>()
     }
 
-    /// <p>Lists the services that are running in a specified cluster.</p>
+    /// <p>Returns a list of services. You can filter the results by cluster, launch type, and scheduling strategy.</p>
     async fn list_services(
         &self,
         input: ListServicesRequest,
@@ -7275,7 +7693,7 @@ impl Ecs for EcsClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListTaskDefinitionsResponse, _>()
     }
 
-    /// <p>Returns a list of tasks for a specified cluster. You can filter the results by family name, by a particular container instance, or by the desired status of the task with the <code>family</code>, <code>containerInstance</code>, and <code>desiredStatus</code> parameters.</p> <p>Recently stopped tasks might appear in the returned results. Currently, stopped tasks appear in the returned results for at least one hour. </p>
+    /// <p>Returns a list of tasks. You can filter the results by cluster, task definition family, container instance, launch type, what IAM principal started the task, or by the desired status of the task.</p> <p>Recently stopped tasks might appear in the returned results. Currently, stopped tasks appear in the returned results for at least one hour.</p>
     async fn list_tasks(
         &self,
         input: ListTasksRequest,
@@ -7620,6 +8038,27 @@ impl Ecs for EcsClient {
             .deserialize::<UpdateCapacityProviderResponse, _>()
     }
 
+    /// <p>Updates the cluster.</p>
+    async fn update_cluster(
+        &self,
+        input: UpdateClusterRequest,
+    ) -> Result<UpdateClusterResponse, RusotoError<UpdateClusterError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerServiceV20141113.UpdateCluster",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateClusterError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateClusterResponse, _>()
+    }
+
     /// <p>Modifies the settings to use for a cluster.</p>
     async fn update_cluster_settings(
         &self,
@@ -7642,7 +8081,7 @@ impl Ecs for EcsClient {
             .deserialize::<UpdateClusterSettingsResponse, _>()
     }
 
-    /// <p>Updates the Amazon ECS container agent on a specified container instance. Updating the Amazon ECS container agent does not interrupt running tasks or services on the container instance. The process for updating the agent differs depending on whether your container instance was launched with the Amazon ECS-optimized AMI or another operating system.</p> <p> <code>UpdateContainerAgent</code> requires the Amazon ECS-optimized AMI or Amazon Linux with the <code>ecs-init</code> service installed and running. For help updating the Amazon ECS container agent on other operating systems, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-update.html#manually_update_agent">Manually Updating the Amazon ECS Container Agent</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
+    /// <p>Updates the Amazon ECS container agent on a specified container instance. Updating the Amazon ECS container agent does not interrupt running tasks or services on the container instance. The process for updating the agent differs depending on whether your container instance was launched with the Amazon ECS-optimized AMI or another operating system.</p> <note> <p>The <code>UpdateContainerAgent</code> API isn't supported for container instances using the Amazon ECS-optimized Amazon Linux 2 (arm64) AMI. To update the container agent, you can update the <code>ecs-init</code> package which will update the agent. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/agent-update-ecs-ami.html">Updating the Amazon ECS container agent</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> </note> <p>The <code>UpdateContainerAgent</code> API requires an Amazon ECS-optimized AMI or Amazon Linux AMI with the <code>ecs-init</code> service installed and running. For help updating the Amazon ECS container agent on other operating systems, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-agent-update.html#manually_update_agent">Manually updating the Amazon ECS container agent</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     async fn update_container_agent(
         &self,
         input: UpdateContainerAgentRequest,

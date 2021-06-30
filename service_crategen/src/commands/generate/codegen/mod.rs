@@ -405,8 +405,16 @@ fn mutate_type_name(service: &Service<'_>, type_name: &str) -> String {
             "CloudSearchUpdateDomainEndpointOptionsError".to_owned()
         }
 
+        // CloudFormation has a BatchDescribeTypeConfigurationsError, avoid collision with our error enum
+        "BatchDescribeTypeConfigurationsError" => {
+            "CloudFormationBatchDescribeTypeConfigurationsError".to_owned()
+        }
+
         // Chime has a CreateAttendeeError, avoid collision with our error enum
         "CreateAttendeeError" => "ChimeCreateAttendeeError".to_owned(),
+
+        // Chime has a BatchCreateChannelMembershipError, avoid collision with our error enum
+        "BatchCreateChannelMembershipError" => "ChimeBatchCreateChannelMembershipError".to_owned(),
 
         // Fraud Detection has naming clashes, avoid collision with an error enum
         "BatchCreateVariableError" => "FraudDetectorBatchCreateVariableError".to_owned(),

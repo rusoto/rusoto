@@ -62,6 +62,9 @@ pub struct ActiveDirectoryBackupAttributes {
     #[serde(rename = "DomainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name: Option<String>,
+    #[serde(rename = "ResourceARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_arn: Option<String>,
 }
 
 /// <p>Describes a specific Amazon FSx administrative action for the current Windows or Lustre file system.</p>
@@ -110,7 +113,7 @@ pub struct Alias {
     #[serde(rename = "Lifecycle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lifecycle: Option<String>,
-    /// <p>The name of the DNS alias. The alias name has to meet the following requirements:</p> <ul> <li> <p>Formatted as a fully-qualified domain name (FQDN), <code>hostname.domain</code>, for example, <code>accounting.example.com</code>.</p> </li> <li> <p>Can contain alphanumeric characters and the hyphen (-).</p> </li> <li> <p>Cannot start or end with a hyphen.</p> </li> <li> <p>Can start with a numeric.</p> </li> </ul> <p>For DNS names, Amazon FSx stores alphabetic characters as lowercase letters (a-z), regardless of how you specify them: as uppercase letters, lowercase letters, or the corresponding letters in escape codes.</p>
+    /// <p>The name of the DNS alias. The alias name has to meet the following requirements:</p> <ul> <li> <p>Formatted as a fully-qualified domain name (FQDN), <code>hostname.domain</code>, for example, <code>accounting.example.com</code>.</p> </li> <li> <p>Can contain alphanumeric characters, the underscore (_), and the hyphen (-).</p> </li> <li> <p>Cannot start or end with a hyphen.</p> </li> <li> <p>Can start with a numeric.</p> </li> </ul> <p>For DNS names, Amazon FSx stores alphabetic characters as lowercase letters (a-z), regardless of how you specify them: as uppercase letters, lowercase letters, or the corresponding letters in escape codes.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -141,7 +144,7 @@ pub struct AssociateFileSystemAliasesResponse {
     pub aliases: Option<Vec<Alias>>,
 }
 
-/// <p><p>A backup of an Amazon FSx file system. For more information see:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/using-backups.html">Working with backups for Windows file systems</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/using-backups-fsx.html">Working with backups for Lustre file systems</a> </p> </li> </ul></p>
+/// <p>A backup of an Amazon FSx file system.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Backup {
@@ -166,9 +169,12 @@ pub struct Backup {
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    /// <p><p>The lifecycle status of the backup.</p> <ul> <li> <p> <code>AVAILABLE</code> - The backup is fully available.</p> </li> <li> <p> <code>PENDING</code> - For user-initiated backups on Lustre file systems only; Amazon FSx has not started creating the backup.</p> </li> <li> <p> <code>CREATING</code> - Amazon FSx is creating the backup.</p> </li> <li> <p> <code>TRANSFERRING</code> - For user-initiated backups on Lustre file systems only; Amazon FSx is transferring the backup to S3.</p> </li> <li> <p> <code>DELETED</code> - Amazon FSx deleted the backup and it is no longer available.</p> </li> <li> <p> <code>FAILED</code> - Amazon FSx could not complete the backup.</p> </li> </ul></p>
+    /// <p><p>The lifecycle status of the backup.</p> <ul> <li> <p> <code>AVAILABLE</code> - The backup is fully available.</p> </li> <li> <p> <code>PENDING</code> - For user-initiated backups on Lustre file systems only; Amazon FSx has not started creating the backup.</p> </li> <li> <p> <code>CREATING</code> - Amazon FSx is creating the backup.</p> </li> <li> <p> <code>TRANSFERRING</code> - For user-initiated backups on Lustre file systems only; Amazon FSx is transferring the backup to S3.</p> </li> <li> <p> <code>COPYING</code> - Amazon FSx is copying the backup.</p> </li> <li> <p> <code>DELETED</code> - Amazon FSx deleted the backup and it is no longer available.</p> </li> <li> <p> <code>FAILED</code> - Amazon FSx could not complete the backup.</p> </li> </ul></p>
     #[serde(rename = "Lifecycle")]
     pub lifecycle: String,
+    #[serde(rename = "OwnerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner_id: Option<String>,
     #[serde(rename = "ProgressPercent")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub progress_percent: Option<i64>,
@@ -176,6 +182,13 @@ pub struct Backup {
     #[serde(rename = "ResourceARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arn: Option<String>,
+    #[serde(rename = "SourceBackupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_backup_id: Option<String>,
+    /// <p>The source Region of the backup. Specifies the Region from where this backup is copied.</p>
+    #[serde(rename = "SourceBackupRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_backup_region: Option<String>,
     /// <p>Tags associated with a particular file system.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -235,6 +248,39 @@ pub struct CompletionReport {
     #[serde(rename = "Scope")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scope: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CopyBackupRequest {
+    #[serde(rename = "ClientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>A boolean flag indicating whether tags from the source backup should be copied to the backup copy. This value defaults to false.</p> <p>If you set <code>CopyTags</code> to true and the source backup has existing tags, you can use the <code>Tags</code> parameter to create new tags, provided that the sum of the source backup tags and the new tags doesn't exceed 50. Both sets of tags are merged. If there are tag conflicts (for example, two tags with the same key but different values), the tags created with the <code>Tags</code> parameter take precedence.</p>
+    #[serde(rename = "CopyTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub copy_tags: Option<bool>,
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
+    /// <p>The ID of the source backup. Specifies the ID of the backup that is being copied.</p>
+    #[serde(rename = "SourceBackupId")]
+    pub source_backup_id: String,
+    /// <p>The source AWS Region of the backup. Specifies the AWS Region from which the backup is being copied. The source and destination Regions must be in the same AWS partition. If you don't specify a Region, it defaults to the Region where the request is sent from (in-Region copy).</p>
+    #[serde(rename = "SourceRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_region: Option<String>,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CopyBackupResponse {
+    #[serde(rename = "Backup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup: Option<Backup>,
 }
 
 /// <p>The request object for the <code>CreateBackup</code> operation.</p>
@@ -306,6 +352,9 @@ pub struct CreateFileSystemFromBackupRequest {
     #[serde(rename = "ClientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
     #[serde(rename = "LustreConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lustre_configuration: Option<CreateFileSystemLustreConfiguration>,
@@ -358,6 +407,10 @@ pub struct CreateFileSystemLustreConfiguration {
     #[serde(rename = "DailyAutomaticBackupStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub daily_automatic_backup_start_time: Option<String>,
+    /// <p>Sets the data compression configuration for the file system. <code>DataCompressionType</code> can have the following values:</p> <ul> <li> <p> <code>NONE</code> - (Default) Data compression is turned off when the file system is created.</p> </li> <li> <p> <code>LZ4</code> - Data compression is turned on with the LZ4 algorithm.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/data-compression.html">Lustre data compression</a>.</p>
+    #[serde(rename = "DataCompressionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_compression_type: Option<String>,
     /// <p> Choose <code>SCRATCH_1</code> and <code>SCRATCH_2</code> deployment types when you need temporary storage and shorter-term processing of data. The <code>SCRATCH_2</code> deployment type provides in-transit encryption of data and higher burst throughput capacity than <code>SCRATCH_1</code>.</p> <p>Choose <code>PERSISTENT_1</code> deployment type for longer-term storage and workloads and encryption of data in transit. To learn more about deployment types, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/lustre-deployment-types.html"> FSx for Lustre Deployment Options</a>.</p> <p>Encryption of data in-transit is automatically enabled when you access a <code>SCRATCH_2</code> or <code>PERSISTENT_1</code> file system from Amazon EC2 instances that <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/data- protection.html">support this feature</a>. (Default = <code>SCRATCH_1</code>) </p> <p>Encryption of data in-transit for <code>SCRATCH_2</code> and <code>PERSISTENT_1</code> deployment types is supported when accessed from supported instance types in supported AWS Regions. To learn more, <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/encryption-in-transit-fsxl.html">Encrypting Data in Transit</a>.</p>
     #[serde(rename = "DeploymentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -416,7 +469,7 @@ pub struct CreateFileSystemRequest {
     #[serde(rename = "StorageType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub storage_type: Option<String>,
-    /// <p>Specifies the IDs of the subnets that the file system will be accessible from. For Windows <code>MULTI_AZ_1</code> file system deployment types, provide exactly two subnet IDs, one for the preferred file server and one for the standby file server. You specify one of these subnets as the preferred subnet using the <code>WindowsConfiguration &gt; PreferredSubnetID</code> property.</p> <p>For Windows <code>SINGLE_AZ_1</code> and <code>SINGLE_AZ_2</code> file system deployment types and Lustre file systems, provide exactly one subnet ID. The file server is launched in that subnet's Availability Zone.</p>
+    /// <p>Specifies the IDs of the subnets that the file system will be accessible from. For Windows <code>MULTI_AZ_1</code> file system deployment types, provide exactly two subnet IDs, one for the preferred file server and one for the standby file server. You specify one of these subnets as the preferred subnet using the <code>WindowsConfiguration &gt; PreferredSubnetID</code> property. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/high-availability-multiAZ.html"> Availability and durability: Single-AZ and Multi-AZ file systems</a>.</p> <p>For Windows <code>SINGLE_AZ_1</code> and <code>SINGLE_AZ_2</code> file system deployment types and Lustre file systems, provide exactly one subnet ID. The file server is launched in that subnet's Availability Zone.</p>
     #[serde(rename = "SubnetIds")]
     pub subnet_ids: Vec<String>,
     /// <p>The tags to apply to the file system being created. The key value of the <code>Name</code> tag appears in the console as the file system name.</p>
@@ -447,10 +500,14 @@ pub struct CreateFileSystemWindowsConfiguration {
     #[serde(rename = "ActiveDirectoryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub active_directory_id: Option<String>,
-    /// <p>An array of one or more DNS alias names that you want to associate with the Amazon FSx file system. Aliases allow you to use existing DNS names to access the data in your Amazon FSx file system. You can associate up to 50 aliases with a file system at any time. You can associate additional DNS aliases after you create the file system using the AssociateFileSystemAliases operation. You can remove DNS aliases from the file system after it is created using the DisassociateFileSystemAliases operation. You only need to specify the alias name in the request payload.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/managing-dns-aliases.html">Working with DNS Aliases</a> and <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/walkthrough05-file-system-custom-CNAME.html">Walkthrough 5: Using DNS aliases to access your file system</a>, including additional steps you must take to be able to access your file system using a DNS alias.</p> <p>An alias name has to meet the following requirements:</p> <ul> <li> <p>Formatted as a fully-qualified domain name (FQDN), <code>hostname.domain</code>, for example, <code>accounting.example.com</code>.</p> </li> <li> <p>Can contain alphanumeric characters and the hyphen (-).</p> </li> <li> <p>Cannot start or end with a hyphen.</p> </li> <li> <p>Can start with a numeric.</p> </li> </ul> <p>For DNS alias names, Amazon FSx stores alphabetic characters as lowercase letters (a-z), regardless of how you specify them: as uppercase letters, lowercase letters, or the corresponding letters in escape codes.</p>
+    /// <p>An array of one or more DNS alias names that you want to associate with the Amazon FSx file system. Aliases allow you to use existing DNS names to access the data in your Amazon FSx file system. You can associate up to 50 aliases with a file system at any time. You can associate additional DNS aliases after you create the file system using the AssociateFileSystemAliases operation. You can remove DNS aliases from the file system after it is created using the DisassociateFileSystemAliases operation. You only need to specify the alias name in the request payload.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/managing-dns-aliases.html">Working with DNS Aliases</a> and <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/walkthrough05-file-system-custom-CNAME.html">Walkthrough 5: Using DNS aliases to access your file system</a>, including additional steps you must take to be able to access your file system using a DNS alias.</p> <p>An alias name has to meet the following requirements:</p> <ul> <li> <p>Formatted as a fully-qualified domain name (FQDN), <code>hostname.domain</code>, for example, <code>accounting.example.com</code>.</p> </li> <li> <p>Can contain alphanumeric characters, the underscore (_), and the hyphen (-).</p> </li> <li> <p>Cannot start or end with a hyphen.</p> </li> <li> <p>Can start with a numeric.</p> </li> </ul> <p>For DNS alias names, Amazon FSx stores alphabetic characters as lowercase letters (a-z), regardless of how you specify them: as uppercase letters, lowercase letters, or the corresponding letters in escape codes.</p>
     #[serde(rename = "Aliases")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aliases: Option<Vec<String>>,
+    /// <p>The configuration that Amazon FSx for Windows File Server uses to audit and log user accesses of files, folders, and file shares on the Amazon FSx for Windows File Server file system.</p>
+    #[serde(rename = "AuditLogConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audit_log_configuration: Option<WindowsAuditLogCreateConfiguration>,
     /// <p>The number of days to retain automatic backups. The default is to retain backups for 7 days. Setting this value to 0 disables the creation of automatic backups. The maximum retention period for backups is 90 days.</p>
     #[serde(rename = "AutomaticBackupRetentionDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -763,7 +820,7 @@ pub struct DescribeBackupsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeBackupsResponse {
-    /// <p>Any array of backups.</p>
+    /// <p>An array of backups.</p>
     #[serde(rename = "Backups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backups: Option<Vec<Backup>>,
@@ -1040,6 +1097,10 @@ pub struct LustreFileSystemConfiguration {
     #[serde(rename = "DailyAutomaticBackupStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub daily_automatic_backup_start_time: Option<String>,
+    /// <p>The data compression configuration for the file system. <code>DataCompressionType</code> can have the following values:</p> <ul> <li> <p> <code>NONE</code> - Data compression is turned off for the file system.</p> </li> <li> <p> <code>LZ4</code> - Data compression is turned on with the LZ4 algorithm.</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/data-compression.html">Lustre data compression</a>.</p>
+    #[serde(rename = "DataCompressionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_compression_type: Option<String>,
     #[serde(rename = "DataRepositoryConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_repository_configuration: Option<DataRepositoryConfiguration>,
@@ -1091,11 +1152,11 @@ pub struct SelfManagedActiveDirectoryAttributes {
     pub user_name: Option<String>,
 }
 
-/// <p>The configuration that Amazon FSx uses to join the Windows File Server instance to your self-managed (including on-premises) Microsoft Active Directory (AD) directory.</p>
+/// <p>The configuration that Amazon FSx uses to join the Windows File Server instance to your self-managed (including on-premises) Microsoft Active Directory (AD) directory. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/self-managed-AD.html"> Using Amazon FSx with your self-managed Microsoft Active Directory</a>.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SelfManagedActiveDirectoryConfiguration {
-    /// <p><p>A list of up to two IP addresses of DNS servers or domain controllers in the self-managed AD directory. The IP addresses need to be either in the same VPC CIDR range as the one in which your Amazon FSx file system is being created, or in the private IP version 4 (IPv4) address ranges, as specified in <a href="http://www.faqs.org/rfcs/rfc1918.html">RFC 1918</a>:</p> <ul> <li> <p>10.0.0.0 - 10.255.255.255 (10/8 prefix)</p> </li> <li> <p>172.16.0.0 - 172.31.255.255 (172.16/12 prefix)</p> </li> <li> <p>192.168.0.0 - 192.168.255.255 (192.168/16 prefix)</p> </li> </ul></p>
+    /// <p>A list of up to two IP addresses of DNS servers or domain controllers in the self-managed AD directory. </p>
     #[serde(rename = "DnsIps")]
     pub dns_ips: Vec<String>,
     /// <p>The fully qualified domain name of the self-managed AD directory, such as <code>corp.example.com</code>.</p>
@@ -1194,6 +1255,10 @@ pub struct UpdateFileSystemLustreConfiguration {
     #[serde(rename = "DailyAutomaticBackupStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub daily_automatic_backup_start_time: Option<String>,
+    /// <p>Sets the data compression configuration for the file system. <code>DataCompressionType</code> can have the following values:</p> <ul> <li> <p> <code>NONE</code> - Data compression is turned off for the file system.</p> </li> <li> <p> <code>LZ4</code> - Data compression is turned on with the LZ4 algorithm.</p> </li> </ul> <p>If you don't use <code>DataCompressionType</code>, the file system retains its current data compression configuration.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/data-compression.html">Lustre data compression</a>.</p>
+    #[serde(rename = "DataCompressionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_compression_type: Option<String>,
     /// <p>(Optional) The preferred start time to perform weekly maintenance, formatted d:HH:MM in the UTC time zone. d is the weekday number, from 1 through 7, beginning with Monday and ending with Sunday.</p>
     #[serde(rename = "WeeklyMaintenanceStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1238,6 +1303,10 @@ pub struct UpdateFileSystemResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFileSystemWindowsConfiguration {
+    /// <p>The configuration that Amazon FSx for Windows File Server uses to audit and log user accesses of files, folders, and file shares on the Amazon FSx for Windows File Server file system..</p>
+    #[serde(rename = "AuditLogConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audit_log_configuration: Option<WindowsAuditLogCreateConfiguration>,
     /// <p>The number of days to retain automatic daily backups. Setting this to zero (0) disables automatic daily backups. You can retain automatic daily backups for a maximum of 90 days. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/using-backups.html#automatic-backups">Working with Automatic Daily Backups</a>.</p>
     #[serde(rename = "AutomaticBackupRetentionDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1261,17 +1330,53 @@ pub struct UpdateFileSystemWindowsConfiguration {
     pub weekly_maintenance_start_time: Option<String>,
 }
 
+/// <p>The configuration that Amazon FSx for Windows File Server uses to audit and log user accesses of files, folders, and file shares on the Amazon FSx for Windows File Server file system. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/file-access-auditing.html"> File access auditing</a>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct WindowsAuditLogConfiguration {
+    /// <p>The Amazon Resource Name (ARN) for the destination of the audit logs. The destination can be any Amazon CloudWatch Logs log group ARN or Amazon Kinesis Data Firehose delivery stream ARN.</p> <p>The name of the Amazon CloudWatch Logs log group must begin with the <code>/aws/fsx</code> prefix. The name of the Amazon Kinesis Data Firehouse delivery stream must begin with the <code>aws-fsx</code> prefix.</p> <p>The destination ARN (either CloudWatch Logs log group or Kinesis Data Firehose delivery stream) must be in the same AWS partition, AWS region, and AWS account as your Amazon FSx file system.</p>
+    #[serde(rename = "AuditLogDestination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audit_log_destination: Option<String>,
+    /// <p><p>Sets which attempt type is logged by Amazon FSx for file and folder accesses.</p> <ul> <li> <p> <code>SUCCESS<em>ONLY</code> - only successful attempts to access files or folders are logged.</p> </li> <li> <p> <code>FAILURE</em>ONLY</code> - only failed attempts to access files or folders are logged.</p> </li> <li> <p> <code>SUCCESS<em>AND</em>FAILURE</code> - both successful attempts and failed attempts to access files or folders are logged.</p> </li> <li> <p> <code>DISABLED</code> - access auditing of files and folders is turned off.</p> </li> </ul></p>
+    #[serde(rename = "FileAccessAuditLogLevel")]
+    pub file_access_audit_log_level: String,
+    /// <p><p>Sets which attempt type is logged by Amazon FSx for file share accesses.</p> <ul> <li> <p> <code>SUCCESS<em>ONLY</code> - only successful attempts to access file shares are logged.</p> </li> <li> <p> <code>FAILURE</em>ONLY</code> - only failed attempts to access file shares are logged.</p> </li> <li> <p> <code>SUCCESS<em>AND</em>FAILURE</code> - both successful attempts and failed attempts to access file shares are logged.</p> </li> <li> <p> <code>DISABLED</code> - access auditing of file shares is turned off.</p> </li> </ul></p>
+    #[serde(rename = "FileShareAccessAuditLogLevel")]
+    pub file_share_access_audit_log_level: String,
+}
+
+/// <p>The Windows file access auditing configuration used when creating or updating an Amazon FSx for Windows File Server file system.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct WindowsAuditLogCreateConfiguration {
+    /// <p><p>The Amazon Resource Name (ARN) that specifies the destination of the audit logs.</p> <p>The destination can be any Amazon CloudWatch Logs log group ARN or Amazon Kinesis Data Firehose delivery stream ARN, with the following requirements:</p> <ul> <li> <p>The destination ARN that you provide (either CloudWatch Logs log group or Kinesis Data Firehose delivery stream) must be in the same AWS partition, AWS region, and AWS account as your Amazon FSx file system.</p> </li> <li> <p>The name of the Amazon CloudWatch Logs log group must begin with the <code>/aws/fsx</code> prefix. The name of the Amazon Kinesis Data Firehouse delivery stream must begin with the <code>aws-fsx</code> prefix.</p> </li> <li> <p>If you do not provide a destination in <code>AuditLogDestination</code>, Amazon FSx will create and use a log stream in the CloudWatch Logs <code>/aws/fsx/windows</code> log group.</p> </li> <li> <p>If <code>AuditLogDestination</code> is provided and the resource does not exist, the request will fail with a <code>BadRequest</code> error.</p> </li> <li> <p>If <code>FileAccessAuditLogLevel</code> and <code>FileShareAccessAuditLogLevel</code> are both set to <code>DISABLED</code>, you cannot specify a destination in <code>AuditLogDestination</code>.</p> </li> </ul></p>
+    #[serde(rename = "AuditLogDestination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audit_log_destination: Option<String>,
+    /// <p><p>Sets which attempt type is logged by Amazon FSx for file and folder accesses.</p> <ul> <li> <p> <code>SUCCESS<em>ONLY</code> - only successful attempts to access files or folders are logged.</p> </li> <li> <p> <code>FAILURE</em>ONLY</code> - only failed attempts to access files or folders are logged.</p> </li> <li> <p> <code>SUCCESS<em>AND</em>FAILURE</code> - both successful attempts and failed attempts to access files or folders are logged.</p> </li> <li> <p> <code>DISABLED</code> - access auditing of files and folders is turned off.</p> </li> </ul></p>
+    #[serde(rename = "FileAccessAuditLogLevel")]
+    pub file_access_audit_log_level: String,
+    /// <p><p>Sets which attempt type is logged by Amazon FSx for file share accesses.</p> <ul> <li> <p> <code>SUCCESS<em>ONLY</code> - only successful attempts to access file shares are logged.</p> </li> <li> <p> <code>FAILURE</em>ONLY</code> - only failed attempts to access file shares are logged.</p> </li> <li> <p> <code>SUCCESS<em>AND</em>FAILURE</code> - both successful attempts and failed attempts to access file shares are logged.</p> </li> <li> <p> <code>DISABLED</code> - access auditing of file shares is turned off.</p> </li> </ul></p>
+    #[serde(rename = "FileShareAccessAuditLogLevel")]
+    pub file_share_access_audit_log_level: String,
+}
+
 /// <p>The configuration for this Microsoft Windows file system.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct WindowsFileSystemConfiguration {
-    /// <p>The ID for an existing Microsoft Active Directory instance that the file system should join when it's created.</p>
+    /// <p>The ID for an existing AWS Managed Microsoft Active Directory instance that the file system is joined to.</p>
     #[serde(rename = "ActiveDirectoryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub active_directory_id: Option<String>,
     #[serde(rename = "Aliases")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aliases: Option<Vec<Alias>>,
+    /// <p>The configuration that Amazon FSx for Windows File Server uses to audit and log user accesses of files, folders, and file shares on the Amazon FSx for Windows File Server file system.</p>
+    #[serde(rename = "AuditLogConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audit_log_configuration: Option<WindowsAuditLogConfiguration>,
     /// <p>The number of days to retain automatic backups. Setting this to 0 disables automatic backups. You can retain automatic backups for a maximum of 90 days.</p>
     #[serde(rename = "AutomaticBackupRetentionDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1296,7 +1401,7 @@ pub struct WindowsFileSystemConfiguration {
     #[serde(rename = "PreferredFileServerIp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub preferred_file_server_ip: Option<String>,
-    /// <p>For <code>MULTI_AZ_1</code> deployment types, it specifies the ID of the subnet where the preferred file server is located. Must be one of the two subnet IDs specified in <code>SubnetIds</code> property. Amazon FSx serves traffic from this subnet except in the event of a failover to the secondary file server.</p> <p>For <code>SINGLE_AZ_1</code> and <code>SINGLE_AZ_2</code> deployment types, this value is the same as that for <code>SubnetIDs</code>. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/high-availability-multiAZ.html#single-multi-az-resources">Availability and Durability: Single-AZ and Multi-AZ File Systems</a> </p>
+    /// <p>For <code>MULTI_AZ_1</code> deployment types, it specifies the ID of the subnet where the preferred file server is located. Must be one of the two subnet IDs specified in <code>SubnetIds</code> property. Amazon FSx serves traffic from this subnet except in the event of a failover to the secondary file server.</p> <p>For <code>SINGLE_AZ_1</code> and <code>SINGLE_AZ_2</code> deployment types, this value is the same as that for <code>SubnetIDs</code>. For more information, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/high-availability-multiAZ.html#single-multi-az-resources">Availability and durability: Single-AZ and Multi-AZ file systems</a>.</p>
     #[serde(rename = "PreferredSubnetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub preferred_subnet_id: Option<String>,
@@ -1307,7 +1412,7 @@ pub struct WindowsFileSystemConfiguration {
     #[serde(rename = "SelfManagedActiveDirectoryConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub self_managed_active_directory_configuration: Option<SelfManagedActiveDirectoryAttributes>,
-    /// <p>The throughput of an Amazon FSx file system, measured in megabytes per second.</p>
+    /// <p>The throughput of the Amazon FSx file system, measured in megabytes per second.</p>
     #[serde(rename = "ThroughputCapacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub throughput_capacity: Option<i64>,
@@ -1439,6 +1544,98 @@ impl fmt::Display for CancelDataRepositoryTaskError {
     }
 }
 impl Error for CancelDataRepositoryTaskError {}
+/// Errors returned by CopyBackup
+#[derive(Debug, PartialEq)]
+pub enum CopyBackupError {
+    /// <p>No Amazon FSx backups were found based upon the supplied parameters.</p>
+    BackupNotFound(String),
+    /// <p>A generic error indicating a failure with a client request.</p>
+    BadRequest(String),
+    /// <p>The error returned when a second request is received with the same client request token but different parameters settings. A client request token should always uniquely identify a single request.</p>
+    IncompatibleParameterError(String),
+    /// <p>Amazon FSx doesn't support Multi-AZ Windows File Server copy backup in the destination Region, so the copied backup can't be restored.</p>
+    IncompatibleRegionForMultiAZ(String),
+    /// <p>A generic error indicating a server-side failure.</p>
+    InternalServerError(String),
+    /// <p>The AWS Key Management Service (AWS KMS) key of the destination backup is invalid.</p>
+    InvalidDestinationKmsKey(String),
+    /// <p>The Region provided for <code>Source Region</code> is invalid or is in a different AWS partition.</p>
+    InvalidRegion(String),
+    /// <p>The AWS Key Management Service (AWS KMS) key of the source backup is invalid.</p>
+    InvalidSourceKmsKey(String),
+    /// <p>An error indicating that a particular service limit was exceeded. You can increase some service limits by contacting AWS Support. </p>
+    ServiceLimitExceeded(String),
+    /// <p>The request was rejected because the lifecycle status of the source backup is not <code>AVAILABLE</code>.</p>
+    SourceBackupUnavailable(String),
+    /// <p>The requested operation is not supported for this resource or API.</p>
+    UnsupportedOperation(String),
+}
+
+impl CopyBackupError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CopyBackupError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "BackupNotFound" => {
+                    return RusotoError::Service(CopyBackupError::BackupNotFound(err.msg))
+                }
+                "BadRequest" => return RusotoError::Service(CopyBackupError::BadRequest(err.msg)),
+                "IncompatibleParameterError" => {
+                    return RusotoError::Service(CopyBackupError::IncompatibleParameterError(
+                        err.msg,
+                    ))
+                }
+                "IncompatibleRegionForMultiAZ" => {
+                    return RusotoError::Service(CopyBackupError::IncompatibleRegionForMultiAZ(
+                        err.msg,
+                    ))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(CopyBackupError::InternalServerError(err.msg))
+                }
+                "InvalidDestinationKmsKey" => {
+                    return RusotoError::Service(CopyBackupError::InvalidDestinationKmsKey(err.msg))
+                }
+                "InvalidRegion" => {
+                    return RusotoError::Service(CopyBackupError::InvalidRegion(err.msg))
+                }
+                "InvalidSourceKmsKey" => {
+                    return RusotoError::Service(CopyBackupError::InvalidSourceKmsKey(err.msg))
+                }
+                "ServiceLimitExceeded" => {
+                    return RusotoError::Service(CopyBackupError::ServiceLimitExceeded(err.msg))
+                }
+                "SourceBackupUnavailable" => {
+                    return RusotoError::Service(CopyBackupError::SourceBackupUnavailable(err.msg))
+                }
+                "UnsupportedOperation" => {
+                    return RusotoError::Service(CopyBackupError::UnsupportedOperation(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CopyBackupError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CopyBackupError::BackupNotFound(ref cause) => write!(f, "{}", cause),
+            CopyBackupError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CopyBackupError::IncompatibleParameterError(ref cause) => write!(f, "{}", cause),
+            CopyBackupError::IncompatibleRegionForMultiAZ(ref cause) => write!(f, "{}", cause),
+            CopyBackupError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CopyBackupError::InvalidDestinationKmsKey(ref cause) => write!(f, "{}", cause),
+            CopyBackupError::InvalidRegion(ref cause) => write!(f, "{}", cause),
+            CopyBackupError::InvalidSourceKmsKey(ref cause) => write!(f, "{}", cause),
+            CopyBackupError::ServiceLimitExceeded(ref cause) => write!(f, "{}", cause),
+            CopyBackupError::SourceBackupUnavailable(ref cause) => write!(f, "{}", cause),
+            CopyBackupError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CopyBackupError {}
 /// Errors returned by CreateBackup
 #[derive(Debug, PartialEq)]
 pub enum CreateBackupError {
@@ -1810,6 +2007,8 @@ impl Error for CreateFileSystemFromBackupError {}
 /// Errors returned by DeleteBackup
 #[derive(Debug, PartialEq)]
 pub enum DeleteBackupError {
+    /// <p>You can't delete a backup while it's being copied.</p>
+    BackupBeingCopied(String),
     /// <p>Another backup is already under way. Wait for completion before initiating additional backups of this file system.</p>
     BackupInProgress(String),
     /// <p>No Amazon FSx backups were found based upon the supplied parameters.</p>
@@ -1828,6 +2027,9 @@ impl DeleteBackupError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBackupError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "BackupBeingCopied" => {
+                    return RusotoError::Service(DeleteBackupError::BackupBeingCopied(err.msg))
+                }
                 "BackupInProgress" => {
                     return RusotoError::Service(DeleteBackupError::BackupInProgress(err.msg))
                 }
@@ -1859,6 +2061,7 @@ impl fmt::Display for DeleteBackupError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            DeleteBackupError::BackupBeingCopied(ref cause) => write!(f, "{}", cause),
             DeleteBackupError::BackupInProgress(ref cause) => write!(f, "{}", cause),
             DeleteBackupError::BackupNotFound(ref cause) => write!(f, "{}", cause),
             DeleteBackupError::BackupRestoring(ref cause) => write!(f, "{}", cause),
@@ -2460,6 +2663,12 @@ pub trait Fsx {
         input: CancelDataRepositoryTaskRequest,
     ) -> Result<CancelDataRepositoryTaskResponse, RusotoError<CancelDataRepositoryTaskError>>;
 
+    /// <p>Copies an existing backup within the same AWS account to another Region (cross-Region copy) or within the same Region (in-Region copy). You can have up to five backup copy requests in progress to a single destination Region per account.</p> <p>You can use cross-Region backup copies for cross-region disaster recovery. You periodically take backups and copy them to another Region so that in the event of a disaster in the primary Region, you can restore from backup and recover availability quickly in the other Region. You can make cross-Region copies only within your AWS partition.</p> <p> You can also use backup copies to clone your file data set to another Region or within the same Region.</p> <p>You can use the <code>SourceRegion</code> parameter to specify the AWS Region from which the backup will be copied. For example, if you make the call from the <code>us-west-1</code> Region and want to copy a backup from the <code>us-east-2</code> Region, you specify <code>us-east-2</code> in the <code>SourceRegion</code> parameter to make a cross-Region copy. If you don't specify a Region, the backup copy is created in the same Region where the request is sent from (in-Region copy).</p> <p>For more information on creating backup copies, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/using-backups.html#copy-backups"> Copying backups</a> in the <i>Amazon FSx for Windows User Guide</i> and <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/using-backups-fsx.html#copy-backups">Copying backups</a> in the <i>Amazon FSx for Lustre User Guide</i>.</p>
+    async fn copy_backup(
+        &self,
+        input: CopyBackupRequest,
+    ) -> Result<CopyBackupResponse, RusotoError<CopyBackupError>>;
+
     /// <p>Creates a backup of an existing Amazon FSx file system. Creating regular backups for your file system is a best practice, enabling you to restore a file system from a backup if an issue arises with the original file system.</p> <p>For Amazon FSx for Lustre file systems, you can create a backup only for file systems with the following configuration:</p> <ul> <li> <p>a Persistent deployment type</p> </li> <li> <p>is <i>not</i> linked to a data respository.</p> </li> </ul> <p>For more information about backing up Amazon FSx for Lustre file systems, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/using-backups-fsx.html">Working with FSx for Lustre backups</a>.</p> <p>For more information about backing up Amazon FSx for Windows file systems, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/using-backups.html">Working with FSx for Windows backups</a>.</p> <p>If a backup with the specified client request token exists, and the parameters match, this operation returns the description of the existing backup. If a backup specified client request token exists, and the parameters don't match, this operation returns <code>IncompatibleParameterError</code>. If a backup with the specified client request token doesn't exist, <code>CreateBackup</code> does the following: </p> <ul> <li> <p>Creates a new Amazon FSx backup with an assigned ID, and an initial lifecycle state of <code>CREATING</code>.</p> </li> <li> <p>Returns the description of the backup.</p> </li> </ul> <p>By using the idempotent operation, you can retry a <code>CreateBackup</code> operation without the risk of creating an extra backup. This approach can be useful when an initial call fails in a way that makes it unclear whether a backup was created. If you use the same client request token and the initial call created a backup, the operation returns a successful result because all the parameters are the same.</p> <p>The <code>CreateBackup</code> operation returns while the backup's lifecycle state is still <code>CREATING</code>. You can check the backup creation status by calling the <a>DescribeBackups</a> operation, which returns the backup state along with other information.</p>
     async fn create_backup(
         &self,
@@ -2547,7 +2756,7 @@ pub trait Fsx {
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
-    /// <p><p>Use this operation to update the configuration of an existing Amazon FSx file system. You can update multiple properties in a single request.</p> <p>For Amazon FSx for Windows File Server file systems, you can update the following properties:</p> <ul> <li> <p>AutomaticBackupRetentionDays</p> </li> <li> <p>DailyAutomaticBackupStartTime</p> </li> <li> <p>SelfManagedActiveDirectoryConfiguration</p> </li> <li> <p>StorageCapacity</p> </li> <li> <p>ThroughputCapacity</p> </li> <li> <p>WeeklyMaintenanceStartTime</p> </li> </ul> <p>For Amazon FSx for Lustre file systems, you can update the following properties:</p> <ul> <li> <p>AutoImportPolicy</p> </li> <li> <p>AutomaticBackupRetentionDays</p> </li> <li> <p>DailyAutomaticBackupStartTime</p> </li> <li> <p>StorageCapacity</p> </li> <li> <p>WeeklyMaintenanceStartTime</p> </li> </ul></p>
+    /// <p><p>Use this operation to update the configuration of an existing Amazon FSx file system. You can update multiple properties in a single request.</p> <p>For Amazon FSx for Windows File Server file systems, you can update the following properties:</p> <ul> <li> <p>AuditLogConfiguration</p> </li> <li> <p>AutomaticBackupRetentionDays</p> </li> <li> <p>DailyAutomaticBackupStartTime</p> </li> <li> <p>SelfManagedActiveDirectoryConfiguration</p> </li> <li> <p>StorageCapacity</p> </li> <li> <p>ThroughputCapacity</p> </li> <li> <p>WeeklyMaintenanceStartTime</p> </li> </ul> <p>For Amazon FSx for Lustre file systems, you can update the following properties:</p> <ul> <li> <p>AutoImportPolicy</p> </li> <li> <p>AutomaticBackupRetentionDays</p> </li> <li> <p>DailyAutomaticBackupStartTime</p> </li> <li> <p>DataCompressionType</p> </li> <li> <p>StorageCapacity</p> </li> <li> <p>WeeklyMaintenanceStartTime</p> </li> </ul></p>
     async fn update_file_system(
         &self,
         input: UpdateFileSystemRequest,
@@ -2636,6 +2845,24 @@ impl Fsx for FsxClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<CancelDataRepositoryTaskResponse, _>()
+    }
+
+    /// <p>Copies an existing backup within the same AWS account to another Region (cross-Region copy) or within the same Region (in-Region copy). You can have up to five backup copy requests in progress to a single destination Region per account.</p> <p>You can use cross-Region backup copies for cross-region disaster recovery. You periodically take backups and copy them to another Region so that in the event of a disaster in the primary Region, you can restore from backup and recover availability quickly in the other Region. You can make cross-Region copies only within your AWS partition.</p> <p> You can also use backup copies to clone your file data set to another Region or within the same Region.</p> <p>You can use the <code>SourceRegion</code> parameter to specify the AWS Region from which the backup will be copied. For example, if you make the call from the <code>us-west-1</code> Region and want to copy a backup from the <code>us-east-2</code> Region, you specify <code>us-east-2</code> in the <code>SourceRegion</code> parameter to make a cross-Region copy. If you don't specify a Region, the backup copy is created in the same Region where the request is sent from (in-Region copy).</p> <p>For more information on creating backup copies, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/using-backups.html#copy-backups"> Copying backups</a> in the <i>Amazon FSx for Windows User Guide</i> and <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/using-backups-fsx.html#copy-backups">Copying backups</a> in the <i>Amazon FSx for Lustre User Guide</i>.</p>
+    async fn copy_backup(
+        &self,
+        input: CopyBackupRequest,
+    ) -> Result<CopyBackupResponse, RusotoError<CopyBackupError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSSimbaAPIService_v20180301.CopyBackup");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CopyBackupError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CopyBackupResponse, _>()
     }
 
     /// <p>Creates a backup of an existing Amazon FSx file system. Creating regular backups for your file system is a best practice, enabling you to restore a file system from a backup if an issue arises with the original file system.</p> <p>For Amazon FSx for Lustre file systems, you can create a backup only for file systems with the following configuration:</p> <ul> <li> <p>a Persistent deployment type</p> </li> <li> <p>is <i>not</i> linked to a data respository.</p> </li> </ul> <p>For more information about backing up Amazon FSx for Lustre file systems, see <a href="https://docs.aws.amazon.com/fsx/latest/LustreGuide/using-backups-fsx.html">Working with FSx for Lustre backups</a>.</p> <p>For more information about backing up Amazon FSx for Windows file systems, see <a href="https://docs.aws.amazon.com/fsx/latest/WindowsGuide/using-backups.html">Working with FSx for Windows backups</a>.</p> <p>If a backup with the specified client request token exists, and the parameters match, this operation returns the description of the existing backup. If a backup specified client request token exists, and the parameters don't match, this operation returns <code>IncompatibleParameterError</code>. If a backup with the specified client request token doesn't exist, <code>CreateBackup</code> does the following: </p> <ul> <li> <p>Creates a new Amazon FSx backup with an assigned ID, and an initial lifecycle state of <code>CREATING</code>.</p> </li> <li> <p>Returns the description of the backup.</p> </li> </ul> <p>By using the idempotent operation, you can retry a <code>CreateBackup</code> operation without the risk of creating an extra backup. This approach can be useful when an initial call fails in a way that makes it unclear whether a backup was created. If you use the same client request token and the initial call created a backup, the operation returns a successful result because all the parameters are the same.</p> <p>The <code>CreateBackup</code> operation returns while the backup's lifecycle state is still <code>CREATING</code>. You can check the backup creation status by calling the <a>DescribeBackups</a> operation, which returns the backup state along with other information.</p>
@@ -2931,7 +3158,7 @@ impl Fsx for FsxClient {
         proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
     }
 
-    /// <p><p>Use this operation to update the configuration of an existing Amazon FSx file system. You can update multiple properties in a single request.</p> <p>For Amazon FSx for Windows File Server file systems, you can update the following properties:</p> <ul> <li> <p>AutomaticBackupRetentionDays</p> </li> <li> <p>DailyAutomaticBackupStartTime</p> </li> <li> <p>SelfManagedActiveDirectoryConfiguration</p> </li> <li> <p>StorageCapacity</p> </li> <li> <p>ThroughputCapacity</p> </li> <li> <p>WeeklyMaintenanceStartTime</p> </li> </ul> <p>For Amazon FSx for Lustre file systems, you can update the following properties:</p> <ul> <li> <p>AutoImportPolicy</p> </li> <li> <p>AutomaticBackupRetentionDays</p> </li> <li> <p>DailyAutomaticBackupStartTime</p> </li> <li> <p>StorageCapacity</p> </li> <li> <p>WeeklyMaintenanceStartTime</p> </li> </ul></p>
+    /// <p><p>Use this operation to update the configuration of an existing Amazon FSx file system. You can update multiple properties in a single request.</p> <p>For Amazon FSx for Windows File Server file systems, you can update the following properties:</p> <ul> <li> <p>AuditLogConfiguration</p> </li> <li> <p>AutomaticBackupRetentionDays</p> </li> <li> <p>DailyAutomaticBackupStartTime</p> </li> <li> <p>SelfManagedActiveDirectoryConfiguration</p> </li> <li> <p>StorageCapacity</p> </li> <li> <p>ThroughputCapacity</p> </li> <li> <p>WeeklyMaintenanceStartTime</p> </li> </ul> <p>For Amazon FSx for Lustre file systems, you can update the following properties:</p> <ul> <li> <p>AutoImportPolicy</p> </li> <li> <p>AutomaticBackupRetentionDays</p> </li> <li> <p>DailyAutomaticBackupStartTime</p> </li> <li> <p>DataCompressionType</p> </li> <li> <p>StorageCapacity</p> </li> <li> <p>WeeklyMaintenanceStartTime</p> </li> </ul></p>
     async fn update_file_system(
         &self,
         input: UpdateFileSystemRequest,

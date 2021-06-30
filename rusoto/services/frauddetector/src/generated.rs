@@ -129,6 +129,119 @@ pub struct BatchGetVariableResult {
     pub variables: Option<Vec<Variable>>,
 }
 
+/// <p>The batch prediction details.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BatchPrediction {
+    /// <p>The ARN of batch prediction job.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>Timestamp of when the batch prediction job comleted.</p>
+    #[serde(rename = "completionTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub completion_time: Option<String>,
+    /// <p>The name of the detector.</p>
+    #[serde(rename = "detectorName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub detector_name: Option<String>,
+    /// <p>The detector version. </p>
+    #[serde(rename = "detectorVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub detector_version: Option<String>,
+    /// <p>The name of the event type.</p>
+    #[serde(rename = "eventTypeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_type_name: Option<String>,
+    /// <p>The reason a batch prediction job failed.</p>
+    #[serde(rename = "failureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>The ARN of the IAM role to use for this job request.</p>
+    #[serde(rename = "iamRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iam_role_arn: Option<String>,
+    /// <p>The Amazon S3 location of your training file.</p>
+    #[serde(rename = "inputPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_path: Option<String>,
+    /// <p>The job ID for the batch prediction.</p>
+    #[serde(rename = "jobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    /// <p>Timestamp of most recent heartbeat indicating the batch prediction job was making progress.</p>
+    #[serde(rename = "lastHeartbeatTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_heartbeat_time: Option<String>,
+    /// <p>The Amazon S3 location of your output file.</p>
+    #[serde(rename = "outputPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_path: Option<String>,
+    /// <p>The number of records processed by the batch prediction job.</p>
+    #[serde(rename = "processedRecordsCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub processed_records_count: Option<i64>,
+    /// <p>Timestamp of when the batch prediction job started.</p>
+    #[serde(rename = "startTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<String>,
+    /// <p>The batch prediction status.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The total number of records in the batch prediction job.</p>
+    #[serde(rename = "totalRecordsCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_records_count: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CancelBatchPredictionJobRequest {
+    /// <p>The ID of the batch prediction job to cancel.</p>
+    #[serde(rename = "jobId")]
+    pub job_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CancelBatchPredictionJobResult {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateBatchPredictionJobRequest {
+    /// <p>The name of the detector.</p>
+    #[serde(rename = "detectorName")]
+    pub detector_name: String,
+    /// <p>The detector version.</p>
+    #[serde(rename = "detectorVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub detector_version: Option<String>,
+    /// <p>The name of the event type.</p>
+    #[serde(rename = "eventTypeName")]
+    pub event_type_name: String,
+    /// <p>The ARN of the IAM role to use for this job request.</p>
+    #[serde(rename = "iamRoleArn")]
+    pub iam_role_arn: String,
+    /// <p>The Amazon S3 location of your training file.</p>
+    #[serde(rename = "inputPath")]
+    pub input_path: String,
+    /// <p>The ID of the batch prediction job.</p>
+    #[serde(rename = "jobId")]
+    pub job_id: String,
+    /// <p>The Amazon S3 location of your output file.</p>
+    #[serde(rename = "outputPath")]
+    pub output_path: String,
+    /// <p>A collection of key and value pairs.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateBatchPredictionJobResult {}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDetectorVersionRequest {
@@ -332,6 +445,18 @@ pub struct DataValidationMetrics {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_level_messages: Option<Vec<FileValidationMessage>>,
 }
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteBatchPredictionJobRequest {
+    /// <p>The ID of the batch prediction job to delete.</p>
+    #[serde(rename = "jobId")]
+    pub job_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteBatchPredictionJobResult {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -789,6 +914,36 @@ pub struct FileValidationMessage {
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetBatchPredictionJobsRequest {
+    /// <p>The batch prediction job for which to get the details.</p>
+    #[serde(rename = "jobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    /// <p>The maximum number of objects to return for the request.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The next token from the previous request.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetBatchPredictionJobsResult {
+    /// <p>An array containing the details of each batch prediction job.</p>
+    #[serde(rename = "batchPredictions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub batch_predictions: Option<Vec<BatchPrediction>>,
+    /// <p>The next token for the subsequent request.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2223,6 +2378,94 @@ impl fmt::Display for BatchGetVariableError {
     }
 }
 impl Error for BatchGetVariableError {}
+/// Errors returned by CancelBatchPredictionJob
+#[derive(Debug, PartialEq)]
+pub enum CancelBatchPredictionJobError {
+    /// <p>An exception indicating Amazon Fraud Detector does not have the needed permissions. This can occur if you submit a request, such as <code>PutExternalModel</code>, that specifies a role that is not in your account.</p>
+    AccessDenied(String),
+    /// <p>An exception indicating an internal server error.</p>
+    InternalServer(String),
+    /// <p>An exception indicating the specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl CancelBatchPredictionJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CancelBatchPredictionJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CancelBatchPredictionJobError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(CancelBatchPredictionJobError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CancelBatchPredictionJobError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CancelBatchPredictionJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CancelBatchPredictionJobError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CancelBatchPredictionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            CancelBatchPredictionJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CancelBatchPredictionJobError {}
+/// Errors returned by CreateBatchPredictionJob
+#[derive(Debug, PartialEq)]
+pub enum CreateBatchPredictionJobError {
+    /// <p>An exception indicating Amazon Fraud Detector does not have the needed permissions. This can occur if you submit a request, such as <code>PutExternalModel</code>, that specifies a role that is not in your account.</p>
+    AccessDenied(String),
+    /// <p>An exception indicating an internal server error.</p>
+    InternalServer(String),
+}
+
+impl CreateBatchPredictionJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateBatchPredictionJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateBatchPredictionJobError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(CreateBatchPredictionJobError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateBatchPredictionJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateBatchPredictionJobError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateBatchPredictionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateBatchPredictionJobError {}
 /// Errors returned by CreateDetectorVersion
 #[derive(Debug, PartialEq)]
 pub enum CreateDetectorVersionError {
@@ -2437,6 +2680,54 @@ impl fmt::Display for CreateVariableError {
     }
 }
 impl Error for CreateVariableError {}
+/// Errors returned by DeleteBatchPredictionJob
+#[derive(Debug, PartialEq)]
+pub enum DeleteBatchPredictionJobError {
+    /// <p>An exception indicating Amazon Fraud Detector does not have the needed permissions. This can occur if you submit a request, such as <code>PutExternalModel</code>, that specifies a role that is not in your account.</p>
+    AccessDenied(String),
+    /// <p>An exception indicating an internal server error.</p>
+    InternalServer(String),
+    /// <p>An exception indicating the specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteBatchPredictionJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteBatchPredictionJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteBatchPredictionJobError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(DeleteBatchPredictionJobError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteBatchPredictionJobError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteBatchPredictionJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteBatchPredictionJobError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteBatchPredictionJobError::InternalServer(ref cause) => write!(f, "{}", cause),
+            DeleteBatchPredictionJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteBatchPredictionJobError {}
 /// Errors returned by DeleteDetector
 #[derive(Debug, PartialEq)]
 pub enum DeleteDetectorError {
@@ -3075,6 +3366,52 @@ impl fmt::Display for DescribeModelVersionsError {
     }
 }
 impl Error for DescribeModelVersionsError {}
+/// Errors returned by GetBatchPredictionJobs
+#[derive(Debug, PartialEq)]
+pub enum GetBatchPredictionJobsError {
+    /// <p>An exception indicating Amazon Fraud Detector does not have the needed permissions. This can occur if you submit a request, such as <code>PutExternalModel</code>, that specifies a role that is not in your account.</p>
+    AccessDenied(String),
+    /// <p>An exception indicating an internal server error.</p>
+    InternalServer(String),
+    /// <p>An exception indicating the specified resource was not found.</p>
+    ResourceNotFound(String),
+}
+
+impl GetBatchPredictionJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetBatchPredictionJobsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(GetBatchPredictionJobsError::AccessDenied(err.msg))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(GetBatchPredictionJobsError::InternalServer(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(GetBatchPredictionJobsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetBatchPredictionJobsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetBatchPredictionJobsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetBatchPredictionJobsError::InternalServer(ref cause) => write!(f, "{}", cause),
+            GetBatchPredictionJobsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetBatchPredictionJobsError {}
 /// Errors returned by GetDetectorVersion
 #[derive(Debug, PartialEq)]
 pub enum GetDetectorVersionError {
@@ -4510,6 +4847,18 @@ pub trait FraudDetector {
         input: BatchGetVariableRequest,
     ) -> Result<BatchGetVariableResult, RusotoError<BatchGetVariableError>>;
 
+    /// <p>Cancels the specified batch prediction job.</p>
+    async fn cancel_batch_prediction_job(
+        &self,
+        input: CancelBatchPredictionJobRequest,
+    ) -> Result<CancelBatchPredictionJobResult, RusotoError<CancelBatchPredictionJobError>>;
+
+    /// <p>Creates a batch prediction job.</p>
+    async fn create_batch_prediction_job(
+        &self,
+        input: CreateBatchPredictionJobRequest,
+    ) -> Result<CreateBatchPredictionJobResult, RusotoError<CreateBatchPredictionJobError>>;
+
     /// <p>Creates a detector version. The detector version starts in a <code>DRAFT</code> status.</p>
     async fn create_detector_version(
         &self,
@@ -4540,6 +4889,12 @@ pub trait FraudDetector {
         input: CreateVariableRequest,
     ) -> Result<CreateVariableResult, RusotoError<CreateVariableError>>;
 
+    /// <p>Deletes a batch prediction job.</p>
+    async fn delete_batch_prediction_job(
+        &self,
+        input: DeleteBatchPredictionJobRequest,
+    ) -> Result<DeleteBatchPredictionJobResult, RusotoError<DeleteBatchPredictionJobError>>;
+
     /// <p>Deletes the detector. Before deleting a detector, you must first delete all detector versions and rule versions associated with the detector.</p> <p>When you delete a detector, Amazon Fraud Detector permanently deletes the detector and the data is no longer stored in Amazon Fraud Detector.</p>
     async fn delete_detector(
         &self,
@@ -4552,19 +4907,19 @@ pub trait FraudDetector {
         input: DeleteDetectorVersionRequest,
     ) -> Result<DeleteDetectorVersionResult, RusotoError<DeleteDetectorVersionError>>;
 
-    /// <p>Deletes an entity type.</p> <p>You cannot delete an entity type that is included in an event type.</p> <p>When you delete an entity type, Amazon Fraud Detector permanently deletes that entity type from the evaluation history, and the data is no longer stored in Amazon Fraud Detector.</p>
+    /// <p>Deletes an entity type.</p> <p>You cannot delete an entity type that is included in an event type.</p> <p>When you delete an entity type, Amazon Fraud Detector permanently deletes that entity type and the data is no longer stored in Amazon Fraud Detector.</p>
     async fn delete_entity_type(
         &self,
         input: DeleteEntityTypeRequest,
     ) -> Result<DeleteEntityTypeResult, RusotoError<DeleteEntityTypeError>>;
 
-    /// <p>Deletes the specified event.</p> <p>When you delete an event, Amazon Fraud Detector permanently deletes that event from the evaluation history, and the event data is no longer stored in Amazon Fraud Detector.</p>
+    /// <p>Deletes the specified event.</p> <p>When you delete an event, Amazon Fraud Detector permanently deletes that event and the event data is no longer stored in Amazon Fraud Detector.</p>
     async fn delete_event(
         &self,
         input: DeleteEventRequest,
     ) -> Result<DeleteEventResult, RusotoError<DeleteEventError>>;
 
-    /// <p>Deletes an event type.</p> <p>You cannot delete an event type that is used in a detector or a model.</p> <p>When you delete an entity type, Amazon Fraud Detector permanently deletes that entity type from the evaluation history, and the data is no longer stored in Amazon Fraud Detector.</p>
+    /// <p>Deletes an event type.</p> <p>You cannot delete an event type that is used in a detector or a model.</p> <p>When you delete an entity type, Amazon Fraud Detector permanently deletes that entity type and the data is no longer stored in Amazon Fraud Detector.</p>
     async fn delete_event_type(
         &self,
         input: DeleteEventTypeRequest,
@@ -4576,37 +4931,37 @@ pub trait FraudDetector {
         input: DeleteExternalModelRequest,
     ) -> Result<DeleteExternalModelResult, RusotoError<DeleteExternalModelError>>;
 
-    /// <p>Deletes a label.</p> <p>You cannot delete labels that are included in an event type in Amazon Fraud Detector.</p> <p>You cannot delete a label assigned to an event ID. You must first delete the relevant event ID.</p> <p>When you delete a label, Amazon Fraud Detector permanently deletes that label from the evaluation history, and the data is no longer stored in Amazon Fraud Detector.</p>
+    /// <p>Deletes a label.</p> <p>You cannot delete labels that are included in an event type in Amazon Fraud Detector.</p> <p>You cannot delete a label assigned to an event ID. You must first delete the relevant event ID.</p> <p>When you delete a label, Amazon Fraud Detector permanently deletes that label and the data is no longer stored in Amazon Fraud Detector.</p>
     async fn delete_label(
         &self,
         input: DeleteLabelRequest,
     ) -> Result<DeleteLabelResult, RusotoError<DeleteLabelError>>;
 
-    /// <p>Deletes a model.</p> <p>You can delete models and model versions in Amazon Fraud Detector, provided that they are not associated with a detector version.</p> <p> When you delete a model, Amazon Fraud Detector permanently deletes that model from the evaluation history, and the data is no longer stored in Amazon Fraud Detector.</p>
+    /// <p>Deletes a model.</p> <p>You can delete models and model versions in Amazon Fraud Detector, provided that they are not associated with a detector version.</p> <p> When you delete a model, Amazon Fraud Detector permanently deletes that model and the data is no longer stored in Amazon Fraud Detector.</p>
     async fn delete_model(
         &self,
         input: DeleteModelRequest,
     ) -> Result<DeleteModelResult, RusotoError<DeleteModelError>>;
 
-    /// <p>Deletes a model version.</p> <p>You can delete models and model versions in Amazon Fraud Detector, provided that they are not associated with a detector version.</p> <p> When you delete a model version, Amazon Fraud Detector permanently deletes that model version from the evaluation history, and the data is no longer stored in Amazon Fraud Detector.</p>
+    /// <p>Deletes a model version.</p> <p>You can delete models and model versions in Amazon Fraud Detector, provided that they are not associated with a detector version.</p> <p> When you delete a model version, Amazon Fraud Detector permanently deletes that model version and the data is no longer stored in Amazon Fraud Detector.</p>
     async fn delete_model_version(
         &self,
         input: DeleteModelVersionRequest,
     ) -> Result<DeleteModelVersionResult, RusotoError<DeleteModelVersionError>>;
 
-    /// <p>Deletes an outcome.</p> <p>You cannot delete an outcome that is used in a rule version.</p> <p>When you delete an outcome, Amazon Fraud Detector permanently deletes that outcome from the evaluation history, and the data is no longer stored in Amazon Fraud Detector.</p>
+    /// <p>Deletes an outcome.</p> <p>You cannot delete an outcome that is used in a rule version.</p> <p>When you delete an outcome, Amazon Fraud Detector permanently deletes that outcome and the data is no longer stored in Amazon Fraud Detector.</p>
     async fn delete_outcome(
         &self,
         input: DeleteOutcomeRequest,
     ) -> Result<DeleteOutcomeResult, RusotoError<DeleteOutcomeError>>;
 
-    /// <p>Deletes the rule. You cannot delete a rule if it is used by an <code>ACTIVE</code> or <code>INACTIVE</code> detector version.</p> <p>When you delete a rule, Amazon Fraud Detector permanently deletes that rule from the evaluation history, and the data is no longer stored in Amazon Fraud Detector.</p>
+    /// <p>Deletes the rule. You cannot delete a rule if it is used by an <code>ACTIVE</code> or <code>INACTIVE</code> detector version.</p> <p>When you delete a rule, Amazon Fraud Detector permanently deletes that rule and the data is no longer stored in Amazon Fraud Detector.</p>
     async fn delete_rule(
         &self,
         input: DeleteRuleRequest,
     ) -> Result<DeleteRuleResult, RusotoError<DeleteRuleError>>;
 
-    /// <p>Deletes a variable.</p> <p>You can't delete variables that are included in an event type in Amazon Fraud Detector.</p> <p>Amazon Fraud Detector automatically deletes model output variables and SageMaker model output variables when you delete the model. You can't delete these variables manually.</p> <p>When you delete a variable, Amazon Fraud Detector permanently deletes that variable from the evaluation history, and the data is no longer stored in Amazon Fraud Detector.</p>
+    /// <p>Deletes a variable.</p> <p>You can't delete variables that are included in an event type in Amazon Fraud Detector.</p> <p>Amazon Fraud Detector automatically deletes model output variables and SageMaker model output variables when you delete the model. You can't delete these variables manually.</p> <p>When you delete a variable, Amazon Fraud Detector permanently deletes that variable and the data is no longer stored in Amazon Fraud Detector.</p>
     async fn delete_variable(
         &self,
         input: DeleteVariableRequest,
@@ -4623,6 +4978,12 @@ pub trait FraudDetector {
         &self,
         input: DescribeModelVersionsRequest,
     ) -> Result<DescribeModelVersionsResult, RusotoError<DescribeModelVersionsError>>;
+
+    /// <p>Gets all batch prediction jobs or a specific job if you specify a job ID. This is a paginated API. If you provide a null maxResults, this action retrieves a maximum of 50 records per page. If you provide a maxResults, the value must be between 1 and 50. To get the next page results, provide the pagination token from the GetBatchPredictionJobsResponse as part of your request. A null pagination token fetches the records from the beginning.</p>
+    async fn get_batch_prediction_jobs(
+        &self,
+        input: GetBatchPredictionJobsRequest,
+    ) -> Result<GetBatchPredictionJobsResult, RusotoError<GetBatchPredictionJobsError>>;
 
     /// <p>Gets a particular detector version. </p>
     async fn get_detector_version(
@@ -4894,6 +5255,50 @@ impl FraudDetector for FraudDetectorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<BatchGetVariableResult, _>()
     }
 
+    /// <p>Cancels the specified batch prediction job.</p>
+    async fn cancel_batch_prediction_job(
+        &self,
+        input: CancelBatchPredictionJobRequest,
+    ) -> Result<CancelBatchPredictionJobResult, RusotoError<CancelBatchPredictionJobError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSHawksNestServiceFacade.CancelBatchPredictionJob",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CancelBatchPredictionJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CancelBatchPredictionJobResult, _>()
+    }
+
+    /// <p>Creates a batch prediction job.</p>
+    async fn create_batch_prediction_job(
+        &self,
+        input: CreateBatchPredictionJobRequest,
+    ) -> Result<CreateBatchPredictionJobResult, RusotoError<CreateBatchPredictionJobError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSHawksNestServiceFacade.CreateBatchPredictionJob",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateBatchPredictionJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateBatchPredictionJobResult, _>()
+    }
+
     /// <p>Creates a detector version. The detector version starts in a <code>DRAFT</code> status.</p>
     async fn create_detector_version(
         &self,
@@ -4990,6 +5395,28 @@ impl FraudDetector for FraudDetectorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateVariableResult, _>()
     }
 
+    /// <p>Deletes a batch prediction job.</p>
+    async fn delete_batch_prediction_job(
+        &self,
+        input: DeleteBatchPredictionJobRequest,
+    ) -> Result<DeleteBatchPredictionJobResult, RusotoError<DeleteBatchPredictionJobError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSHawksNestServiceFacade.DeleteBatchPredictionJob",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteBatchPredictionJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteBatchPredictionJobResult, _>()
+    }
+
     /// <p>Deletes the detector. Before deleting a detector, you must first delete all detector versions and rule versions associated with the detector.</p> <p>When you delete a detector, Amazon Fraud Detector permanently deletes the detector and the data is no longer stored in Amazon Fraud Detector.</p>
     async fn delete_detector(
         &self,
@@ -5029,7 +5456,7 @@ impl FraudDetector for FraudDetectorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteDetectorVersionResult, _>()
     }
 
-    /// <p>Deletes an entity type.</p> <p>You cannot delete an entity type that is included in an event type.</p> <p>When you delete an entity type, Amazon Fraud Detector permanently deletes that entity type from the evaluation history, and the data is no longer stored in Amazon Fraud Detector.</p>
+    /// <p>Deletes an entity type.</p> <p>You cannot delete an entity type that is included in an event type.</p> <p>When you delete an entity type, Amazon Fraud Detector permanently deletes that entity type and the data is no longer stored in Amazon Fraud Detector.</p>
     async fn delete_entity_type(
         &self,
         input: DeleteEntityTypeRequest,
@@ -5047,7 +5474,7 @@ impl FraudDetector for FraudDetectorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteEntityTypeResult, _>()
     }
 
-    /// <p>Deletes the specified event.</p> <p>When you delete an event, Amazon Fraud Detector permanently deletes that event from the evaluation history, and the event data is no longer stored in Amazon Fraud Detector.</p>
+    /// <p>Deletes the specified event.</p> <p>When you delete an event, Amazon Fraud Detector permanently deletes that event and the event data is no longer stored in Amazon Fraud Detector.</p>
     async fn delete_event(
         &self,
         input: DeleteEventRequest,
@@ -5065,7 +5492,7 @@ impl FraudDetector for FraudDetectorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteEventResult, _>()
     }
 
-    /// <p>Deletes an event type.</p> <p>You cannot delete an event type that is used in a detector or a model.</p> <p>When you delete an entity type, Amazon Fraud Detector permanently deletes that entity type from the evaluation history, and the data is no longer stored in Amazon Fraud Detector.</p>
+    /// <p>Deletes an event type.</p> <p>You cannot delete an event type that is used in a detector or a model.</p> <p>When you delete an entity type, Amazon Fraud Detector permanently deletes that entity type and the data is no longer stored in Amazon Fraud Detector.</p>
     async fn delete_event_type(
         &self,
         input: DeleteEventTypeRequest,
@@ -5104,7 +5531,7 @@ impl FraudDetector for FraudDetectorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteExternalModelResult, _>()
     }
 
-    /// <p>Deletes a label.</p> <p>You cannot delete labels that are included in an event type in Amazon Fraud Detector.</p> <p>You cannot delete a label assigned to an event ID. You must first delete the relevant event ID.</p> <p>When you delete a label, Amazon Fraud Detector permanently deletes that label from the evaluation history, and the data is no longer stored in Amazon Fraud Detector.</p>
+    /// <p>Deletes a label.</p> <p>You cannot delete labels that are included in an event type in Amazon Fraud Detector.</p> <p>You cannot delete a label assigned to an event ID. You must first delete the relevant event ID.</p> <p>When you delete a label, Amazon Fraud Detector permanently deletes that label and the data is no longer stored in Amazon Fraud Detector.</p>
     async fn delete_label(
         &self,
         input: DeleteLabelRequest,
@@ -5122,7 +5549,7 @@ impl FraudDetector for FraudDetectorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteLabelResult, _>()
     }
 
-    /// <p>Deletes a model.</p> <p>You can delete models and model versions in Amazon Fraud Detector, provided that they are not associated with a detector version.</p> <p> When you delete a model, Amazon Fraud Detector permanently deletes that model from the evaluation history, and the data is no longer stored in Amazon Fraud Detector.</p>
+    /// <p>Deletes a model.</p> <p>You can delete models and model versions in Amazon Fraud Detector, provided that they are not associated with a detector version.</p> <p> When you delete a model, Amazon Fraud Detector permanently deletes that model and the data is no longer stored in Amazon Fraud Detector.</p>
     async fn delete_model(
         &self,
         input: DeleteModelRequest,
@@ -5140,7 +5567,7 @@ impl FraudDetector for FraudDetectorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteModelResult, _>()
     }
 
-    /// <p>Deletes a model version.</p> <p>You can delete models and model versions in Amazon Fraud Detector, provided that they are not associated with a detector version.</p> <p> When you delete a model version, Amazon Fraud Detector permanently deletes that model version from the evaluation history, and the data is no longer stored in Amazon Fraud Detector.</p>
+    /// <p>Deletes a model version.</p> <p>You can delete models and model versions in Amazon Fraud Detector, provided that they are not associated with a detector version.</p> <p> When you delete a model version, Amazon Fraud Detector permanently deletes that model version and the data is no longer stored in Amazon Fraud Detector.</p>
     async fn delete_model_version(
         &self,
         input: DeleteModelVersionRequest,
@@ -5161,7 +5588,7 @@ impl FraudDetector for FraudDetectorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteModelVersionResult, _>()
     }
 
-    /// <p>Deletes an outcome.</p> <p>You cannot delete an outcome that is used in a rule version.</p> <p>When you delete an outcome, Amazon Fraud Detector permanently deletes that outcome from the evaluation history, and the data is no longer stored in Amazon Fraud Detector.</p>
+    /// <p>Deletes an outcome.</p> <p>You cannot delete an outcome that is used in a rule version.</p> <p>When you delete an outcome, Amazon Fraud Detector permanently deletes that outcome and the data is no longer stored in Amazon Fraud Detector.</p>
     async fn delete_outcome(
         &self,
         input: DeleteOutcomeRequest,
@@ -5179,7 +5606,7 @@ impl FraudDetector for FraudDetectorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteOutcomeResult, _>()
     }
 
-    /// <p>Deletes the rule. You cannot delete a rule if it is used by an <code>ACTIVE</code> or <code>INACTIVE</code> detector version.</p> <p>When you delete a rule, Amazon Fraud Detector permanently deletes that rule from the evaluation history, and the data is no longer stored in Amazon Fraud Detector.</p>
+    /// <p>Deletes the rule. You cannot delete a rule if it is used by an <code>ACTIVE</code> or <code>INACTIVE</code> detector version.</p> <p>When you delete a rule, Amazon Fraud Detector permanently deletes that rule and the data is no longer stored in Amazon Fraud Detector.</p>
     async fn delete_rule(
         &self,
         input: DeleteRuleRequest,
@@ -5197,7 +5624,7 @@ impl FraudDetector for FraudDetectorClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteRuleResult, _>()
     }
 
-    /// <p>Deletes a variable.</p> <p>You can't delete variables that are included in an event type in Amazon Fraud Detector.</p> <p>Amazon Fraud Detector automatically deletes model output variables and SageMaker model output variables when you delete the model. You can't delete these variables manually.</p> <p>When you delete a variable, Amazon Fraud Detector permanently deletes that variable from the evaluation history, and the data is no longer stored in Amazon Fraud Detector.</p>
+    /// <p>Deletes a variable.</p> <p>You can't delete variables that are included in an event type in Amazon Fraud Detector.</p> <p>Amazon Fraud Detector automatically deletes model output variables and SageMaker model output variables when you delete the model. You can't delete these variables manually.</p> <p>When you delete a variable, Amazon Fraud Detector permanently deletes that variable and the data is no longer stored in Amazon Fraud Detector.</p>
     async fn delete_variable(
         &self,
         input: DeleteVariableRequest,
@@ -5252,6 +5679,28 @@ impl FraudDetector for FraudDetectorClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeModelVersionsResult, _>()
+    }
+
+    /// <p>Gets all batch prediction jobs or a specific job if you specify a job ID. This is a paginated API. If you provide a null maxResults, this action retrieves a maximum of 50 records per page. If you provide a maxResults, the value must be between 1 and 50. To get the next page results, provide the pagination token from the GetBatchPredictionJobsResponse as part of your request. A null pagination token fetches the records from the beginning.</p>
+    async fn get_batch_prediction_jobs(
+        &self,
+        input: GetBatchPredictionJobsRequest,
+    ) -> Result<GetBatchPredictionJobsResult, RusotoError<GetBatchPredictionJobsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSHawksNestServiceFacade.GetBatchPredictionJobs",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetBatchPredictionJobsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetBatchPredictionJobsResult, _>()
     }
 
     /// <p>Gets a particular detector version. </p>

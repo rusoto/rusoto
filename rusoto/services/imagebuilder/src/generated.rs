@@ -25,11 +25,11 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
-/// <p> Details of an EC2 AMI. </p>
+/// <p> Details of an EC2 AMI.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Ami {
-    /// <p> The account ID of the owner of the AMI. </p>
+    /// <p>The account ID of the owner of the AMI.</p>
     #[serde(rename = "accountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_id: Option<String>,
@@ -37,15 +37,15 @@ pub struct Ami {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The AMI ID of the EC2 AMI. </p>
+    /// <p>The AMI ID of the EC2 AMI.</p>
     #[serde(rename = "image")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image: Option<String>,
-    /// <p>The name of the EC2 AMI. </p>
+    /// <p>The name of the EC2 AMI.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The AWS Region of the EC2 AMI. </p>
+    /// <p>The AWS Region of the EC2 AMI.</p>
     #[serde(rename = "region")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub region: Option<String>,
@@ -54,10 +54,10 @@ pub struct Ami {
     pub state: Option<ImageState>,
 }
 
-/// <p> Define and configure the output AMIs of the pipeline. </p>
+/// <p> Define and configure the output AMIs of the pipeline.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AmiDistributionConfiguration {
-    /// <p>The tags to apply to AMIs distributed to this Region. </p>
+    /// <p>The tags to apply to AMIs distributed to this Region.</p>
     #[serde(rename = "amiTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ami_tags: Option<::std::collections::HashMap<String, String>>,
@@ -65,19 +65,19 @@ pub struct AmiDistributionConfiguration {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p> The KMS key identifier used to encrypt the distributed image. </p>
+    /// <p>The KMS key identifier used to encrypt the distributed image.</p>
     #[serde(rename = "kmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    /// <p> Launch permissions can be used to configure which AWS accounts can use the AMI to launch instances. </p>
+    /// <p> Launch permissions can be used to configure which AWS accounts can use the AMI to launch instances.</p>
     #[serde(rename = "launchPermission")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub launch_permission: Option<LaunchPermissionConfiguration>,
-    /// <p>The name of the distribution configuration. </p>
+    /// <p>The name of the distribution configuration.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p> The ID of an account to which you want to distribute an image. </p>
+    /// <p>The ID of an account to which you want to distribute an image.</p>
     #[serde(rename = "targetAccountIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_account_ids: Option<Vec<String>>,
@@ -155,7 +155,7 @@ pub struct Component {
     #[serde(rename = "platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub platform: Option<String>,
-    /// <p>The operating system (OS) version supported by the component. If the OS information is available, a prefix match is performed against the parent image OS version during image recipe creation. </p>
+    /// <p>The operating system (OS) version supported by the component. If the OS information is available, a prefix match is performed against the parent image OS version during image recipe creation.</p>
     #[serde(rename = "supportedOsVersions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub supported_os_versions: Option<Vec<String>>,
@@ -173,10 +173,10 @@ pub struct Component {
     pub version: Option<String>,
 }
 
-/// <p> Configuration details of the component. </p>
+/// <p> Configuration details of the component.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ComponentConfiguration {
-    /// <p>The Amazon Resource Name (ARN) of the component. </p>
+    /// <p>The Amazon Resource Name (ARN) of the component.</p>
     #[serde(rename = "componentArn")]
     pub component_arn: String,
 }
@@ -213,7 +213,7 @@ pub struct ComponentSummary {
     #[serde(rename = "platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub platform: Option<String>,
-    /// <p>The operating system (OS) version supported by the component. If the OS information is available, a prefix match is performed against the parent image OS version during image recipe creation. </p>
+    /// <p>The operating system (OS) version supported by the component. If the OS information is available, a prefix match is performed against the parent image OS version during image recipe creation.</p>
     #[serde(rename = "supportedOsVersions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub supported_os_versions: Option<Vec<String>>,
@@ -259,7 +259,7 @@ pub struct ComponentVersion {
     #[serde(rename = "platform")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub platform: Option<String>,
-    /// <p> The operating system (OS) version supported by the component. If the OS information is available, a prefix match is performed against the parent image OS version during image recipe creation. </p>
+    /// <p>he operating system (OS) version supported by the component. If the OS information is available, a prefix match is performed against the parent image OS version during image recipe creation.</p>
     #[serde(rename = "supportedOsVersions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub supported_os_versions: Option<Vec<String>>,
@@ -335,6 +335,10 @@ pub struct ContainerRecipe {
     #[serde(rename = "encrypted")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encrypted: Option<bool>,
+    /// <p>A group of options that can be used to configure an instance for building and testing container images.</p>
+    #[serde(rename = "instanceConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_configuration: Option<InstanceConfiguration>,
     /// <p>Identifies which KMS key is used to encrypt the container image for distribution to the target Region.</p>
     #[serde(rename = "kmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -442,7 +446,7 @@ pub struct CreateComponentRequest {
     /// <p>The semantic version of the component. This version follows the semantic version syntax. For example, major.minor.patch. This could be versioned like software (2.0.1) or like a date (2019.12.01).</p>
     #[serde(rename = "semanticVersion")]
     pub semantic_version: String,
-    /// <p> The operating system (OS) version supported by the component. If the OS information is available, a prefix match is performed against the parent image OS version during image recipe creation. </p>
+    /// <p> The operating system (OS) version supported by the component. If the OS information is available, a prefix match is performed against the parent image OS version during image recipe creation.</p>
     #[serde(rename = "supportedOsVersions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub supported_os_versions: Option<Vec<String>>,
@@ -491,7 +495,8 @@ pub struct CreateContainerRecipeRequest {
     pub description: Option<String>,
     /// <p>The Dockerfile template used to build your image as an inline data blob.</p>
     #[serde(rename = "dockerfileTemplateData")]
-    pub dockerfile_template_data: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dockerfile_template_data: Option<String>,
     /// <p>The S3 URI for the Dockerfile that will be used to build your container image.</p>
     #[serde(rename = "dockerfileTemplateUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -500,6 +505,10 @@ pub struct CreateContainerRecipeRequest {
     #[serde(rename = "imageOsVersionOverride")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_os_version_override: Option<String>,
+    /// <p>A group of options that can be used to configure an instance for building and testing container images.</p>
+    #[serde(rename = "instanceConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_configuration: Option<InstanceConfiguration>,
     /// <p>Identifies which KMS key is used to encrypt the container image.</p>
     #[serde(rename = "kmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -550,20 +559,20 @@ pub struct CreateContainerRecipeResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDistributionConfigurationRequest {
-    /// <p> The idempotency token of the distribution configuration. </p>
+    /// <p> The idempotency token of the distribution configuration.</p>
     #[serde(rename = "clientToken")]
     pub client_token: String,
-    /// <p> The description of the distribution configuration. </p>
+    /// <p> The description of the distribution configuration.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p> The distributions of the distribution configuration. </p>
+    /// <p> The distributions of the distribution configuration.</p>
     #[serde(rename = "distributions")]
     pub distributions: Vec<Distribution>,
-    /// <p> The name of the distribution configuration. </p>
+    /// <p> The name of the distribution configuration.</p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p> The tags of the distribution configuration. </p>
+    /// <p> The tags of the distribution configuration.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -572,15 +581,15 @@ pub struct CreateDistributionConfigurationRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateDistributionConfigurationResponse {
-    /// <p> The idempotency token used to make this request idempotent. </p>
+    /// <p> The idempotency token used to make this request idempotent.</p>
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-    /// <p> The Amazon Resource Name (ARN) of the distribution configuration that was created by this request. </p>
+    /// <p> The Amazon Resource Name (ARN) of the distribution configuration that was created by this request.</p>
     #[serde(rename = "distributionConfigurationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub distribution_configuration_arn: Option<String>,
-    /// <p> The request ID that uniquely identifies this request. </p>
+    /// <p> The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -589,48 +598,48 @@ pub struct CreateDistributionConfigurationResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateImagePipelineRequest {
-    /// <p> The idempotency token used to make this request idempotent. </p>
+    /// <p> The idempotency token used to make this request idempotent.</p>
     #[serde(rename = "clientToken")]
     pub client_token: String,
     /// <p>The Amazon Resource Name (ARN) of the container recipe that is used to configure images created by this container pipeline.</p>
     #[serde(rename = "containerRecipeArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub container_recipe_arn: Option<String>,
-    /// <p> The description of the image pipeline. </p>
+    /// <p> The description of the image pipeline.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p> The Amazon Resource Name (ARN) of the distribution configuration that will be used to configure and distribute images created by this image pipeline. </p>
+    /// <p> The Amazon Resource Name (ARN) of the distribution configuration that will be used to configure and distribute images created by this image pipeline.</p>
     #[serde(rename = "distributionConfigurationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub distribution_configuration_arn: Option<String>,
-    /// <p> Collects additional information about the image being created, including the operating system (OS) version and package list. This information is used to enhance the overall experience of using EC2 Image Builder. Enabled by default. </p>
+    /// <p> Collects additional information about the image being created, including the operating system (OS) version and package list. This information is used to enhance the overall experience of using EC2 Image Builder. Enabled by default.</p>
     #[serde(rename = "enhancedImageMetadataEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enhanced_image_metadata_enabled: Option<bool>,
-    /// <p> The Amazon Resource Name (ARN) of the image recipe that will be used to configure images created by this image pipeline. </p>
+    /// <p> The Amazon Resource Name (ARN) of the image recipe that will be used to configure images created by this image pipeline.</p>
     #[serde(rename = "imageRecipeArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_recipe_arn: Option<String>,
-    /// <p> The image test configuration of the image pipeline. </p>
+    /// <p> The image test configuration of the image pipeline.</p>
     #[serde(rename = "imageTestsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_tests_configuration: Option<ImageTestsConfiguration>,
-    /// <p> The Amazon Resource Name (ARN) of the infrastructure configuration that will be used to build images created by this image pipeline. </p>
+    /// <p> The Amazon Resource Name (ARN) of the infrastructure configuration that will be used to build images created by this image pipeline.</p>
     #[serde(rename = "infrastructureConfigurationArn")]
     pub infrastructure_configuration_arn: String,
-    /// <p> The name of the image pipeline. </p>
+    /// <p> The name of the image pipeline.</p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p> The schedule of the image pipeline. </p>
+    /// <p> The schedule of the image pipeline.</p>
     #[serde(rename = "schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<Schedule>,
-    /// <p> The status of the image pipeline. </p>
+    /// <p> The status of the image pipeline.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p> The tags of the image pipeline. </p>
+    /// <p> The tags of the image pipeline.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -639,15 +648,15 @@ pub struct CreateImagePipelineRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateImagePipelineResponse {
-    /// <p> The idempotency token used to make this request idempotent. </p>
+    /// <p> The idempotency token used to make this request idempotent.</p>
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-    /// <p> The Amazon Resource Name (ARN) of the image pipeline that was created by this request. </p>
+    /// <p> The Amazon Resource Name (ARN) of the image pipeline that was created by this request.</p>
     #[serde(rename = "imagePipelineArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_pipeline_arn: Option<String>,
-    /// <p> The request ID that uniquely identifies this request. </p>
+    /// <p> The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -656,30 +665,30 @@ pub struct CreateImagePipelineResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateImageRecipeRequest {
-    /// <p>The block device mappings of the image recipe. </p>
+    /// <p>The block device mappings of the image recipe.</p>
     #[serde(rename = "blockDeviceMappings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub block_device_mappings: Option<Vec<InstanceBlockDeviceMapping>>,
-    /// <p>The idempotency token used to make this request idempotent. </p>
+    /// <p>The idempotency token used to make this request idempotent.</p>
     #[serde(rename = "clientToken")]
     pub client_token: String,
-    /// <p>The components of the image recipe. </p>
+    /// <p>The components of the image recipe.</p>
     #[serde(rename = "components")]
     pub components: Vec<ComponentConfiguration>,
-    /// <p> The description of the image recipe. </p>
+    /// <p> The description of the image recipe.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p> The name of the image recipe. </p>
+    /// <p> The name of the image recipe.</p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p>The parent image of the image recipe. The value of the string can be the ARN of the parent image or an AMI ID. The format for the ARN follows this example: <code>arn:aws:imagebuilder:us-west-2:aws:image/windows-server-2016-english-full-base-x86/xxxx.x.x</code>. You can provide the specific version that you want to use, or you can use a wildcard in all of the fields. If you enter an AMI ID for the string value, you must have access to the AMI, and the AMI must be in the same Region in which you are using Image Builder. </p>
+    /// <p>The parent image of the image recipe. The value of the string can be the ARN of the parent image or an AMI ID. The format for the ARN follows this example: <code>arn:aws:imagebuilder:us-west-2:aws:image/windows-server-2016-english-full-base-x86/x.x.x</code>. You can provide the specific version that you want to use, or you can use a wildcard in all of the fields. If you enter an AMI ID for the string value, you must have access to the AMI, and the AMI must be in the same Region in which you are using Image Builder.</p>
     #[serde(rename = "parentImage")]
     pub parent_image: String,
-    /// <p>The semantic version of the image recipe. </p>
+    /// <p>The semantic version of the image recipe.</p>
     #[serde(rename = "semanticVersion")]
     pub semantic_version: String,
-    /// <p> The tags of the image recipe. </p>
+    /// <p> The tags of the image recipe.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -692,15 +701,15 @@ pub struct CreateImageRecipeRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateImageRecipeResponse {
-    /// <p>The idempotency token used to make this request idempotent. </p>
+    /// <p>The idempotency token used to make this request idempotent.</p>
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the image recipe that was created by this request. </p>
+    /// <p>The Amazon Resource Name (ARN) of the image recipe that was created by this request.</p>
     #[serde(rename = "imageRecipeArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_recipe_arn: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -709,33 +718,33 @@ pub struct CreateImageRecipeResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateImageRequest {
-    /// <p> The idempotency token used to make this request idempotent. </p>
+    /// <p> The idempotency token used to make this request idempotent.</p>
     #[serde(rename = "clientToken")]
     pub client_token: String,
     /// <p>The Amazon Resource Name (ARN) of the container recipe that defines how images are configured and tested.</p>
     #[serde(rename = "containerRecipeArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub container_recipe_arn: Option<String>,
-    /// <p> The Amazon Resource Name (ARN) of the distribution configuration that defines and configures the outputs of your pipeline. </p>
+    /// <p> The Amazon Resource Name (ARN) of the distribution configuration that defines and configures the outputs of your pipeline.</p>
     #[serde(rename = "distributionConfigurationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub distribution_configuration_arn: Option<String>,
-    /// <p> Collects additional information about the image being created, including the operating system (OS) version and package list. This information is used to enhance the overall experience of using EC2 Image Builder. Enabled by default. </p>
+    /// <p> Collects additional information about the image being created, including the operating system (OS) version and package list. This information is used to enhance the overall experience of using EC2 Image Builder. Enabled by default.</p>
     #[serde(rename = "enhancedImageMetadataEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enhanced_image_metadata_enabled: Option<bool>,
-    /// <p> The Amazon Resource Name (ARN) of the image recipe that defines how images are configured, tested, and assessed. </p>
+    /// <p> The Amazon Resource Name (ARN) of the image recipe that defines how images are configured, tested, and assessed.</p>
     #[serde(rename = "imageRecipeArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_recipe_arn: Option<String>,
-    /// <p> The image tests configuration of the image. </p>
+    /// <p> The image tests configuration of the image.</p>
     #[serde(rename = "imageTestsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_tests_configuration: Option<ImageTestsConfiguration>,
-    /// <p> The Amazon Resource Name (ARN) of the infrastructure configuration that defines the environment in which your image will be built and tested. </p>
+    /// <p> The Amazon Resource Name (ARN) of the infrastructure configuration that defines the environment in which your image will be built and tested.</p>
     #[serde(rename = "infrastructureConfigurationArn")]
     pub infrastructure_configuration_arn: String,
-    /// <p> The tags of the image. </p>
+    /// <p> The tags of the image.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -744,15 +753,15 @@ pub struct CreateImageRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateImageResponse {
-    /// <p> The idempotency token used to make this request idempotent. </p>
+    /// <p> The idempotency token used to make this request idempotent.</p>
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-    /// <p> The Amazon Resource Name (ARN) of the image that was created by this request. </p>
+    /// <p> The Amazon Resource Name (ARN) of the image that was created by this request.</p>
     #[serde(rename = "imageBuildVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_build_version_arn: Option<String>,
-    /// <p> The request ID that uniquely identifies this request. </p>
+    /// <p> The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -761,52 +770,52 @@ pub struct CreateImageResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateInfrastructureConfigurationRequest {
-    /// <p>The idempotency token used to make this request idempotent. </p>
+    /// <p>The idempotency token used to make this request idempotent.</p>
     #[serde(rename = "clientToken")]
     pub client_token: String,
-    /// <p>The description of the infrastructure configuration. </p>
+    /// <p>The description of the infrastructure configuration.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The instance profile to associate with the instance used to customize your EC2 AMI. </p>
+    /// <p>The instance profile to associate with the instance used to customize your EC2 AMI.</p>
     #[serde(rename = "instanceProfileName")]
     pub instance_profile_name: String,
-    /// <p>The instance types of the infrastructure configuration. You can specify one or more instance types to use for this build. The service will pick one of these instance types based on availability. </p>
+    /// <p>The instance types of the infrastructure configuration. You can specify one or more instance types to use for this build. The service will pick one of these instance types based on availability.</p>
     #[serde(rename = "instanceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_types: Option<Vec<String>>,
-    /// <p>The key pair of the infrastructure configuration. This can be used to log on to and debug the instance used to create your image. </p>
+    /// <p>The key pair of the infrastructure configuration. This can be used to log on to and debug the instance used to create your image.</p>
     #[serde(rename = "keyPair")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_pair: Option<String>,
-    /// <p>The logging configuration of the infrastructure configuration. </p>
+    /// <p>The logging configuration of the infrastructure configuration.</p>
     #[serde(rename = "logging")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging: Option<Logging>,
-    /// <p>The name of the infrastructure configuration. </p>
+    /// <p>The name of the infrastructure configuration.</p>
     #[serde(rename = "name")]
     pub name: String,
     /// <p>The tags attached to the resource created by Image Builder.</p>
     #[serde(rename = "resourceTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The security group IDs to associate with the instance used to customize your EC2 AMI. </p>
+    /// <p>The security group IDs to associate with the instance used to customize your EC2 AMI.</p>
     #[serde(rename = "securityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
-    /// <p>The SNS topic on which to send image build events. </p>
+    /// <p>The SNS topic on which to send image build events.</p>
     #[serde(rename = "snsTopicArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sns_topic_arn: Option<String>,
-    /// <p>The subnet ID in which to place the instance used to customize your EC2 AMI. </p>
+    /// <p>The subnet ID in which to place the instance used to customize your EC2 AMI.</p>
     #[serde(rename = "subnetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_id: Option<String>,
-    /// <p>The tags of the infrastructure configuration. </p>
+    /// <p>The tags of the infrastructure configuration.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The terminate instance on failure setting of the infrastructure configuration. Set to false if you want Image Builder to retain the instance used to configure your AMI if the build or test phase of your workflow fails. </p>
+    /// <p>The terminate instance on failure setting of the infrastructure configuration. Set to false if you want Image Builder to retain the instance used to configure your AMI if the build or test phase of your workflow fails.</p>
     #[serde(rename = "terminateInstanceOnFailure")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub terminate_instance_on_failure: Option<bool>,
@@ -815,15 +824,15 @@ pub struct CreateInfrastructureConfigurationRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateInfrastructureConfigurationResponse {
-    /// <p>The idempotency token used to make this request idempotent. </p>
+    /// <p>The idempotency token used to make this request idempotent.</p>
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the infrastructure configuration that was created by this request. </p>
+    /// <p>The Amazon Resource Name (ARN) of the infrastructure configuration that was created by this request.</p>
     #[serde(rename = "infrastructureConfigurationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub infrastructure_configuration_arn: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -832,7 +841,7 @@ pub struct CreateInfrastructureConfigurationResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteComponentRequest {
-    /// <p>The Amazon Resource Name (ARN) of the component build version to delete. </p>
+    /// <p>The Amazon Resource Name (ARN) of the component build version to delete.</p>
     #[serde(rename = "componentBuildVersionArn")]
     pub component_build_version_arn: String,
 }
@@ -840,11 +849,11 @@ pub struct DeleteComponentRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteComponentResponse {
-    /// <p>The Amazon Resource Name (ARN) of the component build version that was deleted. </p>
+    /// <p>The Amazon Resource Name (ARN) of the component build version that was deleted.</p>
     #[serde(rename = "componentBuildVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub component_build_version_arn: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -874,7 +883,7 @@ pub struct DeleteContainerRecipeResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteDistributionConfigurationRequest {
-    /// <p>The Amazon Resource Name (ARN) of the distribution configuration to delete. </p>
+    /// <p>The Amazon Resource Name (ARN) of the distribution configuration to delete.</p>
     #[serde(rename = "distributionConfigurationArn")]
     pub distribution_configuration_arn: String,
 }
@@ -882,11 +891,11 @@ pub struct DeleteDistributionConfigurationRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteDistributionConfigurationResponse {
-    /// <p>The Amazon Resource Name (ARN) of the distribution configuration that was deleted. </p>
+    /// <p>The Amazon Resource Name (ARN) of the distribution configuration that was deleted.</p>
     #[serde(rename = "distributionConfigurationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub distribution_configuration_arn: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -895,7 +904,7 @@ pub struct DeleteDistributionConfigurationResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteImagePipelineRequest {
-    /// <p>The Amazon Resource Name (ARN) of the image pipeline to delete. </p>
+    /// <p>The Amazon Resource Name (ARN) of the image pipeline to delete.</p>
     #[serde(rename = "imagePipelineArn")]
     pub image_pipeline_arn: String,
 }
@@ -903,11 +912,11 @@ pub struct DeleteImagePipelineRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteImagePipelineResponse {
-    /// <p>The Amazon Resource Name (ARN) of the image pipeline that was deleted. </p>
+    /// <p>The Amazon Resource Name (ARN) of the image pipeline that was deleted.</p>
     #[serde(rename = "imagePipelineArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_pipeline_arn: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -916,7 +925,7 @@ pub struct DeleteImagePipelineResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteImageRecipeRequest {
-    /// <p>The Amazon Resource Name (ARN) of the image recipe to delete. </p>
+    /// <p>The Amazon Resource Name (ARN) of the image recipe to delete.</p>
     #[serde(rename = "imageRecipeArn")]
     pub image_recipe_arn: String,
 }
@@ -924,11 +933,11 @@ pub struct DeleteImageRecipeRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteImageRecipeResponse {
-    /// <p>The Amazon Resource Name (ARN) of the image recipe that was deleted. </p>
+    /// <p>The Amazon Resource Name (ARN) of the image recipe that was deleted.</p>
     #[serde(rename = "imageRecipeArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_recipe_arn: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -937,7 +946,7 @@ pub struct DeleteImageRecipeResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteImageRequest {
-    /// <p>The Amazon Resource Name (ARN) of the image to delete. </p>
+    /// <p>The Amazon Resource Name (ARN) of the image to delete.</p>
     #[serde(rename = "imageBuildVersionArn")]
     pub image_build_version_arn: String,
 }
@@ -945,11 +954,11 @@ pub struct DeleteImageRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteImageResponse {
-    /// <p>The Amazon Resource Name (ARN) of the image that was deleted. </p>
+    /// <p>The Amazon Resource Name (ARN) of the image that was deleted.</p>
     #[serde(rename = "imageBuildVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_build_version_arn: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -958,7 +967,7 @@ pub struct DeleteImageResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInfrastructureConfigurationRequest {
-    /// <p>The Amazon Resource Name (ARN) of the infrastructure configuration to delete. </p>
+    /// <p>The Amazon Resource Name (ARN) of the infrastructure configuration to delete.</p>
     #[serde(rename = "infrastructureConfigurationArn")]
     pub infrastructure_configuration_arn: String,
 }
@@ -966,20 +975,20 @@ pub struct DeleteInfrastructureConfigurationRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteInfrastructureConfigurationResponse {
-    /// <p>The Amazon Resource Name (ARN) of the infrastructure configuration that was deleted. </p>
+    /// <p>The Amazon Resource Name (ARN) of the infrastructure configuration that was deleted.</p>
     #[serde(rename = "infrastructureConfigurationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub infrastructure_configuration_arn: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
 }
 
-/// <p> Defines the settings for a specific Region. </p>
+/// <p> Defines the settings for a specific Region.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Distribution {
-    /// <p>The specific AMI settings (for example, launch permissions, AMI tags). </p>
+    /// <p>The specific AMI settings; for example, launch permissions or AMI tags.</p>
     #[serde(rename = "amiDistributionConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ami_distribution_configuration: Option<AmiDistributionConfiguration>,
@@ -987,11 +996,15 @@ pub struct Distribution {
     #[serde(rename = "containerDistributionConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub container_distribution_configuration: Option<ContainerDistributionConfiguration>,
+    /// <p>A group of launchTemplateConfiguration settings that apply to image distribution for specified accounts.</p>
+    #[serde(rename = "launchTemplateConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub launch_template_configurations: Option<Vec<LaunchTemplateConfiguration>>,
     /// <p>The License Manager Configuration to associate with the AMI in the specified Region.</p>
     #[serde(rename = "licenseConfigurationArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub license_configuration_arns: Option<Vec<String>>,
-    /// <p>The target Region. </p>
+    /// <p>The target Region.</p>
     #[serde(rename = "region")]
     pub region: String,
 }
@@ -1016,7 +1029,7 @@ pub struct DistributionConfiguration {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The distributions of the distribution configuration.</p>
+    /// <p>The distribution objects that apply Region-specific settings for the deployment of the image to targeted Regions.</p>
     #[serde(rename = "distributions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub distributions: Option<Vec<Distribution>>,
@@ -1100,15 +1113,15 @@ pub struct EbsInstanceBlockDeviceSpecification {
     pub volume_type: Option<String>,
 }
 
-/// <p>A filter name and value pair that is used to return a more specific list of results from a list operation. Filters can be used to match a set of resources by specific criteria, such as tags, attributes, or IDs. </p>
+/// <p>A filter name and value pair that is used to return a more specific list of results from a list operation. Filters can be used to match a set of resources by specific criteria, such as tags, attributes, or IDs.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filter {
-    /// <p>The name of the filter. Filter names are case-sensitive. </p>
+    /// <p>The name of the filter. Filter names are case-sensitive.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The filter values. Filter values are case-sensitive. </p>
+    /// <p>The filter values. Filter values are case-sensitive.</p>
     #[serde(rename = "values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
@@ -1117,7 +1130,7 @@ pub struct Filter {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetComponentPolicyRequest {
-    /// <p>The Amazon Resource Name (ARN) of the component whose policy you want to retrieve. </p>
+    /// <p>The Amazon Resource Name (ARN) of the component whose policy you want to retrieve.</p>
     #[serde(rename = "componentArn")]
     pub component_arn: String,
 }
@@ -1125,11 +1138,11 @@ pub struct GetComponentPolicyRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetComponentPolicyResponse {
-    /// <p>The component policy. </p>
+    /// <p>The component policy.</p>
     #[serde(rename = "policy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -1146,11 +1159,11 @@ pub struct GetComponentRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetComponentResponse {
-    /// <p>The component object associated with the specified ARN. </p>
+    /// <p>The component object associated with the specified ARN.</p>
     #[serde(rename = "component")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub component: Option<Component>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -1201,7 +1214,7 @@ pub struct GetContainerRecipeResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDistributionConfigurationRequest {
-    /// <p>The Amazon Resource Name (ARN) of the distribution configuration that you want to retrieve. </p>
+    /// <p>The Amazon Resource Name (ARN) of the distribution configuration that you want to retrieve.</p>
     #[serde(rename = "distributionConfigurationArn")]
     pub distribution_configuration_arn: String,
 }
@@ -1209,11 +1222,11 @@ pub struct GetDistributionConfigurationRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetDistributionConfigurationResponse {
-    /// <p>The distribution configuration object. </p>
+    /// <p>The distribution configuration object.</p>
     #[serde(rename = "distributionConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub distribution_configuration: Option<DistributionConfiguration>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -1222,7 +1235,7 @@ pub struct GetDistributionConfigurationResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetImagePipelineRequest {
-    /// <p>The Amazon Resource Name (ARN) of the image pipeline that you want to retrieve. </p>
+    /// <p>The Amazon Resource Name (ARN) of the image pipeline that you want to retrieve.</p>
     #[serde(rename = "imagePipelineArn")]
     pub image_pipeline_arn: String,
 }
@@ -1230,11 +1243,11 @@ pub struct GetImagePipelineRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetImagePipelineResponse {
-    /// <p>The image pipeline object. </p>
+    /// <p>The image pipeline object.</p>
     #[serde(rename = "imagePipeline")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_pipeline: Option<ImagePipeline>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -1243,7 +1256,7 @@ pub struct GetImagePipelineResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetImagePolicyRequest {
-    /// <p>The Amazon Resource Name (ARN) of the image whose policy you want to retrieve. </p>
+    /// <p>The Amazon Resource Name (ARN) of the image whose policy you want to retrieve.</p>
     #[serde(rename = "imageArn")]
     pub image_arn: String,
 }
@@ -1251,11 +1264,11 @@ pub struct GetImagePolicyRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetImagePolicyResponse {
-    /// <p>The image policy object. </p>
+    /// <p>The image policy object.</p>
     #[serde(rename = "policy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -1264,7 +1277,7 @@ pub struct GetImagePolicyResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetImageRecipePolicyRequest {
-    /// <p>The Amazon Resource Name (ARN) of the image recipe whose policy you want to retrieve. </p>
+    /// <p>The Amazon Resource Name (ARN) of the image recipe whose policy you want to retrieve.</p>
     #[serde(rename = "imageRecipeArn")]
     pub image_recipe_arn: String,
 }
@@ -1272,11 +1285,11 @@ pub struct GetImageRecipePolicyRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetImageRecipePolicyResponse {
-    /// <p>The image recipe policy object. </p>
+    /// <p>The image recipe policy object.</p>
     #[serde(rename = "policy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -1285,7 +1298,7 @@ pub struct GetImageRecipePolicyResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetImageRecipeRequest {
-    /// <p>The Amazon Resource Name (ARN) of the image recipe that you want to retrieve. </p>
+    /// <p>The Amazon Resource Name (ARN) of the image recipe that you want to retrieve.</p>
     #[serde(rename = "imageRecipeArn")]
     pub image_recipe_arn: String,
 }
@@ -1293,11 +1306,11 @@ pub struct GetImageRecipeRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetImageRecipeResponse {
-    /// <p>The image recipe object. </p>
+    /// <p>The image recipe object.</p>
     #[serde(rename = "imageRecipe")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_recipe: Option<ImageRecipe>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -1306,7 +1319,7 @@ pub struct GetImageRecipeResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetImageRequest {
-    /// <p>The Amazon Resource Name (ARN) of the image that you want to retrieve. </p>
+    /// <p>The Amazon Resource Name (ARN) of the image that you want to retrieve.</p>
     #[serde(rename = "imageBuildVersionArn")]
     pub image_build_version_arn: String,
 }
@@ -1314,34 +1327,34 @@ pub struct GetImageRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetImageResponse {
-    /// <p>The image object. </p>
+    /// <p>The image object.</p>
     #[serde(rename = "image")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image: Option<Image>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
 }
 
-/// <p> GetInfrastructureConfiguration request object. </p>
+/// <p> GetInfrastructureConfiguration request object.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetInfrastructureConfigurationRequest {
-    /// <p>The Amazon Resource Name (ARN) of the infrastructure configuration that you want to retrieve. </p>
+    /// <p>The Amazon Resource Name (ARN) of the infrastructure configuration that you want to retrieve.</p>
     #[serde(rename = "infrastructureConfigurationArn")]
     pub infrastructure_configuration_arn: String,
 }
 
-/// <p>GetInfrastructureConfiguration response object. </p>
+/// <p>GetInfrastructureConfiguration response object.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetInfrastructureConfigurationResponse {
-    /// <p>The infrastructure configuration object. </p>
+    /// <p>The infrastructure configuration object.</p>
     #[serde(rename = "infrastructureConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub infrastructure_configuration: Option<InfrastructureConfiguration>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -1367,7 +1380,7 @@ pub struct Image {
     #[serde(rename = "distributionConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub distribution_configuration: Option<DistributionConfiguration>,
-    /// <p> Collects additional information about the image being created, including the operating system (OS) version and package list. This information is used to enhance the overall experience of using EC2 Image Builder. Enabled by default. </p>
+    /// <p> Collects additional information about the image being created, including the operating system (OS) version and package list. This information is used to enhance the overall experience of using EC2 Image Builder. Enabled by default.</p>
     #[serde(rename = "enhancedImageMetadataEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enhanced_image_metadata_enabled: Option<bool>,
@@ -1387,7 +1400,7 @@ pub struct Image {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The operating system version of the instance. For example, Amazon Linux 2, Ubuntu 18, or Microsoft Windows Server 2019. </p>
+    /// <p>The operating system version of the instance. For example, Amazon Linux 2, Ubuntu 18, or Microsoft Windows Server 2019.</p>
     #[serde(rename = "osVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub os_version: Option<String>,
@@ -1423,6 +1436,20 @@ pub struct Image {
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+}
+
+/// <p>Represents a package installed on an Image Builder image.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ImagePackage {
+    /// <p>The name of the package as reported to the operating system package manager.</p>
+    #[serde(rename = "packageName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub package_name: Option<String>,
+    /// <p>The version of the package as reported to the operating system package manager.</p>
+    #[serde(rename = "packageVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub package_version: Option<String>,
 }
 
 /// <p>Details of an image pipeline.</p>
@@ -1461,7 +1488,7 @@ pub struct ImagePipeline {
     #[serde(rename = "distributionConfigurationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub distribution_configuration_arn: Option<String>,
-    /// <p> Collects additional information about the image being created, including the operating system (OS) version and package list. This information is used to enhance the overall experience of using EC2 Image Builder. Enabled by default. </p>
+    /// <p> Collects additional information about the image being created, including the operating system (OS) version and package list. This information is used to enhance the overall experience of using EC2 Image Builder. Enabled by default.</p>
     #[serde(rename = "enhancedImageMetadataEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enhanced_image_metadata_enabled: Option<bool>,
@@ -1591,15 +1618,15 @@ pub struct ImageRecipeSummary {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p> Image state shows the image status and the reason for that status. </p>
+/// <p> Image state shows the image status and the reason for that status.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImageState {
-    /// <p>The reason for the image's status. </p>
+    /// <p>The reason for the image's status.</p>
     #[serde(rename = "reason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reason: Option<String>,
-    /// <p>The status of the image. </p>
+    /// <p>The status of the image.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1621,7 +1648,7 @@ pub struct ImageSummary {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The operating system version of the instance. For example, Amazon Linux 2, Ubuntu 18, or Microsoft Windows Server 2019. </p>
+    /// <p>The operating system version of the instance. For example, Amazon Linux 2, Ubuntu 18, or Microsoft Windows Server 2019.</p>
     #[serde(rename = "osVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub os_version: Option<String>,
@@ -1684,7 +1711,7 @@ pub struct ImageVersion {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p> The operating system version of the instance. For example, Amazon Linux 2, Ubuntu 18, or Microsoft Windows Server 2019. </p>
+    /// <p>The operating system version of the instance. For example, Amazon Linux 2, Ubuntu 18, or Microsoft Windows Server 2019.</p>
     #[serde(rename = "osVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub os_version: Option<String>,
@@ -1709,45 +1736,45 @@ pub struct ImageVersion {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ImportComponentRequest {
-    /// <p>The change description of the component. Describes what change has been made in this version, or what makes this version different from other versions of this component. </p>
+    /// <p>The change description of the component. Describes what change has been made in this version, or what makes this version different from other versions of this component.</p>
     #[serde(rename = "changeDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub change_description: Option<String>,
-    /// <p>The idempotency token of the component. </p>
+    /// <p>The idempotency token of the component.</p>
     #[serde(rename = "clientToken")]
     pub client_token: String,
     /// <p>The data of the component. Used to specify the data inline. Either <code>data</code> or <code>uri</code> can be used to specify the data within the component.</p>
     #[serde(rename = "data")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<String>,
-    /// <p>The description of the component. Describes the contents of the component. </p>
+    /// <p>The description of the component. Describes the contents of the component.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The format of the resource that you want to import as a component. </p>
+    /// <p>The format of the resource that you want to import as a component.</p>
     #[serde(rename = "format")]
     pub format: String,
-    /// <p>The ID of the KMS key that should be used to encrypt this component. </p>
+    /// <p>The ID of the KMS key that should be used to encrypt this component.</p>
     #[serde(rename = "kmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    /// <p> The name of the component. </p>
+    /// <p> The name of the component.</p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p>The platform of the component. </p>
+    /// <p>The platform of the component.</p>
     #[serde(rename = "platform")]
     pub platform: String,
     /// <p>The semantic version of the component. This version follows the semantic version syntax. For example, major.minor.patch. This could be versioned like software (2.0.1) or like a date (2019.12.01).</p>
     #[serde(rename = "semanticVersion")]
     pub semantic_version: String,
-    /// <p>The tags of the component. </p>
+    /// <p>The tags of the component.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The type of the component denotes whether the component is used to build the image or only to test it. </p>
+    /// <p>The type of the component denotes whether the component is used to build the image or only to test it.</p>
     #[serde(rename = "type")]
     pub type_: String,
-    /// <p>The uri of the component. Must be an S3 URL and the requester must have permission to access the S3 bucket. If you use S3, you can specify component content up to your service quota. Either <code>data</code> or <code>uri</code> can be used to specify the data within the component. </p>
+    /// <p>The uri of the component. Must be an S3 URL and the requester must have permission to access the S3 bucket. If you use S3, you can specify component content up to your service quota. Either <code>data</code> or <code>uri</code> can be used to specify the data within the component.</p>
     #[serde(rename = "uri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub uri: Option<String>,
@@ -1756,15 +1783,15 @@ pub struct ImportComponentRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ImportComponentResponse {
-    /// <p>The idempotency token used to make this request idempotent. </p>
+    /// <p>The idempotency token used to make this request idempotent.</p>
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the imported component. </p>
+    /// <p>The Amazon Resource Name (ARN) of the imported component.</p>
     #[serde(rename = "componentBuildVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub component_build_version_arn: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -1856,6 +1883,14 @@ pub struct InfrastructureConfigurationSummary {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>The instance profile of the infrastructure configuration.</p>
+    #[serde(rename = "instanceProfileName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_profile_name: Option<String>,
+    /// <p>The instance types of the infrastructure configuration.</p>
+    #[serde(rename = "instanceTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_types: Option<Vec<String>>,
     /// <p>The name of the infrastructure configuration.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1891,30 +1926,59 @@ pub struct InstanceBlockDeviceMapping {
     pub virtual_name: Option<String>,
 }
 
-/// <p>Describes the configuration for a launch permission. The launch permission modification request is sent to the <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyImageAttribute.html">EC2 ModifyImageAttribute</a> API on behalf of the user for each Region they have selected to distribute the AMI. To make an AMI public, set the launch permission authorized accounts to <code>all</code>. See the examples for making an AMI public at <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyImageAttribute.html">EC2 ModifyImageAttribute</a>. </p>
+/// <p>Defines a custom source AMI and block device mapping configurations of an instance used for building and testing container images.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct InstanceConfiguration {
+    /// <p>Defines the block devices to attach for building an instance from this Image Builder AMI.</p>
+    #[serde(rename = "blockDeviceMappings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub block_device_mappings: Option<Vec<InstanceBlockDeviceMapping>>,
+    /// <p>The AMI ID to use as the base image for a container build and test instance. If not specified, Image Builder will use the appropriate ECS-optimized AMI as a base image.</p>
+    #[serde(rename = "image")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image: Option<String>,
+}
+
+/// <p>Describes the configuration for a launch permission. The launch permission modification request is sent to the <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyImageAttribute.html">EC2 ModifyImageAttribute</a> API on behalf of the user for each Region they have selected to distribute the AMI. To make an AMI public, set the launch permission authorized accounts to <code>all</code>. See the examples for making an AMI public at <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_ModifyImageAttribute.html">EC2 ModifyImageAttribute</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LaunchPermissionConfiguration {
-    /// <p>The name of the group. </p>
+    /// <p>The name of the group.</p>
     #[serde(rename = "userGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_groups: Option<Vec<String>>,
-    /// <p>The AWS account ID. </p>
+    /// <p>The AWS account ID.</p>
     #[serde(rename = "userIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_ids: Option<Vec<String>>,
 }
 
+/// <p>Identifies an EC2 launch template to use for a specific account.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct LaunchTemplateConfiguration {
+    /// <p>The account ID that this configuration applies to.</p>
+    #[serde(rename = "accountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p>Identifies the EC2 launch template to use.</p>
+    #[serde(rename = "launchTemplateId")]
+    pub launch_template_id: String,
+    /// <p>Set the specified EC2 launch template as the default launch template for the specified account.</p>
+    #[serde(rename = "setDefaultVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub set_default_version: Option<bool>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListComponentBuildVersionsRequest {
-    /// <p>The component version Amazon Resource Name (ARN) whose versions you want to list. </p>
+    /// <p>The component version Amazon Resource Name (ARN) whose versions you want to list.</p>
     #[serde(rename = "componentVersionArn")]
     pub component_version_arn: String,
-    /// <p>The maximum items to return in a request. </p>
+    /// <p>The maximum items to return in a request.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>A token to specify where to start paginating. This is the NextToken from a previously truncated response. </p>
+    /// <p>A token to specify where to start paginating. This is the NextToken from a previously truncated response.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1923,15 +1987,15 @@ pub struct ListComponentBuildVersionsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListComponentBuildVersionsResponse {
-    /// <p>The list of component summaries for the specified semantic version. </p>
+    /// <p>The list of component summaries for the specified semantic version.</p>
     #[serde(rename = "componentSummaryList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub component_summary_list: Option<Vec<ComponentSummary>>,
-    /// <p>The next token used for paginated responses. When this is not empty, there are additional elements that the service has not included in this request. Use this token with the next request to retrieve additional objects. </p>
+    /// <p>The next token used for paginated responses. When this is not empty, there are additional elements that the service has not included in this request. Use this token with the next request to retrieve additional objects.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -1944,19 +2008,19 @@ pub struct ListComponentsRequest {
     #[serde(rename = "byName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub by_name: Option<bool>,
-    /// <p>The filters. </p>
+    /// <p>The filters.</p>
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    /// <p>The maximum items to return in a request. </p>
+    /// <p>The maximum items to return in a request.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>A token to specify where to start paginating. This is the NextToken from a previously truncated response. </p>
+    /// <p>A token to specify where to start paginating. This is the NextToken from a previously truncated response.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The owner defines which components you want to list. By default, this request will only show components owned by your account. You can use this field to specify if you want to view components owned by yourself, by Amazon, or those components that have been shared with you by other customers. </p>
+    /// <p>The owner defines which components you want to list. By default, this request will only show components owned by your account. You can use this field to specify if you want to view components owned by yourself, by Amazon, or those components that have been shared with you by other customers.</p>
     #[serde(rename = "owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
@@ -1965,15 +2029,15 @@ pub struct ListComponentsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListComponentsResponse {
-    /// <p>The list of component semantic versions. </p>
+    /// <p>The list of component semantic versions.</p>
     #[serde(rename = "componentVersionList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub component_version_list: Option<Vec<ComponentVersion>>,
-    /// <p>The next token used for paginated responses. When this is not empty, there are additional elements that the service has not included in this request. Use this token with the next request to retrieve additional objects. </p>
+    /// <p>The next token used for paginated responses. When this is not empty, there are additional elements that the service has not included in this request. Use this token with the next request to retrieve additional objects.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -2020,15 +2084,15 @@ pub struct ListContainerRecipesResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDistributionConfigurationsRequest {
-    /// <p><p>The filters. </p> <ul> <li> <p> <code>name</code> - The name of this distribution configuration.</p> </li> </ul></p>
+    /// <p><p>The filters.</p> <ul> <li> <p> <code>name</code> - The name of this distribution configuration.</p> </li> </ul></p>
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    /// <p>The maximum items to return in a request. </p>
+    /// <p>The maximum items to return in a request.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>A token to specify where to start paginating. This is the NextToken from a previously truncated response. </p>
+    /// <p>A token to specify where to start paginating. This is the NextToken from a previously truncated response.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2037,15 +2101,15 @@ pub struct ListDistributionConfigurationsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListDistributionConfigurationsResponse {
-    /// <p>The list of distributions. </p>
+    /// <p>The list of distributions.</p>
     #[serde(rename = "distributionConfigurationSummaryList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub distribution_configuration_summary_list: Option<Vec<DistributionConfigurationSummary>>,
-    /// <p>The next token used for paginated responses. When this is not empty, there are additional elements that the service has not included in this request. Use this token with the next request to retrieve additional objects. </p>
+    /// <p>The next token used for paginated responses. When this is not empty, there are additional elements that the service has not included in this request. Use this token with the next request to retrieve additional objects.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -2054,18 +2118,18 @@ pub struct ListDistributionConfigurationsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImageBuildVersionsRequest {
-    /// <p>The filters. </p>
+    /// <p>The filters.</p>
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    /// <p>The Amazon Resource Name (ARN) of the image whose build versions you want to retrieve. </p>
+    /// <p>The Amazon Resource Name (ARN) of the image whose build versions you want to retrieve.</p>
     #[serde(rename = "imageVersionArn")]
     pub image_version_arn: String,
-    /// <p>The maximum items to return in a request. </p>
+    /// <p>The maximum items to return in a request.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>A token to specify where to start paginating. This is the NextToken from a previously truncated response. </p>
+    /// <p>A token to specify where to start paginating. This is the NextToken from a previously truncated response.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2074,15 +2138,48 @@ pub struct ListImageBuildVersionsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListImageBuildVersionsResponse {
-    /// <p>The list of image build versions. </p>
+    /// <p>The list of image build versions.</p>
     #[serde(rename = "imageSummaryList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_summary_list: Option<Vec<ImageSummary>>,
-    /// <p>The next token used for paginated responses. When this is not empty, there are additional elements that the service has not included in this request. Use this token with the next request to retrieve additional objects. </p>
+    /// <p>The next token used for paginated responses. When this is not empty, there are additional elements that the service has not included in this request. Use this token with the next request to retrieve additional objects.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
+    #[serde(rename = "requestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListImagePackagesRequest {
+    /// <p>Filter results for the ListImagePackages request by the Image Build Version ARN</p>
+    #[serde(rename = "imageBuildVersionArn")]
+    pub image_build_version_arn: String,
+    /// <p>The maxiumum number of results to return from the ListImagePackages request.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token to specify where to start paginating. This is the NextToken from a previously truncated response.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListImagePackagesResponse {
+    /// <p>The list of Image Packages returned in the response.</p>
+    #[serde(rename = "imagePackageList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_package_list: Option<Vec<ImagePackage>>,
+    /// <p>A token to specify where to start paginating. This is the NextToken from a previously truncated response.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -2091,18 +2188,18 @@ pub struct ListImageBuildVersionsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImagePipelineImagesRequest {
-    /// <p>The filters. </p>
+    /// <p>The filters.</p>
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    /// <p>The Amazon Resource Name (ARN) of the image pipeline whose images you want to view. </p>
+    /// <p>The Amazon Resource Name (ARN) of the image pipeline whose images you want to view.</p>
     #[serde(rename = "imagePipelineArn")]
     pub image_pipeline_arn: String,
-    /// <p>The maximum items to return in a request. </p>
+    /// <p>The maximum items to return in a request.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>A token to specify where to start paginating. This is the NextToken from a previously truncated response. </p>
+    /// <p>A token to specify where to start paginating. This is the NextToken from a previously truncated response.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2111,15 +2208,15 @@ pub struct ListImagePipelineImagesRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListImagePipelineImagesResponse {
-    /// <p>The list of images built by this pipeline. </p>
+    /// <p>The list of images built by this pipeline.</p>
     #[serde(rename = "imageSummaryList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_summary_list: Option<Vec<ImageSummary>>,
-    /// <p>The next token used for paginated responses. When this is not empty, there are additional elements that the service has not included in this request. Use this token with the next request to retrieve additional objects. </p>
+    /// <p>The next token used for paginated responses. When this is not empty, there are additional elements that the service has not included in this request. Use this token with the next request to retrieve additional objects.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -2128,15 +2225,15 @@ pub struct ListImagePipelineImagesResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImagePipelinesRequest {
-    /// <p>The filters. </p>
+    /// <p>The filters.</p>
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    /// <p>The maximum items to return in a request. </p>
+    /// <p>The maximum items to return in a request.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>A token to specify where to start paginating. This is the NextToken from a previously truncated response. </p>
+    /// <p>A token to specify where to start paginating. This is the NextToken from a previously truncated response.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2145,15 +2242,15 @@ pub struct ListImagePipelinesRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListImagePipelinesResponse {
-    /// <p>The list of image pipelines. </p>
+    /// <p>The list of image pipelines.</p>
     #[serde(rename = "imagePipelineList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_pipeline_list: Option<Vec<ImagePipeline>>,
-    /// <p>The next token used for paginated responses. When this is not empty, there are additional elements that the service has not included in this request. Use this token with the next request to retrieve additional objects. </p>
+    /// <p>The next token used for paginated responses. When this is not empty, there are additional elements that the service has not included in this request. Use this token with the next request to retrieve additional objects.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -2162,19 +2259,19 @@ pub struct ListImagePipelinesResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListImageRecipesRequest {
-    /// <p>The filters. </p>
+    /// <p>The filters.</p>
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    /// <p>The maximum items to return in a request. </p>
+    /// <p>The maximum items to return in a request.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>A token to specify where to start paginating. This is the NextToken from a previously truncated response. </p>
+    /// <p>A token to specify where to start paginating. This is the NextToken from a previously truncated response.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The owner defines which image recipes you want to list. By default, this request will only show image recipes owned by your account. You can use this field to specify if you want to view image recipes owned by yourself, by Amazon, or those image recipes that have been shared with you by other customers. </p>
+    /// <p>The owner defines which image recipes you want to list. By default, this request will only show image recipes owned by your account. You can use this field to specify if you want to view image recipes owned by yourself, by Amazon, or those image recipes that have been shared with you by other customers.</p>
     #[serde(rename = "owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
@@ -2183,15 +2280,15 @@ pub struct ListImageRecipesRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListImageRecipesResponse {
-    /// <p>The list of image pipelines. </p>
+    /// <p>The list of image pipelines.</p>
     #[serde(rename = "imageRecipeSummaryList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_recipe_summary_list: Option<Vec<ImageRecipeSummary>>,
-    /// <p>The next token used for paginated responses. When this is not empty, there are additional elements that the service has not included in this request. Use this token with the next request to retrieve additional objects. </p>
+    /// <p>The next token used for paginated responses. When this is not empty, there are additional elements that the service has not included in this request. Use this token with the next request to retrieve additional objects.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -2204,7 +2301,7 @@ pub struct ListImagesRequest {
     #[serde(rename = "byName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub by_name: Option<bool>,
-    /// <p>The filters. </p>
+    /// <p>The filters.</p>
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
@@ -2212,15 +2309,15 @@ pub struct ListImagesRequest {
     #[serde(rename = "includeDeprecated")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_deprecated: Option<bool>,
-    /// <p>The maximum items to return in a request. </p>
+    /// <p>The maximum items to return in a request.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>A token to specify where to start paginating. This is the NextToken from a previously truncated response. </p>
+    /// <p>A token to specify where to start paginating. This is the NextToken from a previously truncated response.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The owner defines which images you want to list. By default, this request will only show images owned by your account. You can use this field to specify if you want to view images owned by yourself, by Amazon, or those images that have been shared with you by other customers. </p>
+    /// <p>The owner defines which images you want to list. By default, this request will only show images owned by your account. You can use this field to specify if you want to view images owned by yourself, by Amazon, or those images that have been shared with you by other customers.</p>
     #[serde(rename = "owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
@@ -2229,15 +2326,15 @@ pub struct ListImagesRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListImagesResponse {
-    /// <p>The list of image semantic versions. </p>
+    /// <p>The list of image semantic versions.</p>
     #[serde(rename = "imageVersionList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_version_list: Option<Vec<ImageVersion>>,
-    /// <p>The next token used for paginated responses. When this is not empty, there are additional elements that the service has not included in this request. Use this token with the next request to retrieve additional objects. </p>
+    /// <p>The next token used for paginated responses. When this is not empty, there are additional elements that the service has not included in this request. Use this token with the next request to retrieve additional objects.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -2246,15 +2343,15 @@ pub struct ListImagesResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInfrastructureConfigurationsRequest {
-    /// <p>The filters. </p>
+    /// <p>The filters.</p>
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    /// <p>The maximum items to return in a request. </p>
+    /// <p>The maximum items to return in a request.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>A token to specify where to start paginating. This is the NextToken from a previously truncated response. </p>
+    /// <p>A token to specify where to start paginating. This is the NextToken from a previously truncated response.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2263,7 +2360,7 @@ pub struct ListInfrastructureConfigurationsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListInfrastructureConfigurationsResponse {
-    /// <p>The list of infrastructure configurations. </p>
+    /// <p>The list of infrastructure configurations.</p>
     #[serde(rename = "infrastructureConfigurationSummaryList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub infrastructure_configuration_summary_list: Option<Vec<InfrastructureConfigurationSummary>>,
@@ -2271,7 +2368,7 @@ pub struct ListInfrastructureConfigurationsResponse {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -2280,7 +2377,7 @@ pub struct ListInfrastructureConfigurationsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
-    /// <p>The Amazon Resource Name (ARN) of the resource whose tags you want to retrieve. </p>
+    /// <p>The Amazon Resource Name (ARN) of the resource whose tags you want to retrieve.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
 }
@@ -2288,7 +2385,7 @@ pub struct ListTagsForResourceRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
-    /// <p>The tags for the specified resource. </p>
+    /// <p>The tags for the specified resource.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -2303,11 +2400,11 @@ pub struct Logging {
     pub s_3_logs: Option<S3Logs>,
 }
 
-/// <p>The resources produced by this image. </p>
+/// <p>The resources produced by this image.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OutputResources {
-    /// <p>The EC2 AMIs created by this image. </p>
+    /// <p>The EC2 AMIs created by this image.</p>
     #[serde(rename = "amis")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amis: Option<Vec<Ami>>,
@@ -2320,10 +2417,10 @@ pub struct OutputResources {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutComponentPolicyRequest {
-    /// <p>The Amazon Resource Name (ARN) of the component that this policy should be applied to. </p>
+    /// <p>The Amazon Resource Name (ARN) of the component that this policy should be applied to.</p>
     #[serde(rename = "componentArn")]
     pub component_arn: String,
-    /// <p>The policy to apply. </p>
+    /// <p>The policy to apply.</p>
     #[serde(rename = "policy")]
     pub policy: String,
 }
@@ -2331,11 +2428,11 @@ pub struct PutComponentPolicyRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutComponentPolicyResponse {
-    /// <p>The Amazon Resource Name (ARN) of the component that this policy was applied to. </p>
+    /// <p>The Amazon Resource Name (ARN) of the component that this policy was applied to.</p>
     #[serde(rename = "componentArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub component_arn: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -2368,10 +2465,10 @@ pub struct PutContainerRecipePolicyResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutImagePolicyRequest {
-    /// <p>The Amazon Resource Name (ARN) of the image that this policy should be applied to. </p>
+    /// <p>The Amazon Resource Name (ARN) of the image that this policy should be applied to.</p>
     #[serde(rename = "imageArn")]
     pub image_arn: String,
-    /// <p>The policy to apply. </p>
+    /// <p>The policy to apply.</p>
     #[serde(rename = "policy")]
     pub policy: String,
 }
@@ -2379,11 +2476,11 @@ pub struct PutImagePolicyRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutImagePolicyResponse {
-    /// <p>The Amazon Resource Name (ARN) of the image that this policy was applied to. </p>
+    /// <p>The Amazon Resource Name (ARN) of the image that this policy was applied to.</p>
     #[serde(rename = "imageArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_arn: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -2392,10 +2489,10 @@ pub struct PutImagePolicyResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutImageRecipePolicyRequest {
-    /// <p>The Amazon Resource Name (ARN) of the image recipe that this policy should be applied to. </p>
+    /// <p>The Amazon Resource Name (ARN) of the image recipe that this policy should be applied to.</p>
     #[serde(rename = "imageRecipeArn")]
     pub image_recipe_arn: String,
-    /// <p>The policy to apply. </p>
+    /// <p>The policy to apply.</p>
     #[serde(rename = "policy")]
     pub policy: String,
 }
@@ -2403,11 +2500,11 @@ pub struct PutImageRecipePolicyRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutImageRecipePolicyResponse {
-    /// <p>The Amazon Resource Name (ARN) of the image recipe that this policy was applied to. </p>
+    /// <p>The Amazon Resource Name (ARN) of the image recipe that this policy was applied to.</p>
     #[serde(rename = "imageRecipeArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_recipe_arn: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -2426,7 +2523,7 @@ pub struct S3Logs {
     pub s_3_key_prefix: Option<String>,
 }
 
-/// <p>A schedule configures how often and when a pipeline will automatically create a new image. </p>
+/// <p>A schedule configures how often and when a pipeline will automatically create a new image.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Schedule {
     /// <p>The condition configures when the pipeline should trigger a new image build. When the <code>pipelineExecutionStartCondition</code> is set to <code>EXPRESSION_MATCH_AND_DEPENDENCY_UPDATES_AVAILABLE</code>, and you use semantic version filters on the source image or components in your image recipe, EC2 Image Builder will build a new image only when there are new versions of the image or components in your recipe that match the semantic version filter. When it is set to <code>EXPRESSION_MATCH_ONLY</code>, it will build a new image every time the CRON expression matches the current time. For semantic version syntax, see <a href="https://docs.aws.amazon.com/imagebuilder/latest/APIReference/API_CreateComponent.html">CreateComponent</a> in the <i> EC2 Image Builder API Reference</i>.</p>
@@ -2437,15 +2534,19 @@ pub struct Schedule {
     #[serde(rename = "scheduleExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_expression: Option<String>,
+    /// <p>The timezone that applies to the scheduling expression. For example, "Etc/UTC", "America/Los_Angeles" in the <a href="https://www.joda.org/joda-time/timezones.html">IANA timezone format</a>. If not specified this defaults to UTC.</p>
+    #[serde(rename = "timezone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timezone: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartImagePipelineExecutionRequest {
-    /// <p>The idempotency token used to make this request idempotent. </p>
+    /// <p>The idempotency token used to make this request idempotent.</p>
     #[serde(rename = "clientToken")]
     pub client_token: String,
-    /// <p>The Amazon Resource Name (ARN) of the image pipeline that you want to manually invoke. </p>
+    /// <p>The Amazon Resource Name (ARN) of the image pipeline that you want to manually invoke.</p>
     #[serde(rename = "imagePipelineArn")]
     pub image_pipeline_arn: String,
 }
@@ -2461,7 +2562,7 @@ pub struct StartImagePipelineExecutionResponse {
     #[serde(rename = "imageBuildVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_build_version_arn: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -2470,10 +2571,10 @@ pub struct StartImagePipelineExecutionResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
-    /// <p>The Amazon Resource Name (ARN) of the resource that you want to tag. </p>
+    /// <p>The Amazon Resource Name (ARN) of the resource that you want to tag.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
-    /// <p>The tags to apply to the resource. </p>
+    /// <p>The tags to apply to the resource.</p>
     #[serde(rename = "tags")]
     pub tags: ::std::collections::HashMap<String, String>,
 }
@@ -2496,10 +2597,10 @@ pub struct TargetContainerRepository {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
-    /// <p>The Amazon Resource Name (ARN) of the resource that you want to untag. </p>
+    /// <p>The Amazon Resource Name (ARN) of the resource that you want to untag.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
-    /// <p>The tag keys to remove from the resource. </p>
+    /// <p>The tag keys to remove from the resource.</p>
     #[serde(rename = "tagKeys")]
     pub tag_keys: Vec<String>,
 }
@@ -2511,17 +2612,17 @@ pub struct UntagResourceResponse {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDistributionConfigurationRequest {
-    /// <p>The idempotency token of the distribution configuration. </p>
+    /// <p>The idempotency token of the distribution configuration.</p>
     #[serde(rename = "clientToken")]
     pub client_token: String,
-    /// <p>The description of the distribution configuration. </p>
+    /// <p>The description of the distribution configuration.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the distribution configuration that you want to update. </p>
+    /// <p>The Amazon Resource Name (ARN) of the distribution configuration that you want to update.</p>
     #[serde(rename = "distributionConfigurationArn")]
     pub distribution_configuration_arn: String,
-    /// <p>The distributions of the distribution configuration. </p>
+    /// <p>The distributions of the distribution configuration.</p>
     #[serde(rename = "distributions")]
     pub distributions: Vec<Distribution>,
 }
@@ -2529,15 +2630,15 @@ pub struct UpdateDistributionConfigurationRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateDistributionConfigurationResponse {
-    /// <p>The idempotency token used to make this request idempotent. </p>
+    /// <p>The idempotency token used to make this request idempotent.</p>
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the distribution configuration that was updated by this request. </p>
+    /// <p>The Amazon Resource Name (ARN) of the distribution configuration that was updated by this request.</p>
     #[serde(rename = "distributionConfigurationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub distribution_configuration_arn: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -2546,44 +2647,44 @@ pub struct UpdateDistributionConfigurationResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateImagePipelineRequest {
-    /// <p>The idempotency token used to make this request idempotent. </p>
+    /// <p>The idempotency token used to make this request idempotent.</p>
     #[serde(rename = "clientToken")]
     pub client_token: String,
     /// <p>The Amazon Resource Name (ARN) of the container pipeline to update.</p>
     #[serde(rename = "containerRecipeArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub container_recipe_arn: Option<String>,
-    /// <p>The description of the image pipeline. </p>
+    /// <p>The description of the image pipeline.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the distribution configuration that will be used to configure and distribute images updated by this image pipeline. </p>
+    /// <p>The Amazon Resource Name (ARN) of the distribution configuration that will be used to configure and distribute images updated by this image pipeline.</p>
     #[serde(rename = "distributionConfigurationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub distribution_configuration_arn: Option<String>,
-    /// <p> Collects additional information about the image being created, including the operating system (OS) version and package list. This information is used to enhance the overall experience of using EC2 Image Builder. Enabled by default. </p>
+    /// <p> Collects additional information about the image being created, including the operating system (OS) version and package list. This information is used to enhance the overall experience of using EC2 Image Builder. Enabled by default.</p>
     #[serde(rename = "enhancedImageMetadataEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enhanced_image_metadata_enabled: Option<bool>,
-    /// <p>The Amazon Resource Name (ARN) of the image pipeline that you want to update. </p>
+    /// <p>The Amazon Resource Name (ARN) of the image pipeline that you want to update.</p>
     #[serde(rename = "imagePipelineArn")]
     pub image_pipeline_arn: String,
-    /// <p>The Amazon Resource Name (ARN) of the image recipe that will be used to configure images updated by this image pipeline. </p>
+    /// <p>The Amazon Resource Name (ARN) of the image recipe that will be used to configure images updated by this image pipeline.</p>
     #[serde(rename = "imageRecipeArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_recipe_arn: Option<String>,
-    /// <p>The image test configuration of the image pipeline. </p>
+    /// <p>The image test configuration of the image pipeline.</p>
     #[serde(rename = "imageTestsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_tests_configuration: Option<ImageTestsConfiguration>,
-    /// <p>The Amazon Resource Name (ARN) of the infrastructure configuration that will be used to build images updated by this image pipeline. </p>
+    /// <p>The Amazon Resource Name (ARN) of the infrastructure configuration that will be used to build images updated by this image pipeline.</p>
     #[serde(rename = "infrastructureConfigurationArn")]
     pub infrastructure_configuration_arn: String,
-    /// <p>The schedule of the image pipeline. </p>
+    /// <p>The schedule of the image pipeline.</p>
     #[serde(rename = "schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<Schedule>,
-    /// <p>The status of the image pipeline. </p>
+    /// <p>The status of the image pipeline.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -2592,15 +2693,15 @@ pub struct UpdateImagePipelineRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateImagePipelineResponse {
-    /// <p>The idempotency token used to make this request idempotent. </p>
+    /// <p>The idempotency token used to make this request idempotent.</p>
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the image pipeline that was updated by this request. </p>
+    /// <p>The Amazon Resource Name (ARN) of the image pipeline that was updated by this request.</p>
     #[serde(rename = "imagePipelineArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_pipeline_arn: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -2609,28 +2710,28 @@ pub struct UpdateImagePipelineResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateInfrastructureConfigurationRequest {
-    /// <p>The idempotency token used to make this request idempotent. </p>
+    /// <p>The idempotency token used to make this request idempotent.</p>
     #[serde(rename = "clientToken")]
     pub client_token: String,
-    /// <p>The description of the infrastructure configuration. </p>
+    /// <p>The description of the infrastructure configuration.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the infrastructure configuration that you want to update. </p>
+    /// <p>The Amazon Resource Name (ARN) of the infrastructure configuration that you want to update.</p>
     #[serde(rename = "infrastructureConfigurationArn")]
     pub infrastructure_configuration_arn: String,
-    /// <p>The instance profile to associate with the instance used to customize your EC2 AMI. </p>
+    /// <p>The instance profile to associate with the instance used to customize your EC2 AMI.</p>
     #[serde(rename = "instanceProfileName")]
     pub instance_profile_name: String,
-    /// <p>The instance types of the infrastructure configuration. You can specify one or more instance types to use for this build. The service will pick one of these instance types based on availability. </p>
+    /// <p>The instance types of the infrastructure configuration. You can specify one or more instance types to use for this build. The service will pick one of these instance types based on availability.</p>
     #[serde(rename = "instanceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_types: Option<Vec<String>>,
-    /// <p>The key pair of the infrastructure configuration. This can be used to log on to and debug the instance used to create your image. </p>
+    /// <p>The key pair of the infrastructure configuration. This can be used to log on to and debug the instance used to create your image.</p>
     #[serde(rename = "keyPair")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_pair: Option<String>,
-    /// <p>The logging configuration of the infrastructure configuration. </p>
+    /// <p>The logging configuration of the infrastructure configuration.</p>
     #[serde(rename = "logging")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging: Option<Logging>,
@@ -2638,19 +2739,19 @@ pub struct UpdateInfrastructureConfigurationRequest {
     #[serde(rename = "resourceTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The security group IDs to associate with the instance used to customize your EC2 AMI. </p>
+    /// <p>The security group IDs to associate with the instance used to customize your EC2 AMI.</p>
     #[serde(rename = "securityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
-    /// <p>The SNS topic on which to send image build events. </p>
+    /// <p>The SNS topic on which to send image build events.</p>
     #[serde(rename = "snsTopicArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sns_topic_arn: Option<String>,
-    /// <p>The subnet ID to place the instance used to customize your EC2 AMI in. </p>
+    /// <p>The subnet ID to place the instance used to customize your EC2 AMI in.</p>
     #[serde(rename = "subnetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_id: Option<String>,
-    /// <p>The terminate instance on failure setting of the infrastructure configuration. Set to false if you want Image Builder to retain the instance used to configure your AMI if the build or test phase of your workflow fails. </p>
+    /// <p>The terminate instance on failure setting of the infrastructure configuration. Set to false if you want Image Builder to retain the instance used to configure your AMI if the build or test phase of your workflow fails.</p>
     #[serde(rename = "terminateInstanceOnFailure")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub terminate_instance_on_failure: Option<bool>,
@@ -2659,15 +2760,15 @@ pub struct UpdateInfrastructureConfigurationRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateInfrastructureConfigurationResponse {
-    /// <p>The idempotency token used to make this request idempotent. </p>
+    /// <p>The idempotency token used to make this request idempotent.</p>
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the infrastructure configuration that was updated by this request. </p>
+    /// <p>The Amazon Resource Name (ARN) of the infrastructure configuration that was updated by this request.</p>
     #[serde(rename = "infrastructureConfigurationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub infrastructure_configuration_arn: Option<String>,
-    /// <p>The request ID that uniquely identifies this request. </p>
+    /// <p>The request ID that uniquely identifies this request.</p>
     #[serde(rename = "requestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
@@ -5229,6 +5330,84 @@ impl fmt::Display for ListImageBuildVersionsError {
     }
 }
 impl Error for ListImageBuildVersionsError {}
+/// Errors returned by ListImagePackages
+#[derive(Debug, PartialEq)]
+pub enum ListImagePackagesError {
+    /// <p>You have exceeded the permitted request rate for the specific operation.</p>
+    CallRateLimitExceeded(String),
+    /// <p>These errors are usually caused by a client action, such as using an action or resource on behalf of a user that doesn't have permissions to use the action or resource, or specifying an invalid resource identifier.</p>
+    Client(String),
+    /// <p>You are not authorized to perform the requested operation.</p>
+    Forbidden(String),
+    /// <p>You have provided an invalid pagination token in your request.</p>
+    InvalidPaginationToken(String),
+    /// <p>You have made a request for an action that is not supported by the service.</p>
+    InvalidRequest(String),
+    /// <p>At least one of the resources referenced by your request does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>This exception is thrown when the service encounters an unrecoverable exception.</p>
+    Service(String),
+    /// <p>The service is unable to process your request at this time.</p>
+    ServiceUnavailable(String),
+}
+
+impl ListImagePackagesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListImagePackagesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "CallRateLimitExceededException" => {
+                    return RusotoError::Service(ListImagePackagesError::CallRateLimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ClientException" => {
+                    return RusotoError::Service(ListImagePackagesError::Client(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListImagePackagesError::Forbidden(err.msg))
+                }
+                "InvalidPaginationTokenException" => {
+                    return RusotoError::Service(ListImagePackagesError::InvalidPaginationToken(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListImagePackagesError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListImagePackagesError::ResourceNotFound(err.msg))
+                }
+                "ServiceException" => {
+                    return RusotoError::Service(ListImagePackagesError::Service(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListImagePackagesError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListImagePackagesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListImagePackagesError::CallRateLimitExceeded(ref cause) => write!(f, "{}", cause),
+            ListImagePackagesError::Client(ref cause) => write!(f, "{}", cause),
+            ListImagePackagesError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListImagePackagesError::InvalidPaginationToken(ref cause) => write!(f, "{}", cause),
+            ListImagePackagesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListImagePackagesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListImagePackagesError::Service(ref cause) => write!(f, "{}", cause),
+            ListImagePackagesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListImagePackagesError {}
 /// Errors returned by ListImagePipelineImages
 #[derive(Debug, PartialEq)]
 pub enum ListImagePipelineImagesError {
@@ -6474,7 +6653,7 @@ pub trait ImageBuilder {
         input: CreateContainerRecipeRequest,
     ) -> Result<CreateContainerRecipeResponse, RusotoError<CreateContainerRecipeError>>;
 
-    /// <p>Creates a new distribution configuration. Distribution configurations define and configure the outputs of your pipeline. </p>
+    /// <p>Creates a new distribution configuration. Distribution configurations define and configure the outputs of your pipeline.</p>
     async fn create_distribution_configuration(
         &self,
         input: CreateDistributionConfigurationRequest,
@@ -6483,25 +6662,25 @@ pub trait ImageBuilder {
         RusotoError<CreateDistributionConfigurationError>,
     >;
 
-    /// <p> Creates a new image. This request will create a new image along with all of the configured output resources defined in the distribution configuration. </p>
+    /// <p> Creates a new image. This request will create a new image along with all of the configured output resources defined in the distribution configuration. You must specify exactly one recipe for your image, using either a ContainerRecipeArn or an ImageRecipeArn.</p>
     async fn create_image(
         &self,
         input: CreateImageRequest,
     ) -> Result<CreateImageResponse, RusotoError<CreateImageError>>;
 
-    /// <p> Creates a new image pipeline. Image pipelines enable you to automate the creation and distribution of images. </p>
+    /// <p> Creates a new image pipeline. Image pipelines enable you to automate the creation and distribution of images.</p>
     async fn create_image_pipeline(
         &self,
         input: CreateImagePipelineRequest,
     ) -> Result<CreateImagePipelineResponse, RusotoError<CreateImagePipelineError>>;
 
-    /// <p> Creates a new image recipe. Image recipes define how images are configured, tested, and assessed. </p>
+    /// <p> Creates a new image recipe. Image recipes define how images are configured, tested, and assessed.</p>
     async fn create_image_recipe(
         &self,
         input: CreateImageRecipeRequest,
     ) -> Result<CreateImageRecipeResponse, RusotoError<CreateImageRecipeError>>;
 
-    /// <p> Creates a new infrastructure configuration. An infrastructure configuration defines the environment in which your image will be built and tested. </p>
+    /// <p> Creates a new infrastructure configuration. An infrastructure configuration defines the environment in which your image will be built and tested.</p>
     async fn create_infrastructure_configuration(
         &self,
         input: CreateInfrastructureConfigurationRequest,
@@ -6510,7 +6689,7 @@ pub trait ImageBuilder {
         RusotoError<CreateInfrastructureConfigurationError>,
     >;
 
-    /// <p> Deletes a component build version. </p>
+    /// <p> Deletes a component build version.</p>
     async fn delete_component(
         &self,
         input: DeleteComponentRequest,
@@ -6522,7 +6701,7 @@ pub trait ImageBuilder {
         input: DeleteContainerRecipeRequest,
     ) -> Result<DeleteContainerRecipeResponse, RusotoError<DeleteContainerRecipeError>>;
 
-    /// <p> Deletes a distribution configuration. </p>
+    /// <p> Deletes a distribution configuration.</p>
     async fn delete_distribution_configuration(
         &self,
         input: DeleteDistributionConfigurationRequest,
@@ -6531,25 +6710,25 @@ pub trait ImageBuilder {
         RusotoError<DeleteDistributionConfigurationError>,
     >;
 
-    /// <p> Deletes an image. </p>
+    /// <p> Deletes an image.</p>
     async fn delete_image(
         &self,
         input: DeleteImageRequest,
     ) -> Result<DeleteImageResponse, RusotoError<DeleteImageError>>;
 
-    /// <p> Deletes an image pipeline. </p>
+    /// <p> Deletes an image pipeline.</p>
     async fn delete_image_pipeline(
         &self,
         input: DeleteImagePipelineRequest,
     ) -> Result<DeleteImagePipelineResponse, RusotoError<DeleteImagePipelineError>>;
 
-    /// <p> Deletes an image recipe. </p>
+    /// <p> Deletes an image recipe.</p>
     async fn delete_image_recipe(
         &self,
         input: DeleteImageRecipeRequest,
     ) -> Result<DeleteImageRecipeResponse, RusotoError<DeleteImageRecipeError>>;
 
-    /// <p> Deletes an infrastructure configuration. </p>
+    /// <p> Deletes an infrastructure configuration.</p>
     async fn delete_infrastructure_configuration(
         &self,
         input: DeleteInfrastructureConfigurationRequest,
@@ -6558,13 +6737,13 @@ pub trait ImageBuilder {
         RusotoError<DeleteInfrastructureConfigurationError>,
     >;
 
-    /// <p> Gets a component object. </p>
+    /// <p> Gets a component object.</p>
     async fn get_component(
         &self,
         input: GetComponentRequest,
     ) -> Result<GetComponentResponse, RusotoError<GetComponentError>>;
 
-    /// <p> Gets a component policy. </p>
+    /// <p> Gets a component policy.</p>
     async fn get_component_policy(
         &self,
         input: GetComponentPolicyRequest,
@@ -6582,43 +6761,43 @@ pub trait ImageBuilder {
         input: GetContainerRecipePolicyRequest,
     ) -> Result<GetContainerRecipePolicyResponse, RusotoError<GetContainerRecipePolicyError>>;
 
-    /// <p> Gets a distribution configuration. </p>
+    /// <p> Gets a distribution configuration.</p>
     async fn get_distribution_configuration(
         &self,
         input: GetDistributionConfigurationRequest,
     ) -> Result<GetDistributionConfigurationResponse, RusotoError<GetDistributionConfigurationError>>;
 
-    /// <p> Gets an image. </p>
+    /// <p> Gets an image.</p>
     async fn get_image(
         &self,
         input: GetImageRequest,
     ) -> Result<GetImageResponse, RusotoError<GetImageError>>;
 
-    /// <p> Gets an image pipeline. </p>
+    /// <p> Gets an image pipeline.</p>
     async fn get_image_pipeline(
         &self,
         input: GetImagePipelineRequest,
     ) -> Result<GetImagePipelineResponse, RusotoError<GetImagePipelineError>>;
 
-    /// <p> Gets an image policy. </p>
+    /// <p> Gets an image policy.</p>
     async fn get_image_policy(
         &self,
         input: GetImagePolicyRequest,
     ) -> Result<GetImagePolicyResponse, RusotoError<GetImagePolicyError>>;
 
-    /// <p> Gets an image recipe. </p>
+    /// <p> Gets an image recipe.</p>
     async fn get_image_recipe(
         &self,
         input: GetImageRecipeRequest,
     ) -> Result<GetImageRecipeResponse, RusotoError<GetImageRecipeError>>;
 
-    /// <p> Gets an image recipe policy. </p>
+    /// <p> Gets an image recipe policy.</p>
     async fn get_image_recipe_policy(
         &self,
         input: GetImageRecipePolicyRequest,
     ) -> Result<GetImageRecipePolicyResponse, RusotoError<GetImageRecipePolicyError>>;
 
-    /// <p> Gets an infrastructure configuration. </p>
+    /// <p> Gets an infrastructure configuration.</p>
     async fn get_infrastructure_configuration(
         &self,
         input: GetInfrastructureConfigurationRequest,
@@ -6627,19 +6806,19 @@ pub trait ImageBuilder {
         RusotoError<GetInfrastructureConfigurationError>,
     >;
 
-    /// <p>Imports a component and transforms its data into a component document. </p>
+    /// <p>Imports a component and transforms its data into a component document.</p>
     async fn import_component(
         &self,
         input: ImportComponentRequest,
     ) -> Result<ImportComponentResponse, RusotoError<ImportComponentError>>;
 
-    /// <p> Returns the list of component build versions for the specified semantic version. </p>
+    /// <p> Returns the list of component build versions for the specified semantic version.</p>
     async fn list_component_build_versions(
         &self,
         input: ListComponentBuildVersionsRequest,
     ) -> Result<ListComponentBuildVersionsResponse, RusotoError<ListComponentBuildVersionsError>>;
 
-    /// <p>Returns the list of component build versions for the specified semantic version. </p>
+    /// <p>Returns the list of component build versions for the specified semantic version.</p>
     async fn list_components(
         &self,
         input: ListComponentsRequest,
@@ -6651,7 +6830,7 @@ pub trait ImageBuilder {
         input: ListContainerRecipesRequest,
     ) -> Result<ListContainerRecipesResponse, RusotoError<ListContainerRecipesError>>;
 
-    /// <p>Returns a list of distribution configurations. </p>
+    /// <p>Returns a list of distribution configurations.</p>
     async fn list_distribution_configurations(
         &self,
         input: ListDistributionConfigurationsRequest,
@@ -6660,37 +6839,43 @@ pub trait ImageBuilder {
         RusotoError<ListDistributionConfigurationsError>,
     >;
 
-    /// <p> Returns a list of image build versions. </p>
+    /// <p> Returns a list of image build versions.</p>
     async fn list_image_build_versions(
         &self,
         input: ListImageBuildVersionsRequest,
     ) -> Result<ListImageBuildVersionsResponse, RusotoError<ListImageBuildVersionsError>>;
 
-    /// <p> Returns a list of images created by the specified pipeline. </p>
+    /// <p>List the Packages that are associated with an Image Build Version, as determined by AWS Systems Manager Inventory at build time.</p>
+    async fn list_image_packages(
+        &self,
+        input: ListImagePackagesRequest,
+    ) -> Result<ListImagePackagesResponse, RusotoError<ListImagePackagesError>>;
+
+    /// <p> Returns a list of images created by the specified pipeline.</p>
     async fn list_image_pipeline_images(
         &self,
         input: ListImagePipelineImagesRequest,
     ) -> Result<ListImagePipelineImagesResponse, RusotoError<ListImagePipelineImagesError>>;
 
-    /// <p>Returns a list of image pipelines. </p>
+    /// <p>Returns a list of image pipelines.</p>
     async fn list_image_pipelines(
         &self,
         input: ListImagePipelinesRequest,
     ) -> Result<ListImagePipelinesResponse, RusotoError<ListImagePipelinesError>>;
 
-    /// <p> Returns a list of image recipes. </p>
+    /// <p> Returns a list of image recipes.</p>
     async fn list_image_recipes(
         &self,
         input: ListImageRecipesRequest,
     ) -> Result<ListImageRecipesResponse, RusotoError<ListImageRecipesError>>;
 
-    /// <p> Returns the list of images that you have access to. </p>
+    /// <p> Returns the list of images that you have access to.</p>
     async fn list_images(
         &self,
         input: ListImagesRequest,
     ) -> Result<ListImagesResponse, RusotoError<ListImagesError>>;
 
-    /// <p> Returns a list of infrastructure configurations. </p>
+    /// <p> Returns a list of infrastructure configurations.</p>
     async fn list_infrastructure_configurations(
         &self,
         input: ListInfrastructureConfigurationsRequest,
@@ -6699,13 +6884,13 @@ pub trait ImageBuilder {
         RusotoError<ListInfrastructureConfigurationsError>,
     >;
 
-    /// <p> Returns the list of tags for the specified resource. </p>
+    /// <p> Returns the list of tags for the specified resource.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
-    /// <p> Applies a policy to a component. We recommend that you call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_CreateResourceShare.html">CreateResourceShare</a> to share resources. If you call the Image Builder API <code>PutComponentPolicy</code>, you must also call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_PromoteResourceShareCreatedFromPolicy.html">PromoteResourceShareCreatedFromPolicy</a> in order for the resource to be visible to all principals with whom the resource is shared. </p>
+    /// <p> Applies a policy to a component. We recommend that you call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_CreateResourceShare.html">CreateResourceShare</a> to share resources. If you call the Image Builder API <code>PutComponentPolicy</code>, you must also call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_PromoteResourceShareCreatedFromPolicy.html">PromoteResourceShareCreatedFromPolicy</a> in order for the resource to be visible to all principals with whom the resource is shared.</p>
     async fn put_component_policy(
         &self,
         input: PutComponentPolicyRequest,
@@ -6717,37 +6902,37 @@ pub trait ImageBuilder {
         input: PutContainerRecipePolicyRequest,
     ) -> Result<PutContainerRecipePolicyResponse, RusotoError<PutContainerRecipePolicyError>>;
 
-    /// <p>Applies a policy to an image. We recommend that you call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_CreateResourceShare.html">CreateResourceShare</a> to share resources. If you call the Image Builder API <code>PutImagePolicy</code>, you must also call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_PromoteResourceShareCreatedFromPolicy.html">PromoteResourceShareCreatedFromPolicy</a> in order for the resource to be visible to all principals with whom the resource is shared. </p>
+    /// <p>Applies a policy to an image. We recommend that you call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_CreateResourceShare.html">CreateResourceShare</a> to share resources. If you call the Image Builder API <code>PutImagePolicy</code>, you must also call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_PromoteResourceShareCreatedFromPolicy.html">PromoteResourceShareCreatedFromPolicy</a> in order for the resource to be visible to all principals with whom the resource is shared.</p>
     async fn put_image_policy(
         &self,
         input: PutImagePolicyRequest,
     ) -> Result<PutImagePolicyResponse, RusotoError<PutImagePolicyError>>;
 
-    /// <p> Applies a policy to an image recipe. We recommend that you call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_CreateResourceShare.html">CreateResourceShare</a> to share resources. If you call the Image Builder API <code>PutImageRecipePolicy</code>, you must also call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_PromoteResourceShareCreatedFromPolicy.html">PromoteResourceShareCreatedFromPolicy</a> in order for the resource to be visible to all principals with whom the resource is shared. </p>
+    /// <p> Applies a policy to an image recipe. We recommend that you call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_CreateResourceShare.html">CreateResourceShare</a> to share resources. If you call the Image Builder API <code>PutImageRecipePolicy</code>, you must also call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_PromoteResourceShareCreatedFromPolicy.html">PromoteResourceShareCreatedFromPolicy</a> in order for the resource to be visible to all principals with whom the resource is shared.</p>
     async fn put_image_recipe_policy(
         &self,
         input: PutImageRecipePolicyRequest,
     ) -> Result<PutImageRecipePolicyResponse, RusotoError<PutImageRecipePolicyError>>;
 
-    /// <p> Manually triggers a pipeline to create an image. </p>
+    /// <p> Manually triggers a pipeline to create an image.</p>
     async fn start_image_pipeline_execution(
         &self,
         input: StartImagePipelineExecutionRequest,
     ) -> Result<StartImagePipelineExecutionResponse, RusotoError<StartImagePipelineExecutionError>>;
 
-    /// <p> Adds a tag to a resource. </p>
+    /// <p> Adds a tag to a resource.</p>
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
 
-    /// <p> Removes a tag from a resource. </p>
+    /// <p> Removes a tag from a resource.</p>
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
-    /// <p> Updates a new distribution configuration. Distribution configurations define and configure the outputs of your pipeline. </p>
+    /// <p> Updates a new distribution configuration. Distribution configurations define and configure the outputs of your pipeline.</p>
     async fn update_distribution_configuration(
         &self,
         input: UpdateDistributionConfigurationRequest,
@@ -6756,13 +6941,13 @@ pub trait ImageBuilder {
         RusotoError<UpdateDistributionConfigurationError>,
     >;
 
-    /// <p> Updates a new image pipeline. Image pipelines enable you to automate the creation and distribution of images. </p>
+    /// <p><p> Updates an image pipeline. Image pipelines enable you to automate the creation and distribution of images.</p> <note> <p>UpdateImagePipeline does not support selective updates for the pipeline. You must specify all of the required properties in the update request, not just the properties that have changed.</p> </note></p>
     async fn update_image_pipeline(
         &self,
         input: UpdateImagePipelineRequest,
     ) -> Result<UpdateImagePipelineResponse, RusotoError<UpdateImagePipelineError>>;
 
-    /// <p> Updates a new infrastructure configuration. An infrastructure configuration defines the environment in which your image will be built and tested. </p>
+    /// <p> Updates a new infrastructure configuration. An infrastructure configuration defines the environment in which your image will be built and tested.</p>
     async fn update_infrastructure_configuration(
         &self,
         input: UpdateInfrastructureConfigurationRequest,
@@ -6904,7 +7089,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p>Creates a new distribution configuration. Distribution configurations define and configure the outputs of your pipeline. </p>
+    /// <p>Creates a new distribution configuration. Distribution configurations define and configure the outputs of your pipeline.</p>
     #[allow(unused_mut)]
     async fn create_distribution_configuration(
         &self,
@@ -6940,7 +7125,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Creates a new image. This request will create a new image along with all of the configured output resources defined in the distribution configuration. </p>
+    /// <p> Creates a new image. This request will create a new image along with all of the configured output resources defined in the distribution configuration. You must specify exactly one recipe for your image, using either a ContainerRecipeArn or an ImageRecipeArn.</p>
     #[allow(unused_mut)]
     async fn create_image(
         &self,
@@ -6971,7 +7156,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Creates a new image pipeline. Image pipelines enable you to automate the creation and distribution of images. </p>
+    /// <p> Creates a new image pipeline. Image pipelines enable you to automate the creation and distribution of images.</p>
     #[allow(unused_mut)]
     async fn create_image_pipeline(
         &self,
@@ -7002,7 +7187,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Creates a new image recipe. Image recipes define how images are configured, tested, and assessed. </p>
+    /// <p> Creates a new image recipe. Image recipes define how images are configured, tested, and assessed.</p>
     #[allow(unused_mut)]
     async fn create_image_recipe(
         &self,
@@ -7033,7 +7218,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Creates a new infrastructure configuration. An infrastructure configuration defines the environment in which your image will be built and tested. </p>
+    /// <p> Creates a new infrastructure configuration. An infrastructure configuration defines the environment in which your image will be built and tested.</p>
     #[allow(unused_mut)]
     async fn create_infrastructure_configuration(
         &self,
@@ -7069,7 +7254,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Deletes a component build version. </p>
+    /// <p> Deletes a component build version.</p>
     #[allow(unused_mut)]
     async fn delete_component(
         &self,
@@ -7136,7 +7321,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Deletes a distribution configuration. </p>
+    /// <p> Deletes a distribution configuration.</p>
     #[allow(unused_mut)]
     async fn delete_distribution_configuration(
         &self,
@@ -7176,7 +7361,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Deletes an image. </p>
+    /// <p> Deletes an image.</p>
     #[allow(unused_mut)]
     async fn delete_image(
         &self,
@@ -7208,7 +7393,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Deletes an image pipeline. </p>
+    /// <p> Deletes an image pipeline.</p>
     #[allow(unused_mut)]
     async fn delete_image_pipeline(
         &self,
@@ -7240,7 +7425,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Deletes an image recipe. </p>
+    /// <p> Deletes an image recipe.</p>
     #[allow(unused_mut)]
     async fn delete_image_recipe(
         &self,
@@ -7272,7 +7457,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Deletes an infrastructure configuration. </p>
+    /// <p> Deletes an infrastructure configuration.</p>
     #[allow(unused_mut)]
     async fn delete_infrastructure_configuration(
         &self,
@@ -7312,7 +7497,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Gets a component object. </p>
+    /// <p> Gets a component object.</p>
     #[allow(unused_mut)]
     async fn get_component(
         &self,
@@ -7347,7 +7532,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Gets a component policy. </p>
+    /// <p> Gets a component policy.</p>
     #[allow(unused_mut)]
     async fn get_component_policy(
         &self,
@@ -7443,7 +7628,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Gets a distribution configuration. </p>
+    /// <p> Gets a distribution configuration.</p>
     #[allow(unused_mut)]
     async fn get_distribution_configuration(
         &self,
@@ -7479,7 +7664,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Gets an image. </p>
+    /// <p> Gets an image.</p>
     #[allow(unused_mut)]
     async fn get_image(
         &self,
@@ -7511,7 +7696,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Gets an image pipeline. </p>
+    /// <p> Gets an image pipeline.</p>
     #[allow(unused_mut)]
     async fn get_image_pipeline(
         &self,
@@ -7543,7 +7728,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Gets an image policy. </p>
+    /// <p> Gets an image policy.</p>
     #[allow(unused_mut)]
     async fn get_image_policy(
         &self,
@@ -7575,7 +7760,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Gets an image recipe. </p>
+    /// <p> Gets an image recipe.</p>
     #[allow(unused_mut)]
     async fn get_image_recipe(
         &self,
@@ -7607,7 +7792,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Gets an image recipe policy. </p>
+    /// <p> Gets an image recipe policy.</p>
     #[allow(unused_mut)]
     async fn get_image_recipe_policy(
         &self,
@@ -7639,7 +7824,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Gets an infrastructure configuration. </p>
+    /// <p> Gets an infrastructure configuration.</p>
     #[allow(unused_mut)]
     async fn get_infrastructure_configuration(
         &self,
@@ -7677,7 +7862,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p>Imports a component and transforms its data into a component document. </p>
+    /// <p>Imports a component and transforms its data into a component document.</p>
     #[allow(unused_mut)]
     async fn import_component(
         &self,
@@ -7708,7 +7893,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Returns the list of component build versions for the specified semantic version. </p>
+    /// <p> Returns the list of component build versions for the specified semantic version.</p>
     #[allow(unused_mut)]
     async fn list_component_build_versions(
         &self,
@@ -7740,7 +7925,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p>Returns the list of component build versions for the specified semantic version. </p>
+    /// <p>Returns the list of component build versions for the specified semantic version.</p>
     #[allow(unused_mut)]
     async fn list_components(
         &self,
@@ -7802,7 +7987,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p>Returns a list of distribution configurations. </p>
+    /// <p>Returns a list of distribution configurations.</p>
     #[allow(unused_mut)]
     async fn list_distribution_configurations(
         &self,
@@ -7836,7 +8021,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Returns a list of image build versions. </p>
+    /// <p> Returns a list of image build versions.</p>
     #[allow(unused_mut)]
     async fn list_image_build_versions(
         &self,
@@ -7867,7 +8052,38 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Returns a list of images created by the specified pipeline. </p>
+    /// <p>List the Packages that are associated with an Image Build Version, as determined by AWS Systems Manager Inventory at build time.</p>
+    #[allow(unused_mut)]
+    async fn list_image_packages(
+        &self,
+        input: ListImagePackagesRequest,
+    ) -> Result<ListImagePackagesResponse, RusotoError<ListImagePackagesError>> {
+        let request_uri = "/ListImagePackages";
+
+        let mut request = SignedRequest::new("POST", "imagebuilder", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListImagePackagesResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListImagePackagesError::from_response(response))
+        }
+    }
+
+    /// <p> Returns a list of images created by the specified pipeline.</p>
     #[allow(unused_mut)]
     async fn list_image_pipeline_images(
         &self,
@@ -7898,7 +8114,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p>Returns a list of image pipelines. </p>
+    /// <p>Returns a list of image pipelines.</p>
     #[allow(unused_mut)]
     async fn list_image_pipelines(
         &self,
@@ -7929,7 +8145,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Returns a list of image recipes. </p>
+    /// <p> Returns a list of image recipes.</p>
     #[allow(unused_mut)]
     async fn list_image_recipes(
         &self,
@@ -7960,7 +8176,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Returns the list of images that you have access to. </p>
+    /// <p> Returns the list of images that you have access to.</p>
     #[allow(unused_mut)]
     async fn list_images(
         &self,
@@ -7991,7 +8207,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Returns a list of infrastructure configurations. </p>
+    /// <p> Returns a list of infrastructure configurations.</p>
     #[allow(unused_mut)]
     async fn list_infrastructure_configurations(
         &self,
@@ -8027,7 +8243,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Returns the list of tags for the specified resource. </p>
+    /// <p> Returns the list of tags for the specified resource.</p>
     #[allow(unused_mut)]
     async fn list_tags_for_resource(
         &self,
@@ -8055,7 +8271,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Applies a policy to a component. We recommend that you call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_CreateResourceShare.html">CreateResourceShare</a> to share resources. If you call the Image Builder API <code>PutComponentPolicy</code>, you must also call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_PromoteResourceShareCreatedFromPolicy.html">PromoteResourceShareCreatedFromPolicy</a> in order for the resource to be visible to all principals with whom the resource is shared. </p>
+    /// <p> Applies a policy to a component. We recommend that you call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_CreateResourceShare.html">CreateResourceShare</a> to share resources. If you call the Image Builder API <code>PutComponentPolicy</code>, you must also call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_PromoteResourceShareCreatedFromPolicy.html">PromoteResourceShareCreatedFromPolicy</a> in order for the resource to be visible to all principals with whom the resource is shared.</p>
     #[allow(unused_mut)]
     async fn put_component_policy(
         &self,
@@ -8117,7 +8333,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p>Applies a policy to an image. We recommend that you call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_CreateResourceShare.html">CreateResourceShare</a> to share resources. If you call the Image Builder API <code>PutImagePolicy</code>, you must also call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_PromoteResourceShareCreatedFromPolicy.html">PromoteResourceShareCreatedFromPolicy</a> in order for the resource to be visible to all principals with whom the resource is shared. </p>
+    /// <p>Applies a policy to an image. We recommend that you call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_CreateResourceShare.html">CreateResourceShare</a> to share resources. If you call the Image Builder API <code>PutImagePolicy</code>, you must also call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_PromoteResourceShareCreatedFromPolicy.html">PromoteResourceShareCreatedFromPolicy</a> in order for the resource to be visible to all principals with whom the resource is shared.</p>
     #[allow(unused_mut)]
     async fn put_image_policy(
         &self,
@@ -8148,7 +8364,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Applies a policy to an image recipe. We recommend that you call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_CreateResourceShare.html">CreateResourceShare</a> to share resources. If you call the Image Builder API <code>PutImageRecipePolicy</code>, you must also call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_PromoteResourceShareCreatedFromPolicy.html">PromoteResourceShareCreatedFromPolicy</a> in order for the resource to be visible to all principals with whom the resource is shared. </p>
+    /// <p> Applies a policy to an image recipe. We recommend that you call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_CreateResourceShare.html">CreateResourceShare</a> to share resources. If you call the Image Builder API <code>PutImageRecipePolicy</code>, you must also call the RAM API <a href="https://docs.aws.amazon.com/ram/latest/APIReference/API_PromoteResourceShareCreatedFromPolicy.html">PromoteResourceShareCreatedFromPolicy</a> in order for the resource to be visible to all principals with whom the resource is shared.</p>
     #[allow(unused_mut)]
     async fn put_image_recipe_policy(
         &self,
@@ -8179,7 +8395,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Manually triggers a pipeline to create an image. </p>
+    /// <p> Manually triggers a pipeline to create an image.</p>
     #[allow(unused_mut)]
     async fn start_image_pipeline_execution(
         &self,
@@ -8211,7 +8427,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Adds a tag to a resource. </p>
+    /// <p> Adds a tag to a resource.</p>
     #[allow(unused_mut)]
     async fn tag_resource(
         &self,
@@ -8242,7 +8458,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Removes a tag from a resource. </p>
+    /// <p> Removes a tag from a resource.</p>
     #[allow(unused_mut)]
     async fn untag_resource(
         &self,
@@ -8276,7 +8492,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Updates a new distribution configuration. Distribution configurations define and configure the outputs of your pipeline. </p>
+    /// <p> Updates a new distribution configuration. Distribution configurations define and configure the outputs of your pipeline.</p>
     #[allow(unused_mut)]
     async fn update_distribution_configuration(
         &self,
@@ -8312,7 +8528,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Updates a new image pipeline. Image pipelines enable you to automate the creation and distribution of images. </p>
+    /// <p><p> Updates an image pipeline. Image pipelines enable you to automate the creation and distribution of images.</p> <note> <p>UpdateImagePipeline does not support selective updates for the pipeline. You must specify all of the required properties in the update request, not just the properties that have changed.</p> </note></p>
     #[allow(unused_mut)]
     async fn update_image_pipeline(
         &self,
@@ -8343,7 +8559,7 @@ impl ImageBuilder for ImageBuilderClient {
         }
     }
 
-    /// <p> Updates a new infrastructure configuration. An infrastructure configuration defines the environment in which your image will be built and tested. </p>
+    /// <p> Updates a new infrastructure configuration. An infrastructure configuration defines the environment in which your image will be built and tested.</p>
     #[allow(unused_mut)]
     async fn update_infrastructure_configuration(
         &self,

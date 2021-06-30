@@ -28,7 +28,7 @@ use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateGroupInput {
-    /// <p><p>A configuration associates the resource group with an AWS service and specifies how the service can interact with the resources in the group. A configuration is an array of <a>GroupConfigurationItem</a> elements.</p> <note> <p>You can specify either a <code>Configuration</code> or a <code>ResourceQuery</code> in a group, but not both.</p> </note></p>
+    /// <p><p>A configuration associates the resource group with an AWS service and specifies how the service can interact with the resources in the group. A configuration is an array of <a>GroupConfigurationItem</a> elements. For details about the syntax of service configurations, see <a href="https://docs.aws.amazon.com/ARG/latest/APIReference/about-slg.html">Service configurations for resource groups</a>.</p> <note> <p>A resource group can contain either a <code>Configuration</code> or a <code>ResourceQuery</code>, but not both.</p> </note></p>
     #[serde(rename = "Configuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<Vec<GroupConfigurationItem>>,
@@ -39,7 +39,7 @@ pub struct CreateGroupInput {
     /// <p>The name of the group, which is the identifier of the group in other operations. You can't change the name of a resource group after you create it. A resource group name can consist of letters, numbers, hyphens, periods, and underscores. The name cannot start with <code>AWS</code> or <code>aws</code>; these are reserved. A resource group name must be unique within each AWS Region in your AWS account.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p><p>The resource query that determines which AWS resources are members of this group.</p> <note> <p>You can specify either a <code>ResourceQuery</code> or a <code>Configuration</code>, but not both.</p> </note></p>
+    /// <p><p>The resource query that determines which AWS resources are members of this group. For more information about resource queries, see <a href="https://docs.aws.amazon.com/ARG/latest/userguide/gettingstarted-query.html#gettingstarted-query-cli-tag">Create a tag-based group in Resource Groups</a>. </p> <note> <p>A resource group can contain either a <code>ResourceQuery</code> or a <code>Configuration</code>, but not both.</p> </note></p>
     #[serde(rename = "ResourceQuery")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_query: Option<ResourceQuery>,
@@ -56,11 +56,11 @@ pub struct CreateGroupOutput {
     #[serde(rename = "Group")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group: Option<Group>,
-    /// <p><p>The service configuration associated with the resource group. AWS Resource Groups supports adding service configurations for the following resource group types:</p> <ul> <li> <p> <code>AWS::EC2::CapacityReservationPool</code> - Amazon EC2 capacity reservation pools. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/capacity-reservations-using.html#create-cr-group">Working with capacity reservation groups</a> in the <i>EC2 Users Guide</i>.</p> </li> </ul></p>
+    /// <p>The service configuration associated with the resource group. For details about the syntax of a service configuration, see <a href="https://docs.aws.amazon.com/ARG/latest/APIReference/about-slg.html">Service configurations for resource groups</a>.</p>
     #[serde(rename = "GroupConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_configuration: Option<GroupConfiguration>,
-    /// <p>The resource query associated with the group.</p>
+    /// <p>The resource query associated with the group. For more information about resource queries, see <a href="https://docs.aws.amazon.com/ARG/latest/userguide/gettingstarted-query.html#gettingstarted-query-cli-tag">Create a tag-based group in Resource Groups</a>. </p>
     #[serde(rename = "ResourceQuery")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_query: Option<ResourceQuery>,
@@ -118,7 +118,7 @@ pub struct GetGroupConfigurationInput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupConfigurationOutput {
-    /// <p>The configuration associated with the specified group.</p>
+    /// <p>The service configuration associated with the specified group. For details about the service configuration syntax, see <a href="https://docs.aws.amazon.com/ARG/latest/APIReference/about-slg.html">Service configurations for resource groups</a>.</p>
     #[serde(rename = "GroupConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_configuration: Option<GroupConfiguration>,
@@ -154,7 +154,7 @@ pub struct GetGroupQueryInput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetGroupQueryOutput {
-    /// <p>The resource query associated with the specified group.</p>
+    /// <p>The resource query associated with the specified group. For more information about resource queries, see <a href="https://docs.aws.amazon.com/ARG/latest/userguide/gettingstarted-query.html#gettingstarted-query-cli-tag">Create a tag-based group in Resource Groups</a>.</p>
     #[serde(rename = "GroupQuery")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_query: Option<GroupQuery>,
@@ -181,7 +181,7 @@ pub struct GetTagsOutput {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p><p>A resource group that contains AWS resources. You can assign resources to the group by associating either of the following elements with the group:</p> <ul> <li> <p> <a>ResourceQuery</a> - Use a resource query to specify a set of tag keys and values. All resources in the same AWS Region and AWS account that have those keys with the same values are included in the group. You can add a resource query when you create the group.</p> </li> <li> <p> <a>GroupConfiguration</a> - Use a service configuration to associate the group with an AWS service. The configuration specifies which resource types can be included in the group.</p> </li> </ul></p>
+/// <p><p>A resource group that contains AWS resources. You can assign resources to the group by associating either of the following elements with the group:</p> <ul> <li> <p> <a>ResourceQuery</a> - Use a resource query to specify a set of tag keys and values. All resources in the same AWS Region and AWS account that have those keys with the same values are included in the group. You can add a resource query when you create the group, or later by using the <a>PutGroupConfiguration</a> operation.</p> </li> <li> <p> <a>GroupConfiguration</a> - Use a service configuration to associate the group with an AWS service. The configuration specifies which resource types can be included in the group.</p> </li> </ul></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Group {
@@ -197,7 +197,7 @@ pub struct Group {
     pub name: String,
 }
 
-/// <p>A service configuration associated with a resource group. The configuration options are determined by the AWS service that defines the <code>Type</code>, and specifies which resources can be included in the group. You can add a service configuration when you create the group.</p>
+/// <p>A service configuration associated with a resource group. The configuration options are determined by the AWS service that defines the <code>Type</code>, and specifies which resources can be included in the group. You can add a service configuration when you create the group by using <a>CreateGroup</a>, or later by using the <a>PutGroupConfiguration</a> operation. For details about group service configuration syntax, see <a href="https://docs.aws.amazon.com/ARG/latest/APIReference/about-slg.html">Service configurations for resource groups</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GroupConfiguration {
@@ -219,25 +219,25 @@ pub struct GroupConfiguration {
     pub status: Option<String>,
 }
 
-/// <p>An item in a group configuration. A group configuration can have one or more items.</p>
+/// <p>An item in a group configuration. A group service configuration can have one or more items. For details about group service configuration syntax, see <a href="https://docs.aws.amazon.com/ARG/latest/APIReference/about-slg.html">Service configurations for resource groups</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GroupConfigurationItem {
-    /// <p>A collection of parameters for this group configuration item.</p>
+    /// <p>A collection of parameters for this group configuration item. For the list of parameters that you can use with each configuration item type, see <a href="https://docs.aws.amazon.com/ARG/latest/APIReference/about-slg.html#about-slg-types">Supported resource types and parameters</a>.</p>
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<Vec<GroupConfigurationParameter>>,
-    /// <p><p>Specifies the type of group configuration item. Each item must have a unique value for <code>type</code>.</p> <p>You can specify the following string values:</p> <ul> <li> <p> <code>AWS::EC2::CapacityReservationPool</code> </p> <p>For more information about EC2 capacity reservation groups, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/capacity-reservations-using.html#create-cr-group">Working with capacity reservation groups</a> in the <i>EC2 Users Guide</i>.</p> </li> <li> <p> <code>AWS::ResourceGroups::Generic</code> - Supports parameters that configure the behavior of resource groups of any type.</p> </li> </ul></p>
+    /// <p>Specifies the type of group configuration item. Each item must have a unique value for <code>type</code>. For the list of types that you can specify for a configuration item, see <a href="https://docs.aws.amazon.com/ARG/latest/APIReference/about-slg.html#about-slg-types">Supported resource types and parameters</a>.</p>
     #[serde(rename = "Type")]
     pub type_: String,
 }
 
-/// <p>A parameter for a group configuration item.</p>
+/// <p>A parameter for a group configuration item. For details about group service configuration syntax, see <a href="https://docs.aws.amazon.com/ARG/latest/APIReference/about-slg.html">Service configurations for resource groups</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GroupConfigurationParameter {
-    /// <p><p>The name of the group configuration parameter.</p> <p>You can specify the following string values:</p> <ul> <li> <p>For configuration item type <code>AWS::ResourceGroups::Generic</code>:</p> <ul> <li> <p> <code>allowed-resource-types</code> </p> <p>Specifies the types of resources that you can add to this group by using the <a>GroupResources</a> operation.</p> </li> </ul> </li> <li> <p>For configuration item type <code>AWS::EC2::CapacityReservationPool</code>:</p> <ul> <li> <p>None - This configuration item type doesn&#39;t support any parameters.</p> </li> </ul> <p>For more information about EC2 capacity reservation groups, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/capacity-reservations-using.html#create-cr-group">Working with capacity reservation groups</a> in the <i>EC2 Users Guide</i>.</p> </li> </ul></p>
+    /// <p>The name of the group configuration parameter. For the list of parameters that you can use with each configuration item type, see <a href="https://docs.aws.amazon.com/ARG/latest/APIReference/about-slg.html#about-slg-types">Supported resource types and parameters</a>.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p><p>The values of for this parameter.</p> <p>You can specify the following string value:</p> <ul> <li> <p>For item type <code>allowed-resource-types</code>: the only supported parameter value is <code>AWS::EC2::CapacityReservation</code>.</p> </li> </ul></p>
+    /// <p>The value or values to be used for the specified parameter. For the list of values you can use with each parameter, see <a href="https://docs.aws.amazon.com/ARG/latest/APIReference/about-slg.html#about-slg-types">Supported resource types and parameters</a>.</p>
     #[serde(rename = "Values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
@@ -295,11 +295,15 @@ pub struct GroupResourcesInput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GroupResourcesOutput {
-    /// <p>The ARNs of the resources that failed to be added to the group by this operation.</p>
+    /// <p>A list of ARNs of any resources that failed to be added to the group by this operation.</p>
     #[serde(rename = "Failed")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed: Option<Vec<FailedResource>>,
-    /// <p>The ARNs of the resources that were successfully added to the group by this operation.</p>
+    /// <p>A list of ARNs of any resources that are still in the process of being added to the group by this operation. These pending additions continue asynchronously. You can check the status of pending additions by using the <code> <a>ListGroupResources</a> </code> operation, and checking the <code>Resources</code> array in the response and the <code>Status</code> field of each object in that array. </p>
+    #[serde(rename = "Pending")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pending: Option<Vec<PendingResource>>,
+    /// <p>A list of ARNs of resources that were successfully added to the group by this operation.</p>
     #[serde(rename = "Succeeded")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub succeeded: Option<Vec<String>>,
@@ -326,6 +330,19 @@ pub struct ListGroupResourcesInput {
     pub next_token: Option<String>,
 }
 
+/// <p>A structure returned by the <a>ListGroupResources</a> operation that contains identity and group membership status information for one of the resources in the group.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListGroupResourcesItem {
+    #[serde(rename = "Identifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identifier: Option<ResourceIdentifier>,
+    /// <p><p>A structure that contains the status of this resource&#39;s membership in the group.</p> <note> <p>This field is present in the response only if the group is of type <code>AWS::EC2::HostManagement</code>.</p> </note></p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<ResourceStatus>,
+}
+
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGroupResourcesOutput {
@@ -337,16 +354,16 @@ pub struct ListGroupResourcesOutput {
     #[serde(rename = "QueryErrors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub query_errors: Option<Vec<QueryError>>,
-    /// <p>The ARNs and resource types of resources that are members of the group that you specified.</p>
-    #[serde(rename = "ResourceIdentifiers")]
+    /// <p>An array of resources from which you can determine each resource's identity, type, and group membership status.</p>
+    #[serde(rename = "Resources")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub resource_identifiers: Option<Vec<ResourceIdentifier>>,
+    pub resources: Option<Vec<ListGroupResourcesItem>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListGroupsInput {
-    /// <p><p>Filters, formatted as <a>GroupFilter</a> objects, that you want to apply to a <code>ListGroups</code> operation.</p> <ul> <li> <p> <code>resource-type</code> - Filter the results to include only those of the specified resource types. Specify up to five resource types in the format <code>AWS::<i>ServiceCode</i>::<i>ResourceType</i> </code>. For example, <code>AWS::EC2::Instance</code>, or <code>AWS::S3::Bucket</code>.</p> </li> <li> <p> <code>configuration-type</code> - Filter the results to include only those groups that have the specified configuration types attached. The current supported values are:</p> <ul> <li> <p>AWS:EC2::CapacityReservationPool</p> </li> </ul> </li> </ul></p>
+    /// <p><p>Filters, formatted as <a>GroupFilter</a> objects, that you want to apply to a <code>ListGroups</code> operation.</p> <ul> <li> <p> <code>resource-type</code> - Filter the results to include only those of the specified resource types. Specify up to five resource types in the format <code>AWS::<i>ServiceCode</i>::<i>ResourceType</i> </code>. For example, <code>AWS::EC2::Instance</code>, or <code>AWS::S3::Bucket</code>.</p> </li> <li> <p> <code>configuration-type</code> - Filter the results to include only those groups that have the specified configuration types attached. The current supported values are:</p> <ul> <li> <p> <code>AWS:EC2::CapacityReservationPool</code> </p> </li> <li> <p> <code>AWS:EC2::HostManagement</code> </p> </li> </ul> </li> </ul></p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<GroupFilter>>,
@@ -372,6 +389,33 @@ pub struct ListGroupsOutput {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
+
+/// <p>A structure that identifies a resource that is currently pending addition to the group as a member. Adding a resource to a resource group happens asynchronously as a background task and this one isn't completed yet.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PendingResource {
+    /// <p>The Amazon resource name (ARN) of the resource that's in a pending state.</p>
+    #[serde(rename = "ResourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutGroupConfigurationInput {
+    /// <p><p>The new configuration to associate with the specified group. A configuration associates the resource group with an AWS service and specifies how the service can interact with the resources in the group. A configuration is an array of <a>GroupConfigurationItem</a> elements.</p> <p>For information about the syntax of a service configuration, see <a href="https://docs.aws.amazon.com/ARG/latest/APIReference/about-slg.html">Service configurations for resource groups</a>.</p> <note> <p>A resource group can contain either a <code>Configuration</code> or a <code>ResourceQuery</code>, but not both.</p> </note></p>
+    #[serde(rename = "Configuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration: Option<Vec<GroupConfigurationItem>>,
+    /// <p>The name or ARN of the resource group with the configuration that you want to update.</p>
+    #[serde(rename = "Group")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutGroupConfigurationOutput {}
 
 /// <p>A two-part error structure that can occur in <code>ListGroupResources</code> or <code>SearchResources</code> operations on CloudFormation stack-based queries. The error occurs if the CloudFormation stack on which the query is based either does not exist, or has a status that renders the stack inactive. A <code>QueryError</code> occurrence does not necessarily mean that AWS Resource Groups could not complete the operation, but the resulting group might have no member resources.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -399,7 +443,7 @@ pub struct ResourceFilter {
     pub values: Vec<String>,
 }
 
-/// <p>The ARN of a resource, and its resource type.</p>
+/// <p>A structure that contains the ARN of a resource and its resource type.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ResourceIdentifier {
@@ -422,6 +466,16 @@ pub struct ResourceQuery {
     /// <p><p>The type of the query. You can use the following values:</p> <ul> <li> <p> <i> <code>CLOUDFORMATION<em>STACK</em>1<em>0:</code> </i>Specifies that the <code>Query</code> contains an ARN for a CloudFormation stack.</p> </li> <li> <p> <i> <code>TAG</em>FILTERS<em>1</em>0:</code> </i>Specifies that the <code>Query</code> parameter contains a JSON string that represents a collection of simple tag filters for resource types and tags. The JSON string uses a syntax similar to the <code> <a href="https://docs.aws.amazon.com/resourcegroupstagging/latest/APIReference/API_GetResources.html">GetResources</a> </code> operation, but uses only the <code> <a href="https://docs.aws.amazon.com/resourcegroupstagging/latest/APIReference/API_GetResources.html#resourcegrouptagging-GetResources-request-ResourceTypeFilters"> ResourceTypeFilters</a> </code> and <code> <a href="https://docs.aws.amazon.com/resourcegroupstagging/latest/APIReference/API_GetResources.html#resourcegrouptagging-GetResources-request-TagFiltersTagFilters">TagFilters</a> </code> fields. If you specify more than one tag key, only resources that match all tag keys, and at least one value of each specified tag key, are returned in your query. If you specify more than one value for a tag key, a resource matches the filter if it has a tag key value that matches <i>any</i> of the specified values.</p> <p>For example, consider the following sample query for resources that have two tags, <code>Stage</code> and <code>Version</code>, with two values each:</p> <p> <code>[{&quot;Stage&quot;:[&quot;Test&quot;,&quot;Deploy&quot;]},{&quot;Version&quot;:[&quot;1&quot;,&quot;2&quot;]}]</code> </p> <p>The results of this query could include the following.</p> <ul> <li> <p>An EC2 instance that has the following two tags: <code>{&quot;Stage&quot;:&quot;Deploy&quot;}</code>, and <code>{&quot;Version&quot;:&quot;2&quot;}</code> </p> </li> <li> <p>An S3 bucket that has the following two tags: <code>{&quot;Stage&quot;:&quot;Test&quot;}</code>, and <code>{&quot;Version&quot;:&quot;1&quot;}</code> </p> </li> </ul> <p>The query would not include the following items in the results, however. </p> <ul> <li> <p>An EC2 instance that has only the following tag: <code>{&quot;Stage&quot;:&quot;Deploy&quot;}</code>.</p> <p>The instance does not have <b>all</b> of the tag keys specified in the filter, so it is excluded from the results.</p> </li> <li> <p>An RDS database that has the following two tags: <code>{&quot;Stage&quot;:&quot;Archived&quot;}</code> and <code>{&quot;Version&quot;:&quot;4&quot;}</code> </p> <p>The database has all of the tag keys, but none of those keys has an associated value that matches at least one of the specified values in the filter.</p> </li> </ul> </li> </ul></p>
     #[serde(rename = "Type")]
     pub type_: String,
+}
+
+/// <p>A structure that identifies the current group membership status for a resource. Adding a resource to a resource group is performed asynchronously as a background task. A <code>PENDING</code> status indicates, for this resource, that the process isn't completed yet.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ResourceStatus {
+    /// <p>The current status.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -495,11 +549,15 @@ pub struct UngroupResourcesInput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UngroupResourcesOutput {
-    /// <p>The resources that failed to be removed from the group.</p>
+    /// <p>A list of any resources that failed to be removed from the group by this operation.</p>
     #[serde(rename = "Failed")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed: Option<Vec<FailedResource>>,
-    /// <p>The ARNs of the resources that were successfully removed from the group.</p>
+    /// <p>A list of any resources that are still in the process of being removed from the group by this operation. These pending removals continue asynchronously. You can check the status of pending removals by using the <code> <a>ListGroupResources</a> </code> operation. After the resource is successfully removed, it no longer appears in the response.</p>
+    #[serde(rename = "Pending")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pending: Option<Vec<PendingResource>>,
+    /// <p>A list of resources that were successfully removed from the group by this operation.</p>
     #[serde(rename = "Succeeded")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub succeeded: Option<Vec<String>>,
@@ -558,7 +616,7 @@ pub struct UpdateGroupQueryInput {
     #[serde(rename = "Group")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group: Option<String>,
-    /// <p>The resource query to determine which AWS resources are members of this resource group.</p>
+    /// <p><p>The resource query to determine which AWS resources are members of this resource group.</p> <note> <p>A resource group can contain either a <code>Configuration</code> or a <code>ResourceQuery</code>, but not both.</p> </note></p>
     #[serde(rename = "ResourceQuery")]
     pub resource_query: ResourceQuery,
 }
@@ -1114,6 +1172,72 @@ impl fmt::Display for ListGroupsError {
     }
 }
 impl Error for ListGroupsError {}
+/// Errors returned by PutGroupConfiguration
+#[derive(Debug, PartialEq)]
+pub enum PutGroupConfigurationError {
+    /// <p>The request includes one or more parameters that violate validation rules.</p>
+    BadRequest(String),
+    /// <p>The caller isn't authorized to make the request. Check permissions.</p>
+    Forbidden(String),
+    /// <p>An internal error occurred while processing the request. Try again later.</p>
+    InternalServerError(String),
+    /// <p>The request uses an HTTP method that isn't allowed for the specified resource.</p>
+    MethodNotAllowed(String),
+    /// <p>One or more of the specified resources don't exist.</p>
+    NotFound(String),
+    /// <p>You've exceeded throttling limits by making too many requests in a period of time.</p>
+    TooManyRequests(String),
+}
+
+impl PutGroupConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutGroupConfigurationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(PutGroupConfigurationError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(PutGroupConfigurationError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(PutGroupConfigurationError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "MethodNotAllowedException" => {
+                    return RusotoError::Service(PutGroupConfigurationError::MethodNotAllowed(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(PutGroupConfigurationError::NotFound(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(PutGroupConfigurationError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutGroupConfigurationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutGroupConfigurationError::BadRequest(ref cause) => write!(f, "{}", cause),
+            PutGroupConfigurationError::Forbidden(ref cause) => write!(f, "{}", cause),
+            PutGroupConfigurationError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            PutGroupConfigurationError::MethodNotAllowed(ref cause) => write!(f, "{}", cause),
+            PutGroupConfigurationError::NotFound(ref cause) => write!(f, "{}", cause),
+            PutGroupConfigurationError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PutGroupConfigurationError {}
 /// Errors returned by SearchResources
 #[derive(Debug, PartialEq)]
 pub enum SearchResourcesError {
@@ -1475,85 +1599,91 @@ impl Error for UpdateGroupQueryError {}
 /// Trait representing the capabilities of the Resource Groups API. Resource Groups clients implement this trait.
 #[async_trait]
 pub trait ResourceGroups {
-    /// <p>Creates a resource group with the specified name and description. You can optionally include a resource query, or a service configuration.</p>
+    /// <p><p>Creates a resource group with the specified name and description. You can optionally include a resource query, or a service configuration. For more information about constructing a resource query, see <a href="https://docs.aws.amazon.com/ARG/latest/userguide/gettingstarted-query.html#gettingstarted-query-cli-tag">Create a tag-based group in Resource Groups</a>. For more information about service configurations, see <a href="https://docs.aws.amazon.com/ARG/latest/APIReference/about-slg.html">Service configurations for resource groups</a>.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:CreateGroup</code> </p> </li> </ul></p>
     async fn create_group(
         &self,
         input: CreateGroupInput,
     ) -> Result<CreateGroupOutput, RusotoError<CreateGroupError>>;
 
-    /// <p>Deletes the specified resource group. Deleting a resource group does not delete any resources that are members of the group; it only deletes the group structure.</p>
+    /// <p><p>Deletes the specified resource group. Deleting a resource group does not delete any resources that are members of the group; it only deletes the group structure.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:DeleteGroup</code> </p> </li> </ul></p>
     async fn delete_group(
         &self,
         input: DeleteGroupInput,
     ) -> Result<DeleteGroupOutput, RusotoError<DeleteGroupError>>;
 
-    /// <p>Returns information about a specified resource group.</p>
+    /// <p><p>Returns information about a specified resource group.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:GetGroup</code> </p> </li> </ul></p>
     async fn get_group(
         &self,
         input: GetGroupInput,
     ) -> Result<GetGroupOutput, RusotoError<GetGroupError>>;
 
-    /// <p><p>Returns the service configuration associated with the specified resource group. AWS Resource Groups supports configurations for the following resource group types:</p> <ul> <li> <p> <code>AWS::EC2::CapacityReservationPool</code> - Amazon EC2 capacity reservation pools. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/capacity-reservations-using.html#create-cr-group">Working with capacity reservation groups</a> in the <i>EC2 Users Guide</i>.</p> </li> </ul></p>
+    /// <p><p>Returns the service configuration associated with the specified resource group. For details about the service configuration syntax, see <a href="https://docs.aws.amazon.com/ARG/latest/APIReference/about-slg.html">Service configurations for resource groups</a>.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:GetGroupConfiguration</code> </p> </li> </ul></p>
     async fn get_group_configuration(
         &self,
         input: GetGroupConfigurationInput,
     ) -> Result<GetGroupConfigurationOutput, RusotoError<GetGroupConfigurationError>>;
 
-    /// <p>Retrieves the resource query associated with the specified resource group.</p>
+    /// <p><p>Retrieves the resource query associated with the specified resource group. For more information about resource queries, see <a href="https://docs.aws.amazon.com/ARG/latest/userguide/gettingstarted-query.html#gettingstarted-query-cli-tag">Create a tag-based group in Resource Groups</a>.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:GetGroupQuery</code> </p> </li> </ul></p>
     async fn get_group_query(
         &self,
         input: GetGroupQueryInput,
     ) -> Result<GetGroupQueryOutput, RusotoError<GetGroupQueryError>>;
 
-    /// <p>Returns a list of tags that are associated with a resource group, specified by an ARN.</p>
+    /// <p><p>Returns a list of tags that are associated with a resource group, specified by an ARN.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:GetTags</code> </p> </li> </ul></p>
     async fn get_tags(
         &self,
         input: GetTagsInput,
     ) -> Result<GetTagsOutput, RusotoError<GetTagsError>>;
 
-    /// <p>Adds the specified resources to the specified group.</p>
+    /// <p><p>Adds the specified resources to the specified group.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:GroupResources</code> </p> </li> </ul></p>
     async fn group_resources(
         &self,
         input: GroupResourcesInput,
     ) -> Result<GroupResourcesOutput, RusotoError<GroupResourcesError>>;
 
-    /// <p>Returns a list of ARNs of the resources that are members of a specified resource group.</p>
+    /// <p><p>Returns a list of ARNs of the resources that are members of a specified resource group.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:ListGroupResources</code> </p> </li> <li> <p> <code>cloudformation:DescribeStacks</code> </p> </li> <li> <p> <code>cloudformation:ListStackResources</code> </p> </li> <li> <p> <code>tag:GetResources</code> </p> </li> </ul></p>
     async fn list_group_resources(
         &self,
         input: ListGroupResourcesInput,
     ) -> Result<ListGroupResourcesOutput, RusotoError<ListGroupResourcesError>>;
 
-    /// <p>Returns a list of existing resource groups in your account.</p>
+    /// <p><p>Returns a list of existing resource groups in your account.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:ListGroups</code> </p> </li> </ul></p>
     async fn list_groups(
         &self,
         input: ListGroupsInput,
     ) -> Result<ListGroupsOutput, RusotoError<ListGroupsError>>;
 
-    /// <p>Returns a list of AWS resource identifiers that matches the specified query. The query uses the same format as a resource query in a CreateGroup or UpdateGroupQuery operation.</p>
+    /// <p><p>Attaches a service configuration to the specified group. This occurs asynchronously, and can take time to complete. You can use <a>GetGroupConfiguration</a> to check the status of the update.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:PutGroupConfiguration</code> </p> </li> </ul></p>
+    async fn put_group_configuration(
+        &self,
+        input: PutGroupConfigurationInput,
+    ) -> Result<PutGroupConfigurationOutput, RusotoError<PutGroupConfigurationError>>;
+
+    /// <p><p>Returns a list of AWS resource identifiers that matches the specified query. The query uses the same format as a resource query in a CreateGroup or UpdateGroupQuery operation.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:SearchResources</code> </p> </li> <li> <p> <code>cloudformation:DescribeStacks</code> </p> </li> <li> <p> <code>cloudformation:ListStackResources</code> </p> </li> <li> <p> <code>tag:GetResources</code> </p> </li> </ul></p>
     async fn search_resources(
         &self,
         input: SearchResourcesInput,
     ) -> Result<SearchResourcesOutput, RusotoError<SearchResourcesError>>;
 
-    /// <p><p>Adds tags to a resource group with the specified ARN. Existing tags on a resource group are not changed if they are not specified in the request parameters.</p> <important> <p>Do not store personally identifiable information (PII) or other confidential or sensitive information in tags. We use tags to provide you with billing and administration services. Tags are not intended to be used for private or sensitive data.</p> </important></p>
+    /// <p><p>Adds tags to a resource group with the specified ARN. Existing tags on a resource group are not changed if they are not specified in the request parameters.</p> <important> <p>Do not store personally identifiable information (PII) or other confidential or sensitive information in tags. We use tags to provide you with billing and administration services. Tags are not intended to be used for private or sensitive data.</p> </important> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:Tag</code> </p> </li> </ul></p>
     async fn tag(&self, input: TagInput) -> Result<TagOutput, RusotoError<TagError>>;
 
-    /// <p>Removes the specified resources from the specified group.</p>
+    /// <p><p>Removes the specified resources from the specified group.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:UngroupResources</code> </p> </li> </ul></p>
     async fn ungroup_resources(
         &self,
         input: UngroupResourcesInput,
     ) -> Result<UngroupResourcesOutput, RusotoError<UngroupResourcesError>>;
 
-    /// <p>Deletes tags from a specified resource group.</p>
+    /// <p><p>Deletes tags from a specified resource group.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:Untag</code> </p> </li> </ul></p>
     async fn untag(&self, input: UntagInput) -> Result<UntagOutput, RusotoError<UntagError>>;
 
-    /// <p>Updates the description for an existing group. You cannot update the name of a resource group.</p>
+    /// <p><p>Updates the description for an existing group. You cannot update the name of a resource group.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:UpdateGroup</code> </p> </li> </ul></p>
     async fn update_group(
         &self,
         input: UpdateGroupInput,
     ) -> Result<UpdateGroupOutput, RusotoError<UpdateGroupError>>;
 
-    /// <p>Updates the resource query of a group.</p>
+    /// <p><p>Updates the resource query of a group. For more information about resource queries, see <a href="https://docs.aws.amazon.com/ARG/latest/userguide/gettingstarted-query.html#gettingstarted-query-cli-tag">Create a tag-based group in Resource Groups</a>.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:UpdateGroupQuery</code> </p> </li> </ul></p>
     async fn update_group_query(
         &self,
         input: UpdateGroupQueryInput,
@@ -1599,7 +1729,7 @@ impl ResourceGroupsClient {
 
 #[async_trait]
 impl ResourceGroups for ResourceGroupsClient {
-    /// <p>Creates a resource group with the specified name and description. You can optionally include a resource query, or a service configuration.</p>
+    /// <p><p>Creates a resource group with the specified name and description. You can optionally include a resource query, or a service configuration. For more information about constructing a resource query, see <a href="https://docs.aws.amazon.com/ARG/latest/userguide/gettingstarted-query.html#gettingstarted-query-cli-tag">Create a tag-based group in Resource Groups</a>. For more information about service configurations, see <a href="https://docs.aws.amazon.com/ARG/latest/APIReference/about-slg.html">Service configurations for resource groups</a>.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:CreateGroup</code> </p> </li> </ul></p>
     #[allow(unused_mut)]
     async fn create_group(
         &self,
@@ -1630,7 +1760,7 @@ impl ResourceGroups for ResourceGroupsClient {
         }
     }
 
-    /// <p>Deletes the specified resource group. Deleting a resource group does not delete any resources that are members of the group; it only deletes the group structure.</p>
+    /// <p><p>Deletes the specified resource group. Deleting a resource group does not delete any resources that are members of the group; it only deletes the group structure.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:DeleteGroup</code> </p> </li> </ul></p>
     #[allow(unused_mut)]
     async fn delete_group(
         &self,
@@ -1661,7 +1791,7 @@ impl ResourceGroups for ResourceGroupsClient {
         }
     }
 
-    /// <p>Returns information about a specified resource group.</p>
+    /// <p><p>Returns information about a specified resource group.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:GetGroup</code> </p> </li> </ul></p>
     #[allow(unused_mut)]
     async fn get_group(
         &self,
@@ -1692,7 +1822,7 @@ impl ResourceGroups for ResourceGroupsClient {
         }
     }
 
-    /// <p><p>Returns the service configuration associated with the specified resource group. AWS Resource Groups supports configurations for the following resource group types:</p> <ul> <li> <p> <code>AWS::EC2::CapacityReservationPool</code> - Amazon EC2 capacity reservation pools. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/capacity-reservations-using.html#create-cr-group">Working with capacity reservation groups</a> in the <i>EC2 Users Guide</i>.</p> </li> </ul></p>
+    /// <p><p>Returns the service configuration associated with the specified resource group. For details about the service configuration syntax, see <a href="https://docs.aws.amazon.com/ARG/latest/APIReference/about-slg.html">Service configurations for resource groups</a>.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:GetGroupConfiguration</code> </p> </li> </ul></p>
     #[allow(unused_mut)]
     async fn get_group_configuration(
         &self,
@@ -1723,7 +1853,7 @@ impl ResourceGroups for ResourceGroupsClient {
         }
     }
 
-    /// <p>Retrieves the resource query associated with the specified resource group.</p>
+    /// <p><p>Retrieves the resource query associated with the specified resource group. For more information about resource queries, see <a href="https://docs.aws.amazon.com/ARG/latest/userguide/gettingstarted-query.html#gettingstarted-query-cli-tag">Create a tag-based group in Resource Groups</a>.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:GetGroupQuery</code> </p> </li> </ul></p>
     #[allow(unused_mut)]
     async fn get_group_query(
         &self,
@@ -1754,7 +1884,7 @@ impl ResourceGroups for ResourceGroupsClient {
         }
     }
 
-    /// <p>Returns a list of tags that are associated with a resource group, specified by an ARN.</p>
+    /// <p><p>Returns a list of tags that are associated with a resource group, specified by an ARN.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:GetTags</code> </p> </li> </ul></p>
     #[allow(unused_mut)]
     async fn get_tags(
         &self,
@@ -1782,7 +1912,7 @@ impl ResourceGroups for ResourceGroupsClient {
         }
     }
 
-    /// <p>Adds the specified resources to the specified group.</p>
+    /// <p><p>Adds the specified resources to the specified group.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:GroupResources</code> </p> </li> </ul></p>
     #[allow(unused_mut)]
     async fn group_resources(
         &self,
@@ -1813,7 +1943,7 @@ impl ResourceGroups for ResourceGroupsClient {
         }
     }
 
-    /// <p>Returns a list of ARNs of the resources that are members of a specified resource group.</p>
+    /// <p><p>Returns a list of ARNs of the resources that are members of a specified resource group.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:ListGroupResources</code> </p> </li> <li> <p> <code>cloudformation:DescribeStacks</code> </p> </li> <li> <p> <code>cloudformation:ListStackResources</code> </p> </li> <li> <p> <code>tag:GetResources</code> </p> </li> </ul></p>
     #[allow(unused_mut)]
     async fn list_group_resources(
         &self,
@@ -1844,7 +1974,7 @@ impl ResourceGroups for ResourceGroupsClient {
         }
     }
 
-    /// <p>Returns a list of existing resource groups in your account.</p>
+    /// <p><p>Returns a list of existing resource groups in your account.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:ListGroups</code> </p> </li> </ul></p>
     #[allow(unused_mut)]
     async fn list_groups(
         &self,
@@ -1884,7 +2014,38 @@ impl ResourceGroups for ResourceGroupsClient {
         }
     }
 
-    /// <p>Returns a list of AWS resource identifiers that matches the specified query. The query uses the same format as a resource query in a CreateGroup or UpdateGroupQuery operation.</p>
+    /// <p><p>Attaches a service configuration to the specified group. This occurs asynchronously, and can take time to complete. You can use <a>GetGroupConfiguration</a> to check the status of the update.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:PutGroupConfiguration</code> </p> </li> </ul></p>
+    #[allow(unused_mut)]
+    async fn put_group_configuration(
+        &self,
+        input: PutGroupConfigurationInput,
+    ) -> Result<PutGroupConfigurationOutput, RusotoError<PutGroupConfigurationError>> {
+        let request_uri = "/put-group-configuration";
+
+        let mut request = SignedRequest::new("POST", "resource-groups", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 202 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutGroupConfigurationOutput, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutGroupConfigurationError::from_response(response))
+        }
+    }
+
+    /// <p><p>Returns a list of AWS resource identifiers that matches the specified query. The query uses the same format as a resource query in a CreateGroup or UpdateGroupQuery operation.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:SearchResources</code> </p> </li> <li> <p> <code>cloudformation:DescribeStacks</code> </p> </li> <li> <p> <code>cloudformation:ListStackResources</code> </p> </li> <li> <p> <code>tag:GetResources</code> </p> </li> </ul></p>
     #[allow(unused_mut)]
     async fn search_resources(
         &self,
@@ -1915,7 +2076,7 @@ impl ResourceGroups for ResourceGroupsClient {
         }
     }
 
-    /// <p><p>Adds tags to a resource group with the specified ARN. Existing tags on a resource group are not changed if they are not specified in the request parameters.</p> <important> <p>Do not store personally identifiable information (PII) or other confidential or sensitive information in tags. We use tags to provide you with billing and administration services. Tags are not intended to be used for private or sensitive data.</p> </important></p>
+    /// <p><p>Adds tags to a resource group with the specified ARN. Existing tags on a resource group are not changed if they are not specified in the request parameters.</p> <important> <p>Do not store personally identifiable information (PII) or other confidential or sensitive information in tags. We use tags to provide you with billing and administration services. Tags are not intended to be used for private or sensitive data.</p> </important> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:Tag</code> </p> </li> </ul></p>
     #[allow(unused_mut)]
     async fn tag(&self, input: TagInput) -> Result<TagOutput, RusotoError<TagError>> {
         let request_uri = format!("/resources/{arn}/tags", arn = input.arn);
@@ -1943,7 +2104,7 @@ impl ResourceGroups for ResourceGroupsClient {
         }
     }
 
-    /// <p>Removes the specified resources from the specified group.</p>
+    /// <p><p>Removes the specified resources from the specified group.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:UngroupResources</code> </p> </li> </ul></p>
     #[allow(unused_mut)]
     async fn ungroup_resources(
         &self,
@@ -1974,7 +2135,7 @@ impl ResourceGroups for ResourceGroupsClient {
         }
     }
 
-    /// <p>Deletes tags from a specified resource group.</p>
+    /// <p><p>Deletes tags from a specified resource group.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:Untag</code> </p> </li> </ul></p>
     #[allow(unused_mut)]
     async fn untag(&self, input: UntagInput) -> Result<UntagOutput, RusotoError<UntagError>> {
         let request_uri = format!("/resources/{arn}/tags", arn = input.arn);
@@ -2003,7 +2164,7 @@ impl ResourceGroups for ResourceGroupsClient {
         }
     }
 
-    /// <p>Updates the description for an existing group. You cannot update the name of a resource group.</p>
+    /// <p><p>Updates the description for an existing group. You cannot update the name of a resource group.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:UpdateGroup</code> </p> </li> </ul></p>
     #[allow(unused_mut)]
     async fn update_group(
         &self,
@@ -2034,7 +2195,7 @@ impl ResourceGroups for ResourceGroupsClient {
         }
     }
 
-    /// <p>Updates the resource query of a group.</p>
+    /// <p><p>Updates the resource query of a group. For more information about resource queries, see <a href="https://docs.aws.amazon.com/ARG/latest/userguide/gettingstarted-query.html#gettingstarted-query-cli-tag">Create a tag-based group in Resource Groups</a>.</p> <p> <b>Minimum permissions</b> </p> <p>To run this command, you must have the following permissions:</p> <ul> <li> <p> <code>resource-groups:UpdateGroupQuery</code> </p> </li> </ul></p>
     #[allow(unused_mut)]
     async fn update_group_query(
         &self,
