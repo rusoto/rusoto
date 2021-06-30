@@ -168,6 +168,132 @@ pub struct AssociatePackageResponse {
     pub domain_package_details: Option<DomainPackageDetails>,
 }
 
+/// <p>Specifies Auto-Tune type and Auto-Tune action details. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AutoTune {
+    /// <p>Specifies details of the Auto-Tune action. See the <a href="https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/auto-tune.html" target="_blank">Developer Guide</a> for more information. </p>
+    #[serde(rename = "AutoTuneDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_tune_details: Option<AutoTuneDetails>,
+    /// <p>Specifies Auto-Tune type. Valid value is SCHEDULED_ACTION. </p>
+    #[serde(rename = "AutoTuneType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_tune_type: Option<String>,
+}
+
+/// <p>Specifies details of the Auto-Tune action. See the <a href="https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/auto-tune.html" target="_blank">Developer Guide</a> for more information. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AutoTuneDetails {
+    #[serde(rename = "ScheduledAutoTuneDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scheduled_auto_tune_details: Option<ScheduledAutoTuneDetails>,
+}
+
+/// <p>Specifies Auto-Tune maitenance schedule. See the <a href="https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/auto-tune.html" target="_blank">Developer Guide</a> for more information.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AutoTuneMaintenanceSchedule {
+    /// <p>Specifies cron expression for a recurring maintenance schedule. See the <a href="https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/auto-tune.html" target="_blank">Developer Guide</a> for more information.</p>
+    #[serde(rename = "CronExpressionForRecurrence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cron_expression_for_recurrence: Option<String>,
+    /// <p>Specifies maintenance schedule duration: duration value and duration unit. See the <a href="https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/auto-tune.html" target="_blank">Developer Guide</a> for more information.</p>
+    #[serde(rename = "Duration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub duration: Option<Duration>,
+    /// <p>Specifies timestamp at which Auto-Tune maintenance schedule start. </p>
+    #[serde(rename = "StartAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_at: Option<f64>,
+}
+
+/// <p>Specifies the Auto-Tune options: the Auto-Tune desired state for the domain, rollback state when disabling Auto-Tune options and list of maintenance schedules.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AutoTuneOptions {
+    /// <p>Specifies the Auto-Tune desired state. Valid values are ENABLED, DISABLED. </p>
+    #[serde(rename = "DesiredState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub desired_state: Option<String>,
+    /// <p>Specifies list of maitenance schedules. See the <a href="https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/auto-tune.html" target="_blank">Developer Guide</a> for more information.</p>
+    #[serde(rename = "MaintenanceSchedules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maintenance_schedules: Option<Vec<AutoTuneMaintenanceSchedule>>,
+    /// <p>Specifies the rollback state while disabling Auto-Tune for the domain. Valid values are NO_ROLLBACK, DEFAULT_ROLLBACK. </p>
+    #[serde(rename = "RollbackOnDisable")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rollback_on_disable: Option<String>,
+}
+
+/// <p>Specifies the Auto-Tune options: the Auto-Tune desired state for the domain and list of maintenance schedules.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AutoTuneOptionsInput {
+    /// <p>Specifies the Auto-Tune desired state. Valid values are ENABLED, DISABLED. </p>
+    #[serde(rename = "DesiredState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub desired_state: Option<String>,
+    /// <p>Specifies list of maitenance schedules. See the <a href="https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/auto-tune.html" target="_blank">Developer Guide</a> for more information.</p>
+    #[serde(rename = "MaintenanceSchedules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maintenance_schedules: Option<Vec<AutoTuneMaintenanceSchedule>>,
+}
+
+/// <p>Specifies the Auto-Tune options: the Auto-Tune desired state for the domain and list of maintenance schedules.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AutoTuneOptionsOutput {
+    /// <p>Specifies the error message while enabling or disabling the Auto-Tune.</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    /// <p>Specifies the <code>AutoTuneState</code> for the Elasticsearch domain.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+}
+
+/// <p> Specifies the status of Auto-Tune options for the specified Elasticsearch domain.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AutoTuneOptionsStatus {
+    /// <p> Specifies Auto-Tune options for the specified Elasticsearch domain.</p>
+    #[serde(rename = "Options")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub options: Option<AutoTuneOptions>,
+    /// <p> Specifies Status of the Auto-Tune options for the specified Elasticsearch domain.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<AutoTuneStatus>,
+}
+
+/// <p>Provides the current status of the Auto-Tune options. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AutoTuneStatus {
+    /// <p>Timestamp which tells Auto-Tune options creation date .</p>
+    #[serde(rename = "CreationDate")]
+    pub creation_date: f64,
+    /// <p>Specifies the error message while enabling or disabling the Auto-Tune options.</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    /// <p>Indicates whether the Elasticsearch domain is being deleted.</p>
+    #[serde(rename = "PendingDeletion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pending_deletion: Option<bool>,
+    /// <p>Specifies the <code>AutoTuneState</code> for the Elasticsearch domain.</p>
+    #[serde(rename = "State")]
+    pub state: String,
+    /// <p>Timestamp which tells Auto-Tune options last updated time.</p>
+    #[serde(rename = "UpdateDate")]
+    pub update_date: f64,
+    /// <p>Specifies the Auto-Tune options latest version.</p>
+    #[serde(rename = "UpdateVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update_version: Option<i64>,
+}
+
 /// <p>Container for the parameters to the <code><a>CancelElasticsearchServiceSoftwareUpdate</a></code> operation. Specifies the name of the Elasticsearch domain that you wish to cancel a service software update on.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -220,6 +346,14 @@ pub struct CognitoOptionsStatus {
     pub status: OptionStatus,
 }
 
+/// <p>Specifies settings for cold storage.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ColdStorageOptions {
+    /// <p>True to enable cold storage for an Elasticsearch domain.</p>
+    #[serde(rename = "Enabled")]
+    pub enabled: bool,
+}
+
 /// <p> A map from an <code> <a>ElasticsearchVersion</a> </code> to a list of compatible <code> <a>ElasticsearchVersion</a> </code> s to which the domain can be upgraded. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -248,6 +382,10 @@ pub struct CreateElasticsearchDomainRequest {
     #[serde(rename = "AdvancedSecurityOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub advanced_security_options: Option<AdvancedSecurityOptionsInput>,
+    /// <p>Specifies Auto-Tune options.</p>
+    #[serde(rename = "AutoTuneOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_tune_options: Option<AutoTuneOptionsInput>,
     /// <p>Options to specify the Cognito user and identity pools for Kibana authentication. For more information, see <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-cognito-auth.html" target="_blank">Amazon Cognito Authentication for Kibana</a>.</p>
     #[serde(rename = "CognitoOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -287,6 +425,10 @@ pub struct CreateElasticsearchDomainRequest {
     #[serde(rename = "SnapshotOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snapshot_options: Option<SnapshotOptions>,
+    /// <p>A list of <code>Tag</code> added during domain creation.</p>
+    #[serde(rename = "TagList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tag_list: Option<Vec<Tag>>,
     /// <p>Options to specify the subnets and security groups for VPC endpoint. For more information, see <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-vpc.html#es-creating-vpc" target="_blank">Creating a VPC</a> in <i>VPC Endpoints for Amazon Elasticsearch Service Domains</i></p>
     #[serde(rename = "VPCOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -447,6 +589,37 @@ pub struct DeletePackageResponse {
     #[serde(rename = "PackageDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub package_details: Option<PackageDetails>,
+}
+
+/// <p>Container for the parameters to the <code>DescribeDomainAutoTunes</code> operation.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeDomainAutoTunesRequest {
+    /// <p>Specifies the domain name for which you want Auto-Tune action details.</p>
+    #[serde(rename = "DomainName")]
+    pub domain_name: String,
+    /// <p>Set this value to limit the number of results returned. If not specified, defaults to 100.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>NextToken is sent in case the earlier API call results contain the NextToken. It is used for pagination.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p>The result of <code>DescribeDomainAutoTunes</code> request. See the <a href="https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/auto-tune.html" target="_blank">Developer Guide</a> for more information. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeDomainAutoTunesResponse {
+    /// <p>Specifies the list of setting adjustments that Auto-Tune has made to the domain. See the <a href="https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/auto-tune.html" target="_blank">Developer Guide</a> for more information.</p>
+    #[serde(rename = "AutoTunes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_tunes: Option<Vec<AutoTune>>,
+    /// <p>Specifies an identifier to allow retrieval of paginated results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 /// <p> Container for the parameters to the <code>DescribeElasticsearchDomainConfig</code> operation. Specifies the domain name for which you want configuration information.</p>
@@ -823,6 +996,19 @@ pub struct DomainPackageDetails {
     pub reference_path: Option<String>,
 }
 
+/// <p>Specifies maintenance schedule duration: duration value and duration unit. See the <a href="https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/auto-tune.html" target="_blank">Developer Guide</a> for more information.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Duration {
+    /// <p>Specifies the unit of a maintenance schedule duration. Valid value is HOURS. See the <a href="https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/auto-tune.html" target="_blank">Developer Guide</a> for more information.</p>
+    #[serde(rename = "Unit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unit: Option<String>,
+    /// <p> Integer to specify the value of a maintenance schedule duration. See the <a href="https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/auto-tune.html" target="_blank">Developer Guide</a> for more information.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<i64>,
+}
+
 /// <p>Options to enable, disable, and specify the properties of EBS storage volumes. For more information, see <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-createupdatedomains.html#es-createdomain-configure-ebs" target="_blank"> Configuring EBS-based Storage</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EBSOptions {
@@ -859,6 +1045,10 @@ pub struct EBSOptionsStatus {
 /// <p>Specifies the configuration for the domain cluster, such as the type and number of instances.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ElasticsearchClusterConfig {
+    /// <p>Specifies the <code>ColdStorageOptions</code> configuration for an Elasticsearch domain.</p>
+    #[serde(rename = "ColdStorageOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cold_storage_options: Option<ColdStorageOptions>,
     /// <p>Total number of dedicated master nodes, active and on standby, for the cluster.</p>
     #[serde(rename = "DedicatedMasterCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -929,6 +1119,10 @@ pub struct ElasticsearchDomainConfig {
     #[serde(rename = "AdvancedSecurityOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub advanced_security_options: Option<AdvancedSecurityOptionsStatus>,
+    /// <p>Specifies <code>AutoTuneOptions</code> for the domain. </p>
+    #[serde(rename = "AutoTuneOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_tune_options: Option<AutoTuneOptionsStatus>,
     /// <p>The <code>CognitoOptions</code> for the specified domain. For more information, see <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-cognito-auth.html" target="_blank">Amazon Cognito Authentication for Kibana</a>.</p>
     #[serde(rename = "CognitoOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -990,6 +1184,10 @@ pub struct ElasticsearchDomainStatus {
     #[serde(rename = "AdvancedSecurityOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub advanced_security_options: Option<AdvancedSecurityOptions>,
+    /// <p>The current status of the Elasticsearch domain's Auto-Tune options.</p>
+    #[serde(rename = "AutoTuneOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_tune_options: Option<AutoTuneOptionsOutput>,
     /// <p>The <code>CognitoOptions</code> for the specified domain. For more information, see <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-cognito-auth.html" target="_blank">Amazon Cognito Authentication for Kibana</a>.</p>
     #[serde(rename = "CognitoOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1898,6 +2096,28 @@ pub struct SAMLOptionsOutput {
     pub subject_key: Option<String>,
 }
 
+/// <p>Specifies details of the scheduled Auto-Tune action. See the <a href="https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/auto-tune.html" target="_blank">Developer Guide</a> for more information. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ScheduledAutoTuneDetails {
+    /// <p>Specifies Auto-Tune action description. </p>
+    #[serde(rename = "Action")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action: Option<String>,
+    /// <p>Specifies Auto-Tune action type. Valid values are JVM_HEAP_SIZE_TUNING and JVM_YOUNG_GEN_TUNING. </p>
+    #[serde(rename = "ActionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_type: Option<String>,
+    /// <p>Specifies timestamp for the Auto-Tune action scheduled for the domain. </p>
+    #[serde(rename = "Date")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub date: Option<f64>,
+    /// <p>Specifies Auto-Tune action severity. Valid values are LOW, MEDIUM and HIGH. </p>
+    #[serde(rename = "Severity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub severity: Option<String>,
+}
+
 /// <p>The current options of an Elasticsearch domain service software options.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2033,6 +2253,10 @@ pub struct UpdateElasticsearchDomainConfigRequest {
     #[serde(rename = "AdvancedSecurityOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub advanced_security_options: Option<AdvancedSecurityOptionsInput>,
+    /// <p>Specifies Auto-Tune options.</p>
+    #[serde(rename = "AutoTuneOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_tune_options: Option<AutoTuneOptions>,
     /// <p>Options to specify the Cognito user and identity pools for Kibana authentication. For more information, see <a href="http://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/es-cognito-auth.html" target="_blank">Amazon Cognito Authentication for Kibana</a>.</p>
     #[serde(rename = "CognitoOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2052,10 +2276,18 @@ pub struct UpdateElasticsearchDomainConfigRequest {
     #[serde(rename = "ElasticsearchClusterConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub elasticsearch_cluster_config: Option<ElasticsearchClusterConfig>,
+    /// <p>Specifies the Encryption At Rest Options.</p>
+    #[serde(rename = "EncryptionAtRestOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_at_rest_options: Option<EncryptionAtRestOptions>,
     /// <p>Map of <code>LogType</code> and <code>LogPublishingOption</code>, each containing options to publish a given type of Elasticsearch log.</p>
     #[serde(rename = "LogPublishingOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_publishing_options: Option<::std::collections::HashMap<String, LogPublishingOption>>,
+    /// <p>Specifies the NodeToNodeEncryptionOptions.</p>
+    #[serde(rename = "NodeToNodeEncryptionOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub node_to_node_encryption_options: Option<NodeToNodeEncryptionOptions>,
     /// <p>Option to set the time, in UTC format, for the daily automated snapshot. Default value is <code>0</code> hours. </p>
     #[serde(rename = "SnapshotOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2867,6 +3099,50 @@ impl fmt::Display for DeletePackageError {
     }
 }
 impl Error for DeletePackageError {}
+/// Errors returned by DescribeDomainAutoTunes
+#[derive(Debug, PartialEq)]
+pub enum DescribeDomainAutoTunesError {
+    /// <p>An error occurred while processing the request.</p>
+    Base(String),
+    /// <p>The request processing has failed because of an unknown error, exception or failure (the failure is internal to the service) . Gives http status code of 500.</p>
+    Internal(String),
+    /// <p>An exception for accessing or deleting a resource that does not exist. Gives http status code of 400.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeDomainAutoTunesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDomainAutoTunesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BaseException" => {
+                    return RusotoError::Service(DescribeDomainAutoTunesError::Base(err.msg))
+                }
+                "InternalException" => {
+                    return RusotoError::Service(DescribeDomainAutoTunesError::Internal(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeDomainAutoTunesError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeDomainAutoTunesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeDomainAutoTunesError::Base(ref cause) => write!(f, "{}", cause),
+            DescribeDomainAutoTunesError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribeDomainAutoTunesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeDomainAutoTunesError {}
 /// Errors returned by DescribeElasticsearchDomain
 #[derive(Debug, PartialEq)]
 pub enum DescribeElasticsearchDomainError {
@@ -4361,6 +4637,12 @@ pub trait Es {
         input: DeletePackageRequest,
     ) -> Result<DeletePackageResponse, RusotoError<DeletePackageError>>;
 
+    /// <p>Provides scheduled Auto-Tune action details for the Elasticsearch domain, such as Auto-Tune action type, description, severity, and scheduled date.</p>
+    async fn describe_domain_auto_tunes(
+        &self,
+        input: DescribeDomainAutoTunesRequest,
+    ) -> Result<DescribeDomainAutoTunesResponse, RusotoError<DescribeDomainAutoTunesError>>;
+
     /// <p>Returns domain configuration information about the specified Elasticsearch domain, including the domain ID, domain endpoint, and domain ARN.</p>
     async fn describe_elasticsearch_domain(
         &self,
@@ -4976,6 +5258,40 @@ impl Es for EsClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeletePackageError::from_response(response))
+        }
+    }
+
+    /// <p>Provides scheduled Auto-Tune action details for the Elasticsearch domain, such as Auto-Tune action type, description, severity, and scheduled date.</p>
+    #[allow(unused_mut)]
+    async fn describe_domain_auto_tunes(
+        &self,
+        input: DescribeDomainAutoTunesRequest,
+    ) -> Result<DescribeDomainAutoTunesResponse, RusotoError<DescribeDomainAutoTunesError>> {
+        let request_uri = format!(
+            "/2015-01-01/es/domain/{domain_name}/autoTunes",
+            domain_name = input.domain_name
+        );
+
+        let mut request = SignedRequest::new("GET", "es", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeDomainAutoTunesResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeDomainAutoTunesError::from_response(response))
         }
     }
 

@@ -229,6 +229,64 @@ pub struct DeleteProtocolsListRequest {
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateAdminAccountRequest {}
 
+/// <p>A DNS Firewall rule group that Firewall Manager tried to associate with a VPC is already associated with the VPC and can't be associated again. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DnsDuplicateRuleGroupViolation {
+    /// <p>The ID of the VPC. </p>
+    #[serde(rename = "ViolationTarget")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_target: Option<String>,
+    /// <p>A description of the violation that specifies the rule group and VPC.</p>
+    #[serde(rename = "ViolationTargetDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_target_description: Option<String>,
+}
+
+/// <p>The VPC that Firewall Manager was applying a DNS Fireall policy to reached the limit for associated DNS Firewall rule groups. Firewall Manager tried to associate another rule group with the VPC and failed due to the limit. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DnsRuleGroupLimitExceededViolation {
+    /// <p>The number of rule groups currently associated with the VPC. </p>
+    #[serde(rename = "NumberOfRuleGroupsAlreadyAssociated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_rule_groups_already_associated: Option<i64>,
+    /// <p>The ID of the VPC. </p>
+    #[serde(rename = "ViolationTarget")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_target: Option<String>,
+    /// <p>A description of the violation that specifies the rule group and VPC.</p>
+    #[serde(rename = "ViolationTargetDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_target_description: Option<String>,
+}
+
+/// <p>A rule group that Firewall Manager tried to associate with a VPC has the same priority as a rule group that's already associated. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DnsRuleGroupPriorityConflictViolation {
+    /// <p>The ID of the Firewall Manager DNS Firewall policy that was already applied to the VPC. This policy contains the rule group that's already associated with the VPC. </p>
+    #[serde(rename = "ConflictingPolicyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conflicting_policy_id: Option<String>,
+    /// <p>The priority setting of the two conflicting rule groups.</p>
+    #[serde(rename = "ConflictingPriority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conflicting_priority: Option<i64>,
+    /// <p>The priorities of rule groups that are already associated with the VPC. To retry your operation, choose priority settings that aren't in this list for the rule groups in your new DNS Firewall policy. </p>
+    #[serde(rename = "UnavailablePriorities")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unavailable_priorities: Option<Vec<i64>>,
+    /// <p>The ID of the VPC. </p>
+    #[serde(rename = "ViolationTarget")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_target: Option<String>,
+    /// <p>A description of the violation that specifies the VPC and the rule group that's already associated with it.</p>
+    #[serde(rename = "ViolationTargetDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub violation_target_description: Option<String>,
+}
+
 /// <p>Describes the compliance status for the account. An account is considered noncompliant if it includes resources that are not protected by the specified policy or that don't comply with the policy.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1040,6 +1098,18 @@ pub struct ResourceViolation {
     #[serde(rename = "AwsVPCSecurityGroupViolation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_vpc_security_group_violation: Option<AwsVPCSecurityGroupViolation>,
+    /// <p>Violation detail for a DNS Firewall policy that indicates that a rule group that Firewall Manager tried to associate with a VPC is already associated with the VPC and can't be associated again. </p>
+    #[serde(rename = "DnsDuplicateRuleGroupViolation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dns_duplicate_rule_group_violation: Option<DnsDuplicateRuleGroupViolation>,
+    /// <p>Violation details for a DNS Firewall policy that indicates that the VPC reached the limit for associated DNS Firewall rule groups. Firewall Manager tried to associate another rule group with the VPC and failed. </p>
+    #[serde(rename = "DnsRuleGroupLimitExceededViolation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dns_rule_group_limit_exceeded_violation: Option<DnsRuleGroupLimitExceededViolation>,
+    /// <p>Violation detail for a DNS Firewall policy that indicates that a rule group that Firewall Manager tried to associate with a VPC has the same priority as a rule group that's already associated. </p>
+    #[serde(rename = "DnsRuleGroupPriorityConflictViolation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dns_rule_group_priority_conflict_violation: Option<DnsRuleGroupPriorityConflictViolation>,
     /// <p>Violation detail for an Network Firewall policy that indicates that a subnet is not associated with the expected Firewall Manager managed route table. </p>
     #[serde(rename = "NetworkFirewallMissingExpectedRTViolation")]
     #[serde(skip_serializing_if = "Option::is_none")]

@@ -94,7 +94,7 @@ pub struct CreateIdentityPoolInput {
     #[serde(rename = "IdentityPoolTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_pool_tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p>A list of OpendID Connect provider ARNs.</p>
+    /// <p>The Amazon Resource Names (ARN) of the OpenID Connect providers.</p>
     #[serde(rename = "OpenIdConnectProviderARNs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub open_id_connect_provider_ar_ns: Option<Vec<String>>,
@@ -187,7 +187,7 @@ pub struct GetCredentialsForIdentityInput {
     /// <p>A unique identifier in the format REGION:GUID.</p>
     #[serde(rename = "IdentityId")]
     pub identity_id: String,
-    /// <p>A set of optional name-value pairs that map provider names to provider tokens. The name-value pair will follow the syntax "provider_name": "provider_user_identifier".</p> <p>Logins should not be specified when trying to get credentials for an unauthenticated identity.</p> <p>The Logins parameter is required when using identities associated with external identity providers such as FaceBook. For examples of <code>Logins</code> maps, see the code examples in the <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/external-identity-providers.html">External Identity Providers</a> section of the Amazon Cognito Developer Guide.</p>
+    /// <p>A set of optional name-value pairs that map provider names to provider tokens. The name-value pair will follow the syntax "provider_name": "provider_user_identifier".</p> <p>Logins should not be specified when trying to get credentials for an unauthenticated identity.</p> <p>The Logins parameter is required when using identities associated with external identity providers such as Facebook. For examples of <code>Logins</code> maps, see the code examples in the <a href="https://docs.aws.amazon.com/cognito/latest/developerguide/external-identity-providers.html">External Identity Providers</a> section of the Amazon Cognito Developer Guide.</p>
     #[serde(rename = "Logins")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logins: Option<::std::collections::HashMap<String, String>>,
@@ -275,6 +275,10 @@ pub struct GetOpenIdTokenForDeveloperIdentityInput {
     /// <p>A set of optional name-value pairs that map provider names to provider tokens. Each name-value pair represents a user from a public provider or developer provider. If the user is from a developer provider, the name-value pair will follow the syntax <code>"developer_provider_name": "developer_user_identifier"</code>. The developer provider is the "domain" by which Cognito will refer to your users; you provided this domain while creating/updating the identity pool. The developer user identifier is an identifier from your backend that uniquely identifies a user. When you create an identity pool, you can specify the supported logins.</p>
     #[serde(rename = "Logins")]
     pub logins: ::std::collections::HashMap<String, String>,
+    /// <p>Use this operation to configure attribute mappings for custom providers. </p>
+    #[serde(rename = "PrincipalTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub principal_tags: Option<::std::collections::HashMap<String, String>>,
     /// <p><p>The expiration time of the token, in seconds. You can specify a custom expiration time for the token so that you can cache it. If you don&#39;t provide an expiration time, the token is valid for 15 minutes. You can exchange the token with Amazon STS for temporary AWS credentials, which are valid for a maximum of one hour. The maximum token duration you can set is 24 hours. You should take care in setting the expiration time for a token, as there are significant security implications: an attacker could use a leaked token to access your AWS resources for the token&#39;s duration.</p> <note> <p>Please provide for a small grace period, usually no more than 5 minutes, to account for clock skew.</p> </note></p>
     #[serde(rename = "TokenDuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -302,7 +306,7 @@ pub struct GetOpenIdTokenInput {
     /// <p>A unique identifier in the format REGION:GUID.</p>
     #[serde(rename = "IdentityId")]
     pub identity_id: String,
-    /// <p>A set of optional name-value pairs that map provider names to provider tokens. When using graph.facebook.com and www.amazon.com, supply the access_token returned from the provider's authflow. For accounts.google.com, an Amazon Cognito user pool provider, or any other OpenId Connect provider, always include the <code>id_token</code>.</p>
+    /// <p>A set of optional name-value pairs that map provider names to provider tokens. When using graph.facebook.com and www.amazon.com, supply the access_token returned from the provider's authflow. For accounts.google.com, an Amazon Cognito user pool provider, or any other OpenID Connect provider, always include the <code>id_token</code>.</p>
     #[serde(rename = "Logins")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logins: Option<::std::collections::HashMap<String, String>>,
@@ -320,6 +324,38 @@ pub struct GetOpenIdTokenResponse {
     #[serde(rename = "Token")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetPrincipalTagAttributeMapInput {
+    /// <p>You can use this operation to get the ID of the Identity Pool you setup attribute mappings for.</p>
+    #[serde(rename = "IdentityPoolId")]
+    pub identity_pool_id: String,
+    /// <p>You can use this operation to get the provider name.</p>
+    #[serde(rename = "IdentityProviderName")]
+    pub identity_provider_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetPrincipalTagAttributeMapResponse {
+    /// <p>You can use this operation to get the ID of the Identity Pool you setup attribute mappings for.</p>
+    #[serde(rename = "IdentityPoolId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_pool_id: Option<String>,
+    /// <p>You can use this operation to get the provider name.</p>
+    #[serde(rename = "IdentityProviderName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_provider_name: Option<String>,
+    /// <p>You can use this operation to add principal tags. The <code>PrincipalTags</code>operation enables you to reference user attributes in your IAM permissions policy.</p>
+    #[serde(rename = "PrincipalTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub principal_tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>You can use this operation to list </p>
+    #[serde(rename = "UseDefaults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub use_defaults: Option<bool>,
 }
 
 /// <p>A description of the identity.</p>
@@ -372,7 +408,7 @@ pub struct IdentityPool {
     #[serde(rename = "IdentityPoolTags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_pool_tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p>A list of OpendID Connect provider ARNs.</p>
+    /// <p>The ARNs of the OpenID Connect providers.</p>
     #[serde(rename = "OpenIdConnectProviderARNs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub open_id_connect_provider_ar_ns: Option<Vec<String>>,
@@ -601,7 +637,7 @@ pub struct SetIdentityPoolRolesInput {
     /// <p>An identity pool ID in the format REGION:GUID.</p>
     #[serde(rename = "IdentityPoolId")]
     pub identity_pool_id: String,
-    /// <p>How users for a specific identity provider are to mapped to roles. This is a string to <a>RoleMapping</a> object map. The string identifies the identity provider, for example, "graph.facebook.com" or "cognito-idp-east-1.amazonaws.com/us-east-1_abcdefghi:app_client_id".</p> <p>Up to 25 rules can be specified per identity provider.</p>
+    /// <p>How users for a specific identity provider are to mapped to roles. This is a string to <a>RoleMapping</a> object map. The string identifies the identity provider, for example, "graph.facebook.com" or "cognito-idp.us-east-1.amazonaws.com/us-east-1_abcdefghi:app_client_id".</p> <p>Up to 25 rules can be specified per identity provider.</p>
     #[serde(rename = "RoleMappings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_mappings: Option<::std::collections::HashMap<String, RoleMapping>>,
@@ -612,8 +648,48 @@ pub struct SetIdentityPoolRolesInput {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct SetPrincipalTagAttributeMapInput {
+    /// <p>The ID of the Identity Pool you want to set attribute mappings for.</p>
+    #[serde(rename = "IdentityPoolId")]
+    pub identity_pool_id: String,
+    /// <p>The provider name you want to use for attribute mappings.</p>
+    #[serde(rename = "IdentityProviderName")]
+    pub identity_provider_name: String,
+    /// <p>You can use this operation to add principal tags.</p>
+    #[serde(rename = "PrincipalTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub principal_tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>You can use this operation to use default (username and clientID) attribute mappings.</p>
+    #[serde(rename = "UseDefaults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub use_defaults: Option<bool>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SetPrincipalTagAttributeMapResponse {
+    /// <p>The ID of the Identity Pool you want to set attribute mappings for.</p>
+    #[serde(rename = "IdentityPoolId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_pool_id: Option<String>,
+    /// <p>The provider name you want to use for attribute mappings.</p>
+    #[serde(rename = "IdentityProviderName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_provider_name: Option<String>,
+    /// <p>You can use this operation to add principal tags. The <code>PrincipalTags</code>operation enables you to reference user attributes in your IAM permissions policy.</p>
+    #[serde(rename = "PrincipalTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub principal_tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>You can use this operation to select default (username and clientID) attribute mappings.</p>
+    #[serde(rename = "UseDefaults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub use_defaults: Option<bool>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceInput {
-    /// <p>The Amazon Resource Name (ARN) of the identity pool to assign the tags to.</p>
+    /// <p>The Amazon Resource Name (ARN) of the identity pool.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
     /// <p>The tags to assign to the identity pool.</p>
@@ -675,7 +751,7 @@ pub struct UnprocessedIdentityId {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceInput {
-    /// <p>The Amazon Resource Name (ARN) of the identity pool that the tags are assigned to.</p>
+    /// <p>The Amazon Resource Name (ARN) of the identity pool.</p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
     /// <p>The keys of the tags to remove from the user pool.</p>
@@ -1351,6 +1427,72 @@ impl fmt::Display for GetOpenIdTokenForDeveloperIdentityError {
     }
 }
 impl Error for GetOpenIdTokenForDeveloperIdentityError {}
+/// Errors returned by GetPrincipalTagAttributeMap
+#[derive(Debug, PartialEq)]
+pub enum GetPrincipalTagAttributeMapError {
+    /// <p>Thrown when the service encounters an error during processing the request.</p>
+    InternalError(String),
+    /// <p>Thrown for missing or bad input parameter(s).</p>
+    InvalidParameter(String),
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
+    NotAuthorized(String),
+    /// <p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>Thrown when a request is throttled.</p>
+    TooManyRequests(String),
+}
+
+impl GetPrincipalTagAttributeMapError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetPrincipalTagAttributeMapError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(GetPrincipalTagAttributeMapError::InternalError(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        GetPrincipalTagAttributeMapError::InvalidParameter(err.msg),
+                    )
+                }
+                "NotAuthorizedException" => {
+                    return RusotoError::Service(GetPrincipalTagAttributeMapError::NotAuthorized(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        GetPrincipalTagAttributeMapError::ResourceNotFound(err.msg),
+                    )
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(GetPrincipalTagAttributeMapError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetPrincipalTagAttributeMapError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetPrincipalTagAttributeMapError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetPrincipalTagAttributeMapError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetPrincipalTagAttributeMapError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            GetPrincipalTagAttributeMapError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            GetPrincipalTagAttributeMapError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetPrincipalTagAttributeMapError {}
 /// Errors returned by ListIdentities
 #[derive(Debug, PartialEq)]
 pub enum ListIdentitiesError {
@@ -1737,6 +1879,72 @@ impl fmt::Display for SetIdentityPoolRolesError {
     }
 }
 impl Error for SetIdentityPoolRolesError {}
+/// Errors returned by SetPrincipalTagAttributeMap
+#[derive(Debug, PartialEq)]
+pub enum SetPrincipalTagAttributeMapError {
+    /// <p>Thrown when the service encounters an error during processing the request.</p>
+    InternalError(String),
+    /// <p>Thrown for missing or bad input parameter(s).</p>
+    InvalidParameter(String),
+    /// <p>Thrown when a user is not authorized to access the requested resource.</p>
+    NotAuthorized(String),
+    /// <p>Thrown when the requested resource (for example, a dataset or record) does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>Thrown when a request is throttled.</p>
+    TooManyRequests(String),
+}
+
+impl SetPrincipalTagAttributeMapError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<SetPrincipalTagAttributeMapError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(SetPrincipalTagAttributeMapError::InternalError(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        SetPrincipalTagAttributeMapError::InvalidParameter(err.msg),
+                    )
+                }
+                "NotAuthorizedException" => {
+                    return RusotoError::Service(SetPrincipalTagAttributeMapError::NotAuthorized(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        SetPrincipalTagAttributeMapError::ResourceNotFound(err.msg),
+                    )
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(SetPrincipalTagAttributeMapError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for SetPrincipalTagAttributeMapError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            SetPrincipalTagAttributeMapError::InternalError(ref cause) => write!(f, "{}", cause),
+            SetPrincipalTagAttributeMapError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            SetPrincipalTagAttributeMapError::NotAuthorized(ref cause) => write!(f, "{}", cause),
+            SetPrincipalTagAttributeMapError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            SetPrincipalTagAttributeMapError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for SetPrincipalTagAttributeMapError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -2105,7 +2313,7 @@ pub trait CognitoIdentity {
         input: GetIdentityPoolRolesInput,
     ) -> Result<GetIdentityPoolRolesResponse, RusotoError<GetIdentityPoolRolesError>>;
 
-    /// <p>Gets an OpenID token, using a known Cognito ID. This known Cognito ID is returned by <a>GetId</a>. You can optionally add additional logins for the identity. Supplying multiple logins creates an implicit link.</p> <p>The OpenId token is valid for 10 minutes.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
+    /// <p>Gets an OpenID token, using a known Cognito ID. This known Cognito ID is returned by <a>GetId</a>. You can optionally add additional logins for the identity. Supplying multiple logins creates an implicit link.</p> <p>The OpenID token is valid for 10 minutes.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
     async fn get_open_id_token(
         &self,
         input: GetOpenIdTokenInput,
@@ -2119,6 +2327,12 @@ pub trait CognitoIdentity {
         GetOpenIdTokenForDeveloperIdentityResponse,
         RusotoError<GetOpenIdTokenForDeveloperIdentityError>,
     >;
+
+    /// <p>Use <code>GetPrincipalTagAttributeMap</code> to list all mappings between <code>PrincipalTags</code> and user attributes.</p>
+    async fn get_principal_tag_attribute_map(
+        &self,
+        input: GetPrincipalTagAttributeMapInput,
+    ) -> Result<GetPrincipalTagAttributeMapResponse, RusotoError<GetPrincipalTagAttributeMapError>>;
 
     /// <p>Lists the identities in an identity pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
     async fn list_identities(
@@ -2156,7 +2370,13 @@ pub trait CognitoIdentity {
         input: SetIdentityPoolRolesInput,
     ) -> Result<(), RusotoError<SetIdentityPoolRolesError>>;
 
-    /// <p>Assigns a set of tags to an Amazon Cognito identity pool. A tag is a label that you can use to categorize and manage identity pools in different ways, such as by purpose, owner, environment, or other criteria.</p> <p>Each tag consists of a key and value, both of which you define. A key is a general category for more specific values. For example, if you have two versions of an identity pool, one for testing and another for production, you might assign an <code>Environment</code> tag key to both identity pools. The value of this key might be <code>Test</code> for one identity pool and <code>Production</code> for the other.</p> <p>Tags are useful for cost tracking and access control. You can activate your tags so that they appear on the Billing and Cost Management console, where you can track the costs associated with your identity pools. In an IAM policy, you can constrain permissions for identity pools based on specific tags or tag values.</p> <p>You can use this action up to 5 times per second, per account. An identity pool can have as many as 50 tags.</p>
+    /// <p>You can use this operation to use default (username and clientID) attribute or custom attribute mappings.</p>
+    async fn set_principal_tag_attribute_map(
+        &self,
+        input: SetPrincipalTagAttributeMapInput,
+    ) -> Result<SetPrincipalTagAttributeMapResponse, RusotoError<SetPrincipalTagAttributeMapError>>;
+
+    /// <p>Assigns a set of tags to the specified Amazon Cognito identity pool. A tag is a label that you can use to categorize and manage identity pools in different ways, such as by purpose, owner, environment, or other criteria.</p> <p>Each tag consists of a key and value, both of which you define. A key is a general category for more specific values. For example, if you have two versions of an identity pool, one for testing and another for production, you might assign an <code>Environment</code> tag key to both identity pools. The value of this key might be <code>Test</code> for one identity pool and <code>Production</code> for the other.</p> <p>Tags are useful for cost tracking and access control. You can activate your tags so that they appear on the Billing and Cost Management console, where you can track the costs associated with your identity pools. In an IAM policy, you can constrain permissions for identity pools based on specific tags or tag values.</p> <p>You can use this action up to 5 times per second, per account. An identity pool can have as many as 50 tags.</p>
     async fn tag_resource(
         &self,
         input: TagResourceInput,
@@ -2174,7 +2394,7 @@ pub trait CognitoIdentity {
         input: UnlinkIdentityInput,
     ) -> Result<(), RusotoError<UnlinkIdentityError>>;
 
-    /// <p>Removes the specified tags from an Amazon Cognito identity pool. You can use this action up to 5 times per second, per account</p>
+    /// <p>Removes the specified tags from the specified Amazon Cognito identity pool. You can use this action up to 5 times per second, per account</p>
     async fn untag_resource(
         &self,
         input: UntagResourceInput,
@@ -2384,7 +2604,7 @@ impl CognitoIdentity for CognitoIdentityClient {
             .deserialize::<GetIdentityPoolRolesResponse, _>()
     }
 
-    /// <p>Gets an OpenID token, using a known Cognito ID. This known Cognito ID is returned by <a>GetId</a>. You can optionally add additional logins for the identity. Supplying multiple logins creates an implicit link.</p> <p>The OpenId token is valid for 10 minutes.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
+    /// <p>Gets an OpenID token, using a known Cognito ID. This known Cognito ID is returned by <a>GetId</a>. You can optionally add additional logins for the identity. Supplying multiple logins creates an implicit link.</p> <p>The OpenID token is valid for 10 minutes.</p> <p>This is a public API. You do not need any credentials to call this API.</p>
     async fn get_open_id_token(
         &self,
         input: GetOpenIdTokenInput,
@@ -2428,6 +2648,29 @@ impl CognitoIdentity for CognitoIdentityClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<GetOpenIdTokenForDeveloperIdentityResponse, _>()
+    }
+
+    /// <p>Use <code>GetPrincipalTagAttributeMap</code> to list all mappings between <code>PrincipalTags</code> and user attributes.</p>
+    async fn get_principal_tag_attribute_map(
+        &self,
+        input: GetPrincipalTagAttributeMapInput,
+    ) -> Result<GetPrincipalTagAttributeMapResponse, RusotoError<GetPrincipalTagAttributeMapError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityService.GetPrincipalTagAttributeMap",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetPrincipalTagAttributeMapError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetPrincipalTagAttributeMapResponse, _>()
     }
 
     /// <p>Lists the identities in an identity pool.</p> <p>You must use AWS Developer credentials to call this API.</p>
@@ -2554,7 +2797,30 @@ impl CognitoIdentity for CognitoIdentityClient {
         Ok(())
     }
 
-    /// <p>Assigns a set of tags to an Amazon Cognito identity pool. A tag is a label that you can use to categorize and manage identity pools in different ways, such as by purpose, owner, environment, or other criteria.</p> <p>Each tag consists of a key and value, both of which you define. A key is a general category for more specific values. For example, if you have two versions of an identity pool, one for testing and another for production, you might assign an <code>Environment</code> tag key to both identity pools. The value of this key might be <code>Test</code> for one identity pool and <code>Production</code> for the other.</p> <p>Tags are useful for cost tracking and access control. You can activate your tags so that they appear on the Billing and Cost Management console, where you can track the costs associated with your identity pools. In an IAM policy, you can constrain permissions for identity pools based on specific tags or tag values.</p> <p>You can use this action up to 5 times per second, per account. An identity pool can have as many as 50 tags.</p>
+    /// <p>You can use this operation to use default (username and clientID) attribute or custom attribute mappings.</p>
+    async fn set_principal_tag_attribute_map(
+        &self,
+        input: SetPrincipalTagAttributeMapInput,
+    ) -> Result<SetPrincipalTagAttributeMapResponse, RusotoError<SetPrincipalTagAttributeMapError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityService.SetPrincipalTagAttributeMap",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, SetPrincipalTagAttributeMapError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<SetPrincipalTagAttributeMapResponse, _>()
+    }
+
+    /// <p>Assigns a set of tags to the specified Amazon Cognito identity pool. A tag is a label that you can use to categorize and manage identity pools in different ways, such as by purpose, owner, environment, or other criteria.</p> <p>Each tag consists of a key and value, both of which you define. A key is a general category for more specific values. For example, if you have two versions of an identity pool, one for testing and another for production, you might assign an <code>Environment</code> tag key to both identity pools. The value of this key might be <code>Test</code> for one identity pool and <code>Production</code> for the other.</p> <p>Tags are useful for cost tracking and access control. You can activate your tags so that they appear on the Billing and Cost Management console, where you can track the costs associated with your identity pools. In an IAM policy, you can constrain permissions for identity pools based on specific tags or tag values.</p> <p>You can use this action up to 5 times per second, per account. An identity pool can have as many as 50 tags.</p>
     async fn tag_resource(
         &self,
         input: TagResourceInput,
@@ -2609,7 +2875,7 @@ impl CognitoIdentity for CognitoIdentityClient {
         Ok(())
     }
 
-    /// <p>Removes the specified tags from an Amazon Cognito identity pool. You can use this action up to 5 times per second, per account</p>
+    /// <p>Removes the specified tags from the specified Amazon Cognito identity pool. You can use this action up to 5 times per second, per account</p>
     async fn untag_resource(
         &self,
         input: UntagResourceInput,

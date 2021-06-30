@@ -57,9 +57,13 @@ pub struct AssociateResourceSharePermissionRequest {
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-    /// <p>The ARN of the AWS RAM permission to associate with the resource share.</p>
+    /// <p>The Amazon Resource Name (ARN) of the AWS RAM permissions to associate with the resource share.</p>
     #[serde(rename = "permissionArn")]
     pub permission_arn: String,
+    /// <p>The version of the AWS RAM permissions to associate with the resource share.</p>
+    #[serde(rename = "permissionVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permission_version: Option<i64>,
     /// <p>Indicates whether the permission should replace the permissions that are currently associated with the resource share. Use <code>true</code> to replace the current permissions. Use <code>false</code> to add the permission to the current permission.</p>
     #[serde(rename = "replace")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -89,7 +93,7 @@ pub struct AssociateResourceShareRequest {
     #[serde(rename = "clientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-    /// <p>The principals.</p>
+    /// <p>The principals to associate with the resource share. The possible values are IDs of AWS accounts, and the ARNs of organizational units (OU) or organizations from AWS Organizations.</p>
     #[serde(rename = "principals")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub principals: Option<Vec<String>>,
@@ -407,10 +411,14 @@ pub struct GetResourceSharesRequest {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the AWS RAM permission that is associated with the resource share.</p>
+    #[serde(rename = "permissionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permission_arn: Option<String>,
     /// <p>The type of owner.</p>
     #[serde(rename = "resourceOwner")]
     pub resource_owner: String,
-    /// <p>The Amazon Resource Names (ARN) of the resource shares.</p>
+    /// <p>The ARNs of the resource shares.</p>
     #[serde(rename = "resourceShareArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_share_arns: Option<Vec<String>>,
@@ -522,7 +530,7 @@ pub struct ListPrincipalsRequest {
     #[serde(rename = "resourceShareArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_share_arns: Option<Vec<String>>,
-    /// <p>The resource type.</p> <p>Valid values: <code>codebuild:Project</code> | <code>codebuild:ReportGroup</code> | <code>ec2:CapacityReservation</code> | <code>ec2:DedicatedHost</code> | <code>ec2:Subnet</code> | <code>ec2:TrafficMirrorTarget</code> | <code>ec2:TransitGateway</code> | <code>imagebuilder:Component</code> | <code>imagebuilder:Image</code> | <code>imagebuilder:ImageRecipe</code> | <code>license-manager:LicenseConfiguration</code> I <code>resource-groups:Group</code> | <code>rds:Cluster</code> | <code>route53resolver:ResolverRule</code> </p>
+    /// <p>The resource type.</p> <p>Valid values: <code>acm-pca:CertificateAuthority</code> | <code>appmesh:Mesh</code> | <code>codebuild:Project</code> | <code>codebuild:ReportGroup</code> | <code>ec2:CapacityReservation</code> | <code>ec2:DedicatedHost</code> | <code>ec2:LocalGatewayRouteTable</code> | <code>ec2:PrefixList</code> | <code>ec2:Subnet</code> | <code>ec2:TrafficMirrorTarget</code> | <code>ec2:TransitGateway</code> | <code>imagebuilder:Component</code> | <code>imagebuilder:Image</code> | <code>imagebuilder:ImageRecipe</code> | <code>imagebuilder:ContainerRecipe</code> | <code>glue:Catalog</code> | <code>glue:Database</code> | <code>glue:Table</code> | <code>license-manager:LicenseConfiguration</code> I <code>network-firewall:FirewallPolicy</code> | <code>network-firewall:StatefulRuleGroup</code> | <code>network-firewall:StatelessRuleGroup</code> | <code>outposts:Outpost</code> | <code>resource-groups:Group</code> | <code>rds:Cluster</code> | <code>route53resolver:ResolverQueryLogConfig</code> | <code>route53resolver:ResolverRule</code> </p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
@@ -622,7 +630,7 @@ pub struct ListResourcesRequest {
     #[serde(rename = "resourceShareArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_share_arns: Option<Vec<String>>,
-    /// <p>The resource type.</p> <p>Valid values: <code>codebuild:Project</code> | <code>codebuild:ReportGroup</code> | <code>ec2:CapacityReservation</code> | <code>ec2:DedicatedHost</code> | <code>ec2:Subnet</code> | <code>ec2:TrafficMirrorTarget</code> | <code>ec2:TransitGateway</code> | <code>imagebuilder:Component</code> | <code>imagebuilder:Image</code> | <code>imagebuilder:ImageRecipe</code> | <code>license-manager:LicenseConfiguration</code> I <code>resource-groups:Group</code> | <code>rds:Cluster</code> | <code>route53resolver:ResolverRule</code> </p>
+    /// <p>The resource type.</p> <p>Valid values: <code>acm-pca:CertificateAuthority</code> | <code>appmesh:Mesh</code> | <code>codebuild:Project</code> | <code>codebuild:ReportGroup</code> | <code>ec2:CapacityReservation</code> | <code>ec2:DedicatedHost</code> | <code>ec2:LocalGatewayRouteTable</code> | <code>ec2:PrefixList</code> | <code>ec2:Subnet</code> | <code>ec2:TrafficMirrorTarget</code> | <code>ec2:TransitGateway</code> | <code>imagebuilder:Component</code> | <code>imagebuilder:Image</code> | <code>imagebuilder:ImageRecipe</code> | <code>imagebuilder:ContainerRecipe</code> | <code>glue:Catalog</code> | <code>glue:Database</code> | <code>glue:Table</code> | <code>license-manager:LicenseConfiguration</code> I <code>network-firewall:FirewallPolicy</code> | <code>network-firewall:StatefulRuleGroup</code> | <code>network-firewall:StatelessRuleGroup</code> | <code>outposts:Outpost</code> | <code>resource-groups:Group</code> | <code>rds:Cluster</code> | <code>route53resolver:ResolverQueryLogConfig</code> | <code>route53resolver:ResolverRule</code> </p>
     #[serde(rename = "resourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
@@ -847,6 +855,10 @@ pub struct ResourceShareInvitation {
     #[serde(rename = "receiverAccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub receiver_account_id: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the IAM user or IAM role that received the invitation.</p>
+    #[serde(rename = "receiverArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub receiver_arn: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the resource share.</p>
     #[serde(rename = "resourceShareArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -881,10 +893,14 @@ pub struct ResourceSharePermissionDetail {
     #[serde(rename = "creationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    /// <p>The identifier for the version of the permission that is set as the default version.</p>
+    /// <p>Specifies whether the version of the permission is set to the default version for this permission.</p>
     #[serde(rename = "defaultVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_version: Option<bool>,
+    /// <p>Specifies whether the version of the permission is set to the default version for this resource type.</p>
+    #[serde(rename = "isResourceTypeDefault")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_resource_type_default: Option<bool>,
     /// <p>The date and time when the permission was last updated.</p>
     #[serde(rename = "lastUpdatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -919,10 +935,14 @@ pub struct ResourceSharePermissionSummary {
     #[serde(rename = "creationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
-    /// <p>The identifier for the version of the permission that is set as the default version.</p>
+    /// <p>Specifies whether the version of the permission is set to the default version for this permission.</p>
     #[serde(rename = "defaultVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_version: Option<bool>,
+    /// <p>Specifies whether the version of the permission is set to the default version for this resource type.</p>
+    #[serde(rename = "isResourceTypeDefault")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_resource_type_default: Option<bool>,
     /// <p>The date and time when the permission was last updated.</p>
     #[serde(rename = "lastUpdatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1702,6 +1722,8 @@ pub enum DisassociateResourceSharePermissionError {
     InvalidClientToken(String),
     /// <p>A parameter is not valid.</p>
     InvalidParameter(String),
+    /// <p>The requested state transition is not valid.</p>
+    InvalidStateTransition(String),
     /// <p>The format of an Amazon Resource Name (ARN) is not valid.</p>
     MalformedArn(String),
     /// <p>The requested operation is not permitted.</p>
@@ -1728,6 +1750,11 @@ impl DisassociateResourceSharePermissionError {
                 "InvalidParameterException" => {
                     return RusotoError::Service(
                         DisassociateResourceSharePermissionError::InvalidParameter(err.msg),
+                    )
+                }
+                "InvalidStateTransitionException" => {
+                    return RusotoError::Service(
+                        DisassociateResourceSharePermissionError::InvalidStateTransition(err.msg),
                     )
                 }
                 "MalformedArnException" => {
@@ -1770,6 +1797,9 @@ impl fmt::Display for DisassociateResourceSharePermissionError {
                 write!(f, "{}", cause)
             }
             DisassociateResourceSharePermissionError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateResourceSharePermissionError::InvalidStateTransition(ref cause) => {
                 write!(f, "{}", cause)
             }
             DisassociateResourceSharePermissionError::MalformedArn(ref cause) => {
@@ -2678,6 +2708,8 @@ pub enum PromoteResourceShareCreatedFromPolicyError {
     MissingRequiredParameter(String),
     /// <p>The requested operation is not permitted.</p>
     OperationNotPermitted(String),
+    /// <p>The requested resource share exceeds the limit for your account.</p>
+    ResourceShareLimitExceeded(String),
     /// <p>The service could not respond to the request due to an internal problem.</p>
     ServerInternal(String),
     /// <p>The service is not available.</p>
@@ -2712,6 +2744,13 @@ impl PromoteResourceShareCreatedFromPolicyError {
                 "OperationNotPermittedException" => {
                     return RusotoError::Service(
                         PromoteResourceShareCreatedFromPolicyError::OperationNotPermitted(err.msg),
+                    )
+                }
+                "ResourceShareLimitExceededException" => {
+                    return RusotoError::Service(
+                        PromoteResourceShareCreatedFromPolicyError::ResourceShareLimitExceeded(
+                            err.msg,
+                        ),
                     )
                 }
                 "ServerInternalException" => {
@@ -2750,6 +2789,9 @@ impl fmt::Display for PromoteResourceShareCreatedFromPolicyError {
                 write!(f, "{}", cause)
             }
             PromoteResourceShareCreatedFromPolicyError::OperationNotPermitted(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PromoteResourceShareCreatedFromPolicyError::ResourceShareLimitExceeded(ref cause) => {
                 write!(f, "{}", cause)
             }
             PromoteResourceShareCreatedFromPolicyError::ServerInternal(ref cause) => {
@@ -2910,6 +2952,8 @@ pub enum TagResourceError {
     TagLimitExceeded(String),
     /// <p>The specified tag is a reserved word and cannot be used.</p>
     TagPolicyViolation(String),
+    /// <p>A specified resource was not found.</p>
+    UnknownResource(String),
 }
 
 impl TagResourceError {
@@ -2937,6 +2981,9 @@ impl TagResourceError {
                 "TagPolicyViolationException" => {
                     return RusotoError::Service(TagResourceError::TagPolicyViolation(err.msg))
                 }
+                "UnknownResourceException" => {
+                    return RusotoError::Service(TagResourceError::UnknownResource(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -2955,6 +3002,7 @@ impl fmt::Display for TagResourceError {
             TagResourceError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
             TagResourceError::TagLimitExceeded(ref cause) => write!(f, "{}", cause),
             TagResourceError::TagPolicyViolation(ref cause) => write!(f, "{}", cause),
+            TagResourceError::UnknownResource(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -3173,7 +3221,7 @@ pub trait Ram {
         input: GetResourceShareAssociationsRequest,
     ) -> Result<GetResourceShareAssociationsResponse, RusotoError<GetResourceShareAssociationsError>>;
 
-    /// <p>Gets the invitations for resource sharing that you've received.</p>
+    /// <p>Gets the invitations that you have received for resource shares.</p>
     async fn get_resource_share_invitations(
         &self,
         input: GetResourceShareInvitationsRequest,
@@ -3661,7 +3709,7 @@ impl Ram for RamClient {
         }
     }
 
-    /// <p>Gets the invitations for resource sharing that you've received.</p>
+    /// <p>Gets the invitations that you have received for resource shares.</p>
     #[allow(unused_mut)]
     async fn get_resource_share_invitations(
         &self,

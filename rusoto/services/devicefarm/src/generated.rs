@@ -401,6 +401,10 @@ pub struct CreateTestGridProjectRequest {
     /// <p>Human-readable name of the Selenium testing project.</p>
     #[serde(rename = "name")]
     pub name: String,
+    /// <p>The VPC security groups and subnets that are attached to a project.</p>
+    #[serde(rename = "vpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<TestGridVpcConfig>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -722,16 +726,13 @@ pub struct Device {
 pub struct DeviceFilter {
     /// <p><p>The aspect of a device such as platform or model used as the selection criteria in a device filter.</p> <p>The supported operators for each attribute are provided in the following list.</p> <dl> <dt>ARN</dt> <dd> <p>The Amazon Resource Name (ARN) of the device (for example, <code>arn:aws:devicefarm:us-west-2::device:12345Example</code>).</p> <p>Supported operators: <code>EQUALS</code>, <code>IN</code>, <code>NOT<em>IN</code> </p> </dd> <dt>PLATFORM</dt> <dd> <p>The device platform. Valid values are ANDROID or IOS.</p> <p>Supported operators: <code>EQUALS</code> </p> </dd> <dt>OS</em>VERSION</dt> <dd> <p>The operating system version (for example, 10.3.2).</p> <p>Supported operators: <code>EQUALS</code>, <code>GREATER<em>THAN</code>, <code>GREATER</em>THAN<em>OR</em>EQUALS</code>, <code>IN</code>, <code>LESS<em>THAN</code>, <code>LESS</em>THAN<em>OR</em>EQUALS</code>, <code>NOT<em>IN</code> </p> </dd> <dt>MODEL</dt> <dd> <p>The device model (for example, iPad 5th Gen).</p> <p>Supported operators: <code>CONTAINS</code>, <code>EQUALS</code>, <code>IN</code>, <code>NOT</em>IN</code> </p> </dd> <dt>AVAILABILITY</dt> <dd> <p>The current availability of the device. Valid values are AVAILABLE, HIGHLY<em>AVAILABLE, BUSY, or TEMPORARY</em>NOT<em>AVAILABLE.</p> <p>Supported operators: <code>EQUALS</code> </p> </dd> <dt>FORM</em>FACTOR</dt> <dd> <p>The device form factor. Valid values are PHONE or TABLET.</p> <p>Supported operators: <code>EQUALS</code> </p> </dd> <dt>MANUFACTURER</dt> <dd> <p>The device manufacturer (for example, Apple).</p> <p>Supported operators: <code>EQUALS</code>, <code>IN</code>, <code>NOT<em>IN</code> </p> </dd> <dt>REMOTE</em>ACCESS<em>ENABLED</dt> <dd> <p>Whether the device is enabled for remote access. Valid values are TRUE or FALSE.</p> <p>Supported operators: <code>EQUALS</code> </p> </dd> <dt>REMOTE</em>DEBUG<em>ENABLED</dt> <dd> <p>Whether the device is enabled for remote debugging. Valid values are TRUE or FALSE.</p> <p>Supported operators: <code>EQUALS</code> </p> <p>Because remote debugging is <a href="https://docs.aws.amazon.com/devicefarm/latest/developerguide/history.html">no longer supported</a>, this filter is ignored.</p> </dd> <dt>INSTANCE</em>ARN</dt> <dd> <p>The Amazon Resource Name (ARN) of the device instance.</p> <p>Supported operators: <code>EQUALS</code>, <code>IN</code>, <code>NOT<em>IN</code> </p> </dd> <dt>INSTANCE</em>LABELS</dt> <dd> <p>The label of the device instance.</p> <p>Supported operators: <code>CONTAINS</code> </p> </dd> <dt>FLEET_TYPE</dt> <dd> <p>The fleet type. Valid values are PUBLIC or PRIVATE.</p> <p>Supported operators: <code>EQUALS</code> </p> </dd> </dl></p>
     #[serde(rename = "attribute")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub attribute: Option<String>,
+    pub attribute: String,
     /// <p>Specifies how Device Farm compares the filter's attribute to the value. See the attribute descriptions.</p>
     #[serde(rename = "operator")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub operator: Option<String>,
+    pub operator: String,
     /// <p><p>An array of one or more filter values used in a device filter.</p> <p class="title"> <b>Operator Values</b> </p> <ul> <li> <p>The IN and NOT<em>IN operators can take a values array that has more than one element.</p> </li> <li> <p>The other operators require an array with a single element.</p> </li> </ul> <p class="title"> <b>Attribute Values</b> </p> <ul> <li> <p>The PLATFORM attribute can be set to ANDROID or IOS.</p> </li> <li> <p>The AVAILABILITY attribute can be set to AVAILABLE, HIGHLY</em>AVAILABLE, BUSY, or TEMPORARY<em>NOT</em>AVAILABLE.</p> </li> <li> <p>The FORM<em>FACTOR attribute can be set to PHONE or TABLET.</p> </li> <li> <p>The FLEET</em>TYPE attribute can be set to PUBLIC or PRIVATE.</p> </li> </ul></p>
     #[serde(rename = "values")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub values: Option<Vec<String>>,
+    pub values: Vec<String>,
 }
 
 /// <p>Represents the device instance.</p>
@@ -2297,16 +2298,14 @@ pub struct Project {
 pub struct PurchaseOfferingRequest {
     /// <p>The ID of the offering.</p>
     #[serde(rename = "offeringId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub offering_id: Option<String>,
+    pub offering_id: String,
     /// <p>The ID of the offering promotion to be applied to the purchase.</p>
     #[serde(rename = "offeringPromotionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub offering_promotion_id: Option<String>,
     /// <p>The number of device slots to purchase in an offering request.</p>
     #[serde(rename = "quantity")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub quantity: Option<i64>,
+    pub quantity: i64,
 }
 
 /// <p>The result of the purchase offering (for example, success or failure).</p>
@@ -2450,12 +2449,10 @@ pub struct RemoteAccessSession {
 pub struct RenewOfferingRequest {
     /// <p>The ID of a request to renew an offering.</p>
     #[serde(rename = "offeringId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub offering_id: Option<String>,
+    pub offering_id: String,
     /// <p>The quantity requested in an offering renewal.</p>
     #[serde(rename = "quantity")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub quantity: Option<i64>,
+    pub quantity: i64,
 }
 
 /// <p>The result of a renewal offering.</p>
@@ -2961,6 +2958,10 @@ pub struct TestGridProject {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The VPC security groups and subnets that are attached to a project.</p>
+    #[serde(rename = "vpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<TestGridVpcConfig>,
 }
 
 /// <p>A <a>TestGridSession</a> is a single instance of a browser launched from the URL provided by a call to <a>CreateTestGridUrl</a>.</p>
@@ -3035,6 +3036,20 @@ pub struct TestGridSessionArtifact {
     #[serde(rename = "url")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+}
+
+/// <p>The VPC security groups and subnets that are attached to a project.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct TestGridVpcConfig {
+    /// <p>A list of VPC security group IDs in your Amazon VPC.</p>
+    #[serde(rename = "securityGroupIds")]
+    pub security_group_ids: Vec<String>,
+    /// <p>A list of VPC subnet IDs in your Amazon VPC.</p>
+    #[serde(rename = "subnetIds")]
+    pub subnet_ids: Vec<String>,
+    /// <p>The ID of the Amazon VPC.</p>
+    #[serde(rename = "vpcId")]
+    pub vpc_id: String,
 }
 
 /// <p>Represents information about free trial device minutes for an AWS account.</p>
@@ -3283,6 +3298,10 @@ pub struct UpdateTestGridProjectRequest {
     /// <p>ARN of the project to update.</p>
     #[serde(rename = "projectArn")]
     pub project_arn: String,
+    /// <p>The VPC security groups and subnets that are attached to a project.</p>
+    #[serde(rename = "vpcConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_config: Option<TestGridVpcConfig>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -3683,18 +3702,28 @@ impl Error for CreateRemoteAccessSessionError {}
 /// Errors returned by CreateTestGridProject
 #[derive(Debug, PartialEq)]
 pub enum CreateTestGridProjectError {
+    /// <p>An invalid argument was specified.</p>
+    Argument(String),
     /// <p>An internal exception was raised in the service. Contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a> if you see this error. </p>
     InternalService(String),
+    /// <p>A limit was exceeded.</p>
+    LimitExceeded(String),
 }
 
 impl CreateTestGridProjectError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateTestGridProjectError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "ArgumentException" => {
+                    return RusotoError::Service(CreateTestGridProjectError::Argument(err.msg))
+                }
                 "InternalServiceException" => {
                     return RusotoError::Service(CreateTestGridProjectError::InternalService(
                         err.msg,
                     ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateTestGridProjectError::LimitExceeded(err.msg))
                 }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
@@ -3707,7 +3736,9 @@ impl fmt::Display for CreateTestGridProjectError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            CreateTestGridProjectError::Argument(ref cause) => write!(f, "{}", cause),
             CreateTestGridProjectError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateTestGridProjectError::LimitExceeded(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -7013,6 +7044,8 @@ pub enum UpdateTestGridProjectError {
     Argument(String),
     /// <p>An internal exception was raised in the service. Contact <a href="mailto:aws-devicefarm-support@amazon.com">aws-devicefarm-support@amazon.com</a> if you see this error. </p>
     InternalService(String),
+    /// <p>A limit was exceeded.</p>
+    LimitExceeded(String),
     /// <p>The specified entity was not found.</p>
     NotFound(String),
 }
@@ -7028,6 +7061,9 @@ impl UpdateTestGridProjectError {
                     return RusotoError::Service(UpdateTestGridProjectError::InternalService(
                         err.msg,
                     ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(UpdateTestGridProjectError::LimitExceeded(err.msg))
                 }
                 "NotFoundException" => {
                     return RusotoError::Service(UpdateTestGridProjectError::NotFound(err.msg))
@@ -7045,6 +7081,7 @@ impl fmt::Display for UpdateTestGridProjectError {
         match *self {
             UpdateTestGridProjectError::Argument(ref cause) => write!(f, "{}", cause),
             UpdateTestGridProjectError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateTestGridProjectError::LimitExceeded(ref cause) => write!(f, "{}", cause),
             UpdateTestGridProjectError::NotFound(ref cause) => write!(f, "{}", cause),
         }
     }

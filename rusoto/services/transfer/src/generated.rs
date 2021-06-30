@@ -52,36 +52,84 @@ impl TransferClient {
 use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateAccessRequest {
+    /// <p>A unique identifier that is required to identify specific groups within your directory. The users of the group that you associate have access to your Amazon S3 or Amazon EFS resources over the enabled protocols using Amazon Web Services Transfer Family. If you know the group name, you can view the SID values by running the following command using Windows PowerShell.</p> <p> <code>Get-ADGroup -Filter {samAccountName -like "<i>YourGroupName</i>*"} -Properties * | Select SamAccountName,ObjectSid</code> </p> <p>In that command, replace <i>YourGroupName</i> with the name of your Active Directory group.</p> <p>The regex used to validate this parameter is a string of characters consisting of uppercase and lowercase alphanumeric characters with no spaces. You can also include underscores or any of the following characters: =,.@:/-</p>
+    #[serde(rename = "ExternalId")]
+    pub external_id: String,
+    /// <p>The landing directory (folder) for a user when they log in to the server using the client.</p> <p>A <code>HomeDirectory</code> example is <code>/bucket_name/home/mydirectory</code>.</p>
+    #[serde(rename = "HomeDirectory")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub home_directory: Option<String>,
+    /// <p><p>Logical directory mappings that specify what Amazon S3 or Amazon EFS paths and keys should be visible to your user and how you want to make them visible. You must specify the <code>Entry</code> and <code>Target</code> pair, where <code>Entry</code> shows how the path is made visible and <code>Target</code> is the actual Amazon S3 or Amazon EFS path. If you only specify a target, it is displayed as is. You also must ensure that your Amazon Web Services Identity and Access Management (IAM) role provides access to paths in <code>Target</code>. This value can only be set when <code>HomeDirectoryType</code> is set to <i>LOGICAL</i>.</p> <p>The following is an <code>Entry</code> and <code>Target</code> pair example.</p> <p> <code>[ { &quot;Entry&quot;: &quot;your-personal-report.pdf&quot;, &quot;Target&quot;: &quot;/bucket3/customized-reports/${transfer:UserName}.pdf&quot; } ]</code> </p> <p>In most cases, you can use this value instead of the scope-down policy to lock down your user to the designated home directory (&quot;<code>chroot</code>&quot;). To do this, you can set <code>Entry</code> to <code>/</code> and set <code>Target</code> to the <code>HomeDirectory</code> parameter value.</p> <p>The following is an <code>Entry</code> and <code>Target</code> pair example for <code>chroot</code>.</p> <p> <code>[ { &quot;Entry:&quot;: &quot;/&quot;, &quot;Target&quot;: &quot;/bucket_name/home/mydirectory&quot; } ]</code> </p> <note> <p>If the target of a logical directory entry does not exist in Amazon S3 or EFS, the entry is ignored. As a workaround, you can use the Amazon S3 API or EFS API to create 0 byte objects as place holders for your directory. If using the CLI, use the <code>s3api</code> or <code>efsapi</code> call instead of <code>s3</code> or <code>efs</code> so you can use the put-object operation. For example, you use the following: <code>aws s3api put-object --bucket bucketname --key path/to/folder/</code>. Make sure that the end of the key name ends in a <code>/</code> for it to be considered a folder.</p> </note></p>
+    #[serde(rename = "HomeDirectoryMappings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub home_directory_mappings: Option<Vec<HomeDirectoryMapEntry>>,
+    /// <p>The type of landing directory (folder) you want your users' home directory to be when they log into the server. If you set it to <code>PATH</code>, the user will see the absolute Amazon S3 bucket or EFS paths as is in their file transfer protocol clients. If you set it <code>LOGICAL</code>, you will need to provide mappings in the <code>HomeDirectoryMappings</code> for how you want to make Amazon S3 or EFS paths visible to your users.</p>
+    #[serde(rename = "HomeDirectoryType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub home_directory_type: Option<String>,
+    /// <p><p>A scope-down policy for your user so that you can use the same IAM role across multiple users. This policy scopes down user access to portions of their Amazon S3 bucket. Variables that you can use inside this policy include <code>${Transfer:UserName}</code>, <code>${Transfer:HomeDirectory}</code>, and <code>${Transfer:HomeBucket}</code>.</p> <note> <p>This only applies when domain of <code>ServerId</code> is S3. Amazon EFS does not use scope-down policies.</p> <p>For scope-down policies, Amazon Web Services Transfer Family stores the policy as a JSON blob, instead of the Amazon Resource Name (ARN) of the policy. You save the policy as a JSON blob and pass it in the <code>Policy</code> argument.</p> <p>For an example of a scope-down policy, see <a href="https://docs.aws.amazon.com/transfer/latest/userguide/scope-down-policy.html">Example scope-down policy</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html">AssumeRole</a> in the <i>Amazon Web Services Security Token Service API Reference</i>.</p> </note></p>
+    #[serde(rename = "Policy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy: Option<String>,
+    #[serde(rename = "PosixProfile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub posix_profile: Option<PosixProfile>,
+    /// <p>Specifies the Amazon Resource Name (ARN) of the IAM role that controls your users' access to your Amazon S3 bucket or EFS file system. The policies attached to this role determine the level of access that you want to provide your users when transferring files into and out of your Amazon S3 bucket or EFS file system. The IAM role should also contain a trust relationship that allows the server to access your resources when servicing your users' transfer requests.</p>
+    #[serde(rename = "Role")]
+    pub role: String,
+    /// <p>A system-assigned unique identifier for a server instance. This is the specific server that you added your user to.</p>
+    #[serde(rename = "ServerId")]
+    pub server_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateAccessResponse {
+    /// <p>The external ID of the group whose users have access to your Amazon S3 or Amazon EFS resources over the enabled protocols using Amazon Web Services Transfer Family.</p>
+    #[serde(rename = "ExternalId")]
+    pub external_id: String,
+    /// <p>The ID of the server that the user is attached to.</p>
+    #[serde(rename = "ServerId")]
+    pub server_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateServerRequest {
-    /// <p><p>The Amazon Resource Name (ARN) of the AWS Certificate Manager (ACM) certificate. Required when <code>Protocols</code> is set to <code>FTPS</code>.</p> <p>To request a new public certificate, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-request-public.html">Request a public certificate</a> in the <i> AWS Certificate Manager User Guide</i>.</p> <p>To import an existing certificate into ACM, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html">Importing certificates into ACM</a> in the <i> AWS Certificate Manager User Guide</i>.</p> <p>To request a private certificate to use FTPS through private IP addresses, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-request-private.html">Request a private certificate</a> in the <i> AWS Certificate Manager User Guide</i>.</p> <p>Certificates with the following cryptographic algorithms and key sizes are supported:</p> <ul> <li> <p>2048-bit RSA (RSA<em>2048)</p> </li> <li> <p>4096-bit RSA (RSA</em>4096)</p> </li> <li> <p>Elliptic Prime Curve 256 bit (EC<em>prime256v1)</p> </li> <li> <p>Elliptic Prime Curve 384 bit (EC</em>secp384r1)</p> </li> <li> <p>Elliptic Prime Curve 521 bit (EC_secp521r1)</p> </li> </ul> <note> <p>The certificate must be a valid SSL/TLS X.509 version 3 certificate with FQDN or IP address specified and information about the issuer.</p> </note></p>
+    /// <p><p>The Amazon Resource Name (ARN) of the Amazon Web Services Certificate Manager (ACM) certificate. Required when <code>Protocols</code> is set to <code>FTPS</code>.</p> <p>To request a new public certificate, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-request-public.html">Request a public certificate</a> in the <i> Amazon Web Services Certificate Manager User Guide</i>.</p> <p>To import an existing certificate into ACM, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html">Importing certificates into ACM</a> in the <i> Amazon Web Services Certificate Manager User Guide</i>.</p> <p>To request a private certificate to use FTPS through private IP addresses, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-request-private.html">Request a private certificate</a> in the <i> Amazon Web Services Certificate Manager User Guide</i>.</p> <p>Certificates with the following cryptographic algorithms and key sizes are supported:</p> <ul> <li> <p>2048-bit RSA (RSA<em>2048)</p> </li> <li> <p>4096-bit RSA (RSA</em>4096)</p> </li> <li> <p>Elliptic Prime Curve 256 bit (EC<em>prime256v1)</p> </li> <li> <p>Elliptic Prime Curve 384 bit (EC</em>secp384r1)</p> </li> <li> <p>Elliptic Prime Curve 521 bit (EC_secp521r1)</p> </li> </ul> <note> <p>The certificate must be a valid SSL/TLS X.509 version 3 certificate with FQDN or IP address specified and information about the issuer.</p> </note></p>
     #[serde(rename = "Certificate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate: Option<String>,
-    /// <p>The virtual private cloud (VPC) endpoint settings that are configured for your server. When you host your endpoint within your VPC, you can make it accessible only to resources within your VPC, or you can attach Elastic IPs and make it accessible to clients over the internet. Your VPC's default security groups are automatically assigned to your endpoint.</p>
+    /// <p><p>The domain of the storage system that is used for file transfers. There are two domains available: Amazon Simple Storage Service (Amazon S3) and Amazon Elastic File System (Amazon EFS). The default value is S3.</p> <note> <p>After the server is created, the domain cannot be changed.</p> </note></p>
+    #[serde(rename = "Domain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain: Option<String>,
+    /// <p>The virtual private cloud (VPC) endpoint settings that are configured for your server. When you host your endpoint within your VPC, you can make it accessible only to resources within your VPC, or you can attach Elastic IP addresses and make it accessible to clients over the internet. Your VPC's default security groups are automatically assigned to your endpoint.</p>
     #[serde(rename = "EndpointDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_details: Option<EndpointDetails>,
-    /// <p><p>The type of VPC endpoint that you want your server to connect to. You can choose to connect to the public internet or a VPC endpoint. With a VPC endpoint, you can restrict access to your server and resources only within your VPC.</p> <note> <p>It is recommended that you use <code>VPC</code> as the <code>EndpointType</code>. With this endpoint type, you have the option to directly associate up to three Elastic IPv4 addresses (BYO IP included) with your server&#39;s endpoint and use VPC security groups to restrict traffic by the client&#39;s public IP address. This is not possible with <code>EndpointType</code> set to <code>VPC_ENDPOINT</code>.</p> </note></p>
+    /// <p><p>The type of endpoint that you want your server to use. You can choose to make your server&#39;s endpoint publicly accessible (PUBLIC) or host it inside your VPC. With an endpoint that is hosted in a VPC, you can restrict access to your server and resources only within your VPC or choose to make it internet facing by attaching Elastic IP addresses directly to it.</p> <note> <p> After May 19, 2021, you won&#39;t be able to create a server using <code>EndpointType=VPC<em>ENDPOINT</code> in your Amazon Web Services account if your account hasn&#39;t already done so before May 19, 2021. If you have already created servers with <code>EndpointType=VPC</em>ENDPOINT</code> in your Amazon Web Services account on or before May 19, 2021, you will not be affected. After this date, use <code>EndpointType</code>=<code>VPC</code>.</p> <p>For more information, see https://docs.aws.amazon.com/transfer/latest/userguide/create-server-in-vpc.html#deprecate-vpc-endpoint.</p> <p>It is recommended that you use <code>VPC</code> as the <code>EndpointType</code>. With this endpoint type, you have the option to directly associate up to three Elastic IPv4 addresses (BYO IP included) with your server&#39;s endpoint and use VPC security groups to restrict traffic by the client&#39;s public IP address. This is not possible with <code>EndpointType</code> set to <code>VPC_ENDPOINT</code>.</p> </note></p>
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
-    /// <p>The RSA private key as generated by the <code>ssh-keygen -N "" -m PEM -f my-new-server-key</code> command.</p> <important> <p>If you aren't planning to migrate existing users from an existing SFTP-enabled server to a new server, don't update the host key. Accidentally changing a server's host key can be disruptive.</p> </important> <p>For more information, see <a href="https://docs.aws.amazon.com/transfer/latest/userguide/edit-server-config.html#configuring-servers-change-host-key">Change the host key for your SFTP-enabled server</a> in the <i>AWS Transfer Family User Guide</i>.</p>
+    /// <p>The RSA private key as generated by the <code>ssh-keygen -N "" -m PEM -f my-new-server-key</code> command.</p> <important> <p>If you aren't planning to migrate existing users from an existing SFTP-enabled server to a new server, don't update the host key. Accidentally changing a server's host key can be disruptive.</p> </important> <p>For more information, see <a href="https://docs.aws.amazon.com/transfer/latest/userguide/edit-server-config.html#configuring-servers-change-host-key">Change the host key for your SFTP-enabled server</a> in the <i>Amazon Web Services Transfer Family User Guide</i>.</p>
     #[serde(rename = "HostKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub host_key: Option<String>,
-    /// <p>Required when <code>IdentityProviderType</code> is set to <code>API_GATEWAY</code>. Accepts an array containing all of the information required to call a customer-supplied authentication API, including the API Gateway URL. Not required when <code>IdentityProviderType</code> is set to <code>SERVICE_MANAGED</code>.</p>
+    /// <p>Required when <code>IdentityProviderType</code> is set to <code>AWS_DIRECTORY_SERVICE</code> or <code>API_GATEWAY</code>. Accepts an array containing all of the information required to use a directory in <code>AWS_DIRECTORY_SERVICE</code> or invoke a customer-supplied authentication API, including the API Gateway URL. Not required when <code>IdentityProviderType</code> is set to <code>SERVICE_MANAGED</code>.</p>
     #[serde(rename = "IdentityProviderDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_provider_details: Option<IdentityProviderDetails>,
-    /// <p>Specifies the mode of authentication for a server. The default value is <code>SERVICE_MANAGED</code>, which allows you to store and access user credentials within the AWS Transfer Family service. Use the <code>API_GATEWAY</code> value to integrate with an identity provider of your choosing. The <code>API_GATEWAY</code> setting requires you to provide an API Gateway endpoint URL to call for authentication using the <code>IdentityProviderDetails</code> parameter.</p>
+    /// <p>Specifies the mode of authentication for a server. The default value is <code>SERVICE_MANAGED</code>, which allows you to store and access user credentials within the Amazon Web Services Transfer Family service.</p> <p>Use <code>AWS_DIRECTORY_SERVICE</code> to provide access to Active Directory groups in Amazon Web Services Managed Active Directory or Microsoft Active Directory in your on-premises environment or in Amazon Web Services using AD Connectors. This option also requires you to provide a Directory ID using the <code>IdentityProviderDetails</code> parameter.</p> <p>Use the <code>API_GATEWAY</code> value to integrate with an identity provider of your choosing. The <code>API_GATEWAY</code> setting requires you to provide an API Gateway endpoint URL to call for authentication using the <code>IdentityProviderDetails</code> parameter.</p>
     #[serde(rename = "IdentityProviderType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_provider_type: Option<String>,
-    /// <p>Allows the service to write your users' activity to your Amazon CloudWatch logs for monitoring and auditing purposes.</p>
+    /// <p>Specifies the Amazon Resource Name (ARN) of the Amazon Web Services Identity and Access Management (IAM) role that allows a server to turn on Amazon CloudWatch logging for Amazon S3 or Amazon EFS events. When set, user activity can be viewed in your CloudWatch logs.</p>
     #[serde(rename = "LoggingRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_role: Option<String>,
-    /// <p><p>Specifies the file transfer protocol or protocols over which your file transfer protocol client can connect to your server&#39;s endpoint. The available protocols are:</p> <ul> <li> <p> <code>SFTP</code> (Secure Shell (SSH) File Transfer Protocol): File transfer over SSH</p> </li> <li> <p> <code>FTPS</code> (File Transfer Protocol Secure): File transfer with TLS encryption</p> </li> <li> <p> <code>FTP</code> (File Transfer Protocol): Unencrypted file transfer</p> </li> </ul> <note> <p>If you select <code>FTPS</code>, you must choose a certificate stored in AWS Certificate Manager (ACM) which will be used to identify your server when clients connect to it over FTPS.</p> <p>If <code>Protocol</code> includes either <code>FTP</code> or <code>FTPS</code>, then the <code>EndpointType</code> must be <code>VPC</code> and the <code>IdentityProviderType</code> must be <code>API<em>GATEWAY</code>.</p> <p>If <code>Protocol</code> includes <code>FTP</code>, then <code>AddressAllocationIds</code> cannot be associated.</p> <p>If <code>Protocol</code> is set only to <code>SFTP</code>, the <code>EndpointType</code> can be set to <code>PUBLIC</code> and the <code>IdentityProviderType</code> can be set to <code>SERVICE</em>MANAGED</code>.</p> </note></p>
+    /// <p><p>Specifies the file transfer protocol or protocols over which your file transfer protocol client can connect to your server&#39;s endpoint. The available protocols are:</p> <ul> <li> <p> <code>SFTP</code> (Secure Shell (SSH) File Transfer Protocol): File transfer over SSH</p> </li> <li> <p> <code>FTPS</code> (File Transfer Protocol Secure): File transfer with TLS encryption</p> </li> <li> <p> <code>FTP</code> (File Transfer Protocol): Unencrypted file transfer</p> </li> </ul> <note> <p>If you select <code>FTPS</code>, you must choose a certificate stored in Amazon Web Services Certificate Manager (ACM) which is used to identify your server when clients connect to it over FTPS.</p> <p>If <code>Protocol</code> includes either <code>FTP</code> or <code>FTPS</code>, then the <code>EndpointType</code> must be <code>VPC</code> and the <code>IdentityProviderType</code> must be <code>AWS<em>DIRECTORY</em>SERVICE</code> or <code>API<em>GATEWAY</code>.</p> <p>If <code>Protocol</code> includes <code>FTP</code>, then <code>AddressAllocationIds</code> cannot be associated.</p> <p>If <code>Protocol</code> is set only to <code>SFTP</code>, the <code>EndpointType</code> can be set to <code>PUBLIC</code> and the <code>IdentityProviderType</code> can be set to <code>SERVICE</em>MANAGED</code>.</p> </note></p>
     #[serde(rename = "Protocols")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub protocols: Option<Vec<String>>,
@@ -106,23 +154,27 @@ pub struct CreateServerResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserRequest {
-    /// <p>The landing directory (folder) for a user when they log in to the server using the client.</p> <p>An example is <i> <code>your-Amazon-S3-bucket-name&gt;/home/username</code> </i>.</p>
+    /// <p>The landing directory (folder) for a user when they log in to the server using the client.</p> <p>A <code>HomeDirectory</code> example is <code>/bucket_name/home/mydirectory</code>.</p>
     #[serde(rename = "HomeDirectory")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_directory: Option<String>,
-    /// <p><p>Logical directory mappings that specify what Amazon S3 paths and keys should be visible to your user and how you want to make them visible. You will need to specify the &quot;<code>Entry</code>&quot; and &quot;<code>Target</code>&quot; pair, where <code>Entry</code> shows how the path is made visible and <code>Target</code> is the actual Amazon S3 path. If you only specify a target, it will be displayed as is. You will need to also make sure that your IAM role provides access to paths in <code>Target</code>. The following is an example.</p> <p> <code>&#39;[ &quot;/bucket2/documentation&quot;, { &quot;Entry&quot;: &quot;your-personal-report.pdf&quot;, &quot;Target&quot;: &quot;/bucket3/customized-reports/${transfer:UserName}.pdf&quot; } ]&#39;</code> </p> <p>In most cases, you can use this value instead of the scope-down policy to lock your user down to the designated home directory (&quot;chroot&quot;). To do this, you can set <code>Entry</code> to &#39;/&#39; and set <code>Target</code> to the HomeDirectory parameter value.</p> <note> <p>If the target of a logical directory entry does not exist in Amazon S3, the entry will be ignored. As a workaround, you can use the Amazon S3 API to create 0 byte objects as place holders for your directory. If using the CLI, use the <code>s3api</code> call instead of <code>s3</code> so you can use the put-object operation. For example, you use the following: <code>aws s3api put-object --bucket bucketname --key path/to/folder/</code>. Make sure that the end of the key name ends in a &#39;/&#39; for it to be considered a folder.</p> </note></p>
+    /// <p><p>Logical directory mappings that specify what Amazon S3 or Amazon EFS paths and keys should be visible to your user and how you want to make them visible. You must specify the <code>Entry</code> and <code>Target</code> pair, where <code>Entry</code> shows how the path is made visible and <code>Target</code> is the actual Amazon S3 or Amazon EFS path. If you only specify a target, it is displayed as is. You also must ensure that your Amazon Web Services Identity and Access Management (IAM) role provides access to paths in <code>Target</code>. This value can only be set when <code>HomeDirectoryType</code> is set to <i>LOGICAL</i>.</p> <p>The following is an <code>Entry</code> and <code>Target</code> pair example.</p> <p> <code>[ { &quot;Entry&quot;: &quot;your-personal-report.pdf&quot;, &quot;Target&quot;: &quot;/bucket3/customized-reports/${transfer:UserName}.pdf&quot; } ]</code> </p> <p>In most cases, you can use this value instead of the scope-down policy to lock your user down to the designated home directory (&quot;<code>chroot</code>&quot;). To do this, you can set <code>Entry</code> to <code>/</code> and set <code>Target</code> to the HomeDirectory parameter value.</p> <p>The following is an <code>Entry</code> and <code>Target</code> pair example for <code>chroot</code>.</p> <p> <code>[ { &quot;Entry:&quot;: &quot;/&quot;, &quot;Target&quot;: &quot;/bucket_name/home/mydirectory&quot; } ]</code> </p> <note> <p>If the target of a logical directory entry does not exist in Amazon S3 or EFS, the entry is ignored. As a workaround, you can use the Amazon S3 API or EFS API to create 0 byte objects as place holders for your directory. If using the CLI, use the <code>s3api</code> or <code>efsapi</code> call instead of <code>s3</code> or <code>efs</code> so you can use the put-object operation. For example, you use the following: <code>aws s3api put-object --bucket bucketname --key path/to/folder/</code>. Make sure that the end of the key name ends in a <code>/</code> for it to be considered a folder.</p> </note></p>
     #[serde(rename = "HomeDirectoryMappings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_directory_mappings: Option<Vec<HomeDirectoryMapEntry>>,
-    /// <p>The type of landing directory (folder) you want your users' home directory to be when they log into the server. If you set it to <code>PATH</code>, the user will see the absolute Amazon S3 bucket paths as is in their file transfer protocol clients. If you set it <code>LOGICAL</code>, you will need to provide mappings in the <code>HomeDirectoryMappings</code> for how you want to make Amazon S3 paths visible to your users.</p>
+    /// <p>The type of landing directory (folder) you want your users' home directory to be when they log into the server. If you set it to <code>PATH</code>, the user will see the absolute Amazon S3 bucket or EFS paths as is in their file transfer protocol clients. If you set it <code>LOGICAL</code>, you will need to provide mappings in the <code>HomeDirectoryMappings</code> for how you want to make Amazon S3 or EFS paths visible to your users.</p>
     #[serde(rename = "HomeDirectoryType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_directory_type: Option<String>,
-    /// <p><p>A scope-down policy for your user so you can use the same IAM role across multiple users. This policy scopes down user access to portions of their Amazon S3 bucket. Variables that you can use inside this policy include <code>${Transfer:UserName}</code>, <code>${Transfer:HomeDirectory}</code>, and <code>${Transfer:HomeBucket}</code>.</p> <note> <p>For scope-down policies, AWS Transfer Family stores the policy as a JSON blob, instead of the Amazon Resource Name (ARN) of the policy. You save the policy as a JSON blob and pass it in the <code>Policy</code> argument.</p> <p>For an example of a scope-down policy, see <a href="https://docs.aws.amazon.com/transfer/latest/userguide/users.html#users-policies-scope-down">Creating a scope-down policy</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html">AssumeRole</a> in the <i>AWS Security Token Service API Reference</i>.</p> </note></p>
+    /// <p><p>A scope-down policy for your user so that you can use the same IAM role across multiple users. This policy scopes down user access to portions of their Amazon S3 bucket. Variables that you can use inside this policy include <code>${Transfer:UserName}</code>, <code>${Transfer:HomeDirectory}</code>, and <code>${Transfer:HomeBucket}</code>.</p> <note> <p>This only applies when domain of ServerId is S3. EFS does not use scope down policy.</p> <p>For scope-down policies, Amazon Web Services Transfer Family stores the policy as a JSON blob, instead of the Amazon Resource Name (ARN) of the policy. You save the policy as a JSON blob and pass it in the <code>Policy</code> argument.</p> <p>For an example of a scope-down policy, see <a href="https://docs.aws.amazon.com/transfer/latest/userguide/scope-down-policy.html">Example scope-down policy</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html">AssumeRole</a> in the <i>Amazon Web Services Security Token Service API Reference</i>.</p> </note></p>
     #[serde(rename = "Policy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy: Option<String>,
-    /// <p>The IAM role that controls your users' access to your Amazon S3 bucket. The policies attached to this role will determine the level of access you want to provide your users when transferring files into and out of your Amazon S3 bucket or buckets. The IAM role should also contain a trust relationship that allows the server to access your resources when servicing your users' transfer requests.</p>
+    /// <p>Specifies the full POSIX identity, including user ID (<code>Uid</code>), group ID (<code>Gid</code>), and any secondary groups IDs (<code>SecondaryGids</code>), that controls your users' access to your Amazon EFS file systems. The POSIX permissions that are set on files and directories in Amazon EFS determine the level of access your users get when transferring files into and out of your Amazon EFS file systems.</p>
+    #[serde(rename = "PosixProfile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub posix_profile: Option<PosixProfile>,
+    /// <p>Specifies the Amazon Resource Name (ARN) of the IAM role that controls your users' access to your Amazon S3 bucket or EFS file system. The policies attached to this role determine the level of access that you want to provide your users when transferring files into and out of your Amazon S3 bucket or EFS file system. The IAM role should also contain a trust relationship that allows the server to access your resources when servicing your users' transfer requests.</p>
     #[serde(rename = "Role")]
     pub role: String,
     /// <p>A system-assigned unique identifier for a server instance. This is the specific server that you added your user to.</p>
@@ -150,6 +202,17 @@ pub struct CreateUserResponse {
     /// <p>A unique string that identifies a user account associated with a server.</p>
     #[serde(rename = "UserName")]
     pub user_name: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteAccessRequest {
+    /// <p>A unique identifier that is required to identify specific groups within your directory. The users of the group that you associate have access to your Amazon S3 or Amazon EFS resources over the enabled protocols using Amazon Web Services Transfer Family. If you know the group name, you can view the SID values by running the following command using Windows PowerShell.</p> <p> <code>Get-ADGroup -Filter {samAccountName -like "<i>YourGroupName</i>*"} -Properties * | Select SamAccountName,ObjectSid</code> </p> <p>In that command, replace <i>YourGroupName</i> with the name of your Active Directory group.</p> <p>The regex used to validate this parameter is a string of characters consisting of uppercase and lowercase alphanumeric characters with no spaces. You can also include underscores or any of the following characters: =,.@:/-</p>
+    #[serde(rename = "ExternalId")]
+    pub external_id: String,
+    /// <p>A system-assigned unique identifier for a server that has this user assigned.</p>
+    #[serde(rename = "ServerId")]
+    pub server_id: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -183,6 +246,28 @@ pub struct DeleteUserRequest {
     /// <p>A unique string that identifies a user that is being deleted from a server.</p>
     #[serde(rename = "UserName")]
     pub user_name: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeAccessRequest {
+    /// <p>A unique identifier that is required to identify specific groups within your directory. The users of the group that you associate have access to your Amazon S3 or Amazon EFS resources over the enabled protocols using Amazon Web Services Transfer Family. If you know the group name, you can view the SID values by running the following command using Windows PowerShell.</p> <p> <code>Get-ADGroup -Filter {samAccountName -like "<i>YourGroupName</i>*"} -Properties * | Select SamAccountName,ObjectSid</code> </p> <p>In that command, replace <i>YourGroupName</i> with the name of your Active Directory group.</p> <p>The regex used to validate this parameter is a string of characters consisting of uppercase and lowercase alphanumeric characters with no spaces. You can also include underscores or any of the following characters: =,.@:/-</p>
+    #[serde(rename = "ExternalId")]
+    pub external_id: String,
+    /// <p>A system-assigned unique identifier for a server that has this access assigned.</p>
+    #[serde(rename = "ServerId")]
+    pub server_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeAccessResponse {
+    /// <p>The external ID of the server that the access is attached to.</p>
+    #[serde(rename = "Access")]
+    pub access: DescribedAccess,
+    /// <p>A system-assigned unique identifier for a server that has this access assigned.</p>
+    #[serde(rename = "ServerId")]
+    pub server_id: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -223,7 +308,7 @@ pub struct DescribeUserRequest {
     /// <p>A system-assigned unique identifier for a server that has this user assigned.</p>
     #[serde(rename = "ServerId")]
     pub server_id: String,
-    /// <p>The name of the user assigned to one or more servers. User names are part of the sign-in credentials to use the AWS Transfer Family service and perform file transfer tasks.</p>
+    /// <p>The name of the user assigned to one or more servers. User names are part of the sign-in credentials to use the Amazon Web Services Transfer Family service and perform file transfer tasks.</p>
     #[serde(rename = "UserName")]
     pub user_name: String,
 }
@@ -237,6 +322,39 @@ pub struct DescribeUserResponse {
     /// <p>An array containing the properties of the user account for the <code>ServerID</code> value that you specified.</p>
     #[serde(rename = "User")]
     pub user: DescribedUser,
+}
+
+/// <p>Describes the properties of the access that was specified.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribedAccess {
+    /// <p>A unique identifier that is required to identify specific groups within your directory. The users of the group that you associate have access to your Amazon S3 or Amazon EFS resources over the enabled protocols using Amazon Web Services Transfer Family. If you know the group name, you can view the SID values by running the following command using Windows PowerShell.</p> <p> <code>Get-ADGroup -Filter {samAccountName -like "<i>YourGroupName</i>*"} -Properties * | Select SamAccountName,ObjectSid</code> </p> <p>In that command, replace <i>YourGroupName</i> with the name of your Active Directory group.</p> <p>The regex used to validate this parameter is a string of characters consisting of uppercase and lowercase alphanumeric characters with no spaces. You can also include underscores or any of the following characters: =,.@:/-</p>
+    #[serde(rename = "ExternalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_id: Option<String>,
+    /// <p>The landing directory (folder) for a user when they log in to the server using the client.</p> <p>A <code>HomeDirectory</code> example is <code>/bucket_name/home/mydirectory</code>.</p>
+    #[serde(rename = "HomeDirectory")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub home_directory: Option<String>,
+    /// <p>Logical directory mappings that specify what Amazon S3 or Amazon EFS paths and keys should be visible to your user and how you want to make them visible. You must specify the <code>Entry</code> and <code>Target</code> pair, where <code>Entry</code> shows how the path is made visible and <code>Target</code> is the actual Amazon S3 or Amazon EFS path. If you only specify a target, it is displayed as is. You also must ensure that your Amazon Web Services Identity and Access Management (IAM) role provides access to paths in <code>Target</code>. This value can only be set when <code>HomeDirectoryType</code> is set to <i>LOGICAL</i>.</p> <p>In most cases, you can use this value instead of the scope-down policy to lock down the associated access to the designated home directory ("<code>chroot</code>"). To do this, you can set <code>Entry</code> to '/' and set <code>Target</code> to the <code>HomeDirectory</code> parameter value.</p>
+    #[serde(rename = "HomeDirectoryMappings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub home_directory_mappings: Option<Vec<HomeDirectoryMapEntry>>,
+    /// <p>The type of landing directory (folder) you want your users' home directory to be when they log into the server. If you set it to <code>PATH</code>, the user will see the absolute Amazon S3 bucket or EFS paths as is in their file transfer protocol clients. If you set it <code>LOGICAL</code>, you will need to provide mappings in the <code>HomeDirectoryMappings</code> for how you want to make Amazon S3 or EFS paths visible to your users.</p>
+    #[serde(rename = "HomeDirectoryType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub home_directory_type: Option<String>,
+    /// <p>A scope-down policy for your user so that you can use the same IAM role across multiple users. This policy scopes down user access to portions of their Amazon S3 bucket. Variables that you can use inside this policy include <code>${Transfer:UserName}</code>, <code>${Transfer:HomeDirectory}</code>, and <code>${Transfer:HomeBucket}</code>.</p>
+    #[serde(rename = "Policy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy: Option<String>,
+    #[serde(rename = "PosixProfile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub posix_profile: Option<PosixProfile>,
+    /// <p>Specifies the Amazon Resource Name (ARN) of the IAM role that controls your users' access to your Amazon S3 bucket or EFS file system. The policies attached to this role determine the level of access that you want to provide your users when transferring files into and out of your Amazon S3 bucket or EFS file system. The IAM role should also contain a trust relationship that allows the server to access your resources when servicing your users' transfer requests.</p>
+    #[serde(rename = "Role")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role: Option<String>,
 }
 
 /// <p>Describes the properties of a security policy that was specified. For more information about security policies, see <a href="https://docs.aws.amazon.com/transfer/latest/userguide/security-policies.html">Working with security policies</a>.</p>
@@ -275,11 +393,15 @@ pub struct DescribedServer {
     /// <p>Specifies the unique Amazon Resource Name (ARN) of the server.</p>
     #[serde(rename = "Arn")]
     pub arn: String,
-    /// <p>Specifies the ARN of the AWS Certificate Manager (ACM) certificate. Required when <code>Protocols</code> is set to <code>FTPS</code>.</p>
+    /// <p>Specifies the ARN of the Amazon Web ServicesCertificate Manager (ACM) certificate. Required when <code>Protocols</code> is set to <code>FTPS</code>.</p>
     #[serde(rename = "Certificate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate: Option<String>,
-    /// <p>Specifies the virtual private cloud (VPC) endpoint settings that you configured for your server.</p>
+    /// <p>Specifies the domain of the storage system that is used for file transfers.</p>
+    #[serde(rename = "Domain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain: Option<String>,
+    /// <p>The virtual private cloud (VPC) endpoint settings that are configured for your server. When you host your endpoint within your VPC, you can make it accessible only to resources within your VPC, or you can attach Elastic IP addresses and make it accessible to clients over the internet. Your VPC's default security groups are automatically assigned to your endpoint.</p>
     #[serde(rename = "EndpointDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_details: Option<EndpointDetails>,
@@ -291,18 +413,22 @@ pub struct DescribedServer {
     #[serde(rename = "HostKeyFingerprint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub host_key_fingerprint: Option<String>,
-    /// <p>Specifies information to call a customer-supplied authentication API. This field is not populated when the <code>IdentityProviderType</code> of a server is <code>SERVICE_MANAGED</code>.</p>
+    /// <p>Specifies information to call a customer-supplied authentication API. This field is not populated when the <code>IdentityProviderType</code> of a server is <code>AWS_DIRECTORY_SERVICE</code> or <code>SERVICE_MANAGED</code>.</p>
     #[serde(rename = "IdentityProviderDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_provider_details: Option<IdentityProviderDetails>,
-    /// <p>Specifies the mode of authentication method enabled for this service. A value of <code>SERVICE_MANAGED</code> means that you are using this server to store and access user credentials within the service. A value of <code>API_GATEWAY</code> indicates that you have integrated an API Gateway endpoint that will be invoked for authenticating your user into the service.</p>
+    /// <p>Specifies the mode of authentication for a server. The default value is <code>SERVICE_MANAGED</code>, which allows you to store and access user credentials within the Amazon Web Services Transfer Family service.</p> <p>Use <code>AWS_DIRECTORY_SERVICE</code> to provide access to Active Directory groups in Amazon Web Services Managed Active Directory or Microsoft Active Directory in your on-premises environment or in Amazon Web Services using AD Connectors. This option also requires you to provide a Directory ID using the <code>IdentityProviderDetails</code> parameter.</p> <p>Use the <code>API_GATEWAY</code> value to integrate with an identity provider of your choosing. The <code>API_GATEWAY</code> setting requires you to provide an API Gateway endpoint URL to call for authentication using the <code>IdentityProviderDetails</code> parameter.</p>
     #[serde(rename = "IdentityProviderType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_provider_type: Option<String>,
-    /// <p>Specifies the AWS Identity and Access Management (IAM) role that allows a server to turn on Amazon CloudWatch logging for Amazon S3 events. When set, user activity can be viewed in your CloudWatch logs.</p>
+    /// <p>Specifies the Amazon Resource Name (ARN) of the Amazon Web Services Identity and Access Management (IAM) role that allows a server to turn on Amazon CloudWatch logging for Amazon S3 or Amazon EFS events. When set, user activity can be viewed in your CloudWatch logs.</p>
     #[serde(rename = "LoggingRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_role: Option<String>,
+    /// <p> The protocol settings that are configured for your server. </p> <p> Use the <code>PassiveIp</code> parameter to indicate passive mode. Enter a single dotted-quad IPv4 address, such as the external IP address of a firewall, router, or load balancer. </p>
+    #[serde(rename = "ProtocolDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protocol_details: Option<ProtocolDetails>,
     /// <p><p>Specifies the file transfer protocol or protocols over which your file transfer protocol client can connect to your server&#39;s endpoint. The available protocols are:</p> <ul> <li> <p> <code>SFTP</code> (Secure Shell (SSH) File Transfer Protocol): File transfer over SSH</p> </li> <li> <p> <code>FTPS</code> (File Transfer Protocol Secure): File transfer with TLS encryption</p> </li> <li> <p> <code>FTP</code> (File Transfer Protocol): Unencrypted file transfer</p> </li> </ul></p>
     #[serde(rename = "Protocols")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -336,23 +462,27 @@ pub struct DescribedUser {
     /// <p>Specifies the unique Amazon Resource Name (ARN) for the user that was requested to be described.</p>
     #[serde(rename = "Arn")]
     pub arn: String,
-    /// <p>Specifies the landing directory (or folder), which is the location that files are written to or read from in an Amazon S3 bucket, for the described user. An example is <i> <code>your-Amazon-S3-bucket-name&gt;/home/username</code> </i>.</p>
+    /// <p>The landing directory (folder) for a user when they log in to the server using the client.</p> <p>A <code>HomeDirectory</code> example is <code>/bucket_name/home/mydirectory</code>.</p>
     #[serde(rename = "HomeDirectory")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_directory: Option<String>,
-    /// <p>Specifies the logical directory mappings that specify what Amazon S3 paths and keys should be visible to your user and how you want to make them visible. You will need to specify the "<code>Entry</code>" and "<code>Target</code>" pair, where <code>Entry</code> shows how the path is made visible and <code>Target</code> is the actual Amazon S3 path. If you only specify a target, it will be displayed as is. You will need to also make sure that your AWS Identity and Access Management (IAM) role provides access to paths in <code>Target</code>.</p> <p>In most cases, you can use this value instead of the scope-down policy to lock your user down to the designated home directory ("chroot"). To do this, you can set <code>Entry</code> to '/' and set <code>Target</code> to the HomeDirectory parameter value.</p>
+    /// <p>Logical directory mappings that specify what Amazon S3 or Amazon EFS paths and keys should be visible to your user and how you want to make them visible. You must specify the <code>Entry</code> and <code>Target</code> pair, where <code>Entry</code> shows how the path is made visible and <code>Target</code> is the actual Amazon S3 or Amazon EFS path. If you only specify a target, it is displayed as is. You also must ensure that your Amazon Web Services Identity and Access Management (IAM) role provides access to paths in <code>Target</code>. This value can only be set when <code>HomeDirectoryType</code> is set to <i>LOGICAL</i>.</p> <p>In most cases, you can use this value instead of the scope-down policy to lock your user down to the designated home directory ("<code>chroot</code>"). To do this, you can set <code>Entry</code> to '/' and set <code>Target</code> to the HomeDirectory parameter value.</p>
     #[serde(rename = "HomeDirectoryMappings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_directory_mappings: Option<Vec<HomeDirectoryMapEntry>>,
-    /// <p>Specifies the type of landing directory (folder) you mapped for your users to see when they log into the file transfer protocol-enabled server. If you set it to <code>PATH</code>, the user will see the absolute Amazon S3 bucket paths as is in their file transfer protocol clients. If you set it <code>LOGICAL</code>, you will need to provide mappings in the <code>HomeDirectoryMappings</code> for how you want to make Amazon S3 paths visible to your users.</p>
+    /// <p>The type of landing directory (folder) you want your users' home directory to be when they log into the server. If you set it to <code>PATH</code>, the user will see the absolute Amazon S3 bucket or EFS paths as is in their file transfer protocol clients. If you set it <code>LOGICAL</code>, you will need to provide mappings in the <code>HomeDirectoryMappings</code> for how you want to make Amazon S3 or EFS paths visible to your users.</p>
     #[serde(rename = "HomeDirectoryType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_directory_type: Option<String>,
-    /// <p>Specifies the name of the policy in use for the described user.</p>
+    /// <p>A scope-down policy for your user so that you can use the same IAM role across multiple users. This policy scopes down user access to portions of their Amazon S3 bucket. Variables that you can use inside this policy include <code>${Transfer:UserName}</code>, <code>${Transfer:HomeDirectory}</code>, and <code>${Transfer:HomeBucket}</code>.</p>
     #[serde(rename = "Policy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy: Option<String>,
-    /// <p>Specifies the IAM role that controls your users' access to your Amazon S3 bucket. The policies attached to this role will determine the level of access you want to provide your users when transferring files into and out of your Amazon S3 bucket or buckets. The IAM role should also contain a trust relationship that allows a server to access your resources when servicing your users' transfer requests.</p>
+    /// <p>Specifies the full POSIX identity, including user ID (<code>Uid</code>), group ID (<code>Gid</code>), and any secondary groups IDs (<code>SecondaryGids</code>), that controls your users' access to your Amazon Elastic File System (Amazon EFS) file systems. The POSIX permissions that are set on files and directories in your file system determine the level of access your users get when transferring files into and out of your Amazon EFS file systems.</p>
+    #[serde(rename = "PosixProfile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub posix_profile: Option<PosixProfile>,
+    /// <p>Specifies the Amazon Resource Name (ARN) of the IAM role that controls your users' access to your Amazon S3 bucket or EFS file system. The policies attached to this role determine the level of access that you want to provide your users when transferring files into and out of your Amazon S3 bucket or EFS file system. The IAM role should also contain a trust relationship that allows the server to access your resources when servicing your users' transfer requests.</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
@@ -370,14 +500,14 @@ pub struct DescribedUser {
     pub user_name: Option<String>,
 }
 
-/// <p>The virtual private cloud (VPC) endpoint settings that are configured for your file transfer protocol-enabled server. With a VPC endpoint, you can restrict access to your server and resources only within your VPC. To control incoming internet traffic, invoke the <code>UpdateServer</code> API and attach an Elastic IP to your server's endpoint.</p>
+/// <p><p>The virtual private cloud (VPC) endpoint settings that are configured for your file transfer protocol-enabled server. With a VPC endpoint, you can restrict access to your server and resources only within your VPC. To control incoming internet traffic, invoke the <code>UpdateServer</code> API and attach an Elastic IP address to your server&#39;s endpoint.</p> <note> <p> After May 19, 2021, you won&#39;t be able to create a server using <code>EndpointType=VPC<em>ENDPOINT</code> in your Amazon Web Servicesaccount if your account hasn&#39;t already done so before May 19, 2021. If you have already created servers with <code>EndpointType=VPC</em>ENDPOINT</code> in your Amazon Web Servicesaccount on or before May 19, 2021, you will not be affected. After this date, use <code>EndpointType</code>=<code>VPC</code>.</p> <p>For more information, see https://docs.aws.amazon.com/transfer/latest/userguide/create-server-in-vpc.html#deprecate-vpc-endpoint.</p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EndpointDetails {
     /// <p><p>A list of address allocation IDs that are required to attach an Elastic IP address to your server&#39;s endpoint.</p> <note> <p>This property can only be set when <code>EndpointType</code> is set to <code>VPC</code> and it is only valid in the <code>UpdateServer</code> API.</p> </note></p>
     #[serde(rename = "AddressAllocationIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub address_allocation_ids: Option<Vec<String>>,
-    /// <p><p>A list of security groups IDs that are available to attach to your server&#39;s endpoint.</p> <note> <p>This property can only be set when <code>EndpointType</code> is set to <code>VPC</code>.</p> <p>You can only edit the <code>SecurityGroupIds</code> property in the <code>UpdateServer</code> API and only if you are changing the <code>EndpointType</code> from <code>PUBLIC</code> or <code>VPC_ENDPOINT</code> to <code>VPC</code>.</p> </note></p>
+    /// <p><p>A list of security groups IDs that are available to attach to your server&#39;s endpoint.</p> <note> <p>This property can only be set when <code>EndpointType</code> is set to <code>VPC</code>.</p> <p>You can edit the <code>SecurityGroupIds</code> property in the <a href="https://docs.aws.amazon.com/transfer/latest/userguide/API_UpdateServer.html">UpdateServer</a> API only if you are changing the <code>EndpointType</code> from <code>PUBLIC</code> or <code>VPC<em>ENDPOINT</code> to <code>VPC</code>. To change security groups associated with your server&#39;s VPC endpoint after creation, use the Amazon EC2 &lt;a href=&quot;https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API</em>ModifyVpcEndpoint.html&quot;&gt;ModifyVpcEndpoint</a> API.</p> </note></p>
     #[serde(rename = "SecurityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
@@ -385,7 +515,7 @@ pub struct EndpointDetails {
     #[serde(rename = "SubnetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_ids: Option<Vec<String>>,
-    /// <p><p>The ID of the VPC endpoint.</p> <note> <p>This property can only be set when <code>EndpointType</code> is set to <code>VPC_ENDPOINT</code>.</p> </note></p>
+    /// <p><p>The ID of the VPC endpoint.</p> <note> <p>This property can only be set when <code>EndpointType</code> is set to <code>VPC_ENDPOINT</code>.</p> <p>For more information, see https://docs.aws.amazon.com/transfer/latest/userguide/create-server-in-vpc.html#deprecate-vpc-endpoint.</p> </note></p>
     #[serde(rename = "VpcEndpointId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_endpoint_id: Option<String>,
@@ -395,10 +525,10 @@ pub struct EndpointDetails {
     pub vpc_id: Option<String>,
 }
 
-/// <p>Represents an object that contains entries and targets for <code>HomeDirectoryMappings</code>.</p>
+/// <p><p>Represents an object that contains entries and targets for <code>HomeDirectoryMappings</code>.</p> <p>The following is an <code>Entry</code> and <code>Target</code> pair example for <code>chroot</code>.</p> <p> <code>[ { &quot;Entry:&quot;: &quot;/&quot;, &quot;Target&quot;: &quot;/bucket_name/home/mydirectory&quot; } ]</code> </p> <note> <p>If the target of a logical directory entry does not exist in Amazon S3 or EFS, the entry is ignored. As a workaround, you can use the Amazon S3 API or EFS API to create 0 byte objects as place holders for your directory. If using the CLI, use the <code>s3api</code> or <code>efsapi</code> call instead of <code>s3</code> or <code>efs</code> so you can use the put-object operation. For example, you use the following: <code>aws s3api put-object --bucket bucketname --key path/to/folder/</code>. Make sure that the end of the key name ends in a <code>/</code> for it to be considered a folder.</p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HomeDirectoryMapEntry {
-    /// <p>Represents an entry and a target for <code>HomeDirectoryMappings</code>.</p>
+    /// <p>Represents an entry for <code>HomeDirectoryMappings</code>.</p>
     #[serde(rename = "Entry")]
     pub entry: String,
     /// <p>Represents the map target that is used in a <code>HomeDirectorymapEntry</code>.</p>
@@ -409,6 +539,10 @@ pub struct HomeDirectoryMapEntry {
 /// <p>Returns information related to the type of user authentication that is in use for a file transfer protocol-enabled server's users. A server can have only one method of authentication.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct IdentityProviderDetails {
+    /// <p>The identifier of the Amazon Web ServicesDirectory Service directory that you want to stop sharing.</p>
+    #[serde(rename = "DirectoryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub directory_id: Option<String>,
     /// <p>Provides the type of <code>InvocationRole</code> used to authenticate the user account.</p>
     #[serde(rename = "InvocationRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -446,6 +580,37 @@ pub struct ImportSshPublicKeyResponse {
     /// <p>A user name assigned to the <code>ServerID</code> value that you specified.</p>
     #[serde(rename = "UserName")]
     pub user_name: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListAccessesRequest {
+    /// <p>Specifies the maximum number of access SIDs to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>When you can get additional results from the <code>ListAccesses</code> call, a <code>NextToken</code> parameter is returned in the output. You can then pass in a subsequent command to the <code>NextToken</code> parameter to continue listing additional accesses.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A system-assigned unique identifier for a server that has users assigned to it.</p>
+    #[serde(rename = "ServerId")]
+    pub server_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListAccessesResponse {
+    /// <p>Returns the accesses and their properties for the <code>ServerId</code> value that you specify.</p>
+    #[serde(rename = "Accesses")]
+    pub accesses: Vec<ListedAccess>,
+    /// <p>When you can get additional results from the <code>ListAccesses</code> call, a <code>NextToken</code> parameter is returned in the output. You can then pass in a subsequent command to the <code>NextToken</code> parameter to continue listing additional accesses.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A system-assigned unique identifier for a server that has users assigned to it.</p>
+    #[serde(rename = "ServerId")]
+    pub server_id: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -501,7 +666,7 @@ pub struct ListServersResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
-    /// <p>Requests the tags associated with a particular Amazon Resource Name (ARN). An ARN is an identifier for a specific AWS resource, such as a server, user, or role.</p>
+    /// <p>Requests the tags associated with a particular Amazon Resource Name (ARN). An ARN is an identifier for a specific Amazon Web Services resource, such as a server, user, or role.</p>
     #[serde(rename = "Arn")]
     pub arn: String,
     /// <p>Specifies the number of tags to return as a response to the <code>ListTagsForResource</code> request.</p>
@@ -562,6 +727,28 @@ pub struct ListUsersResponse {
     pub users: Vec<ListedUser>,
 }
 
+/// <p>Lists the properties for one or more specified associated accesses.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListedAccess {
+    /// <p>A unique identifier that is required to identify specific groups within your directory. The users of the group that you associate have access to your Amazon S3 or Amazon EFS resources over the enabled protocols using Amazon Web Services Transfer Family. If you know the group name, you can view the SID values by running the following command using Windows PowerShell.</p> <p> <code>Get-ADGroup -Filter {samAccountName -like "<i>YourGroupName</i>*"} -Properties * | Select SamAccountName,ObjectSid</code> </p> <p>In that command, replace <i>YourGroupName</i> with the name of your Active Directory group.</p> <p>The regex used to validate this parameter is a string of characters consisting of uppercase and lowercase alphanumeric characters with no spaces. You can also include underscores or any of the following characters: =,.@:/-</p>
+    #[serde(rename = "ExternalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_id: Option<String>,
+    /// <p>The landing directory (folder) for a user when they log in to the server using the client.</p> <p>A <code>HomeDirectory</code> example is <code>/bucket_name/home/mydirectory</code>.</p>
+    #[serde(rename = "HomeDirectory")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub home_directory: Option<String>,
+    /// <p>The type of landing directory (folder) you want your users' home directory to be when they log into the server. If you set it to <code>PATH</code>, the user will see the absolute Amazon S3 bucket or EFS paths as is in their file transfer protocol clients. If you set it <code>LOGICAL</code>, you will need to provide mappings in the <code>HomeDirectoryMappings</code> for how you want to make Amazon S3 or EFS paths visible to your users.</p>
+    #[serde(rename = "HomeDirectoryType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub home_directory_type: Option<String>,
+    /// <p>Specifies the Amazon Resource Name (ARN) of the IAM role that controls your users' access to your Amazon S3 bucket or EFS file system. The policies attached to this role determine the level of access that you want to provide your users when transferring files into and out of your Amazon S3 bucket or EFS file system. The IAM role should also contain a trust relationship that allows the server to access your resources when servicing your users' transfer requests.</p>
+    #[serde(rename = "Role")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role: Option<String>,
+}
+
 /// <p>Returns properties of a file transfer protocol-enabled server that was specified.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -569,15 +756,19 @@ pub struct ListedServer {
     /// <p>Specifies the unique Amazon Resource Name (ARN) for a server to be listed.</p>
     #[serde(rename = "Arn")]
     pub arn: String,
+    /// <p>Specifies the domain of the storage system that is used for file transfers.</p>
+    #[serde(rename = "Domain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain: Option<String>,
     /// <p>Specifies the type of VPC endpoint that your server is connected to. If your server is connected to a VPC endpoint, your server isn't accessible over the public internet.</p>
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
-    /// <p>Specifies the authentication method used to validate a user for a server that was specified. This can include Secure Shell (SSH), user name and password combinations, or your own custom authentication method. Valid values include <code>SERVICE_MANAGED</code> or <code>API_GATEWAY</code>.</p>
+    /// <p>Specifies the mode of authentication for a server. The default value is <code>SERVICE_MANAGED</code>, which allows you to store and access user credentials within the Amazon Web Services Transfer Family service.</p> <p>Use <code>AWS_DIRECTORY_SERVICE</code> to provide access to Active Directory groups in Amazon Web Services Managed Active Directory or Microsoft Active Directory in your on-premises environment or in Amazon Web Services using AD Connectors. This option also requires you to provide a Directory ID using the <code>IdentityProviderDetails</code> parameter.</p> <p>Use the <code>API_GATEWAY</code> value to integrate with an identity provider of your choosing. The <code>API_GATEWAY</code> setting requires you to provide an API Gateway endpoint URL to call for authentication using the <code>IdentityProviderDetails</code> parameter.</p>
     #[serde(rename = "IdentityProviderType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_provider_type: Option<String>,
-    /// <p>Specifies the AWS Identity and Access Management (IAM) role that allows a server to turn on Amazon CloudWatch logging.</p>
+    /// <p>Specifies the Amazon Resource Name (ARN) of the Amazon Web Services Identity and Access Management (IAM) role that allows a server to turn on Amazon CloudWatch logging for Amazon S3 or Amazon EFS events. When set, user activity can be viewed in your CloudWatch logs.</p>
     #[serde(rename = "LoggingRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_role: Option<String>,
@@ -602,15 +793,15 @@ pub struct ListedUser {
     /// <p>Provides the unique Amazon Resource Name (ARN) for the user that you want to learn about.</p>
     #[serde(rename = "Arn")]
     pub arn: String,
-    /// <p>Specifies the location that files are written to or read from an Amazon S3 bucket for the user you specify by their ARN.</p>
+    /// <p>The landing directory (folder) for a user when they log in to the server using the client.</p> <p>A <code>HomeDirectory</code> example is <code>/bucket_name/home/mydirectory</code>.</p>
     #[serde(rename = "HomeDirectory")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_directory: Option<String>,
-    /// <p>Specifies the type of landing directory (folder) you mapped for your users' home directory. If you set it to <code>PATH</code>, the user will see the absolute Amazon S3 bucket paths as is in their file transfer protocol clients. If you set it <code>LOGICAL</code>, you will need to provide mappings in the <code>HomeDirectoryMappings</code> for how you want to make Amazon S3 paths visible to your users.</p>
+    /// <p>The type of landing directory (folder) you want your users' home directory to be when they log into the server. If you set it to <code>PATH</code>, the user will see the absolute Amazon S3 bucket or EFS paths as is in their file transfer protocol clients. If you set it <code>LOGICAL</code>, you will need to provide mappings in the <code>HomeDirectoryMappings</code> for how you want to make Amazon S3 or EFS paths visible to your users.</p>
     #[serde(rename = "HomeDirectoryType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_directory_type: Option<String>,
-    /// <p>Specifies the role that is in use by this user. A <i>role</i> is an AWS Identity and Access Management (IAM) entity that, in this case, allows a file transfer protocol-enabled server to act on a user's behalf. It allows the server to inherit the trust relationship that enables that user to perform file operations to their Amazon S3 bucket.</p>
+    /// <p><p>Specifies the Amazon Resource Name (ARN) of the IAM role that controls your users&#39; access to your Amazon S3 bucket or EFS file system. The policies attached to this role determine the level of access that you want to provide your users when transferring files into and out of your Amazon S3 bucket or EFS file system. The IAM role should also contain a trust relationship that allows the server to access your resources when servicing your users&#39; transfer requests.</p> <note> <p>The IAM role that controls your users&#39; access to your Amazon S3 bucket for servers with <code>Domain=S3</code>, or your EFS file system for servers with <code>Domain=EFS</code>. </p> <p>The policies attached to this role determine the level of access you want to provide your users when transferring files into and out of your S3 buckets or EFS file systems.</p> </note></p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
@@ -622,6 +813,30 @@ pub struct ListedUser {
     #[serde(rename = "UserName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_name: Option<String>,
+}
+
+/// <p>The full POSIX identity, including user ID (<code>Uid</code>), group ID (<code>Gid</code>), and any secondary groups IDs (<code>SecondaryGids</code>), that controls your users' access to your Amazon EFS file systems. The POSIX permissions that are set on files and directories in your file system determine the level of access your users get when transferring files into and out of your Amazon EFS file systems.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct PosixProfile {
+    /// <p>The POSIX group ID used for all EFS operations by this user.</p>
+    #[serde(rename = "Gid")]
+    pub gid: i64,
+    /// <p>The secondary POSIX group IDs used for all EFS operations by this user.</p>
+    #[serde(rename = "SecondaryGids")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secondary_gids: Option<Vec<i64>>,
+    /// <p>The POSIX user ID used for all EFS operations by this user.</p>
+    #[serde(rename = "Uid")]
+    pub uid: i64,
+}
+
+/// <p><p> The protocol settings that are configured for your server. </p> <note> <p> This type is only valid in the <code>UpdateServer</code> API. </p> </note></p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ProtocolDetails {
+    /// <p> Indicates passive mode, for FTP and FTPS protocols. Enter a single dotted-quad IPv4 address, such as the external IP address of a firewall, router, or load balancer. For example: </p> <p> <code> aws transfer update-server --protocol-details PassiveIp=<i>0.0.0.0</i> </code> </p> <p>Replace <code> <i>0.0.0.0</i> </code> in the example above with the actual IP address you want to use.</p>
+    #[serde(rename = "PassiveIp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub passive_ip: Option<String>,
 }
 
 /// <p>Provides information about the public Secure Shell (SSH) key that is associated with a user account for the specific file transfer protocol-enabled server (as identified by <code>ServerId</code>). The information returned includes the date the key was imported, the public key contents, and the public key ID. A user can store more than one SSH public key associated with their user name on a specific server.</p>
@@ -669,7 +884,7 @@ pub struct Tag {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
-    /// <p>An Amazon Resource Name (ARN) for a specific AWS resource, such as a server, user, or role.</p>
+    /// <p>An Amazon Resource Name (ARN) for a specific Amazon Web Services resource, such as a server, user, or role.</p>
     #[serde(rename = "Arn")]
     pub arn: String,
     /// <p>Key-value pairs assigned to ARNs that you can use to group and search for resources by type. You can attach this metadata to user accounts for any purpose.</p>
@@ -722,7 +937,7 @@ pub struct TestIdentityProviderResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
-    /// <p>The value of the resource that will have the tag removed. An Amazon Resource Name (ARN) is an identifier for a specific AWS resource, such as a server, user, or role.</p>
+    /// <p>The value of the resource that will have the tag removed. An Amazon Resource Name (ARN) is an identifier for a specific Amazon Web Services resource, such as a server, user, or role.</p>
     #[serde(rename = "Arn")]
     pub arn: String,
     /// <p>TagKeys are key-value pairs assigned to ARNs that can be used to group and search for resources by type. This metadata can be attached to resources for any purpose.</p>
@@ -732,20 +947,65 @@ pub struct UntagResourceRequest {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateAccessRequest {
+    /// <p>A unique identifier that is required to identify specific groups within your directory. The users of the group that you associate have access to your Amazon S3 or Amazon EFS resources over the enabled protocols using Amazon Web Services Transfer Family. If you know the group name, you can view the SID values by running the following command using Windows PowerShell.</p> <p> <code>Get-ADGroup -Filter {samAccountName -like "<i>YourGroupName</i>*"} -Properties * | Select SamAccountName,ObjectSid</code> </p> <p>In that command, replace <i>YourGroupName</i> with the name of your Active Directory group.</p> <p>The regex used to validate this parameter is a string of characters consisting of uppercase and lowercase alphanumeric characters with no spaces. You can also include underscores or any of the following characters: =,.@:/-</p>
+    #[serde(rename = "ExternalId")]
+    pub external_id: String,
+    /// <p>The landing directory (folder) for a user when they log in to the server using the client.</p> <p>A <code>HomeDirectory</code> example is <code>/bucket_name/home/mydirectory</code>.</p>
+    #[serde(rename = "HomeDirectory")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub home_directory: Option<String>,
+    /// <p><p>Logical directory mappings that specify what Amazon S3 or Amazon EFS paths and keys should be visible to your user and how you want to make them visible. You must specify the <code>Entry</code> and <code>Target</code> pair, where <code>Entry</code> shows how the path is made visible and <code>Target</code> is the actual Amazon S3 or Amazon EFS path. If you only specify a target, it is displayed as is. You also must ensure that your Amazon Web Services Identity and Access Management (IAM) role provides access to paths in <code>Target</code>. This value can only be set when <code>HomeDirectoryType</code> is set to <i>LOGICAL</i>.</p> <p>The following is an <code>Entry</code> and <code>Target</code> pair example.</p> <p> <code>[ { &quot;Entry&quot;: &quot;your-personal-report.pdf&quot;, &quot;Target&quot;: &quot;/bucket3/customized-reports/${transfer:UserName}.pdf&quot; } ]</code> </p> <p>In most cases, you can use this value instead of the scope-down policy to lock down your user to the designated home directory (&quot;<code>chroot</code>&quot;). To do this, you can set <code>Entry</code> to <code>/</code> and set <code>Target</code> to the <code>HomeDirectory</code> parameter value.</p> <p>The following is an <code>Entry</code> and <code>Target</code> pair example for <code>chroot</code>.</p> <p> <code>[ { &quot;Entry:&quot;: &quot;/&quot;, &quot;Target&quot;: &quot;/bucket_name/home/mydirectory&quot; } ]</code> </p> <note> <p>If the target of a logical directory entry does not exist in Amazon S3 or EFS, the entry is ignored. As a workaround, you can use the Amazon S3 API or EFS API to create 0 byte objects as place holders for your directory. If using the CLI, use the <code>s3api</code> or <code>efsapi</code> call instead of <code>s3</code> or <code>efs</code> so you can use the put-object operation. For example, you use the following: <code>aws s3api put-object --bucket bucketname --key path/to/folder/</code>. Make sure that the end of the key name ends in a <code>/</code> for it to be considered a folder.</p> </note></p>
+    #[serde(rename = "HomeDirectoryMappings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub home_directory_mappings: Option<Vec<HomeDirectoryMapEntry>>,
+    /// <p>The type of landing directory (folder) you want your users' home directory to be when they log into the server. If you set it to <code>PATH</code>, the user will see the absolute Amazon S3 bucket or EFS paths as is in their file transfer protocol clients. If you set it <code>LOGICAL</code>, you will need to provide mappings in the <code>HomeDirectoryMappings</code> for how you want to make Amazon S3 or EFS paths visible to your users.</p>
+    #[serde(rename = "HomeDirectoryType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub home_directory_type: Option<String>,
+    /// <p><p>A scope-down policy for your user so that you can use the same IAM role across multiple users. This policy scopes down user access to portions of their Amazon S3 bucket. Variables that you can use inside this policy include <code>${Transfer:UserName}</code>, <code>${Transfer:HomeDirectory}</code>, and <code>${Transfer:HomeBucket}</code>.</p> <note> <p>This only applies when domain of <code>ServerId</code> is S3. Amazon EFS does not use scope down policy.</p> <p>For scope-down policies, Amazon Web ServicesTransfer Family stores the policy as a JSON blob, instead of the Amazon Resource Name (ARN) of the policy. You save the policy as a JSON blob and pass it in the <code>Policy</code> argument.</p> <p>For an example of a scope-down policy, see <a href="https://docs.aws.amazon.com/transfer/latest/userguide/scope-down-policy.html">Example scope-down policy</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html">AssumeRole</a> in the <i>Amazon Web ServicesSecurity Token Service API Reference</i>.</p> </note></p>
+    #[serde(rename = "Policy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy: Option<String>,
+    #[serde(rename = "PosixProfile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub posix_profile: Option<PosixProfile>,
+    /// <p>Specifies the Amazon Resource Name (ARN) of the IAM role that controls your users' access to your Amazon S3 bucket or EFS file system. The policies attached to this role determine the level of access that you want to provide your users when transferring files into and out of your Amazon S3 bucket or EFS file system. The IAM role should also contain a trust relationship that allows the server to access your resources when servicing your users' transfer requests.</p>
+    #[serde(rename = "Role")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role: Option<String>,
+    /// <p>A system-assigned unique identifier for a server instance. This is the specific server that you added your user to.</p>
+    #[serde(rename = "ServerId")]
+    pub server_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateAccessResponse {
+    /// <p>The external ID of the group whose users have access to your Amazon S3 or Amazon EFS resources over the enabled protocols using Amazon Web ServicesTransfer Family.</p>
+    #[serde(rename = "ExternalId")]
+    pub external_id: String,
+    /// <p>The ID of the server that the user is attached to.</p>
+    #[serde(rename = "ServerId")]
+    pub server_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServerRequest {
-    /// <p><p>The Amazon Resource Name (ARN) of the AWS Certificate Manager (ACM) certificate. Required when <code>Protocols</code> is set to <code>FTPS</code>.</p> <p>To request a new public certificate, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-request-public.html">Request a public certificate</a> in the <i> AWS Certificate Manager User Guide</i>.</p> <p>To import an existing certificate into ACM, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html">Importing certificates into ACM</a> in the <i> AWS Certificate Manager User Guide</i>.</p> <p>To request a private certificate to use FTPS through private IP addresses, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-request-private.html">Request a private certificate</a> in the <i> AWS Certificate Manager User Guide</i>.</p> <p>Certificates with the following cryptographic algorithms and key sizes are supported:</p> <ul> <li> <p>2048-bit RSA (RSA<em>2048)</p> </li> <li> <p>4096-bit RSA (RSA</em>4096)</p> </li> <li> <p>Elliptic Prime Curve 256 bit (EC<em>prime256v1)</p> </li> <li> <p>Elliptic Prime Curve 384 bit (EC</em>secp384r1)</p> </li> <li> <p>Elliptic Prime Curve 521 bit (EC_secp521r1)</p> </li> </ul> <note> <p>The certificate must be a valid SSL/TLS X.509 version 3 certificate with FQDN or IP address specified and information about the issuer.</p> </note></p>
+    /// <p><p>The Amazon Resource Name (ARN) of the Amazon Web ServicesCertificate Manager (ACM) certificate. Required when <code>Protocols</code> is set to <code>FTPS</code>.</p> <p>To request a new public certificate, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-request-public.html">Request a public certificate</a> in the <i> Amazon Web ServicesCertificate Manager User Guide</i>.</p> <p>To import an existing certificate into ACM, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html">Importing certificates into ACM</a> in the <i> Amazon Web ServicesCertificate Manager User Guide</i>.</p> <p>To request a private certificate to use FTPS through private IP addresses, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-request-private.html">Request a private certificate</a> in the <i> Amazon Web ServicesCertificate Manager User Guide</i>.</p> <p>Certificates with the following cryptographic algorithms and key sizes are supported:</p> <ul> <li> <p>2048-bit RSA (RSA<em>2048)</p> </li> <li> <p>4096-bit RSA (RSA</em>4096)</p> </li> <li> <p>Elliptic Prime Curve 256 bit (EC<em>prime256v1)</p> </li> <li> <p>Elliptic Prime Curve 384 bit (EC</em>secp384r1)</p> </li> <li> <p>Elliptic Prime Curve 521 bit (EC_secp521r1)</p> </li> </ul> <note> <p>The certificate must be a valid SSL/TLS X.509 version 3 certificate with FQDN or IP address specified and information about the issuer.</p> </note></p>
     #[serde(rename = "Certificate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate: Option<String>,
-    /// <p>The virtual private cloud (VPC) endpoint settings that are configured for your server. With a VPC endpoint, you can restrict access to your server to resources only within your VPC. To control incoming internet traffic, you will need to associate one or more Elastic IP addresses with your server's endpoint.</p>
+    /// <p>The virtual private cloud (VPC) endpoint settings that are configured for your server. When you host your endpoint within your VPC, you can make it accessible only to resources within your VPC, or you can attach Elastic IP addresses and make it accessible to clients over the internet. Your VPC's default security groups are automatically assigned to your endpoint.</p>
     #[serde(rename = "EndpointDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_details: Option<EndpointDetails>,
-    /// <p><p>The type of endpoint that you want your server to connect to. You can choose to connect to the public internet or a VPC endpoint. With a VPC endpoint, you can restrict access to your server and resources only within your VPC.</p> <note> <p>It is recommended that you use <code>VPC</code> as the <code>EndpointType</code>. With this endpoint type, you have the option to directly associate up to three Elastic IPv4 addresses (BYO IP included) with your server&#39;s endpoint and use VPC security groups to restrict traffic by the client&#39;s public IP address. This is not possible with <code>EndpointType</code> set to <code>VPC_ENDPOINT</code>.</p> </note></p>
+    /// <p><p>The type of endpoint that you want your server to use. You can choose to make your server&#39;s endpoint publicly accessible (PUBLIC) or host it inside your VPC. With an endpoint that is hosted in a VPC, you can restrict access to your server and resources only within your VPC or choose to make it internet facing by attaching Elastic IP addresses directly to it.</p> <note> <p> After May 19, 2021, you won&#39;t be able to create a server using <code>EndpointType=VPC<em>ENDPOINT</code> in your Amazon Web Servicesaccount if your account hasn&#39;t already done so before May 19, 2021. If you have already created servers with <code>EndpointType=VPC</em>ENDPOINT</code> in your Amazon Web Servicesaccount on or before May 19, 2021, you will not be affected. After this date, use <code>EndpointType</code>=<code>VPC</code>.</p> <p>For more information, see https://docs.aws.amazon.com/transfer/latest/userguide/create-server-in-vpc.html#deprecate-vpc-endpoint.</p> <p>It is recommended that you use <code>VPC</code> as the <code>EndpointType</code>. With this endpoint type, you have the option to directly associate up to three Elastic IPv4 addresses (BYO IP included) with your server&#39;s endpoint and use VPC security groups to restrict traffic by the client&#39;s public IP address. This is not possible with <code>EndpointType</code> set to <code>VPC_ENDPOINT</code>.</p> </note></p>
     #[serde(rename = "EndpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
-    /// <p>The RSA private key as generated by <code>ssh-keygen -N "" -m PEM -f my-new-server-key</code>.</p> <important> <p>If you aren't planning to migrate existing users from an existing server to a new server, don't update the host key. Accidentally changing a server's host key can be disruptive.</p> </important> <p>For more information, see <a href="https://docs.aws.amazon.com/transfer/latest/userguide/edit-server-config.html#configuring-servers-change-host-key">Change the host key for your SFTP-enabled server</a> in the <i>AWS Transfer Family User Guide</i>.</p>
+    /// <p>The RSA private key as generated by <code>ssh-keygen -N "" -m PEM -f my-new-server-key</code>.</p> <important> <p>If you aren't planning to migrate existing users from an existing server to a new server, don't update the host key. Accidentally changing a server's host key can be disruptive.</p> </important> <p>For more information, see <a href="https://docs.aws.amazon.com/transfer/latest/userguide/edit-server-config.html#configuring-servers-change-host-key">Change the host key for your SFTP-enabled server</a> in the <i>Amazon Web ServicesTransfer Family User Guide</i>.</p>
     #[serde(rename = "HostKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub host_key: Option<String>,
@@ -753,11 +1013,15 @@ pub struct UpdateServerRequest {
     #[serde(rename = "IdentityProviderDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_provider_details: Option<IdentityProviderDetails>,
-    /// <p>Changes the AWS Identity and Access Management (IAM) role that allows Amazon S3 events to be logged in Amazon CloudWatch, turning logging on or off.</p>
+    /// <p>Specifies the Amazon Resource Name (ARN) of the Amazon Web Services Identity and Access Management (IAM) role that allows a server to turn on Amazon CloudWatch logging for Amazon S3 or Amazon EFS events. When set, user activity can be viewed in your CloudWatch logs.</p>
     #[serde(rename = "LoggingRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logging_role: Option<String>,
-    /// <p><p>Specifies the file transfer protocol or protocols over which your file transfer protocol client can connect to your server&#39;s endpoint. The available protocols are:</p> <ul> <li> <p>Secure Shell (SSH) File Transfer Protocol (SFTP): File transfer over SSH</p> </li> <li> <p>File Transfer Protocol Secure (FTPS): File transfer with TLS encryption</p> </li> <li> <p>File Transfer Protocol (FTP): Unencrypted file transfer</p> </li> </ul> <note> <p>If you select <code>FTPS</code>, you must choose a certificate stored in AWS Certificate Manager (ACM) which will be used to identify your server when clients connect to it over FTPS.</p> <p>If <code>Protocol</code> includes either <code>FTP</code> or <code>FTPS</code>, then the <code>EndpointType</code> must be <code>VPC</code> and the <code>IdentityProviderType</code> must be <code>API<em>GATEWAY</code>.</p> <p>If <code>Protocol</code> includes <code>FTP</code>, then <code>AddressAllocationIds</code> cannot be associated.</p> <p>If <code>Protocol</code> is set only to <code>SFTP</code>, the <code>EndpointType</code> can be set to <code>PUBLIC</code> and the <code>IdentityProviderType</code> can be set to <code>SERVICE</em>MANAGED</code>.</p> </note></p>
+    /// <p> The protocol settings that are configured for your server. </p> <p> Use the <code>PassiveIp</code> parameter to indicate passive mode (for FTP and FTPS protocols). Enter a single dotted-quad IPv4 address, such as the external IP address of a firewall, router, or load balancer. </p>
+    #[serde(rename = "ProtocolDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protocol_details: Option<ProtocolDetails>,
+    /// <p><p>Specifies the file transfer protocol or protocols over which your file transfer protocol client can connect to your server&#39;s endpoint. The available protocols are:</p> <ul> <li> <p>Secure Shell (SSH) File Transfer Protocol (SFTP): File transfer over SSH</p> </li> <li> <p>File Transfer Protocol Secure (FTPS): File transfer with TLS encryption</p> </li> <li> <p>File Transfer Protocol (FTP): Unencrypted file transfer</p> </li> </ul> <note> <p>If you select <code>FTPS</code>, you must choose a certificate stored in Amazon Web ServicesCertificate Manager (ACM) which will be used to identify your server when clients connect to it over FTPS.</p> <p>If <code>Protocol</code> includes either <code>FTP</code> or <code>FTPS</code>, then the <code>EndpointType</code> must be <code>VPC</code> and the <code>IdentityProviderType</code> must be <code>AWS<em>DIRECTORY</em>SERVICE</code> or <code>API<em>GATEWAY</code>.</p> <p>If <code>Protocol</code> includes <code>FTP</code>, then <code>AddressAllocationIds</code> cannot be associated.</p> <p>If <code>Protocol</code> is set only to <code>SFTP</code>, the <code>EndpointType</code> can be set to <code>PUBLIC</code> and the <code>IdentityProviderType</code> can be set to <code>SERVICE</em>MANAGED</code>.</p> </note></p>
     #[serde(rename = "Protocols")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub protocols: Option<Vec<String>>,
@@ -781,23 +1045,27 @@ pub struct UpdateServerResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserRequest {
-    /// <p>Specifies the landing directory (folder) for a user when they log in to the server using their file transfer protocol client.</p> <p>An example is <code>your-Amazon-S3-bucket-name&gt;/home/username</code>.</p>
+    /// <p>The landing directory (folder) for a user when they log in to the server using the client.</p> <p>A <code>HomeDirectory</code> example is <code>/bucket_name/home/mydirectory</code>.</p>
     #[serde(rename = "HomeDirectory")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_directory: Option<String>,
-    /// <p><p>Logical directory mappings that specify what Amazon S3 paths and keys should be visible to your user and how you want to make them visible. You will need to specify the &quot;<code>Entry</code>&quot; and &quot;<code>Target</code>&quot; pair, where <code>Entry</code> shows how the path is made visible and <code>Target</code> is the actual Amazon S3 path. If you only specify a target, it will be displayed as is. You will need to also make sure that your IAM role provides access to paths in <code>Target</code>. The following is an example.</p> <p> <code>&#39;[ &quot;/bucket2/documentation&quot;, { &quot;Entry&quot;: &quot;your-personal-report.pdf&quot;, &quot;Target&quot;: &quot;/bucket3/customized-reports/${transfer:UserName}.pdf&quot; } ]&#39;</code> </p> <p>In most cases, you can use this value instead of the scope-down policy to lock your user down to the designated home directory (&quot;chroot&quot;). To do this, you can set <code>Entry</code> to &#39;/&#39; and set <code>Target</code> to the HomeDirectory parameter value.</p> <note> <p>If the target of a logical directory entry does not exist in Amazon S3, the entry will be ignored. As a workaround, you can use the Amazon S3 API to create 0 byte objects as place holders for your directory. If using the CLI, use the <code>s3api</code> call instead of <code>s3</code> so you can use the put-object operation. For example, you use the following: <code>aws s3api put-object --bucket bucketname --key path/to/folder/</code>. Make sure that the end of the key name ends in a / for it to be considered a folder.</p> </note></p>
+    /// <p><p>Logical directory mappings that specify what Amazon S3 or Amazon EFS paths and keys should be visible to your user and how you want to make them visible. You must specify the <code>Entry</code> and <code>Target</code> pair, where <code>Entry</code> shows how the path is made visible and <code>Target</code> is the actual Amazon S3 or Amazon EFS path. If you only specify a target, it is displayed as is. You also must ensure that your Amazon Web Services Identity and Access Management (IAM) role provides access to paths in <code>Target</code>. This value can only be set when <code>HomeDirectoryType</code> is set to <i>LOGICAL</i>.</p> <p>The following is an <code>Entry</code> and <code>Target</code> pair example.</p> <p> <code>[ { &quot;Entry&quot;: &quot;your-personal-report.pdf&quot;, &quot;Target&quot;: &quot;/bucket3/customized-reports/${transfer:UserName}.pdf&quot; } ]</code> </p> <p>In most cases, you can use this value instead of the scope-down policy to lock down your user to the designated home directory (&quot;<code>chroot</code>&quot;). To do this, you can set <code>Entry</code> to &#39;/&#39; and set <code>Target</code> to the HomeDirectory parameter value.</p> <p>The following is an <code>Entry</code> and <code>Target</code> pair example for <code>chroot</code>.</p> <p> <code>[ { &quot;Entry:&quot;: &quot;/&quot;, &quot;Target&quot;: &quot;/bucket_name/home/mydirectory&quot; } ]</code> </p> <note> <p>If the target of a logical directory entry does not exist in Amazon S3 or EFS, the entry is ignored. As a workaround, you can use the Amazon S3 API or EFS API to create 0 byte objects as place holders for your directory. If using the CLI, use the <code>s3api</code> or <code>efsapi</code> call instead of <code>s3</code> or <code>efs</code> so you can use the put-object operation. For example, you use the following: <code>aws s3api put-object --bucket bucketname --key path/to/folder/</code>. Make sure that the end of the key name ends in a <code>/</code> for it to be considered a folder.</p> </note></p>
     #[serde(rename = "HomeDirectoryMappings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_directory_mappings: Option<Vec<HomeDirectoryMapEntry>>,
-    /// <p>The type of landing directory (folder) you want your users' home directory to be when they log into the server. If you set it to <code>PATH</code>, the user will see the absolute Amazon S3 bucket paths as is in their file transfer protocol clients. If you set it <code>LOGICAL</code>, you will need to provide mappings in the <code>HomeDirectoryMappings</code> for how you want to make Amazon S3 paths visible to your users.</p>
+    /// <p>The type of landing directory (folder) you want your users' home directory to be when they log into the server. If you set it to <code>PATH</code>, the user will see the absolute Amazon S3 bucket or EFS paths as is in their file transfer protocol clients. If you set it <code>LOGICAL</code>, you will need to provide mappings in the <code>HomeDirectoryMappings</code> for how you want to make Amazon S3 or EFS paths visible to your users.</p>
     #[serde(rename = "HomeDirectoryType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub home_directory_type: Option<String>,
-    /// <p><p>Allows you to supply a scope-down policy for your user so you can use the same IAM role across multiple users. The policy scopes down user access to portions of your Amazon S3 bucket. Variables you can use inside this policy include <code>${Transfer:UserName}</code>, <code>${Transfer:HomeDirectory}</code>, and <code>${Transfer:HomeBucket}</code>.</p> <note> <p>For scope-down policies, AWS Transfer Family stores the policy as a JSON blob, instead of the Amazon Resource Name (ARN) of the policy. You save the policy as a JSON blob and pass it in the <code>Policy</code> argument.</p> <p>For an example of a scope-down policy, see <a href="https://docs.aws.amazon.com/transfer/latest/userguide/users.html#users-policies-scope-down">Creating a scope-down policy</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html">AssumeRole</a> in the <i>AWS Security Token Service API Reference</i>.</p> </note></p>
+    /// <p><p>A scope-down policy for your user so that you can use the same IAM role across multiple users. This policy scopes down user access to portions of their Amazon S3 bucket. Variables that you can use inside this policy include <code>${Transfer:UserName}</code>, <code>${Transfer:HomeDirectory}</code>, and <code>${Transfer:HomeBucket}</code>.</p> <note> <p>This only applies when domain of <code>ServerId</code> is S3. Amazon EFS does not use scope-down policies.</p> <p>For scope-down policies, Amazon Web ServicesTransfer Family stores the policy as a JSON blob, instead of the Amazon Resource Name (ARN) of the policy. You save the policy as a JSON blob and pass it in the <code>Policy</code> argument.</p> <p>For an example of a scope-down policy, see <a href="https://docs.aws.amazon.com/transfer/latest/userguide/users.html#users-policies-scope-down">Creating a scope-down policy</a>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/STS/latest/APIReference/API_AssumeRole.html">AssumeRole</a> in the <i>Amazon Web Services Security Token Service API Reference</i>.</p> </note></p>
     #[serde(rename = "Policy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy: Option<String>,
-    /// <p>The IAM role that controls your users' access to your Amazon S3 bucket. The policies attached to this role will determine the level of access you want to provide your users when transferring files into and out of your Amazon S3 bucket or buckets. The IAM role should also contain a trust relationship that allows the server to access your resources when servicing your users' transfer requests.</p>
+    /// <p>Specifies the full POSIX identity, including user ID (<code>Uid</code>), group ID (<code>Gid</code>), and any secondary groups IDs (<code>SecondaryGids</code>), that controls your users' access to your Amazon Elastic File Systems (Amazon EFS). The POSIX permissions that are set on files and directories in your file system determines the level of access your users get when transferring files into and out of your Amazon EFS file systems.</p>
+    #[serde(rename = "PosixProfile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub posix_profile: Option<PosixProfile>,
+    /// <p>Specifies the Amazon Resource Name (ARN) of the IAM role that controls your users' access to your Amazon S3 bucket or EFS file system. The policies attached to this role determine the level of access that you want to provide your users when transferring files into and out of your Amazon S3 bucket or EFS file system. The IAM role should also contain a trust relationship that allows the server to access your resources when servicing your users' transfer requests.</p>
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
@@ -821,18 +1089,72 @@ pub struct UpdateUserResponse {
     pub user_name: String,
 }
 
-/// Errors returned by CreateServer
+/// Errors returned by CreateAccess
 #[derive(Debug, PartialEq)]
-pub enum CreateServerError {
-    /// <p>You do not have sufficient access to perform this action.</p>
-    AccessDenied(String),
-    /// <p>This exception is thrown when an error occurs in the AWS Transfer Family service.</p>
+pub enum CreateAccessError {
+    /// <p>This exception is thrown when an error occurs in the Amazon Web ServicesTransfer Family service.</p>
     InternalServiceError(String),
     /// <p>This exception is thrown when the client submits a malformed request.</p>
     InvalidRequest(String),
     /// <p>The requested resource does not exist.</p>
     ResourceExists(String),
-    /// <p>The request has failed because the AWS Transfer Family service is not available.</p>
+    /// <p>This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer Family service.</p>
+    ResourceNotFound(String),
+    /// <p>The request has failed because the Amazon Web ServicesTransfer Family service is not available.</p>
+    ServiceUnavailable(String),
+}
+
+impl CreateAccessError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateAccessError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServiceError" => {
+                    return RusotoError::Service(CreateAccessError::InternalServiceError(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(CreateAccessError::InvalidRequest(err.msg))
+                }
+                "ResourceExistsException" => {
+                    return RusotoError::Service(CreateAccessError::ResourceExists(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateAccessError::ResourceNotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(CreateAccessError::ServiceUnavailable(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateAccessError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateAccessError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            CreateAccessError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateAccessError::ResourceExists(ref cause) => write!(f, "{}", cause),
+            CreateAccessError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateAccessError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateAccessError {}
+/// Errors returned by CreateServer
+#[derive(Debug, PartialEq)]
+pub enum CreateServerError {
+    /// <p>You do not have sufficient access to perform this action.</p>
+    AccessDenied(String),
+    /// <p>This exception is thrown when an error occurs in the Amazon Web ServicesTransfer Family service.</p>
+    InternalServiceError(String),
+    /// <p>This exception is thrown when the client submits a malformed request.</p>
+    InvalidRequest(String),
+    /// <p>The requested resource does not exist.</p>
+    ResourceExists(String),
+    /// <p>The request has failed because the Amazon Web ServicesTransfer Family service is not available.</p>
     ServiceUnavailable(String),
     /// <p>The request was denied due to request throttling.</p> <p> HTTP Status Code: 400</p>
     Throttling(String),
@@ -884,15 +1206,15 @@ impl Error for CreateServerError {}
 /// Errors returned by CreateUser
 #[derive(Debug, PartialEq)]
 pub enum CreateUserError {
-    /// <p>This exception is thrown when an error occurs in the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when an error occurs in the Amazon Web ServicesTransfer Family service.</p>
     InternalServiceError(String),
     /// <p>This exception is thrown when the client submits a malformed request.</p>
     InvalidRequest(String),
     /// <p>The requested resource does not exist.</p>
     ResourceExists(String),
-    /// <p>This exception is thrown when a resource is not found by the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer Family service.</p>
     ResourceNotFound(String),
-    /// <p>The request has failed because the AWS Transfer Family service is not available.</p>
+    /// <p>The request has failed because the Amazon Web ServicesTransfer Family service is not available.</p>
     ServiceUnavailable(String),
 }
 
@@ -935,18 +1257,66 @@ impl fmt::Display for CreateUserError {
     }
 }
 impl Error for CreateUserError {}
+/// Errors returned by DeleteAccess
+#[derive(Debug, PartialEq)]
+pub enum DeleteAccessError {
+    /// <p>This exception is thrown when an error occurs in the Amazon Web ServicesTransfer Family service.</p>
+    InternalServiceError(String),
+    /// <p>This exception is thrown when the client submits a malformed request.</p>
+    InvalidRequest(String),
+    /// <p>This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer Family service.</p>
+    ResourceNotFound(String),
+    /// <p>The request has failed because the Amazon Web ServicesTransfer Family service is not available.</p>
+    ServiceUnavailable(String),
+}
+
+impl DeleteAccessError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteAccessError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServiceError" => {
+                    return RusotoError::Service(DeleteAccessError::InternalServiceError(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DeleteAccessError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteAccessError::ResourceNotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DeleteAccessError::ServiceUnavailable(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteAccessError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteAccessError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            DeleteAccessError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteAccessError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteAccessError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteAccessError {}
 /// Errors returned by DeleteServer
 #[derive(Debug, PartialEq)]
 pub enum DeleteServerError {
     /// <p>You do not have sufficient access to perform this action.</p>
     AccessDenied(String),
-    /// <p>This exception is thrown when an error occurs in the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when an error occurs in the Amazon Web ServicesTransfer Family service.</p>
     InternalServiceError(String),
     /// <p>This exception is thrown when the client submits a malformed request.</p>
     InvalidRequest(String),
-    /// <p>This exception is thrown when a resource is not found by the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer Family service.</p>
     ResourceNotFound(String),
-    /// <p>The request has failed because the AWS Transfer Family service is not available.</p>
+    /// <p>The request has failed because the Amazon Web ServicesTransfer Family service is not available.</p>
     ServiceUnavailable(String),
 }
 
@@ -992,13 +1362,13 @@ impl Error for DeleteServerError {}
 /// Errors returned by DeleteSshPublicKey
 #[derive(Debug, PartialEq)]
 pub enum DeleteSshPublicKeyError {
-    /// <p>This exception is thrown when an error occurs in the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when an error occurs in the Amazon Web ServicesTransfer Family service.</p>
     InternalServiceError(String),
     /// <p>This exception is thrown when the client submits a malformed request.</p>
     InvalidRequest(String),
-    /// <p>This exception is thrown when a resource is not found by the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer Family service.</p>
     ResourceNotFound(String),
-    /// <p>The request has failed because the AWS Transfer Family service is not available.</p>
+    /// <p>The request has failed because the Amazon Web ServicesTransfer Family service is not available.</p>
     ServiceUnavailable(String),
     /// <p>The request was denied due to request throttling.</p> <p> HTTP Status Code: 400</p>
     Throttling(String),
@@ -1050,13 +1420,13 @@ impl Error for DeleteSshPublicKeyError {}
 /// Errors returned by DeleteUser
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserError {
-    /// <p>This exception is thrown when an error occurs in the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when an error occurs in the Amazon Web ServicesTransfer Family service.</p>
     InternalServiceError(String),
     /// <p>This exception is thrown when the client submits a malformed request.</p>
     InvalidRequest(String),
-    /// <p>This exception is thrown when a resource is not found by the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer Family service.</p>
     ResourceNotFound(String),
-    /// <p>The request has failed because the AWS Transfer Family service is not available.</p>
+    /// <p>The request has failed because the Amazon Web ServicesTransfer Family service is not available.</p>
     ServiceUnavailable(String),
 }
 
@@ -1095,16 +1465,64 @@ impl fmt::Display for DeleteUserError {
     }
 }
 impl Error for DeleteUserError {}
-/// Errors returned by DescribeSecurityPolicy
+/// Errors returned by DescribeAccess
 #[derive(Debug, PartialEq)]
-pub enum DescribeSecurityPolicyError {
-    /// <p>This exception is thrown when an error occurs in the AWS Transfer Family service.</p>
+pub enum DescribeAccessError {
+    /// <p>This exception is thrown when an error occurs in the Amazon Web ServicesTransfer Family service.</p>
     InternalServiceError(String),
     /// <p>This exception is thrown when the client submits a malformed request.</p>
     InvalidRequest(String),
-    /// <p>This exception is thrown when a resource is not found by the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer Family service.</p>
     ResourceNotFound(String),
-    /// <p>The request has failed because the AWS Transfer Family service is not available.</p>
+    /// <p>The request has failed because the Amazon Web ServicesTransfer Family service is not available.</p>
+    ServiceUnavailable(String),
+}
+
+impl DescribeAccessError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeAccessError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServiceError" => {
+                    return RusotoError::Service(DescribeAccessError::InternalServiceError(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DescribeAccessError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeAccessError::ResourceNotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(DescribeAccessError::ServiceUnavailable(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeAccessError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeAccessError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            DescribeAccessError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeAccessError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeAccessError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeAccessError {}
+/// Errors returned by DescribeSecurityPolicy
+#[derive(Debug, PartialEq)]
+pub enum DescribeSecurityPolicyError {
+    /// <p>This exception is thrown when an error occurs in the Amazon Web ServicesTransfer Family service.</p>
+    InternalServiceError(String),
+    /// <p>This exception is thrown when the client submits a malformed request.</p>
+    InvalidRequest(String),
+    /// <p>This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer Family service.</p>
+    ResourceNotFound(String),
+    /// <p>The request has failed because the Amazon Web ServicesTransfer Family service is not available.</p>
     ServiceUnavailable(String),
 }
 
@@ -1154,13 +1572,13 @@ impl Error for DescribeSecurityPolicyError {}
 /// Errors returned by DescribeServer
 #[derive(Debug, PartialEq)]
 pub enum DescribeServerError {
-    /// <p>This exception is thrown when an error occurs in the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when an error occurs in the Amazon Web ServicesTransfer Family service.</p>
     InternalServiceError(String),
     /// <p>This exception is thrown when the client submits a malformed request.</p>
     InvalidRequest(String),
-    /// <p>This exception is thrown when a resource is not found by the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer Family service.</p>
     ResourceNotFound(String),
-    /// <p>The request has failed because the AWS Transfer Family service is not available.</p>
+    /// <p>The request has failed because the Amazon Web ServicesTransfer Family service is not available.</p>
     ServiceUnavailable(String),
 }
 
@@ -1202,13 +1620,13 @@ impl Error for DescribeServerError {}
 /// Errors returned by DescribeUser
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserError {
-    /// <p>This exception is thrown when an error occurs in the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when an error occurs in the Amazon Web ServicesTransfer Family service.</p>
     InternalServiceError(String),
     /// <p>This exception is thrown when the client submits a malformed request.</p>
     InvalidRequest(String),
-    /// <p>This exception is thrown when a resource is not found by the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer Family service.</p>
     ResourceNotFound(String),
-    /// <p>The request has failed because the AWS Transfer Family service is not available.</p>
+    /// <p>The request has failed because the Amazon Web ServicesTransfer Family service is not available.</p>
     ServiceUnavailable(String),
 }
 
@@ -1250,15 +1668,15 @@ impl Error for DescribeUserError {}
 /// Errors returned by ImportSshPublicKey
 #[derive(Debug, PartialEq)]
 pub enum ImportSshPublicKeyError {
-    /// <p>This exception is thrown when an error occurs in the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when an error occurs in the Amazon Web ServicesTransfer Family service.</p>
     InternalServiceError(String),
     /// <p>This exception is thrown when the client submits a malformed request.</p>
     InvalidRequest(String),
     /// <p>The requested resource does not exist.</p>
     ResourceExists(String),
-    /// <p>This exception is thrown when a resource is not found by the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer Family service.</p>
     ResourceNotFound(String),
-    /// <p>The request has failed because the AWS Transfer Family service is not available.</p>
+    /// <p>The request has failed because the Amazon Web ServicesTransfer Family service is not available.</p>
     ServiceUnavailable(String),
     /// <p>The request was denied due to request throttling.</p> <p> HTTP Status Code: 400</p>
     Throttling(String),
@@ -1311,16 +1729,70 @@ impl fmt::Display for ImportSshPublicKeyError {
     }
 }
 impl Error for ImportSshPublicKeyError {}
-/// Errors returned by ListSecurityPolicies
+/// Errors returned by ListAccesses
 #[derive(Debug, PartialEq)]
-pub enum ListSecurityPoliciesError {
-    /// <p>This exception is thrown when an error occurs in the AWS Transfer Family service.</p>
+pub enum ListAccessesError {
+    /// <p>This exception is thrown when an error occurs in the Amazon Web ServicesTransfer Family service.</p>
     InternalServiceError(String),
     /// <p>The <code>NextToken</code> parameter that was passed is invalid.</p>
     InvalidNextToken(String),
     /// <p>This exception is thrown when the client submits a malformed request.</p>
     InvalidRequest(String),
-    /// <p>The request has failed because the AWS Transfer Family service is not available.</p>
+    /// <p>This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer Family service.</p>
+    ResourceNotFound(String),
+    /// <p>The request has failed because the Amazon Web ServicesTransfer Family service is not available.</p>
+    ServiceUnavailable(String),
+}
+
+impl ListAccessesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListAccessesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServiceError" => {
+                    return RusotoError::Service(ListAccessesError::InternalServiceError(err.msg))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(ListAccessesError::InvalidNextToken(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListAccessesError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListAccessesError::ResourceNotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ListAccessesError::ServiceUnavailable(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListAccessesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListAccessesError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            ListAccessesError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListAccessesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListAccessesError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListAccessesError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListAccessesError {}
+/// Errors returned by ListSecurityPolicies
+#[derive(Debug, PartialEq)]
+pub enum ListSecurityPoliciesError {
+    /// <p>This exception is thrown when an error occurs in the Amazon Web ServicesTransfer Family service.</p>
+    InternalServiceError(String),
+    /// <p>The <code>NextToken</code> parameter that was passed is invalid.</p>
+    InvalidNextToken(String),
+    /// <p>This exception is thrown when the client submits a malformed request.</p>
+    InvalidRequest(String),
+    /// <p>The request has failed because the Amazon Web ServicesTransfer Family service is not available.</p>
     ServiceUnavailable(String),
 }
 
@@ -1368,13 +1840,13 @@ impl Error for ListSecurityPoliciesError {}
 /// Errors returned by ListServers
 #[derive(Debug, PartialEq)]
 pub enum ListServersError {
-    /// <p>This exception is thrown when an error occurs in the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when an error occurs in the Amazon Web ServicesTransfer Family service.</p>
     InternalServiceError(String),
     /// <p>The <code>NextToken</code> parameter that was passed is invalid.</p>
     InvalidNextToken(String),
     /// <p>This exception is thrown when the client submits a malformed request.</p>
     InvalidRequest(String),
-    /// <p>The request has failed because the AWS Transfer Family service is not available.</p>
+    /// <p>The request has failed because the Amazon Web ServicesTransfer Family service is not available.</p>
     ServiceUnavailable(String),
 }
 
@@ -1416,13 +1888,13 @@ impl Error for ListServersError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
-    /// <p>This exception is thrown when an error occurs in the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when an error occurs in the Amazon Web ServicesTransfer Family service.</p>
     InternalServiceError(String),
     /// <p>The <code>NextToken</code> parameter that was passed is invalid.</p>
     InvalidNextToken(String),
     /// <p>This exception is thrown when the client submits a malformed request.</p>
     InvalidRequest(String),
-    /// <p>The request has failed because the AWS Transfer Family service is not available.</p>
+    /// <p>The request has failed because the Amazon Web ServicesTransfer Family service is not available.</p>
     ServiceUnavailable(String),
 }
 
@@ -1470,15 +1942,15 @@ impl Error for ListTagsForResourceError {}
 /// Errors returned by ListUsers
 #[derive(Debug, PartialEq)]
 pub enum ListUsersError {
-    /// <p>This exception is thrown when an error occurs in the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when an error occurs in the Amazon Web ServicesTransfer Family service.</p>
     InternalServiceError(String),
     /// <p>The <code>NextToken</code> parameter that was passed is invalid.</p>
     InvalidNextToken(String),
     /// <p>This exception is thrown when the client submits a malformed request.</p>
     InvalidRequest(String),
-    /// <p>This exception is thrown when a resource is not found by the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer Family service.</p>
     ResourceNotFound(String),
-    /// <p>The request has failed because the AWS Transfer Family service is not available.</p>
+    /// <p>The request has failed because the Amazon Web ServicesTransfer Family service is not available.</p>
     ServiceUnavailable(String),
 }
 
@@ -1524,13 +1996,13 @@ impl Error for ListUsersError {}
 /// Errors returned by StartServer
 #[derive(Debug, PartialEq)]
 pub enum StartServerError {
-    /// <p>This exception is thrown when an error occurs in the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when an error occurs in the Amazon Web ServicesTransfer Family service.</p>
     InternalServiceError(String),
     /// <p>This exception is thrown when the client submits a malformed request.</p>
     InvalidRequest(String),
-    /// <p>This exception is thrown when a resource is not found by the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer Family service.</p>
     ResourceNotFound(String),
-    /// <p>The request has failed because the AWS Transfer Family service is not available.</p>
+    /// <p>The request has failed because the Amazon Web ServicesTransfer Family service is not available.</p>
     ServiceUnavailable(String),
     /// <p>The request was denied due to request throttling.</p> <p> HTTP Status Code: 400</p>
     Throttling(String),
@@ -1578,13 +2050,13 @@ impl Error for StartServerError {}
 /// Errors returned by StopServer
 #[derive(Debug, PartialEq)]
 pub enum StopServerError {
-    /// <p>This exception is thrown when an error occurs in the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when an error occurs in the Amazon Web ServicesTransfer Family service.</p>
     InternalServiceError(String),
     /// <p>This exception is thrown when the client submits a malformed request.</p>
     InvalidRequest(String),
-    /// <p>This exception is thrown when a resource is not found by the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer Family service.</p>
     ResourceNotFound(String),
-    /// <p>The request has failed because the AWS Transfer Family service is not available.</p>
+    /// <p>The request has failed because the Amazon Web ServicesTransfer Family service is not available.</p>
     ServiceUnavailable(String),
     /// <p>The request was denied due to request throttling.</p> <p> HTTP Status Code: 400</p>
     Throttling(String),
@@ -1632,13 +2104,13 @@ impl Error for StopServerError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
-    /// <p>This exception is thrown when an error occurs in the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when an error occurs in the Amazon Web ServicesTransfer Family service.</p>
     InternalServiceError(String),
     /// <p>This exception is thrown when the client submits a malformed request.</p>
     InvalidRequest(String),
-    /// <p>This exception is thrown when a resource is not found by the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer Family service.</p>
     ResourceNotFound(String),
-    /// <p>The request has failed because the AWS Transfer Family service is not available.</p>
+    /// <p>The request has failed because the Amazon Web ServicesTransfer Family service is not available.</p>
     ServiceUnavailable(String),
 }
 
@@ -1680,13 +2152,13 @@ impl Error for TagResourceError {}
 /// Errors returned by TestIdentityProvider
 #[derive(Debug, PartialEq)]
 pub enum TestIdentityProviderError {
-    /// <p>This exception is thrown when an error occurs in the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when an error occurs in the Amazon Web ServicesTransfer Family service.</p>
     InternalServiceError(String),
     /// <p>This exception is thrown when the client submits a malformed request.</p>
     InvalidRequest(String),
-    /// <p>This exception is thrown when a resource is not found by the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer Family service.</p>
     ResourceNotFound(String),
-    /// <p>The request has failed because the AWS Transfer Family service is not available.</p>
+    /// <p>The request has failed because the Amazon Web ServicesTransfer Family service is not available.</p>
     ServiceUnavailable(String),
 }
 
@@ -1734,13 +2206,13 @@ impl Error for TestIdentityProviderError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
-    /// <p>This exception is thrown when an error occurs in the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when an error occurs in the Amazon Web ServicesTransfer Family service.</p>
     InternalServiceError(String),
     /// <p>This exception is thrown when the client submits a malformed request.</p>
     InvalidRequest(String),
-    /// <p>This exception is thrown when a resource is not found by the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer Family service.</p>
     ResourceNotFound(String),
-    /// <p>The request has failed because the AWS Transfer Family service is not available.</p>
+    /// <p>The request has failed because the Amazon Web ServicesTransfer Family service is not available.</p>
     ServiceUnavailable(String),
 }
 
@@ -1779,6 +2251,60 @@ impl fmt::Display for UntagResourceError {
     }
 }
 impl Error for UntagResourceError {}
+/// Errors returned by UpdateAccess
+#[derive(Debug, PartialEq)]
+pub enum UpdateAccessError {
+    /// <p>This exception is thrown when an error occurs in the Amazon Web ServicesTransfer Family service.</p>
+    InternalServiceError(String),
+    /// <p>This exception is thrown when the client submits a malformed request.</p>
+    InvalidRequest(String),
+    /// <p>The requested resource does not exist.</p>
+    ResourceExists(String),
+    /// <p>This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer Family service.</p>
+    ResourceNotFound(String),
+    /// <p>The request has failed because the Amazon Web ServicesTransfer Family service is not available.</p>
+    ServiceUnavailable(String),
+}
+
+impl UpdateAccessError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateAccessError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServiceError" => {
+                    return RusotoError::Service(UpdateAccessError::InternalServiceError(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateAccessError::InvalidRequest(err.msg))
+                }
+                "ResourceExistsException" => {
+                    return RusotoError::Service(UpdateAccessError::ResourceExists(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateAccessError::ResourceNotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(UpdateAccessError::ServiceUnavailable(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateAccessError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateAccessError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            UpdateAccessError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateAccessError::ResourceExists(ref cause) => write!(f, "{}", cause),
+            UpdateAccessError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateAccessError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateAccessError {}
 /// Errors returned by UpdateServer
 #[derive(Debug, PartialEq)]
 pub enum UpdateServerError {
@@ -1786,15 +2312,15 @@ pub enum UpdateServerError {
     AccessDenied(String),
     /// <p>This exception is thrown when the <code>UpdatServer</code> is called for a file transfer protocol-enabled server that has VPC as the endpoint type and the server's <code>VpcEndpointID</code> is not in the available state.</p>
     Conflict(String),
-    /// <p>This exception is thrown when an error occurs in the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when an error occurs in the Amazon Web ServicesTransfer Family service.</p>
     InternalServiceError(String),
     /// <p>This exception is thrown when the client submits a malformed request.</p>
     InvalidRequest(String),
     /// <p>The requested resource does not exist.</p>
     ResourceExists(String),
-    /// <p>This exception is thrown when a resource is not found by the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer Family service.</p>
     ResourceNotFound(String),
-    /// <p>The request has failed because the AWS Transfer Family service is not available.</p>
+    /// <p>The request has failed because the Amazon Web ServicesTransfer Family service is not available.</p>
     ServiceUnavailable(String),
     /// <p>The request was denied due to request throttling.</p> <p> HTTP Status Code: 400</p>
     Throttling(String),
@@ -1854,13 +2380,13 @@ impl Error for UpdateServerError {}
 /// Errors returned by UpdateUser
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserError {
-    /// <p>This exception is thrown when an error occurs in the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when an error occurs in the Amazon Web ServicesTransfer Family service.</p>
     InternalServiceError(String),
     /// <p>This exception is thrown when the client submits a malformed request.</p>
     InvalidRequest(String),
-    /// <p>This exception is thrown when a resource is not found by the AWS Transfer Family service.</p>
+    /// <p>This exception is thrown when a resource is not found by the Amazon Web ServicesTransfer Family service.</p>
     ResourceNotFound(String),
-    /// <p>The request has failed because the AWS Transfer Family service is not available.</p>
+    /// <p>The request has failed because the Amazon Web ServicesTransfer Family service is not available.</p>
     ServiceUnavailable(String),
     /// <p>The request was denied due to request throttling.</p> <p> HTTP Status Code: 400</p>
     Throttling(String),
@@ -1908,17 +2434,29 @@ impl Error for UpdateUserError {}
 /// Trait representing the capabilities of the AWS Transfer API. AWS Transfer clients implement this trait.
 #[async_trait]
 pub trait Transfer {
-    /// <p>Instantiates an autoscaling virtual server based on the selected file transfer protocol in AWS. When you make updates to your file transfer protocol-enabled server or when you work with users, use the service-generated <code>ServerId</code> property that is assigned to the newly created server.</p>
+    /// <p>Used by administrators to choose which groups in the directory should have access to upload and download files over the enabled protocols using Amazon Web Services Transfer Family. For example, a Microsoft Active Directory might contain 50,000 users, but only a small fraction might need the ability to transfer files to the server. An administrator can use <code>CreateAccess</code> to limit the access to the correct set of users who need this ability.</p>
+    async fn create_access(
+        &self,
+        input: CreateAccessRequest,
+    ) -> Result<CreateAccessResponse, RusotoError<CreateAccessError>>;
+
+    /// <p>Instantiates an auto-scaling virtual server based on the selected file transfer protocol in Amazon Web Services. When you make updates to your file transfer protocol-enabled server or when you work with users, use the service-generated <code>ServerId</code> property that is assigned to the newly created server.</p>
     async fn create_server(
         &self,
         input: CreateServerRequest,
     ) -> Result<CreateServerResponse, RusotoError<CreateServerError>>;
 
-    /// <p>Creates a user and associates them with an existing file transfer protocol-enabled server. You can only create and associate users with servers that have the <code>IdentityProviderType</code> set to <code>SERVICE_MANAGED</code>. Using parameters for <code>CreateUser</code>, you can specify the user name, set the home directory, store the user's public key, and assign the user's AWS Identity and Access Management (IAM) role. You can also optionally add a scope-down policy, and assign metadata with tags that can be used to group and search for users.</p>
+    /// <p>Creates a user and associates them with an existing file transfer protocol-enabled server. You can only create and associate users with servers that have the <code>IdentityProviderType</code> set to <code>SERVICE_MANAGED</code>. Using parameters for <code>CreateUser</code>, you can specify the user name, set the home directory, store the user's public key, and assign the user's Amazon Web Services Identity and Access Management (IAM) role. You can also optionally add a scope-down policy, and assign metadata with tags that can be used to group and search for users.</p>
     async fn create_user(
         &self,
         input: CreateUserRequest,
     ) -> Result<CreateUserResponse, RusotoError<CreateUserError>>;
+
+    /// <p>Allows you to delete the access specified in the <code>ServerID</code> and <code>ExternalID</code> parameters.</p>
+    async fn delete_access(
+        &self,
+        input: DeleteAccessRequest,
+    ) -> Result<(), RusotoError<DeleteAccessError>>;
 
     /// <p>Deletes the file transfer protocol-enabled server that you specify.</p> <p>No response returns from this operation.</p>
     async fn delete_server(
@@ -1937,6 +2475,12 @@ pub trait Transfer {
         &self,
         input: DeleteUserRequest,
     ) -> Result<(), RusotoError<DeleteUserError>>;
+
+    /// <p>Describes the access that is assigned to the specific file transfer protocol-enabled server, as identified by its <code>ServerId</code> property and its <code>ExternalID</code>.</p> <p>The response from this call returns the properties of the access that is associated with the <code>ServerId</code> value that was specified.</p>
+    async fn describe_access(
+        &self,
+        input: DescribeAccessRequest,
+    ) -> Result<DescribeAccessResponse, RusotoError<DescribeAccessError>>;
 
     /// <p>Describes the security policy that is attached to your file transfer protocol-enabled server. The response contains a description of the security policy's properties. For more information about security policies, see <a href="https://docs.aws.amazon.com/transfer/latest/userguide/security-policies.html">Working with security policies</a>.</p>
     async fn describe_security_policy(
@@ -1962,19 +2506,25 @@ pub trait Transfer {
         input: ImportSshPublicKeyRequest,
     ) -> Result<ImportSshPublicKeyResponse, RusotoError<ImportSshPublicKeyError>>;
 
+    /// <p>Lists the details for all the accesses you have on your server.</p>
+    async fn list_accesses(
+        &self,
+        input: ListAccessesRequest,
+    ) -> Result<ListAccessesResponse, RusotoError<ListAccessesError>>;
+
     /// <p>Lists the security policies that are attached to your file transfer protocol-enabled servers.</p>
     async fn list_security_policies(
         &self,
         input: ListSecurityPoliciesRequest,
     ) -> Result<ListSecurityPoliciesResponse, RusotoError<ListSecurityPoliciesError>>;
 
-    /// <p>Lists the file transfer protocol-enabled servers that are associated with your AWS account.</p>
+    /// <p>Lists the file transfer protocol-enabled servers that are associated with your Amazon Web Services account.</p>
     async fn list_servers(
         &self,
         input: ListServersRequest,
     ) -> Result<ListServersResponse, RusotoError<ListServersError>>;
 
-    /// <p>Lists all of the tags associated with the Amazon Resource Number (ARN) you specify. The resource can be a user, server, or role.</p>
+    /// <p>Lists all of the tags associated with the Amazon Resource Name (ARN) that you specify. The resource can be a user, server, or role.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -2004,7 +2554,7 @@ pub trait Transfer {
         input: TagResourceRequest,
     ) -> Result<(), RusotoError<TagResourceError>>;
 
-    /// <p>If the <code>IdentityProviderType</code> of a file transfer protocol-enabled server is <code>API_Gateway</code>, tests whether your API Gateway is set up successfully. We highly recommend that you call this operation to test your authentication method as soon as you create your server. By doing so, you can troubleshoot issues with the API Gateway integration to ensure that your users can successfully use the service.</p>
+    /// <p>If the <code>IdentityProviderType</code> of a file transfer protocol-enabled server is <code>AWS_DIRECTORY_SERVICE</code> or <code>API_Gateway</code>, tests whether your identity provider is set up successfully. We highly recommend that you call this operation to test your authentication method as soon as you create your server. By doing so, you can troubleshoot issues with the identity provider integration to ensure that your users can successfully use the service.</p>
     async fn test_identity_provider(
         &self,
         input: TestIdentityProviderRequest,
@@ -2015,6 +2565,12 @@ pub trait Transfer {
         &self,
         input: UntagResourceRequest,
     ) -> Result<(), RusotoError<UntagResourceError>>;
+
+    /// <p>Allows you to update parameters for the access specified in the <code>ServerID</code> and <code>ExternalID</code> parameters.</p>
+    async fn update_access(
+        &self,
+        input: UpdateAccessRequest,
+    ) -> Result<UpdateAccessResponse, RusotoError<UpdateAccessError>>;
 
     /// <p>Updates the file transfer protocol-enabled server's properties after that server has been created.</p> <p>The <code>UpdateServer</code> call returns the <code>ServerId</code> of the server you updated.</p>
     async fn update_server(
@@ -2068,7 +2624,25 @@ impl TransferClient {
 
 #[async_trait]
 impl Transfer for TransferClient {
-    /// <p>Instantiates an autoscaling virtual server based on the selected file transfer protocol in AWS. When you make updates to your file transfer protocol-enabled server or when you work with users, use the service-generated <code>ServerId</code> property that is assigned to the newly created server.</p>
+    /// <p>Used by administrators to choose which groups in the directory should have access to upload and download files over the enabled protocols using Amazon Web Services Transfer Family. For example, a Microsoft Active Directory might contain 50,000 users, but only a small fraction might need the ability to transfer files to the server. An administrator can use <code>CreateAccess</code> to limit the access to the correct set of users who need this ability.</p>
+    async fn create_access(
+        &self,
+        input: CreateAccessRequest,
+    ) -> Result<CreateAccessResponse, RusotoError<CreateAccessError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "TransferService.CreateAccess");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateAccessError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateAccessResponse, _>()
+    }
+
+    /// <p>Instantiates an auto-scaling virtual server based on the selected file transfer protocol in Amazon Web Services. When you make updates to your file transfer protocol-enabled server or when you work with users, use the service-generated <code>ServerId</code> property that is assigned to the newly created server.</p>
     async fn create_server(
         &self,
         input: CreateServerRequest,
@@ -2086,7 +2660,7 @@ impl Transfer for TransferClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateServerResponse, _>()
     }
 
-    /// <p>Creates a user and associates them with an existing file transfer protocol-enabled server. You can only create and associate users with servers that have the <code>IdentityProviderType</code> set to <code>SERVICE_MANAGED</code>. Using parameters for <code>CreateUser</code>, you can specify the user name, set the home directory, store the user's public key, and assign the user's AWS Identity and Access Management (IAM) role. You can also optionally add a scope-down policy, and assign metadata with tags that can be used to group and search for users.</p>
+    /// <p>Creates a user and associates them with an existing file transfer protocol-enabled server. You can only create and associate users with servers that have the <code>IdentityProviderType</code> set to <code>SERVICE_MANAGED</code>. Using parameters for <code>CreateUser</code>, you can specify the user name, set the home directory, store the user's public key, and assign the user's Amazon Web Services Identity and Access Management (IAM) role. You can also optionally add a scope-down policy, and assign metadata with tags that can be used to group and search for users.</p>
     async fn create_user(
         &self,
         input: CreateUserRequest,
@@ -2102,6 +2676,23 @@ impl Transfer for TransferClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateUserResponse, _>()
+    }
+
+    /// <p>Allows you to delete the access specified in the <code>ServerID</code> and <code>ExternalID</code> parameters.</p>
+    async fn delete_access(
+        &self,
+        input: DeleteAccessRequest,
+    ) -> Result<(), RusotoError<DeleteAccessError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "TransferService.DeleteAccess");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteAccessError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Deletes the file transfer protocol-enabled server that you specify.</p> <p>No response returns from this operation.</p>
@@ -2153,6 +2744,24 @@ impl Transfer for TransferClient {
             .await?;
         std::mem::drop(response);
         Ok(())
+    }
+
+    /// <p>Describes the access that is assigned to the specific file transfer protocol-enabled server, as identified by its <code>ServerId</code> property and its <code>ExternalID</code>.</p> <p>The response from this call returns the properties of the access that is associated with the <code>ServerId</code> value that was specified.</p>
+    async fn describe_access(
+        &self,
+        input: DescribeAccessRequest,
+    ) -> Result<DescribeAccessResponse, RusotoError<DescribeAccessError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "TransferService.DescribeAccess");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeAccessError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeAccessResponse, _>()
     }
 
     /// <p>Describes the security policy that is attached to your file transfer protocol-enabled server. The response contains a description of the security policy's properties. For more information about security policies, see <a href="https://docs.aws.amazon.com/transfer/latest/userguide/security-policies.html">Working with security policies</a>.</p>
@@ -2228,6 +2837,24 @@ impl Transfer for TransferClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ImportSshPublicKeyResponse, _>()
     }
 
+    /// <p>Lists the details for all the accesses you have on your server.</p>
+    async fn list_accesses(
+        &self,
+        input: ListAccessesRequest,
+    ) -> Result<ListAccessesResponse, RusotoError<ListAccessesError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "TransferService.ListAccesses");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListAccessesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListAccessesResponse, _>()
+    }
+
     /// <p>Lists the security policies that are attached to your file transfer protocol-enabled servers.</p>
     async fn list_security_policies(
         &self,
@@ -2247,7 +2874,7 @@ impl Transfer for TransferClient {
             .deserialize::<ListSecurityPoliciesResponse, _>()
     }
 
-    /// <p>Lists the file transfer protocol-enabled servers that are associated with your AWS account.</p>
+    /// <p>Lists the file transfer protocol-enabled servers that are associated with your Amazon Web Services account.</p>
     async fn list_servers(
         &self,
         input: ListServersRequest,
@@ -2265,7 +2892,7 @@ impl Transfer for TransferClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListServersResponse, _>()
     }
 
-    /// <p>Lists all of the tags associated with the Amazon Resource Number (ARN) you specify. The resource can be a user, server, or role.</p>
+    /// <p>Lists all of the tags associated with the Amazon Resource Name (ARN) that you specify. The resource can be a user, server, or role.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -2352,7 +2979,7 @@ impl Transfer for TransferClient {
         Ok(())
     }
 
-    /// <p>If the <code>IdentityProviderType</code> of a file transfer protocol-enabled server is <code>API_Gateway</code>, tests whether your API Gateway is set up successfully. We highly recommend that you call this operation to test your authentication method as soon as you create your server. By doing so, you can troubleshoot issues with the API Gateway integration to ensure that your users can successfully use the service.</p>
+    /// <p>If the <code>IdentityProviderType</code> of a file transfer protocol-enabled server is <code>AWS_DIRECTORY_SERVICE</code> or <code>API_Gateway</code>, tests whether your identity provider is set up successfully. We highly recommend that you call this operation to test your authentication method as soon as you create your server. By doing so, you can troubleshoot issues with the identity provider integration to ensure that your users can successfully use the service.</p>
     async fn test_identity_provider(
         &self,
         input: TestIdentityProviderRequest,
@@ -2386,6 +3013,24 @@ impl Transfer for TransferClient {
             .await?;
         std::mem::drop(response);
         Ok(())
+    }
+
+    /// <p>Allows you to update parameters for the access specified in the <code>ServerID</code> and <code>ExternalID</code> parameters.</p>
+    async fn update_access(
+        &self,
+        input: UpdateAccessRequest,
+    ) -> Result<UpdateAccessResponse, RusotoError<UpdateAccessError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "TransferService.UpdateAccess");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateAccessError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateAccessResponse, _>()
     }
 
     /// <p>Updates the file transfer protocol-enabled server's properties after that server has been created.</p> <p>The <code>UpdateServer</code> call returns the <code>ServerId</code> of the server you updated.</p>

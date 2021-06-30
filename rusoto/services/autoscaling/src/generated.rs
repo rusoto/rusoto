@@ -116,8 +116,12 @@ impl ActivitiesTypeDeserializer {
 pub struct Activity {
     /// <p>The ID of the activity.</p>
     pub activity_id: String,
+    /// <p>The Amazon Resource Name (ARN) of the Auto Scaling group.</p>
+    pub auto_scaling_group_arn: Option<String>,
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
+    /// <p>The state of the Auto Scaling group, which is either <code>InService</code> or <code>Deleted</code>.</p>
+    pub auto_scaling_group_state: Option<String>,
     /// <p>The reason the activity began.</p>
     pub cause: String,
     /// <p>A friendly, more verbose description of the activity.</p>
@@ -149,9 +153,22 @@ impl ActivityDeserializer {
                 "ActivityId" => {
                     obj.activity_id = XmlStringDeserializer::deserialize("ActivityId", stack)?;
                 }
+                "AutoScalingGroupARN" => {
+                    obj.auto_scaling_group_arn = Some(ResourceNameDeserializer::deserialize(
+                        "AutoScalingGroupARN",
+                        stack,
+                    )?);
+                }
                 "AutoScalingGroupName" => {
                     obj.auto_scaling_group_name =
                         XmlStringMaxLen255Deserializer::deserialize("AutoScalingGroupName", stack)?;
+                }
+                "AutoScalingGroupState" => {
+                    obj.auto_scaling_group_state =
+                        Some(AutoScalingGroupStateDeserializer::deserialize(
+                            "AutoScalingGroupState",
+                            stack,
+                        )?);
                 }
                 "Cause" => {
                     obj.cause = XmlStringMaxLen1023Deserializer::deserialize("Cause", stack)?;
@@ -496,7 +513,7 @@ pub struct AutoScalingGroup {
     pub enabled_metrics: Option<Vec<EnabledMetric>>,
     /// <p>The amount of time, in seconds, that Amazon EC2 Auto Scaling waits before checking the health status of an EC2 instance that has come into service.</p>
     pub health_check_grace_period: Option<i64>,
-    /// <p>The service to use for the health checks. The valid values are <code>EC2</code> and <code>ELB</code>. If you configure an Auto Scaling group to use ELB health checks, it considers the instance unhealthy if it fails either the EC2 status checks or the load balancer health checks.</p>
+    /// <p>The service to use for the health checks. The valid values are <code>EC2</code> and <code>ELB</code>. If you configure an Auto Scaling group to use <code>ELB</code> health checks, it considers the instance unhealthy if it fails either the EC2 status checks or the load balancer health checks.</p>
     pub health_check_type: String,
     /// <p>The EC2 instances associated with the group.</p>
     pub instances: Option<Vec<Instance>>,
@@ -518,7 +535,9 @@ pub struct AutoScalingGroup {
     pub new_instances_protected_from_scale_in: Option<bool>,
     /// <p>The name of the placement group into which to launch your instances, if any.</p>
     pub placement_group: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the service-linked role that the Auto Scaling group uses to call other AWS services on your behalf.</p>
+    /// <p>The predicted capacity of the group when it has a predictive scaling policy.</p>
+    pub predicted_capacity: Option<i64>,
+    /// <p>The Amazon Resource Name (ARN) of the service-linked role that the Auto Scaling group uses to call other Amazon Web Services on your behalf.</p>
     pub service_linked_role_arn: Option<String>,
     /// <p>The current state of the group when the <a>DeleteAutoScalingGroup</a> operation is in progress.</p>
     pub status: Option<String>,
@@ -532,6 +551,10 @@ pub struct AutoScalingGroup {
     pub termination_policies: Option<Vec<String>>,
     /// <p>One or more subnet IDs, if applicable, separated by commas.</p>
     pub vpc_zone_identifier: Option<String>,
+    /// <p>The warm pool for the group.</p>
+    pub warm_pool_configuration: Option<WarmPoolConfiguration>,
+    /// <p>The current size of the warm pool.</p>
+    pub warm_pool_size: Option<i64>,
 }
 
 #[allow(dead_code)]
@@ -657,6 +680,13 @@ impl AutoScalingGroupDeserializer {
                         stack,
                     )?);
                 }
+                "PredictedCapacity" => {
+                    obj.predicted_capacity =
+                        Some(AutoScalingGroupPredictedCapacityDeserializer::deserialize(
+                            "PredictedCapacity",
+                            stack,
+                        )?);
+                }
                 "ServiceLinkedRoleARN" => {
                     obj.service_linked_role_arn = Some(ResourceNameDeserializer::deserialize(
                         "ServiceLinkedRoleARN",
@@ -691,6 +721,19 @@ impl AutoScalingGroupDeserializer {
                 "VPCZoneIdentifier" => {
                     obj.vpc_zone_identifier = Some(XmlStringMaxLen2047Deserializer::deserialize(
                         "VPCZoneIdentifier",
+                        stack,
+                    )?);
+                }
+                "WarmPoolConfiguration" => {
+                    obj.warm_pool_configuration =
+                        Some(WarmPoolConfigurationDeserializer::deserialize(
+                            "WarmPoolConfiguration",
+                            stack,
+                        )?);
+                }
+                "WarmPoolSize" => {
+                    obj.warm_pool_size = Some(WarmPoolSizeDeserializer::deserialize(
+                        "WarmPoolSize",
                         stack,
                     )?);
                 }
@@ -773,6 +816,22 @@ impl AutoScalingGroupNamesTypeSerializer {
 }
 
 #[allow(dead_code)]
+struct AutoScalingGroupPredictedCapacityDeserializer;
+impl AutoScalingGroupPredictedCapacityDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
+    }
+}
+#[allow(dead_code)]
+struct AutoScalingGroupStateDeserializer;
+impl AutoScalingGroupStateDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+#[allow(dead_code)]
 struct AutoScalingGroupsDeserializer;
 impl AutoScalingGroupsDeserializer {
     #[allow(dead_code, unused_variables)]
@@ -843,7 +902,7 @@ pub struct AutoScalingInstanceDetails {
     pub launch_configuration_name: Option<String>,
     /// <p>The launch template for the instance.</p>
     pub launch_template: Option<LaunchTemplateSpecification>,
-    /// <p>The lifecycle state for the instance.</p>
+    /// <p>The lifecycle state for the instance. The <code>Quarantined</code> state is not used. For information about lifecycle states, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroupLifecycle.html">Instance lifecycle</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. </p> <p>Valid Values: <code>Pending</code> | <code>Pending:Wait</code> | <code>Pending:Proceed</code> | <code>Quarantined</code> | <code>InService</code> | <code>Terminating</code> | <code>Terminating:Wait</code> | <code>Terminating:Proceed</code> | <code>Terminated</code> | <code>Detaching</code> | <code>Detached</code> | <code>EnteringStandby</code> | <code>Standby</code> | <code>Warmed:Pending</code> | <code>Warmed:Pending:Wait</code> | <code>Warmed:Pending:Proceed</code> | <code>Warmed:Terminating</code> | <code>Warmed:Terminating:Wait</code> | <code>Warmed:Terminating:Proceed</code> | <code>Warmed:Terminated</code> | <code>Warmed:Stopped</code> | <code>Warmed:Running</code> </p>
     pub lifecycle_state: String,
     /// <p>Indicates whether the instance is protected from termination by Amazon EC2 Auto Scaling when scaling in.</p>
     pub protected_from_scale_in: bool,
@@ -1207,6 +1266,14 @@ impl BlockDeviceEbsIopsDeserializer {
     }
 }
 #[allow(dead_code)]
+struct BlockDeviceEbsThroughputDeserializer;
+impl BlockDeviceEbsThroughputDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
+    }
+}
+#[allow(dead_code)]
 struct BlockDeviceEbsVolumeSizeDeserializer;
 impl BlockDeviceEbsVolumeSizeDeserializer {
     #[allow(dead_code, unused_variables)]
@@ -1381,6 +1448,46 @@ impl CancelInstanceRefreshTypeSerializer {
     }
 }
 
+/// <p>A <code>GetPredictiveScalingForecast</code> call returns the capacity forecast for a predictive scaling policy. This structure includes the data points for that capacity forecast, along with the timestamps of those data points. </p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct CapacityForecast {
+    /// <p>The time stamps for the data points, in UTC format.</p>
+    pub timestamps: Vec<String>,
+    /// <p>The values of the data points.</p>
+    pub values: Vec<f64>,
+}
+
+#[allow(dead_code)]
+struct CapacityForecastDeserializer;
+impl CapacityForecastDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CapacityForecast, XmlParseError> {
+        deserialize_elements::<_, CapacityForecast, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Timestamps" => {
+                    obj.timestamps.extend(
+                        PredictiveScalingForecastTimestampsDeserializer::deserialize(
+                            "Timestamps",
+                            stack,
+                        )?,
+                    );
+                }
+                "Values" => {
+                    obj.values
+                        .extend(PredictiveScalingForecastValuesDeserializer::deserialize(
+                            "Values", stack,
+                        )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
 #[allow(dead_code)]
 struct CapacityRebalanceEnabledDeserializer;
 impl CapacityRebalanceEnabledDeserializer {
@@ -1389,6 +1496,18 @@ impl CapacityRebalanceEnabledDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
+
+/// Serialize `CheckpointPercentages` contents to a `SignedRequest`.
+struct CheckpointPercentagesSerializer;
+impl CheckpointPercentagesSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<i64>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
 #[allow(dead_code)]
 struct ClassicLinkVPCSecurityGroupsDeserializer;
 impl ClassicLinkVPCSecurityGroupsDeserializer {
@@ -1519,7 +1638,7 @@ pub struct CreateAutoScalingGroupType {
     pub instance_id: Option<String>,
     /// <p>The name of the launch configuration to use to launch instances. </p> <p>Conditional: You must specify either a launch template (<code>LaunchTemplate</code> or <code>MixedInstancesPolicy</code>) or a launch configuration (<code>LaunchConfigurationName</code> or <code>InstanceId</code>).</p>
     pub launch_configuration_name: Option<String>,
-    /// <p><p>Parameters used to specify the <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-launchtemplate.html">launch template</a> and version to use to launch instances. </p> <p>Conditional: You must specify either a launch template (<code>LaunchTemplate</code> or <code>MixedInstancesPolicy</code>) or a launch configuration (<code>LaunchConfigurationName</code> or <code>InstanceId</code>).</p> <note> <p>The launch template that is specified must be configured for use with an Auto Scaling group. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-launch-template.html">Creating a launch template for an Auto Scaling group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> </note></p>
+    /// <p><p>Parameters used to specify the launch template and version to use to launch instances. </p> <p>Conditional: You must specify either a launch template (<code>LaunchTemplate</code> or <code>MixedInstancesPolicy</code>) or a launch configuration (<code>LaunchConfigurationName</code> or <code>InstanceId</code>).</p> <note> <p>The launch template that is specified must be configured for use with an Auto Scaling group. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/create-launch-template.html">Creating a launch template for an Auto Scaling group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> </note></p>
     pub launch_template: Option<LaunchTemplateSpecification>,
     /// <p>One or more lifecycle hooks for the group, which specify actions to perform when Amazon EC2 Auto Scaling launches or terminates instances.</p>
     pub lifecycle_hook_specification_list: Option<Vec<LifecycleHookSpecification>>,
@@ -1531,13 +1650,13 @@ pub struct CreateAutoScalingGroupType {
     pub max_size: i64,
     /// <p>The minimum size of the group.</p>
     pub min_size: i64,
-    /// <p>An embedded object that specifies a mixed instances policy. The required parameters must be specified. If optional parameters are unspecified, their default values are used.</p> <p>The policy includes parameters that not only define the distribution of On-Demand Instances and Spot Instances, the maximum price to pay for Spot Instances, and how the Auto Scaling group allocates instance types to fulfill On-Demand and Spot capacities, but also the parameters that specify the instance configuration information—the launch template and instance types. The policy can also include a weight for each instance type and different launch templates for individual instance types. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-purchase-options.html">Auto Scaling groups with multiple instance types and purchase options</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>An embedded object that specifies a mixed instances policy. The required properties must be specified. If optional properties are unspecified, their default values are used.</p> <p>The policy includes properties that not only define the distribution of On-Demand Instances and Spot Instances, the maximum price to pay for Spot Instances, and how the Auto Scaling group allocates instance types to fulfill On-Demand and Spot capacities, but also the properties that specify the instance configuration information—the launch template and instance types. The policy can also include a weight for each instance type and different launch templates for individual instance types. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-purchase-options.html">Auto Scaling groups with multiple instance types and purchase options</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub mixed_instances_policy: Option<MixedInstancesPolicy>,
     /// <p>Indicates whether newly launched instances are protected from termination by Amazon EC2 Auto Scaling when scaling in. For more information about preventing instances from terminating on scale in, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection">Instance scale-in protection</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub new_instances_protected_from_scale_in: Option<bool>,
     /// <p>The name of an existing placement group into which to launch your instances, if any. A placement group is a logical grouping of instances within a single Availability Zone. You cannot specify multiple Availability Zones and a placement group. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">Placement Groups</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     pub placement_group: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the service-linked role that the Auto Scaling group uses to call other AWS services on your behalf. By default, Amazon EC2 Auto Scaling uses a service-linked role named AWSServiceRoleForAutoScaling, which it creates if it does not exist. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-service-linked-role.html">Service-linked roles</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The Amazon Resource Name (ARN) of the service-linked role that the Auto Scaling group uses to call other Amazon Web Services on your behalf. By default, Amazon EC2 Auto Scaling uses a service-linked role named AWSServiceRoleForAutoScaling, which it creates if it does not exist. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-service-linked-role.html">Service-linked roles</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub service_linked_role_arn: Option<String>,
     /// <p>One or more tags. You can tag your Auto Scaling group and propagate the tags to the Amazon EC2 instances it launches. Tags are not propagated to Amazon EBS volumes. To add tags to Amazon EBS volumes, specify the tags in a launch template but use caution. If the launch template specifies an instance tag with a key that is also specified for the Auto Scaling group, Amazon EC2 Auto Scaling overrides the value of that instance tag with the value specified by the Auto Scaling group. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-tagging.html">Tagging Auto Scaling groups and instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub tags: Option<Vec<Tag>>,
@@ -1691,7 +1810,7 @@ pub struct CreateLaunchConfigurationType {
     pub instance_id: Option<String>,
     /// <p><p>Controls whether instances in this group are launched with detailed (<code>true</code>) or basic (<code>false</code>) monitoring.</p> <p>The default value is <code>true</code> (enabled).</p> <important> <p>When detailed monitoring is enabled, Amazon CloudWatch generates metrics every minute and your account is charged a fee. When you disable detailed monitoring, CloudWatch generates metrics every 5 minutes. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/latest/userguide/enable-as-instance-metrics.html">Configure Monitoring for Auto Scaling Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> </important></p>
     pub instance_monitoring: Option<InstanceMonitoring>,
-    /// <p>Specifies the instance type of the EC2 instance.</p> <p>For information about available instance types, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#AvailableInstanceTypes">Available Instance Types</a> in the <i>Amazon EC2 User Guide for Linux Instances.</i> </p> <p>If you do not specify <code>InstanceId</code>, you must specify <code>InstanceType</code>.</p>
+    /// <p>Specifies the instance type of the EC2 instance.</p> <p>For information about available instance types, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#AvailableInstanceTypes">Available Instance Types</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> <p>If you do not specify <code>InstanceId</code>, you must specify <code>InstanceType</code>.</p>
     pub instance_type: Option<String>,
     /// <p>The ID of the kernel associated with the AMI.</p>
     pub kernel_id: Option<String>,
@@ -1709,7 +1828,7 @@ pub struct CreateLaunchConfigurationType {
     pub security_groups: Option<Vec<String>>,
     /// <p><p>The maximum hourly price to be paid for any Spot Instance launched to fulfill the request. Spot Instances are launched when the price you specify exceeds the current Spot price. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-launch-spot-instances.html">Requesting Spot Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <note> <p>When you change your maximum price by creating a new launch configuration, running instances will continue to run as long as the maximum price for those running instances is higher than the current Spot price.</p> </note></p>
     pub spot_price: Option<String>,
-    /// <p>The Base64-encoded user data to make available to the launched EC2 instances. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html">Instance metadata and user data</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
+    /// <p>The user data to make available to the launched EC2 instances. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html">Instance metadata and user data</a> (Linux) and <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-instance-metadata.html">Instance metadata and user data</a> (Windows). If you are using a command line tool, base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide base64-encoded text. User data is limited to 16 KB.</p>
     pub user_data: Option<String>,
 }
 
@@ -1913,7 +2032,7 @@ impl CustomizedMetricSpecificationSerializer {
 pub struct DeleteAutoScalingGroupType {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
-    /// <p>Specifies that the group is to be deleted along with all instances associated with the group, without waiting for all instances to be terminated. This parameter also deletes any lifecycle actions associated with the group.</p>
+    /// <p>Specifies that the group is to be deleted along with all instances associated with the group, without waiting for all instances to be terminated. This parameter also deletes any outstanding lifecycle actions associated with the group.</p>
     pub force_delete: Option<bool>,
 }
 
@@ -2091,14 +2210,63 @@ impl DeleteTagsTypeSerializer {
 
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct DeleteWarmPoolAnswer {}
+
+#[allow(dead_code)]
+struct DeleteWarmPoolAnswerDeserializer;
+impl DeleteWarmPoolAnswerDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteWarmPoolAnswer, XmlParseError> {
+        xml_util::start_element(tag_name, stack)?;
+
+        let obj = DeleteWarmPoolAnswer::default();
+
+        xml_util::end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteWarmPoolType {
+    /// <p>The name of the Auto Scaling group.</p>
+    pub auto_scaling_group_name: String,
+    /// <p>Specifies that the warm pool is to be deleted along with all of its associated instances, without waiting for all instances to be terminated. This parameter also deletes any outstanding lifecycle actions associated with the warm pool instances.</p>
+    pub force_delete: Option<bool>,
+}
+
+/// Serialize `DeleteWarmPoolType` contents to a `SignedRequest`.
+struct DeleteWarmPoolTypeSerializer;
+impl DeleteWarmPoolTypeSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteWarmPoolType) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "AutoScalingGroupName"),
+            &obj.auto_scaling_group_name,
+        );
+        if let Some(ref field_value) = obj.force_delete {
+            params.put(&format!("{}{}", prefix, "ForceDelete"), &field_value);
+        }
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DescribeAccountLimitsAnswer {
-    /// <p>The maximum number of groups allowed for your AWS account. The default is 200 groups per AWS Region.</p>
+    /// <p>The maximum number of groups allowed for your account. The default is 200 groups per Region.</p>
     pub max_number_of_auto_scaling_groups: Option<i64>,
-    /// <p>The maximum number of launch configurations allowed for your AWS account. The default is 200 launch configurations per AWS Region.</p>
+    /// <p>The maximum number of launch configurations allowed for your account. The default is 200 launch configurations per Region.</p>
     pub max_number_of_launch_configurations: Option<i64>,
-    /// <p>The current number of groups for your AWS account.</p>
+    /// <p>The current number of groups for your account.</p>
     pub number_of_auto_scaling_groups: Option<i64>,
-    /// <p>The current number of launch configurations for your AWS account.</p>
+    /// <p>The current number of launch configurations for your account.</p>
     pub number_of_launch_configurations: Option<i64>,
 }
 
@@ -2185,7 +2353,7 @@ impl DescribeAdjustmentTypesAnswerDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAutoScalingInstancesType {
-    /// <p>The IDs of the instances. You can specify up to <code>MaxRecords</code> IDs. If you omit this parameter, all Auto Scaling instances are described. If you specify an ID that does not exist, it is ignored with no error.</p>
+    /// <p>The IDs of the instances. If you omit this parameter, all Auto Scaling instances are described. If you specify an ID that does not exist, it is ignored with no error.</p> <p>Array Members: Maximum number of 50 items.</p>
     pub instance_ids: Option<Vec<String>>,
     /// <p>The maximum number of items to return with this call. The default value is <code>50</code> and the maximum value is <code>50</code>.</p>
     pub max_records: Option<i64>,
@@ -2705,9 +2873,9 @@ pub struct DescribePoliciesType {
     pub max_records: Option<i64>,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
     pub next_token: Option<String>,
-    /// <p>The names of one or more policies. If you omit this parameter, all policies are described. If a group name is provided, the results are limited to that group. This list is limited to 50 items. If you specify an unknown policy name, it is ignored with no error.</p>
+    /// <p>The names of one or more policies. If you omit this parameter, all policies are described. If a group name is provided, the results are limited to that group. If you specify an unknown policy name, it is ignored with no error.</p> <p>Array Members: Maximum number of 50 items.</p>
     pub policy_names: Option<Vec<String>>,
-    /// <p>One or more policy types. The valid values are <code>SimpleScaling</code>, <code>StepScaling</code>, and <code>TargetTrackingScaling</code>.</p>
+    /// <p>One or more policy types. The valid values are <code>SimpleScaling</code>, <code>StepScaling</code>, <code>TargetTrackingScaling</code>, and <code>PredictiveScaling</code>.</p>
     pub policy_types: Option<Vec<String>>,
 }
 
@@ -2752,10 +2920,12 @@ impl DescribePoliciesTypeSerializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeScalingActivitiesType {
-    /// <p>The activity IDs of the desired scaling activities. You can specify up to 50 IDs. If you omit this parameter, all activities for the past six weeks are described. If unknown activities are requested, they are ignored with no error. If you specify an Auto Scaling group, the results are limited to that group.</p>
+    /// <p>The activity IDs of the desired scaling activities. If you omit this parameter, all activities for the past six weeks are described. If unknown activities are requested, they are ignored with no error. If you specify an Auto Scaling group, the results are limited to that group.</p> <p>Array Members: Maximum number of 50 IDs.</p>
     pub activity_ids: Option<Vec<String>>,
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: Option<String>,
+    /// <p>Indicates whether to include scaling activity from deleted Auto Scaling groups.</p>
+    pub include_deleted_groups: Option<bool>,
     /// <p>The maximum number of items to return with this call. The default value is <code>100</code> and the maximum value is <code>100</code>.</p>
     pub max_records: Option<i64>,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
@@ -2784,6 +2954,12 @@ impl DescribeScalingActivitiesTypeSerializer {
                 &field_value,
             );
         }
+        if let Some(ref field_value) = obj.include_deleted_groups {
+            params.put(
+                &format!("{}{}", prefix, "IncludeDeletedGroups"),
+                &field_value,
+            );
+        }
         if let Some(ref field_value) = obj.max_records {
             params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
@@ -2804,7 +2980,7 @@ pub struct DescribeScheduledActionsType {
     pub max_records: Option<i64>,
     /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
     pub next_token: Option<String>,
-    /// <p>The names of one or more scheduled actions. You can specify up to 50 actions. If you omit this parameter, all scheduled actions are described. If you specify an unknown scheduled action, it is ignored with no error.</p>
+    /// <p>The names of one or more scheduled actions. If you omit this parameter, all scheduled actions are described. If you specify an unknown scheduled action, it is ignored with no error.</p> <p>Array Members: Maximum number of 50 actions.</p>
     pub scheduled_action_names: Option<Vec<String>>,
     /// <p>The earliest scheduled start time to return. If scheduled action names are provided, this parameter is ignored.</p>
     pub start_time: Option<String>,
@@ -2914,6 +3090,81 @@ impl DescribeTerminationPolicyTypesAnswerDeserializer {
         )
     }
 }
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct DescribeWarmPoolAnswer {
+    /// <p>The instances that are currently in the warm pool.</p>
+    pub instances: Option<Vec<Instance>>,
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    pub next_token: Option<String>,
+    /// <p>The warm pool configuration details. </p>
+    pub warm_pool_configuration: Option<WarmPoolConfiguration>,
+}
+
+#[allow(dead_code)]
+struct DescribeWarmPoolAnswerDeserializer;
+impl DescribeWarmPoolAnswerDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeWarmPoolAnswer, XmlParseError> {
+        deserialize_elements::<_, DescribeWarmPoolAnswer, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Instances" => {
+                    obj.instances
+                        .get_or_insert(vec![])
+                        .extend(InstancesDeserializer::deserialize("Instances", stack)?);
+                }
+                "NextToken" => {
+                    obj.next_token = Some(XmlStringDeserializer::deserialize("NextToken", stack)?);
+                }
+                "WarmPoolConfiguration" => {
+                    obj.warm_pool_configuration =
+                        Some(WarmPoolConfigurationDeserializer::deserialize(
+                            "WarmPoolConfiguration",
+                            stack,
+                        )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeWarmPoolType {
+    /// <p>The name of the Auto Scaling group.</p>
+    pub auto_scaling_group_name: String,
+    /// <p>The maximum number of instances to return with this call. The maximum value is <code>50</code>.</p>
+    pub max_records: Option<i64>,
+    /// <p>The token for the next set of instances to return. (You received this token from a previous call.)</p>
+    pub next_token: Option<String>,
+}
+
+/// Serialize `DescribeWarmPoolType` contents to a `SignedRequest`.
+struct DescribeWarmPoolTypeSerializer;
+impl DescribeWarmPoolTypeSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeWarmPoolType) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "AutoScalingGroupName"),
+            &obj.auto_scaling_group_name,
+        );
+        if let Some(ref field_value) = obj.max_records {
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+    }
+}
+
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DetachInstancesAnswer {
@@ -3087,7 +3338,7 @@ impl DetachLoadBalancersTypeSerializer {
 pub struct DisableMetricsCollectionQuery {
     /// <p>The name of the Auto Scaling group.</p>
     pub auto_scaling_group_name: String,
-    /// <p>Specifies one or more of the following metrics:</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> <li> <p> <code>GroupInServiceCapacity</code> </p> </li> <li> <p> <code>GroupPendingCapacity</code> </p> </li> <li> <p> <code>GroupStandbyCapacity</code> </p> </li> <li> <p> <code>GroupTerminatingCapacity</code> </p> </li> <li> <p> <code>GroupTotalCapacity</code> </p> </li> </ul> <p>If you omit this parameter, all metrics are disabled. </p>
+    /// <p>Specifies one or more of the following metrics:</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> <li> <p> <code>GroupInServiceCapacity</code> </p> </li> <li> <p> <code>GroupPendingCapacity</code> </p> </li> <li> <p> <code>GroupStandbyCapacity</code> </p> </li> <li> <p> <code>GroupTerminatingCapacity</code> </p> </li> <li> <p> <code>GroupTotalCapacity</code> </p> </li> <li> <p> <code>WarmPoolDesiredCapacity</code> </p> </li> <li> <p> <code>WarmPoolWarmedCapacity</code> </p> </li> <li> <p> <code>WarmPoolPendingCapacity</code> </p> </li> <li> <p> <code>WarmPoolTerminatingCapacity</code> </p> </li> <li> <p> <code>WarmPoolTotalCapacity</code> </p> </li> <li> <p> <code>GroupAndWarmPoolDesiredCapacity</code> </p> </li> <li> <p> <code>GroupAndWarmPoolTotalCapacity</code> </p> </li> </ul> <p>If you omit this parameter, all metrics are disabled. </p>
     pub metrics: Option<Vec<String>>,
 }
 
@@ -3127,13 +3378,15 @@ pub struct Ebs {
     pub delete_on_termination: Option<bool>,
     /// <p>Specifies whether the volume should be encrypted. Encrypted EBS volumes can only be attached to instances that support Amazon EBS encryption. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#EBSEncryption_supported_instances">Supported Instance Types</a>. If your AMI uses encrypted volumes, you can also only launch it on supported instance types.</p> <note> <p>If you are creating a volume from a snapshot, you cannot specify an encryption value. Volumes that are created from encrypted snapshots are automatically encrypted, and volumes that are created from unencrypted snapshots are automatically unencrypted. By default, encrypted snapshots use the AWS managed CMK that is used for EBS encryption, but you can specify a custom CMK when you create the snapshot. The ability to encrypt a snapshot during copying also allows you to apply a new CMK to an already-encrypted snapshot. Volumes restored from the resulting copy are only accessible using the new CMK.</p> <p>Enabling <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSEncryption.html#encryption-by-default">encryption by default</a> results in all EBS volumes being encrypted with the AWS managed CMK or a customer managed CMK, whether or not the snapshot was encrypted.</p> </note> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AMIEncryption.html">Using Encryption with EBS-Backed AMIs</a> in the <i>Amazon EC2 User Guide for Linux Instances</i> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/key-policy-requirements-EBS-encryption.html">Required CMK key policy for use with encrypted volumes</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub encrypted: Option<bool>,
-    /// <p>The number of I/O operations per second (IOPS) to provision for the volume. The maximum ratio of IOPS to volume size (in GiB) is 50:1. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> <p>Required when the volume type is <code>io1</code>. (Not used with <code>standard</code>, <code>gp2</code>, <code>st1</code>, or <code>sc1</code> volumes.) </p>
+    /// <p>The number of input/output (I/O) operations per second (IOPS) to provision for the volume. For <code>gp3</code> and <code>io1</code> volumes, this represents the number of IOPS that are provisioned for the volume. For <code>gp2</code> volumes, this represents the baseline performance of the volume and the rate at which the volume accumulates I/O credits for bursting. </p> <p>The following are the supported values for each volume type: </p> <ul> <li> <p> <code>gp3</code>: 3,000-16,000 IOPS</p> </li> <li> <p> <code>io1</code>: 100-64,000 IOPS</p> </li> </ul> <p>For <code>io1</code> volumes, we guarantee 64,000 IOPS only for <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#ec2-nitro-instances">Instances built on the Nitro System</a>. Other instance families guarantee performance up to 32,000 IOPS. </p> <p> <code>Iops</code> is supported when the volume type is <code>gp3</code> or <code>io1</code> and required only when the volume type is <code>io1</code>. (Not used with <code>standard</code>, <code>gp2</code>, <code>st1</code>, or <code>sc1</code> volumes.) </p>
     pub iops: Option<i64>,
     /// <p>The snapshot ID of the volume to use.</p> <p>You must specify either a <code>VolumeSize</code> or a <code>SnapshotId</code>.</p>
     pub snapshot_id: Option<String>,
-    /// <p>The volume size, in Gibibytes (GiB).</p> <p>This can be a number from 1-1,024 for <code>standard</code>, 4-16,384 for <code>io1</code>, 1-16,384 for <code>gp2</code>, and 500-16,384 for <code>st1</code> and <code>sc1</code>. If you specify a snapshot, the volume size must be equal to or larger than the snapshot size.</p> <p>Default: If you create a volume from a snapshot and you don't specify a volume size, the default is the snapshot size.</p> <p>You must specify either a <code>VolumeSize</code> or a <code>SnapshotId</code>. If you specify both <code>SnapshotId</code> and <code>VolumeSize</code>, the volume size must be equal or greater than the size of the snapshot.</p>
+    /// <p>The throughput (MiBps) to provision for a <code>gp3</code> volume.</p>
+    pub throughput: Option<i64>,
+    /// <p>The volume size, in GiBs. The following are the supported volumes sizes for each volume type: </p> <ul> <li> <p> <code>gp2</code> and <code>gp3</code>: 1-16,384</p> </li> <li> <p> <code>io1</code>: 4-16,384</p> </li> <li> <p> <code>st1</code> and <code>sc1</code>: 125-16,384</p> </li> <li> <p> <code>standard</code>: 1-1,024</p> </li> </ul> <p>You must specify either a <code>SnapshotId</code> or a <code>VolumeSize</code>. If you specify both <code>SnapshotId</code> and <code>VolumeSize</code>, the volume size must be equal or greater than the size of the snapshot.</p>
     pub volume_size: Option<i64>,
-    /// <p>The volume type, which can be <code>standard</code> for Magnetic, <code>io1</code> for Provisioned IOPS SSD, <code>gp2</code> for General Purpose SSD, <code>st1</code> for Throughput Optimized HDD, or <code>sc1</code> for Cold HDD. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> <p>Valid Values: <code>standard</code> | <code>io1</code> | <code>gp2</code> | <code>st1</code> | <code>sc1</code> </p>
+    /// <p>The volume type. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html">Amazon EBS Volume Types</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p> <p>Valid Values: <code>standard</code> | <code>io1</code> | <code>gp2</code> | <code>st1</code> | <code>sc1</code> | <code>gp3</code> </p>
     pub volume_type: Option<String>,
 }
 
@@ -3163,6 +3416,12 @@ impl EbsDeserializer {
                 "SnapshotId" => {
                     obj.snapshot_id = Some(XmlStringMaxLen255Deserializer::deserialize(
                         "SnapshotId",
+                        stack,
+                    )?);
+                }
+                "Throughput" => {
+                    obj.throughput = Some(BlockDeviceEbsThroughputDeserializer::deserialize(
+                        "Throughput",
                         stack,
                     )?);
                 }
@@ -3209,6 +3468,9 @@ impl EbsSerializer {
         if let Some(ref field_value) = obj.snapshot_id {
             params.put(&format!("{}{}", prefix, "SnapshotId"), &field_value);
         }
+        if let Some(ref field_value) = obj.throughput {
+            params.put(&format!("{}{}", prefix, "Throughput"), &field_value);
+        }
         if let Some(ref field_value) = obj.volume_size {
             params.put(&format!("{}{}", prefix, "VolumeSize"), &field_value);
         }
@@ -3233,7 +3495,7 @@ pub struct EnableMetricsCollectionQuery {
     pub auto_scaling_group_name: String,
     /// <p>The granularity to associate with the metrics to collect. The only valid value is <code>1Minute</code>.</p>
     pub granularity: String,
-    /// <p>Specifies which group-level metrics to start collecting. You can specify one or more of the following metrics:</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> </ul> <p>The instance weighting feature supports the following additional metrics: </p> <ul> <li> <p> <code>GroupInServiceCapacity</code> </p> </li> <li> <p> <code>GroupPendingCapacity</code> </p> </li> <li> <p> <code>GroupStandbyCapacity</code> </p> </li> <li> <p> <code>GroupTerminatingCapacity</code> </p> </li> <li> <p> <code>GroupTotalCapacity</code> </p> </li> </ul> <p>If you omit this parameter, all metrics are enabled. </p>
+    /// <p>Specifies which group-level metrics to start collecting. You can specify one or more of the following metrics:</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> </ul> <p>The instance weighting feature supports the following additional metrics: </p> <ul> <li> <p> <code>GroupInServiceCapacity</code> </p> </li> <li> <p> <code>GroupPendingCapacity</code> </p> </li> <li> <p> <code>GroupStandbyCapacity</code> </p> </li> <li> <p> <code>GroupTerminatingCapacity</code> </p> </li> <li> <p> <code>GroupTotalCapacity</code> </p> </li> </ul> <p>The warm pools feature supports the following additional metrics: </p> <ul> <li> <p> <code>WarmPoolDesiredCapacity</code> </p> </li> <li> <p> <code>WarmPoolWarmedCapacity</code> </p> </li> <li> <p> <code>WarmPoolPendingCapacity</code> </p> </li> <li> <p> <code>WarmPoolTerminatingCapacity</code> </p> </li> <li> <p> <code>WarmPoolTotalCapacity</code> </p> </li> <li> <p> <code>GroupAndWarmPoolDesiredCapacity</code> </p> </li> <li> <p> <code>GroupAndWarmPoolTotalCapacity</code> </p> </li> </ul> <p>If you omit this parameter, all metrics are enabled. </p>
     pub metrics: Option<Vec<String>>,
 }
 
@@ -3263,7 +3525,7 @@ impl EnableMetricsCollectionQuerySerializer {
 pub struct EnabledMetric {
     /// <p>The granularity of the metric. The only valid value is <code>1Minute</code>.</p>
     pub granularity: Option<String>,
-    /// <p><p>One of the following metrics:</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> <li> <p> <code>GroupInServiceCapacity</code> </p> </li> <li> <p> <code>GroupPendingCapacity</code> </p> </li> <li> <p> <code>GroupStandbyCapacity</code> </p> </li> <li> <p> <code>GroupTerminatingCapacity</code> </p> </li> <li> <p> <code>GroupTotalCapacity</code> </p> </li> </ul></p>
+    /// <p><p>One of the following metrics:</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> <li> <p> <code>GroupInServiceCapacity</code> </p> </li> <li> <p> <code>GroupPendingCapacity</code> </p> </li> <li> <p> <code>GroupStandbyCapacity</code> </p> </li> <li> <p> <code>GroupTerminatingCapacity</code> </p> </li> <li> <p> <code>GroupTotalCapacity</code> </p> </li> <li> <p> <code>WarmPoolDesiredCapacity</code> </p> </li> <li> <p> <code>WarmPoolWarmedCapacity</code> </p> </li> <li> <p> <code>WarmPoolPendingCapacity</code> </p> </li> <li> <p> <code>WarmPoolTerminatingCapacity</code> </p> </li> <li> <p> <code>WarmPoolTotalCapacity</code> </p> </li> <li> <p> <code>GroupAndWarmPoolDesiredCapacity</code> </p> </li> <li> <p> <code>GroupAndWarmPoolTotalCapacity</code> </p> </li> </ul></p>
     pub metric: Option<String>,
 }
 
@@ -3598,6 +3860,84 @@ impl FiltersSerializer {
     }
 }
 
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct GetPredictiveScalingForecastAnswer {
+    /// <p>The capacity forecast.</p>
+    pub capacity_forecast: CapacityForecast,
+    /// <p>The load forecast.</p>
+    pub load_forecast: Vec<LoadForecast>,
+    /// <p>The time the forecast was made.</p>
+    pub update_time: String,
+}
+
+#[allow(dead_code)]
+struct GetPredictiveScalingForecastAnswerDeserializer;
+impl GetPredictiveScalingForecastAnswerDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetPredictiveScalingForecastAnswer, XmlParseError> {
+        deserialize_elements::<_, GetPredictiveScalingForecastAnswer, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "CapacityForecast" => {
+                        obj.capacity_forecast =
+                            CapacityForecastDeserializer::deserialize("CapacityForecast", stack)?;
+                    }
+                    "LoadForecast" => {
+                        obj.load_forecast
+                            .extend(LoadForecastsDeserializer::deserialize(
+                                "LoadForecast",
+                                stack,
+                            )?);
+                    }
+                    "UpdateTime" => {
+                        obj.update_time =
+                            TimestampTypeDeserializer::deserialize("UpdateTime", stack)?;
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetPredictiveScalingForecastType {
+    /// <p>The name of the Auto Scaling group.</p>
+    pub auto_scaling_group_name: String,
+    /// <p>The exclusive end time of the time range for the forecast data to get. The maximum time duration between the start and end time is 30 days. </p> <p>Although this parameter can accept a date and time that is more than two days in the future, the availability of forecast data has limits. Amazon EC2 Auto Scaling only issues forecasts for periods of two days in advance.</p>
+    pub end_time: String,
+    /// <p>The name of the policy.</p>
+    pub policy_name: String,
+    /// <p>The inclusive start time of the time range for the forecast data to get. At most, the date and time can be one year before the current date and time.</p>
+    pub start_time: String,
+}
+
+/// Serialize `GetPredictiveScalingForecastType` contents to a `SignedRequest`.
+struct GetPredictiveScalingForecastTypeSerializer;
+impl GetPredictiveScalingForecastTypeSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &GetPredictiveScalingForecastType) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "AutoScalingGroupName"),
+            &obj.auto_scaling_group_name,
+        );
+        params.put(&format!("{}{}", prefix, "EndTime"), &obj.end_time);
+        params.put(&format!("{}{}", prefix, "PolicyName"), &obj.policy_name);
+        params.put(&format!("{}{}", prefix, "StartTime"), &obj.start_time);
+    }
+}
+
 #[allow(dead_code)]
 struct GlobalTimeoutDeserializer;
 impl GlobalTimeoutDeserializer {
@@ -3638,7 +3978,7 @@ pub struct Instance {
     pub launch_configuration_name: Option<String>,
     /// <p>The launch template for the instance.</p>
     pub launch_template: Option<LaunchTemplateSpecification>,
-    /// <p>A description of the current lifecycle state. The <code>Quarantined</code> state is not used.</p>
+    /// <p>A description of the current lifecycle state. The <code>Quarantined</code> state is not used. For information about lifecycle states, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroupLifecycle.html">Instance lifecycle</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. </p>
     pub lifecycle_state: String,
     /// <p>Indicates whether the instance is protected from termination by Amazon EC2 Auto Scaling when scaling in.</p>
     pub protected_from_scale_in: bool,
@@ -3751,7 +4091,7 @@ impl InstanceMetadataHttpTokensStateDeserializer {
 pub struct InstanceMetadataOptions {
     /// <p><p>This parameter enables or disables the HTTP metadata endpoint on your instances. If the parameter is not specified, the default state is <code>enabled</code>.</p> <note> <p>If you specify a value of <code>disabled</code>, you will not be able to access your instance metadata. </p> </note></p>
     pub http_endpoint: Option<String>,
-    /// <p>The desired HTTP PUT response hop limit for instance metadata requests. The larger the number, the further instance metadata requests can travel.</p> <p>Default: 1</p> <p>Possible values: Integers from 1 to 64</p>
+    /// <p>The desired HTTP PUT response hop limit for instance metadata requests. The larger the number, the further instance metadata requests can travel.</p> <p>Default: 1</p>
     pub http_put_response_hop_limit: Option<i64>,
     /// <p>The state of token usage for your instance metadata requests. If the parameter is not specified in the request, the default state is <code>optional</code>.</p> <p>If the state is <code>optional</code>, you can choose to retrieve instance metadata with or without a signed token header on your request. If you retrieve the IAM role credentials without a token, the version 1.0 role credentials are returned. If you retrieve the IAM role credentials using a valid signed token, the version 2.0 role credentials are returned.</p> <p>If the state is <code>required</code>, you must send a signed token header with any instance metadata retrieval requests. In this state, retrieving the IAM role credentials always returns the version 2.0 credentials; the version 1.0 credentials are not available.</p>
     pub http_tokens: Option<String>,
@@ -3890,8 +4230,10 @@ pub struct InstanceRefresh {
     pub instance_refresh_id: Option<String>,
     /// <p>The number of instances remaining to update before the instance refresh is complete.</p>
     pub instances_to_update: Option<i64>,
-    /// <p>The percentage of the instance refresh that is complete. For each instance replacement, Amazon EC2 Auto Scaling tracks the instance's health status and warm-up time. When the instance's health status changes to healthy and the specified warm-up time passes, the instance is considered updated and added to the percentage complete.</p>
+    /// <p>The percentage of the instance refresh that is complete. For each instance replacement, Amazon EC2 Auto Scaling tracks the instance's health status and warm-up time. When the instance's health status changes to healthy and the specified warm-up time passes, the instance is considered updated and is added to the percentage complete.</p>
     pub percentage_complete: Option<i64>,
+    /// <p>Additional progress details for an Auto Scaling group that has a warm pool.</p>
+    pub progress_details: Option<InstanceRefreshProgressDetails>,
     /// <p>The date and time at which the instance refresh began.</p>
     pub start_time: Option<String>,
     /// <p><p>The current status for the instance refresh operation:</p> <ul> <li> <p> <code>Pending</code> - The request was created, but the operation has not started.</p> </li> <li> <p> <code>InProgress</code> - The operation is in progress.</p> </li> <li> <p> <code>Successful</code> - The operation completed successfully.</p> </li> <li> <p> <code>Failed</code> - The operation failed to complete. You can troubleshoot using the status reason and the scaling activities. </p> </li> <li> <p> <code>Cancelling</code> - An ongoing operation is being cancelled. Cancellation does not roll back any replacements that have already been completed, but it prevents new replacements from being started. </p> </li> <li> <p> <code>Cancelled</code> - The operation is cancelled. </p> </li> </ul></p>
@@ -3936,6 +4278,13 @@ impl InstanceRefreshDeserializer {
                         stack,
                     )?);
                 }
+                "ProgressDetails" => {
+                    obj.progress_details =
+                        Some(InstanceRefreshProgressDetailsDeserializer::deserialize(
+                            "ProgressDetails",
+                            stack,
+                        )?);
+                }
                 "StartTime" => {
                     obj.start_time =
                         Some(TimestampTypeDeserializer::deserialize("StartTime", stack)?);
@@ -3969,12 +4318,140 @@ impl InstanceRefreshIdsSerializer {
     }
 }
 
+/// <p>Reports the progress of an instance refresh on instances that are in the Auto Scaling group.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct InstanceRefreshLivePoolProgress {
+    /// <p>The number of instances remaining to update.</p>
+    pub instances_to_update: Option<i64>,
+    /// <p>The percentage of instances in the Auto Scaling group that have been replaced. For each instance replacement, Amazon EC2 Auto Scaling tracks the instance's health status and warm-up time. When the instance's health status changes to healthy and the specified warm-up time passes, the instance is considered updated and is added to the percentage complete.</p>
+    pub percentage_complete: Option<i64>,
+}
+
+#[allow(dead_code)]
+struct InstanceRefreshLivePoolProgressDeserializer;
+impl InstanceRefreshLivePoolProgressDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<InstanceRefreshLivePoolProgress, XmlParseError> {
+        deserialize_elements::<_, InstanceRefreshLivePoolProgress, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "InstancesToUpdate" => {
+                        obj.instances_to_update = Some(InstancesToUpdateDeserializer::deserialize(
+                            "InstancesToUpdate",
+                            stack,
+                        )?);
+                    }
+                    "PercentageComplete" => {
+                        obj.percentage_complete = Some(IntPercentDeserializer::deserialize(
+                            "PercentageComplete",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p>Reports the progress of an instance refresh on an Auto Scaling group that has a warm pool. This includes separate details for instances in the warm pool and instances in the Auto Scaling group (the live pool).</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct InstanceRefreshProgressDetails {
+    /// <p>Indicates the progress of an instance refresh on instances that are in the Auto Scaling group.</p>
+    pub live_pool_progress: Option<InstanceRefreshLivePoolProgress>,
+    /// <p>Indicates the progress of an instance refresh on instances that are in the warm pool.</p>
+    pub warm_pool_progress: Option<InstanceRefreshWarmPoolProgress>,
+}
+
+#[allow(dead_code)]
+struct InstanceRefreshProgressDetailsDeserializer;
+impl InstanceRefreshProgressDetailsDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<InstanceRefreshProgressDetails, XmlParseError> {
+        deserialize_elements::<_, InstanceRefreshProgressDetails, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "LivePoolProgress" => {
+                        obj.live_pool_progress =
+                            Some(InstanceRefreshLivePoolProgressDeserializer::deserialize(
+                                "LivePoolProgress",
+                                stack,
+                            )?);
+                    }
+                    "WarmPoolProgress" => {
+                        obj.warm_pool_progress =
+                            Some(InstanceRefreshWarmPoolProgressDeserializer::deserialize(
+                                "WarmPoolProgress",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 #[allow(dead_code)]
 struct InstanceRefreshStatusDeserializer;
 impl InstanceRefreshStatusDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+/// <p>Reports the progress of an instance refresh on instances that are in the warm pool.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct InstanceRefreshWarmPoolProgress {
+    /// <p>The number of instances remaining to update.</p>
+    pub instances_to_update: Option<i64>,
+    /// <p>The percentage of instances in the warm pool that have been replaced. For each instance replacement, Amazon EC2 Auto Scaling tracks the instance's health status and warm-up time. When the instance's health status changes to healthy and the specified warm-up time passes, the instance is considered updated and is added to the percentage complete.</p>
+    pub percentage_complete: Option<i64>,
+}
+
+#[allow(dead_code)]
+struct InstanceRefreshWarmPoolProgressDeserializer;
+impl InstanceRefreshWarmPoolProgressDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<InstanceRefreshWarmPoolProgress, XmlParseError> {
+        deserialize_elements::<_, InstanceRefreshWarmPoolProgress, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "InstancesToUpdate" => {
+                        obj.instances_to_update = Some(InstancesToUpdateDeserializer::deserialize(
+                            "InstancesToUpdate",
+                            stack,
+                        )?);
+                    }
+                    "PercentageComplete" => {
+                        obj.percentage_complete = Some(IntPercentDeserializer::deserialize(
+                            "PercentageComplete",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
     }
 }
 #[allow(dead_code)]
@@ -4018,13 +4495,13 @@ impl InstancesDeserializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstancesDistribution {
-    /// <p>Indicates how to allocate instance types to fulfill On-Demand capacity. The only valid value is <code>prioritized</code>, which is also the default value. This strategy uses the order of instance types in the overrides to define the launch priority of each instance type. The first instance type in the array is prioritized higher than the last. If all your On-Demand capacity cannot be fulfilled using your highest priority instance, then the Auto Scaling groups launches the remaining capacity using the second priority instance type, and so on.</p>
+    /// <p>Indicates how to allocate instance types to fulfill On-Demand capacity. The only valid value is <code>prioritized</code>, which is also the default value. This strategy uses the order of instance types in the <code>LaunchTemplateOverrides</code> to define the launch priority of each instance type. The first instance type in the array is prioritized higher than the last. If all your On-Demand capacity cannot be fulfilled using your highest priority instance, then the Auto Scaling groups launches the remaining capacity using the second priority instance type, and so on.</p>
     pub on_demand_allocation_strategy: Option<String>,
     /// <p>The minimum amount of the Auto Scaling group's capacity that must be fulfilled by On-Demand Instances. This base portion is provisioned first as your group scales. Defaults to 0 if not specified. If you specify weights for the instance types in the overrides, set the value of <code>OnDemandBaseCapacity</code> in terms of the number of capacity units, and not the number of instances.</p>
     pub on_demand_base_capacity: Option<i64>,
     /// <p>Controls the percentages of On-Demand Instances and Spot Instances for your additional capacity beyond <code>OnDemandBaseCapacity</code>. Expressed as a number (for example, 20 specifies 20% On-Demand Instances, 80% Spot Instances). Defaults to 100 if not specified. If set to 100, only On-Demand Instances are provisioned.</p>
     pub on_demand_percentage_above_base_capacity: Option<i64>,
-    /// <p>Indicates how to allocate instances across Spot Instance pools. If the allocation strategy is <code>capacity-optimized</code> (recommended), the Auto Scaling group launches instances using Spot pools that are optimally chosen based on the available Spot capacity. If the allocation strategy is <code>lowest-price</code>, the Auto Scaling group launches instances using the Spot pools with the lowest price, and evenly allocates your instances across the number of Spot pools that you specify. Defaults to <code>lowest-price</code> if not specified.</p>
+    /// <p>Indicates how to allocate instances across Spot Instance pools. </p> <p>If the allocation strategy is <code>lowest-price</code>, the Auto Scaling group launches instances using the Spot pools with the lowest price, and evenly allocates your instances across the number of Spot pools that you specify. Defaults to <code>lowest-price</code> if not specified.</p> <p>If the allocation strategy is <code>capacity-optimized</code> (recommended), the Auto Scaling group launches instances using Spot pools that are optimally chosen based on the available Spot capacity. Alternatively, you can use <code>capacity-optimized-prioritized</code> and set the order of instance types in the list of launch template overrides from highest to lowest priority (from first to last in the list). Amazon EC2 Auto Scaling honors the instance type priorities on a best-effort basis but optimizes for capacity first. </p>
     pub spot_allocation_strategy: Option<String>,
     /// <p>The number of Spot Instance pools across which to allocate your Spot Instances. The Spot pools are determined from the different instance types in the overrides. Valid only when the Spot allocation strategy is <code>lowest-price</code>. Value must be in the range of 1 to 20. Defaults to 2 if not specified.</p>
     pub spot_instance_pools: Option<i64>,
@@ -4168,7 +4645,7 @@ pub struct LaunchConfiguration {
     pub image_id: String,
     /// <p>Controls whether instances in this group are launched with detailed (<code>true</code>) or basic (<code>false</code>) monitoring.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/latest/userguide/enable-as-instance-metrics.html">Configure Monitoring for Auto Scaling Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub instance_monitoring: Option<InstanceMonitoring>,
-    /// <p>The instance type for the instances.</p> <p>For information about available instance types, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#AvailableInstanceTypes">Available Instance Types</a> in the <i>Amazon EC2 User Guide for Linux Instances.</i> </p>
+    /// <p>The instance type for the instances.</p> <p>For information about available instance types, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#AvailableInstanceTypes">Available Instance Types</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     pub instance_type: String,
     /// <p>The ID of the kernel associated with the AMI.</p>
     pub kernel_id: Option<String>,
@@ -4188,7 +4665,7 @@ pub struct LaunchConfiguration {
     pub security_groups: Option<Vec<String>>,
     /// <p>The maximum hourly price to be paid for any Spot Instance launched to fulfill the request. Spot Instances are launched when the price you specify exceeds the current Spot price. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-launch-spot-instances.html">Requesting Spot Instances</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub spot_price: Option<String>,
-    /// <p>The Base64-encoded user data to make available to the launched EC2 instances. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html">Instance metadata and user data</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
+    /// <p>The user data to make available to the launched EC2 instances. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-metadata.html">Instance metadata and user data</a> (Linux) and <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-instance-metadata.html">Instance metadata and user data</a> (Windows). If you are using a command line tool, base64-encoding is performed for you, and you can load the text from a file. Otherwise, you must provide base64-encoded text. User data is limited to 16 KB.</p>
     pub user_data: Option<String>,
 }
 
@@ -4353,7 +4830,7 @@ impl LaunchConfigurationNamesSerializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LaunchConfigurationNamesType {
-    /// <p>The launch configuration names. If you omit this parameter, all launch configurations are described.</p>
+    /// <p>The launch configuration names. If you omit this parameter, all launch configurations are described.</p> <p>Array Members: Maximum number of 50 items.</p>
     pub launch_configuration_names: Option<Vec<String>>,
     /// <p>The maximum number of items to return with this call. The default value is <code>50</code> and the maximum value is <code>100</code>.</p>
     pub max_records: Option<i64>,
@@ -4447,14 +4924,14 @@ impl LaunchConfigurationsTypeDeserializer {
         )
     }
 }
-/// <p>Describes a launch template and overrides. </p> <p>You specify these parameters as part of a mixed instances policy. </p> <p>When you update the launch template or overrides, existing Amazon EC2 instances continue to run. When scale out occurs, Amazon EC2 Auto Scaling launches instances to match the new settings. When scale in occurs, Amazon EC2 Auto Scaling terminates instances according to the group's termination policies.</p>
+/// <p>Describes a launch template and overrides. </p> <p>You specify these properties as part of a mixed instances policy. </p> <p>When you update the launch template or overrides, existing Amazon EC2 instances continue to run. When scale out occurs, Amazon EC2 Auto Scaling launches instances to match the new settings. When scale in occurs, Amazon EC2 Auto Scaling terminates instances according to the group's termination policies.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct LaunchTemplate {
     /// <p>The launch template to use.</p>
     pub launch_template_specification: Option<LaunchTemplateSpecification>,
-    /// <p>Any parameters that you specify override the same parameters in the launch template. If not provided, Amazon EC2 Auto Scaling uses the instance type specified in the launch template when it launches an instance. </p>
+    /// <p>Any properties that you specify override the same properties in the launch template. If not provided, Amazon EC2 Auto Scaling uses the instance type specified in the launch template when it launches an instance. </p>
     pub overrides: Option<Vec<LaunchTemplateOverrides>>,
 }
 
@@ -4521,7 +4998,7 @@ impl LaunchTemplateNameDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
-/// <p>Describes an override for a launch template. The maximum number of instance types that can be associated with an Auto Scaling group is 20. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-override-options.html">Configuring overrides</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. </p>
+/// <p>Describes an override for a launch template. The maximum number of instance types that can be associated with an Auto Scaling group is 40. The maximum number of distinct launch templates you can define for an Auto Scaling group is 20. For more information about configuring overrides, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-override-options.html">Configuring overrides</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. </p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -4923,13 +5400,13 @@ impl LoadBalancerNamesSerializer {
     }
 }
 
-/// <p>Describes the state of a Classic Load Balancer.</p> <p>If you specify a load balancer when creating the Auto Scaling group, the state of the load balancer is <code>InService</code>.</p> <p>If you attach a load balancer to an existing Auto Scaling group, the initial state is <code>Adding</code>. The state transitions to <code>Added</code> after all instances in the group are registered with the load balancer. If Elastic Load Balancing health checks are enabled for the load balancer, the state transitions to <code>InService</code> after at least one instance in the group passes the health check. If EC2 health checks are enabled instead, the load balancer remains in the <code>Added</code> state.</p>
+/// <p>Describes the state of a Classic Load Balancer.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LoadBalancerState {
     /// <p>The name of the load balancer.</p>
     pub load_balancer_name: Option<String>,
-    /// <p><p>One of the following load balancer states:</p> <ul> <li> <p> <code>Adding</code> - The instances in the group are being registered with the load balancer.</p> </li> <li> <p> <code>Added</code> - All instances in the group are registered with the load balancer.</p> </li> <li> <p> <code>InService</code> - At least one instance in the group passed an ELB health check.</p> </li> <li> <p> <code>Removing</code> - The instances in the group are being deregistered from the load balancer. If connection draining is enabled, Elastic Load Balancing waits for in-flight requests to complete before deregistering the instances.</p> </li> <li> <p> <code>Removed</code> - All instances in the group are deregistered from the load balancer.</p> </li> </ul></p>
+    /// <p><p>One of the following load balancer states:</p> <ul> <li> <p> <code>Adding</code> - The Auto Scaling instances are being registered with the load balancer.</p> </li> <li> <p> <code>Added</code> - All Auto Scaling instances are registered with the load balancer.</p> </li> <li> <p> <code>InService</code> - At least one Auto Scaling instance passed an <code>ELB</code> health check.</p> </li> <li> <p> <code>Removing</code> - The Auto Scaling instances are being deregistered from the load balancer. If connection draining is enabled, Elastic Load Balancing waits for in-flight requests to complete before deregistering the instances.</p> </li> <li> <p> <code>Removed</code> - All Auto Scaling instances are deregistered from the load balancer.</p> </li> </ul></p>
     pub state: Option<String>,
 }
 
@@ -4976,13 +5453,13 @@ impl LoadBalancerStatesDeserializer {
         })
     }
 }
-/// <p>Describes the state of a target group.</p> <p>If you attach a target group to an existing Auto Scaling group, the initial state is <code>Adding</code>. The state transitions to <code>Added</code> after all Auto Scaling instances are registered with the target group. If Elastic Load Balancing health checks are enabled, the state transitions to <code>InService</code> after at least one Auto Scaling instance passes the health check. If EC2 health checks are enabled instead, the target group remains in the <code>Added</code> state.</p>
+/// <p>Describes the state of a target group.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct LoadBalancerTargetGroupState {
     /// <p>The Amazon Resource Name (ARN) of the target group.</p>
     pub load_balancer_target_group_arn: Option<String>,
-    /// <p><p>The state of the target group.</p> <ul> <li> <p> <code>Adding</code> - The Auto Scaling instances are being registered with the target group.</p> </li> <li> <p> <code>Added</code> - All Auto Scaling instances are registered with the target group.</p> </li> <li> <p> <code>InService</code> - At least one Auto Scaling instance passed an ELB health check.</p> </li> <li> <p> <code>Removing</code> - The Auto Scaling instances are being deregistered from the target group. If connection draining is enabled, Elastic Load Balancing waits for in-flight requests to complete before deregistering the instances.</p> </li> <li> <p> <code>Removed</code> - All Auto Scaling instances are deregistered from the target group.</p> </li> </ul></p>
+    /// <p><p>The state of the target group.</p> <ul> <li> <p> <code>Adding</code> - The Auto Scaling instances are being registered with the target group.</p> </li> <li> <p> <code>Added</code> - All Auto Scaling instances are registered with the target group.</p> </li> <li> <p> <code>InService</code> - At least one Auto Scaling instance passed an <code>ELB</code> health check.</p> </li> <li> <p> <code>Removing</code> - The Auto Scaling instances are being deregistered from the target group. If connection draining is enabled, Elastic Load Balancing waits for in-flight requests to complete before deregistering the instances.</p> </li> <li> <p> <code>Removed</code> - All Auto Scaling instances are deregistered from the target group.</p> </li> </ul></p>
     pub state: Option<String>,
 }
 
@@ -5037,6 +5514,81 @@ impl LoadBalancerTargetGroupStatesDeserializer {
         })
     }
 }
+/// <p>A <code>GetPredictiveScalingForecast</code> call returns the load forecast for a predictive scaling policy. This structure includes the data points for that load forecast, along with the timestamps of those data points and the metric specification. </p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct LoadForecast {
+    /// <p>The metric specification for the load forecast.</p>
+    pub metric_specification: PredictiveScalingMetricSpecification,
+    /// <p>The time stamps for the data points, in UTC format.</p>
+    pub timestamps: Vec<String>,
+    /// <p>The values of the data points.</p>
+    pub values: Vec<f64>,
+}
+
+#[allow(dead_code)]
+struct LoadForecastDeserializer;
+impl LoadForecastDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LoadForecast, XmlParseError> {
+        deserialize_elements::<_, LoadForecast, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "MetricSpecification" => {
+                    obj.metric_specification =
+                        PredictiveScalingMetricSpecificationDeserializer::deserialize(
+                            "MetricSpecification",
+                            stack,
+                        )?;
+                }
+                "Timestamps" => {
+                    obj.timestamps.extend(
+                        PredictiveScalingForecastTimestampsDeserializer::deserialize(
+                            "Timestamps",
+                            stack,
+                        )?,
+                    );
+                }
+                "Values" => {
+                    obj.values
+                        .extend(PredictiveScalingForecastValuesDeserializer::deserialize(
+                            "Values", stack,
+                        )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct LoadForecastsDeserializer;
+impl LoadForecastsDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<LoadForecast>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(LoadForecastDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct MaxGroupPreparedCapacityDeserializer;
+impl MaxGroupPreparedCapacityDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
+    }
+}
 #[allow(dead_code)]
 struct MaxInstanceLifetimeDeserializer;
 impl MaxInstanceLifetimeDeserializer {
@@ -5065,7 +5617,7 @@ impl MaxNumberOfLaunchConfigurationsDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct MetricCollectionType {
-    /// <p><p>One of the following metrics:</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> <li> <p> <code>GroupInServiceCapacity</code> </p> </li> <li> <p> <code>GroupPendingCapacity</code> </p> </li> <li> <p> <code>GroupStandbyCapacity</code> </p> </li> <li> <p> <code>GroupTerminatingCapacity</code> </p> </li> <li> <p> <code>GroupTotalCapacity</code> </p> </li> </ul></p>
+    /// <p><p>One of the following metrics:</p> <ul> <li> <p> <code>GroupMinSize</code> </p> </li> <li> <p> <code>GroupMaxSize</code> </p> </li> <li> <p> <code>GroupDesiredCapacity</code> </p> </li> <li> <p> <code>GroupInServiceInstances</code> </p> </li> <li> <p> <code>GroupPendingInstances</code> </p> </li> <li> <p> <code>GroupStandbyInstances</code> </p> </li> <li> <p> <code>GroupTerminatingInstances</code> </p> </li> <li> <p> <code>GroupTotalInstances</code> </p> </li> <li> <p> <code>GroupInServiceCapacity</code> </p> </li> <li> <p> <code>GroupPendingCapacity</code> </p> </li> <li> <p> <code>GroupStandbyCapacity</code> </p> </li> <li> <p> <code>GroupTerminatingCapacity</code> </p> </li> <li> <p> <code>GroupTotalCapacity</code> </p> </li> <li> <p> <code>WarmPoolDesiredCapacity</code> </p> </li> <li> <p> <code>WarmPoolWarmedCapacity</code> </p> </li> <li> <p> <code>WarmPoolPendingCapacity</code> </p> </li> <li> <p> <code>WarmPoolTerminatingCapacity</code> </p> </li> <li> <p> <code>WarmPoolTotalCapacity</code> </p> </li> <li> <p> <code>GroupAndWarmPoolDesiredCapacity</code> </p> </li> <li> <p> <code>GroupAndWarmPoolTotalCapacity</code> </p> </li> </ul></p>
     pub metric: Option<String>,
 }
 
@@ -5338,12 +5890,12 @@ impl MixedInstanceSpotPriceDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
-/// <p>Describes a mixed instances policy for an Auto Scaling group. With mixed instances, your Auto Scaling group can provision a combination of On-Demand Instances and Spot Instances across multiple instance types. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-purchase-options.html">Auto Scaling groups with multiple instance types and purchase options</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>You can create a mixed instances policy for a new Auto Scaling group, or you can create it for an existing group by updating the group to specify <code>MixedInstancesPolicy</code> as the top-level parameter instead of a launch configuration or launch template.</p>
+/// <p>Describes a mixed instances policy for an Auto Scaling group. With mixed instances, your Auto Scaling group can provision a combination of On-Demand Instances and Spot Instances across multiple instance types. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-purchase-options.html">Auto Scaling groups with multiple instance types and purchase options</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>You can create a mixed instances policy for a new Auto Scaling group, or you can create it for an existing group by updating the group to specify <code>MixedInstancesPolicy</code> as the top-level property instead of a launch configuration or launch template.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MixedInstancesPolicy {
-    /// <p>Specifies the instances distribution. If not provided, the value for each parameter in <code>InstancesDistribution</code> uses a default value.</p>
+    /// <p>Specifies the instances distribution. If not provided, the value for each property in <code>InstancesDistribution</code> uses a default value.</p>
     pub instances_distribution: Option<InstancesDistribution>,
     /// <p>Specifies the launch template to use and optionally the instance types (overrides) that are used to provision EC2 instances to fulfill On-Demand and Spot capacities. Required when creating a mixed instances policy.</p>
     pub launch_template: Option<LaunchTemplate>,
@@ -5662,6 +6214,22 @@ impl PolicyTypesSerializer {
     }
 }
 
+#[allow(dead_code)]
+struct PredefinedLoadMetricTypeDeserializer;
+impl PredefinedLoadMetricTypeDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+#[allow(dead_code)]
+struct PredefinedMetricPairTypeDeserializer;
+impl PredefinedMetricPairTypeDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
 /// <p>Represents a predefined metric for a target tracking scaling policy to use with Amazon EC2 Auto Scaling.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -5720,6 +6288,514 @@ impl PredefinedMetricSpecificationSerializer {
         if let Some(ref field_value) = obj.resource_label {
             params.put(&format!("{}{}", prefix, "ResourceLabel"), &field_value);
         }
+    }
+}
+
+#[allow(dead_code)]
+struct PredefinedScalingMetricTypeDeserializer;
+impl PredefinedScalingMetricTypeDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+/// <p>Represents a predictive scaling policy configuration to use with Amazon EC2 Auto Scaling.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PredictiveScalingConfiguration {
+    /// <p><p>Defines the behavior that should be applied if the forecast capacity approaches or exceeds the maximum capacity of the Auto Scaling group. Defaults to <code>HonorMaxCapacity</code> if not specified.</p> <p>The following are possible values:</p> <ul> <li> <p> <code>HonorMaxCapacity</code> - Amazon EC2 Auto Scaling cannot scale out capacity higher than the maximum capacity. The maximum capacity is enforced as a hard limit. </p> </li> <li> <p> <code>IncreaseMaxCapacity</code> - Amazon EC2 Auto Scaling can scale out capacity higher than the maximum capacity when the forecast capacity is close to or exceeds the maximum capacity. The upper limit is determined by the forecasted capacity and the value for <code>MaxCapacityBuffer</code>.</p> </li> </ul></p>
+    pub max_capacity_breach_behavior: Option<String>,
+    /// <p>The size of the capacity buffer to use when the forecast capacity is close to or exceeds the maximum capacity. The value is specified as a percentage relative to the forecast capacity. For example, if the buffer is 10, this means a 10 percent buffer, such that if the forecast capacity is 50, and the maximum capacity is 40, then the effective maximum capacity is 55.</p> <p>If set to 0, Amazon EC2 Auto Scaling may scale capacity higher than the maximum capacity to equal but not exceed forecast capacity. </p> <p>Required if the <code>MaxCapacityBreachBehavior</code> property is set to <code>IncreaseMaxCapacity</code>, and cannot be used otherwise.</p>
+    pub max_capacity_buffer: Option<i64>,
+    /// <p>This structure includes the metrics and target utilization to use for predictive scaling. </p> <p>This is an array, but we currently only support a single metric specification. That is, you can specify a target value and a single metric pair, or a target value and one scaling metric and one load metric.</p>
+    pub metric_specifications: Vec<PredictiveScalingMetricSpecification>,
+    /// <p>The predictive scaling mode. Defaults to <code>ForecastOnly</code> if not specified.</p>
+    pub mode: Option<String>,
+    /// <p>The amount of time, in seconds, by which the instance launch time can be advanced. For example, the forecast says to add capacity at 10:00 AM, and you choose to pre-launch instances by 5 minutes. In that case, the instances will be launched at 9:55 AM. The intention is to give resources time to be provisioned. It can take a few minutes to launch an EC2 instance. The actual amount of time required depends on several factors, such as the size of the instance and whether there are startup scripts to complete. </p> <p>The value must be less than the forecast interval duration of 3600 seconds (60 minutes). Defaults to 300 seconds if not specified. </p>
+    pub scheduling_buffer_time: Option<i64>,
+}
+
+#[allow(dead_code)]
+struct PredictiveScalingConfigurationDeserializer;
+impl PredictiveScalingConfigurationDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PredictiveScalingConfiguration, XmlParseError> {
+        deserialize_elements::<_, PredictiveScalingConfiguration, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "MaxCapacityBreachBehavior" => {
+                        obj.max_capacity_breach_behavior = Some(
+                            PredictiveScalingMaxCapacityBreachBehaviorDeserializer::deserialize(
+                                "MaxCapacityBreachBehavior",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "MaxCapacityBuffer" => {
+                        obj.max_capacity_buffer =
+                            Some(PredictiveScalingMaxCapacityBufferDeserializer::deserialize(
+                                "MaxCapacityBuffer",
+                                stack,
+                            )?);
+                    }
+                    "MetricSpecifications" => {
+                        obj.metric_specifications.extend(
+                            PredictiveScalingMetricSpecificationsDeserializer::deserialize(
+                                "MetricSpecifications",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "Mode" => {
+                        obj.mode = Some(PredictiveScalingModeDeserializer::deserialize(
+                            "Mode", stack,
+                        )?);
+                    }
+                    "SchedulingBufferTime" => {
+                        obj.scheduling_buffer_time = Some(
+                            PredictiveScalingSchedulingBufferTimeDeserializer::deserialize(
+                                "SchedulingBufferTime",
+                                stack,
+                            )?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+/// Serialize `PredictiveScalingConfiguration` contents to a `SignedRequest`.
+struct PredictiveScalingConfigurationSerializer;
+impl PredictiveScalingConfigurationSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &PredictiveScalingConfiguration) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.max_capacity_breach_behavior {
+            params.put(
+                &format!("{}{}", prefix, "MaxCapacityBreachBehavior"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.max_capacity_buffer {
+            params.put(&format!("{}{}", prefix, "MaxCapacityBuffer"), &field_value);
+        }
+        PredictiveScalingMetricSpecificationsSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "MetricSpecifications"),
+            &obj.metric_specifications,
+        );
+        if let Some(ref field_value) = obj.mode {
+            params.put(&format!("{}{}", prefix, "Mode"), &field_value);
+        }
+        if let Some(ref field_value) = obj.scheduling_buffer_time {
+            params.put(
+                &format!("{}{}", prefix, "SchedulingBufferTime"),
+                &field_value,
+            );
+        }
+    }
+}
+
+#[allow(dead_code)]
+struct PredictiveScalingForecastTimestampsDeserializer;
+impl PredictiveScalingForecastTimestampsDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(TimestampTypeDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct PredictiveScalingForecastValuesDeserializer;
+impl PredictiveScalingForecastValuesDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<f64>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(MetricScaleDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct PredictiveScalingMaxCapacityBreachBehaviorDeserializer;
+impl PredictiveScalingMaxCapacityBreachBehaviorDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+#[allow(dead_code)]
+struct PredictiveScalingMaxCapacityBufferDeserializer;
+impl PredictiveScalingMaxCapacityBufferDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
+    }
+}
+/// <p><p>This structure specifies the metrics and target utilization settings for a predictive scaling policy. </p> <p>You must specify either a metric pair, or a load metric and a scaling metric individually. Specifying a metric pair instead of individual metrics provides a simpler way to configure metrics for a scaling policy. You choose the metric pair, and the policy automatically knows the correct sum and average statistics to use for the load metric and the scaling metric.</p> <p>Example</p> <ul> <li> <p>You create a predictive scaling policy and specify <code>ALBRequestCount</code> as the value for the metric pair and <code>1000.0</code> as the target value. For this type of metric, you must provide the metric dimension for the corresponding target group, so you also provide a resource label for the Application Load Balancer target group that is attached to your Auto Scaling group.</p> </li> <li> <p>The number of requests the target group receives per minute provides the load metric, and the request count averaged between the members of the target group provides the scaling metric. In CloudWatch, this refers to the <code>RequestCount</code> and <code>RequestCountPerTarget</code> metrics, respectively.</p> </li> <li> <p>For optimal use of predictive scaling, you adhere to the best practice of using a dynamic scaling policy to automatically scale between the minimum capacity and maximum capacity in response to real-time changes in resource utilization.</p> </li> <li> <p>Amazon EC2 Auto Scaling consumes data points for the load metric over the last 14 days and creates an hourly load forecast for predictive scaling. (A minimum of 24 hours of data is required.)</p> </li> <li> <p>After creating the load forecast, Amazon EC2 Auto Scaling determines when to reduce or increase the capacity of your Auto Scaling group in each hour of the forecast period so that the average number of requests received by each instance is as close to 1000 requests per minute as possible at all times.</p> </li> </ul></p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PredictiveScalingMetricSpecification {
+    /// <p>The load metric specification.</p>
+    pub predefined_load_metric_specification: Option<PredictiveScalingPredefinedLoadMetric>,
+    /// <p>The metric pair specification from which Amazon EC2 Auto Scaling determines the appropriate scaling metric and load metric to use.</p>
+    pub predefined_metric_pair_specification: Option<PredictiveScalingPredefinedMetricPair>,
+    /// <p>The scaling metric specification.</p>
+    pub predefined_scaling_metric_specification: Option<PredictiveScalingPredefinedScalingMetric>,
+    /// <p>Specifies the target utilization.</p>
+    pub target_value: f64,
+}
+
+#[allow(dead_code)]
+struct PredictiveScalingMetricSpecificationDeserializer;
+impl PredictiveScalingMetricSpecificationDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PredictiveScalingMetricSpecification, XmlParseError> {
+        deserialize_elements::<_, PredictiveScalingMetricSpecification, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "PredefinedLoadMetricSpecification" => {
+                        obj.predefined_load_metric_specification = Some(
+                            PredictiveScalingPredefinedLoadMetricDeserializer::deserialize(
+                                "PredefinedLoadMetricSpecification",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "PredefinedMetricPairSpecification" => {
+                        obj.predefined_metric_pair_specification = Some(
+                            PredictiveScalingPredefinedMetricPairDeserializer::deserialize(
+                                "PredefinedMetricPairSpecification",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "PredefinedScalingMetricSpecification" => {
+                        obj.predefined_scaling_metric_specification = Some(
+                            PredictiveScalingPredefinedScalingMetricDeserializer::deserialize(
+                                "PredefinedScalingMetricSpecification",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "TargetValue" => {
+                        obj.target_value =
+                            MetricScaleDeserializer::deserialize("TargetValue", stack)?;
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+/// Serialize `PredictiveScalingMetricSpecification` contents to a `SignedRequest`.
+struct PredictiveScalingMetricSpecificationSerializer;
+impl PredictiveScalingMetricSpecificationSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &PredictiveScalingMetricSpecification) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.predefined_load_metric_specification {
+            PredictiveScalingPredefinedLoadMetricSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "PredefinedLoadMetricSpecification"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.predefined_metric_pair_specification {
+            PredictiveScalingPredefinedMetricPairSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "PredefinedMetricPairSpecification"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.predefined_scaling_metric_specification {
+            PredictiveScalingPredefinedScalingMetricSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "PredefinedScalingMetricSpecification"),
+                field_value,
+            );
+        }
+        params.put(&format!("{}{}", prefix, "TargetValue"), &obj.target_value);
+    }
+}
+
+#[allow(dead_code)]
+struct PredictiveScalingMetricSpecificationsDeserializer;
+impl PredictiveScalingMetricSpecificationsDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<PredictiveScalingMetricSpecification>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(
+                    PredictiveScalingMetricSpecificationDeserializer::deserialize("member", stack)?,
+                );
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+
+/// Serialize `PredictiveScalingMetricSpecifications` contents to a `SignedRequest`.
+struct PredictiveScalingMetricSpecificationsSerializer;
+impl PredictiveScalingMetricSpecificationsSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<PredictiveScalingMetricSpecification>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            PredictiveScalingMetricSpecificationSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+#[allow(dead_code)]
+struct PredictiveScalingModeDeserializer;
+impl PredictiveScalingModeDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+/// <p>Describes a load metric for a predictive scaling policy.</p> <p>When returned in the output of <code>DescribePolicies</code>, it indicates that a predictive scaling policy uses individually specified load and scaling metrics instead of a metric pair.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PredictiveScalingPredefinedLoadMetric {
+    /// <p>The metric type.</p>
+    pub predefined_metric_type: String,
+    /// <p>A label that uniquely identifies a specific Application Load Balancer target group from which to determine the request count served by your Auto Scaling group. You can't specify a resource label unless the target group is attached to the Auto Scaling group.</p> <p>You create the resource label by appending the final portion of the load balancer ARN and the final portion of the target group ARN into a single value, separated by a forward slash (/). The format of the resource label is:</p> <p> <code>app/EC2Co-EcsEl-1TKLTMITMM0EO/f37c06a68c1748aa/targetgroup/EC2Co-Defau-LDNM7Q3ZH1ZN/6d4ea56ca2d6a18d</code>.</p> <p>Where:</p> <ul> <li> <p>app/&lt;load-balancer-name&gt;/&lt;load-balancer-id&gt; is the final portion of the load balancer ARN</p> </li> <li> <p>targetgroup/&lt;target-group-name&gt;/&lt;target-group-id&gt; is the final portion of the target group ARN.</p> </li> </ul> <p>To find the ARN for an Application Load Balancer, use the <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeLoadBalancers.html">DescribeLoadBalancers</a> API operation. To find the ARN for the target group, use the <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeTargetGroups.html">DescribeTargetGroups</a> API operation.</p>
+    pub resource_label: Option<String>,
+}
+
+#[allow(dead_code)]
+struct PredictiveScalingPredefinedLoadMetricDeserializer;
+impl PredictiveScalingPredefinedLoadMetricDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PredictiveScalingPredefinedLoadMetric, XmlParseError> {
+        deserialize_elements::<_, PredictiveScalingPredefinedLoadMetric, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "PredefinedMetricType" => {
+                        obj.predefined_metric_type =
+                            PredefinedLoadMetricTypeDeserializer::deserialize(
+                                "PredefinedMetricType",
+                                stack,
+                            )?;
+                    }
+                    "ResourceLabel" => {
+                        obj.resource_label = Some(XmlStringMaxLen1023Deserializer::deserialize(
+                            "ResourceLabel",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+/// Serialize `PredictiveScalingPredefinedLoadMetric` contents to a `SignedRequest`.
+struct PredictiveScalingPredefinedLoadMetricSerializer;
+impl PredictiveScalingPredefinedLoadMetricSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &PredictiveScalingPredefinedLoadMetric) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "PredefinedMetricType"),
+            &obj.predefined_metric_type,
+        );
+        if let Some(ref field_value) = obj.resource_label {
+            params.put(&format!("{}{}", prefix, "ResourceLabel"), &field_value);
+        }
+    }
+}
+
+/// <p>Represents a metric pair for a predictive scaling policy. </p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PredictiveScalingPredefinedMetricPair {
+    /// <p>Indicates which metrics to use. There are two different types of metrics for each metric type: one is a load metric and one is a scaling metric. For example, if the metric type is <code>ASGCPUUtilization</code>, the Auto Scaling group's total CPU metric is used as the load metric, and the average CPU metric is used for the scaling metric.</p>
+    pub predefined_metric_type: String,
+    /// <p>A label that uniquely identifies a specific Application Load Balancer target group from which to determine the request count served by your Auto Scaling group. You can't specify a resource label unless the target group is attached to the Auto Scaling group.</p> <p>You create the resource label by appending the final portion of the load balancer ARN and the final portion of the target group ARN into a single value, separated by a forward slash (/). The format of the resource label is:</p> <p> <code>app/EC2Co-EcsEl-1TKLTMITMM0EO/f37c06a68c1748aa/targetgroup/EC2Co-Defau-LDNM7Q3ZH1ZN/6d4ea56ca2d6a18d</code>.</p> <p>Where:</p> <ul> <li> <p>app/&lt;load-balancer-name&gt;/&lt;load-balancer-id&gt; is the final portion of the load balancer ARN</p> </li> <li> <p>targetgroup/&lt;target-group-name&gt;/&lt;target-group-id&gt; is the final portion of the target group ARN.</p> </li> </ul> <p>To find the ARN for an Application Load Balancer, use the <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeLoadBalancers.html">DescribeLoadBalancers</a> API operation. To find the ARN for the target group, use the <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeTargetGroups.html">DescribeTargetGroups</a> API operation.</p>
+    pub resource_label: Option<String>,
+}
+
+#[allow(dead_code)]
+struct PredictiveScalingPredefinedMetricPairDeserializer;
+impl PredictiveScalingPredefinedMetricPairDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PredictiveScalingPredefinedMetricPair, XmlParseError> {
+        deserialize_elements::<_, PredictiveScalingPredefinedMetricPair, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "PredefinedMetricType" => {
+                        obj.predefined_metric_type =
+                            PredefinedMetricPairTypeDeserializer::deserialize(
+                                "PredefinedMetricType",
+                                stack,
+                            )?;
+                    }
+                    "ResourceLabel" => {
+                        obj.resource_label = Some(XmlStringMaxLen1023Deserializer::deserialize(
+                            "ResourceLabel",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+/// Serialize `PredictiveScalingPredefinedMetricPair` contents to a `SignedRequest`.
+struct PredictiveScalingPredefinedMetricPairSerializer;
+impl PredictiveScalingPredefinedMetricPairSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &PredictiveScalingPredefinedMetricPair) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "PredefinedMetricType"),
+            &obj.predefined_metric_type,
+        );
+        if let Some(ref field_value) = obj.resource_label {
+            params.put(&format!("{}{}", prefix, "ResourceLabel"), &field_value);
+        }
+    }
+}
+
+/// <p>Describes a scaling metric for a predictive scaling policy.</p> <p>When returned in the output of <code>DescribePolicies</code>, it indicates that a predictive scaling policy uses individually specified load and scaling metrics instead of a metric pair.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PredictiveScalingPredefinedScalingMetric {
+    /// <p>The metric type.</p>
+    pub predefined_metric_type: String,
+    /// <p>A label that uniquely identifies a specific Application Load Balancer target group from which to determine the request count served by your Auto Scaling group. You can't specify a resource label unless the target group is attached to the Auto Scaling group.</p> <p>You create the resource label by appending the final portion of the load balancer ARN and the final portion of the target group ARN into a single value, separated by a forward slash (/). The format of the resource label is:</p> <p> <code>app/EC2Co-EcsEl-1TKLTMITMM0EO/f37c06a68c1748aa/targetgroup/EC2Co-Defau-LDNM7Q3ZH1ZN/6d4ea56ca2d6a18d</code>.</p> <p>Where:</p> <ul> <li> <p>app/&lt;load-balancer-name&gt;/&lt;load-balancer-id&gt; is the final portion of the load balancer ARN</p> </li> <li> <p>targetgroup/&lt;target-group-name&gt;/&lt;target-group-id&gt; is the final portion of the target group ARN.</p> </li> </ul> <p>To find the ARN for an Application Load Balancer, use the <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeLoadBalancers.html">DescribeLoadBalancers</a> API operation. To find the ARN for the target group, use the <a href="https://docs.aws.amazon.com/elasticloadbalancing/latest/APIReference/API_DescribeTargetGroups.html">DescribeTargetGroups</a> API operation.</p>
+    pub resource_label: Option<String>,
+}
+
+#[allow(dead_code)]
+struct PredictiveScalingPredefinedScalingMetricDeserializer;
+impl PredictiveScalingPredefinedScalingMetricDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PredictiveScalingPredefinedScalingMetric, XmlParseError> {
+        deserialize_elements::<_, PredictiveScalingPredefinedScalingMetric, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "PredefinedMetricType" => {
+                        obj.predefined_metric_type =
+                            PredefinedScalingMetricTypeDeserializer::deserialize(
+                                "PredefinedMetricType",
+                                stack,
+                            )?;
+                    }
+                    "ResourceLabel" => {
+                        obj.resource_label = Some(XmlStringMaxLen1023Deserializer::deserialize(
+                            "ResourceLabel",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+
+/// Serialize `PredictiveScalingPredefinedScalingMetric` contents to a `SignedRequest`.
+struct PredictiveScalingPredefinedScalingMetricSerializer;
+impl PredictiveScalingPredefinedScalingMetricSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &PredictiveScalingPredefinedScalingMetric) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "PredefinedMetricType"),
+            &obj.predefined_metric_type,
+        );
+        if let Some(ref field_value) = obj.resource_label {
+            params.put(&format!("{}{}", prefix, "ResourceLabel"), &field_value);
+        }
+    }
+}
+
+#[allow(dead_code)]
+struct PredictiveScalingSchedulingBufferTimeDeserializer;
+impl PredictiveScalingSchedulingBufferTimeDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
     }
 }
 
@@ -5967,13 +7043,15 @@ pub struct PutScalingPolicyType {
     pub min_adjustment_step: Option<i64>,
     /// <p>The name of the policy.</p>
     pub policy_name: String,
-    /// <p><p>One of the following policy types: </p> <ul> <li> <p> <code>TargetTrackingScaling</code> </p> </li> <li> <p> <code>StepScaling</code> </p> </li> <li> <p> <code>SimpleScaling</code> (default)</p> </li> </ul></p>
+    /// <p><p>One of the following policy types: </p> <ul> <li> <p> <code>TargetTrackingScaling</code> </p> </li> <li> <p> <code>StepScaling</code> </p> </li> <li> <p> <code>SimpleScaling</code> (default)</p> </li> <li> <p> <code>PredictiveScaling</code> </p> </li> </ul></p>
     pub policy_type: Option<String>,
+    /// <p>A predictive scaling policy. Provides support for only predefined metrics.</p> <p>Predictive scaling works with CPU utilization, network in/out, and the Application Load Balancer request count.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_PredictiveScalingConfiguration.html">PredictiveScalingConfiguration</a> in the <i>Amazon EC2 Auto Scaling API Reference</i>.</p> <p>Required if the policy type is <code>PredictiveScaling</code>.</p>
+    pub predictive_scaling_configuration: Option<PredictiveScalingConfiguration>,
     /// <p>The amount by which to scale, based on the specified adjustment type. A positive value adds to the current capacity while a negative number removes from the current capacity. For exact capacity, you must specify a positive value.</p> <p>Required if the policy type is <code>SimpleScaling</code>. (Not used with any other policy type.) </p>
     pub scaling_adjustment: Option<i64>,
     /// <p>A set of adjustments that enable you to scale based on the size of the alarm breach.</p> <p>Required if the policy type is <code>StepScaling</code>. (Not used with any other policy type.) </p>
     pub step_adjustments: Option<Vec<StepAdjustment>>,
-    /// <p>A target tracking scaling policy. Includes support for predefined or customized metrics.</p> <p>The following predefined metrics are available:</p> <ul> <li> <p> <code>ASGAverageCPUUtilization</code> </p> </li> <li> <p> <code>ASGAverageNetworkIn</code> </p> </li> <li> <p> <code>ASGAverageNetworkOut</code> </p> </li> <li> <p> <code>ALBRequestCountPerTarget</code> </p> </li> </ul> <p>If you specify <code>ALBRequestCountPerTarget</code> for the metric, you must specify the <code>ResourceLabel</code> parameter with the <code>PredefinedMetricSpecification</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_TargetTrackingConfiguration.html">TargetTrackingConfiguration</a> in the <i>Amazon EC2 Auto Scaling API Reference</i>.</p> <p>Required if the policy type is <code>TargetTrackingScaling</code>.</p>
+    /// <p>A target tracking scaling policy. Provides support for predefined or customized metrics.</p> <p>The following predefined metrics are available:</p> <ul> <li> <p> <code>ASGAverageCPUUtilization</code> </p> </li> <li> <p> <code>ASGAverageNetworkIn</code> </p> </li> <li> <p> <code>ASGAverageNetworkOut</code> </p> </li> <li> <p> <code>ALBRequestCountPerTarget</code> </p> </li> </ul> <p>If you specify <code>ALBRequestCountPerTarget</code> for the metric, you must specify the <code>ResourceLabel</code> parameter with the <code>PredefinedMetricSpecification</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_TargetTrackingConfiguration.html">TargetTrackingConfiguration</a> in the <i>Amazon EC2 Auto Scaling API Reference</i>.</p> <p>Required if the policy type is <code>TargetTrackingScaling</code>.</p>
     pub target_tracking_configuration: Option<TargetTrackingConfiguration>,
 }
 
@@ -6024,6 +7102,13 @@ impl PutScalingPolicyTypeSerializer {
         if let Some(ref field_value) = obj.policy_type {
             params.put(&format!("{}{}", prefix, "PolicyType"), &field_value);
         }
+        if let Some(ref field_value) = obj.predictive_scaling_configuration {
+            PredictiveScalingConfigurationSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "PredictiveScalingConfiguration"),
+                field_value,
+            );
+        }
         if let Some(ref field_value) = obj.scaling_adjustment {
             params.put(&format!("{}{}", prefix, "ScalingAdjustment"), &field_value);
         }
@@ -6051,13 +7136,13 @@ pub struct PutScheduledUpdateGroupActionType {
     pub auto_scaling_group_name: String,
     /// <p>The desired capacity is the initial capacity of the Auto Scaling group after the scheduled action runs and the capacity it attempts to maintain. It can scale beyond this capacity if you add more scaling conditions. </p>
     pub desired_capacity: Option<i64>,
-    /// <p>The date and time for the recurring schedule to end. Amazon EC2 Auto Scaling does not perform the action after this time.</p>
+    /// <p>The date and time for the recurring schedule to end, in UTC.</p>
     pub end_time: Option<String>,
     /// <p>The maximum size of the Auto Scaling group.</p>
     pub max_size: Option<i64>,
     /// <p>The minimum size of the Auto Scaling group.</p>
     pub min_size: Option<i64>,
-    /// <p>The recurring schedule for this action, in Unix cron syntax format. This format consists of five fields separated by white spaces: [Minute] [Hour] [Day_of_Month] [Month_of_Year] [Day_of_Week]. The value must be in quotes (for example, <code>"30 0 1 1,6,12 *"</code>). For more information about this format, see <a href="http://crontab.org">Crontab</a>.</p> <p>When <code>StartTime</code> and <code>EndTime</code> are specified with <code>Recurrence</code>, they form the boundaries of when the recurring action starts and stops.</p>
+    /// <p>The recurring schedule for this action. This format consists of five fields separated by white spaces: [Minute] [Hour] [Day_of_Month] [Month_of_Year] [Day_of_Week]. The value must be in quotes (for example, <code>"30 0 1 1,6,12 *"</code>). For more information about this format, see <a href="http://crontab.org">Crontab</a>.</p> <p>When <code>StartTime</code> and <code>EndTime</code> are specified with <code>Recurrence</code>, they form the boundaries of when the recurring action starts and stops.</p> <p>Cron expressions use Universal Coordinated Time (UTC) by default.</p>
     pub recurrence: Option<String>,
     /// <p>The name of this scaling action.</p>
     pub scheduled_action_name: String,
@@ -6065,6 +7150,8 @@ pub struct PutScheduledUpdateGroupActionType {
     pub start_time: Option<String>,
     /// <p>This parameter is no longer used.</p>
     pub time: Option<String>,
+    /// <p>Specifies the time zone for a cron expression. If a time zone is not provided, UTC is used by default. </p> <p>Valid values are the canonical names of the IANA time zones, derived from the IANA Time Zone Database (such as <code>Etc/GMT+9</code> or <code>Pacific/Tahiti</code>). For more information, see <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">https://en.wikipedia.org/wiki/List_of_tz_database_time_zones</a>.</p>
+    pub time_zone: Option<String>,
 }
 
 /// Serialize `PutScheduledUpdateGroupActionType` contents to a `SignedRequest`.
@@ -6104,6 +7191,71 @@ impl PutScheduledUpdateGroupActionTypeSerializer {
         }
         if let Some(ref field_value) = obj.time {
             params.put(&format!("{}{}", prefix, "Time"), &field_value);
+        }
+        if let Some(ref field_value) = obj.time_zone {
+            params.put(&format!("{}{}", prefix, "TimeZone"), &field_value);
+        }
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct PutWarmPoolAnswer {}
+
+#[allow(dead_code)]
+struct PutWarmPoolAnswerDeserializer;
+impl PutWarmPoolAnswerDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutWarmPoolAnswer, XmlParseError> {
+        xml_util::start_element(tag_name, stack)?;
+
+        let obj = PutWarmPoolAnswer::default();
+
+        xml_util::end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutWarmPoolType {
+    /// <p>The name of the Auto Scaling group.</p>
+    pub auto_scaling_group_name: String,
+    /// <p>Specifies the maximum number of instances that are allowed to be in the warm pool or in any state except <code>Terminated</code> for the Auto Scaling group. This is an optional property. Specify it only if you do not want the warm pool size to be determined by the difference between the group's maximum capacity and its desired capacity. </p> <important> <p>If a value for <code>MaxGroupPreparedCapacity</code> is not specified, Amazon EC2 Auto Scaling launches and maintains the difference between the group's maximum capacity and its desired capacity. If you specify a value for <code>MaxGroupPreparedCapacity</code>, Amazon EC2 Auto Scaling uses the difference between the <code>MaxGroupPreparedCapacity</code> and the desired capacity instead. </p> <p>The size of the warm pool is dynamic. Only when <code>MaxGroupPreparedCapacity</code> and <code>MinSize</code> are set to the same value does the warm pool have an absolute size.</p> </important> <p>If the desired capacity of the Auto Scaling group is higher than the <code>MaxGroupPreparedCapacity</code>, the capacity of the warm pool is 0, unless you specify a value for <code>MinSize</code>. To remove a value that you previously set, include the property but specify -1 for the value. </p>
+    pub max_group_prepared_capacity: Option<i64>,
+    /// <p>Specifies the minimum number of instances to maintain in the warm pool. This helps you to ensure that there is always a certain number of warmed instances available to handle traffic spikes. Defaults to 0 if not specified.</p>
+    pub min_size: Option<i64>,
+    /// <p>Sets the instance state to transition to after the lifecycle actions are complete. Default is <code>Stopped</code>.</p>
+    pub pool_state: Option<String>,
+}
+
+/// Serialize `PutWarmPoolType` contents to a `SignedRequest`.
+struct PutWarmPoolTypeSerializer;
+impl PutWarmPoolTypeSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &PutWarmPoolType) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "AutoScalingGroupName"),
+            &obj.auto_scaling_group_name,
+        );
+        if let Some(ref field_value) = obj.max_group_prepared_capacity {
+            params.put(
+                &format!("{}{}", prefix, "MaxGroupPreparedCapacity"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.min_size {
+            params.put(&format!("{}{}", prefix, "MinSize"), &field_value);
+        }
+        if let Some(ref field_value) = obj.pool_state {
+            params.put(&format!("{}{}", prefix, "PoolState"), &field_value);
         }
     }
 }
@@ -6171,10 +7323,14 @@ impl RecordLifecycleActionHeartbeatTypeSerializer {
     }
 }
 
-/// <p>Describes information used to start an instance refresh. </p>
+/// <p>Describes information used to start an instance refresh. </p> <p>All properties are optional. However, if you specify a value for <code>CheckpointDelay</code>, you must also provide a value for <code>CheckpointPercentages</code>. </p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RefreshPreferences {
+    /// <p>The amount of time, in seconds, to wait after a checkpoint before continuing. This property is optional, but if you specify a value for it, you must also specify a value for <code>CheckpointPercentages</code>. If you specify a value for <code>CheckpointPercentages</code> and not for <code>CheckpointDelay</code>, the <code>CheckpointDelay</code> defaults to <code>3600</code> (1 hour). </p>
+    pub checkpoint_delay: Option<i64>,
+    /// <p>Threshold values for each checkpoint in ascending order. Each number must be unique. To replace all instances in the Auto Scaling group, the last number in the array must be <code>100</code>.</p> <p>For usage examples, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-adding-checkpoints-instance-refresh.html">Adding checkpoints to an instance refresh</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    pub checkpoint_percentages: Option<Vec<i64>>,
     /// <p>The number of seconds until a newly launched instance is configured and ready to use. During this time, Amazon EC2 Auto Scaling does not immediately move on to the next replacement. The default is to use the value for the health check grace period defined for the group.</p>
     pub instance_warmup: Option<i64>,
     /// <p>The amount of capacity in the Auto Scaling group that must remain healthy during an instance refresh to allow the operation to continue, as a percentage of the desired capacity of the Auto Scaling group (rounded up to the nearest integer). The default is <code>90</code>. </p>
@@ -6190,6 +7346,16 @@ impl RefreshPreferencesSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.checkpoint_delay {
+            params.put(&format!("{}{}", prefix, "CheckpointDelay"), &field_value);
+        }
+        if let Some(ref field_value) = obj.checkpoint_percentages {
+            CheckpointPercentagesSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "CheckpointPercentages"),
+                field_value,
+            );
+        }
         if let Some(ref field_value) = obj.instance_warmup {
             params.put(&format!("{}{}", prefix, "InstanceWarmup"), &field_value);
         }
@@ -6262,8 +7428,10 @@ pub struct ScalingPolicy {
     pub policy_arn: Option<String>,
     /// <p>The name of the scaling policy.</p>
     pub policy_name: Option<String>,
-    /// <p>One of the following policy types: </p> <ul> <li> <p> <code>TargetTrackingScaling</code> </p> </li> <li> <p> <code>StepScaling</code> </p> </li> <li> <p> <code>SimpleScaling</code> (default)</p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html">Target tracking scaling policies</a> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-simple-step.html">Step and simple scaling policies</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>One of the following policy types: </p> <ul> <li> <p> <code>TargetTrackingScaling</code> </p> </li> <li> <p> <code>StepScaling</code> </p> </li> <li> <p> <code>SimpleScaling</code> (default)</p> </li> <li> <p> <code>PredictiveScaling</code> </p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html">Target tracking scaling policies</a> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-simple-step.html">Step and simple scaling policies</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub policy_type: Option<String>,
+    /// <p>A predictive scaling policy.</p>
+    pub predictive_scaling_configuration: Option<PredictiveScalingConfiguration>,
     /// <p>The amount by which to scale, based on the specified adjustment type. A positive value adds to the current capacity while a negative number removes from the current capacity.</p>
     pub scaling_adjustment: Option<i64>,
     /// <p>A set of adjustments that enable you to scale based on the size of the alarm breach.</p>
@@ -6347,6 +7515,13 @@ impl ScalingPolicyDeserializer {
                         "PolicyType",
                         stack,
                     )?);
+                }
+                "PredictiveScalingConfiguration" => {
+                    obj.predictive_scaling_configuration =
+                        Some(PredictiveScalingConfigurationDeserializer::deserialize(
+                            "PredictiveScalingConfiguration",
+                            stack,
+                        )?);
                 }
                 "ScalingAdjustment" => {
                     obj.scaling_adjustment = Some(PolicyIncrementDeserializer::deserialize(
@@ -6483,6 +7658,8 @@ pub struct ScheduledUpdateGroupAction {
     pub start_time: Option<String>,
     /// <p>This parameter is no longer used.</p>
     pub time: Option<String>,
+    /// <p>The time zone for the cron expression.</p>
+    pub time_zone: Option<String>,
 }
 
 #[allow(dead_code)]
@@ -6552,6 +7729,11 @@ impl ScheduledUpdateGroupActionDeserializer {
                     "Time" => {
                         obj.time = Some(TimestampTypeDeserializer::deserialize("Time", stack)?);
                     }
+                    "TimeZone" => {
+                        obj.time_zone = Some(XmlStringMaxLen255Deserializer::deserialize(
+                            "TimeZone", stack,
+                        )?);
+                    }
                     _ => skip_tree(stack),
                 }
                 Ok(())
@@ -6559,24 +7741,26 @@ impl ScheduledUpdateGroupActionDeserializer {
         )
     }
 }
-/// <p>Describes information used for one or more scheduled scaling action updates in a <a>BatchPutScheduledUpdateGroupAction</a> operation.</p> <p>When updating a scheduled scaling action, all optional parameters are left unchanged if not specified.</p>
+/// <p>Describes information used for one or more scheduled scaling action updates in a <a>BatchPutScheduledUpdateGroupAction</a> operation.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ScheduledUpdateGroupActionRequest {
     /// <p>The desired capacity is the initial capacity of the Auto Scaling group after the scheduled action runs and the capacity it attempts to maintain.</p>
     pub desired_capacity: Option<i64>,
-    /// <p>The date and time for the recurring schedule to end. Amazon EC2 Auto Scaling does not perform the action after this time.</p>
+    /// <p>The date and time for the recurring schedule to end, in UTC.</p>
     pub end_time: Option<String>,
     /// <p>The maximum size of the Auto Scaling group.</p>
     pub max_size: Option<i64>,
     /// <p>The minimum size of the Auto Scaling group.</p>
     pub min_size: Option<i64>,
-    /// <p>The recurring schedule for the action, in Unix cron syntax format. This format consists of five fields separated by white spaces: [Minute] [Hour] [Day_of_Month] [Month_of_Year] [Day_of_Week]. The value must be in quotes (for example, <code>"30 0 1 1,6,12 *"</code>). For more information about this format, see <a href="http://crontab.org">Crontab</a>.</p> <p>When <code>StartTime</code> and <code>EndTime</code> are specified with <code>Recurrence</code>, they form the boundaries of when the recurring action starts and stops.</p>
+    /// <p>The recurring schedule for the action, in Unix cron syntax format. This format consists of five fields separated by white spaces: [Minute] [Hour] [Day_of_Month] [Month_of_Year] [Day_of_Week]. The value must be in quotes (for example, <code>"30 0 1 1,6,12 *"</code>). For more information about this format, see <a href="http://crontab.org">Crontab</a>.</p> <p>When <code>StartTime</code> and <code>EndTime</code> are specified with <code>Recurrence</code>, they form the boundaries of when the recurring action starts and stops.</p> <p>Cron expressions use Universal Coordinated Time (UTC) by default.</p>
     pub recurrence: Option<String>,
     /// <p>The name of the scaling action.</p>
     pub scheduled_action_name: String,
     /// <p>The date and time for the action to start, in YYYY-MM-DDThh:mm:ssZ format in UTC/GMT only and in quotes (for example, <code>"2019-06-01T00:00:00Z"</code>).</p> <p>If you specify <code>Recurrence</code> and <code>StartTime</code>, Amazon EC2 Auto Scaling performs the action at this time, and then performs the action based on the specified recurrence.</p> <p>If you try to schedule the action in the past, Amazon EC2 Auto Scaling returns an error message.</p>
     pub start_time: Option<String>,
+    /// <p>Specifies the time zone for a cron expression. If a time zone is not provided, UTC is used by default. </p> <p>Valid values are the canonical names of the IANA time zones, derived from the IANA Time Zone Database (such as <code>Etc/GMT+9</code> or <code>Pacific/Tahiti</code>). For more information, see <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">https://en.wikipedia.org/wiki/List_of_tz_database_time_zones</a>.</p>
+    pub time_zone: Option<String>,
 }
 
 /// Serialize `ScheduledUpdateGroupActionRequest` contents to a `SignedRequest`.
@@ -6609,6 +7793,9 @@ impl ScheduledUpdateGroupActionRequestSerializer {
         );
         if let Some(ref field_value) = obj.start_time {
             params.put(&format!("{}{}", prefix, "StartTime"), &field_value);
+        }
+        if let Some(ref field_value) = obj.time_zone {
+            params.put(&format!("{}{}", prefix, "TimeZone"), &field_value);
         }
     }
 }
@@ -7051,7 +8238,7 @@ pub struct Tag {
     pub key: String,
     /// <p>Determines whether the tag is added to new instances as they are launched in the group.</p>
     pub propagate_at_launch: Option<bool>,
-    /// <p>The name of the group.</p>
+    /// <p>The name of the Auto Scaling group.</p>
     pub resource_id: Option<String>,
     /// <p>The type of resource. The only supported value is <code>auto-scaling-group</code>.</p>
     pub resource_type: Option<String>,
@@ -7418,7 +8605,7 @@ pub struct UpdateAutoScalingGroupType {
     pub desired_capacity: Option<i64>,
     /// <p>The amount of time, in seconds, that Amazon EC2 Auto Scaling waits before checking the health status of an EC2 instance that has come into service. The default value is <code>0</code>. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/healthcheck.html#health-check-grace-period">Health check grace period</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>Conditional: Required if you are adding an <code>ELB</code> health check.</p>
     pub health_check_grace_period: Option<i64>,
-    /// <p>The service to use for the health checks. The valid values are <code>EC2</code> and <code>ELB</code>. If you configure an Auto Scaling group to use ELB health checks, it considers the instance unhealthy if it fails either the EC2 status checks or the load balancer health checks.</p>
+    /// <p>The service to use for the health checks. The valid values are <code>EC2</code> and <code>ELB</code>. If you configure an Auto Scaling group to use <code>ELB</code> health checks, it considers the instance unhealthy if it fails either the EC2 status checks or the load balancer health checks.</p>
     pub health_check_type: Option<String>,
     /// <p>The name of the launch configuration. If you specify <code>LaunchConfigurationName</code> in your update request, you can't specify <code>LaunchTemplate</code> or <code>MixedInstancesPolicy</code>.</p>
     pub launch_configuration_name: Option<String>,
@@ -7430,13 +8617,13 @@ pub struct UpdateAutoScalingGroupType {
     pub max_size: Option<i64>,
     /// <p>The minimum size of the Auto Scaling group.</p>
     pub min_size: Option<i64>,
-    /// <p>An embedded object that specifies a mixed instances policy. When you make changes to an existing policy, all optional parameters are left unchanged if not specified. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-purchase-options.html">Auto Scaling groups with multiple instance types and purchase options</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>An embedded object that specifies a mixed instances policy. When you make changes to an existing policy, all optional properties are left unchanged if not specified. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-purchase-options.html">Auto Scaling groups with multiple instance types and purchase options</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub mixed_instances_policy: Option<MixedInstancesPolicy>,
     /// <p>Indicates whether newly launched instances are protected from termination by Amazon EC2 Auto Scaling when scaling in. For more information about preventing instances from terminating on scale in, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection">Instance scale-in protection</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub new_instances_protected_from_scale_in: Option<bool>,
     /// <p>The name of an existing placement group into which to launch your instances, if any. A placement group is a logical grouping of instances within a single Availability Zone. You cannot specify multiple Availability Zones and a placement group. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">Placement Groups</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
     pub placement_group: Option<String>,
-    /// <p>The Amazon Resource Name (ARN) of the service-linked role that the Auto Scaling group uses to call other AWS services on your behalf. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-service-linked-role.html">Service-linked roles</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>The Amazon Resource Name (ARN) of the service-linked role that the Auto Scaling group uses to call other Amazon Web Services on your behalf. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-service-linked-role.html">Service-linked roles</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub service_linked_role_arn: Option<String>,
     /// <p>A policy or a list of policies that are used to select the instances to terminate. The policies are executed in the order that you list them. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html">Controlling which Auto Scaling instances terminate during scale in</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     pub termination_policies: Option<Vec<String>>,
@@ -7553,6 +8740,86 @@ impl ValuesSerializer {
     }
 }
 
+/// <p>Describes a warm pool configuration. </p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct WarmPoolConfiguration {
+    /// <p>The maximum number of instances that are allowed to be in the warm pool or in any state except <code>Terminated</code> for the Auto Scaling group.</p>
+    pub max_group_prepared_capacity: Option<i64>,
+    /// <p>The minimum number of instances to maintain in the warm pool.</p>
+    pub min_size: Option<i64>,
+    /// <p>The instance state to transition to after the lifecycle actions are complete.</p>
+    pub pool_state: Option<String>,
+    /// <p>The status of a warm pool that is marked for deletion.</p>
+    pub status: Option<String>,
+}
+
+#[allow(dead_code)]
+struct WarmPoolConfigurationDeserializer;
+impl WarmPoolConfigurationDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<WarmPoolConfiguration, XmlParseError> {
+        deserialize_elements::<_, WarmPoolConfiguration, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "MaxGroupPreparedCapacity" => {
+                    obj.max_group_prepared_capacity =
+                        Some(MaxGroupPreparedCapacityDeserializer::deserialize(
+                            "MaxGroupPreparedCapacity",
+                            stack,
+                        )?);
+                }
+                "MinSize" => {
+                    obj.min_size =
+                        Some(WarmPoolMinSizeDeserializer::deserialize("MinSize", stack)?);
+                }
+                "PoolState" => {
+                    obj.pool_state =
+                        Some(WarmPoolStateDeserializer::deserialize("PoolState", stack)?);
+                }
+                "Status" => {
+                    obj.status = Some(WarmPoolStatusDeserializer::deserialize("Status", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct WarmPoolMinSizeDeserializer;
+impl WarmPoolMinSizeDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
+    }
+}
+#[allow(dead_code)]
+struct WarmPoolSizeDeserializer;
+impl WarmPoolSizeDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<i64, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, |s| Ok(i64::from_str(&s).unwrap()))
+    }
+}
+#[allow(dead_code)]
+struct WarmPoolStateDeserializer;
+impl WarmPoolStateDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+#[allow(dead_code)]
+struct WarmPoolStatusDeserializer;
+impl WarmPoolStatusDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
 #[allow(dead_code)]
 struct XmlStringDeserializer;
 impl XmlStringDeserializer {
@@ -8625,6 +9892,78 @@ impl fmt::Display for DeleteTagsError {
     }
 }
 impl Error for DeleteTagsError {}
+/// Errors returned by DeleteWarmPool
+#[derive(Debug, PartialEq)]
+pub enum DeleteWarmPoolError {
+    /// <p>You have already reached a limit for your Amazon EC2 Auto Scaling resources (for example, Auto Scaling groups, launch configurations, or lifecycle hooks). For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_DescribeAccountLimits.html">DescribeAccountLimits</a> in the <i>Amazon EC2 Auto Scaling API Reference</i>.</p>
+    LimitExceededFault(String),
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
+    ResourceContentionFault(String),
+    /// <p>The operation can't be performed because the resource is in use.</p>
+    ResourceInUseFault(String),
+    /// <p>The operation can't be performed because there are scaling activities in progress.</p>
+    ScalingActivityInProgressFault(String),
+}
+
+impl DeleteWarmPoolError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteWarmPoolError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return RusotoError::Service(DeleteWarmPoolError::LimitExceededFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceContention" => {
+                        return RusotoError::Service(DeleteWarmPoolError::ResourceContentionFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceInUse" => {
+                        return RusotoError::Service(DeleteWarmPoolError::ResourceInUseFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ScalingActivityInProgress" => {
+                        return RusotoError::Service(
+                            DeleteWarmPoolError::ScalingActivityInProgressFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DeleteWarmPoolError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteWarmPoolError::LimitExceededFault(ref cause) => write!(f, "{}", cause),
+            DeleteWarmPoolError::ResourceContentionFault(ref cause) => write!(f, "{}", cause),
+            DeleteWarmPoolError::ResourceInUseFault(ref cause) => write!(f, "{}", cause),
+            DeleteWarmPoolError::ScalingActivityInProgressFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteWarmPoolError {}
 /// Errors returned by DescribeAccountLimits
 #[derive(Debug, PartialEq)]
 pub enum DescribeAccountLimitsError {
@@ -9639,6 +10978,66 @@ impl fmt::Display for DescribeTerminationPolicyTypesError {
     }
 }
 impl Error for DescribeTerminationPolicyTypesError {}
+/// Errors returned by DescribeWarmPool
+#[derive(Debug, PartialEq)]
+pub enum DescribeWarmPoolError {
+    /// <p>The <code>NextToken</code> value is not valid.</p>
+    InvalidNextToken(String),
+    /// <p>You have already reached a limit for your Amazon EC2 Auto Scaling resources (for example, Auto Scaling groups, launch configurations, or lifecycle hooks). For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_DescribeAccountLimits.html">DescribeAccountLimits</a> in the <i>Amazon EC2 Auto Scaling API Reference</i>.</p>
+    LimitExceededFault(String),
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
+    ResourceContentionFault(String),
+}
+
+impl DescribeWarmPoolError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeWarmPoolError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidNextToken" => {
+                        return RusotoError::Service(DescribeWarmPoolError::InvalidNextToken(
+                            parsed_error.message,
+                        ))
+                    }
+                    "LimitExceeded" => {
+                        return RusotoError::Service(DescribeWarmPoolError::LimitExceededFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceContention" => {
+                        return RusotoError::Service(
+                            DescribeWarmPoolError::ResourceContentionFault(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DescribeWarmPoolError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeWarmPoolError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            DescribeWarmPoolError::LimitExceededFault(ref cause) => write!(f, "{}", cause),
+            DescribeWarmPoolError::ResourceContentionFault(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeWarmPoolError {}
 /// Errors returned by DetachInstances
 #[derive(Debug, PartialEq)]
 pub enum DetachInstancesError {
@@ -10015,6 +11414,56 @@ impl fmt::Display for ExitStandbyError {
     }
 }
 impl Error for ExitStandbyError {}
+/// Errors returned by GetPredictiveScalingForecast
+#[derive(Debug, PartialEq)]
+pub enum GetPredictiveScalingForecastError {
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
+    ResourceContentionFault(String),
+}
+
+impl GetPredictiveScalingForecastError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetPredictiveScalingForecastError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ResourceContention" => {
+                        return RusotoError::Service(
+                            GetPredictiveScalingForecastError::ResourceContentionFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for GetPredictiveScalingForecastError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetPredictiveScalingForecastError::ResourceContentionFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for GetPredictiveScalingForecastError {}
 /// Errors returned by PutLifecycleHook
 #[derive(Debug, PartialEq)]
 pub enum PutLifecycleHookError {
@@ -10275,6 +11724,58 @@ impl fmt::Display for PutScheduledUpdateGroupActionError {
     }
 }
 impl Error for PutScheduledUpdateGroupActionError {}
+/// Errors returned by PutWarmPool
+#[derive(Debug, PartialEq)]
+pub enum PutWarmPoolError {
+    /// <p>You have already reached a limit for your Amazon EC2 Auto Scaling resources (for example, Auto Scaling groups, launch configurations, or lifecycle hooks). For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/APIReference/API_DescribeAccountLimits.html">DescribeAccountLimits</a> in the <i>Amazon EC2 Auto Scaling API Reference</i>.</p>
+    LimitExceededFault(String),
+    /// <p>You already have a pending update to an Amazon EC2 Auto Scaling resource (for example, an Auto Scaling group, instance, or load balancer).</p>
+    ResourceContentionFault(String),
+}
+
+impl PutWarmPoolError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutWarmPoolError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "LimitExceeded" => {
+                        return RusotoError::Service(PutWarmPoolError::LimitExceededFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceContention" => {
+                        return RusotoError::Service(PutWarmPoolError::ResourceContentionFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for PutWarmPoolError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutWarmPoolError::LimitExceededFault(ref cause) => write!(f, "{}", cause),
+            PutWarmPoolError::ResourceContentionFault(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PutWarmPoolError {}
 /// Errors returned by RecordLifecycleActionHeartbeat
 #[derive(Debug, PartialEq)]
 pub enum RecordLifecycleActionHeartbeatError {
@@ -10813,7 +12314,7 @@ pub trait Autoscaling {
         input: BatchDeleteScheduledActionType,
     ) -> Result<BatchDeleteScheduledActionAnswer, RusotoError<BatchDeleteScheduledActionError>>;
 
-    /// <p>Creates or updates one or more scheduled scaling actions for an Auto Scaling group. If you leave a parameter unspecified when updating a scheduled scaling action, the corresponding value remains unchanged.</p>
+    /// <p>Creates or updates one or more scheduled scaling actions for an Auto Scaling group.</p>
     async fn batch_put_scheduled_update_group_action(
         &self,
         input: BatchPutScheduledUpdateGroupActionType,
@@ -10822,7 +12323,7 @@ pub trait Autoscaling {
         RusotoError<BatchPutScheduledUpdateGroupActionError>,
     >;
 
-    /// <p>Cancels an instance refresh operation in progress. Cancellation does not roll back any replacements that have already been completed, but it prevents new replacements from being started. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-refresh.html">Replacing Auto Scaling Instances Based on an Instance Refresh</a>.</p>
+    /// <p>Cancels an instance refresh operation in progress. Cancellation does not roll back any replacements that have already been completed, but it prevents new replacements from being started. </p> <p>This operation is part of the <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-refresh.html">instance refresh feature</a> in Amazon EC2 Auto Scaling, which helps you update instances in your Auto Scaling group after you make configuration changes.</p>
     async fn cancel_instance_refresh(
         &self,
         input: CancelInstanceRefreshType,
@@ -10834,7 +12335,7 @@ pub trait Autoscaling {
         input: CompleteLifecycleActionType,
     ) -> Result<CompleteLifecycleActionAnswer, RusotoError<CompleteLifecycleActionError>>;
 
-    /// <p>Creates an Auto Scaling group with the specified name and attributes. </p> <p>If you exceed your maximum limit of Auto Scaling groups, the call fails. To query this limit, call the <a>DescribeAccountLimits</a> API. For information about updating this limit, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling service quotas</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>For introductory exercises for creating an Auto Scaling group, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/GettingStartedTutorial.html">Getting started with Amazon EC2 Auto Scaling</a> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-register-lbs-with-asg.html">Tutorial: Set up a scaled and load-balanced application</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html">Auto Scaling groups</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>Every Auto Scaling group has three size parameters (<code>DesiredCapacity</code>, <code>MaxSize</code>, and <code>MinSize</code>). Usually, you set these sizes based on a specific number of instances. However, if you configure a mixed instances policy that defines weights for the instance types, you must specify these sizes with the same units that you use for weighting instances.</p>
+    /// <p> <b>We strongly recommend using a launch template when calling this operation to ensure full functionality for Amazon EC2 Auto Scaling and Amazon EC2.</b> </p> <p>Creates an Auto Scaling group with the specified name and attributes. </p> <p>If you exceed your maximum limit of Auto Scaling groups, the call fails. To query this limit, call the <a>DescribeAccountLimits</a> API. For information about updating this limit, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling service quotas</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>For introductory exercises for creating an Auto Scaling group, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/GettingStartedTutorial.html">Getting started with Amazon EC2 Auto Scaling</a> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-register-lbs-with-asg.html">Tutorial: Set up a scaled and load-balanced application</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html">Auto Scaling groups</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>Every Auto Scaling group has three size parameters (<code>DesiredCapacity</code>, <code>MaxSize</code>, and <code>MinSize</code>). Usually, you set these sizes based on a specific number of instances. However, if you configure a mixed instances policy that defines weights for the instance types, you must specify these sizes with the same units that you use for weighting instances.</p>
     async fn create_auto_scaling_group(
         &self,
         input: CreateAutoScalingGroupType,
@@ -10891,23 +12392,29 @@ pub trait Autoscaling {
     /// <p>Deletes the specified tags.</p>
     async fn delete_tags(&self, input: DeleteTagsType) -> Result<(), RusotoError<DeleteTagsError>>;
 
-    /// <p>Describes the current Amazon EC2 Auto Scaling resource quotas for your AWS account.</p> <p>For information about requesting an increase, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling service quotas</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Deletes the warm pool for the specified Auto Scaling group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-warm-pools.html">Warm pools for Amazon EC2 Auto Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    async fn delete_warm_pool(
+        &self,
+        input: DeleteWarmPoolType,
+    ) -> Result<DeleteWarmPoolAnswer, RusotoError<DeleteWarmPoolError>>;
+
+    /// <p>Describes the current Amazon EC2 Auto Scaling resource quotas for your account.</p> <p>For information about requesting an increase, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling service quotas</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     async fn describe_account_limits(
         &self,
     ) -> Result<DescribeAccountLimitsAnswer, RusotoError<DescribeAccountLimitsError>>;
 
-    /// <p><p>Describes the available adjustment types for Amazon EC2 Auto Scaling scaling policies. These settings apply to step scaling policies and simple scaling policies; they do not apply to target tracking scaling policies.</p> <p>The following adjustment types are supported:</p> <ul> <li> <p>ChangeInCapacity</p> </li> <li> <p>ExactCapacity</p> </li> <li> <p>PercentChangeInCapacity</p> </li> </ul></p>
+    /// <p><p>Describes the available adjustment types for step scaling and simple scaling policies.</p> <p>The following adjustment types are supported:</p> <ul> <li> <p> <code>ChangeInCapacity</code> </p> </li> <li> <p> <code>ExactCapacity</code> </p> </li> <li> <p> <code>PercentChangeInCapacity</code> </p> </li> </ul></p>
     async fn describe_adjustment_types(
         &self,
     ) -> Result<DescribeAdjustmentTypesAnswer, RusotoError<DescribeAdjustmentTypesError>>;
 
-    /// <p>Describes one or more Auto Scaling groups.</p>
+    /// <p>Gets information about the Auto Scaling groups in the account and Region.</p> <p>This operation returns information about instances in Auto Scaling groups. To retrieve information about the instances in a warm pool, you must call the <a>DescribeWarmPool</a> API. </p>
     async fn describe_auto_scaling_groups(
         &self,
         input: AutoScalingGroupNamesType,
     ) -> Result<AutoScalingGroupsType, RusotoError<DescribeAutoScalingGroupsError>>;
 
-    /// <p>Describes one or more Auto Scaling instances.</p>
+    /// <p>Gets information about the Auto Scaling instances in the account and Region.</p>
     async fn describe_auto_scaling_instances(
         &self,
         input: DescribeAutoScalingInstancesType,
@@ -10921,30 +12428,30 @@ pub trait Autoscaling {
         RusotoError<DescribeAutoScalingNotificationTypesError>,
     >;
 
-    /// <p>Describes one or more instance refreshes.</p> <p>You can determine the status of a request by looking at the <code>Status</code> parameter. The following are the possible statuses: </p> <ul> <li> <p> <code>Pending</code> - The request was created, but the operation has not started.</p> </li> <li> <p> <code>InProgress</code> - The operation is in progress.</p> </li> <li> <p> <code>Successful</code> - The operation completed successfully.</p> </li> <li> <p> <code>Failed</code> - The operation failed to complete. You can troubleshoot using the status reason and the scaling activities. </p> </li> <li> <p> <code>Cancelling</code> - An ongoing operation is being cancelled. Cancellation does not roll back any replacements that have already been completed, but it prevents new replacements from being started. </p> </li> <li> <p> <code>Cancelled</code> - The operation is cancelled. </p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-refresh.html">Replacing Auto Scaling Instances Based on an Instance Refresh</a>.</p>
+    /// <p><p>Gets information about the instance refreshes for the specified Auto Scaling group.</p> <p>This operation is part of the <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-refresh.html">instance refresh feature</a> in Amazon EC2 Auto Scaling, which helps you update instances in your Auto Scaling group after you make configuration changes.</p> <p>To help you determine the status of an instance refresh, this operation returns information about the instance refreshes you previously initiated, including their status, end time, the percentage of the instance refresh that is complete, and the number of instances remaining to update before the instance refresh is complete.</p> <p>The following are the possible statuses: </p> <ul> <li> <p> <code>Pending</code> - The request was created, but the operation has not started.</p> </li> <li> <p> <code>InProgress</code> - The operation is in progress.</p> </li> <li> <p> <code>Successful</code> - The operation completed successfully.</p> </li> <li> <p> <code>Failed</code> - The operation failed to complete. You can troubleshoot using the status reason and the scaling activities. </p> </li> <li> <p> <code>Cancelling</code> - An ongoing operation is being cancelled. Cancellation does not roll back any replacements that have already been completed, but it prevents new replacements from being started. </p> </li> <li> <p> <code>Cancelled</code> - The operation is cancelled. </p> </li> </ul></p>
     async fn describe_instance_refreshes(
         &self,
         input: DescribeInstanceRefreshesType,
     ) -> Result<DescribeInstanceRefreshesAnswer, RusotoError<DescribeInstanceRefreshesError>>;
 
-    /// <p>Describes one or more launch configurations.</p>
+    /// <p>Gets information about the launch configurations in the account and Region.</p>
     async fn describe_launch_configurations(
         &self,
         input: LaunchConfigurationNamesType,
     ) -> Result<LaunchConfigurationsType, RusotoError<DescribeLaunchConfigurationsError>>;
 
-    /// <p><p>Describes the available types of lifecycle hooks.</p> <p>The following hook types are supported:</p> <ul> <li> <p>autoscaling:EC2<em>INSTANCE</em>LAUNCHING</p> </li> <li> <p>autoscaling:EC2<em>INSTANCE</em>TERMINATING</p> </li> </ul></p>
+    /// <p><p>Describes the available types of lifecycle hooks.</p> <p>The following hook types are supported:</p> <ul> <li> <p> <code>autoscaling:EC2<em>INSTANCE</em>LAUNCHING</code> </p> </li> <li> <p> <code>autoscaling:EC2<em>INSTANCE</em>TERMINATING</code> </p> </li> </ul></p>
     async fn describe_lifecycle_hook_types(
         &self,
     ) -> Result<DescribeLifecycleHookTypesAnswer, RusotoError<DescribeLifecycleHookTypesError>>;
 
-    /// <p>Describes the lifecycle hooks for the specified Auto Scaling group.</p>
+    /// <p>Gets information about the lifecycle hooks for the specified Auto Scaling group.</p>
     async fn describe_lifecycle_hooks(
         &self,
         input: DescribeLifecycleHooksType,
     ) -> Result<DescribeLifecycleHooksAnswer, RusotoError<DescribeLifecycleHooksError>>;
 
-    /// <p>Describes the target groups for the specified Auto Scaling group.</p>
+    /// <p>Gets information about the load balancer target groups for the specified Auto Scaling group.</p> <p>To determine the availability of registered instances, use the <code>State</code> element in the response. When you attach a target group to an Auto Scaling group, the initial <code>State</code> value is <code>Adding</code>. The state transitions to <code>Added</code> after all Auto Scaling instances are registered with the target group. If Elastic Load Balancing health checks are enabled for the Auto Scaling group, the state transitions to <code>InService</code> after at least one Auto Scaling instance passes the health check. When the target group is in the <code>InService</code> state, Amazon EC2 Auto Scaling can terminate and replace any instances that are reported as unhealthy. If no registered instances pass the health checks, the target group doesn't enter the <code>InService</code> state. </p> <p>Target groups also have an <code>InService</code> state if you attach them in the <a>CreateAutoScalingGroup</a> API call. If your target group state is <code>InService</code>, but it is not working properly, check the scaling activities by calling <a>DescribeScalingActivities</a> and take any corrective actions necessary.</p> <p>For help with failed health checks, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/ts-as-healthchecks.html">Troubleshooting Amazon EC2 Auto Scaling: Health checks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-load-balancer.html">Elastic Load Balancing and Amazon EC2 Auto Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. </p>
     async fn describe_load_balancer_target_groups(
         &self,
         input: DescribeLoadBalancerTargetGroupsRequest,
@@ -10953,7 +12460,7 @@ pub trait Autoscaling {
         RusotoError<DescribeLoadBalancerTargetGroupsError>,
     >;
 
-    /// <p>Describes the load balancers for the specified Auto Scaling group.</p> <p>This operation describes only Classic Load Balancers. If you have Application Load Balancers, Network Load Balancers, or Gateway Load Balancers, use the <a>DescribeLoadBalancerTargetGroups</a> API instead.</p>
+    /// <p>Gets information about the load balancers for the specified Auto Scaling group.</p> <p>This operation describes only Classic Load Balancers. If you have Application Load Balancers, Network Load Balancers, or Gateway Load Balancers, use the <a>DescribeLoadBalancerTargetGroups</a> API instead.</p> <p>To determine the availability of registered instances, use the <code>State</code> element in the response. When you attach a load balancer to an Auto Scaling group, the initial <code>State</code> value is <code>Adding</code>. The state transitions to <code>Added</code> after all Auto Scaling instances are registered with the load balancer. If Elastic Load Balancing health checks are enabled for the Auto Scaling group, the state transitions to <code>InService</code> after at least one Auto Scaling instance passes the health check. When the load balancer is in the <code>InService</code> state, Amazon EC2 Auto Scaling can terminate and replace any instances that are reported as unhealthy. If no registered instances pass the health checks, the load balancer doesn't enter the <code>InService</code> state. </p> <p>Load balancers also have an <code>InService</code> state if you attach them in the <a>CreateAutoScalingGroup</a> API call. If your load balancer state is <code>InService</code>, but it is not working properly, check the scaling activities by calling <a>DescribeScalingActivities</a> and take any corrective actions necessary.</p> <p>For help with failed health checks, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/ts-as-healthchecks.html">Troubleshooting Amazon EC2 Auto Scaling: Health checks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-load-balancer.html">Elastic Load Balancing and Amazon EC2 Auto Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. </p>
     async fn describe_load_balancers(
         &self,
         input: DescribeLoadBalancersRequest,
@@ -10964,7 +12471,7 @@ pub trait Autoscaling {
         &self,
     ) -> Result<DescribeMetricCollectionTypesAnswer, RusotoError<DescribeMetricCollectionTypesError>>;
 
-    /// <p>Describes the notification actions associated with the specified Auto Scaling group.</p>
+    /// <p>Gets information about the Amazon SNS notifications that are configured for one or more Auto Scaling groups.</p>
     async fn describe_notification_configurations(
         &self,
         input: DescribeNotificationConfigurationsType,
@@ -10973,13 +12480,13 @@ pub trait Autoscaling {
         RusotoError<DescribeNotificationConfigurationsError>,
     >;
 
-    /// <p>Describes the policies for the specified Auto Scaling group.</p>
+    /// <p>Gets information about the scaling policies in the account and Region.</p>
     async fn describe_policies(
         &self,
         input: DescribePoliciesType,
     ) -> Result<PoliciesType, RusotoError<DescribePoliciesError>>;
 
-    /// <p>Describes one or more scaling activities for the specified Auto Scaling group.</p>
+    /// <p>Gets information about the scaling activities in the account and Region.</p> <p>When scaling events occur, you see a record of the scaling activity in the scaling activities. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-verify-scaling-activity.html">Verifying a scaling activity for an Auto Scaling group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If the scaling event succeeds, the value of the <code>StatusCode</code> element in the response is <code>Successful</code>. If an attempt to launch instances failed, the <code>StatusCode</code> value is <code>Failed</code> or <code>Cancelled</code> and the <code>StatusMessage</code> element in the response indicates the cause of the failure. For help interpreting the <code>StatusMessage</code>, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/CHAP_Troubleshooting.html">Troubleshooting Amazon EC2 Auto Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. </p>
     async fn describe_scaling_activities(
         &self,
         input: DescribeScalingActivitiesType,
@@ -10990,7 +12497,7 @@ pub trait Autoscaling {
         &self,
     ) -> Result<ProcessesType, RusotoError<DescribeScalingProcessTypesError>>;
 
-    /// <p>Describes the actions scheduled for your Auto Scaling group that haven't run or that have not reached their end time. To describe the actions that have already run, call the <a>DescribeScalingActivities</a> API.</p>
+    /// <p>Gets information about the scheduled actions that haven't run or that have not reached their end time.</p> <p>To describe the scaling activities for scheduled actions that have already run, call the <a>DescribeScalingActivities</a> API.</p>
     async fn describe_scheduled_actions(
         &self,
         input: DescribeScheduledActionsType,
@@ -11009,6 +12516,12 @@ pub trait Autoscaling {
         DescribeTerminationPolicyTypesAnswer,
         RusotoError<DescribeTerminationPolicyTypesError>,
     >;
+
+    /// <p>Gets information about a warm pool and its instances.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-warm-pools.html">Warm pools for Amazon EC2 Auto Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    async fn describe_warm_pool(
+        &self,
+        input: DescribeWarmPoolType,
+    ) -> Result<DescribeWarmPoolAnswer, RusotoError<DescribeWarmPoolError>>;
 
     /// <p>Removes one or more instances from the specified Auto Scaling group.</p> <p>After the instances are detached, you can manage them independent of the Auto Scaling group.</p> <p>If you do not specify the option to decrement the desired capacity, Amazon EC2 Auto Scaling launches instances to replace the ones that are detached.</p> <p>If there is a Classic Load Balancer attached to the Auto Scaling group, the instances are deregistered from the load balancer. If there are target groups attached to the Auto Scaling group, the instances are deregistered from the target groups.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/detach-instance-asg.html">Detach EC2 instances from your Auto Scaling group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     async fn detach_instances(
@@ -11061,6 +12574,12 @@ pub trait Autoscaling {
         input: ExitStandbyQuery,
     ) -> Result<ExitStandbyAnswer, RusotoError<ExitStandbyError>>;
 
+    /// <p>Retrieves the forecast data for a predictive scaling policy.</p> <p>Load forecasts are predictions of the hourly load values using historical load data from CloudWatch and an analysis of historical trends. Capacity forecasts are represented as predicted values for the minimum capacity that is needed on an hourly basis, based on the hourly load forecast.</p> <p>A minimum of 24 hours of data is required to create the initial forecasts. However, having a full 14 days of historical data results in more accurate forecasts.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-predictive-scaling.html">Predictive scaling for Amazon EC2 Auto Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    async fn get_predictive_scaling_forecast(
+        &self,
+        input: GetPredictiveScalingForecastType,
+    ) -> Result<GetPredictiveScalingForecastAnswer, RusotoError<GetPredictiveScalingForecastError>>;
+
     /// <p>Creates or updates a lifecycle hook for the specified Auto Scaling group.</p> <p>A lifecycle hook tells Amazon EC2 Auto Scaling to perform an action on an instance when the instance launches (before it is put into service) or as the instance terminates (before it is fully terminated).</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p> <b>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</b> </p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state using the <a>RecordLifecycleActionHeartbeat</a> API call.</p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action using the <a>CompleteLifecycleAction</a> API call.</p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html">Amazon EC2 Auto Scaling lifecycle hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you exceed your maximum limit of lifecycle hooks, which by default is 50 per Auto Scaling group, the call fails.</p> <p>You can view the lifecycle hooks for an Auto Scaling group using the <a>DescribeLifecycleHooks</a> API call. If you are no longer using a lifecycle hook, you can delete it by calling the <a>DeleteLifecycleHook</a> API.</p>
     async fn put_lifecycle_hook(
         &self,
@@ -11073,19 +12592,25 @@ pub trait Autoscaling {
         input: PutNotificationConfigurationType,
     ) -> Result<(), RusotoError<PutNotificationConfigurationError>>;
 
-    /// <p>Creates or updates a scaling policy for an Auto Scaling group.</p> <p>For more information about using scaling policies to scale your Auto Scaling group, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html">Target tracking scaling policies</a> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-simple-step.html">Step and simple scaling policies</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Creates or updates a scaling policy for an Auto Scaling group. Scaling policies are used to scale an Auto Scaling group based on configurable metrics. If no policies are defined, the dynamic scaling and predictive scaling features are not used. </p> <p>For more information about using dynamic scaling, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html">Target tracking scaling policies</a> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-simple-step.html">Step and simple scaling policies</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>For more information about using predictive scaling, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-predictive-scaling.html">Predictive scaling for Amazon EC2 Auto Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>You can view the scaling policies for an Auto Scaling group using the <a>DescribePolicies</a> API call. If you are no longer using a scaling policy, you can delete it by calling the <a>DeletePolicy</a> API.</p>
     async fn put_scaling_policy(
         &self,
         input: PutScalingPolicyType,
     ) -> Result<PolicyARNType, RusotoError<PutScalingPolicyError>>;
 
-    /// <p>Creates or updates a scheduled scaling action for an Auto Scaling group. If you leave a parameter unspecified when updating a scheduled scaling action, the corresponding value remains unchanged.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/schedule_time.html">Scheduled scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Creates or updates a scheduled scaling action for an Auto Scaling group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/schedule_time.html">Scheduled scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>You can view the scheduled actions for an Auto Scaling group using the <a>DescribeScheduledActions</a> API call. If you are no longer using a scheduled action, you can delete it by calling the <a>DeleteScheduledAction</a> API.</p>
     async fn put_scheduled_update_group_action(
         &self,
         input: PutScheduledUpdateGroupActionType,
     ) -> Result<(), RusotoError<PutScheduledUpdateGroupActionError>>;
 
-    /// <p>Records a heartbeat for the lifecycle action associated with the specified token or instance. This extends the timeout by the length of time defined using the <a>PutLifecycleHook</a> API call.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p> <b>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</b> </p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroupLifecycle.html">Auto Scaling lifecycle</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Creates or updates a warm pool for the specified Auto Scaling group. A warm pool is a pool of pre-initialized EC2 instances that sits alongside the Auto Scaling group. Whenever your application needs to scale out, the Auto Scaling group can draw on the warm pool to meet its new desired capacity. For more information and example configurations, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-warm-pools.html">Warm pools for Amazon EC2 Auto Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>This operation must be called from the Region in which the Auto Scaling group was created. This operation cannot be called on an Auto Scaling group that has a mixed instances policy or a launch template or launch configuration that requests Spot Instances.</p> <p>You can view the instances in the warm pool using the <a>DescribeWarmPool</a> API call. If you are no longer using a warm pool, you can delete it by calling the <a>DeleteWarmPool</a> API.</p>
+    async fn put_warm_pool(
+        &self,
+        input: PutWarmPoolType,
+    ) -> Result<PutWarmPoolAnswer, RusotoError<PutWarmPoolError>>;
+
+    /// <p>Records a heartbeat for the lifecycle action associated with the specified token or instance. This extends the timeout by the length of time defined using the <a>PutLifecycleHook</a> API call.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p> <b>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</b> </p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html">Amazon EC2 Auto Scaling lifecycle hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     async fn record_lifecycle_action_heartbeat(
         &self,
         input: RecordLifecycleActionHeartbeatType,
@@ -11112,13 +12637,13 @@ pub trait Autoscaling {
         input: SetInstanceHealthQuery,
     ) -> Result<(), RusotoError<SetInstanceHealthError>>;
 
-    /// <p>Updates the instance protection settings of the specified instances.</p> <p>For more information about preventing instances that are part of an Auto Scaling group from terminating on scale in, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection">Instance scale-in protection</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you exceed your maximum limit of instance IDs, which is 50 per Auto Scaling group, the call fails.</p>
+    /// <p>Updates the instance protection settings of the specified instances. This operation cannot be called on instances in a warm pool.</p> <p>For more information about preventing instances that are part of an Auto Scaling group from terminating on scale in, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection">Instance scale-in protection</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you exceed your maximum limit of instance IDs, which is 50 per Auto Scaling group, the call fails.</p>
     async fn set_instance_protection(
         &self,
         input: SetInstanceProtectionQuery,
     ) -> Result<SetInstanceProtectionAnswer, RusotoError<SetInstanceProtectionError>>;
 
-    /// <p>Starts a new instance refresh operation, which triggers a rolling replacement of all previously launched instances in the Auto Scaling group with a new group of instances.</p> <p>If successful, this call creates a new instance refresh request with a unique ID that you can use to track its progress. To query its status, call the <a>DescribeInstanceRefreshes</a> API. To describe the instance refreshes that have already run, call the <a>DescribeInstanceRefreshes</a> API. To cancel an instance refresh operation in progress, use the <a>CancelInstanceRefresh</a> API. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-refresh.html">Replacing Auto Scaling Instances Based on an Instance Refresh</a>.</p>
+    /// <p>Starts a new instance refresh operation, which triggers a rolling replacement of previously launched instances in the Auto Scaling group with a new group of instances.</p> <p>This operation is part of the <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-refresh.html">instance refresh feature</a> in Amazon EC2 Auto Scaling, which helps you update instances in your Auto Scaling group after you make configuration changes.</p> <p>If the call succeeds, it creates a new instance refresh request with a unique ID that you can use to track its progress. To query its status, call the <a>DescribeInstanceRefreshes</a> API. To describe the instance refreshes that have already run, call the <a>DescribeInstanceRefreshes</a> API. To cancel an instance refresh operation in progress, use the <a>CancelInstanceRefresh</a> API. </p>
     async fn start_instance_refresh(
         &self,
         input: StartInstanceRefreshType,
@@ -11130,13 +12655,13 @@ pub trait Autoscaling {
         input: ScalingProcessQuery,
     ) -> Result<(), RusotoError<SuspendProcessesError>>;
 
-    /// <p>Terminates the specified instance and optionally adjusts the desired group size. </p> <p>This call simply makes a termination request. The instance is not terminated immediately. When an instance is terminated, the instance status changes to <code>terminated</code>. You can't connect to or start an instance after you've terminated it.</p> <p>If you do not specify the option to decrement the desired capacity, Amazon EC2 Auto Scaling launches instances to replace the ones that are terminated. </p> <p>By default, Amazon EC2 Auto Scaling balances instances across all Availability Zones. If you decrement the desired capacity, your Auto Scaling group can become unbalanced between Availability Zones. Amazon EC2 Auto Scaling tries to rebalance the group, and rebalancing might terminate instances in other zones. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/auto-scaling-benefits.html#AutoScalingBehavior.InstanceUsage">Rebalancing activities</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Terminates the specified instance and optionally adjusts the desired group size. This operation cannot be called on instances in a warm pool.</p> <p>This call simply makes a termination request. The instance is not terminated immediately. When an instance is terminated, the instance status changes to <code>terminated</code>. You can't connect to or start an instance after you've terminated it.</p> <p>If you do not specify the option to decrement the desired capacity, Amazon EC2 Auto Scaling launches instances to replace the ones that are terminated. </p> <p>By default, Amazon EC2 Auto Scaling balances instances across all Availability Zones. If you decrement the desired capacity, your Auto Scaling group can become unbalanced between Availability Zones. Amazon EC2 Auto Scaling tries to rebalance the group, and rebalancing might terminate instances in other zones. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/auto-scaling-benefits.html#AutoScalingBehavior.InstanceUsage">Rebalancing activities</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     async fn terminate_instance_in_auto_scaling_group(
         &self,
         input: TerminateInstanceInAutoScalingGroupType,
     ) -> Result<ActivityType, RusotoError<TerminateInstanceInAutoScalingGroupError>>;
 
-    /// <p>Updates the configuration for the specified Auto Scaling group.</p> <p>To update an Auto Scaling group, specify the name of the group and the parameter that you want to change. Any parameters that you don't specify are not changed by this update request. The new settings take effect on any scaling activities after this call returns. </p> <p>If you associate a new launch configuration or template with an Auto Scaling group, all new instances will get the updated configuration. Existing instances continue to run with the configuration that they were originally launched with. When you update a group to specify a mixed instances policy instead of a launch configuration or template, existing instances may be replaced to match the new purchasing options that you specified in the policy. For example, if the group currently has 100% On-Demand capacity and the policy specifies 50% Spot capacity, this means that half of your instances will be gradually terminated and relaunched as Spot Instances. When replacing instances, Amazon EC2 Auto Scaling launches new instances before terminating the old ones, so that updating your group does not compromise the performance or availability of your application.</p> <p>Note the following about changing <code>DesiredCapacity</code>, <code>MaxSize</code>, or <code>MinSize</code>:</p> <ul> <li> <p>If a scale-in activity occurs as a result of a new <code>DesiredCapacity</code> value that is lower than the current size of the group, the Auto Scaling group uses its termination policy to determine which instances to terminate.</p> </li> <li> <p>If you specify a new value for <code>MinSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MinSize</code> is larger than the current size of the group, this sets the group's <code>DesiredCapacity</code> to the new <code>MinSize</code> value.</p> </li> <li> <p>If you specify a new value for <code>MaxSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MaxSize</code> is smaller than the current size of the group, this sets the group's <code>DesiredCapacity</code> to the new <code>MaxSize</code> value.</p> </li> </ul> <p>To see which parameters have been set, call the <a>DescribeAutoScalingGroups</a> API. To view the scaling policies for an Auto Scaling group, call the <a>DescribePolicies</a> API. If the group has scaling policies, you can update them by calling the <a>PutScalingPolicy</a> API.</p>
+    /// <p> <b>We strongly recommend that all Auto Scaling groups use launch templates to ensure full functionality for Amazon EC2 Auto Scaling and Amazon EC2.</b> </p> <p>Updates the configuration for the specified Auto Scaling group.</p> <p>To update an Auto Scaling group, specify the name of the group and the parameter that you want to change. Any parameters that you don't specify are not changed by this update request. The new settings take effect on any scaling activities after this call returns. </p> <p>If you associate a new launch configuration or template with an Auto Scaling group, all new instances will get the updated configuration. Existing instances continue to run with the configuration that they were originally launched with. When you update a group to specify a mixed instances policy instead of a launch configuration or template, existing instances may be replaced to match the new purchasing options that you specified in the policy. For example, if the group currently has 100% On-Demand capacity and the policy specifies 50% Spot capacity, this means that half of your instances will be gradually terminated and relaunched as Spot Instances. When replacing instances, Amazon EC2 Auto Scaling launches new instances before terminating the old ones, so that updating your group does not compromise the performance or availability of your application.</p> <p>Note the following about changing <code>DesiredCapacity</code>, <code>MaxSize</code>, or <code>MinSize</code>:</p> <ul> <li> <p>If a scale-in activity occurs as a result of a new <code>DesiredCapacity</code> value that is lower than the current size of the group, the Auto Scaling group uses its termination policy to determine which instances to terminate.</p> </li> <li> <p>If you specify a new value for <code>MinSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MinSize</code> is larger than the current size of the group, this sets the group's <code>DesiredCapacity</code> to the new <code>MinSize</code> value.</p> </li> <li> <p>If you specify a new value for <code>MaxSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MaxSize</code> is smaller than the current size of the group, this sets the group's <code>DesiredCapacity</code> to the new <code>MaxSize</code> value.</p> </li> </ul> <p>To see which parameters have been set, call the <a>DescribeAutoScalingGroups</a> API. To view the scaling policies for an Auto Scaling group, call the <a>DescribePolicies</a> API. If the group has scaling policies, you can update them by calling the <a>PutScalingPolicy</a> API.</p>
     async fn update_auto_scaling_group(
         &self,
         input: UpdateAutoScalingGroupType,
@@ -11283,7 +12808,7 @@ impl Autoscaling for AutoscalingClient {
         Ok(result)
     }
 
-    /// <p>Creates or updates one or more scheduled scaling actions for an Auto Scaling group. If you leave a parameter unspecified when updating a scheduled scaling action, the corresponding value remains unchanged.</p>
+    /// <p>Creates or updates one or more scheduled scaling actions for an Auto Scaling group.</p>
     async fn batch_put_scheduled_update_group_action(
         &self,
         input: BatchPutScheduledUpdateGroupActionType,
@@ -11322,7 +12847,7 @@ impl Autoscaling for AutoscalingClient {
         Ok(result)
     }
 
-    /// <p>Cancels an instance refresh operation in progress. Cancellation does not roll back any replacements that have already been completed, but it prevents new replacements from being started. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-refresh.html">Replacing Auto Scaling Instances Based on an Instance Refresh</a>.</p>
+    /// <p>Cancels an instance refresh operation in progress. Cancellation does not roll back any replacements that have already been completed, but it prevents new replacements from being started. </p> <p>This operation is part of the <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-refresh.html">instance refresh feature</a> in Amazon EC2 Auto Scaling, which helps you update instances in your Auto Scaling group after you make configuration changes.</p>
     async fn cancel_instance_refresh(
         &self,
         input: CancelInstanceRefreshType,
@@ -11377,7 +12902,7 @@ impl Autoscaling for AutoscalingClient {
         Ok(result)
     }
 
-    /// <p>Creates an Auto Scaling group with the specified name and attributes. </p> <p>If you exceed your maximum limit of Auto Scaling groups, the call fails. To query this limit, call the <a>DescribeAccountLimits</a> API. For information about updating this limit, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling service quotas</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>For introductory exercises for creating an Auto Scaling group, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/GettingStartedTutorial.html">Getting started with Amazon EC2 Auto Scaling</a> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-register-lbs-with-asg.html">Tutorial: Set up a scaled and load-balanced application</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html">Auto Scaling groups</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>Every Auto Scaling group has three size parameters (<code>DesiredCapacity</code>, <code>MaxSize</code>, and <code>MinSize</code>). Usually, you set these sizes based on a specific number of instances. However, if you configure a mixed instances policy that defines weights for the instance types, you must specify these sizes with the same units that you use for weighting instances.</p>
+    /// <p> <b>We strongly recommend using a launch template when calling this operation to ensure full functionality for Amazon EC2 Auto Scaling and Amazon EC2.</b> </p> <p>Creates an Auto Scaling group with the specified name and attributes. </p> <p>If you exceed your maximum limit of Auto Scaling groups, the call fails. To query this limit, call the <a>DescribeAccountLimits</a> API. For information about updating this limit, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling service quotas</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>For introductory exercises for creating an Auto Scaling group, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/GettingStartedTutorial.html">Getting started with Amazon EC2 Auto Scaling</a> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-register-lbs-with-asg.html">Tutorial: Set up a scaled and load-balanced application</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroup.html">Auto Scaling groups</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>Every Auto Scaling group has three size parameters (<code>DesiredCapacity</code>, <code>MaxSize</code>, and <code>MinSize</code>). Usually, you set these sizes based on a specific number of instances. However, if you configure a mixed instances policy that defines weights for the instance types, you must specify these sizes with the same units that you use for weighting instances.</p>
     async fn create_auto_scaling_group(
         &self,
         input: CreateAutoScalingGroupType,
@@ -11576,7 +13101,29 @@ impl Autoscaling for AutoscalingClient {
         Ok(())
     }
 
-    /// <p>Describes the current Amazon EC2 Auto Scaling resource quotas for your AWS account.</p> <p>For information about requesting an increase, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling service quotas</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Deletes the warm pool for the specified Auto Scaling group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-warm-pools.html">Warm pools for Amazon EC2 Auto Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    async fn delete_warm_pool(
+        &self,
+        input: DeleteWarmPoolType,
+    ) -> Result<DeleteWarmPoolAnswer, RusotoError<DeleteWarmPoolError>> {
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+        let params = self.new_params("DeleteWarmPool");
+        let mut params = params;
+        DeleteWarmPoolTypeSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, DeleteWarmPoolError::from_response)
+            .await?;
+
+        let result = DeleteWarmPoolAnswer::default();
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Describes the current Amazon EC2 Auto Scaling resource quotas for your account.</p> <p>For information about requesting an increase, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-account-limits.html">Amazon EC2 Auto Scaling service quotas</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     async fn describe_account_limits(
         &self,
     ) -> Result<DescribeAccountLimitsAnswer, RusotoError<DescribeAccountLimitsError>> {
@@ -11607,7 +13154,7 @@ impl Autoscaling for AutoscalingClient {
         Ok(result)
     }
 
-    /// <p><p>Describes the available adjustment types for Amazon EC2 Auto Scaling scaling policies. These settings apply to step scaling policies and simple scaling policies; they do not apply to target tracking scaling policies.</p> <p>The following adjustment types are supported:</p> <ul> <li> <p>ChangeInCapacity</p> </li> <li> <p>ExactCapacity</p> </li> <li> <p>PercentChangeInCapacity</p> </li> </ul></p>
+    /// <p><p>Describes the available adjustment types for step scaling and simple scaling policies.</p> <p>The following adjustment types are supported:</p> <ul> <li> <p> <code>ChangeInCapacity</code> </p> </li> <li> <p> <code>ExactCapacity</code> </p> </li> <li> <p> <code>PercentChangeInCapacity</code> </p> </li> </ul></p>
     async fn describe_adjustment_types(
         &self,
     ) -> Result<DescribeAdjustmentTypesAnswer, RusotoError<DescribeAdjustmentTypesError>> {
@@ -11638,7 +13185,7 @@ impl Autoscaling for AutoscalingClient {
         Ok(result)
     }
 
-    /// <p>Describes one or more Auto Scaling groups.</p>
+    /// <p>Gets information about the Auto Scaling groups in the account and Region.</p> <p>This operation returns information about instances in Auto Scaling groups. To retrieve information about the instances in a warm pool, you must call the <a>DescribeWarmPool</a> API. </p>
     async fn describe_auto_scaling_groups(
         &self,
         input: AutoScalingGroupNamesType,
@@ -11671,7 +13218,7 @@ impl Autoscaling for AutoscalingClient {
         Ok(result)
     }
 
-    /// <p>Describes one or more Auto Scaling instances.</p>
+    /// <p>Gets information about the Auto Scaling instances in the account and Region.</p>
     async fn describe_auto_scaling_instances(
         &self,
         input: DescribeAutoScalingInstancesType,
@@ -11741,7 +13288,7 @@ impl Autoscaling for AutoscalingClient {
         Ok(result)
     }
 
-    /// <p>Describes one or more instance refreshes.</p> <p>You can determine the status of a request by looking at the <code>Status</code> parameter. The following are the possible statuses: </p> <ul> <li> <p> <code>Pending</code> - The request was created, but the operation has not started.</p> </li> <li> <p> <code>InProgress</code> - The operation is in progress.</p> </li> <li> <p> <code>Successful</code> - The operation completed successfully.</p> </li> <li> <p> <code>Failed</code> - The operation failed to complete. You can troubleshoot using the status reason and the scaling activities. </p> </li> <li> <p> <code>Cancelling</code> - An ongoing operation is being cancelled. Cancellation does not roll back any replacements that have already been completed, but it prevents new replacements from being started. </p> </li> <li> <p> <code>Cancelled</code> - The operation is cancelled. </p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-refresh.html">Replacing Auto Scaling Instances Based on an Instance Refresh</a>.</p>
+    /// <p><p>Gets information about the instance refreshes for the specified Auto Scaling group.</p> <p>This operation is part of the <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-refresh.html">instance refresh feature</a> in Amazon EC2 Auto Scaling, which helps you update instances in your Auto Scaling group after you make configuration changes.</p> <p>To help you determine the status of an instance refresh, this operation returns information about the instance refreshes you previously initiated, including their status, end time, the percentage of the instance refresh that is complete, and the number of instances remaining to update before the instance refresh is complete.</p> <p>The following are the possible statuses: </p> <ul> <li> <p> <code>Pending</code> - The request was created, but the operation has not started.</p> </li> <li> <p> <code>InProgress</code> - The operation is in progress.</p> </li> <li> <p> <code>Successful</code> - The operation completed successfully.</p> </li> <li> <p> <code>Failed</code> - The operation failed to complete. You can troubleshoot using the status reason and the scaling activities. </p> </li> <li> <p> <code>Cancelling</code> - An ongoing operation is being cancelled. Cancellation does not roll back any replacements that have already been completed, but it prevents new replacements from being started. </p> </li> <li> <p> <code>Cancelled</code> - The operation is cancelled. </p> </li> </ul></p>
     async fn describe_instance_refreshes(
         &self,
         input: DescribeInstanceRefreshesType,
@@ -11774,7 +13321,7 @@ impl Autoscaling for AutoscalingClient {
         Ok(result)
     }
 
-    /// <p>Describes one or more launch configurations.</p>
+    /// <p>Gets information about the launch configurations in the account and Region.</p>
     async fn describe_launch_configurations(
         &self,
         input: LaunchConfigurationNamesType,
@@ -11807,7 +13354,7 @@ impl Autoscaling for AutoscalingClient {
         Ok(result)
     }
 
-    /// <p><p>Describes the available types of lifecycle hooks.</p> <p>The following hook types are supported:</p> <ul> <li> <p>autoscaling:EC2<em>INSTANCE</em>LAUNCHING</p> </li> <li> <p>autoscaling:EC2<em>INSTANCE</em>TERMINATING</p> </li> </ul></p>
+    /// <p><p>Describes the available types of lifecycle hooks.</p> <p>The following hook types are supported:</p> <ul> <li> <p> <code>autoscaling:EC2<em>INSTANCE</em>LAUNCHING</code> </p> </li> <li> <p> <code>autoscaling:EC2<em>INSTANCE</em>TERMINATING</code> </p> </li> </ul></p>
     async fn describe_lifecycle_hook_types(
         &self,
     ) -> Result<DescribeLifecycleHookTypesAnswer, RusotoError<DescribeLifecycleHookTypesError>>
@@ -11839,7 +13386,7 @@ impl Autoscaling for AutoscalingClient {
         Ok(result)
     }
 
-    /// <p>Describes the lifecycle hooks for the specified Auto Scaling group.</p>
+    /// <p>Gets information about the lifecycle hooks for the specified Auto Scaling group.</p>
     async fn describe_lifecycle_hooks(
         &self,
         input: DescribeLifecycleHooksType,
@@ -11872,7 +13419,7 @@ impl Autoscaling for AutoscalingClient {
         Ok(result)
     }
 
-    /// <p>Describes the target groups for the specified Auto Scaling group.</p>
+    /// <p>Gets information about the load balancer target groups for the specified Auto Scaling group.</p> <p>To determine the availability of registered instances, use the <code>State</code> element in the response. When you attach a target group to an Auto Scaling group, the initial <code>State</code> value is <code>Adding</code>. The state transitions to <code>Added</code> after all Auto Scaling instances are registered with the target group. If Elastic Load Balancing health checks are enabled for the Auto Scaling group, the state transitions to <code>InService</code> after at least one Auto Scaling instance passes the health check. When the target group is in the <code>InService</code> state, Amazon EC2 Auto Scaling can terminate and replace any instances that are reported as unhealthy. If no registered instances pass the health checks, the target group doesn't enter the <code>InService</code> state. </p> <p>Target groups also have an <code>InService</code> state if you attach them in the <a>CreateAutoScalingGroup</a> API call. If your target group state is <code>InService</code>, but it is not working properly, check the scaling activities by calling <a>DescribeScalingActivities</a> and take any corrective actions necessary.</p> <p>For help with failed health checks, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/ts-as-healthchecks.html">Troubleshooting Amazon EC2 Auto Scaling: Health checks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-load-balancer.html">Elastic Load Balancing and Amazon EC2 Auto Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. </p>
     async fn describe_load_balancer_target_groups(
         &self,
         input: DescribeLoadBalancerTargetGroupsRequest,
@@ -11911,7 +13458,7 @@ impl Autoscaling for AutoscalingClient {
         Ok(result)
     }
 
-    /// <p>Describes the load balancers for the specified Auto Scaling group.</p> <p>This operation describes only Classic Load Balancers. If you have Application Load Balancers, Network Load Balancers, or Gateway Load Balancers, use the <a>DescribeLoadBalancerTargetGroups</a> API instead.</p>
+    /// <p>Gets information about the load balancers for the specified Auto Scaling group.</p> <p>This operation describes only Classic Load Balancers. If you have Application Load Balancers, Network Load Balancers, or Gateway Load Balancers, use the <a>DescribeLoadBalancerTargetGroups</a> API instead.</p> <p>To determine the availability of registered instances, use the <code>State</code> element in the response. When you attach a load balancer to an Auto Scaling group, the initial <code>State</code> value is <code>Adding</code>. The state transitions to <code>Added</code> after all Auto Scaling instances are registered with the load balancer. If Elastic Load Balancing health checks are enabled for the Auto Scaling group, the state transitions to <code>InService</code> after at least one Auto Scaling instance passes the health check. When the load balancer is in the <code>InService</code> state, Amazon EC2 Auto Scaling can terminate and replace any instances that are reported as unhealthy. If no registered instances pass the health checks, the load balancer doesn't enter the <code>InService</code> state. </p> <p>Load balancers also have an <code>InService</code> state if you attach them in the <a>CreateAutoScalingGroup</a> API call. If your load balancer state is <code>InService</code>, but it is not working properly, check the scaling activities by calling <a>DescribeScalingActivities</a> and take any corrective actions necessary.</p> <p>For help with failed health checks, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/ts-as-healthchecks.html">Troubleshooting Amazon EC2 Auto Scaling: Health checks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/autoscaling-load-balancer.html">Elastic Load Balancing and Amazon EC2 Auto Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. </p>
     async fn describe_load_balancers(
         &self,
         input: DescribeLoadBalancersRequest,
@@ -11976,7 +13523,7 @@ impl Autoscaling for AutoscalingClient {
         Ok(result)
     }
 
-    /// <p>Describes the notification actions associated with the specified Auto Scaling group.</p>
+    /// <p>Gets information about the Amazon SNS notifications that are configured for one or more Auto Scaling groups.</p>
     async fn describe_notification_configurations(
         &self,
         input: DescribeNotificationConfigurationsType,
@@ -12015,7 +13562,7 @@ impl Autoscaling for AutoscalingClient {
         Ok(result)
     }
 
-    /// <p>Describes the policies for the specified Auto Scaling group.</p>
+    /// <p>Gets information about the scaling policies in the account and Region.</p>
     async fn describe_policies(
         &self,
         input: DescribePoliciesType,
@@ -12045,7 +13592,7 @@ impl Autoscaling for AutoscalingClient {
         Ok(result)
     }
 
-    /// <p>Describes one or more scaling activities for the specified Auto Scaling group.</p>
+    /// <p>Gets information about the scaling activities in the account and Region.</p> <p>When scaling events occur, you see a record of the scaling activity in the scaling activities. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-verify-scaling-activity.html">Verifying a scaling activity for an Auto Scaling group</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If the scaling event succeeds, the value of the <code>StatusCode</code> element in the response is <code>Successful</code>. If an attempt to launch instances failed, the <code>StatusCode</code> value is <code>Failed</code> or <code>Cancelled</code> and the <code>StatusMessage</code> element in the response indicates the cause of the failure. For help interpreting the <code>StatusMessage</code>, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/CHAP_Troubleshooting.html">Troubleshooting Amazon EC2 Auto Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>. </p>
     async fn describe_scaling_activities(
         &self,
         input: DescribeScalingActivitiesType,
@@ -12105,7 +13652,7 @@ impl Autoscaling for AutoscalingClient {
         Ok(result)
     }
 
-    /// <p>Describes the actions scheduled for your Auto Scaling group that haven't run or that have not reached their end time. To describe the actions that have already run, call the <a>DescribeScalingActivities</a> API.</p>
+    /// <p>Gets information about the scheduled actions that haven't run or that have not reached their end time.</p> <p>To describe the scaling activities for scheduled actions that have already run, call the <a>DescribeScalingActivities</a> API.</p>
     async fn describe_scheduled_actions(
         &self,
         input: DescribeScheduledActionsType,
@@ -12192,6 +13739,37 @@ impl Autoscaling for AutoscalingClient {
                 "DescribeTerminationPolicyTypesResult",
                 stack,
             )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Gets information about a warm pool and its instances.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-warm-pools.html">Warm pools for Amazon EC2 Auto Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    async fn describe_warm_pool(
+        &self,
+        input: DescribeWarmPoolType,
+    ) -> Result<DescribeWarmPoolAnswer, RusotoError<DescribeWarmPoolError>> {
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+        let params = self.new_params("DescribeWarmPool");
+        let mut params = params;
+        DescribeWarmPoolTypeSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, DescribeWarmPoolError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                DescribeWarmPoolAnswerDeserializer::deserialize("DescribeWarmPoolResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
             Ok(result)
@@ -12400,6 +13978,40 @@ impl Autoscaling for AutoscalingClient {
         Ok(result)
     }
 
+    /// <p>Retrieves the forecast data for a predictive scaling policy.</p> <p>Load forecasts are predictions of the hourly load values using historical load data from CloudWatch and an analysis of historical trends. Capacity forecasts are represented as predicted values for the minimum capacity that is needed on an hourly basis, based on the hourly load forecast.</p> <p>A minimum of 24 hours of data is required to create the initial forecasts. However, having a full 14 days of historical data results in more accurate forecasts.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-predictive-scaling.html">Predictive scaling for Amazon EC2 Auto Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    async fn get_predictive_scaling_forecast(
+        &self,
+        input: GetPredictiveScalingForecastType,
+    ) -> Result<GetPredictiveScalingForecastAnswer, RusotoError<GetPredictiveScalingForecastError>>
+    {
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+        let params = self.new_params("GetPredictiveScalingForecast");
+        let mut params = params;
+        GetPredictiveScalingForecastTypeSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, GetPredictiveScalingForecastError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetPredictiveScalingForecastAnswerDeserializer::deserialize(
+                "GetPredictiveScalingForecastResult",
+                stack,
+            )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Creates or updates a lifecycle hook for the specified Auto Scaling group.</p> <p>A lifecycle hook tells Amazon EC2 Auto Scaling to perform an action on an instance when the instance launches (before it is put into service) or as the instance terminates (before it is fully terminated).</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p> <b>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</b> </p> </li> <li> <p>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state using the <a>RecordLifecycleActionHeartbeat</a> API call.</p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action using the <a>CompleteLifecycleAction</a> API call.</p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html">Amazon EC2 Auto Scaling lifecycle hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you exceed your maximum limit of lifecycle hooks, which by default is 50 per Auto Scaling group, the call fails.</p> <p>You can view the lifecycle hooks for an Auto Scaling group using the <a>DescribeLifecycleHooks</a> API call. If you are no longer using a lifecycle hook, you can delete it by calling the <a>DeleteLifecycleHook</a> API.</p>
     async fn put_lifecycle_hook(
         &self,
@@ -12442,7 +14054,7 @@ impl Autoscaling for AutoscalingClient {
         Ok(())
     }
 
-    /// <p>Creates or updates a scaling policy for an Auto Scaling group.</p> <p>For more information about using scaling policies to scale your Auto Scaling group, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html">Target tracking scaling policies</a> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-simple-step.html">Step and simple scaling policies</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Creates or updates a scaling policy for an Auto Scaling group. Scaling policies are used to scale an Auto Scaling group based on configurable metrics. If no policies are defined, the dynamic scaling and predictive scaling features are not used. </p> <p>For more information about using dynamic scaling, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-target-tracking.html">Target tracking scaling policies</a> and <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-scaling-simple-step.html">Step and simple scaling policies</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>For more information about using predictive scaling, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-predictive-scaling.html">Predictive scaling for Amazon EC2 Auto Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>You can view the scaling policies for an Auto Scaling group using the <a>DescribePolicies</a> API call. If you are no longer using a scaling policy, you can delete it by calling the <a>DeletePolicy</a> API.</p>
     async fn put_scaling_policy(
         &self,
         input: PutScalingPolicyType,
@@ -12472,7 +14084,7 @@ impl Autoscaling for AutoscalingClient {
         Ok(result)
     }
 
-    /// <p>Creates or updates a scheduled scaling action for an Auto Scaling group. If you leave a parameter unspecified when updating a scheduled scaling action, the corresponding value remains unchanged.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/schedule_time.html">Scheduled scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Creates or updates a scheduled scaling action for an Auto Scaling group.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/schedule_time.html">Scheduled scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>You can view the scheduled actions for an Auto Scaling group using the <a>DescribeScheduledActions</a> API call. If you are no longer using a scheduled action, you can delete it by calling the <a>DeleteScheduledAction</a> API.</p>
     async fn put_scheduled_update_group_action(
         &self,
         input: PutScheduledUpdateGroupActionType,
@@ -12492,7 +14104,29 @@ impl Autoscaling for AutoscalingClient {
         Ok(())
     }
 
-    /// <p>Records a heartbeat for the lifecycle action associated with the specified token or instance. This extends the timeout by the length of time defined using the <a>PutLifecycleHook</a> API call.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p> <b>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</b> </p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroupLifecycle.html">Auto Scaling lifecycle</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Creates or updates a warm pool for the specified Auto Scaling group. A warm pool is a pool of pre-initialized EC2 instances that sits alongside the Auto Scaling group. Whenever your application needs to scale out, the Auto Scaling group can draw on the warm pool to meet its new desired capacity. For more information and example configurations, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-warm-pools.html">Warm pools for Amazon EC2 Auto Scaling</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>This operation must be called from the Region in which the Auto Scaling group was created. This operation cannot be called on an Auto Scaling group that has a mixed instances policy or a launch template or launch configuration that requests Spot Instances.</p> <p>You can view the instances in the warm pool using the <a>DescribeWarmPool</a> API call. If you are no longer using a warm pool, you can delete it by calling the <a>DeleteWarmPool</a> API.</p>
+    async fn put_warm_pool(
+        &self,
+        input: PutWarmPoolType,
+    ) -> Result<PutWarmPoolAnswer, RusotoError<PutWarmPoolError>> {
+        let mut request = SignedRequest::new("POST", "autoscaling", &self.region, "/");
+        let params = self.new_params("PutWarmPool");
+        let mut params = params;
+        PutWarmPoolTypeSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, PutWarmPoolError::from_response)
+            .await?;
+
+        let result = PutWarmPoolAnswer::default();
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Records a heartbeat for the lifecycle action associated with the specified token or instance. This extends the timeout by the length of time defined using the <a>PutLifecycleHook</a> API call.</p> <p>This step is a part of the procedure for adding a lifecycle hook to an Auto Scaling group:</p> <ol> <li> <p>(Optional) Create a Lambda function and a rule that allows CloudWatch Events to invoke your Lambda function when Amazon EC2 Auto Scaling launches or terminates instances.</p> </li> <li> <p>(Optional) Create a notification target and an IAM role. The target can be either an Amazon SQS queue or an Amazon SNS topic. The role allows Amazon EC2 Auto Scaling to publish lifecycle notifications to the target.</p> </li> <li> <p>Create the lifecycle hook. Specify whether the hook is used when the instances launch or terminate.</p> </li> <li> <p> <b>If you need more time, record the lifecycle action heartbeat to keep the instance in a pending state.</b> </p> </li> <li> <p>If you finish before the timeout period ends, complete the lifecycle action.</p> </li> </ol> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html">Amazon EC2 Auto Scaling lifecycle hooks</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     async fn record_lifecycle_action_heartbeat(
         &self,
         input: RecordLifecycleActionHeartbeatType,
@@ -12577,7 +14211,7 @@ impl Autoscaling for AutoscalingClient {
         Ok(())
     }
 
-    /// <p>Updates the instance protection settings of the specified instances.</p> <p>For more information about preventing instances that are part of an Auto Scaling group from terminating on scale in, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection">Instance scale-in protection</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you exceed your maximum limit of instance IDs, which is 50 per Auto Scaling group, the call fails.</p>
+    /// <p>Updates the instance protection settings of the specified instances. This operation cannot be called on instances in a warm pool.</p> <p>For more information about preventing instances that are part of an Auto Scaling group from terminating on scale in, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-instance-termination.html#instance-protection">Instance scale-in protection</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p> <p>If you exceed your maximum limit of instance IDs, which is 50 per Auto Scaling group, the call fails.</p>
     async fn set_instance_protection(
         &self,
         input: SetInstanceProtectionQuery,
@@ -12599,7 +14233,7 @@ impl Autoscaling for AutoscalingClient {
         Ok(result)
     }
 
-    /// <p>Starts a new instance refresh operation, which triggers a rolling replacement of all previously launched instances in the Auto Scaling group with a new group of instances.</p> <p>If successful, this call creates a new instance refresh request with a unique ID that you can use to track its progress. To query its status, call the <a>DescribeInstanceRefreshes</a> API. To describe the instance refreshes that have already run, call the <a>DescribeInstanceRefreshes</a> API. To cancel an instance refresh operation in progress, use the <a>CancelInstanceRefresh</a> API. </p> <p>For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-refresh.html">Replacing Auto Scaling Instances Based on an Instance Refresh</a>.</p>
+    /// <p>Starts a new instance refresh operation, which triggers a rolling replacement of previously launched instances in the Auto Scaling group with a new group of instances.</p> <p>This operation is part of the <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-instance-refresh.html">instance refresh feature</a> in Amazon EC2 Auto Scaling, which helps you update instances in your Auto Scaling group after you make configuration changes.</p> <p>If the call succeeds, it creates a new instance refresh request with a unique ID that you can use to track its progress. To query its status, call the <a>DescribeInstanceRefreshes</a> API. To describe the instance refreshes that have already run, call the <a>DescribeInstanceRefreshes</a> API. To cancel an instance refresh operation in progress, use the <a>CancelInstanceRefresh</a> API. </p>
     async fn start_instance_refresh(
         &self,
         input: StartInstanceRefreshType,
@@ -12652,7 +14286,7 @@ impl Autoscaling for AutoscalingClient {
         Ok(())
     }
 
-    /// <p>Terminates the specified instance and optionally adjusts the desired group size. </p> <p>This call simply makes a termination request. The instance is not terminated immediately. When an instance is terminated, the instance status changes to <code>terminated</code>. You can't connect to or start an instance after you've terminated it.</p> <p>If you do not specify the option to decrement the desired capacity, Amazon EC2 Auto Scaling launches instances to replace the ones that are terminated. </p> <p>By default, Amazon EC2 Auto Scaling balances instances across all Availability Zones. If you decrement the desired capacity, your Auto Scaling group can become unbalanced between Availability Zones. Amazon EC2 Auto Scaling tries to rebalance the group, and rebalancing might terminate instances in other zones. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/auto-scaling-benefits.html#AutoScalingBehavior.InstanceUsage">Rebalancing activities</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
+    /// <p>Terminates the specified instance and optionally adjusts the desired group size. This operation cannot be called on instances in a warm pool.</p> <p>This call simply makes a termination request. The instance is not terminated immediately. When an instance is terminated, the instance status changes to <code>terminated</code>. You can't connect to or start an instance after you've terminated it.</p> <p>If you do not specify the option to decrement the desired capacity, Amazon EC2 Auto Scaling launches instances to replace the ones that are terminated. </p> <p>By default, Amazon EC2 Auto Scaling balances instances across all Availability Zones. If you decrement the desired capacity, your Auto Scaling group can become unbalanced between Availability Zones. Amazon EC2 Auto Scaling tries to rebalance the group, and rebalancing might terminate instances in other zones. For more information, see <a href="https://docs.aws.amazon.com/autoscaling/ec2/userguide/auto-scaling-benefits.html#AutoScalingBehavior.InstanceUsage">Rebalancing activities</a> in the <i>Amazon EC2 Auto Scaling User Guide</i>.</p>
     async fn terminate_instance_in_auto_scaling_group(
         &self,
         input: TerminateInstanceInAutoScalingGroupType,
@@ -12688,7 +14322,7 @@ impl Autoscaling for AutoscalingClient {
         Ok(result)
     }
 
-    /// <p>Updates the configuration for the specified Auto Scaling group.</p> <p>To update an Auto Scaling group, specify the name of the group and the parameter that you want to change. Any parameters that you don't specify are not changed by this update request. The new settings take effect on any scaling activities after this call returns. </p> <p>If you associate a new launch configuration or template with an Auto Scaling group, all new instances will get the updated configuration. Existing instances continue to run with the configuration that they were originally launched with. When you update a group to specify a mixed instances policy instead of a launch configuration or template, existing instances may be replaced to match the new purchasing options that you specified in the policy. For example, if the group currently has 100% On-Demand capacity and the policy specifies 50% Spot capacity, this means that half of your instances will be gradually terminated and relaunched as Spot Instances. When replacing instances, Amazon EC2 Auto Scaling launches new instances before terminating the old ones, so that updating your group does not compromise the performance or availability of your application.</p> <p>Note the following about changing <code>DesiredCapacity</code>, <code>MaxSize</code>, or <code>MinSize</code>:</p> <ul> <li> <p>If a scale-in activity occurs as a result of a new <code>DesiredCapacity</code> value that is lower than the current size of the group, the Auto Scaling group uses its termination policy to determine which instances to terminate.</p> </li> <li> <p>If you specify a new value for <code>MinSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MinSize</code> is larger than the current size of the group, this sets the group's <code>DesiredCapacity</code> to the new <code>MinSize</code> value.</p> </li> <li> <p>If you specify a new value for <code>MaxSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MaxSize</code> is smaller than the current size of the group, this sets the group's <code>DesiredCapacity</code> to the new <code>MaxSize</code> value.</p> </li> </ul> <p>To see which parameters have been set, call the <a>DescribeAutoScalingGroups</a> API. To view the scaling policies for an Auto Scaling group, call the <a>DescribePolicies</a> API. If the group has scaling policies, you can update them by calling the <a>PutScalingPolicy</a> API.</p>
+    /// <p> <b>We strongly recommend that all Auto Scaling groups use launch templates to ensure full functionality for Amazon EC2 Auto Scaling and Amazon EC2.</b> </p> <p>Updates the configuration for the specified Auto Scaling group.</p> <p>To update an Auto Scaling group, specify the name of the group and the parameter that you want to change. Any parameters that you don't specify are not changed by this update request. The new settings take effect on any scaling activities after this call returns. </p> <p>If you associate a new launch configuration or template with an Auto Scaling group, all new instances will get the updated configuration. Existing instances continue to run with the configuration that they were originally launched with. When you update a group to specify a mixed instances policy instead of a launch configuration or template, existing instances may be replaced to match the new purchasing options that you specified in the policy. For example, if the group currently has 100% On-Demand capacity and the policy specifies 50% Spot capacity, this means that half of your instances will be gradually terminated and relaunched as Spot Instances. When replacing instances, Amazon EC2 Auto Scaling launches new instances before terminating the old ones, so that updating your group does not compromise the performance or availability of your application.</p> <p>Note the following about changing <code>DesiredCapacity</code>, <code>MaxSize</code>, or <code>MinSize</code>:</p> <ul> <li> <p>If a scale-in activity occurs as a result of a new <code>DesiredCapacity</code> value that is lower than the current size of the group, the Auto Scaling group uses its termination policy to determine which instances to terminate.</p> </li> <li> <p>If you specify a new value for <code>MinSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MinSize</code> is larger than the current size of the group, this sets the group's <code>DesiredCapacity</code> to the new <code>MinSize</code> value.</p> </li> <li> <p>If you specify a new value for <code>MaxSize</code> without specifying a value for <code>DesiredCapacity</code>, and the new <code>MaxSize</code> is smaller than the current size of the group, this sets the group's <code>DesiredCapacity</code> to the new <code>MaxSize</code> value.</p> </li> </ul> <p>To see which parameters have been set, call the <a>DescribeAutoScalingGroups</a> API. To view the scaling policies for an Auto Scaling group, call the <a>DescribePolicies</a> API. If the group has scaling policies, you can update them by calling the <a>PutScalingPolicy</a> API.</p>
     async fn update_auto_scaling_group(
         &self,
         input: UpdateAutoScalingGroupType,

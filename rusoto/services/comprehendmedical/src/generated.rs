@@ -376,6 +376,10 @@ pub struct ICD10CMAttribute {
     #[serde(rename = "BeginOffset")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub begin_offset: Option<i64>,
+    /// <p>The category of attribute. Can be either of <code>DX_NAME</code> or <code>TIME_EXPRESSION</code>.</p>
+    #[serde(rename = "Category")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub category: Option<String>,
     /// <p>The 0-based character offset in the input text that shows where the attribute ends. The offset returns the UTF-8 code point in the string.</p>
     #[serde(rename = "EndOffset")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -388,6 +392,10 @@ pub struct ICD10CMAttribute {
     #[serde(rename = "RelationshipScore")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub relationship_score: Option<f32>,
+    /// <p>The type of relationship between the entity and attribute. Type for the relationship can be either of <code>OVERLAP</code> or <code>SYSTEM_ORGAN_SITE</code>.</p>
+    #[serde(rename = "RelationshipType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub relationship_type: Option<String>,
     /// <p>The level of confidence that Amazon Comprehend Medical has that the segment of text is correctly recognized as an attribute.</p>
     #[serde(rename = "Score")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -464,7 +472,7 @@ pub struct ICD10CMEntity {
     #[serde(rename = "Traits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub traits: Option<Vec<ICD10CMTrait>>,
-    /// <p>Describes the specific type of entity with category of entities. InferICD10CM detects entities of the type <code>DX_NAME</code>.</p>
+    /// <p>Describes the specific type of entity with category of entities. InferICD10CM detects entities of the type <code>DX_NAME</code> and <code>TIME_EXPRESSION</code>.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -532,7 +540,7 @@ pub struct InferRxNormResponse {
     pub pagination_token: Option<String>,
 }
 
-/// <p>The input properties for an entities detection job. This includes the name of the S3 bucket and the path to the files to be analyzed. See <a>batch-manifest</a> for more information. </p>
+/// <p>The input properties for an entities detection job. This includes the name of the S3 bucket and the path to the files to be analyzed. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputDataConfig {
     /// <p>The URI of the S3 bucket that contains the input data. The bucket must be in the same region as the API endpoint that you are calling.</p> <p>Each file in the document collection must be less than 40 KB. You can store a maximum of 30 GB in the bucket.</p>
@@ -2236,13 +2244,13 @@ pub trait ComprehendMedical {
         input: DetectPHIRequest,
     ) -> Result<DetectPHIResponse, RusotoError<DetectPHIError>>;
 
-    /// <p>InferICD10CM detects medical conditions as entities listed in a patient record and links those entities to normalized concept identifiers in the ICD-10-CM knowledge base from the Centers for Disease Control. Amazon Comprehend Medical only detects medical entities in English language texts.</p>
+    /// <p>InferICD10CM detects medical conditions as entities listed in a patient record and links those entities to normalized concept identifiers in the ICD-10-CM knowledge base from the Centers for Disease Control. Amazon Comprehend Medical only detects medical entities in English language texts. </p>
     async fn infer_icd10cm(
         &self,
         input: InferICD10CMRequest,
     ) -> Result<InferICD10CMResponse, RusotoError<InferICD10CMError>>;
 
-    /// <p>InferRxNorm detects medications as entities listed in a patient record and links to the normalized concept identifiers in the RxNorm database from the National Library of Medicine. Amazon Comprehend Medical only detects medical entities in English language texts.</p>
+    /// <p>InferRxNorm detects medications as entities listed in a patient record and links to the normalized concept identifiers in the RxNorm database from the National Library of Medicine. Amazon Comprehend Medical only detects medical entities in English language texts. </p>
     async fn infer_rx_norm(
         &self,
         input: InferRxNormRequest,
@@ -2510,7 +2518,7 @@ impl ComprehendMedical for ComprehendMedicalClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DetectPHIResponse, _>()
     }
 
-    /// <p>InferICD10CM detects medical conditions as entities listed in a patient record and links those entities to normalized concept identifiers in the ICD-10-CM knowledge base from the Centers for Disease Control. Amazon Comprehend Medical only detects medical entities in English language texts.</p>
+    /// <p>InferICD10CM detects medical conditions as entities listed in a patient record and links those entities to normalized concept identifiers in the ICD-10-CM knowledge base from the Centers for Disease Control. Amazon Comprehend Medical only detects medical entities in English language texts. </p>
     async fn infer_icd10cm(
         &self,
         input: InferICD10CMRequest,
@@ -2528,7 +2536,7 @@ impl ComprehendMedical for ComprehendMedicalClient {
         proto::json::ResponsePayload::new(&response).deserialize::<InferICD10CMResponse, _>()
     }
 
-    /// <p>InferRxNorm detects medications as entities listed in a patient record and links to the normalized concept identifiers in the RxNorm database from the National Library of Medicine. Amazon Comprehend Medical only detects medical entities in English language texts.</p>
+    /// <p>InferRxNorm detects medications as entities listed in a patient record and links to the normalized concept identifiers in the RxNorm database from the National Library of Medicine. Amazon Comprehend Medical only detects medical entities in English language texts. </p>
     async fn infer_rx_norm(
         &self,
         input: InferRxNormRequest,

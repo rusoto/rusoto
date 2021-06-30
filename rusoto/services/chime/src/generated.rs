@@ -86,41 +86,41 @@ pub struct AlexaForBusinessMetadata {
     pub is_alexa_for_business_enabled: Option<bool>,
 }
 
-/// <p>An instance of a Chime messaging application.</p>
+/// <p>The details of an <code>AppInstance</code>, an instance of an Amazon Chime SDK messaging application.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AppInstance {
-    /// <p>The ARN of the messaging instance. </p>
+    /// <p>The ARN of the messaging instance.</p>
     #[serde(rename = "AppInstanceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_instance_arn: Option<String>,
-    /// <p>The time at which an app instance was created. In epoch milliseconds.</p>
+    /// <p>The time at which an <code>AppInstance</code> was created. In epoch milliseconds.</p>
     #[serde(rename = "CreatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_timestamp: Option<f64>,
-    /// <p>The time an app instance was last updated. In epoch milliseconds.</p>
+    /// <p>The time an <code>AppInstance</code> was last updated. In epoch milliseconds.</p>
     #[serde(rename = "LastUpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<f64>,
-    /// <p>The metadata of an app instance.</p>
+    /// <p>The metadata of an <code>AppInstance</code>.</p>
     #[serde(rename = "Metadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<String>,
-    /// <p>The name of an app instance.</p>
+    /// <p>The name of an <code>AppInstance</code>.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-/// <p>Promotes a user to the administrator role for the duration of an app instance.</p>
+/// <p>The details of an <code>AppInstanceAdmin</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AppInstanceAdmin {
-    /// <p>The name and metadata of the app instance administrator.</p>
+    /// <p>The <code>AppInstanceAdmin</code> data.</p>
     #[serde(rename = "Admin")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub admin: Option<Identity>,
-    /// <p>The ARN of the app instance administrator.</p>
+    /// <p>The ARN of the <code>AppInstance</code> for which the user is an administrator.</p>
     #[serde(rename = "AppInstanceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_instance_arn: Option<String>,
@@ -130,29 +130,29 @@ pub struct AppInstanceAdmin {
     pub created_timestamp: Option<f64>,
 }
 
-/// <p>The identity and metadata of an administrator.</p>
+/// <p>Summary of the details of an <code>AppInstanceAdmin</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AppInstanceAdminSummary {
-    /// <p>The name and metadata of the app instance administrator.</p>
+    /// <p>The details of the <code>AppInstanceAdmin</code>.</p>
     #[serde(rename = "Admin")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub admin: Option<Identity>,
 }
 
-/// <p>The length of time in days to retain messages.</p>
+/// <p>The details of the data-retention settings for an <code>AppInstance</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AppInstanceRetentionSettings {
-    /// <p>The length of time in days to retain a channel.</p>
+    /// <p>The length of time in days to retain the messages in a channel.</p>
     #[serde(rename = "ChannelRetentionSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_retention_settings: Option<ChannelRetentionSettings>,
 }
 
-/// <p>The streaming configuration of an app instance.</p>
+/// <p>The details of the streaming configuration of an <code>AppInstance</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AppInstanceStreamingConfiguration {
-    /// <p>The data type of the app instance.</p>
+    /// <p>The type of data to be streamed.</p>
     #[serde(rename = "AppInstanceDataType")]
     pub app_instance_data_type: String,
     /// <p>The resource ARN.</p>
@@ -160,77 +160,77 @@ pub struct AppInstanceStreamingConfiguration {
     pub resource_arn: String,
 }
 
-/// <p>The summary data for an app instance.</p>
+/// <p>Summary of the data for an <code>AppInstance</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AppInstanceSummary {
-    /// <p>The app instance ARN.</p>
+    /// <p>The <code>AppInstance</code> ARN.</p>
     #[serde(rename = "AppInstanceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_instance_arn: Option<String>,
-    /// <p>The metadata of the app instance summary.</p>
+    /// <p>The metadata of the <code>AppInstance</code>.</p>
     #[serde(rename = "Metadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<String>,
-    /// <p>The name of the app instance summary.</p>
+    /// <p>The name of the <code>AppInstance</code>.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-/// <p>The app instance user.</p>
+/// <p>The details of an <code>AppInstanceUser</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AppInstanceUser {
-    /// <p>The ARN of the app instance user.</p>
+    /// <p>The ARN of the <code>AppInstanceUser</code>.</p>
     #[serde(rename = "AppInstanceUserArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_instance_user_arn: Option<String>,
-    /// <p>The time at which the app instance user was created.</p>
+    /// <p>The time at which the <code>AppInstanceUser</code> was created.</p>
     #[serde(rename = "CreatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_timestamp: Option<f64>,
-    /// <p>The time at which the app instance user was last updated.</p>
+    /// <p>The time at which the <code>AppInstanceUser</code> was last updated.</p>
     #[serde(rename = "LastUpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<f64>,
-    /// <p>The metadata of the app instance user.</p>
+    /// <p>The metadata of the <code>AppInstanceUser</code>.</p>
     #[serde(rename = "Metadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<String>,
-    /// <p>The name of the app instance user.</p>
+    /// <p>The name of the <code>AppInstanceUser</code>.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
 }
 
-/// <p>Lists the channels to which app instance users belong.</p>
+/// <p>Summary of the membership details of an <code>AppInstanceUser</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AppInstanceUserMembershipSummary {
-    /// <p>The time at which a summary was last read.</p>
+    /// <p>The time at which a message was last read.</p>
     #[serde(rename = "ReadMarkerTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub read_marker_timestamp: Option<f64>,
-    /// <p>The type of channel summary, </p>
+    /// <p>The type of <code>ChannelMembership</code>.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-/// <p>The app instance user summary data .</p>
+/// <p>Summary of the details of an <code>AppInstanceUser</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AppInstanceUserSummary {
-    /// <p>The ARN of the app instance user.</p>
+    /// <p>The ARN of the <code>AppInstanceUser</code>.</p>
     #[serde(rename = "AppInstanceUserArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_instance_user_arn: Option<String>,
-    /// <p>The metadata in an app instance user summary.</p>
+    /// <p>The metadata of the <code>AppInstanceUser</code>.</p>
     #[serde(rename = "Metadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<String>,
-    /// <p>The name in an app instance user summary.</p>
+    /// <p>The name of an <code>AppInstanceUser</code>.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -317,7 +317,7 @@ pub struct AssociateSigninDelegateGroupsWithAccountRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AssociateSigninDelegateGroupsWithAccountResponse {}
 
-/// <p>An Amazon Chime SDK meeting attendee. Includes a unique <code>AttendeeId</code> and <code>JoinToken</code>. The <code>JoinToken</code> allows a client to authenticate and join as the specified attendee. The <code>JoinToken</code> expires when the meeting ends or when <a>DeleteAttendee</a> is called. After that, the attendee is unable to join the meeting.</p> <p>We recommend securely transferring each <code>JoinToken</code> from your server application to the client so that no other client has access to the token except for the one authorized to represent the attendee.</p>
+/// <p> An Amazon Chime SDK meeting attendee. Includes a unique <code>AttendeeId</code> and <code>JoinToken</code> . The <code>JoinToken</code> allows a client to authenticate and join as the specified attendee. The <code>JoinToken</code> expires when the meeting ends or when <a>DeleteAttendee</a> is called. After that, the attendee is unable to join the meeting. </p> <p>We recommend securely transferring each <code>JoinToken</code> from your server application to the client so that no other client has access to the token except for the one authorized to represent the attendee.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Attendee {
@@ -325,7 +325,7 @@ pub struct Attendee {
     #[serde(rename = "AttendeeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attendee_id: Option<String>,
-    /// <p>The Amazon Chime SDK external user ID. An idempotency token. Links the attendee to an identity managed by a builder application. If you create an attendee with the same external user id, the service returns the existing record.</p>
+    /// <p>The Amazon Chime SDK external user ID. An idempotency token. Links the attendee to an identity managed by a builder application.</p>
     #[serde(rename = "ExternalUserId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub external_user_id: Option<String>,
@@ -333,6 +333,27 @@ pub struct Attendee {
     #[serde(rename = "JoinToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub join_token: Option<String>,
+}
+
+/// <p>The membership information, including member ARNs, the channel ARN, and membership types.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BatchChannelMemberships {
+    /// <p>The ARN of the channel to which you're adding users.</p>
+    #[serde(rename = "ChannelArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_arn: Option<String>,
+    #[serde(rename = "InvitedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invited_by: Option<Identity>,
+    /// <p>The users successfully added to the request.</p>
+    #[serde(rename = "Members")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub members: Option<Vec<Identity>>,
+    /// <p>The membership types set for the channel users.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -357,6 +378,56 @@ pub struct BatchCreateAttendeeResponse {
     #[serde(rename = "Errors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub errors: Option<Vec<ChimeCreateAttendeeError>>,
+}
+
+/// <p>A list of failed member ARNs, error codes, and error messages.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ChimeBatchCreateChannelMembershipError {
+    /// <p>The error code.</p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+    /// <p>The error message.</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    /// <p>The ARN of the member that the service couldn't add.</p>
+    #[serde(rename = "MemberArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub member_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct BatchCreateChannelMembershipRequest {
+    /// <p>The ARN of the channel to which you're adding users.</p>
+    #[serde(rename = "ChannelArn")]
+    pub channel_arn: String,
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
+    /// <p>The ARNs of the members you want to add to the channel.</p>
+    #[serde(rename = "MemberArns")]
+    pub member_arns: Vec<String>,
+    /// <p>The membership type of a user, <code>DEFAULT</code> or <code>HIDDEN</code>. Default members are always returned as part of <code>ListChannelMemberships</code>. Hidden members are only returned if the type filter in <code>ListChannelMemberships</code> equals <code>HIDDEN</code>. Otherwise hidden members are not returned. This is only supported by moderators.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct BatchCreateChannelMembershipResponse {
+    /// <p>The list of channel memberships in the response.</p>
+    #[serde(rename = "BatchChannelMemberships")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub batch_channel_memberships: Option<BatchChannelMemberships>,
+    /// <p>If the action fails for one or more of the memberships in the request, a list of the memberships is returned, along with error codes and error messages.</p>
+    #[serde(rename = "Errors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub errors: Option<Vec<ChimeBatchCreateChannelMembershipError>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -527,7 +598,7 @@ pub struct BusinessCallingSettings {
     pub cdr_bucket: Option<String>,
 }
 
-/// <p>Creates a channel.</p>
+/// <p>The details of a channel.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Channel {
@@ -535,15 +606,15 @@ pub struct Channel {
     #[serde(rename = "ChannelArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_arn: Option<String>,
-    /// <p>The administrator who created the channel.</p>
+    /// <p>The <code>AppInstanceUser</code> who created the channel.</p>
     #[serde(rename = "CreatedBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_by: Option<Identity>,
-    /// <p>The time at which the administrator created the channel.</p>
+    /// <p>The time at which the <code>AppInstanceUser</code> created the channel.</p>
     #[serde(rename = "CreatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_timestamp: Option<f64>,
-    /// <p>The time at which a member sent the last message in a session.</p>
+    /// <p>The time at which a member sent the last message in the channel.</p>
     #[serde(rename = "LastMessageTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_message_timestamp: Option<f64>,
@@ -551,7 +622,7 @@ pub struct Channel {
     #[serde(rename = "LastUpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<f64>,
-    /// <p>The metadata of the channel.</p>
+    /// <p>The channel's metadata.</p>
     #[serde(rename = "Metadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<String>,
@@ -563,13 +634,13 @@ pub struct Channel {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The channel's privacy setting, <code>PUBLIC</code> or <code>HIDDEN</code>.</p>
+    /// <p>The channel's privacy setting.</p>
     #[serde(rename = "Privacy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub privacy: Option<String>,
 }
 
-/// <p>Bans a user from a channel.</p>
+/// <p>The details of a channel ban.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChannelBan {
@@ -577,7 +648,7 @@ pub struct ChannelBan {
     #[serde(rename = "ChannelArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_arn: Option<String>,
-    /// <p>The parameter of the action.</p>
+    /// <p>The <code>AppInstanceUser</code> who created the ban.</p>
     #[serde(rename = "CreatedBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_by: Option<Identity>,
@@ -591,7 +662,7 @@ pub struct ChannelBan {
     pub member: Option<Identity>,
 }
 
-/// <p>The summary data for the channel ban.</p>
+/// <p>Summary of the details of a <code>ChannelBan</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChannelBanSummary {
@@ -601,7 +672,7 @@ pub struct ChannelBanSummary {
     pub member: Option<Identity>,
 }
 
-/// <p>Creates a channel member.</p>
+/// <p>The details of a channel member.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChannelMembership {
@@ -609,11 +680,11 @@ pub struct ChannelMembership {
     #[serde(rename = "ChannelArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_arn: Option<String>,
-    /// <p>The time at which the channel membership was created. </p>
+    /// <p>The time at which the channel membership was created.</p>
     #[serde(rename = "CreatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_timestamp: Option<f64>,
-    /// <p>The identifier of the member who invited another member. Taken from the message header.</p>
+    /// <p>The identifier of the member who invited another member.</p>
     #[serde(rename = "InvitedBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invited_by: Option<Identity>,
@@ -631,11 +702,11 @@ pub struct ChannelMembership {
     pub type_: Option<String>,
 }
 
-/// <p>Returns the channel membership summary data for an app instance.</p>
+/// <p>Summary of the channel membership details of an <code>AppInstanceUser</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChannelMembershipForAppInstanceUserSummary {
-    /// <p>Returns the channel membership data for an app instance.</p>
+    /// <p>Returns the channel membership data for an <code>AppInstance</code>.</p>
     #[serde(rename = "AppInstanceUserMembershipSummary")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_instance_user_membership_summary: Option<AppInstanceUserMembershipSummary>,
@@ -644,7 +715,7 @@ pub struct ChannelMembershipForAppInstanceUserSummary {
     pub channel_summary: Option<ChannelSummary>,
 }
 
-/// <p>The summary data of a channel membership.</p>
+/// <p>Summary of the details of a <code>ChannelMembership</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChannelMembershipSummary {
@@ -654,7 +725,7 @@ pub struct ChannelMembershipSummary {
     pub member: Option<Identity>,
 }
 
-/// <p>Creates a message in a channel.</p>
+/// <p>The details of a message in a channel.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChannelMessage {
@@ -686,10 +757,11 @@ pub struct ChannelMessage {
     #[serde(rename = "Metadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<String>,
+    /// <p>The persistence setting for a channel message.</p>
     #[serde(rename = "Persistence")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub persistence: Option<String>,
-    /// <p>Hides the content of a message. The message still exists on the back end, but this action only returns metadata.</p>
+    /// <p>Hides the content of a message.</p>
     #[serde(rename = "Redacted")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub redacted: Option<bool>,
@@ -703,11 +775,11 @@ pub struct ChannelMessage {
     pub type_: Option<String>,
 }
 
-/// <p>A summary of the messages in a channel.</p>
+/// <p>Summary of the messages in a <code>Channel</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChannelMessageSummary {
-    /// <p>The content of the message summary.</p>
+    /// <p>The content of the message.</p>
     #[serde(rename = "Content")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
@@ -715,35 +787,37 @@ pub struct ChannelMessageSummary {
     #[serde(rename = "CreatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_timestamp: Option<f64>,
+    /// <p>The time at which a message was last edited.</p>
     #[serde(rename = "LastEditedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_edited_timestamp: Option<f64>,
+    /// <p>The time at which a message was last updated.</p>
     #[serde(rename = "LastUpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_timestamp: Option<f64>,
-    /// <p>The ID of the message summary.</p>
+    /// <p>The ID of the message.</p>
     #[serde(rename = "MessageId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_id: Option<String>,
-    /// <p>The metadata of the message summary.</p>
+    /// <p>The metadata of the message.</p>
     #[serde(rename = "Metadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<String>,
-    /// <p>Redacts the content of a message summary.</p>
+    /// <p>Indicates whether a message was redacted.</p>
     #[serde(rename = "Redacted")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub redacted: Option<bool>,
-    /// <p>The sender of the message summary.</p>
+    /// <p>The message sender.</p>
     #[serde(rename = "Sender")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sender: Option<Identity>,
-    /// <p>The type of message summary.</p>
+    /// <p>The type of message.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
 }
 
-/// <p>Returns the summary data for a moderated channel.</p>
+/// <p>Summary of the details of a moderated channel.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChannelModeratedByAppInstanceUserSummary {
@@ -752,7 +826,7 @@ pub struct ChannelModeratedByAppInstanceUserSummary {
     pub channel_summary: Option<ChannelSummary>,
 }
 
-/// <p>Creates a moderator on a channel.</p>
+/// <p>The details of a channel moderator.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChannelModerator {
@@ -760,7 +834,7 @@ pub struct ChannelModerator {
     #[serde(rename = "ChannelArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_arn: Option<String>,
-    /// <p>The member who created the moderator.</p>
+    /// <p>The <code>AppInstanceUser</code> who created the moderator.</p>
     #[serde(rename = "CreatedBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_by: Option<Identity>,
@@ -774,7 +848,7 @@ pub struct ChannelModerator {
     pub moderator: Option<Identity>,
 }
 
-/// <p>Summary data of the moderators in a channel.</p>
+/// <p>Summary of the details of a <code>ChannelModerator</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChannelModeratorSummary {
@@ -784,20 +858,20 @@ pub struct ChannelModeratorSummary {
     pub moderator: Option<Identity>,
 }
 
-/// <p>The retention settings for a channel.</p>
+/// <p>The details of the retention settings for a channel.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ChannelRetentionSettings {
-    /// <p>The time in days to retain a channel.</p>
+    /// <p>The time in days to retain the messages in a channel.</p>
     #[serde(rename = "RetentionDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retention_days: Option<i64>,
 }
 
-/// <p>The summary data for a channel.</p>
+/// <p>Summary of the details of a <code>Channel</code>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChannelSummary {
-    /// <p>The ARN of the channel summary.</p>
+    /// <p>The ARN of the channel.</p>
     #[serde(rename = "ChannelArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_arn: Option<String>,
@@ -805,28 +879,28 @@ pub struct ChannelSummary {
     #[serde(rename = "LastMessageTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_message_timestamp: Option<f64>,
-    /// <p>The metadata of the channel summary.</p>
+    /// <p>The metadata of the channel.</p>
     #[serde(rename = "Metadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<String>,
-    /// <p>The summary mode of the channel.</p>
+    /// <p>The mode of the channel.</p>
     #[serde(rename = "Mode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mode: Option<String>,
-    /// <p>The parameter of the action.</p>
+    /// <p>The name of the channel.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The privacy setting of the channel being summarized, <code>PUBLIC</code> or <code>HIDDEN</code>.</p>
+    /// <p>The privacy setting of the channel.</p>
     #[serde(rename = "Privacy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub privacy: Option<String>,
 }
 
-/// <p>The retention settings that determine how long to retain chat conversation messages for an Amazon Chime Enterprise account.</p>
+/// <p>The retention settings that determine how long to retain conversation messages for an Amazon Chime Enterprise account.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ConversationRetentionSettings {
-    /// <p>The number of days for which to retain chat conversation messages.</p>
+    /// <p>The number of days for which to retain conversation messages.</p>
     #[serde(rename = "RetentionDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retention_days: Option<i64>,
@@ -843,6 +917,7 @@ pub struct CreateAccountRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAccountResponse {
+    /// <p>The Amazon Chime account details.</p>
     #[serde(rename = "Account")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account: Option<Account>,
@@ -851,10 +926,10 @@ pub struct CreateAccountResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAppInstanceAdminRequest {
-    /// <p>The ARN of the administrator of the current app instance.</p>
+    /// <p>The ARN of the administrator of the current <code>AppInstance</code>.</p>
     #[serde(rename = "AppInstanceAdminArn")]
     pub app_instance_admin_arn: String,
-    /// <p>The ARN of the app instance.</p>
+    /// <p>The ARN of the <code>AppInstance</code>.</p>
     #[serde(rename = "AppInstanceArn")]
     pub app_instance_arn: String,
 }
@@ -862,11 +937,11 @@ pub struct CreateAppInstanceAdminRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAppInstanceAdminResponse {
-    /// <p>The name and ARN of the admin for the app instance.</p>
+    /// <p>The name and ARN of the admin for the <code>AppInstance</code>.</p>
     #[serde(rename = "AppInstanceAdmin")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_instance_admin: Option<Identity>,
-    /// <p>The ARN of the of the admin for the app instance.</p>
+    /// <p>The ARN of the of the admin for the <code>AppInstance</code>.</p>
     #[serde(rename = "AppInstanceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_instance_arn: Option<String>,
@@ -875,22 +950,26 @@ pub struct CreateAppInstanceAdminResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAppInstanceRequest {
-    /// <p>The <code>ClientRequestToken</code> of the app instance.</p>
+    /// <p>The <code>ClientRequestToken</code> of the <code>AppInstance</code>.</p>
     #[serde(rename = "ClientRequestToken")]
     pub client_request_token: String,
-    /// <p>The metadata of the app instance. Limited to a 1KB string in UTF-8.</p>
+    /// <p>The metadata of the <code>AppInstance</code>. Limited to a 1KB string in UTF-8.</p>
     #[serde(rename = "Metadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<String>,
-    /// <p>The name of the app instance.</p>
+    /// <p>The name of the <code>AppInstance</code>.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>Tags assigned to the <code>AppInstanceUser</code>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateAppInstanceResponse {
-    /// <p>The Amazon Resource Number (ARN) of the app instance.</p>
+    /// <p>The Amazon Resource Number (ARN) of the <code>AppInstance</code>.</p>
     #[serde(rename = "AppInstanceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_instance_arn: Option<String>,
@@ -899,13 +978,13 @@ pub struct CreateAppInstanceResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAppInstanceUserRequest {
-    /// <p>The ARN of the app instance request.</p>
+    /// <p>The ARN of the <code>AppInstance</code> request.</p>
     #[serde(rename = "AppInstanceArn")]
     pub app_instance_arn: String,
-    /// <p>The user ID of the app instance.</p>
+    /// <p>The user ID of the <code>AppInstance</code>.</p>
     #[serde(rename = "AppInstanceUserId")]
     pub app_instance_user_id: String,
-    /// <p>The token assigned to the user requesting an app instance.</p>
+    /// <p>The token assigned to the user requesting an <code>AppInstance</code>.</p>
     #[serde(rename = "ClientRequestToken")]
     pub client_request_token: String,
     /// <p>The request's metadata. Limited to a 1KB string in UTF-8.</p>
@@ -915,6 +994,10 @@ pub struct CreateAppInstanceUserRequest {
     /// <p>The user's name.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>Tags assigned to the <code>AppInstanceUser</code>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -938,7 +1021,7 @@ pub struct ChimeCreateAttendeeError {
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
-    /// <p>The Amazon Chime SDK external user ID. An idempotency token. Links the attendee to an identity managed by a builder application. If you create an attendee with the same external user id, the service returns the existing record.</p>
+    /// <p>The Amazon Chime SDK external user ID. An idempotency token. Links the attendee to an identity managed by a builder application.</p>
     #[serde(rename = "ExternalUserId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub external_user_id: Option<String>,
@@ -947,7 +1030,7 @@ pub struct ChimeCreateAttendeeError {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAttendeeRequest {
-    /// <p>The Amazon Chime SDK external user ID. An idempotency token. Links the attendee to an identity managed by a builder application. If you create an attendee with the same external user id, the service returns the existing record.</p>
+    /// <p>The Amazon Chime SDK external user ID. An idempotency token. Links the attendee to an identity managed by a builder application.</p>
     #[serde(rename = "ExternalUserId")]
     pub external_user_id: String,
     /// <p>The Amazon Chime SDK meeting ID.</p>
@@ -963,7 +1046,7 @@ pub struct CreateAttendeeRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAttendeeRequestItem {
-    /// <p>The Amazon Chime SDK external user ID. An idempotency token. Links the attendee to an identity managed by a builder application. If you create an attendee with the same external user id, the service returns the existing record.</p> <p>The Amazon Chime SDK external user ID. Links the attendee to an identity managed by a builder application.</p>
+    /// <p>The Amazon Chime SDK external user ID. An idempotency token. Links the attendee to an identity managed by a builder application.</p>
     #[serde(rename = "ExternalUserId")]
     pub external_user_id: String,
     /// <p>The tag key-value pairs.</p>
@@ -1011,6 +1094,10 @@ pub struct CreateChannelBanRequest {
     /// <p>The ARN of the ban request.</p>
     #[serde(rename = "ChannelArn")]
     pub channel_arn: String,
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
     /// <p>The ARN of the member being banned.</p>
     #[serde(rename = "MemberArn")]
     pub member_arn: String,
@@ -1035,6 +1122,10 @@ pub struct CreateChannelMembershipRequest {
     /// <p>The ARN of the channel to which you're adding users.</p>
     #[serde(rename = "ChannelArn")]
     pub channel_arn: String,
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
     /// <p>The ARN of the member you want to add to the channel.</p>
     #[serde(rename = "MemberArn")]
     pub member_arn: String,
@@ -1065,6 +1156,10 @@ pub struct CreateChannelModeratorRequest {
     /// <p>The ARN of the moderator.</p>
     #[serde(rename = "ChannelModeratorArn")]
     pub channel_moderator_arn: String,
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1086,6 +1181,10 @@ pub struct CreateChannelRequest {
     /// <p>The ARN of the channel request.</p>
     #[serde(rename = "AppInstanceArn")]
     pub app_instance_arn: String,
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
     /// <p>The client token for the request. An <code>Idempotency</code> token.</p>
     #[serde(rename = "ClientRequestToken")]
     pub client_request_token: String,
@@ -1100,10 +1199,11 @@ pub struct CreateChannelRequest {
     /// <p>The name of the channel.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The channel's privacy level: <code>PUBLIC</code> or <code>PRIVATE</code>. Private channels aren't discoverable by users outside the channel. Public channels are discoverable by anyone in the app instance.</p>
+    /// <p>The channel's privacy level: <code>PUBLIC</code> or <code>PRIVATE</code>. Private channels aren't discoverable by users outside the channel. Public channels are discoverable by anyone in the <code>AppInstance</code>.</p>
     #[serde(rename = "Privacy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub privacy: Option<String>,
+    /// <p>The tags for the creation request.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -1124,10 +1224,10 @@ pub struct CreateMeetingDialOutRequest {
     /// <p>Phone number used as the caller ID when the remote party receives a call.</p>
     #[serde(rename = "FromPhoneNumber")]
     pub from_phone_number: String,
-    /// <p>Token used by the Amazon Chime SDK attendee. Call the <a href="https://docs.aws.amazon.com/https:/docs.aws.amazon.com/chime/latest/APIReference/API_Attendee.html"> CreateAttendee API</a> to get a join token. </p>
+    /// <p>Token used by the Amazon Chime SDK attendee. Call the <a href="https://docs.aws.amazon.com/chime/latest/APIReference/API_CreateAttendee.html">CreateAttendee</a> action to get a join token.</p>
     #[serde(rename = "JoinToken")]
     pub join_token: String,
-    /// <p>The Amazon Chime SDK meeting ID.</p> <p>Type: String</p> <p>Pattern: [a-fA-F0-9]{8}(?:-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12}</p> <p>Required: No</p>
+    /// <p>The Amazon Chime SDK meeting ID.</p>
     #[serde(rename = "MeetingId")]
     pub meeting_id: String,
     /// <p>Phone number called when inviting someone to a meeting.</p>
@@ -1154,7 +1254,7 @@ pub struct CreateMeetingRequest {
     #[serde(rename = "ExternalMeetingId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub external_meeting_id: Option<String>,
-    /// <p>The Region in which to create the meeting. Default: <code>us-east-1</code>.</p> <p>Available values: <code>af-south-1</code>, <code>ap-northeast-1</code>, <code>ap-northeast-2</code>, <code>ap-south-1</code>, <code>ap-southeast-1</code>, <code>ap-southeast-2</code>, <code>ca-central-1</code>, <code>eu-central-1</code>, <code>eu-north-1</code>, <code>eu-south-1</code>, <code>eu-west-1</code>, <code>eu-west-2</code>, <code>eu-west-3</code>, <code>sa-east-1</code>, <code>us-east-1</code>, <code>us-east-2</code>, <code>us-west-1</code>, <code>us-west-2</code>.</p>
+    /// <p> The Region in which to create the meeting. Default: <code>us-east-1</code>. </p> <p> Available values: <code>af-south-1</code> , <code>ap-northeast-1</code> , <code>ap-northeast-2</code> , <code>ap-south-1</code> , <code>ap-southeast-1</code> , <code>ap-southeast-2</code> , <code>ca-central-1</code> , <code>eu-central-1</code> , <code>eu-north-1</code> , <code>eu-south-1</code> , <code>eu-west-1</code> , <code>eu-west-2</code> , <code>eu-west-3</code> , <code>sa-east-1</code> , <code>us-east-1</code> , <code>us-east-2</code> , <code>us-west-1</code> , <code>us-west-2</code> . </p>
     #[serde(rename = "MediaRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_region: Option<String>,
@@ -1175,7 +1275,7 @@ pub struct CreateMeetingRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateMeetingResponse {
-    /// <p>The meeting information, including the meeting ID and <code>MediaPlacement</code>.</p>
+    /// <p> The meeting information, including the meeting ID and <code>MediaPlacement</code> . </p>
     #[serde(rename = "Meeting")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub meeting: Option<Meeting>,
@@ -1195,7 +1295,7 @@ pub struct CreateMeetingWithAttendeesRequest {
     #[serde(rename = "ExternalMeetingId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub external_meeting_id: Option<String>,
-    /// <p>The Region in which to create the meeting. Default: <code>us-east-1</code>.</p> <p>Available values: <code>af-south-1</code>, <code>ap-northeast-1</code>, <code>ap-northeast-2</code>, <code>ap-south-1</code>, <code>ap-southeast-1</code>, <code>ap-southeast-2</code>, <code>ca-central-1</code>, <code>eu-central-1</code>, <code>eu-north-1</code>, <code>eu-south-1</code>, <code>eu-west-1</code>, <code>eu-west-2</code>, <code>eu-west-3</code>, <code>sa-east-1</code>, <code>us-east-1</code>, <code>us-east-2</code>, <code>us-west-1</code>, <code>us-west-2</code>.</p>
+    /// <p> The Region in which to create the meeting. Default: <code>us-east-1</code> . </p> <p> Available values: <code>af-south-1</code> , <code>ap-northeast-1</code> , <code>ap-northeast-2</code> , <code>ap-south-1</code> , <code>ap-southeast-1</code> , <code>ap-southeast-2</code> , <code>ca-central-1</code> , <code>eu-central-1</code> , <code>eu-north-1</code> , <code>eu-south-1</code> , <code>eu-west-1</code> , <code>eu-west-2</code> , <code>eu-west-3</code> , <code>sa-east-1</code> , <code>us-east-1</code> , <code>us-east-2</code> , <code>us-west-1</code> , <code>us-west-2</code> . </p>
     #[serde(rename = "MediaRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_region: Option<String>,
@@ -1345,17 +1445,15 @@ pub struct CreateRoomResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSipMediaApplicationCallRequest {
-    /// <p>The phone number that a user calls from.</p>
+    /// <p>The phone number that a user calls from. This is a phone number in your Amazon Chime phone number inventory.</p>
     #[serde(rename = "FromPhoneNumber")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub from_phone_number: Option<String>,
+    pub from_phone_number: String,
     /// <p>The ID of the SIP media application.</p>
     #[serde(rename = "SipMediaApplicationId")]
     pub sip_media_application_id: String,
-    /// <p>The phone number that the user dials in order to connect to a meeting</p>
+    /// <p>The phone number that the service should call.</p>
     #[serde(rename = "ToPhoneNumber")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub to_phone_number: Option<String>,
+    pub to_phone_number: String,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1370,7 +1468,7 @@ pub struct CreateSipMediaApplicationCallResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateSipMediaApplicationRequest {
-    /// <p>AWS Region assigned to the SIP media application.</p>
+    /// <p>The AWS Region assigned to the SIP media application.</p>
     #[serde(rename = "AwsRegion")]
     pub aws_region: String,
     /// <p>List of endpoints (Lambda Amazon Resource Names) specified for the SIP media application. Currently, only one endpoint is supported.</p>
@@ -1378,14 +1476,13 @@ pub struct CreateSipMediaApplicationRequest {
     pub endpoints: Vec<SipMediaApplicationEndpoint>,
     /// <p>The SIP media application name.</p>
     #[serde(rename = "Name")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: String,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateSipMediaApplicationResponse {
-    /// <p>The Sip media application details.</p>
+    /// <p>The SIP media application details.</p>
     #[serde(rename = "SipMediaApplication")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sip_media_application: Option<SipMediaApplication>,
@@ -1404,10 +1501,10 @@ pub struct CreateSipRuleRequest {
     /// <p>List of SIP media applications with priority and AWS Region. Only one SIP application per AWS Region can be used.</p>
     #[serde(rename = "TargetApplications")]
     pub target_applications: Vec<SipRuleTargetApplication>,
-    /// <p>The type of trigger whose value is assigned to the SIP rule in <code>TriggerValue</code>. Allowed trigger values are <code>RequestUriHostname</code> and <code>ToPhoneNumber</code>.</p>
+    /// <p>The type of trigger assigned to the SIP rule in <code>TriggerValue</code>, currently <code>RequestUriHostname</code> or <code>ToPhoneNumber</code>.</p>
     #[serde(rename = "TriggerType")]
     pub trigger_type: String,
-    /// <p>If <code>TriggerType</code> is <code>RequestUriHostname</code> then the value can be the outbound host name of an Amazon Chime Voice Connector. If <code>TriggerType</code> is <code>ToPhoneNumber</code> then the value can be a customer-owned phone number in E164 format. <code>SipRule</code> is triggered if the SIP application requests a host name, or a If <code>TriggerType</code> is <code>RequestUriHostname</code>, then the value can be the outbound hostname of an Amazon Chime Voice Connector. If <code>TriggerType</code> is <code>ToPhoneNumber</code>, then the value can be a customer-owned phone number in E164 format. <code>SipRule</code> is triggered if the SIP application requests a host name, or a <code>ToPhoneNumber</code> value matches the incoming SIP request.</p>
+    /// <p>If <code>TriggerType</code> is <code>RequestUriHostname</code>, the value can be the outbound host name of an Amazon Chime Voice Connector. If <code>TriggerType</code> is <code>ToPhoneNumber</code>, the value can be a customer-owned phone number in the E164 format. The <code>SipMediaApplication</code> specified in the <code>SipRule</code> is triggered if the request URI in an incoming SIP request matches the <code>RequestUriHostname</code>, or if the <code>To</code> header in the incoming SIP request matches the <code>ToPhoneNumber</code> value.</p>
     #[serde(rename = "TriggerValue")]
     pub trigger_value: String,
 }
@@ -1473,7 +1570,7 @@ pub struct CreateVoiceConnectorGroupResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateVoiceConnectorRequest {
-    /// <p>The AWS Region in which the Amazon Chime Voice Connector is created. Default value: <code>us-east-1</code>.</p>
+    /// <p> The AWS Region in which the Amazon Chime Voice Connector is created. Default value: <code>us-east-1</code> . </p>
     #[serde(rename = "AwsRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_region: Option<String>,
@@ -1538,10 +1635,10 @@ pub struct DeleteAccountResponse {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppInstanceAdminRequest {
-    /// <p>The ARN of the app instance's administrator.</p>
+    /// <p>The ARN of the <code>AppInstance</code>'s administrator.</p>
     #[serde(rename = "AppInstanceAdminArn")]
     pub app_instance_admin_arn: String,
-    /// <p>The ARN of the app instance.</p>
+    /// <p>The ARN of the <code>AppInstance</code>.</p>
     #[serde(rename = "AppInstanceArn")]
     pub app_instance_arn: String,
 }
@@ -1549,7 +1646,7 @@ pub struct DeleteAppInstanceAdminRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteAppInstanceRequest {
-    /// <p>The ARN of the app instance.</p>
+    /// <p>The ARN of the <code>AppInstance</code>.</p>
     #[serde(rename = "AppInstanceArn")]
     pub app_instance_arn: String,
 }
@@ -1584,10 +1681,14 @@ pub struct DeleteAttendeeRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteChannelBanRequest {
-    /// <p>The ARN of the channel from which the app instance user was banned.</p>
+    /// <p>The ARN of the channel from which the <code>AppInstanceUser</code> was banned.</p>
     #[serde(rename = "ChannelArn")]
     pub channel_arn: String,
-    /// <p>The ARN of the app instance user that you want to reinstate.</p>
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
+    /// <p>The ARN of the <code>AppInstanceUser</code> that you want to reinstate.</p>
     #[serde(rename = "MemberArn")]
     pub member_arn: String,
 }
@@ -1598,6 +1699,10 @@ pub struct DeleteChannelMembershipRequest {
     /// <p>The ARN of the channel from which you want to remove the user.</p>
     #[serde(rename = "ChannelArn")]
     pub channel_arn: String,
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
     /// <p>The ARN of the member that you're removing from the channel.</p>
     #[serde(rename = "MemberArn")]
     pub member_arn: String,
@@ -1609,6 +1714,10 @@ pub struct DeleteChannelMessageRequest {
     /// <p>The ARN of the channel.</p>
     #[serde(rename = "ChannelArn")]
     pub channel_arn: String,
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
     /// <p>The ID of the message being deleted.</p>
     #[serde(rename = "MessageId")]
     pub message_id: String,
@@ -1623,6 +1732,10 @@ pub struct DeleteChannelModeratorRequest {
     /// <p>The ARN of the moderator being deleted.</p>
     #[serde(rename = "ChannelModeratorArn")]
     pub channel_moderator_arn: String,
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1631,6 +1744,10 @@ pub struct DeleteChannelRequest {
     /// <p>The ARN of the channel being deleted.</p>
     #[serde(rename = "ChannelArn")]
     pub channel_arn: String,
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1782,10 +1899,10 @@ pub struct DeleteVoiceConnectorTerminationRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAppInstanceAdminRequest {
-    /// <p>The ARN of the app instance administrator.</p>
+    /// <p>The ARN of the <code>AppInstanceAdmin</code>.</p>
     #[serde(rename = "AppInstanceAdminArn")]
     pub app_instance_admin_arn: String,
-    /// <p>The ARN of the app instance.</p>
+    /// <p>The ARN of the <code>AppInstance</code>.</p>
     #[serde(rename = "AppInstanceArn")]
     pub app_instance_arn: String,
 }
@@ -1793,7 +1910,7 @@ pub struct DescribeAppInstanceAdminRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAppInstanceAdminResponse {
-    /// <p>The ARN and name of the app instance user, the ARN of the app instance, and the created and last-updated timestamps. All timestamps use epoch milliseconds.</p>
+    /// <p>The ARN and name of the <code>AppInstanceUser</code>, the ARN of the <code>AppInstance</code>, and the created and last-updated timestamps. All timestamps use epoch milliseconds.</p>
     #[serde(rename = "AppInstanceAdmin")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_instance_admin: Option<AppInstanceAdmin>,
@@ -1802,7 +1919,7 @@ pub struct DescribeAppInstanceAdminResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAppInstanceRequest {
-    /// <p>The ARN of the app instance.</p>
+    /// <p>The ARN of the <code>AppInstance</code>.</p>
     #[serde(rename = "AppInstanceArn")]
     pub app_instance_arn: String,
 }
@@ -1810,7 +1927,7 @@ pub struct DescribeAppInstanceRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAppInstanceResponse {
-    /// <p>The ARN, metadata, created and last-updated timestamps, and the name of the app instance. All timestamps use epoch milliseconds.</p>
+    /// <p>The ARN, metadata, created and last-updated timestamps, and the name of the <code>AppInstance</code>. All timestamps use epoch milliseconds.</p>
     #[serde(rename = "AppInstance")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_instance: Option<AppInstance>,
@@ -1819,7 +1936,7 @@ pub struct DescribeAppInstanceResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeAppInstanceUserRequest {
-    /// <p>The ARN of the app instance user.</p>
+    /// <p>The ARN of the <code>AppInstanceUser</code>.</p>
     #[serde(rename = "AppInstanceUserArn")]
     pub app_instance_user_arn: String,
 }
@@ -1827,7 +1944,7 @@ pub struct DescribeAppInstanceUserRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeAppInstanceUserResponse {
-    /// <p>The name of the app instance user.</p>
+    /// <p>The name of the <code>AppInstanceUser</code>.</p>
     #[serde(rename = "AppInstanceUser")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_instance_user: Option<AppInstanceUser>,
@@ -1839,6 +1956,10 @@ pub struct DescribeChannelBanRequest {
     /// <p>The ARN of the channel from which the user is banned.</p>
     #[serde(rename = "ChannelArn")]
     pub channel_arn: String,
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
     /// <p>The ARN of the member being banned.</p>
     #[serde(rename = "MemberArn")]
     pub member_arn: String,
@@ -1847,7 +1968,7 @@ pub struct DescribeChannelBanRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DescribeChannelBanResponse {
-    /// <p>The the details of the ban.</p>
+    /// <p>The details of the ban.</p>
     #[serde(rename = "ChannelBan")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_ban: Option<ChannelBan>,
@@ -1862,6 +1983,10 @@ pub struct DescribeChannelMembershipForAppInstanceUserRequest {
     /// <p>The ARN of the channel to which the user belongs.</p>
     #[serde(rename = "ChannelArn")]
     pub channel_arn: String,
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1879,6 +2004,10 @@ pub struct DescribeChannelMembershipRequest {
     /// <p>The ARN of the channel.</p>
     #[serde(rename = "ChannelArn")]
     pub channel_arn: String,
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
     /// <p>The ARN of the member.</p>
     #[serde(rename = "MemberArn")]
     pub member_arn: String,
@@ -1896,12 +2025,16 @@ pub struct DescribeChannelMembershipResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeChannelModeratedByAppInstanceUserRequest {
-    /// <p>The ARN of the app instance user in the moderated channel.</p>
+    /// <p>The ARN of the <code>AppInstanceUser</code> in the moderated channel.</p>
     #[serde(rename = "AppInstanceUserArn")]
     pub app_instance_user_arn: String,
     /// <p>The ARN of the moderated channel.</p>
     #[serde(rename = "ChannelArn")]
     pub channel_arn: String,
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1922,6 +2055,10 @@ pub struct DescribeChannelModeratorRequest {
     /// <p>The ARN of the channel moderator.</p>
     #[serde(rename = "ChannelModeratorArn")]
     pub channel_moderator_arn: String,
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1939,6 +2076,10 @@ pub struct DescribeChannelRequest {
     /// <p>The ARN of the channel.</p>
     #[serde(rename = "ChannelArn")]
     pub channel_arn: String,
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2069,6 +2210,7 @@ pub struct GetAccountRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAccountResponse {
+    /// <p>The Amazon Chime account details.</p>
     #[serde(rename = "Account")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account: Option<Account>,
@@ -2094,7 +2236,7 @@ pub struct GetAccountSettingsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAppInstanceRetentionSettingsRequest {
-    /// <p>The ARN of the app instance.</p>
+    /// <p>The ARN of the <code>AppInstance</code>.</p>
     #[serde(rename = "AppInstanceArn")]
     pub app_instance_arn: String,
 }
@@ -2102,7 +2244,7 @@ pub struct GetAppInstanceRetentionSettingsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAppInstanceRetentionSettingsResponse {
-    /// <p>The retention settings for the app instance.</p>
+    /// <p>The retention settings for the <code>AppInstance</code>.</p>
     #[serde(rename = "AppInstanceRetentionSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_instance_retention_settings: Option<AppInstanceRetentionSettings>,
@@ -2115,7 +2257,7 @@ pub struct GetAppInstanceRetentionSettingsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAppInstanceStreamingConfigurationsRequest {
-    /// <p>The ARN of the app instance. </p>
+    /// <p>The ARN of the <code>AppInstance</code>.</p>
     #[serde(rename = "AppInstanceArn")]
     pub app_instance_arn: String,
 }
@@ -2175,6 +2317,10 @@ pub struct GetChannelMessageRequest {
     /// <p>The ARN of the channel.</p>
     #[serde(rename = "ChannelArn")]
     pub channel_arn: String,
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
     /// <p>The ID of the message.</p>
     #[serde(rename = "MessageId")]
     pub message_id: String,
@@ -2363,7 +2509,7 @@ pub struct GetRoomResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetSipMediaApplicationLoggingConfigurationRequest {
-    /// <p>The ID of the SIP media application.</p>
+    /// <p>The SIP media application ID.</p>
     #[serde(rename = "SipMediaApplicationId")]
     pub sip_media_application_id: String,
 }
@@ -2605,7 +2751,7 @@ pub struct GetVoiceConnectorTerminationResponse {
     pub termination: Option<Termination>,
 }
 
-/// <p>The ARN and name of a user.</p>
+/// <p>The details of a user.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Identity {
@@ -2689,11 +2835,11 @@ pub struct ListAccountsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAccountsResponse {
-    /// <p>The list of accounts.</p>
+    /// <p>List of Amazon Chime accounts and account details.</p>
     #[serde(rename = "Accounts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accounts: Option<Vec<Account>>,
-    /// <p>The account's user token.</p>
+    /// <p>The token to use to retrieve the next page of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2702,7 +2848,7 @@ pub struct ListAccountsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAppInstanceAdminsRequest {
-    /// <p>The ARN of the app instance.</p>
+    /// <p>The ARN of the <code>AppInstance</code>.</p>
     #[serde(rename = "AppInstanceArn")]
     pub app_instance_arn: String,
     /// <p>The maximum number of administrators that you want to return.</p>
@@ -2722,7 +2868,7 @@ pub struct ListAppInstanceAdminsResponse {
     #[serde(rename = "AppInstanceAdmins")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_instance_admins: Option<Vec<AppInstanceAdminSummary>>,
-    /// <p>The ARN of the app instance.</p>
+    /// <p>The ARN of the <code>AppInstance</code>.</p>
     #[serde(rename = "AppInstanceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_instance_arn: Option<String>,
@@ -2735,7 +2881,7 @@ pub struct ListAppInstanceAdminsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAppInstanceUsersRequest {
-    /// <p>The ARN of the app instance.</p>
+    /// <p>The ARN of the <code>AppInstance</code>.</p>
     #[serde(rename = "AppInstanceArn")]
     pub app_instance_arn: String,
     /// <p>The maximum number of requests that you want returned.</p>
@@ -2751,11 +2897,11 @@ pub struct ListAppInstanceUsersRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAppInstanceUsersResponse {
-    /// <p>The ARN of the app instance.</p>
+    /// <p>The ARN of the <code>AppInstance</code>.</p>
     #[serde(rename = "AppInstanceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_instance_arn: Option<String>,
-    /// <p>The information for each of the requested app instance users.</p>
+    /// <p>The information for each requested <code>AppInstanceUser</code>.</p>
     #[serde(rename = "AppInstanceUsers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_instance_users: Option<Vec<AppInstanceUserSummary>>,
@@ -2768,11 +2914,11 @@ pub struct ListAppInstanceUsersResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListAppInstancesRequest {
-    /// <p>The maximum number of app instances that you want to return.</p>
+    /// <p>The maximum number of <code>AppInstance</code>s that you want to return.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token passed by previous API requests until you reach the maximum number of app instances.</p>
+    /// <p>The token passed by previous API requests until you reach the maximum number of <code>AppInstance</code>s.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2781,11 +2927,11 @@ pub struct ListAppInstancesRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListAppInstancesResponse {
-    /// <p>The information for each app instance.</p>
+    /// <p>The information for each <code>AppInstance</code>.</p>
     #[serde(rename = "AppInstances")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_instances: Option<Vec<AppInstanceSummary>>,
-    /// <p>The token passed by previous API requests until the maximum number of app instances is reached.</p>
+    /// <p>The token passed by previous API requests until the maximum number of <code>AppInstance</code>s is reached.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2875,6 +3021,10 @@ pub struct ListChannelBansRequest {
     /// <p>The ARN of the channel.</p>
     #[serde(rename = "ChannelArn")]
     pub channel_arn: String,
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
     /// <p>The maximum number of bans that you want returned.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2905,11 +3055,15 @@ pub struct ListChannelBansResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListChannelMembershipsForAppInstanceUserRequest {
-    /// <p>The ARN of the app instance users</p>
+    /// <p>The ARN of the <code>AppInstanceUser</code>s</p>
     #[serde(rename = "AppInstanceUserArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_instance_user_arn: Option<String>,
-    /// <p>The maximum number of users that you want returned. </p>
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
+    /// <p>The maximum number of users that you want returned.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -2938,11 +3092,15 @@ pub struct ListChannelMembershipsRequest {
     /// <p>The maximum number of channel memberships that you want returned.</p>
     #[serde(rename = "ChannelArn")]
     pub channel_arn: String,
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
     /// <p>The maximum number of channel memberships that you want returned.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token passed by previous API calls until all requested channel memberships are returned..</p>
+    /// <p>The token passed by previous API calls until all requested channel memberships are returned.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -2975,6 +3133,10 @@ pub struct ListChannelMessagesRequest {
     /// <p>The ARN of the channel.</p>
     #[serde(rename = "ChannelArn")]
     pub channel_arn: String,
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
     /// <p>The maximum number of messages that you want returned.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2987,7 +3149,7 @@ pub struct ListChannelMessagesRequest {
     #[serde(rename = "NotAfter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub not_after: Option<f64>,
-    /// <p>The initial or starting time stamp for your requested messages. </p>
+    /// <p>The initial or starting time stamp for your requested messages.</p>
     #[serde(rename = "NotBefore")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub not_before: Option<f64>,
@@ -3004,7 +3166,7 @@ pub struct ListChannelMessagesResponse {
     #[serde(rename = "ChannelArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_arn: Option<String>,
-    /// <p>The information about and content of each requested message.</p>
+    /// <p>The information about, and content of, each requested message.</p>
     #[serde(rename = "ChannelMessages")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_messages: Option<Vec<ChannelMessageSummary>>,
@@ -3020,6 +3182,10 @@ pub struct ListChannelModeratorsRequest {
     /// <p>The ARN of the channel.</p>
     #[serde(rename = "ChannelArn")]
     pub channel_arn: String,
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
     /// <p>The maximum number of moderators that you want returned.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3054,6 +3220,10 @@ pub struct ListChannelsModeratedByAppInstanceUserRequest {
     #[serde(rename = "AppInstanceUserArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_instance_user_arn: Option<String>,
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
     /// <p>The maximum number of channels in the request.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3080,9 +3250,13 @@ pub struct ListChannelsModeratedByAppInstanceUserResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListChannelsRequest {
-    /// <p>The ARN of the app instance.</p>
+    /// <p>The ARN of the <code>AppInstance</code>.</p>
     #[serde(rename = "AppInstanceArn")]
     pub app_instance_arn: String,
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
     /// <p>The maximum number of channels that you want to return.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3091,7 +3265,7 @@ pub struct ListChannelsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The privacy setting. <code>PUBLIC</code> retrieves all the public channels. <code>PRIVATE</code> retrieves private channels. Only an app instance administrator can retrieve private channels.</p>
+    /// <p>The privacy setting. <code>PUBLIC</code> retrieves all the public channels. <code>PRIVATE</code> retrieves private channels. Only an <code>AppInstanceAdmin</code> can retrieve private channels. </p>
     #[serde(rename = "Privacy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub privacy: Option<String>,
@@ -3377,6 +3551,23 @@ pub struct ListSipRulesResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListSupportedPhoneNumberCountriesRequest {
+    /// <p>The phone number product type.</p>
+    #[serde(rename = "ProductType")]
+    pub product_type: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListSupportedPhoneNumberCountriesResponse {
+    /// <p>The supported phone number countries.</p>
+    #[serde(rename = "PhoneNumberCountries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub phone_number_countries: Option<Vec<PhoneNumberCountry>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
     /// <p>The resource ARN.</p>
     #[serde(rename = "ResourceARN")]
@@ -3534,6 +3725,10 @@ pub struct MediaPlacement {
     #[serde(rename = "AudioHostUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_host_url: Option<String>,
+    /// <p>The event ingestion URL.</p>
+    #[serde(rename = "EventIngestionUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_ingestion_url: Option<String>,
     /// <p>The screen data URL.</p>
     #[serde(rename = "ScreenDataUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3568,7 +3763,7 @@ pub struct Meeting {
     #[serde(rename = "MediaPlacement")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_placement: Option<MediaPlacement>,
-    /// <p>The Region in which to create the meeting. Available values: <code>af-south-1</code>, <code>ap-northeast-1</code>, <code>ap-northeast-2</code>, <code>ap-south-1</code>, <code>ap-southeast-1</code>, <code>ap-southeast-2</code>, <code>ca-central-1</code>, <code>eu-central-1</code>, <code>eu-north-1</code>, <code>eu-south-1</code>, <code>eu-west-1</code>, <code>eu-west-2</code>, <code>eu-west-3</code>, <code>sa-east-1</code>, <code>us-east-1</code>, <code>us-east-2</code>, <code>us-west-1</code>, <code>us-west-2</code>.</p>
+    /// <p>The Region in which you create the meeting. Available values: <code>af-south-1</code>, <code>ap-northeast-1</code>, <code>ap-northeast-2</code>, <code>ap-south-1</code>, <code>ap-southeast-1</code>, <code>ap-southeast-2</code>, <code>ca-central-1</code>, <code>eu-central-1</code>, <code>eu-north-1</code>, <code>eu-south-1</code>, <code>eu-west-1</code>, <code>eu-west-2</code>, <code>eu-west-3</code>, <code>sa-east-1</code>, <code>us-east-1</code>, <code>us-east-2</code>, <code>us-west-1</code>, <code>us-west-2</code>.</p>
     #[serde(rename = "MediaRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_region: Option<String>,
@@ -3578,7 +3773,7 @@ pub struct Meeting {
     pub meeting_id: Option<String>,
 }
 
-/// <p>The configuration for resource targets to receive notifications when Amazon Chime SDK meeting and attendee events occur. The Amazon Chime SDK supports resource targets located in the US East (N. Virginia) AWS Region (<code>us-east-1</code>).</p>
+/// <p> The resource target configurations for receiving Amazon Chime SDK meeting and attendee event notifications. The Amazon Chime SDK supports resource targets located in the US East (N. Virginia) AWS Region (<code>us-east-1</code>). </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MeetingNotificationConfiguration {
@@ -3650,11 +3845,11 @@ pub struct MembershipItem {
     pub role: Option<String>,
 }
 
-/// <p>The endpoint of a meeting session.</p>
+/// <p>The websocket endpoint used to connect to Amazon Chime SDK messaging.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MessagingSessionEndpoint {
-    /// <p>The URL of a meeting session endpoint.</p>
+    /// <p>The endpoint to which you establish a websocket connection.</p>
     #[serde(rename = "Url")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
@@ -3706,7 +3901,7 @@ pub struct OriginationRoute {
     #[serde(rename = "Protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub protocol: Option<String>,
-    /// <p>The weight associated with the host. If hosts are equal in priority, calls are distributed among them based on their relative weight.</p>
+    /// <p>The weight associated with the host. If hosts are equal in priority, calls are redistributed among them based on their relative weight.</p>
     #[serde(rename = "Weight")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub weight: Option<i64>,
@@ -3746,6 +3941,10 @@ pub struct PhoneNumber {
     #[serde(rename = "Capabilities")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub capabilities: Option<PhoneNumberCapabilities>,
+    /// <p>The phone number country. Format: ISO 3166-1 alpha-2.</p>
+    #[serde(rename = "Country")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub country: Option<String>,
     /// <p>The phone number creation timestamp, in ISO 8601 format.</p>
     #[serde(rename = "CreatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3828,6 +4027,20 @@ pub struct PhoneNumberCapabilities {
     pub outbound_sms: Option<bool>,
 }
 
+/// <p>The phone number country.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PhoneNumberCountry {
+    /// <p>The phone number country code. Format: ISO 3166-1 alpha-2.</p>
+    #[serde(rename = "CountryCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub country_code: Option<String>,
+    /// <p>The supported phone number types. </p>
+    #[serde(rename = "SupportedPhoneNumberTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub supported_phone_number_types: Option<Vec<String>>,
+}
+
 /// <p>If the phone number action fails for one or more of the phone numbers in the request, a list of the phone numbers is returned, along with error codes and error messages.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3850,7 +4063,7 @@ pub struct PhoneNumberError {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PhoneNumberOrder {
-    /// <p>The phone number order creation timestamp, in ISO 8601 format.</p>
+    /// <p>The phone number order creation time stamp, in ISO 8601 format.</p>
     #[serde(rename = "CreatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_timestamp: Option<f64>,
@@ -3870,7 +4083,7 @@ pub struct PhoneNumberOrder {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>The updated phone number order timestamp, in ISO 8601 format.</p>
+    /// <p>The updated phone number order time stamp, in ISO 8601 format.</p>
     #[serde(rename = "UpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_timestamp: Option<f64>,
@@ -3906,11 +4119,11 @@ pub struct ProxySession {
     #[serde(rename = "Capabilities")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub capabilities: Option<Vec<String>>,
-    /// <p>The created timestamp, in ISO 8601 format.</p>
+    /// <p>The created time stamp, in ISO 8601 format.</p>
     #[serde(rename = "CreatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_timestamp: Option<f64>,
-    /// <p>The ended timestamp, in ISO 8601 format.</p>
+    /// <p>The ended time stamp, in ISO 8601 format.</p>
     #[serde(rename = "EndedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ended_timestamp: Option<f64>,
@@ -3946,7 +4159,7 @@ pub struct ProxySession {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>The updated timestamp, in ISO 8601 format.</p>
+    /// <p>The updated time stamp, in ISO 8601 format.</p>
     #[serde(rename = "UpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_timestamp: Option<f64>,
@@ -3959,7 +4172,7 @@ pub struct ProxySession {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAppInstanceRetentionSettingsRequest {
-    /// <p>The ARN of the app instance.</p>
+    /// <p>The ARN of the <code>AppInstance</code>.</p>
     #[serde(rename = "AppInstanceArn")]
     pub app_instance_arn: String,
     /// <p>The time in days to retain data. Data type: number.</p>
@@ -3983,10 +4196,10 @@ pub struct PutAppInstanceRetentionSettingsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutAppInstanceStreamingConfigurationsRequest {
-    /// <p>The ARN of the app instance.</p>
+    /// <p>The ARN of the <code>AppInstance</code>.</p>
     #[serde(rename = "AppInstanceArn")]
     pub app_instance_arn: String,
-    /// <p>The streaming configurations set for an app instance.</p>
+    /// <p>The streaming configurations set for an <code>AppInstance</code>.</p>
     #[serde(rename = "AppInstanceStreamingConfigurations")]
     pub app_instance_streaming_configurations: Vec<AppInstanceStreamingConfiguration>,
 }
@@ -3994,7 +4207,7 @@ pub struct PutAppInstanceStreamingConfigurationsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutAppInstanceStreamingConfigurationsResponse {
-    /// <p>The streaming configurations of an app instance.</p>
+    /// <p>The streaming configurations of an <code>AppInstance</code>.</p>
     #[serde(rename = "AppInstanceStreamingConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_instance_streaming_configurations: Option<Vec<AppInstanceStreamingConfiguration>>,
@@ -4054,7 +4267,7 @@ pub struct PutRetentionSettingsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutSipMediaApplicationLoggingConfigurationRequest {
-    /// <p>The ID of the specified SIP media application</p>
+    /// <p>The SIP media application ID.</p>
     #[serde(rename = "SipMediaApplicationId")]
     pub sip_media_application_id: String,
     /// <p>The actual logging configuration.</p>
@@ -4067,7 +4280,6 @@ pub struct PutSipMediaApplicationLoggingConfigurationRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutSipMediaApplicationLoggingConfigurationResponse {
-    /// <p>The actual logging configuration.</p>
     #[serde(rename = "SipMediaApplicationLoggingConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sip_media_application_logging_configuration:
@@ -4223,6 +4435,10 @@ pub struct RedactChannelMessageRequest {
     /// <p>The ARN of the channel containing the messages that you want to redact.</p>
     #[serde(rename = "ChannelArn")]
     pub channel_arn: String,
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
     /// <p>The ID of the message being redacted.</p>
     #[serde(rename = "MessageId")]
     pub message_id: String,
@@ -4333,7 +4549,7 @@ pub struct RestorePhoneNumberResponse {
     pub phone_number: Option<PhoneNumber>,
 }
 
-/// <p>The retention settings for an Amazon Chime Enterprise account that determine how long to retain items such as chat room messages and chat conversation messages.</p>
+/// <p>The retention settings for an Amazon Chime Enterprise account that determine how long to retain items such as chat-room messages and chat-conversation messages.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RetentionSettings {
     /// <p>The chat conversation retention settings.</p>
@@ -4401,10 +4617,10 @@ pub struct RoomMembership {
     pub updated_timestamp: Option<f64>,
 }
 
-/// <p>The retention settings that determine how long to retain chat room messages for an Amazon Chime Enterprise account.</p>
+/// <p>The retention settings that determine how long to retain chat-room messages for an Amazon Chime Enterprise account.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RoomRetentionSettings {
-    /// <p>The number of days for which to retain chat room messages.</p>
+    /// <p>The number of days for which to retain chat-room messages.</p>
     #[serde(rename = "RetentionDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retention_days: Option<i64>,
@@ -4413,15 +4629,15 @@ pub struct RoomRetentionSettings {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SearchAvailablePhoneNumbersRequest {
-    /// <p>The area code used to filter results.</p>
+    /// <p>The area code used to filter results. Only applies to the US.</p>
     #[serde(rename = "AreaCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub area_code: Option<String>,
-    /// <p>The city used to filter results.</p>
+    /// <p>The city used to filter results. Only applies to the US.</p>
     #[serde(rename = "City")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub city: Option<String>,
-    /// <p>The country used to filter results.</p>
+    /// <p>The country used to filter results. Defaults to the US Format: ISO 3166-1 alpha-2.</p>
     #[serde(rename = "Country")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub country: Option<String>,
@@ -4429,15 +4645,19 @@ pub struct SearchAvailablePhoneNumbersRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token to use to retrieve the next page of results.</p>
+    /// <p>The token used to retrieve the next page of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The state used to filter results.</p>
+    /// <p>The phone number type used to filter results. Required for non-US numbers.</p>
+    #[serde(rename = "PhoneNumberType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub phone_number_type: Option<String>,
+    /// <p>The state used to filter results. Required only if you provide <code>City</code>. Only applies to the US.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
-    /// <p>The toll-free prefix that you use to filter results.</p>
+    /// <p>The toll-free prefix that you use to filter results. Only applies to the US.</p>
     #[serde(rename = "TollFreePrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub toll_free_prefix: Option<String>,
@@ -4450,6 +4670,10 @@ pub struct SearchAvailablePhoneNumbersResponse {
     #[serde(rename = "E164PhoneNumbers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub e164_phone_numbers: Option<Vec<String>>,
+    /// <p>The token used to retrieve the next page of search results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -4458,13 +4682,17 @@ pub struct SendChannelMessageRequest {
     /// <p>The ARN of the channel.</p>
     #[serde(rename = "ChannelArn")]
     pub channel_arn: String,
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
     /// <p>The <code>Idempotency</code> token for each client request.</p>
     #[serde(rename = "ClientRequestToken")]
     pub client_request_token: String,
     /// <p>The content of the message.</p>
     #[serde(rename = "Content")]
     pub content: String,
-    /// <p>The optional metadata for each message. </p>
+    /// <p>The optional metadata for each message.</p>
     #[serde(rename = "Metadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<String>,
@@ -4483,7 +4711,7 @@ pub struct SendChannelMessageResponse {
     #[serde(rename = "ChannelArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_arn: Option<String>,
-    /// <p>The ID string assigned to each message. </p>
+    /// <p>The ID string assigned to each message.</p>
     #[serde(rename = "MessageId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_id: Option<String>,
@@ -4498,7 +4726,7 @@ pub struct SigninDelegateGroup {
     pub group_name: Option<String>,
 }
 
-/// <p>The SIP media application details, including name and endpoints. An AWS account can have multiple SIP media applications.</p>
+/// <p>The details of the SIP media application, including name and endpoints. An AWS account can have multiple SIP media applications.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SipMediaApplication {
@@ -4538,10 +4766,10 @@ pub struct SipMediaApplicationCall {
     pub transaction_id: Option<String>,
 }
 
-/// <p>Endpoints to specify as part of a SIP media application.</p>
+/// <p>The endpoint assigned to the SIP media application.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SipMediaApplicationEndpoint {
-    /// <p>Valid Amazon Resource Name (ARN) of the Lambda function of the same AWS Region where the SIP media application is created.</p>
+    /// <p>Valid Amazon Resource Name (ARN) of the Lambda function. The function must be created in the same AWS Region as the SIP media application.</p>
     #[serde(rename = "LambdaArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lambda_arn: Option<String>,
@@ -4560,11 +4788,11 @@ pub struct SipMediaApplicationLoggingConfiguration {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct SipRule {
-    /// <p>The SIP rule created timestamp, in ISO 8601 format.</p>
+    /// <p>The time at which the SIP rule was created, in ISO 8601 format.</p>
     #[serde(rename = "CreatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_timestamp: Option<f64>,
-    /// <p>Indicates if the SIP rule is enabled or disabled. You must disable a rule before you can delete it.</p>
+    /// <p>Indicates whether the SIP rule is enabled or disabled. You must disable a rule before you can delete it.</p>
     #[serde(rename = "Disabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disabled: Option<bool>,
@@ -4576,11 +4804,11 @@ pub struct SipRule {
     #[serde(rename = "SipRuleId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sip_rule_id: Option<String>,
-    /// <p>List of SIP media applications with priority and AWS Region. You can only use one SIP application per AWS Region and priority combination.</p>
+    /// <p>Target SIP media application and other details, such as priority and AWS Region, to be specified in the SIP rule. Only one SIP rule per AWS Region can be provided.</p>
     #[serde(rename = "TargetApplications")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_applications: Option<Vec<SipRuleTargetApplication>>,
-    /// <p>The type of trigger whose value is assigned to the SIP rule in <code>TriggerValue</code>.</p>
+    /// <p>The type of trigger assigned to the SIP rule in <code>TriggerValue</code>, currently <code>RequestUriHostname</code> or <code>ToPhoneNumber</code>.</p>
     #[serde(rename = "TriggerType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trigger_type: Option<String>,
@@ -4588,16 +4816,16 @@ pub struct SipRule {
     #[serde(rename = "TriggerValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trigger_value: Option<String>,
-    /// <p>The SIP rule updated timestamp, in ISO 8601 format.</p>
+    /// <p>The time at which the SIP rule was last updated, in ISO 8601 format.</p>
     #[serde(rename = "UpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_timestamp: Option<f64>,
 }
 
-/// <p>Target SIP media application along with other details like priority and AWS Region to be specified in the SIP rule. Only one SIP rule per AWS Region can be provided.</p>
+/// <p>Target SIP media application and other details, such as priority and AWS Region, to be specified in the SIP rule. Only one SIP rule per AWS Region can be provided.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SipRuleTargetApplication {
-    /// <p>AWS Region of target application.</p>
+    /// <p>The AWS Region of the target application.</p>
     #[serde(rename = "AwsRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_region: Option<String>,
@@ -4777,6 +5005,10 @@ pub struct UpdateAccountRequest {
     /// <p>The Amazon Chime account ID.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
+    /// <p>The default license applied when you add users to an Amazon Chime account.</p>
+    #[serde(rename = "DefaultLicense")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_license: Option<String>,
     /// <p>The new name for the specified Amazon Chime account.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4786,6 +5018,7 @@ pub struct UpdateAccountRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAccountResponse {
+    /// <p>The updated Amazon Chime account details.</p>
     #[serde(rename = "Account")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account: Option<Account>,
@@ -4809,7 +5042,7 @@ pub struct UpdateAccountSettingsResponse {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAppInstanceRequest {
-    /// <p>The ARN of the app instance.</p>
+    /// <p>The ARN of the <code>AppInstance</code>.</p>
     #[serde(rename = "AppInstanceArn")]
     pub app_instance_arn: String,
     /// <p>The metadata that you want to change.</p>
@@ -4824,7 +5057,7 @@ pub struct UpdateAppInstanceRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAppInstanceResponse {
-    /// <p>The ARN of the app instance.</p>
+    /// <p>The ARN of the <code>AppInstance</code>.</p>
     #[serde(rename = "AppInstanceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_instance_arn: Option<String>,
@@ -4833,14 +5066,14 @@ pub struct UpdateAppInstanceResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAppInstanceUserRequest {
-    /// <p>The ARN of the app instance user.</p>
+    /// <p>The ARN of the <code>AppInstanceUser</code>.</p>
     #[serde(rename = "AppInstanceUserArn")]
     pub app_instance_user_arn: String,
-    /// <p>The metadata of the app instance user.</p>
+    /// <p>The metadata of the <code>AppInstanceUser</code>.</p>
     #[serde(rename = "Metadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<String>,
-    /// <p>The name of the app instance user.</p>
+    /// <p>The name of the <code>AppInstanceUser</code>.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
@@ -4848,7 +5081,7 @@ pub struct UpdateAppInstanceUserRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateAppInstanceUserResponse {
-    /// <p>The ARN of the app instance user.</p>
+    /// <p>The ARN of the <code>AppInstanceUser</code>.</p>
     #[serde(rename = "AppInstanceUserArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_instance_user_arn: Option<String>,
@@ -4884,6 +5117,10 @@ pub struct UpdateChannelMessageRequest {
     /// <p>The ARN of the channel.</p>
     #[serde(rename = "ChannelArn")]
     pub channel_arn: String,
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
     /// <p>The content of the message being updated.</p>
     #[serde(rename = "Content")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4916,6 +5153,10 @@ pub struct UpdateChannelReadMarkerRequest {
     /// <p>The ARN of the channel.</p>
     #[serde(rename = "ChannelArn")]
     pub channel_arn: String,
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -4933,7 +5174,11 @@ pub struct UpdateChannelRequest {
     /// <p>The ARN of the channel.</p>
     #[serde(rename = "ChannelArn")]
     pub channel_arn: String,
-    /// <p>The metadata of the channel.</p>
+    /// <p>The <code>AppInstanceUserArn</code> of the user that makes the API call.</p>
+    #[serde(rename = "ChimeBearer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chime_bearer: Option<String>,
+    /// <p>The metadata for the update request.</p>
     #[serde(rename = "Metadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metadata: Option<String>,
@@ -5091,6 +5336,28 @@ pub struct UpdateRoomResponse {
     #[serde(rename = "Room")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub room: Option<Room>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateSipMediaApplicationCallRequest {
+    /// <p>Arguments made available to the Lambda function as part of the <code>CALL_UPDATE_REQUESTED</code> event. Can contain 0-20 key-value pairs.</p>
+    #[serde(rename = "Arguments")]
+    pub arguments: ::std::collections::HashMap<String, String>,
+    /// <p>The ID of the SIP media application handling the call.</p>
+    #[serde(rename = "SipMediaApplicationId")]
+    pub sip_media_application_id: String,
+    /// <p>The ID of the call transaction.</p>
+    #[serde(rename = "TransactionId")]
+    pub transaction_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateSipMediaApplicationCallResponse {
+    #[serde(rename = "SipMediaApplicationCall")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sip_media_application_call: Option<SipMediaApplicationCall>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -5346,7 +5613,7 @@ pub struct UserSettings {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VoiceConnector {
-    /// <p>The AWS Region in which the Amazon Chime Voice Connector is created. Default: <code>us-east-1</code>.</p>
+    /// <p> The AWS Region in which the Amazon Chime Voice Connector is created. Default: <code>us-east-1</code>. </p>
     #[serde(rename = "AwsRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_region: Option<String>,
@@ -5380,7 +5647,7 @@ pub struct VoiceConnector {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct VoiceConnectorGroup {
-    /// <p>The Amazon Chime Voice Connector group creation timestamp, in ISO 8601 format.</p>
+    /// <p>The Amazon Chime Voice Connector group creation time stamp, in ISO 8601 format.</p>
     #[serde(rename = "CreatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_timestamp: Option<f64>,
@@ -5388,7 +5655,7 @@ pub struct VoiceConnectorGroup {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The updated Amazon Chime Voice Connector group timestamp, in ISO 8601 format.</p>
+    /// <p>The updated Amazon Chime Voice Connector group time stamp, in ISO 8601 format.</p>
     #[serde(rename = "UpdatedTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_timestamp: Option<f64>,
@@ -5405,7 +5672,7 @@ pub struct VoiceConnectorGroup {
 /// <p>For Amazon Chime Voice Connector groups, the Amazon Chime Voice Connectors to which to route inbound calls. Includes priority configuration settings. Limit: 3 <code>VoiceConnectorItems</code> per Amazon Chime Voice Connector group.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VoiceConnectorItem {
-    /// <p>The priority associated with the Amazon Chime Voice Connector, with 1 being the highest priority. Higher priority Amazon Chime Voice Connectors are attempted first. </p>
+    /// <p>The priority associated with the Amazon Chime Voice Connector, with 1 being the highest priority. Higher priority Amazon Chime Voice Connectors are attempted first.</p>
     #[serde(rename = "Priority")]
     pub priority: i64,
     /// <p>The Amazon Chime Voice Connector ID.</p>
@@ -5906,6 +6173,84 @@ impl fmt::Display for BatchCreateAttendeeError {
     }
 }
 impl Error for BatchCreateAttendeeError {}
+/// Errors returned by BatchCreateChannelMembership
+#[derive(Debug, PartialEq)]
+pub enum BatchCreateChannelMembershipError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl BatchCreateChannelMembershipError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<BatchCreateChannelMembershipError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(BatchCreateChannelMembershipError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(BatchCreateChannelMembershipError::Forbidden(
+                        err.msg,
+                    ))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(BatchCreateChannelMembershipError::ServiceFailure(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        BatchCreateChannelMembershipError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(
+                        BatchCreateChannelMembershipError::ThrottledClient(err.msg),
+                    )
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        BatchCreateChannelMembershipError::UnauthorizedClient(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for BatchCreateChannelMembershipError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            BatchCreateChannelMembershipError::BadRequest(ref cause) => write!(f, "{}", cause),
+            BatchCreateChannelMembershipError::Forbidden(ref cause) => write!(f, "{}", cause),
+            BatchCreateChannelMembershipError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            BatchCreateChannelMembershipError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            BatchCreateChannelMembershipError::ThrottledClient(ref cause) => write!(f, "{}", cause),
+            BatchCreateChannelMembershipError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for BatchCreateChannelMembershipError {}
 /// Errors returned by BatchCreateRoomMembership
 #[derive(Debug, PartialEq)]
 pub enum BatchCreateRoomMembershipError {
@@ -8283,8 +8628,6 @@ pub enum DeleteAppInstanceAdminError {
     Conflict(String),
     /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
-    /// <p>The request exceeds the resource limit.</p>
-    ResourceLimitExceeded(String),
     /// <p>The service encountered an unexpected error.</p>
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
@@ -8307,11 +8650,6 @@ impl DeleteAppInstanceAdminError {
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DeleteAppInstanceAdminError::Forbidden(err.msg))
-                }
-                "ResourceLimitExceededException" => {
-                    return RusotoError::Service(
-                        DeleteAppInstanceAdminError::ResourceLimitExceeded(err.msg),
-                    )
                 }
                 "ServiceFailureException" => {
                     return RusotoError::Service(DeleteAppInstanceAdminError::ServiceFailure(
@@ -8347,7 +8685,6 @@ impl fmt::Display for DeleteAppInstanceAdminError {
             DeleteAppInstanceAdminError::BadRequest(ref cause) => write!(f, "{}", cause),
             DeleteAppInstanceAdminError::Conflict(ref cause) => write!(f, "{}", cause),
             DeleteAppInstanceAdminError::Forbidden(ref cause) => write!(f, "{}", cause),
-            DeleteAppInstanceAdminError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
             DeleteAppInstanceAdminError::ServiceFailure(ref cause) => write!(f, "{}", cause),
             DeleteAppInstanceAdminError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
             DeleteAppInstanceAdminError::ThrottledClient(ref cause) => write!(f, "{}", cause),
@@ -8711,6 +9048,8 @@ impl Error for DeleteChannelBanError {}
 pub enum DeleteChannelMembershipError {
     /// <p>The input parameters don't match the service's restrictions.</p>
     BadRequest(String),
+    /// <p>The request could not be processed because of conflict in the current state of the resource.</p>
+    Conflict(String),
     /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
     /// <p>The service encountered an unexpected error.</p>
@@ -8729,6 +9068,9 @@ impl DeleteChannelMembershipError {
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(DeleteChannelMembershipError::BadRequest(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(DeleteChannelMembershipError::Conflict(err.msg))
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(DeleteChannelMembershipError::Forbidden(err.msg))
@@ -8765,6 +9107,7 @@ impl fmt::Display for DeleteChannelMembershipError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteChannelMembershipError::BadRequest(ref cause) => write!(f, "{}", cause),
+            DeleteChannelMembershipError::Conflict(ref cause) => write!(f, "{}", cause),
             DeleteChannelMembershipError::Forbidden(ref cause) => write!(f, "{}", cause),
             DeleteChannelMembershipError::ServiceFailure(ref cause) => write!(f, "{}", cause),
             DeleteChannelMembershipError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
@@ -13741,8 +14084,6 @@ pub enum ListAppInstanceAdminsError {
     BadRequest(String),
     /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
-    /// <p>The request exceeds the resource limit.</p>
-    ResourceLimitExceeded(String),
     /// <p>The service encountered an unexpected error.</p>
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
@@ -13762,11 +14103,6 @@ impl ListAppInstanceAdminsError {
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(ListAppInstanceAdminsError::Forbidden(err.msg))
-                }
-                "ResourceLimitExceededException" => {
-                    return RusotoError::Service(ListAppInstanceAdminsError::ResourceLimitExceeded(
-                        err.msg,
-                    ))
                 }
                 "ServiceFailureException" => {
                     return RusotoError::Service(ListAppInstanceAdminsError::ServiceFailure(
@@ -13801,7 +14137,6 @@ impl fmt::Display for ListAppInstanceAdminsError {
         match *self {
             ListAppInstanceAdminsError::BadRequest(ref cause) => write!(f, "{}", cause),
             ListAppInstanceAdminsError::Forbidden(ref cause) => write!(f, "{}", cause),
-            ListAppInstanceAdminsError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
             ListAppInstanceAdminsError::ServiceFailure(ref cause) => write!(f, "{}", cause),
             ListAppInstanceAdminsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
             ListAppInstanceAdminsError::ThrottledClient(ref cause) => write!(f, "{}", cause),
@@ -14827,6 +15162,8 @@ pub enum ListPhoneNumbersError {
     BadRequest(String),
     /// <p>The client is permanently forbidden from making the request.</p>
     Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
     /// <p>The service encountered an unexpected error.</p>
     ServiceFailure(String),
     /// <p>The service is currently unavailable.</p>
@@ -14846,6 +15183,9 @@ impl ListPhoneNumbersError {
                 }
                 "ForbiddenException" => {
                     return RusotoError::Service(ListPhoneNumbersError::Forbidden(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(ListPhoneNumbersError::NotFound(err.msg))
                 }
                 "ServiceFailureException" => {
                     return RusotoError::Service(ListPhoneNumbersError::ServiceFailure(err.msg))
@@ -14872,6 +15212,7 @@ impl fmt::Display for ListPhoneNumbersError {
         match *self {
             ListPhoneNumbersError::BadRequest(ref cause) => write!(f, "{}", cause),
             ListPhoneNumbersError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListPhoneNumbersError::NotFound(ref cause) => write!(f, "{}", cause),
             ListPhoneNumbersError::ServiceFailure(ref cause) => write!(f, "{}", cause),
             ListPhoneNumbersError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
             ListPhoneNumbersError::ThrottledClient(ref cause) => write!(f, "{}", cause),
@@ -15214,6 +15555,98 @@ impl fmt::Display for ListSipRulesError {
     }
 }
 impl Error for ListSipRulesError {}
+/// Errors returned by ListSupportedPhoneNumberCountries
+#[derive(Debug, PartialEq)]
+pub enum ListSupportedPhoneNumberCountriesError {
+    /// <p>You don't have permissions to perform the requested operation.</p>
+    AccessDenied(String),
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl ListSupportedPhoneNumberCountriesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListSupportedPhoneNumberCountriesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        ListSupportedPhoneNumberCountriesError::AccessDenied(err.msg),
+                    )
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(
+                        ListSupportedPhoneNumberCountriesError::BadRequest(err.msg),
+                    )
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(ListSupportedPhoneNumberCountriesError::Forbidden(
+                        err.msg,
+                    ))
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(
+                        ListSupportedPhoneNumberCountriesError::ServiceFailure(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        ListSupportedPhoneNumberCountriesError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(
+                        ListSupportedPhoneNumberCountriesError::ThrottledClient(err.msg),
+                    )
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        ListSupportedPhoneNumberCountriesError::UnauthorizedClient(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListSupportedPhoneNumberCountriesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListSupportedPhoneNumberCountriesError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListSupportedPhoneNumberCountriesError::BadRequest(ref cause) => write!(f, "{}", cause),
+            ListSupportedPhoneNumberCountriesError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ListSupportedPhoneNumberCountriesError::ServiceFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListSupportedPhoneNumberCountriesError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListSupportedPhoneNumberCountriesError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListSupportedPhoneNumberCountriesError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListSupportedPhoneNumberCountriesError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
@@ -18782,6 +19215,104 @@ impl fmt::Display for UpdateSipMediaApplicationError {
     }
 }
 impl Error for UpdateSipMediaApplicationError {}
+/// Errors returned by UpdateSipMediaApplicationCall
+#[derive(Debug, PartialEq)]
+pub enum UpdateSipMediaApplicationCallError {
+    /// <p>The input parameters don't match the service's restrictions.</p>
+    BadRequest(String),
+    /// <p>The client is permanently forbidden from making the request.</p>
+    Forbidden(String),
+    /// <p>One or more of the resources in the request does not exist in the system.</p>
+    NotFound(String),
+    /// <p>The request exceeds the resource limit.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The service encountered an unexpected error.</p>
+    ServiceFailure(String),
+    /// <p>The service is currently unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The client exceeded its request rate limit.</p>
+    ThrottledClient(String),
+    /// <p>The client is not currently authorized to make the request.</p>
+    UnauthorizedClient(String),
+}
+
+impl UpdateSipMediaApplicationCallError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateSipMediaApplicationCallError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateSipMediaApplicationCallError::BadRequest(
+                        err.msg,
+                    ))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UpdateSipMediaApplicationCallError::Forbidden(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateSipMediaApplicationCallError::NotFound(
+                        err.msg,
+                    ))
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(
+                        UpdateSipMediaApplicationCallError::ResourceLimitExceeded(err.msg),
+                    )
+                }
+                "ServiceFailureException" => {
+                    return RusotoError::Service(
+                        UpdateSipMediaApplicationCallError::ServiceFailure(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        UpdateSipMediaApplicationCallError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottledClientException" => {
+                    return RusotoError::Service(
+                        UpdateSipMediaApplicationCallError::ThrottledClient(err.msg),
+                    )
+                }
+                "UnauthorizedClientException" => {
+                    return RusotoError::Service(
+                        UpdateSipMediaApplicationCallError::UnauthorizedClient(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateSipMediaApplicationCallError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateSipMediaApplicationCallError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateSipMediaApplicationCallError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateSipMediaApplicationCallError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateSipMediaApplicationCallError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateSipMediaApplicationCallError::ServiceFailure(ref cause) => write!(f, "{}", cause),
+            UpdateSipMediaApplicationCallError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateSipMediaApplicationCallError::ThrottledClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateSipMediaApplicationCallError::UnauthorizedClient(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdateSipMediaApplicationCallError {}
 /// Errors returned by UpdateSipRule
 #[derive(Debug, PartialEq)]
 pub enum UpdateSipRuleError {
@@ -19186,37 +19717,43 @@ pub trait Chime {
         RusotoError<AssociateSigninDelegateGroupsWithAccountError>,
     >;
 
-    /// <p>Creates up to 100 new attendees for an active Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>. </p>
+    /// <p> Creates up to 100 new attendees for an active Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>. </p>
     async fn batch_create_attendee(
         &self,
         input: BatchCreateAttendeeRequest,
     ) -> Result<BatchCreateAttendeeResponse, RusotoError<BatchCreateAttendeeError>>;
 
-    /// <p>Adds up to 50 members to a chat room in an Amazon Chime Enterprise account. Members can be either users or bots. The member role designates whether the member is a chat room administrator or a general chat room member.</p>
+    /// <p>Adds a specified number of users to a channel. </p>
+    async fn batch_create_channel_membership(
+        &self,
+        input: BatchCreateChannelMembershipRequest,
+    ) -> Result<BatchCreateChannelMembershipResponse, RusotoError<BatchCreateChannelMembershipError>>;
+
+    /// <p>Adds up to 50 members to a chat room in an Amazon Chime Enterprise account. Members can be users or bots. The member role designates whether the member is a chat room administrator or a general chat room member.</p>
     async fn batch_create_room_membership(
         &self,
         input: BatchCreateRoomMembershipRequest,
     ) -> Result<BatchCreateRoomMembershipResponse, RusotoError<BatchCreateRoomMembershipError>>;
 
-    /// <p>Moves phone numbers into the <b>Deletion queue</b>. Phone numbers must be disassociated from any users or Amazon Chime Voice Connectors before they can be deleted.</p> <p>Phone numbers remain in the <b>Deletion queue</b> for 7 days before they are deleted permanently.</p>
+    /// <p> Moves phone numbers into the <b>Deletion queue</b>. Phone numbers must be disassociated from any users or Amazon Chime Voice Connectors before they can be deleted. </p> <p> Phone numbers remain in the <b>Deletion queue</b> for 7 days before they are deleted permanently. </p>
     async fn batch_delete_phone_number(
         &self,
         input: BatchDeletePhoneNumberRequest,
     ) -> Result<BatchDeletePhoneNumberResponse, RusotoError<BatchDeletePhoneNumberError>>;
 
-    /// <p>Suspends up to 50 users from a <code>Team</code> or <code>EnterpriseLWA</code> Amazon Chime account. For more information about different account types, see <a href="https://docs.aws.amazon.com/chime/latest/ag/manage-chime-account.html">Managing Your Amazon Chime Accounts</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p>Users suspended from a <code>Team</code> account are disassociated from the account, but they can continue to use Amazon Chime as free users. To remove the suspension from suspended <code>Team</code> account users, invite them to the <code>Team</code> account again. You can use the <a>InviteUsers</a> action to do so.</p> <p>Users suspended from an <code>EnterpriseLWA</code> account are immediately signed out of Amazon Chime and can no longer sign in. To remove the suspension from suspended <code>EnterpriseLWA</code> account users, use the <a>BatchUnsuspendUser</a> action. </p> <p>To sign out users without suspending them, use the <a>LogoutUser</a> action.</p>
+    /// <p>Suspends up to 50 users from a <code>Team</code> or <code>EnterpriseLWA</code> Amazon Chime account. For more information about different account types, see <a href="https://docs.aws.amazon.com/chime/latest/ag/manage-chime-account.html">Managing Your Amazon Chime Accounts</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p>Users suspended from a <code>Team</code> account are disassociated from the account,but they can continue to use Amazon Chime as free users. To remove the suspension from suspended <code>Team</code> account users, invite them to the <code>Team</code> account again. You can use the <a>InviteUsers</a> action to do so.</p> <p>Users suspended from an <code>EnterpriseLWA</code> account are immediately signed out of Amazon Chime and can no longer sign in. To remove the suspension from suspended <code>EnterpriseLWA</code> account users, use the <a>BatchUnsuspendUser</a> action.</p> <p> To sign out users without suspending them, use the <a>LogoutUser</a> action. </p>
     async fn batch_suspend_user(
         &self,
         input: BatchSuspendUserRequest,
     ) -> Result<BatchSuspendUserResponse, RusotoError<BatchSuspendUserError>>;
 
-    /// <p>Removes the suspension from up to 50 previously suspended users for the specified Amazon Chime <code>EnterpriseLWA</code> account. Only users on <code>EnterpriseLWA</code> accounts can be unsuspended using this action. For more information about different account types, see <a href="https://docs.aws.amazon.com/chime/latest/ag/manage-chime-account.html">Managing Your Amazon Chime Accounts</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p>Previously suspended users who are unsuspended using this action are returned to <code>Registered</code> status. Users who are not previously suspended are ignored.</p>
+    /// <p>Removes the suspension from up to 50 previously suspended users for the specified Amazon Chime <code>EnterpriseLWA</code> account. Only users on <code>EnterpriseLWA</code> accounts can be unsuspended using this action. For more information about different account types, see <a href="https://docs.aws.amazon.com/chime/latest/ag/manage-chime-account.html"> Managing Your Amazon Chime Accounts </a> in the account types, in the <i>Amazon Chime Administration Guide</i>. </p> <p> Previously suspended users who are unsuspended using this action are returned to <code>Registered</code> status. Users who are not previously suspended are ignored. </p>
     async fn batch_unsuspend_user(
         &self,
         input: BatchUnsuspendUserRequest,
     ) -> Result<BatchUnsuspendUserResponse, RusotoError<BatchUnsuspendUserError>>;
 
-    /// <p>Updates phone number product types or calling names. You can update one attribute at a time for each <code>UpdatePhoneNumberRequestItem</code>. For example, you can update either the product type or the calling name.</p> <p>For product types, choose from Amazon Chime Business Calling and Amazon Chime Voice Connector. For toll-free numbers, you must use the Amazon Chime Voice Connector product type.</p> <p>Updates to outbound calling names can take up to 72 hours to complete. Pending updates to outbound calling names must be complete before you can request another update.</p>
+    /// <p>Updates phone number product types or calling names. You can update one attribute at a time for each <code>UpdatePhoneNumberRequestItem</code>. For example, you can update the product type or the calling name.</p> <p>For toll-free numbers, you cannot use the Amazon Chime Business Calling product type. For numbers outside the U.S., you must use the Amazon Chime SIP Media Application Dial-In product type.</p> <p>Updates to outbound calling names can take up to 72 hours to complete. Pending updates to outbound calling names must be complete before you can request another update.</p>
     async fn batch_update_phone_number(
         &self,
         input: BatchUpdatePhoneNumberRequest,
@@ -19234,13 +19771,13 @@ pub trait Chime {
         input: CreateAccountRequest,
     ) -> Result<CreateAccountResponse, RusotoError<CreateAccountError>>;
 
-    /// <p>Creates an Amazon Chime Messaging SDK <code>AppInstance</code> under an AWS Account. Only Messaging SDK customers use this API. <code>CreateAppInstance</code> supports <code>idempotency</code> behavior as described in the AWS API Standard.</p>
+    /// <p>Creates an Amazon Chime SDK messaging <code>AppInstance</code> under an AWS account. Only SDK messaging customers use this API. <code>CreateAppInstance</code> supports idempotency behavior as described in the AWS API Standard.</p>
     async fn create_app_instance(
         &self,
         input: CreateAppInstanceRequest,
     ) -> Result<CreateAppInstanceResponse, RusotoError<CreateAppInstanceError>>;
 
-    /// <p>Promotes an <code>AppInstanceUser</code> to an <code>AppInstanceAdmin</code>. The promoted user can perform the following actions. </p> <ul> <li> <p> <code>ChannelModerator</code> actions across all channels in the app instance.</p> </li> <li> <p> <code>DeleteChannelMessage</code> actions.</p> </li> </ul> <p>Only an <code>AppInstanceUser</code> can be promoted to an <code>AppInstanceAdmin</code> role.</p>
+    /// <p>Promotes an <code>AppInstanceUser</code> to an <code>AppInstanceAdmin</code>. The promoted user can perform the following actions. </p> <ul> <li> <p> <code>ChannelModerator</code> actions across all channels in the <code>AppInstance</code>.</p> </li> <li> <p> <code>DeleteChannelMessage</code> actions.</p> </li> </ul> <p>Only an <code>AppInstanceUser</code> can be promoted to an <code>AppInstanceAdmin</code> role.</p>
     async fn create_app_instance_admin(
         &self,
         input: CreateAppInstanceAdminRequest,
@@ -19252,7 +19789,7 @@ pub trait Chime {
         input: CreateAppInstanceUserRequest,
     ) -> Result<CreateAppInstanceUserResponse, RusotoError<CreateAppInstanceUserError>>;
 
-    /// <p>Creates a new attendee for an active Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    /// <p> Creates a new attendee for an active Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>. </p>
     async fn create_attendee(
         &self,
         input: CreateAttendeeRequest,
@@ -19264,49 +19801,49 @@ pub trait Chime {
         input: CreateBotRequest,
     ) -> Result<CreateBotResponse, RusotoError<CreateBotError>>;
 
-    /// <p>Creates a channel to which you can add users and send messages.</p> <p> <b>Restriction</b>: You can't change a channel's privacy.</p>
+    /// <p><p>Creates a channel to which you can add users and send messages.</p> <p> <b>Restriction</b>: You can&#39;t change a channel&#39;s privacy.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     async fn create_channel(
         &self,
         input: CreateChannelRequest,
     ) -> Result<CreateChannelResponse, RusotoError<CreateChannelError>>;
 
-    /// <p>Permanently bans a member from a channel. Moderators can't add banned members to a channel. To undo a ban, you first have to <code>DeleteChannelBan</code>, and then <code>CreateChannelMembership</code>. Bans are cleaned up when you delete users or channels. </p> <p>If you ban a user who is already part of a channel, that user is automatically kicked from the channel.</p>
+    /// <p><p>Permanently bans a member from a channel. Moderators can&#39;t add banned members to a channel. To undo a ban, you first have to <code>DeleteChannelBan</code>, and then <code>CreateChannelMembership</code>. Bans are cleaned up when you delete users or channels.</p> <p>If you ban a user who is already part of a channel, that user is automatically kicked from the channel.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     async fn create_channel_ban(
         &self,
         input: CreateChannelBanRequest,
     ) -> Result<CreateChannelBanResponse, RusotoError<CreateChannelBanError>>;
 
-    /// <p><p>Adds a user to a channel. The <code>InvitedBy</code> response field is derived from the request header. A channel member can:</p> <ul> <li> <p>List messages</p> </li> <li> <p>Send messages</p> </li> <li> <p>Receive messages</p> </li> <li> <p>Edit their own messages</p> </li> <li> <p>Leave the channel</p> </li> </ul> <p>Privacy settings impact this action as follows:</p> <ul> <li> <p>Public Channels: You do not need to be a member to list messages, but you must be a member to send messages.</p> </li> <li> <p>Private Channels: You must be a member to list or send messages.</p> </li> </ul></p>
+    /// <p><p>Adds a user to a channel. The <code>InvitedBy</code> response field is derived from the request header. A channel member can:</p> <ul> <li> <p>List messages</p> </li> <li> <p>Send messages</p> </li> <li> <p>Receive messages</p> </li> <li> <p>Edit their own messages</p> </li> <li> <p>Leave the channel</p> </li> </ul> <p>Privacy settings impact this action as follows:</p> <ul> <li> <p>Public Channels: You do not need to be a member to list messages, but you must be a member to send messages.</p> </li> <li> <p>Private Channels: You must be a member to list or send messages.</p> </li> </ul> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     async fn create_channel_membership(
         &self,
         input: CreateChannelMembershipRequest,
     ) -> Result<CreateChannelMembershipResponse, RusotoError<CreateChannelMembershipError>>;
 
-    /// <p><p>Creates a new <code>ChannelModerator</code>. A channel moderator can:</p> <ul> <li> <p>Add and remove other members of the channel.</p> </li> <li> <p>Add and remove other moderators of the channel.</p> </li> <li> <p>Add and remove user bans for the channel.</p> </li> <li> <p>Redact messages in the channel.</p> </li> <li> <p>List messages in the channel.</p> </li> </ul></p>
+    /// <p><p>Creates a new <code>ChannelModerator</code>. A channel moderator can:</p> <ul> <li> <p>Add and remove other members of the channel.</p> </li> <li> <p>Add and remove other moderators of the channel.</p> </li> <li> <p>Add and remove user bans for the channel.</p> </li> <li> <p>Redact messages in the channel.</p> </li> <li> <p>List messages in the channel.</p> </li> </ul> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     async fn create_channel_moderator(
         &self,
         input: CreateChannelModeratorRequest,
     ) -> Result<CreateChannelModeratorResponse, RusotoError<CreateChannelModeratorError>>;
 
-    /// <p>Creates a new Amazon Chime SDK meeting in the specified media Region with no initial attendees. For more information about specifying media Regions, see <a href="https://docs.aws.amazon.com/chime/latest/dg/chime-sdk-meetings-regions.html">Amazon Chime SDK Media Regions</a> in the <i>Amazon Chime Developer Guide</i>. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    /// <p> Creates a new Amazon Chime SDK meeting in the specified media Region with no initial attendees. For more information about specifying media Regions, see <a href="https://docs.aws.amazon.com/chime/latest/dg/chime-sdk-meetings-regions.html">Amazon Chime SDK Media Regions</a> in the <i>Amazon Chime Developer Guide</i> . For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i> . </p>
     async fn create_meeting(
         &self,
         input: CreateMeetingRequest,
     ) -> Result<CreateMeetingResponse, RusotoError<CreateMeetingError>>;
 
-    /// <p>Uses the join token and call metadata in a meeting request (From number, To number, and so forth) to initiate an outbound call to a public switched telephone network (PSTN) and joins them into Chime meeting. Also ensures that the From number belongs to the customer.</p> <p>To play welcome audio or implement an interactive voice response (IVR), use the <code>CreateSipMediaApplicationCall</code> API with the corresponding SIP media application ID.</p>
+    /// <p>Uses the join token and call metadata in a meeting request (From number, To number, and so forth) to initiate an outbound call to a public switched telephone network (PSTN) and join them into a Chime meeting. Also ensures that the From number belongs to the customer.</p> <p>To play welcome audio or implement an interactive voice response (IVR), use the <code>CreateSipMediaApplicationCall</code> action with the corresponding SIP media application ID.</p>
     async fn create_meeting_dial_out(
         &self,
         input: CreateMeetingDialOutRequest,
     ) -> Result<CreateMeetingDialOutResponse, RusotoError<CreateMeetingDialOutError>>;
 
-    /// <p>Creates a new Amazon Chime SDK meeting in the specified media Region, with attendees. For more information about specifying media Regions, see <a href="https://docs.aws.amazon.com/chime/latest/dg/chime-sdk-meetings-regions.html">Amazon Chime SDK Media Regions</a> in the <i>Amazon Chime Developer Guide</i>. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    /// <p> Creates a new Amazon Chime SDK meeting in the specified media Region, with attendees. For more information about specifying media Regions, see <a href="https://docs.aws.amazon.com/chime/latest/dg/chime-sdk-meetings-regions.html">Amazon Chime SDK Media Regions</a> in the <i>Amazon Chime Developer Guide</i> . For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i> . </p>
     async fn create_meeting_with_attendees(
         &self,
         input: CreateMeetingWithAttendeesRequest,
     ) -> Result<CreateMeetingWithAttendeesResponse, RusotoError<CreateMeetingWithAttendeesError>>;
 
-    /// <p>Creates an order for phone numbers to be provisioned. Choose from Amazon Chime Business Calling and Amazon Chime Voice Connector product types. For toll-free numbers, you must use the Amazon Chime Voice Connector product type.</p>
+    /// <p>Creates an order for phone numbers to be provisioned. For toll-free numbers, you cannot use the Amazon Chime Business Calling product type. For numbers outside the U.S., you must use the Amazon Chime SIP Media Application Dial-In product type.</p>
     async fn create_phone_number_order(
         &self,
         input: CreatePhoneNumberOrderRequest,
@@ -19357,7 +19894,7 @@ pub trait Chime {
         input: CreateUserRequest,
     ) -> Result<CreateUserResponse, RusotoError<CreateUserError>>;
 
-    /// <p>Creates an Amazon Chime Voice Connector under the administrator's AWS account. You can choose to create an Amazon Chime Voice Connector in a specific AWS Region.</p> <p>Enabling <a>CreateVoiceConnectorRequest$RequireEncryption</a> configures your Amazon Chime Voice Connector to use TLS transport for SIP signaling and Secure RTP (SRTP) for media. Inbound calls use TLS transport, and unencrypted outbound calls are blocked.</p>
+    /// <p>Creates an Amazon Chime Voice Connector under the administrator's AWS account. You can choose to create an Amazon Chime Voice Connector in a specific AWS Region.</p> <p> Enabling <a>CreateVoiceConnectorRequest$RequireEncryption</a> configures your Amazon Chime Voice Connector to use TLS transport for SIP signaling and Secure RTP (SRTP) for media. Inbound calls use TLS transport, and unencrypted outbound calls are blocked. </p>
     async fn create_voice_connector(
         &self,
         input: CreateVoiceConnectorRequest,
@@ -19369,7 +19906,7 @@ pub trait Chime {
         input: CreateVoiceConnectorGroupRequest,
     ) -> Result<CreateVoiceConnectorGroupResponse, RusotoError<CreateVoiceConnectorGroupError>>;
 
-    /// <p>Deletes the specified Amazon Chime account. You must suspend all users before deleting a <code>Team</code> account. You can use the <a>BatchSuspendUser</a> action to do so.</p> <p>For <code>EnterpriseLWA</code> and <code>EnterpriseAD</code> accounts, you must release the claimed domains for your Amazon Chime account before deletion. As soon as you release the domain, all users under that account are suspended.</p> <p>Deleted accounts appear in your <code>Disabled</code> accounts list for 90 days. To restore a deleted account from your <code>Disabled</code> accounts list, you must contact AWS Support.</p> <p>After 90 days, deleted accounts are permanently removed from your <code>Disabled</code> accounts list.</p>
+    /// <p>Deletes the specified Amazon Chime account. You must suspend all users before deleting <code>Team</code> account. You can use the <a>BatchSuspendUser</a> action to dodo.</p> <p>For <code>EnterpriseLWA</code> and <code>EnterpriseAD</code> accounts, you must release the claimed domains for your Amazon Chime account before deletion. As soon as you release the domain, all users under that account are suspended.</p> <p>Deleted accounts appear in your <code>Disabled</code> accounts list for 90 days. To restore deleted account from your <code>Disabled</code> accounts list, you must contact AWS Support.</p> <p>After 90 days, deleted accounts are permanently removed from your <code>Disabled</code> accounts list.</p>
     async fn delete_account(
         &self,
         input: DeleteAccountRequest,
@@ -19387,7 +19924,7 @@ pub trait Chime {
         input: DeleteAppInstanceAdminRequest,
     ) -> Result<(), RusotoError<DeleteAppInstanceAdminError>>;
 
-    /// <p>Deletes the streaming configurations of an app instance.</p>
+    /// <p>Deletes the streaming configurations of an <code>AppInstance</code>.</p>
     async fn delete_app_instance_streaming_configurations(
         &self,
         input: DeleteAppInstanceStreamingConfigurationsRequest,
@@ -19405,31 +19942,31 @@ pub trait Chime {
         input: DeleteAttendeeRequest,
     ) -> Result<(), RusotoError<DeleteAttendeeError>>;
 
-    /// <p>Immediately makes a channel and its memberships inaccessible and marks them for deletion. This is an irreversible process.</p>
+    /// <p><p>Immediately makes a channel and its memberships inaccessible and marks them for deletion. This is an irreversible process.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     async fn delete_channel(
         &self,
         input: DeleteChannelRequest,
     ) -> Result<(), RusotoError<DeleteChannelError>>;
 
-    /// <p>Removes a user from a channel's ban list.</p>
+    /// <p><p>Removes a user from a channel&#39;s ban list.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     async fn delete_channel_ban(
         &self,
         input: DeleteChannelBanRequest,
     ) -> Result<(), RusotoError<DeleteChannelBanError>>;
 
-    /// <p>Removes a member from a channel.</p>
+    /// <p><p>Removes a member from a channel.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     async fn delete_channel_membership(
         &self,
         input: DeleteChannelMembershipRequest,
     ) -> Result<(), RusotoError<DeleteChannelMembershipError>>;
 
-    /// <p>Deletes a channel message. Only admins can perform this action. Deletion makes messages inaccessible immediately. A background process deletes any revisions created by <code>UpdateChannelMessage</code>.</p>
+    /// <p><p>Deletes a channel message. Only admins can perform this action. Deletion makes messages inaccessible immediately. A background process deletes any revisions created by <code>UpdateChannelMessage</code>.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     async fn delete_channel_message(
         &self,
         input: DeleteChannelMessageRequest,
     ) -> Result<(), RusotoError<DeleteChannelMessageError>>;
 
-    /// <p>Deletes a channel moderator.</p>
+    /// <p><p>Deletes a channel moderator.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     async fn delete_channel_moderator(
         &self,
         input: DeleteChannelModeratorRequest,
@@ -19441,7 +19978,7 @@ pub trait Chime {
         input: DeleteEventsConfigurationRequest,
     ) -> Result<(), RusotoError<DeleteEventsConfigurationError>>;
 
-    /// <p>Deletes the specified Amazon Chime SDK meeting. When a meeting is deleted, its attendees are also deleted and clients can no longer join it. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    /// <p>Deletes the specified Amazon Chime SDK meeting. The operation deletes all attendees, disconnects all clients, and prevents new clients from joining the meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
     async fn delete_meeting(
         &self,
         input: DeleteMeetingRequest,
@@ -19543,31 +20080,31 @@ pub trait Chime {
         input: DescribeAppInstanceAdminRequest,
     ) -> Result<DescribeAppInstanceAdminResponse, RusotoError<DescribeAppInstanceAdminError>>;
 
-    /// <p>Returns the full details of an <code>AppInstanceUser</code>.</p>
+    /// <p> Returns the full details of an <code>AppInstanceUser</code> . </p>
     async fn describe_app_instance_user(
         &self,
         input: DescribeAppInstanceUserRequest,
     ) -> Result<DescribeAppInstanceUserResponse, RusotoError<DescribeAppInstanceUserError>>;
 
-    /// <p>Returns the full details of a channel in an Amazon Chime app instance.</p>
+    /// <p><p>Returns the full details of a channel in an Amazon Chime <code>AppInstance</code>.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     async fn describe_channel(
         &self,
         input: DescribeChannelRequest,
     ) -> Result<DescribeChannelResponse, RusotoError<DescribeChannelError>>;
 
-    /// <p>Returns the full details of a channel ban.</p>
+    /// <p><p>Returns the full details of a channel ban.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     async fn describe_channel_ban(
         &self,
         input: DescribeChannelBanRequest,
     ) -> Result<DescribeChannelBanResponse, RusotoError<DescribeChannelBanError>>;
 
-    /// <p>Returns the full details of a user's channel membership.</p>
+    /// <p><p>Returns the full details of a user&#39;s channel membership.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     async fn describe_channel_membership(
         &self,
         input: DescribeChannelMembershipRequest,
     ) -> Result<DescribeChannelMembershipResponse, RusotoError<DescribeChannelMembershipError>>;
 
-    /// <p>Returns the details of a channel based on the membership of the <code>AppInstanceUser</code> specified.</p>
+    /// <p><p> Returns the details of a channel based on the membership of the specified <code>AppInstanceUser</code>.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     async fn describe_channel_membership_for_app_instance_user(
         &self,
         input: DescribeChannelMembershipForAppInstanceUserRequest,
@@ -19576,7 +20113,7 @@ pub trait Chime {
         RusotoError<DescribeChannelMembershipForAppInstanceUserError>,
     >;
 
-    /// <p>Returns the full details of a channel moderated by the specified <code>AppInstanceUser</code>.</p>
+    /// <p><p>Returns the full details of a channel moderated by the specified <code>AppInstanceUser</code>.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     async fn describe_channel_moderated_by_app_instance_user(
         &self,
         input: DescribeChannelModeratedByAppInstanceUserRequest,
@@ -19585,7 +20122,7 @@ pub trait Chime {
         RusotoError<DescribeChannelModeratedByAppInstanceUserError>,
     >;
 
-    /// <p>Returns the full details of a single ChannelModerator.</p>
+    /// <p><p>Returns the full details of a single ChannelModerator.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     async fn describe_channel_moderator(
         &self,
         input: DescribeChannelModeratorRequest,
@@ -19633,13 +20170,13 @@ pub trait Chime {
         input: GetAccountRequest,
     ) -> Result<GetAccountResponse, RusotoError<GetAccountError>>;
 
-    /// <p>Retrieves account settings for the specified Amazon Chime account ID, such as remote control and dial out settings. For more information about these settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/policies.html">Use the Policies Page</a> in the <i>Amazon Chime Administration Guide</i>.</p>
+    /// <p>Retrieves account settings for the specified Amazon Chime account ID, such as remote control and dialout settings. For more information about these settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/policies.html">Use the Policies Page</a> in the <i>Amazon Chime Administration Guide</i>. </p>
     async fn get_account_settings(
         &self,
         input: GetAccountSettingsRequest,
     ) -> Result<GetAccountSettingsResponse, RusotoError<GetAccountSettingsError>>;
 
-    /// <p>Gets the retention settings for an app instance.</p>
+    /// <p>Gets the retention settings for an <code>AppInstance</code>.</p>
     async fn get_app_instance_retention_settings(
         &self,
         input: GetAppInstanceRetentionSettingsRequest,
@@ -19648,7 +20185,7 @@ pub trait Chime {
         RusotoError<GetAppInstanceRetentionSettingsError>,
     >;
 
-    /// <p>Gets the streaming settings for an app instance.</p>
+    /// <p>Gets the streaming settings for an <code>AppInstance</code>.</p>
     async fn get_app_instance_streaming_configurations(
         &self,
         input: GetAppInstanceStreamingConfigurationsRequest,
@@ -19657,7 +20194,7 @@ pub trait Chime {
         RusotoError<GetAppInstanceStreamingConfigurationsError>,
     >;
 
-    /// <p>Gets the Amazon Chime SDK attendee details for a specified meeting ID and attendee ID. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    /// <p> Gets the Amazon Chime SDK attendee details for a specified meeting ID and attendee ID. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i> . </p>
     async fn get_attendee(
         &self,
         input: GetAttendeeRequest,
@@ -19669,13 +20206,13 @@ pub trait Chime {
         input: GetBotRequest,
     ) -> Result<GetBotResponse, RusotoError<GetBotError>>;
 
-    /// <p>Gets the full details of a channel message.</p>
+    /// <p><p>Gets the full details of a channel message.</p> <note> <p>The x-amz-chime-bearer request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     async fn get_channel_message(
         &self,
         input: GetChannelMessageRequest,
     ) -> Result<GetChannelMessageResponse, RusotoError<GetChannelMessageError>>;
 
-    /// <p>Gets details for an events configuration that allows a bot to receive outgoing events, such as an HTTPS endpoint or Lambda function ARN. </p>
+    /// <p>Gets details for an events configuration that allows a bot to receive outgoing events, such as an HTTPS endpoint or Lambda function ARN.</p>
     async fn get_events_configuration(
         &self,
         input: GetEventsConfigurationRequest,
@@ -19686,13 +20223,13 @@ pub trait Chime {
         &self,
     ) -> Result<GetGlobalSettingsResponse, RusotoError<GetGlobalSettingsError>>;
 
-    /// <p>Gets the Amazon Chime SDK meeting details for the specified meeting ID. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    /// <p> Gets the Amazon Chime SDK meeting details for the specified meeting ID. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i> . </p>
     async fn get_meeting(
         &self,
         input: GetMeetingRequest,
     ) -> Result<GetMeetingResponse, RusotoError<GetMeetingError>>;
 
-    /// <p>The endpoint for the messaging session.</p>
+    /// <p>The details of the endpoint for the messaging session.</p>
     async fn get_messaging_session_endpoint(
         &self,
     ) -> Result<GetMessagingSessionEndpointResponse, RusotoError<GetMessagingSessionEndpointError>>;
@@ -19703,7 +20240,7 @@ pub trait Chime {
         input: GetPhoneNumberRequest,
     ) -> Result<GetPhoneNumberResponse, RusotoError<GetPhoneNumberError>>;
 
-    /// <p>Retrieves details for the specified phone number order, such as order creation timestamp, phone numbers in E.164 format, product type, and order status.</p>
+    /// <p>Retrieves details for the specified phone number order, such as the order creation timestamp, phone numbers in E.164 format, product type, and order status.</p>
     async fn get_phone_number_order(
         &self,
         input: GetPhoneNumberOrderRequest,
@@ -19720,7 +20257,7 @@ pub trait Chime {
         input: GetProxySessionRequest,
     ) -> Result<GetProxySessionResponse, RusotoError<GetProxySessionError>>;
 
-    /// <p>Gets the retention settings for the specified Amazon Chime Enterprise account. For more information about retention settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/chat-retention.html">Managing Chat Retention Policies</a> in the <i>Amazon Chime Administration Guide</i>.</p>
+    /// <p> Gets the retention settings for the specified Amazon Chime Enterprise account. For more information about retention settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/chat-retention.html">Managing Chat Retention Policies</a> in the <i>Amazon Chime Administration Guide</i>. </p>
     async fn get_retention_settings(
         &self,
         input: GetRetentionSettingsRequest,
@@ -19753,7 +20290,7 @@ pub trait Chime {
         input: GetSipRuleRequest,
     ) -> Result<GetSipRuleResponse, RusotoError<GetSipRuleError>>;
 
-    /// <p>Retrieves details for the specified user ID, such as primary email address, license type, and personal meeting PIN.</p> <p>To retrieve user details with an email address instead of a user ID, use the <a>ListUsers</a> action, and then filter by email address.</p>
+    /// <p>Retrieves details for the specified user ID, such as primary email address, license type,and personal meeting PIN.</p> <p> To retrieve user details with an email address instead of a user ID, use the <a>ListUsers</a> action, and then filter by email address. </p>
     async fn get_user(
         &self,
         input: GetUserRequest,
@@ -19765,7 +20302,7 @@ pub trait Chime {
         input: GetUserSettingsRequest,
     ) -> Result<GetUserSettingsResponse, RusotoError<GetUserSettingsError>>;
 
-    /// <p>Retrieves details for the specified Amazon Chime Voice Connector, such as timestamps, name, outbound host, and encryption requirements.</p>
+    /// <p>Retrieves details for the specified Amazon Chime Voice Connector, such as timestamps,name, outbound host, and encryption requirements.</p>
     async fn get_voice_connector(
         &self,
         input: GetVoiceConnectorRequest,
@@ -19780,13 +20317,13 @@ pub trait Chime {
         RusotoError<GetVoiceConnectorEmergencyCallingConfigurationError>,
     >;
 
-    /// <p>Retrieves details for the specified Amazon Chime Voice Connector group, such as timestamps, name, and associated <code>VoiceConnectorItems</code>.</p>
+    /// <p> Retrieves details for the specified Amazon Chime Voice Connector group, such as timestamps,name, and associated <code>VoiceConnectorItems</code>.</p>
     async fn get_voice_connector_group(
         &self,
         input: GetVoiceConnectorGroupRequest,
     ) -> Result<GetVoiceConnectorGroupResponse, RusotoError<GetVoiceConnectorGroupError>>;
 
-    /// <p>Retrieves the logging configuration details for the specified Amazon Chime Voice Connector. Shows whether SIP message logs are enabled for sending to Amazon CloudWatch.</p>
+    /// <p>Retrieves the logging configuration details for the specified Amazon Chime Voice Connector. Shows whether SIP message logs are enabled for sending to Amazon CloudWatch Logs.</p>
     async fn get_voice_connector_logging_configuration(
         &self,
         input: GetVoiceConnectorLoggingConfigurationRequest,
@@ -19831,7 +20368,7 @@ pub trait Chime {
         RusotoError<GetVoiceConnectorTerminationHealthError>,
     >;
 
-    /// <p>Sends email to a maximum of 50 users, inviting them to the specified Amazon Chime <code>Team</code> account. Only <code>Team</code> account types are currently supported for this action. </p>
+    /// <p>Sends email to a maximum of 50 users, inviting them to the specified Amazon Chime <code>Team</code> account. Only <code>Team</code> account types are currently supported for this action.</p>
     async fn invite_users(
         &self,
         input: InviteUsersRequest,
@@ -19843,19 +20380,19 @@ pub trait Chime {
         input: ListAccountsRequest,
     ) -> Result<ListAccountsResponse, RusotoError<ListAccountsError>>;
 
-    /// <p>Returns a list of the administrators in the app instance.</p>
+    /// <p>Returns a list of the administrators in the <code>AppInstance</code>.</p>
     async fn list_app_instance_admins(
         &self,
         input: ListAppInstanceAdminsRequest,
     ) -> Result<ListAppInstanceAdminsResponse, RusotoError<ListAppInstanceAdminsError>>;
 
-    /// <p>List all <code>AppInstanceUsers</code> created under a single app instance.</p>
+    /// <p> List all <code>AppInstanceUsers</code> created under a single <code>AppInstance</code>. </p>
     async fn list_app_instance_users(
         &self,
         input: ListAppInstanceUsersRequest,
     ) -> Result<ListAppInstanceUsersResponse, RusotoError<ListAppInstanceUsersError>>;
 
-    /// <p>Lists all Amazon Chime app instances created under a single AWS account.</p>
+    /// <p>Lists all Amazon Chime <code>AppInstance</code>s created under a single AWS account.</p>
     async fn list_app_instances(
         &self,
         input: ListAppInstancesRequest,
@@ -19867,7 +20404,7 @@ pub trait Chime {
         input: ListAttendeeTagsRequest,
     ) -> Result<ListAttendeeTagsResponse, RusotoError<ListAttendeeTagsError>>;
 
-    /// <p>Lists the attendees for the specified Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    /// <p> Lists the attendees for the specified Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>. </p>
     async fn list_attendees(
         &self,
         input: ListAttendeesRequest,
@@ -19879,19 +20416,19 @@ pub trait Chime {
         input: ListBotsRequest,
     ) -> Result<ListBotsResponse, RusotoError<ListBotsError>>;
 
-    /// <p>Lists all the users banned from a particular channel.</p>
+    /// <p><p>Lists all the users banned from a particular channel.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     async fn list_channel_bans(
         &self,
         input: ListChannelBansRequest,
     ) -> Result<ListChannelBansResponse, RusotoError<ListChannelBansError>>;
 
-    /// <p>Lists all channel memberships in a channel.</p>
+    /// <p><p>Lists all channel memberships in a channel.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     async fn list_channel_memberships(
         &self,
         input: ListChannelMembershipsRequest,
     ) -> Result<ListChannelMembershipsResponse, RusotoError<ListChannelMembershipsError>>;
 
-    /// <p>Lists all channels that a particular <code>AppInstanceUser</code> is a part of. Only an <code>AppInstanceAdmin</code> can call the API with a user ARN that is not their own.</p>
+    /// <p><p> Lists all channels that a particular <code>AppInstanceUser</code> is a part of. Only an <code>AppInstanceAdmin</code> can call the API with a user ARN that is not their own. </p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     async fn list_channel_memberships_for_app_instance_user(
         &self,
         input: ListChannelMembershipsForAppInstanceUserRequest,
@@ -19900,25 +20437,25 @@ pub trait Chime {
         RusotoError<ListChannelMembershipsForAppInstanceUserError>,
     >;
 
-    /// <p><p>List all the messages in a channel. Returns a paginated list of <code>ChannelMessages</code>. Sorted in descending order by default, based on the creation timestamp.</p> <note> <p>Redacted messages appear in the results as empty, since they are only redacted, not deleted. Deleted messages do not appear in the results. This action always returns the latest version of an edited message.</p> </note></p>
+    /// <p><p>List all the messages in a channel. Returns a paginated list of <code>ChannelMessages</code>. By default, sorted by creation timestamp in descending order.</p> <note> <p>Redacted messages appear in the results as empty, since they are only redacted, not deleted. Deleted messages do not appear in the results. This action always returns the latest version of an edited message.</p> <p>Also, the x-amz-chime-bearer request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     async fn list_channel_messages(
         &self,
         input: ListChannelMessagesRequest,
     ) -> Result<ListChannelMessagesResponse, RusotoError<ListChannelMessagesError>>;
 
-    /// <p>Lists all the moderators for a channel.</p>
+    /// <p><p>Lists all the moderators for a channel.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     async fn list_channel_moderators(
         &self,
         input: ListChannelModeratorsRequest,
     ) -> Result<ListChannelModeratorsResponse, RusotoError<ListChannelModeratorsError>>;
 
-    /// <p><p>Lists all Channels created under a single Chime App as a paginated list. You can specify filters to narrow results.</p> <p class="title"> <b>Functionality &amp; restrictions</b> </p> <ul> <li> <p>Use privacy = <code>PUBLIC</code> to retrieve all public channels in the account</p> </li> <li> <p>Only an <code>AppInstanceAdmin</code> can set privacy = <code>PRIVATE</code> to list the private channels in an account.</p> </li> </ul></p>
+    /// <p><p>Lists all Channels created under a single Chime App as a paginated list. You can specify filters to narrow results.</p> <p class="title"> <b>Functionality &amp; restrictions</b> </p> <ul> <li> <p>Use privacy = <code>PUBLIC</code> to retrieve all public channels in the account.</p> </li> <li> <p>Only an <code>AppInstanceAdmin</code> can set privacy = <code>PRIVATE</code> to list the private channels in an account.</p> </li> </ul> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     async fn list_channels(
         &self,
         input: ListChannelsRequest,
     ) -> Result<ListChannelsResponse, RusotoError<ListChannelsError>>;
 
-    /// <p>A list of the channels moderated by an app instance user.</p>
+    /// <p><p>A list of the channels moderated by an <code>AppInstanceUser</code>.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     async fn list_channels_moderated_by_app_instance_user(
         &self,
         input: ListChannelsModeratedByAppInstanceUserRequest,
@@ -19933,7 +20470,7 @@ pub trait Chime {
         input: ListMeetingTagsRequest,
     ) -> Result<ListMeetingTagsResponse, RusotoError<ListMeetingTagsError>>;
 
-    /// <p>Lists up to 100 active Amazon Chime SDK meetings. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    /// <p> Lists up to 100 active Amazon Chime SDK meetings. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
     async fn list_meetings(
         &self,
         input: ListMeetingsRequest,
@@ -19981,6 +20518,15 @@ pub trait Chime {
         input: ListSipRulesRequest,
     ) -> Result<ListSipRulesResponse, RusotoError<ListSipRulesError>>;
 
+    /// <p>Lists supported phone number countries.</p>
+    async fn list_supported_phone_number_countries(
+        &self,
+        input: ListSupportedPhoneNumberCountriesRequest,
+    ) -> Result<
+        ListSupportedPhoneNumberCountriesResponse,
+        RusotoError<ListSupportedPhoneNumberCountriesError>,
+    >;
+
     /// <p>Lists the tags applied to an Amazon Chime SDK meeting resource.</p>
     async fn list_tags_for_resource(
         &self,
@@ -20020,7 +20566,7 @@ pub trait Chime {
         input: LogoutUserRequest,
     ) -> Result<LogoutUserResponse, RusotoError<LogoutUserError>>;
 
-    /// <p>Sets the amount of time in days that a given app instance retains data.</p>
+    /// <p>Sets the amount of time in days that a given <code>AppInstance</code> retains data.</p>
     async fn put_app_instance_retention_settings(
         &self,
         input: PutAppInstanceRetentionSettingsRequest,
@@ -20029,7 +20575,7 @@ pub trait Chime {
         RusotoError<PutAppInstanceRetentionSettingsError>,
     >;
 
-    /// <p>The data streaming configurations of an app instance.</p>
+    /// <p>The data streaming configurations of an <code>AppInstance</code>.</p>
     async fn put_app_instance_streaming_configurations(
         &self,
         input: PutAppInstanceStreamingConfigurationsRequest,
@@ -20044,7 +20590,7 @@ pub trait Chime {
         input: PutEventsConfigurationRequest,
     ) -> Result<PutEventsConfigurationResponse, RusotoError<PutEventsConfigurationError>>;
 
-    /// <p>Puts retention settings for the specified Amazon Chime Enterprise account. We recommend using AWS CloudTrail to monitor usage of this API for your account. For more information, see <a href="https://docs.aws.amazon.com/chime/latest/ag/cloudtrail.html">Logging Amazon Chime API Calls with AWS CloudTrail</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p>To turn off existing retention settings, remove the number of days from the corresponding <b>RetentionDays</b> field in the <b>RetentionSettings</b> object. For more information about retention settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/chat-retention.html">Managing Chat Retention Policies</a> in the <i>Amazon Chime Administration Guide</i>.</p>
+    /// <p> Puts retention settings for the specified Amazon Chime Enterprise account. We recommend using AWS CloudTrail to monitor usage of this API for your account. For more information, see <a href="https://docs.aws.amazon.com/chime/latest/ag/cloudtrail.html">Logging Amazon Chime API Calls with AWS CloudTrail</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p> To turn off existing retention settings, remove the number of days from the corresponding <b>RetentionDays</b> field in the <b>RetentionSettings</b> object. For more information about retention settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/chat-retention.html">Managing Chat Retention Policies</a> in the <i>Amazon Chime Administration Guide</i>.</p>
     async fn put_retention_settings(
         &self,
         input: PutRetentionSettingsRequest,
@@ -20089,7 +20635,7 @@ pub trait Chime {
         input: PutVoiceConnectorProxyRequest,
     ) -> Result<PutVoiceConnectorProxyResponse, RusotoError<PutVoiceConnectorProxyError>>;
 
-    /// <p>Adds a streaming configuration for the specified Amazon Chime Voice Connector. The streaming configuration specifies whether media streaming is enabled for sending to Amazon Kinesis. It also sets the retention period, in hours, for the Amazon Kinesis data.</p>
+    /// <p>Adds a streaming configuration for the specified Amazon Chime Voice Connector. The streaming configuration specifies whether media streaming is enabled for sending to Indonesians. It also sets the retention period, in hours, for the Amazon Kinesis data.</p>
     async fn put_voice_connector_streaming_configuration(
         &self,
         input: PutVoiceConnectorStreamingConfigurationRequest,
@@ -20110,7 +20656,7 @@ pub trait Chime {
         input: PutVoiceConnectorTerminationCredentialsRequest,
     ) -> Result<(), RusotoError<PutVoiceConnectorTerminationCredentialsError>>;
 
-    /// <p>Redacts message content, but not metadata. The message exists in the back end, but the action returns null content, and the state shows as redacted.</p>
+    /// <p><p>Redacts message content, but not metadata. The message exists in the back end, but the action returns null content, and the state shows as redacted.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     async fn redact_channel_message(
         &self,
         input: RedactChannelMessageRequest,
@@ -20146,13 +20692,13 @@ pub trait Chime {
         input: RestorePhoneNumberRequest,
     ) -> Result<RestorePhoneNumberResponse, RusotoError<RestorePhoneNumberError>>;
 
-    /// <p>Searches phone numbers that can be ordered.</p>
+    /// <p>Searches for phone numbers that can be ordered. For US numbers, provide at least one of the following search filters: <code>AreaCode</code>, <code>City</code>, <code>State</code>, or <code>TollFreePrefix</code>. If you provide <code>City</code>, you must also provide <code>State</code>. Numbers outside the US only support the <code>PhoneNumberType</code> filter, which you must use.</p>
     async fn search_available_phone_numbers(
         &self,
         input: SearchAvailablePhoneNumbersRequest,
     ) -> Result<SearchAvailablePhoneNumbersResponse, RusotoError<SearchAvailablePhoneNumbersError>>;
 
-    /// <p><p>Sends a message to a particular channel that the member is a part of.</p> <note> <p> <code>STANDARD</code> messages can contain 4KB of data and the 1KB of metadata. <code>CONTROL</code> messages can contain 30 bytes of data and no metadata.</p> </note></p>
+    /// <p><p>Sends a message to a particular channel that the member is a part of.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> <p>Also, <code>STANDARD</code> messages can contain 4KB of data and the 1KB of metadata. <code>CONTROL</code> messages can contain 30 bytes of data and no metadata.</p> </note></p>
     async fn send_channel_message(
         &self,
         input: SendChannelMessageRequest,
@@ -20194,7 +20740,7 @@ pub trait Chime {
         input: UntagResourceRequest,
     ) -> Result<(), RusotoError<UntagResourceError>>;
 
-    /// <p>Updates account details for the specified Amazon Chime account. Currently, only account name updates are supported for this action.</p>
+    /// <p>Updates account details for the specified Amazon Chime account. Currently, only account name and default license updates are supported for this action.</p>
     async fn update_account(
         &self,
         input: UpdateAccountRequest,
@@ -20212,7 +20758,7 @@ pub trait Chime {
         input: UpdateAppInstanceRequest,
     ) -> Result<UpdateAppInstanceResponse, RusotoError<UpdateAppInstanceError>>;
 
-    /// <p>Updates the details for an <code>AppInstanceUser</code>. You can update names and metadata.</p>
+    /// <p>Updates the details of an <code>AppInstanceUser</code>. You can update names and metadata.</p>
     async fn update_app_instance_user(
         &self,
         input: UpdateAppInstanceUserRequest,
@@ -20224,19 +20770,19 @@ pub trait Chime {
         input: UpdateBotRequest,
     ) -> Result<UpdateBotResponse, RusotoError<UpdateBotError>>;
 
-    /// <p>Update a channel's attributes.</p> <p> <b>Restriction</b>: You can't change a channel's privacy.</p>
+    /// <p><p>Update a channel&#39;s attributes.</p> <p> <b>Restriction</b>: You can&#39;t change a channel&#39;s privacy. </p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     async fn update_channel(
         &self,
         input: UpdateChannelRequest,
     ) -> Result<UpdateChannelResponse, RusotoError<UpdateChannelError>>;
 
-    /// <p>Updates the content of a message.</p>
+    /// <p><p>Updates the content of a message.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     async fn update_channel_message(
         &self,
         input: UpdateChannelMessageRequest,
     ) -> Result<UpdateChannelMessageResponse, RusotoError<UpdateChannelMessageError>>;
 
-    /// <p>Sets the timestamp to the point when a user last read messages in a channel.</p>
+    /// <p><p>The details of the time when a user last read messages in a channel.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     async fn update_channel_read_marker(
         &self,
         input: UpdateChannelReadMarkerRequest,
@@ -20248,7 +20794,7 @@ pub trait Chime {
         input: UpdateGlobalSettingsRequest,
     ) -> Result<(), RusotoError<UpdateGlobalSettingsError>>;
 
-    /// <p>Updates phone number details, such as product type or calling name, for the specified phone number ID. You can update one phone number detail at a time. For example, you can update either the product type or the calling name in one action.</p> <p>For toll-free numbers, you must use the Amazon Chime Voice Connector product type.</p> <p>Updates to outbound calling names can take up to 72 hours to complete. Pending updates to outbound calling names must be complete before you can request another update.</p>
+    /// <p>Updates phone number details, such as product type or calling name, for the specified phone number ID. You can update one phone number detail at a time. For example, you can update either the product type or the calling name in one action.</p> <p>For toll-free numbers, you cannot use the Amazon Chime Business Calling product type. For numbers outside the U.S., you must use the Amazon Chime SIP Media Application Dial-In product type.</p> <p>Updates to outbound calling names can take 72 hours to complete. Pending updates to outbound calling names must be complete before you can request another update.</p>
     async fn update_phone_number(
         &self,
         input: UpdatePhoneNumberRequest,
@@ -20278,13 +20824,22 @@ pub trait Chime {
         input: UpdateRoomMembershipRequest,
     ) -> Result<UpdateRoomMembershipResponse, RusotoError<UpdateRoomMembershipError>>;
 
-    /// <p>Updates the details for the specified SIP media application.</p>
+    /// <p>Updates the details of the specified SIP media application.</p>
     async fn update_sip_media_application(
         &self,
         input: UpdateSipMediaApplicationRequest,
     ) -> Result<UpdateSipMediaApplicationResponse, RusotoError<UpdateSipMediaApplicationError>>;
 
-    /// <p>Updates the details for the specified SIP rule.</p>
+    /// <p>Allows you to trigger a Lambda function at any time while a call is active, and replace the current actions with new actions returned by the invocation.</p>
+    async fn update_sip_media_application_call(
+        &self,
+        input: UpdateSipMediaApplicationCallRequest,
+    ) -> Result<
+        UpdateSipMediaApplicationCallResponse,
+        RusotoError<UpdateSipMediaApplicationCallError>,
+    >;
+
+    /// <p>Updates the details of the specified SIP rule.</p>
     async fn update_sip_rule(
         &self,
         input: UpdateSipRuleRequest,
@@ -20308,7 +20863,7 @@ pub trait Chime {
         input: UpdateVoiceConnectorRequest,
     ) -> Result<UpdateVoiceConnectorResponse, RusotoError<UpdateVoiceConnectorError>>;
 
-    /// <p>Updates details for the specified Amazon Chime Voice Connector group, such as the name and Amazon Chime Voice Connector priority ranking.</p>
+    /// <p>Updates details of the specified Amazon Chime Voice Connector group, such as the name and Amazon Chime Voice Connector priority ranking.</p>
     async fn update_voice_connector_group(
         &self,
         input: UpdateVoiceConnectorGroupRequest,
@@ -20517,7 +21072,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Creates up to 100 new attendees for an active Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>. </p>
+    /// <p> Creates up to 100 new attendees for an active Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>. </p>
     #[allow(unused_mut)]
     async fn batch_create_attendee(
         &self,
@@ -20555,7 +21110,46 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Adds up to 50 members to a chat room in an Amazon Chime Enterprise account. Members can be either users or bots. The member role designates whether the member is a chat room administrator or a general chat room member.</p>
+    /// <p>Adds a specified number of users to a channel. </p>
+    #[allow(unused_mut)]
+    async fn batch_create_channel_membership(
+        &self,
+        input: BatchCreateChannelMembershipRequest,
+    ) -> Result<BatchCreateChannelMembershipResponse, RusotoError<BatchCreateChannelMembershipError>>
+    {
+        let request_uri = format!(
+            "/channels/{channel_arn}/memberships",
+            channel_arn = input.channel_arn
+        );
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
+        let mut params = Params::new();
+        params.put("operation", "batch-create");
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<BatchCreateChannelMembershipResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(BatchCreateChannelMembershipError::from_response(response))
+        }
+    }
+
+    /// <p>Adds up to 50 members to a chat room in an Amazon Chime Enterprise account. Members can be users or bots. The member role designates whether the member is a chat room administrator or a general chat room member.</p>
     #[allow(unused_mut)]
     async fn batch_create_room_membership(
         &self,
@@ -20595,7 +21189,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Moves phone numbers into the <b>Deletion queue</b>. Phone numbers must be disassociated from any users or Amazon Chime Voice Connectors before they can be deleted.</p> <p>Phone numbers remain in the <b>Deletion queue</b> for 7 days before they are deleted permanently.</p>
+    /// <p> Moves phone numbers into the <b>Deletion queue</b>. Phone numbers must be disassociated from any users or Amazon Chime Voice Connectors before they can be deleted. </p> <p> Phone numbers remain in the <b>Deletion queue</b> for 7 days before they are deleted permanently. </p>
     #[allow(unused_mut)]
     async fn batch_delete_phone_number(
         &self,
@@ -20630,7 +21224,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Suspends up to 50 users from a <code>Team</code> or <code>EnterpriseLWA</code> Amazon Chime account. For more information about different account types, see <a href="https://docs.aws.amazon.com/chime/latest/ag/manage-chime-account.html">Managing Your Amazon Chime Accounts</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p>Users suspended from a <code>Team</code> account are disassociated from the account, but they can continue to use Amazon Chime as free users. To remove the suspension from suspended <code>Team</code> account users, invite them to the <code>Team</code> account again. You can use the <a>InviteUsers</a> action to do so.</p> <p>Users suspended from an <code>EnterpriseLWA</code> account are immediately signed out of Amazon Chime and can no longer sign in. To remove the suspension from suspended <code>EnterpriseLWA</code> account users, use the <a>BatchUnsuspendUser</a> action. </p> <p>To sign out users without suspending them, use the <a>LogoutUser</a> action.</p>
+    /// <p>Suspends up to 50 users from a <code>Team</code> or <code>EnterpriseLWA</code> Amazon Chime account. For more information about different account types, see <a href="https://docs.aws.amazon.com/chime/latest/ag/manage-chime-account.html">Managing Your Amazon Chime Accounts</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p>Users suspended from a <code>Team</code> account are disassociated from the account,but they can continue to use Amazon Chime as free users. To remove the suspension from suspended <code>Team</code> account users, invite them to the <code>Team</code> account again. You can use the <a>InviteUsers</a> action to do so.</p> <p>Users suspended from an <code>EnterpriseLWA</code> account are immediately signed out of Amazon Chime and can no longer sign in. To remove the suspension from suspended <code>EnterpriseLWA</code> account users, use the <a>BatchUnsuspendUser</a> action.</p> <p> To sign out users without suspending them, use the <a>LogoutUser</a> action. </p>
     #[allow(unused_mut)]
     async fn batch_suspend_user(
         &self,
@@ -20668,7 +21262,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Removes the suspension from up to 50 previously suspended users for the specified Amazon Chime <code>EnterpriseLWA</code> account. Only users on <code>EnterpriseLWA</code> accounts can be unsuspended using this action. For more information about different account types, see <a href="https://docs.aws.amazon.com/chime/latest/ag/manage-chime-account.html">Managing Your Amazon Chime Accounts</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p>Previously suspended users who are unsuspended using this action are returned to <code>Registered</code> status. Users who are not previously suspended are ignored.</p>
+    /// <p>Removes the suspension from up to 50 previously suspended users for the specified Amazon Chime <code>EnterpriseLWA</code> account. Only users on <code>EnterpriseLWA</code> accounts can be unsuspended using this action. For more information about different account types, see <a href="https://docs.aws.amazon.com/chime/latest/ag/manage-chime-account.html"> Managing Your Amazon Chime Accounts </a> in the account types, in the <i>Amazon Chime Administration Guide</i>. </p> <p> Previously suspended users who are unsuspended using this action are returned to <code>Registered</code> status. Users who are not previously suspended are ignored. </p>
     #[allow(unused_mut)]
     async fn batch_unsuspend_user(
         &self,
@@ -20706,7 +21300,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Updates phone number product types or calling names. You can update one attribute at a time for each <code>UpdatePhoneNumberRequestItem</code>. For example, you can update either the product type or the calling name.</p> <p>For product types, choose from Amazon Chime Business Calling and Amazon Chime Voice Connector. For toll-free numbers, you must use the Amazon Chime Voice Connector product type.</p> <p>Updates to outbound calling names can take up to 72 hours to complete. Pending updates to outbound calling names must be complete before you can request another update.</p>
+    /// <p>Updates phone number product types or calling names. You can update one attribute at a time for each <code>UpdatePhoneNumberRequestItem</code>. For example, you can update the product type or the calling name.</p> <p>For toll-free numbers, you cannot use the Amazon Chime Business Calling product type. For numbers outside the U.S., you must use the Amazon Chime SIP Media Application Dial-In product type.</p> <p>Updates to outbound calling names can take up to 72 hours to complete. Pending updates to outbound calling names must be complete before you can request another update.</p>
     #[allow(unused_mut)]
     async fn batch_update_phone_number(
         &self,
@@ -20806,7 +21400,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Creates an Amazon Chime Messaging SDK <code>AppInstance</code> under an AWS Account. Only Messaging SDK customers use this API. <code>CreateAppInstance</code> supports <code>idempotency</code> behavior as described in the AWS API Standard.</p>
+    /// <p>Creates an Amazon Chime SDK messaging <code>AppInstance</code> under an AWS account. Only SDK messaging customers use this API. <code>CreateAppInstance</code> supports idempotency behavior as described in the AWS API Standard.</p>
     #[allow(unused_mut)]
     async fn create_app_instance(
         &self,
@@ -20837,7 +21431,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Promotes an <code>AppInstanceUser</code> to an <code>AppInstanceAdmin</code>. The promoted user can perform the following actions. </p> <ul> <li> <p> <code>ChannelModerator</code> actions across all channels in the app instance.</p> </li> <li> <p> <code>DeleteChannelMessage</code> actions.</p> </li> </ul> <p>Only an <code>AppInstanceUser</code> can be promoted to an <code>AppInstanceAdmin</code> role.</p>
+    /// <p>Promotes an <code>AppInstanceUser</code> to an <code>AppInstanceAdmin</code>. The promoted user can perform the following actions. </p> <ul> <li> <p> <code>ChannelModerator</code> actions across all channels in the <code>AppInstance</code>.</p> </li> <li> <p> <code>DeleteChannelMessage</code> actions.</p> </li> </ul> <p>Only an <code>AppInstanceUser</code> can be promoted to an <code>AppInstanceAdmin</code> role.</p>
     #[allow(unused_mut)]
     async fn create_app_instance_admin(
         &self,
@@ -20902,7 +21496,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Creates a new attendee for an active Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    /// <p> Creates a new attendee for an active Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>. </p>
     #[allow(unused_mut)]
     async fn create_attendee(
         &self,
@@ -20967,7 +21561,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Creates a channel to which you can add users and send messages.</p> <p> <b>Restriction</b>: You can't change a channel's privacy.</p>
+    /// <p><p>Creates a channel to which you can add users and send messages.</p> <p> <b>Restriction</b>: You can&#39;t change a channel&#39;s privacy.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     #[allow(unused_mut)]
     async fn create_channel(
         &self,
@@ -20980,6 +21574,7 @@ impl Chime for ChimeClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
 
         let mut response = self
             .client
@@ -20998,7 +21593,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Permanently bans a member from a channel. Moderators can't add banned members to a channel. To undo a ban, you first have to <code>DeleteChannelBan</code>, and then <code>CreateChannelMembership</code>. Bans are cleaned up when you delete users or channels. </p> <p>If you ban a user who is already part of a channel, that user is automatically kicked from the channel.</p>
+    /// <p><p>Permanently bans a member from a channel. Moderators can&#39;t add banned members to a channel. To undo a ban, you first have to <code>DeleteChannelBan</code>, and then <code>CreateChannelMembership</code>. Bans are cleaned up when you delete users or channels.</p> <p>If you ban a user who is already part of a channel, that user is automatically kicked from the channel.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     #[allow(unused_mut)]
     async fn create_channel_ban(
         &self,
@@ -21014,6 +21609,7 @@ impl Chime for ChimeClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
 
         let mut response = self
             .client
@@ -21032,7 +21628,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p><p>Adds a user to a channel. The <code>InvitedBy</code> response field is derived from the request header. A channel member can:</p> <ul> <li> <p>List messages</p> </li> <li> <p>Send messages</p> </li> <li> <p>Receive messages</p> </li> <li> <p>Edit their own messages</p> </li> <li> <p>Leave the channel</p> </li> </ul> <p>Privacy settings impact this action as follows:</p> <ul> <li> <p>Public Channels: You do not need to be a member to list messages, but you must be a member to send messages.</p> </li> <li> <p>Private Channels: You must be a member to list or send messages.</p> </li> </ul></p>
+    /// <p><p>Adds a user to a channel. The <code>InvitedBy</code> response field is derived from the request header. A channel member can:</p> <ul> <li> <p>List messages</p> </li> <li> <p>Send messages</p> </li> <li> <p>Receive messages</p> </li> <li> <p>Edit their own messages</p> </li> <li> <p>Leave the channel</p> </li> </ul> <p>Privacy settings impact this action as follows:</p> <ul> <li> <p>Public Channels: You do not need to be a member to list messages, but you must be a member to send messages.</p> </li> <li> <p>Private Channels: You must be a member to list or send messages.</p> </li> </ul> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     #[allow(unused_mut)]
     async fn create_channel_membership(
         &self,
@@ -21048,6 +21644,7 @@ impl Chime for ChimeClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
 
         let mut response = self
             .client
@@ -21066,7 +21663,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p><p>Creates a new <code>ChannelModerator</code>. A channel moderator can:</p> <ul> <li> <p>Add and remove other members of the channel.</p> </li> <li> <p>Add and remove other moderators of the channel.</p> </li> <li> <p>Add and remove user bans for the channel.</p> </li> <li> <p>Redact messages in the channel.</p> </li> <li> <p>List messages in the channel.</p> </li> </ul></p>
+    /// <p><p>Creates a new <code>ChannelModerator</code>. A channel moderator can:</p> <ul> <li> <p>Add and remove other members of the channel.</p> </li> <li> <p>Add and remove other moderators of the channel.</p> </li> <li> <p>Add and remove user bans for the channel.</p> </li> <li> <p>Redact messages in the channel.</p> </li> <li> <p>List messages in the channel.</p> </li> </ul> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     #[allow(unused_mut)]
     async fn create_channel_moderator(
         &self,
@@ -21082,6 +21679,7 @@ impl Chime for ChimeClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
 
         let mut response = self
             .client
@@ -21100,7 +21698,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Creates a new Amazon Chime SDK meeting in the specified media Region with no initial attendees. For more information about specifying media Regions, see <a href="https://docs.aws.amazon.com/chime/latest/dg/chime-sdk-meetings-regions.html">Amazon Chime SDK Media Regions</a> in the <i>Amazon Chime Developer Guide</i>. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    /// <p> Creates a new Amazon Chime SDK meeting in the specified media Region with no initial attendees. For more information about specifying media Regions, see <a href="https://docs.aws.amazon.com/chime/latest/dg/chime-sdk-meetings-regions.html">Amazon Chime SDK Media Regions</a> in the <i>Amazon Chime Developer Guide</i> . For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i> . </p>
     #[allow(unused_mut)]
     async fn create_meeting(
         &self,
@@ -21131,7 +21729,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Uses the join token and call metadata in a meeting request (From number, To number, and so forth) to initiate an outbound call to a public switched telephone network (PSTN) and joins them into Chime meeting. Also ensures that the From number belongs to the customer.</p> <p>To play welcome audio or implement an interactive voice response (IVR), use the <code>CreateSipMediaApplicationCall</code> API with the corresponding SIP media application ID.</p>
+    /// <p>Uses the join token and call metadata in a meeting request (From number, To number, and so forth) to initiate an outbound call to a public switched telephone network (PSTN) and join them into a Chime meeting. Also ensures that the From number belongs to the customer.</p> <p>To play welcome audio or implement an interactive voice response (IVR), use the <code>CreateSipMediaApplicationCall</code> action with the corresponding SIP media application ID.</p>
     #[allow(unused_mut)]
     async fn create_meeting_dial_out(
         &self,
@@ -21165,7 +21763,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Creates a new Amazon Chime SDK meeting in the specified media Region, with attendees. For more information about specifying media Regions, see <a href="https://docs.aws.amazon.com/chime/latest/dg/chime-sdk-meetings-regions.html">Amazon Chime SDK Media Regions</a> in the <i>Amazon Chime Developer Guide</i>. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    /// <p> Creates a new Amazon Chime SDK meeting in the specified media Region, with attendees. For more information about specifying media Regions, see <a href="https://docs.aws.amazon.com/chime/latest/dg/chime-sdk-meetings-regions.html">Amazon Chime SDK Media Regions</a> in the <i>Amazon Chime Developer Guide</i> . For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i> . </p>
     #[allow(unused_mut)]
     async fn create_meeting_with_attendees(
         &self,
@@ -21201,7 +21799,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Creates an order for phone numbers to be provisioned. Choose from Amazon Chime Business Calling and Amazon Chime Voice Connector product types. For toll-free numbers, you must use the Amazon Chime Voice Connector product type.</p>
+    /// <p>Creates an order for phone numbers to be provisioned. For toll-free numbers, you cannot use the Amazon Chime Business Calling product type. For numbers outside the U.S., you must use the Amazon Chime SIP Media Application Dial-In product type.</p>
     #[allow(unused_mut)]
     async fn create_phone_number_order(
         &self,
@@ -21473,7 +22071,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Creates an Amazon Chime Voice Connector under the administrator's AWS account. You can choose to create an Amazon Chime Voice Connector in a specific AWS Region.</p> <p>Enabling <a>CreateVoiceConnectorRequest$RequireEncryption</a> configures your Amazon Chime Voice Connector to use TLS transport for SIP signaling and Secure RTP (SRTP) for media. Inbound calls use TLS transport, and unencrypted outbound calls are blocked.</p>
+    /// <p>Creates an Amazon Chime Voice Connector under the administrator's AWS account. You can choose to create an Amazon Chime Voice Connector in a specific AWS Region.</p> <p> Enabling <a>CreateVoiceConnectorRequest$RequireEncryption</a> configures your Amazon Chime Voice Connector to use TLS transport for SIP signaling and Secure RTP (SRTP) for media. Inbound calls use TLS transport, and unencrypted outbound calls are blocked. </p>
     #[allow(unused_mut)]
     async fn create_voice_connector(
         &self,
@@ -21536,7 +22134,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Deletes the specified Amazon Chime account. You must suspend all users before deleting a <code>Team</code> account. You can use the <a>BatchSuspendUser</a> action to do so.</p> <p>For <code>EnterpriseLWA</code> and <code>EnterpriseAD</code> accounts, you must release the claimed domains for your Amazon Chime account before deletion. As soon as you release the domain, all users under that account are suspended.</p> <p>Deleted accounts appear in your <code>Disabled</code> accounts list for 90 days. To restore a deleted account from your <code>Disabled</code> accounts list, you must contact AWS Support.</p> <p>After 90 days, deleted accounts are permanently removed from your <code>Disabled</code> accounts list.</p>
+    /// <p>Deletes the specified Amazon Chime account. You must suspend all users before deleting <code>Team</code> account. You can use the <a>BatchSuspendUser</a> action to dodo.</p> <p>For <code>EnterpriseLWA</code> and <code>EnterpriseAD</code> accounts, you must release the claimed domains for your Amazon Chime account before deletion. As soon as you release the domain, all users under that account are suspended.</p> <p>Deleted accounts appear in your <code>Disabled</code> accounts list for 90 days. To restore deleted account from your <code>Disabled</code> accounts list, you must contact AWS Support.</p> <p>After 90 days, deleted accounts are permanently removed from your <code>Disabled</code> accounts list.</p>
     #[allow(unused_mut)]
     async fn delete_account(
         &self,
@@ -21625,7 +22223,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Deletes the streaming configurations of an app instance.</p>
+    /// <p>Deletes the streaming configurations of an <code>AppInstance</code>.</p>
     #[allow(unused_mut)]
     async fn delete_app_instance_streaming_configurations(
         &self,
@@ -21716,7 +22314,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Immediately makes a channel and its memberships inaccessible and marks them for deletion. This is an irreversible process.</p>
+    /// <p><p>Immediately makes a channel and its memberships inaccessible and marks them for deletion. This is an irreversible process.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     #[allow(unused_mut)]
     async fn delete_channel(
         &self,
@@ -21726,6 +22324,8 @@ impl Chime for ChimeClient {
 
         let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
 
         let mut response = self
             .client
@@ -21743,7 +22343,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Removes a user from a channel's ban list.</p>
+    /// <p><p>Removes a user from a channel&#39;s ban list.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     #[allow(unused_mut)]
     async fn delete_channel_ban(
         &self,
@@ -21757,6 +22357,8 @@ impl Chime for ChimeClient {
 
         let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
 
         let mut response = self
             .client
@@ -21774,7 +22376,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Removes a member from a channel.</p>
+    /// <p><p>Removes a member from a channel.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     #[allow(unused_mut)]
     async fn delete_channel_membership(
         &self,
@@ -21788,6 +22390,8 @@ impl Chime for ChimeClient {
 
         let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
 
         let mut response = self
             .client
@@ -21805,7 +22409,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Deletes a channel message. Only admins can perform this action. Deletion makes messages inaccessible immediately. A background process deletes any revisions created by <code>UpdateChannelMessage</code>.</p>
+    /// <p><p>Deletes a channel message. Only admins can perform this action. Deletion makes messages inaccessible immediately. A background process deletes any revisions created by <code>UpdateChannelMessage</code>.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     #[allow(unused_mut)]
     async fn delete_channel_message(
         &self,
@@ -21819,6 +22423,8 @@ impl Chime for ChimeClient {
 
         let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
 
         let mut response = self
             .client
@@ -21836,7 +22442,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Deletes a channel moderator.</p>
+    /// <p><p>Deletes a channel moderator.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     #[allow(unused_mut)]
     async fn delete_channel_moderator(
         &self,
@@ -21850,6 +22456,8 @@ impl Chime for ChimeClient {
 
         let mut request = SignedRequest::new("DELETE", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
 
         let mut response = self
             .client
@@ -21898,7 +22506,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Deletes the specified Amazon Chime SDK meeting. When a meeting is deleted, its attendees are also deleted and clients can no longer join it. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    /// <p>Deletes the specified Amazon Chime SDK meeting. The operation deletes all attendees, disconnects all clients, and prevents new clients from joining the meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
     #[allow(unused_mut)]
     async fn delete_meeting(
         &self,
@@ -22420,7 +23028,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Returns the full details of an <code>AppInstanceUser</code>.</p>
+    /// <p> Returns the full details of an <code>AppInstanceUser</code> . </p>
     #[allow(unused_mut)]
     async fn describe_app_instance_user(
         &self,
@@ -22451,7 +23059,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Returns the full details of a channel in an Amazon Chime app instance.</p>
+    /// <p><p>Returns the full details of a channel in an Amazon Chime <code>AppInstance</code>.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     #[allow(unused_mut)]
     async fn describe_channel(
         &self,
@@ -22461,6 +23069,8 @@ impl Chime for ChimeClient {
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
 
         let mut response = self
             .client
@@ -22479,7 +23089,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Returns the full details of a channel ban.</p>
+    /// <p><p>Returns the full details of a channel ban.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     #[allow(unused_mut)]
     async fn describe_channel_ban(
         &self,
@@ -22493,6 +23103,8 @@ impl Chime for ChimeClient {
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
 
         let mut response = self
             .client
@@ -22511,7 +23123,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Returns the full details of a user's channel membership.</p>
+    /// <p><p>Returns the full details of a user&#39;s channel membership.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     #[allow(unused_mut)]
     async fn describe_channel_membership(
         &self,
@@ -22526,6 +23138,8 @@ impl Chime for ChimeClient {
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
 
         let mut response = self
             .client
@@ -22544,7 +23158,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Returns the details of a channel based on the membership of the <code>AppInstanceUser</code> specified.</p>
+    /// <p><p> Returns the details of a channel based on the membership of the specified <code>AppInstanceUser</code>.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     #[allow(unused_mut)]
     async fn describe_channel_membership_for_app_instance_user(
         &self,
@@ -22558,6 +23172,7 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
         let mut params = Params::new();
         params.put("app-instance-user-arn", &input.app_instance_user_arn);
         params.put("scope", "app-instance-user-membership");
@@ -22580,7 +23195,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Returns the full details of a channel moderated by the specified <code>AppInstanceUser</code>.</p>
+    /// <p><p>Returns the full details of a channel moderated by the specified <code>AppInstanceUser</code>.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     #[allow(unused_mut)]
     async fn describe_channel_moderated_by_app_instance_user(
         &self,
@@ -22594,6 +23209,7 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
         let mut params = Params::new();
         params.put("app-instance-user-arn", &input.app_instance_user_arn);
         params.put("scope", "app-instance-user-moderated-channel");
@@ -22616,7 +23232,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Returns the full details of a single ChannelModerator.</p>
+    /// <p><p>Returns the full details of a single ChannelModerator.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     #[allow(unused_mut)]
     async fn describe_channel_moderator(
         &self,
@@ -22630,6 +23246,8 @@ impl Chime for ChimeClient {
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
 
         let mut response = self
             .client
@@ -22838,7 +23456,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Retrieves account settings for the specified Amazon Chime account ID, such as remote control and dial out settings. For more information about these settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/policies.html">Use the Policies Page</a> in the <i>Amazon Chime Administration Guide</i>.</p>
+    /// <p>Retrieves account settings for the specified Amazon Chime account ID, such as remote control and dialout settings. For more information about these settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/policies.html">Use the Policies Page</a> in the <i>Amazon Chime Administration Guide</i>. </p>
     #[allow(unused_mut)]
     async fn get_account_settings(
         &self,
@@ -22869,7 +23487,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Gets the retention settings for an app instance.</p>
+    /// <p>Gets the retention settings for an <code>AppInstance</code>.</p>
     #[allow(unused_mut)]
     async fn get_app_instance_retention_settings(
         &self,
@@ -22905,7 +23523,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Gets the streaming settings for an app instance.</p>
+    /// <p>Gets the streaming settings for an <code>AppInstance</code>.</p>
     #[allow(unused_mut)]
     async fn get_app_instance_streaming_configurations(
         &self,
@@ -22941,7 +23559,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Gets the Amazon Chime SDK attendee details for a specified meeting ID and attendee ID. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    /// <p> Gets the Amazon Chime SDK attendee details for a specified meeting ID and attendee ID. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i> . </p>
     #[allow(unused_mut)]
     async fn get_attendee(
         &self,
@@ -23005,7 +23623,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Gets the full details of a channel message.</p>
+    /// <p><p>Gets the full details of a channel message.</p> <note> <p>The x-amz-chime-bearer request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     #[allow(unused_mut)]
     async fn get_channel_message(
         &self,
@@ -23019,6 +23637,8 @@ impl Chime for ChimeClient {
 
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
 
         let mut response = self
             .client
@@ -23037,7 +23657,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Gets details for an events configuration that allows a bot to receive outgoing events, such as an HTTPS endpoint or Lambda function ARN. </p>
+    /// <p>Gets details for an events configuration that allows a bot to receive outgoing events, such as an HTTPS endpoint or Lambda function ARN.</p>
     #[allow(unused_mut)]
     async fn get_events_configuration(
         &self,
@@ -23096,7 +23716,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Gets the Amazon Chime SDK meeting details for the specified meeting ID. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    /// <p> Gets the Amazon Chime SDK meeting details for the specified meeting ID. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i> . </p>
     #[allow(unused_mut)]
     async fn get_meeting(
         &self,
@@ -23124,7 +23744,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>The endpoint for the messaging session.</p>
+    /// <p>The details of the endpoint for the messaging session.</p>
     #[allow(unused_mut)]
     async fn get_messaging_session_endpoint(
         &self,
@@ -23183,7 +23803,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Retrieves details for the specified phone number order, such as order creation timestamp, phone numbers in E.164 format, product type, and order status.</p>
+    /// <p>Retrieves details for the specified phone number order, such as the order creation timestamp, phone numbers in E.164 format, product type, and order status.</p>
     #[allow(unused_mut)]
     async fn get_phone_number_order(
         &self,
@@ -23273,7 +23893,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Gets the retention settings for the specified Amazon Chime Enterprise account. For more information about retention settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/chat-retention.html">Managing Chat Retention Policies</a> in the <i>Amazon Chime Administration Guide</i>.</p>
+    /// <p> Gets the retention settings for the specified Amazon Chime Enterprise account. For more information about retention settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/chat-retention.html">Managing Chat Retention Policies</a> in the <i>Amazon Chime Administration Guide</i>. </p>
     #[allow(unused_mut)]
     async fn get_retention_settings(
         &self,
@@ -23429,7 +24049,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Retrieves details for the specified user ID, such as primary email address, license type, and personal meeting PIN.</p> <p>To retrieve user details with an email address instead of a user ID, use the <a>ListUsers</a> action, and then filter by email address.</p>
+    /// <p>Retrieves details for the specified user ID, such as primary email address, license type,and personal meeting PIN.</p> <p> To retrieve user details with an email address instead of a user ID, use the <a>ListUsers</a> action, and then filter by email address. </p>
     #[allow(unused_mut)]
     async fn get_user(
         &self,
@@ -23493,7 +24113,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Retrieves details for the specified Amazon Chime Voice Connector, such as timestamps, name, outbound host, and encryption requirements.</p>
+    /// <p>Retrieves details for the specified Amazon Chime Voice Connector, such as timestamps,name, outbound host, and encryption requirements.</p>
     #[allow(unused_mut)]
     async fn get_voice_connector(
         &self,
@@ -23559,7 +24179,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Retrieves details for the specified Amazon Chime Voice Connector group, such as timestamps, name, and associated <code>VoiceConnectorItems</code>.</p>
+    /// <p> Retrieves details for the specified Amazon Chime Voice Connector group, such as timestamps,name, and associated <code>VoiceConnectorItems</code>.</p>
     #[allow(unused_mut)]
     async fn get_voice_connector_group(
         &self,
@@ -23590,7 +24210,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Retrieves the logging configuration details for the specified Amazon Chime Voice Connector. Shows whether SIP message logs are enabled for sending to Amazon CloudWatch.</p>
+    /// <p>Retrieves the logging configuration details for the specified Amazon Chime Voice Connector. Shows whether SIP message logs are enabled for sending to Amazon CloudWatch Logs.</p>
     #[allow(unused_mut)]
     async fn get_voice_connector_logging_configuration(
         &self,
@@ -23793,7 +24413,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Sends email to a maximum of 50 users, inviting them to the specified Amazon Chime <code>Team</code> account. Only <code>Team</code> account types are currently supported for this action. </p>
+    /// <p>Sends email to a maximum of 50 users, inviting them to the specified Amazon Chime <code>Team</code> account. Only <code>Team</code> account types are currently supported for this action.</p>
     #[allow(unused_mut)]
     async fn invite_users(
         &self,
@@ -23874,7 +24494,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Returns a list of the administrators in the app instance.</p>
+    /// <p>Returns a list of the administrators in the <code>AppInstance</code>.</p>
     #[allow(unused_mut)]
     async fn list_app_instance_admins(
         &self,
@@ -23914,7 +24534,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>List all <code>AppInstanceUsers</code> created under a single app instance.</p>
+    /// <p> List all <code>AppInstanceUsers</code> created under a single <code>AppInstance</code>. </p>
     #[allow(unused_mut)]
     async fn list_app_instance_users(
         &self,
@@ -23952,7 +24572,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Lists all Amazon Chime app instances created under a single AWS account.</p>
+    /// <p>Lists all Amazon Chime <code>AppInstance</code>s created under a single AWS account.</p>
     #[allow(unused_mut)]
     async fn list_app_instances(
         &self,
@@ -24021,7 +24641,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Lists the attendees for the specified Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    /// <p> Lists the attendees for the specified Amazon Chime SDK meeting. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>. </p>
     #[allow(unused_mut)]
     async fn list_attendees(
         &self,
@@ -24098,7 +24718,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Lists all the users banned from a particular channel.</p>
+    /// <p><p>Lists all the users banned from a particular channel.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     #[allow(unused_mut)]
     async fn list_channel_bans(
         &self,
@@ -24112,6 +24732,7 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
             params.put("max-results", x);
@@ -24138,7 +24759,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Lists all channel memberships in a channel.</p>
+    /// <p><p>Lists all channel memberships in a channel.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     #[allow(unused_mut)]
     async fn list_channel_memberships(
         &self,
@@ -24152,6 +24773,7 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
             params.put("max-results", x);
@@ -24181,7 +24803,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Lists all channels that a particular <code>AppInstanceUser</code> is a part of. Only an <code>AppInstanceAdmin</code> can call the API with a user ARN that is not their own.</p>
+    /// <p><p> Lists all channels that a particular <code>AppInstanceUser</code> is a part of. Only an <code>AppInstanceAdmin</code> can call the API with a user ARN that is not their own. </p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     #[allow(unused_mut)]
     async fn list_channel_memberships_for_app_instance_user(
         &self,
@@ -24195,6 +24817,7 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.app_instance_user_arn {
             params.put("app-instance-user-arn", x);
@@ -24225,7 +24848,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p><p>List all the messages in a channel. Returns a paginated list of <code>ChannelMessages</code>. Sorted in descending order by default, based on the creation timestamp.</p> <note> <p>Redacted messages appear in the results as empty, since they are only redacted, not deleted. Deleted messages do not appear in the results. This action always returns the latest version of an edited message.</p> </note></p>
+    /// <p><p>List all the messages in a channel. Returns a paginated list of <code>ChannelMessages</code>. By default, sorted by creation timestamp in descending order.</p> <note> <p>Redacted messages appear in the results as empty, since they are only redacted, not deleted. Deleted messages do not appear in the results. This action always returns the latest version of an edited message.</p> <p>Also, the x-amz-chime-bearer request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     #[allow(unused_mut)]
     async fn list_channel_messages(
         &self,
@@ -24239,6 +24862,7 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
             params.put("max-results", x);
@@ -24274,7 +24898,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Lists all the moderators for a channel.</p>
+    /// <p><p>Lists all the moderators for a channel.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     #[allow(unused_mut)]
     async fn list_channel_moderators(
         &self,
@@ -24288,6 +24912,7 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
             params.put("max-results", x);
@@ -24314,7 +24939,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p><p>Lists all Channels created under a single Chime App as a paginated list. You can specify filters to narrow results.</p> <p class="title"> <b>Functionality &amp; restrictions</b> </p> <ul> <li> <p>Use privacy = <code>PUBLIC</code> to retrieve all public channels in the account</p> </li> <li> <p>Only an <code>AppInstanceAdmin</code> can set privacy = <code>PRIVATE</code> to list the private channels in an account.</p> </li> </ul></p>
+    /// <p><p>Lists all Channels created under a single Chime App as a paginated list. You can specify filters to narrow results.</p> <p class="title"> <b>Functionality &amp; restrictions</b> </p> <ul> <li> <p>Use privacy = <code>PUBLIC</code> to retrieve all public channels in the account.</p> </li> <li> <p>Only an <code>AppInstanceAdmin</code> can set privacy = <code>PRIVATE</code> to list the private channels in an account.</p> </li> </ul> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     #[allow(unused_mut)]
     async fn list_channels(
         &self,
@@ -24325,6 +24950,7 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
         let mut params = Params::new();
         params.put("app-instance-arn", &input.app_instance_arn);
         if let Some(ref x) = input.max_results {
@@ -24355,7 +24981,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>A list of the channels moderated by an app instance user.</p>
+    /// <p><p>A list of the channels moderated by an <code>AppInstanceUser</code>.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     #[allow(unused_mut)]
     async fn list_channels_moderated_by_app_instance_user(
         &self,
@@ -24369,6 +24995,7 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
         let mut params = Params::new();
         if let Some(ref x) = input.app_instance_user_arn {
             params.put("app-instance-user-arn", x);
@@ -24429,7 +25056,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Lists up to 100 active Amazon Chime SDK meetings. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
+    /// <p> Lists up to 100 active Amazon Chime SDK meetings. For more information about the Amazon Chime SDK, see <a href="https://docs.aws.amazon.com/chime/latest/dg/meetings-sdk.html">Using the Amazon Chime SDK</a> in the <i>Amazon Chime Developer Guide</i>.</p>
     #[allow(unused_mut)]
     async fn list_meetings(
         &self,
@@ -24756,6 +25383,43 @@ impl Chime for ChimeClient {
         }
     }
 
+    /// <p>Lists supported phone number countries.</p>
+    #[allow(unused_mut)]
+    async fn list_supported_phone_number_countries(
+        &self,
+        input: ListSupportedPhoneNumberCountriesRequest,
+    ) -> Result<
+        ListSupportedPhoneNumberCountriesResponse,
+        RusotoError<ListSupportedPhoneNumberCountriesError>,
+    > {
+        let request_uri = "/phone-number-countries";
+
+        let mut request = SignedRequest::new("GET", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        params.put("product-type", &input.product_type);
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListSupportedPhoneNumberCountriesResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListSupportedPhoneNumberCountriesError::from_response(
+                response,
+            ))
+        }
+    }
+
     /// <p>Lists the tags applied to an Amazon Chime SDK meeting resource.</p>
     #[allow(unused_mut)]
     async fn list_tags_for_resource(
@@ -24978,7 +25642,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Sets the amount of time in days that a given app instance retains data.</p>
+    /// <p>Sets the amount of time in days that a given <code>AppInstance</code> retains data.</p>
     #[allow(unused_mut)]
     async fn put_app_instance_retention_settings(
         &self,
@@ -25017,7 +25681,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>The data streaming configurations of an app instance.</p>
+    /// <p>The data streaming configurations of an <code>AppInstance</code>.</p>
     #[allow(unused_mut)]
     async fn put_app_instance_streaming_configurations(
         &self,
@@ -25091,7 +25755,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Puts retention settings for the specified Amazon Chime Enterprise account. We recommend using AWS CloudTrail to monitor usage of this API for your account. For more information, see <a href="https://docs.aws.amazon.com/chime/latest/ag/cloudtrail.html">Logging Amazon Chime API Calls with AWS CloudTrail</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p>To turn off existing retention settings, remove the number of days from the corresponding <b>RetentionDays</b> field in the <b>RetentionSettings</b> object. For more information about retention settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/chat-retention.html">Managing Chat Retention Policies</a> in the <i>Amazon Chime Administration Guide</i>.</p>
+    /// <p> Puts retention settings for the specified Amazon Chime Enterprise account. We recommend using AWS CloudTrail to monitor usage of this API for your account. For more information, see <a href="https://docs.aws.amazon.com/chime/latest/ag/cloudtrail.html">Logging Amazon Chime API Calls with AWS CloudTrail</a> in the <i>Amazon Chime Administration Guide</i>.</p> <p> To turn off existing retention settings, remove the number of days from the corresponding <b>RetentionDays</b> field in the <b>RetentionSettings</b> object. For more information about retention settings, see <a href="https://docs.aws.amazon.com/chime/latest/ag/chat-retention.html">Managing Chat Retention Policies</a> in the <i>Amazon Chime Administration Guide</i>.</p>
     #[allow(unused_mut)]
     async fn put_retention_settings(
         &self,
@@ -25308,7 +25972,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Adds a streaming configuration for the specified Amazon Chime Voice Connector. The streaming configuration specifies whether media streaming is enabled for sending to Amazon Kinesis. It also sets the retention period, in hours, for the Amazon Kinesis data.</p>
+    /// <p>Adds a streaming configuration for the specified Amazon Chime Voice Connector. The streaming configuration specifies whether media streaming is enabled for sending to Indonesians. It also sets the retention period, in hours, for the Amazon Kinesis data.</p>
     #[allow(unused_mut)]
     async fn put_voice_connector_streaming_configuration(
         &self,
@@ -25421,7 +26085,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Redacts message content, but not metadata. The message exists in the back end, but the action returns null content, and the state shows as redacted.</p>
+    /// <p><p>Redacts message content, but not metadata. The message exists in the back end, but the action returns null content, and the state shows as redacted.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     #[allow(unused_mut)]
     async fn redact_channel_message(
         &self,
@@ -25436,6 +26100,7 @@ impl Chime for ChimeClient {
         let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
         let mut params = Params::new();
         params.put("operation", "redact");
         request.set_params(params);
@@ -25639,7 +26304,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Searches phone numbers that can be ordered.</p>
+    /// <p>Searches for phone numbers that can be ordered. For US numbers, provide at least one of the following search filters: <code>AreaCode</code>, <code>City</code>, <code>State</code>, or <code>TollFreePrefix</code>. If you provide <code>City</code>, you must also provide <code>State</code>. Numbers outside the US only support the <code>PhoneNumberType</code> filter, which you must use.</p>
     #[allow(unused_mut)]
     async fn search_available_phone_numbers(
         &self,
@@ -25667,6 +26332,9 @@ impl Chime for ChimeClient {
         if let Some(ref x) = input.next_token {
             params.put("next-token", x);
         }
+        if let Some(ref x) = input.phone_number_type {
+            params.put("phone-number-type", x);
+        }
         if let Some(ref x) = input.state {
             params.put("state", x);
         }
@@ -25693,7 +26361,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p><p>Sends a message to a particular channel that the member is a part of.</p> <note> <p> <code>STANDARD</code> messages can contain 4KB of data and the 1KB of metadata. <code>CONTROL</code> messages can contain 30 bytes of data and no metadata.</p> </note></p>
+    /// <p><p>Sends a message to a particular channel that the member is a part of.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> <p>Also, <code>STANDARD</code> messages can contain 4KB of data and the 1KB of metadata. <code>CONTROL</code> messages can contain 30 bytes of data and no metadata.</p> </note></p>
     #[allow(unused_mut)]
     async fn send_channel_message(
         &self,
@@ -25709,6 +26377,7 @@ impl Chime for ChimeClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
 
         let mut response = self
             .client
@@ -25939,7 +26608,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Updates account details for the specified Amazon Chime account. Currently, only account name updates are supported for this action.</p>
+    /// <p>Updates account details for the specified Amazon Chime account. Currently, only account name and default license updates are supported for this action.</p>
     #[allow(unused_mut)]
     async fn update_account(
         &self,
@@ -26038,7 +26707,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Updates the details for an <code>AppInstanceUser</code>. You can update names and metadata.</p>
+    /// <p>Updates the details of an <code>AppInstanceUser</code>. You can update names and metadata.</p>
     #[allow(unused_mut)]
     async fn update_app_instance_user(
         &self,
@@ -26107,7 +26776,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Update a channel's attributes.</p> <p> <b>Restriction</b>: You can't change a channel's privacy.</p>
+    /// <p><p>Update a channel&#39;s attributes.</p> <p> <b>Restriction</b>: You can&#39;t change a channel&#39;s privacy. </p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     #[allow(unused_mut)]
     async fn update_channel(
         &self,
@@ -26120,6 +26789,7 @@ impl Chime for ChimeClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
 
         let mut response = self
             .client
@@ -26138,7 +26808,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Updates the content of a message.</p>
+    /// <p><p>Updates the content of a message.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     #[allow(unused_mut)]
     async fn update_channel_message(
         &self,
@@ -26155,6 +26825,7 @@ impl Chime for ChimeClient {
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());
         request.set_payload(encoded);
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
 
         let mut response = self
             .client
@@ -26173,7 +26844,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Sets the timestamp to the point when a user last read messages in a channel.</p>
+    /// <p><p>The details of the time when a user last read messages in a channel.</p> <note> <p>The <code>x-amz-chime-bearer</code> request header is mandatory. Use the <code>AppInstanceUserArn</code> of the user that makes the API call as the value in the header.</p> </note></p>
     #[allow(unused_mut)]
     async fn update_channel_read_marker(
         &self,
@@ -26186,6 +26857,8 @@ impl Chime for ChimeClient {
 
         let mut request = SignedRequest::new("PUT", "chime", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.add_optional_header("x-amz-chime-bearer", input.chime_bearer.as_ref());
 
         let mut response = self
             .client
@@ -26234,7 +26907,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Updates phone number details, such as product type or calling name, for the specified phone number ID. You can update one phone number detail at a time. For example, you can update either the product type or the calling name in one action.</p> <p>For toll-free numbers, you must use the Amazon Chime Voice Connector product type.</p> <p>Updates to outbound calling names can take up to 72 hours to complete. Pending updates to outbound calling names must be complete before you can request another update.</p>
+    /// <p>Updates phone number details, such as product type or calling name, for the specified phone number ID. You can update one phone number detail at a time. For example, you can update either the product type or the calling name in one action.</p> <p>For toll-free numbers, you cannot use the Amazon Chime Business Calling product type. For numbers outside the U.S., you must use the Amazon Chime SIP Media Application Dial-In product type.</p> <p>Updates to outbound calling names can take 72 hours to complete. Pending updates to outbound calling names must be complete before you can request another update.</p>
     #[allow(unused_mut)]
     async fn update_phone_number(
         &self,
@@ -26404,7 +27077,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Updates the details for the specified SIP media application.</p>
+    /// <p>Updates the details of the specified SIP media application.</p>
     #[allow(unused_mut)]
     async fn update_sip_media_application(
         &self,
@@ -26439,7 +27112,45 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Updates the details for the specified SIP rule.</p>
+    /// <p>Allows you to trigger a Lambda function at any time while a call is active, and replace the current actions with new actions returned by the invocation.</p>
+    #[allow(unused_mut)]
+    async fn update_sip_media_application_call(
+        &self,
+        input: UpdateSipMediaApplicationCallRequest,
+    ) -> Result<
+        UpdateSipMediaApplicationCallResponse,
+        RusotoError<UpdateSipMediaApplicationCallError>,
+    > {
+        let request_uri = format!(
+            "/sip-media-applications/{sip_media_application_id}/calls/{transaction_id}",
+            sip_media_application_id = input.sip_media_application_id,
+            transaction_id = input.transaction_id
+        );
+
+        let mut request = SignedRequest::new("POST", "chime", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 202 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateSipMediaApplicationCallResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateSipMediaApplicationCallError::from_response(response))
+        }
+    }
+
+    /// <p>Updates the details of the specified SIP rule.</p>
     #[allow(unused_mut)]
     async fn update_sip_rule(
         &self,
@@ -26573,7 +27284,7 @@ impl Chime for ChimeClient {
         }
     }
 
-    /// <p>Updates details for the specified Amazon Chime Voice Connector group, such as the name and Amazon Chime Voice Connector priority ranking.</p>
+    /// <p>Updates details of the specified Amazon Chime Voice Connector group, such as the name and Amazon Chime Voice Connector priority ranking.</p>
     #[allow(unused_mut)]
     async fn update_voice_connector_group(
         &self,

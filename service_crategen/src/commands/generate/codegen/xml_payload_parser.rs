@@ -119,7 +119,7 @@ fn payload_body_parser(
         ShapeType::Blob if !streaming => {
             format!("
                 let mut response = response;
-                let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+                let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
                 let mut result = {output_shape}::default();
                 result.{payload_member} = Some(response.body);
                 {parse_non_payload}

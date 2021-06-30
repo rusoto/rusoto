@@ -193,7 +193,7 @@ pub struct BatchInferenceJob {
 /// <p>The configuration details of a batch inference job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BatchInferenceJobConfig {
-    /// <p>A string to string map specifying the inference hyperparameters you wish to use for hyperparameter optimization. See <a>customizing-solution-config-hpo</a>.</p>
+    /// <p>A string to string map specifying the exploration configuration hyperparameters, including <code>explorationWeight</code> and <code>explorationItemAgeCutOff</code>, you want to use to configure the amount of item exploration Amazon Personalize uses when recommending items. See <a href="https://docs.aws.amazon.com/personalize/latest/dg/native-recipe-new-item-USER_PERSONALIZATION.html">User-Personalization</a>.</p>
     #[serde(rename = "itemExplorationConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub item_exploration_config: Option<::std::collections::HashMap<String, String>>,
@@ -297,7 +297,7 @@ pub struct Campaign {
 /// <p>The configuration details of a campaign.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CampaignConfig {
-    /// <p>A string to string map specifying the inference hyperparameters you wish to use for hyperparameter optimization. See <a>customizing-solution-config-hpo</a>.</p>
+    /// <p>A string to string map specifying the exploration configuration hyperparameters, including <code>explorationWeight</code> and <code>explorationItemAgeCutOff</code>, you want to use to configure the amount of item exploration Amazon Personalize uses when recommending items. Provide <code>itemExplorationConfig</code> data only if your solution uses the <a href="https://docs.aws.amazon.com/personalize/latest/dg/native-recipe-new-item-USER_PERSONALIZATION.html">User-Personalization</a> recipe.</p>
     #[serde(rename = "itemExplorationConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub item_exploration_config: Option<::std::collections::HashMap<String, String>>,
@@ -403,7 +403,7 @@ pub struct CreateBatchInferenceJobRequest {
     #[serde(rename = "batchInferenceJobConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub batch_inference_job_config: Option<BatchInferenceJobConfig>,
-    /// <p>The ARN of the filter to apply to the batch inference job. For more information on using filters, see Using Filters with Amazon Personalize.</p>
+    /// <p>The ARN of the filter to apply to the batch inference job. For more information on using filters, see <a href="https://docs.aws.amazon.com/personalize/latest/dg/filter-batch.html">Filtering Batch Recommendations</a>..</p>
     #[serde(rename = "filterArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_arn: Option<String>,
@@ -420,7 +420,7 @@ pub struct CreateBatchInferenceJobRequest {
     #[serde(rename = "numResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub num_results: Option<i64>,
-    /// <p>The ARN of the Amazon Identity and Access Management role that has permissions to read and write to your input and out Amazon S3 buckets respectively.</p>
+    /// <p>The ARN of the Amazon Identity and Access Management role that has permissions to read and write to your input and output Amazon S3 buckets respectively.</p>
     #[serde(rename = "roleArn")]
     pub role_arn: String,
     /// <p>The Amazon Resource Name (ARN) of the solution version that will be used to generate the batch inference recommendations.</p>
@@ -462,6 +462,36 @@ pub struct CreateCampaignResponse {
     #[serde(rename = "campaignArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub campaign_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateDatasetExportJobRequest {
+    /// <p>The Amazon Resource Name (ARN) of the dataset that contains the data to export.</p>
+    #[serde(rename = "datasetArn")]
+    pub dataset_arn: String,
+    /// <p>The data to export, based on how you imported the data. You can choose to export only <code>BULK</code> data that you imported using a dataset import job, only <code>PUT</code> data that you imported incrementally (using the console, PutEvents, PutUsers and PutItems operations), or <code>ALL</code> for both types. The default value is <code>PUT</code>. </p>
+    #[serde(rename = "ingestionMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ingestion_mode: Option<String>,
+    /// <p>The name for the dataset export job.</p>
+    #[serde(rename = "jobName")]
+    pub job_name: String,
+    /// <p>The path to the Amazon S3 bucket where the job's output is stored.</p>
+    #[serde(rename = "jobOutput")]
+    pub job_output: DatasetExportJobOutput,
+    /// <p>The Amazon Resource Name (ARN) of the AWS Identity and Access Management service role that has permissions to add data to your output Amazon S3 bucket.</p>
+    #[serde(rename = "roleArn")]
+    pub role_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateDatasetExportJobResponse {
+    /// <p>The Amazon Resource Name (ARN) of the dataset export job.</p>
+    #[serde(rename = "datasetExportJobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dataset_export_job_arn: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -571,7 +601,7 @@ pub struct CreateFilterRequest {
     /// <p>The ARN of the dataset group that the filter will belong to.</p>
     #[serde(rename = "datasetGroupArn")]
     pub dataset_group_arn: String,
-    /// <p>The filter expression that designates the interaction types that the filter will filter out. A filter expression must follow the following format:</p> <p> <code>EXCLUDE itemId WHERE INTERACTIONS.event_type in ("EVENT_TYPE")</code> </p> <p>Where "EVENT_TYPE" is the type of event to filter out. To filter out all items with any interactions history, set <code>"*"</code> as the EVENT_TYPE. For more information, see <a href="https://docs.aws.amazon.com/personalize/latest/dg/filters.html">Using Filters with Amazon Personalize</a>.</p>
+    /// <p>The filter expression defines which items are included or excluded from recommendations. Filter expression must follow specific format rules. For information about filter expression structure and syntax, see <a>filter-expressions</a>.</p>
     #[serde(rename = "filterExpression")]
     pub filter_expression: String,
     /// <p>The name of the filter to create.</p>
@@ -614,7 +644,7 @@ pub struct CreateSolutionRequest {
     /// <p>The Amazon Resource Name (ARN) of the dataset group that provides the training data.</p>
     #[serde(rename = "datasetGroupArn")]
     pub dataset_group_arn: String,
-    /// <p>When your have multiple event types (using an <code>EVENT_TYPE</code> schema field), this parameter specifies which event type (for example, 'click' or 'like') is used for training the model.</p>
+    /// <p>When your have multiple event types (using an <code>EVENT_TYPE</code> schema field), this parameter specifies which event type (for example, 'click' or 'like') is used for training the model.</p> <p>If you do not provide an <code>eventType</code>, Amazon Personalize will use all interactions for training with equal weight regardless of type.</p>
     #[serde(rename = "eventType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_type: Option<String>,
@@ -633,7 +663,7 @@ pub struct CreateSolutionRequest {
     #[serde(rename = "recipeArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recipe_arn: Option<String>,
-    /// <p>The configuration to use with the solution. When <code>performAutoML</code> is set to true, Amazon Personalize only evaluates the <code>autoMLConfig</code> section of the solution configuration.</p>
+    /// <p><p>The configuration to use with the solution. When <code>performAutoML</code> is set to true, Amazon Personalize only evaluates the <code>autoMLConfig</code> section of the solution configuration.</p> <note> <p>Amazon Personalize doesn&#39;t support configuring the <code>hpoObjective</code> at this time.</p> </note></p>
     #[serde(rename = "solutionConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub solution_config: Option<SolutionConfig>,
@@ -654,7 +684,7 @@ pub struct CreateSolutionVersionRequest {
     /// <p>The Amazon Resource Name (ARN) of the solution containing the training configuration information.</p>
     #[serde(rename = "solutionArn")]
     pub solution_arn: String,
-    /// <p><p>The scope of training to be performed when creating the solution version. The <code>FULL</code> option trains the solution version based on the entirety of the input solution&#39;s training data, while the <code>UPDATE</code> option processes only the data that has changed in comparison to the input solution. Choose <code>UPDATE</code> when you want to incrementally update your solution version instead of creating an entirely new one.</p> <important> <p>The <code>UPDATE</code> option can only be used when you already have an active solution version created from the input solution using the <code>FULL</code> option and the input solution was trained with the <a>native-recipe-hrnn-coldstart</a> recipe.</p> </important></p>
+    /// <p><p>The scope of training to be performed when creating the solution version. The <code>FULL</code> option trains the solution version based on the entirety of the input solution&#39;s training data, while the <code>UPDATE</code> option processes only the data that has changed in comparison to the input solution. Choose <code>UPDATE</code> when you want to incrementally update your solution version instead of creating an entirely new one.</p> <important> <p>The <code>UPDATE</code> option can only be used when you already have an active solution version created from the input solution using the <code>FULL</code> option and the input solution was trained with the <a href="https://docs.aws.amazon.com/personalize/latest/dg/native-recipe-new-item-USER_PERSONALIZATION.html">User-Personalization</a> recipe or the <a href="https://docs.aws.amazon.com/personalize/latest/dg/native-recipe-hrnn-coldstart.html">HRNN-Coldstart</a> recipe.</p> </important></p>
     #[serde(rename = "trainingMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub training_mode: Option<String>,
@@ -672,7 +702,7 @@ pub struct CreateSolutionVersionResponse {
 /// <p>Describes the data source that contains the data to upload to a dataset.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DataSource {
-    /// <p>The path to the Amazon S3 bucket where the data that you want to upload to your dataset is stored. For example: </p> <p> <code>s3://bucket-name/training-data.csv</code> </p>
+    /// <p>The path to the Amazon S3 bucket where the data that you want to upload to your dataset is stored. For example: </p> <p> <code>s3://bucket-name/folder-name/</code> </p>
     #[serde(rename = "dataLocation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_location: Option<String>,
@@ -711,6 +741,89 @@ pub struct Dataset {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema_arn: Option<String>,
     /// <p><p>The status of the dataset.</p> <p>A dataset can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN<em>PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING &gt; DELETE IN</em>PROGRESS</p> </li> </ul></p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p><p>Describes a job that exports a dataset to an Amazon S3 bucket. For more information, see <a>CreateDatasetExportJob</a>.</p> <p>A dataset export job can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> </ul></p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DatasetExportJob {
+    /// <p>The creation date and time (in Unix time) of the dataset export job.</p>
+    #[serde(rename = "creationDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the dataset to export.</p>
+    #[serde(rename = "datasetArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dataset_arn: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the dataset export job.</p>
+    #[serde(rename = "datasetExportJobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dataset_export_job_arn: Option<String>,
+    /// <p>If a dataset export job fails, provides the reason why.</p>
+    #[serde(rename = "failureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>The data to export, based on how you imported the data. You can choose to export <code>BULK</code> data that you imported using a dataset import job, <code>PUT</code> data that you imported incrementally (using the console, PutEvents, PutUsers and PutItems operations), or <code>ALL</code> for both types. The default value is <code>PUT</code>. </p>
+    #[serde(rename = "ingestionMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ingestion_mode: Option<String>,
+    /// <p>The name of the export job.</p>
+    #[serde(rename = "jobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_name: Option<String>,
+    /// <p>The path to the Amazon S3 bucket where the job's output is stored. For example:</p> <p> <code>s3://bucket-name/folder-name/</code> </p>
+    #[serde(rename = "jobOutput")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_output: Option<DatasetExportJobOutput>,
+    /// <p>The date and time (in Unix time) the status of the dataset export job was last updated.</p>
+    #[serde(rename = "lastUpdatedDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_date_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the AWS Identity and Access Management service role that has permissions to add data to your output Amazon S3 bucket.</p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+    /// <p><p>The status of the dataset export job.</p> <p>A dataset export job can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> </ul></p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>The output configuration parameters of a dataset export job.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct DatasetExportJobOutput {
+    #[serde(rename = "s3DataDestination")]
+    pub s_3_data_destination: S3DataConfig,
+}
+
+/// <p>Provides a summary of the properties of a dataset export job. For a complete listing, call the <a>DescribeDatasetExportJob</a> API.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DatasetExportJobSummary {
+    /// <p>The date and time (in Unix time) that the dataset export job was created.</p>
+    #[serde(rename = "creationDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) of the dataset export job.</p>
+    #[serde(rename = "datasetExportJobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dataset_export_job_arn: Option<String>,
+    /// <p>If a dataset export job fails, the reason behind the failure.</p>
+    #[serde(rename = "failureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_reason: Option<String>,
+    /// <p>The name of the dataset export job.</p>
+    #[serde(rename = "jobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_name: Option<String>,
+    /// <p>The date and time (in Unix time) that the dataset export job status was last updated.</p>
+    #[serde(rename = "lastUpdatedDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_date_time: Option<f64>,
+    /// <p><p>The status of the dataset export job.</p> <p>A dataset export job can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -846,7 +959,7 @@ pub struct DatasetImportJobSummary {
     #[serde(rename = "jobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
-    /// <p>The date and time (in Unix time) that the dataset was last updated.</p>
+    /// <p>The date and time (in Unix time) that the dataset import job status was last updated.</p>
     #[serde(rename = "lastUpdatedDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_date_time: Option<f64>,
@@ -1119,6 +1232,23 @@ pub struct DescribeCampaignResponse {
     #[serde(rename = "campaign")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub campaign: Option<Campaign>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeDatasetExportJobRequest {
+    /// <p>The Amazon Resource Name (ARN) of the dataset export job to describe.</p>
+    #[serde(rename = "datasetExportJobArn")]
+    pub dataset_export_job_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeDatasetExportJobResponse {
+    /// <p><p>Information about the dataset export job, including the status.</p> <p>The status is one of the following values:</p> <ul> <li> <p>CREATE PENDING</p> </li> <li> <p>CREATE IN_PROGRESS</p> </li> <li> <p>ACTIVE</p> </li> <li> <p>CREATE FAILED</p> </li> </ul></p>
+    #[serde(rename = "datasetExportJob")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dataset_export_job: Option<DatasetExportJob>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1405,7 +1535,7 @@ pub struct Filter {
     #[serde(rename = "filterArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_arn: Option<String>,
-    /// <p>Specifies the type of item interactions to filter out of recommendation results. The filter expression must follow the following format:</p> <p> <code>EXCLUDE itemId WHERE INTERACTIONS.event_type in ("EVENT_TYPE")</code> </p> <p>Where "EVENT_TYPE" is the type of event to filter out. For more information, see <a href="https://docs.aws.amazon.com/personalize/latest/dg/filters.html">Using Filters with Amazon Personalize</a>.</p>
+    /// <p>Specifies the type of item interactions to filter out of recommendation results. The filter expression must follow specific format rules. For information about filter expression structure and syntax, see <a>filter-expressions</a>.</p>
     #[serde(rename = "filterExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_expression: Option<String>,
@@ -1478,14 +1608,14 @@ pub struct GetSolutionMetricsResponse {
     pub solution_version_arn: Option<String>,
 }
 
-/// <p>Describes the properties for hyperparameter optimization (HPO). For use with the bring-your-own-recipe feature. Do not use for Amazon Personalize native recipes.</p>
+/// <p>Describes the properties for hyperparameter optimization (HPO).</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HPOConfig {
     /// <p>The hyperparameters and their allowable ranges.</p>
     #[serde(rename = "algorithmHyperParameterRanges")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub algorithm_hyper_parameter_ranges: Option<HyperParameterRanges>,
-    /// <p>The metric to optimize during HPO.</p>
+    /// <p><p>The metric to optimize during HPO.</p> <note> <p>Amazon Personalize doesn&#39;t support configuring the <code>hpoObjective</code> at this time.</p> </note></p>
     #[serde(rename = "hpoObjective")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hpo_objective: Option<HPOObjective>,
@@ -1495,7 +1625,7 @@ pub struct HPOConfig {
     pub hpo_resource_config: Option<HPOResourceConfig>,
 }
 
-/// <p>The metric to optimize during hyperparameter optimization (HPO).</p>
+/// <p><p>The metric to optimize during hyperparameter optimization (HPO).</p> <note> <p>Amazon Personalize doesn&#39;t support configuring the <code>hpoObjective</code> at this time.</p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HPOObjective {
     /// <p>The name of the metric.</p>
@@ -1583,7 +1713,7 @@ pub struct ListBatchInferenceJobsResponse {
     #[serde(rename = "batchInferenceJobs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub batch_inference_jobs: Option<Vec<BatchInferenceJobSummary>>,
-    /// <p>The token to use to retreive the next page of results. The value is <code>null</code> when there are no more results to return.</p>
+    /// <p>The token to use to retrieve the next page of results. The value is <code>null</code> when there are no more results to return.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1614,6 +1744,36 @@ pub struct ListCampaignsResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub campaigns: Option<Vec<CampaignSummary>>,
     /// <p>A token for getting the next set of campaigns (if they exist).</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListDatasetExportJobsRequest {
+    /// <p>The Amazon Resource Name (ARN) of the dataset to list the dataset export jobs for.</p>
+    #[serde(rename = "datasetArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dataset_arn: Option<String>,
+    /// <p>The maximum number of dataset export jobs to return.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token returned from the previous call to <code>ListDatasetExportJobs</code> for getting the next set of dataset export jobs (if they exist).</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListDatasetExportJobsResponse {
+    /// <p>The list of dataset export jobs.</p>
+    #[serde(rename = "datasetExportJobs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dataset_export_jobs: Option<Vec<DatasetExportJobSummary>>,
+    /// <p>A token for getting the next set of dataset export jobs (if they exist).</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1881,6 +2041,19 @@ pub struct ListSolutionsResponse {
     pub solutions: Option<Vec<SolutionSummary>>,
 }
 
+/// <p>Describes the additional objective for the solution, such as maximizing streaming minutes or increasing revenue. For more information see <a href="https://docs.aws.amazon.com/personalize/latest/dg/optimizing-solution-for-objective.html">Optimizing a solution</a>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct OptimizationObjective {
+    /// <p>The numerical metadata column in an Items dataset related to the optimization objective. For example, VIDEO_LENGTH (to maximize streaming minutes), or PRICE (to maximize revenue).</p>
+    #[serde(rename = "itemAttribute")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub item_attribute: Option<String>,
+    /// <p>Specifies how Amazon Personalize balances the importance of your optimization objective versus relevance.</p>
+    #[serde(rename = "objectiveSensitivity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub objective_sensitivity: Option<String>,
+}
+
 /// <p>Provides information about a recipe. Each recipe provides an algorithm that Amazon Personalize uses in model training when you use the <a>CreateSolution</a> operation. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1977,7 +2150,7 @@ pub struct Solution {
     #[serde(rename = "datasetGroupArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dataset_group_arn: Option<String>,
-    /// <p>The event type (for example, 'click' or 'like') that is used for training the model.</p>
+    /// <p>The event type (for example, 'click' or 'like') that is used for training the model. If no <code>eventType</code> is provided, Amazon Personalize uses all interactions for training with equal weight regardless of type.</p>
     #[serde(rename = "eventType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_type: Option<String>,
@@ -2042,6 +2215,10 @@ pub struct SolutionConfig {
     #[serde(rename = "hpoConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hpo_config: Option<HPOConfig>,
+    /// <p>Describes the additional objective for the solution, such as maximizing streaming minutes or increasing revenue. For more information see <a href="https://docs.aws.amazon.com/personalize/latest/dg/optimizing-solution-for-objective.html">Optimizing a solution</a>.</p>
+    #[serde(rename = "optimizationObjective")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub optimization_objective: Option<OptimizationObjective>,
 }
 
 /// <p>Provides a summary of the properties of a solution. For a complete listing, call the <a>DescribeSolution</a> API.</p>
@@ -2118,7 +2295,7 @@ pub struct SolutionVersion {
     #[serde(rename = "solutionVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub solution_version_arn: Option<String>,
-    /// <p><p>The status of the solution version.</p> <p>A solution version can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING</p> </li> <li> <p>CREATE IN_PROGRESS</p> </li> <li> <p>ACTIVE</p> </li> <li> <p>CREATE FAILED</p> </li> </ul></p>
+    /// <p><p>The status of the solution version.</p> <p>A solution version can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING</p> </li> <li> <p>CREATE IN_PROGRESS</p> </li> <li> <p>ACTIVE</p> </li> <li> <p>CREATE FAILED</p> </li> <li> <p>CREATE STOPPING</p> </li> <li> <p>CREATE STOPPED</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -2126,7 +2303,7 @@ pub struct SolutionVersion {
     #[serde(rename = "trainingHours")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub training_hours: Option<f64>,
-    /// <p><p>The scope of training used to create the solution version. The <code>FULL</code> option trains the solution version based on the entirety of the input solution&#39;s training data, while the <code>UPDATE</code> option processes only the training data that has changed since the creation of the last solution version. Choose <code>UPDATE</code> when you want to start recommending items added to the dataset without retraining the model.</p> <important> <p>The <code>UPDATE</code> option can only be used after you&#39;ve created a solution version with the <code>FULL</code> option and the training solution uses the <a>native-recipe-hrnn-coldstart</a>.</p> </important></p>
+    /// <p><p>The scope of training to be performed when creating the solution version. The <code>FULL</code> option trains the solution version based on the entirety of the input solution&#39;s training data, while the <code>UPDATE</code> option processes only the data that has changed in comparison to the input solution. Choose <code>UPDATE</code> when you want to incrementally update your solution version instead of creating an entirely new one.</p> <important> <p>The <code>UPDATE</code> option can only be used when you already have an active solution version created from the input solution using the <code>FULL</code> option and the input solution was trained with the <a href="https://docs.aws.amazon.com/personalize/latest/dg/native-recipe-new-item-USER_PERSONALIZATION.html">User-Personalization</a> recipe or the <a href="https://docs.aws.amazon.com/personalize/latest/dg/native-recipe-hrnn-coldstart.html">HRNN-Coldstart</a> recipe.</p> </important></p>
     #[serde(rename = "trainingMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub training_mode: Option<String>,
@@ -2160,6 +2337,14 @@ pub struct SolutionVersionSummary {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StopSolutionVersionCreationRequest {
+    /// <p>The Amazon Resource Name (ARN) of the solution version you want to stop creating.</p>
+    #[serde(rename = "solutionVersionArn")]
+    pub solution_version_arn: String,
 }
 
 /// <p>If hyperparameter optimization (HPO) was performed, contains the hyperparameter values of the best performing model.</p>
@@ -2377,6 +2562,68 @@ impl fmt::Display for CreateDatasetError {
     }
 }
 impl Error for CreateDatasetError {}
+/// Errors returned by CreateDatasetExportJob
+#[derive(Debug, PartialEq)]
+pub enum CreateDatasetExportJobError {
+    /// <p>Provide a valid value for the field or parameter.</p>
+    InvalidInput(String),
+    /// <p>The limit on the number of requests per second has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The specified resource is in use.</p>
+    ResourceInUse(String),
+    /// <p>Could not find the specified resource.</p>
+    ResourceNotFound(String),
+}
+
+impl CreateDatasetExportJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateDatasetExportJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(CreateDatasetExportJobError::InvalidInput(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateDatasetExportJobError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(
+                        CreateDatasetExportJobError::ResourceAlreadyExists(err.msg),
+                    )
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(CreateDatasetExportJobError::ResourceInUse(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateDatasetExportJobError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateDatasetExportJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateDatasetExportJobError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            CreateDatasetExportJobError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateDatasetExportJobError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateDatasetExportJobError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateDatasetExportJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateDatasetExportJobError {}
 /// Errors returned by CreateDatasetGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateDatasetGroupError {
@@ -3177,6 +3424,46 @@ impl fmt::Display for DescribeDatasetError {
     }
 }
 impl Error for DescribeDatasetError {}
+/// Errors returned by DescribeDatasetExportJob
+#[derive(Debug, PartialEq)]
+pub enum DescribeDatasetExportJobError {
+    /// <p>Provide a valid value for the field or parameter.</p>
+    InvalidInput(String),
+    /// <p>Could not find the specified resource.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeDatasetExportJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeDatasetExportJobError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(DescribeDatasetExportJobError::InvalidInput(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeDatasetExportJobError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeDatasetExportJobError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeDatasetExportJobError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DescribeDatasetExportJobError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeDatasetExportJobError {}
 /// Errors returned by DescribeDatasetGroup
 #[derive(Debug, PartialEq)]
 pub enum DescribeDatasetGroupError {
@@ -3637,6 +3924,44 @@ impl fmt::Display for ListCampaignsError {
     }
 }
 impl Error for ListCampaignsError {}
+/// Errors returned by ListDatasetExportJobs
+#[derive(Debug, PartialEq)]
+pub enum ListDatasetExportJobsError {
+    /// <p>Provide a valid value for the field or parameter.</p>
+    InvalidInput(String),
+    /// <p>The token is not valid.</p>
+    InvalidNextToken(String),
+}
+
+impl ListDatasetExportJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListDatasetExportJobsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(ListDatasetExportJobsError::InvalidInput(err.msg))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(ListDatasetExportJobsError::InvalidNextToken(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListDatasetExportJobsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListDatasetExportJobsError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            ListDatasetExportJobsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListDatasetExportJobsError {}
 /// Errors returned by ListDatasetGroups
 #[derive(Debug, PartialEq)]
 pub enum ListDatasetGroupsError {
@@ -3955,6 +4280,56 @@ impl fmt::Display for ListSolutionsError {
     }
 }
 impl Error for ListSolutionsError {}
+/// Errors returned by StopSolutionVersionCreation
+#[derive(Debug, PartialEq)]
+pub enum StopSolutionVersionCreationError {
+    /// <p>Provide a valid value for the field or parameter.</p>
+    InvalidInput(String),
+    /// <p>The specified resource is in use.</p>
+    ResourceInUse(String),
+    /// <p>Could not find the specified resource.</p>
+    ResourceNotFound(String),
+}
+
+impl StopSolutionVersionCreationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<StopSolutionVersionCreationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(StopSolutionVersionCreationError::InvalidInput(
+                        err.msg,
+                    ))
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(StopSolutionVersionCreationError::ResourceInUse(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        StopSolutionVersionCreationError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StopSolutionVersionCreationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StopSolutionVersionCreationError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            StopSolutionVersionCreationError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            StopSolutionVersionCreationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StopSolutionVersionCreationError {}
 /// Errors returned by UpdateCampaign
 #[derive(Debug, PartialEq)]
 pub enum UpdateCampaignError {
@@ -4006,7 +4381,7 @@ pub trait Personalize {
         input: CreateBatchInferenceJobRequest,
     ) -> Result<CreateBatchInferenceJobResponse, RusotoError<CreateBatchInferenceJobError>>;
 
-    /// <p><p>Creates a campaign by deploying a solution version. When a client calls the <a href="https://docs.aws.amazon.com/personalize/latest/dg/API_RS_GetRecommendations.html">GetRecommendations</a> and <a href="https://docs.aws.amazon.com/personalize/latest/dg/API_RS_GetPersonalizedRanking.html">GetPersonalizedRanking</a> APIs, a campaign is specified in the request.</p> <p> <b>Minimum Provisioned TPS and Auto-Scaling</b> </p> <p>A transaction is a single <code>GetRecommendations</code> or <code>GetPersonalizedRanking</code> call. Transactions per second (TPS) is the throughput and unit of billing for Amazon Personalize. The minimum provisioned TPS (<code>minProvisionedTPS</code>) specifies the baseline throughput provisioned by Amazon Personalize, and thus, the minimum billing charge. If your TPS increases beyond <code>minProvisionedTPS</code>, Amazon Personalize auto-scales the provisioned capacity up and down, but never below <code>minProvisionedTPS</code>, to maintain a 70% utilization. There&#39;s a short time delay while the capacity is increased that might cause loss of transactions. It&#39;s recommended to start with a low <code>minProvisionedTPS</code>, track your usage using Amazon CloudWatch metrics, and then increase the <code>minProvisionedTPS</code> as necessary.</p> <p> <b>Status</b> </p> <p>A campaign can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN<em>PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING &gt; DELETE IN</em>PROGRESS</p> </li> </ul> <p>To get the campaign status, call <a>DescribeCampaign</a>.</p> <note> <p>Wait until the <code>status</code> of the campaign is <code>ACTIVE</code> before asking the campaign for recommendations.</p> </note> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListCampaigns</a> </p> </li> <li> <p> <a>DescribeCampaign</a> </p> </li> <li> <p> <a>UpdateCampaign</a> </p> </li> <li> <p> <a>DeleteCampaign</a> </p> </li> </ul></p>
+    /// <p><p>Creates a campaign by deploying a solution version. When a client calls the <a href="https://docs.aws.amazon.com/personalize/latest/dg/API_RS_GetRecommendations.html">GetRecommendations</a> and <a href="https://docs.aws.amazon.com/personalize/latest/dg/API_RS_GetPersonalizedRanking.html">GetPersonalizedRanking</a> APIs, a campaign is specified in the request.</p> <p> <b>Minimum Provisioned TPS and Auto-Scaling</b> </p> <p>A transaction is a single <code>GetRecommendations</code> or <code>GetPersonalizedRanking</code> call. Transactions per second (TPS) is the throughput and unit of billing for Amazon Personalize. The minimum provisioned TPS (<code>minProvisionedTPS</code>) specifies the baseline throughput provisioned by Amazon Personalize, and thus, the minimum billing charge. </p> <p> If your TPS increases beyond <code>minProvisionedTPS</code>, Amazon Personalize auto-scales the provisioned capacity up and down, but never below <code>minProvisionedTPS</code>. There&#39;s a short time delay while the capacity is increased that might cause loss of transactions.</p> <p>The actual TPS used is calculated as the average requests/second within a 5-minute window. You pay for maximum of either the minimum provisioned TPS or the actual TPS. We recommend starting with a low <code>minProvisionedTPS</code>, track your usage using Amazon CloudWatch metrics, and then increase the <code>minProvisionedTPS</code> as necessary.</p> <p> <b>Status</b> </p> <p>A campaign can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN<em>PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING &gt; DELETE IN</em>PROGRESS</p> </li> </ul> <p>To get the campaign status, call <a>DescribeCampaign</a>.</p> <note> <p>Wait until the <code>status</code> of the campaign is <code>ACTIVE</code> before asking the campaign for recommendations.</p> </note> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListCampaigns</a> </p> </li> <li> <p> <a>DescribeCampaign</a> </p> </li> <li> <p> <a>UpdateCampaign</a> </p> </li> <li> <p> <a>DeleteCampaign</a> </p> </li> </ul></p>
     async fn create_campaign(
         &self,
         input: CreateCampaignRequest,
@@ -4018,25 +4393,31 @@ pub trait Personalize {
         input: CreateDatasetRequest,
     ) -> Result<CreateDatasetResponse, RusotoError<CreateDatasetError>>;
 
+    /// <p> Creates a job that exports data from your dataset to an Amazon S3 bucket. To allow Amazon Personalize to export the training data, you must specify an service-linked AWS Identity and Access Management (IAM) role that gives Amazon Personalize <code>PutObject</code> permissions for your Amazon S3 bucket. For information, see <a href="https://docs.aws.amazon.com/personalize/latest/dg/export-data.html">Exporting a dataset</a> in the Amazon Personalize developer guide. </p> <p> <b>Status</b> </p> <p>A dataset export job can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> </ul> <p> To get the status of the export job, call <a>DescribeDatasetExportJob</a>, and specify the Amazon Resource Name (ARN) of the dataset export job. The dataset export is complete when the status shows as ACTIVE. If the status shows as CREATE FAILED, the response includes a <code>failureReason</code> key, which describes why the job failed. </p>
+    async fn create_dataset_export_job(
+        &self,
+        input: CreateDatasetExportJobRequest,
+    ) -> Result<CreateDatasetExportJobResponse, RusotoError<CreateDatasetExportJobError>>;
+
     /// <p><p>Creates an empty dataset group. A dataset group contains related datasets that supply data for training a model. A dataset group can contain at most three datasets, one for each type of dataset:</p> <ul> <li> <p>Interactions</p> </li> <li> <p>Items</p> </li> <li> <p>Users</p> </li> </ul> <p>To train a model (create a solution), a dataset group that contains an <code>Interactions</code> dataset is required. Call <a>CreateDataset</a> to add a dataset to the group.</p> <p>A dataset group can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING</p> </li> </ul> <p>To get the status of the dataset group, call <a>DescribeDatasetGroup</a>. If the status shows as CREATE FAILED, the response includes a <code>failureReason</code> key, which describes why the creation failed.</p> <note> <p>You must wait until the <code>status</code> of the dataset group is <code>ACTIVE</code> before adding a dataset to the group.</p> </note> <p>You can specify an AWS Key Management Service (KMS) key to encrypt the datasets in the group. If you specify a KMS key, you must also include an AWS Identity and Access Management (IAM) role that has permission to access the key.</p> <p class="title"> <b>APIs that require a dataset group ARN in the request</b> </p> <ul> <li> <p> <a>CreateDataset</a> </p> </li> <li> <p> <a>CreateEventTracker</a> </p> </li> <li> <p> <a>CreateSolution</a> </p> </li> </ul> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListDatasetGroups</a> </p> </li> <li> <p> <a>DescribeDatasetGroup</a> </p> </li> <li> <p> <a>DeleteDatasetGroup</a> </p> </li> </ul></p>
     async fn create_dataset_group(
         &self,
         input: CreateDatasetGroupRequest,
     ) -> Result<CreateDatasetGroupResponse, RusotoError<CreateDatasetGroupError>>;
 
-    /// <p><p>Creates a job that imports training data from your data source (an Amazon S3 bucket) to an Amazon Personalize dataset. To allow Amazon Personalize to import the training data, you must specify an AWS Identity and Access Management (IAM) role that has permission to read from the data source, as Amazon Personalize makes a copy of your data and processes it in an internal AWS system.</p> <important> <p>The dataset import job replaces any previous data in the dataset.</p> </important> <p> <b>Status</b> </p> <p>A dataset import job can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> </ul> <p>To get the status of the import job, call <a>DescribeDatasetImportJob</a>, providing the Amazon Resource Name (ARN) of the dataset import job. The dataset import is complete when the status shows as ACTIVE. If the status shows as CREATE FAILED, the response includes a <code>failureReason</code> key, which describes why the job failed.</p> <note> <p>Importing takes time. You must wait until the status shows as ACTIVE before training a model using the dataset.</p> </note> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListDatasetImportJobs</a> </p> </li> <li> <p> <a>DescribeDatasetImportJob</a> </p> </li> </ul></p>
+    /// <p><p>Creates a job that imports training data from your data source (an Amazon S3 bucket) to an Amazon Personalize dataset. To allow Amazon Personalize to import the training data, you must specify an AWS Identity and Access Management (IAM) service role that has permission to read from the data source, as Amazon Personalize makes a copy of your data and processes it in an internal AWS system. For information on granting access to your Amazon S3 bucket, see <a href="https://docs.aws.amazon.com/personalize/latest/dg/granting-personalize-s3-access.html">Giving Amazon Personalize Access to Amazon S3 Resources</a>. </p> <important> <p>The dataset import job replaces any existing data in the dataset that you imported in bulk.</p> </important> <p> <b>Status</b> </p> <p>A dataset import job can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> </ul> <p>To get the status of the import job, call <a>DescribeDatasetImportJob</a>, providing the Amazon Resource Name (ARN) of the dataset import job. The dataset import is complete when the status shows as ACTIVE. If the status shows as CREATE FAILED, the response includes a <code>failureReason</code> key, which describes why the job failed.</p> <note> <p>Importing takes time. You must wait until the status shows as ACTIVE before training a model using the dataset.</p> </note> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListDatasetImportJobs</a> </p> </li> <li> <p> <a>DescribeDatasetImportJob</a> </p> </li> </ul></p>
     async fn create_dataset_import_job(
         &self,
         input: CreateDatasetImportJobRequest,
     ) -> Result<CreateDatasetImportJobResponse, RusotoError<CreateDatasetImportJobError>>;
 
-    /// <p><p>Creates an event tracker that you use when sending event data to the specified dataset group using the <a href="https://docs.aws.amazon.com/personalize/latest/dg/API_UBS_PutEvents.html">PutEvents</a> API.</p> <p>When Amazon Personalize creates an event tracker, it also creates an <i>event-interactions</i> dataset in the dataset group associated with the event tracker. The event-interactions dataset stores the event data from the <code>PutEvents</code> call. The contents of this dataset are not available to the user.</p> <note> <p>Only one event tracker can be associated with a dataset group. You will get an error if you call <code>CreateEventTracker</code> using the same dataset group as an existing event tracker.</p> </note> <p>When you send event data you include your tracking ID. The tracking ID identifies the customer and authorizes the customer to send the data.</p> <p>The event tracker can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN<em>PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING &gt; DELETE IN</em>PROGRESS</p> </li> </ul> <p>To get the status of the event tracker, call <a>DescribeEventTracker</a>.</p> <note> <p>The event tracker must be in the ACTIVE state before using the tracking ID.</p> </note> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListEventTrackers</a> </p> </li> <li> <p> <a>DescribeEventTracker</a> </p> </li> <li> <p> <a>DeleteEventTracker</a> </p> </li> </ul></p>
+    /// <p><p>Creates an event tracker that you use when adding event data to a specified dataset group using the <a href="https://docs.aws.amazon.com/personalize/latest/dg/API_UBS_PutEvents.html">PutEvents</a> API.</p> <note> <p>Only one event tracker can be associated with a dataset group. You will get an error if you call <code>CreateEventTracker</code> using the same dataset group as an existing event tracker.</p> </note> <p>When you create an event tracker, the response includes a tracking ID, which you pass as a parameter when you use the <a href="https://docs.aws.amazon.com/personalize/latest/dg/API_UBS_PutEvents.html">PutEvents</a> operation. Amazon Personalize then appends the event data to the Interactions dataset of the dataset group you specify in your event tracker. </p> <p>The event tracker can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN<em>PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING &gt; DELETE IN</em>PROGRESS</p> </li> </ul> <p>To get the status of the event tracker, call <a>DescribeEventTracker</a>.</p> <note> <p>The event tracker must be in the ACTIVE state before using the tracking ID.</p> </note> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListEventTrackers</a> </p> </li> <li> <p> <a>DescribeEventTracker</a> </p> </li> <li> <p> <a>DeleteEventTracker</a> </p> </li> </ul></p>
     async fn create_event_tracker(
         &self,
         input: CreateEventTrackerRequest,
     ) -> Result<CreateEventTrackerResponse, RusotoError<CreateEventTrackerError>>;
 
-    /// <p>Creates a recommendation filter. For more information, see <a href="https://docs.aws.amazon.com/personalize/latest/dg/filters.html">Using Filters with Amazon Personalize</a>.</p>
+    /// <p>Creates a recommendation filter. For more information, see <a>filter</a>.</p>
     async fn create_filter(
         &self,
         input: CreateFilterRequest,
@@ -4048,13 +4429,13 @@ pub trait Personalize {
         input: CreateSchemaRequest,
     ) -> Result<CreateSchemaResponse, RusotoError<CreateSchemaError>>;
 
-    /// <p><p>Creates the configuration for training a model. A trained model is known as a solution. After the configuration is created, you train the model (create a solution) by calling the <a>CreateSolutionVersion</a> operation. Every time you call <code>CreateSolutionVersion</code>, a new version of the solution is created.</p> <p>After creating a solution version, you check its accuracy by calling <a>GetSolutionMetrics</a>. When you are satisfied with the version, you deploy it using <a>CreateCampaign</a>. The campaign provides recommendations to a client through the <a href="https://docs.aws.amazon.com/personalize/latest/dg/API_RS_GetRecommendations.html">GetRecommendations</a> API.</p> <p>To train a model, Amazon Personalize requires training data and a recipe. The training data comes from the dataset group that you provide in the request. A recipe specifies the training algorithm and a feature transformation. You can specify one of the predefined recipes provided by Amazon Personalize. Alternatively, you can specify <code>performAutoML</code> and Amazon Personalize will analyze your data and select the optimum USER<em>PERSONALIZATION recipe for you.</p> <p> <b>Status</b> </p> <p>A solution can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN</em>PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING &gt; DELETE IN_PROGRESS</p> </li> </ul> <p>To get the status of the solution, call <a>DescribeSolution</a>. Wait until the status shows as ACTIVE before calling <code>CreateSolutionVersion</code>.</p> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListSolutions</a> </p> </li> <li> <p> <a>CreateSolutionVersion</a> </p> </li> <li> <p> <a>DescribeSolution</a> </p> </li> <li> <p> <a>DeleteSolution</a> </p> </li> </ul> <ul> <li> <p> <a>ListSolutionVersions</a> </p> </li> <li> <p> <a>DescribeSolutionVersion</a> </p> </li> </ul></p>
+    /// <p><p>Creates the configuration for training a model. A trained model is known as a solution. After the configuration is created, you train the model (create a solution) by calling the <a>CreateSolutionVersion</a> operation. Every time you call <code>CreateSolutionVersion</code>, a new version of the solution is created.</p> <p>After creating a solution version, you check its accuracy by calling <a>GetSolutionMetrics</a>. When you are satisfied with the version, you deploy it using <a>CreateCampaign</a>. The campaign provides recommendations to a client through the <a href="https://docs.aws.amazon.com/personalize/latest/dg/API_RS_GetRecommendations.html">GetRecommendations</a> API.</p> <p>To train a model, Amazon Personalize requires training data and a recipe. The training data comes from the dataset group that you provide in the request. A recipe specifies the training algorithm and a feature transformation. You can specify one of the predefined recipes provided by Amazon Personalize. Alternatively, you can specify <code>performAutoML</code> and Amazon Personalize will analyze your data and select the optimum USER<em>PERSONALIZATION recipe for you.</p> <note> <p>Amazon Personalize doesn&#39;t support configuring the <code>hpoObjective</code> for solution hyperparameter optimization at this time.</p> </note> <p> <b>Status</b> </p> <p>A solution can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN</em>PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING &gt; DELETE IN_PROGRESS</p> </li> </ul> <p>To get the status of the solution, call <a>DescribeSolution</a>. Wait until the status shows as ACTIVE before calling <code>CreateSolutionVersion</code>.</p> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListSolutions</a> </p> </li> <li> <p> <a>CreateSolutionVersion</a> </p> </li> <li> <p> <a>DescribeSolution</a> </p> </li> <li> <p> <a>DeleteSolution</a> </p> </li> </ul> <ul> <li> <p> <a>ListSolutionVersions</a> </p> </li> <li> <p> <a>DescribeSolutionVersion</a> </p> </li> </ul></p>
     async fn create_solution(
         &self,
         input: CreateSolutionRequest,
     ) -> Result<CreateSolutionResponse, RusotoError<CreateSolutionError>>;
 
-    /// <p><p>Trains or retrains an active solution. A solution is created using the <a>CreateSolution</a> operation and must be in the ACTIVE state before calling <code>CreateSolutionVersion</code>. A new version of the solution is created every time you call this operation.</p> <p> <b>Status</b> </p> <p>A solution version can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> </ul> <p>To get the status of the version, call <a>DescribeSolutionVersion</a>. Wait until the status shows as ACTIVE before calling <code>CreateCampaign</code>.</p> <p>If the status shows as CREATE FAILED, the response includes a <code>failureReason</code> key, which describes why the job failed.</p> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListSolutionVersions</a> </p> </li> <li> <p> <a>DescribeSolutionVersion</a> </p> </li> </ul> <ul> <li> <p> <a>ListSolutions</a> </p> </li> <li> <p> <a>CreateSolution</a> </p> </li> <li> <p> <a>DescribeSolution</a> </p> </li> <li> <p> <a>DeleteSolution</a> </p> </li> </ul></p>
+    /// <p><p>Trains or retrains an active solution. A solution is created using the <a>CreateSolution</a> operation and must be in the ACTIVE state before calling <code>CreateSolutionVersion</code>. A new version of the solution is created every time you call this operation.</p> <p> <b>Status</b> </p> <p>A solution version can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING</p> </li> <li> <p>CREATE IN_PROGRESS</p> </li> <li> <p>ACTIVE</p> </li> <li> <p>CREATE FAILED</p> </li> <li> <p>CREATE STOPPING</p> </li> <li> <p>CREATE STOPPED</p> </li> </ul> <p>To get the status of the version, call <a>DescribeSolutionVersion</a>. Wait until the status shows as ACTIVE before calling <code>CreateCampaign</code>.</p> <p>If the status shows as CREATE FAILED, the response includes a <code>failureReason</code> key, which describes why the job failed.</p> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListSolutionVersions</a> </p> </li> <li> <p> <a>DescribeSolutionVersion</a> </p> </li> </ul> <ul> <li> <p> <a>ListSolutions</a> </p> </li> <li> <p> <a>CreateSolution</a> </p> </li> <li> <p> <a>DescribeSolution</a> </p> </li> <li> <p> <a>DeleteSolution</a> </p> </li> </ul></p>
     async fn create_solution_version(
         &self,
         input: CreateSolutionVersionRequest,
@@ -4125,6 +4506,12 @@ pub trait Personalize {
         &self,
         input: DescribeDatasetRequest,
     ) -> Result<DescribeDatasetResponse, RusotoError<DescribeDatasetError>>;
+
+    /// <p>Describes the dataset export job created by <a>CreateDatasetExportJob</a>, including the export job status.</p>
+    async fn describe_dataset_export_job(
+        &self,
+        input: DescribeDatasetExportJobRequest,
+    ) -> Result<DescribeDatasetExportJobResponse, RusotoError<DescribeDatasetExportJobError>>;
 
     /// <p>Describes the given dataset group. For more information on dataset groups, see <a>CreateDatasetGroup</a>.</p>
     async fn describe_dataset_group(
@@ -4201,6 +4588,12 @@ pub trait Personalize {
         input: ListCampaignsRequest,
     ) -> Result<ListCampaignsResponse, RusotoError<ListCampaignsError>>;
 
+    /// <p>Returns a list of dataset export jobs that use the given dataset. When a dataset is not specified, all the dataset export jobs associated with the account are listed. The response provides the properties for each dataset export job, including the Amazon Resource Name (ARN). For more information on dataset export jobs, see <a>CreateDatasetExportJob</a>. For more information on datasets, see <a>CreateDataset</a>.</p>
+    async fn list_dataset_export_jobs(
+        &self,
+        input: ListDatasetExportJobsRequest,
+    ) -> Result<ListDatasetExportJobsResponse, RusotoError<ListDatasetExportJobsError>>;
+
     /// <p>Returns a list of dataset groups. The response provides the properties for each dataset group, including the Amazon Resource Name (ARN). For more information on dataset groups, see <a>CreateDatasetGroup</a>.</p>
     async fn list_dataset_groups(
         &self,
@@ -4254,6 +4647,12 @@ pub trait Personalize {
         &self,
         input: ListSolutionsRequest,
     ) -> Result<ListSolutionsResponse, RusotoError<ListSolutionsError>>;
+
+    /// <p>Stops creating a solution version that is in a state of CREATE_PENDING or CREATE IN_PROGRESS. </p> <p>Depending on the current state of the solution version, the solution version state changes as follows:</p> <ul> <li> <p>CREATE_PENDING &gt; CREATE_STOPPED</p> <p>or</p> </li> <li> <p>CREATE_IN_PROGRESS &gt; CREATE_STOPPING &gt; CREATE_STOPPED</p> </li> </ul> <p>You are billed for all of the training completed up until you stop the solution version creation. You cannot resume creating a solution version once it has been stopped.</p>
+    async fn stop_solution_version_creation(
+        &self,
+        input: StopSolutionVersionCreationRequest,
+    ) -> Result<(), RusotoError<StopSolutionVersionCreationError>>;
 
     /// <p>Updates a campaign by either deploying a new solution or changing the value of the campaign's <code>minProvisionedTPS</code> parameter.</p> <p>To update a campaign, the campaign status must be ACTIVE or CREATE FAILED. Check the campaign status using the <a>DescribeCampaign</a> API.</p> <note> <p>You must wait until the <code>status</code> of the updated campaign is <code>ACTIVE</code> before asking the campaign for recommendations.</p> </note> <p>For more information on campaigns, see <a>CreateCampaign</a>.</p>
     async fn update_campaign(
@@ -4320,7 +4719,7 @@ impl Personalize for PersonalizeClient {
             .deserialize::<CreateBatchInferenceJobResponse, _>()
     }
 
-    /// <p><p>Creates a campaign by deploying a solution version. When a client calls the <a href="https://docs.aws.amazon.com/personalize/latest/dg/API_RS_GetRecommendations.html">GetRecommendations</a> and <a href="https://docs.aws.amazon.com/personalize/latest/dg/API_RS_GetPersonalizedRanking.html">GetPersonalizedRanking</a> APIs, a campaign is specified in the request.</p> <p> <b>Minimum Provisioned TPS and Auto-Scaling</b> </p> <p>A transaction is a single <code>GetRecommendations</code> or <code>GetPersonalizedRanking</code> call. Transactions per second (TPS) is the throughput and unit of billing for Amazon Personalize. The minimum provisioned TPS (<code>minProvisionedTPS</code>) specifies the baseline throughput provisioned by Amazon Personalize, and thus, the minimum billing charge. If your TPS increases beyond <code>minProvisionedTPS</code>, Amazon Personalize auto-scales the provisioned capacity up and down, but never below <code>minProvisionedTPS</code>, to maintain a 70% utilization. There&#39;s a short time delay while the capacity is increased that might cause loss of transactions. It&#39;s recommended to start with a low <code>minProvisionedTPS</code>, track your usage using Amazon CloudWatch metrics, and then increase the <code>minProvisionedTPS</code> as necessary.</p> <p> <b>Status</b> </p> <p>A campaign can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN<em>PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING &gt; DELETE IN</em>PROGRESS</p> </li> </ul> <p>To get the campaign status, call <a>DescribeCampaign</a>.</p> <note> <p>Wait until the <code>status</code> of the campaign is <code>ACTIVE</code> before asking the campaign for recommendations.</p> </note> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListCampaigns</a> </p> </li> <li> <p> <a>DescribeCampaign</a> </p> </li> <li> <p> <a>UpdateCampaign</a> </p> </li> <li> <p> <a>DeleteCampaign</a> </p> </li> </ul></p>
+    /// <p><p>Creates a campaign by deploying a solution version. When a client calls the <a href="https://docs.aws.amazon.com/personalize/latest/dg/API_RS_GetRecommendations.html">GetRecommendations</a> and <a href="https://docs.aws.amazon.com/personalize/latest/dg/API_RS_GetPersonalizedRanking.html">GetPersonalizedRanking</a> APIs, a campaign is specified in the request.</p> <p> <b>Minimum Provisioned TPS and Auto-Scaling</b> </p> <p>A transaction is a single <code>GetRecommendations</code> or <code>GetPersonalizedRanking</code> call. Transactions per second (TPS) is the throughput and unit of billing for Amazon Personalize. The minimum provisioned TPS (<code>minProvisionedTPS</code>) specifies the baseline throughput provisioned by Amazon Personalize, and thus, the minimum billing charge. </p> <p> If your TPS increases beyond <code>minProvisionedTPS</code>, Amazon Personalize auto-scales the provisioned capacity up and down, but never below <code>minProvisionedTPS</code>. There&#39;s a short time delay while the capacity is increased that might cause loss of transactions.</p> <p>The actual TPS used is calculated as the average requests/second within a 5-minute window. You pay for maximum of either the minimum provisioned TPS or the actual TPS. We recommend starting with a low <code>minProvisionedTPS</code>, track your usage using Amazon CloudWatch metrics, and then increase the <code>minProvisionedTPS</code> as necessary.</p> <p> <b>Status</b> </p> <p>A campaign can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN<em>PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING &gt; DELETE IN</em>PROGRESS</p> </li> </ul> <p>To get the campaign status, call <a>DescribeCampaign</a>.</p> <note> <p>Wait until the <code>status</code> of the campaign is <code>ACTIVE</code> before asking the campaign for recommendations.</p> </note> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListCampaigns</a> </p> </li> <li> <p> <a>DescribeCampaign</a> </p> </li> <li> <p> <a>UpdateCampaign</a> </p> </li> <li> <p> <a>DeleteCampaign</a> </p> </li> </ul></p>
     async fn create_campaign(
         &self,
         input: CreateCampaignRequest,
@@ -4356,6 +4755,25 @@ impl Personalize for PersonalizeClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateDatasetResponse, _>()
     }
 
+    /// <p> Creates a job that exports data from your dataset to an Amazon S3 bucket. To allow Amazon Personalize to export the training data, you must specify an service-linked AWS Identity and Access Management (IAM) role that gives Amazon Personalize <code>PutObject</code> permissions for your Amazon S3 bucket. For information, see <a href="https://docs.aws.amazon.com/personalize/latest/dg/export-data.html">Exporting a dataset</a> in the Amazon Personalize developer guide. </p> <p> <b>Status</b> </p> <p>A dataset export job can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> </ul> <p> To get the status of the export job, call <a>DescribeDatasetExportJob</a>, and specify the Amazon Resource Name (ARN) of the dataset export job. The dataset export is complete when the status shows as ACTIVE. If the status shows as CREATE FAILED, the response includes a <code>failureReason</code> key, which describes why the job failed. </p>
+    async fn create_dataset_export_job(
+        &self,
+        input: CreateDatasetExportJobRequest,
+    ) -> Result<CreateDatasetExportJobResponse, RusotoError<CreateDatasetExportJobError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonPersonalize.CreateDatasetExportJob");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateDatasetExportJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateDatasetExportJobResponse, _>()
+    }
+
     /// <p><p>Creates an empty dataset group. A dataset group contains related datasets that supply data for training a model. A dataset group can contain at most three datasets, one for each type of dataset:</p> <ul> <li> <p>Interactions</p> </li> <li> <p>Items</p> </li> <li> <p>Users</p> </li> </ul> <p>To train a model (create a solution), a dataset group that contains an <code>Interactions</code> dataset is required. Call <a>CreateDataset</a> to add a dataset to the group.</p> <p>A dataset group can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING</p> </li> </ul> <p>To get the status of the dataset group, call <a>DescribeDatasetGroup</a>. If the status shows as CREATE FAILED, the response includes a <code>failureReason</code> key, which describes why the creation failed.</p> <note> <p>You must wait until the <code>status</code> of the dataset group is <code>ACTIVE</code> before adding a dataset to the group.</p> </note> <p>You can specify an AWS Key Management Service (KMS) key to encrypt the datasets in the group. If you specify a KMS key, you must also include an AWS Identity and Access Management (IAM) role that has permission to access the key.</p> <p class="title"> <b>APIs that require a dataset group ARN in the request</b> </p> <ul> <li> <p> <a>CreateDataset</a> </p> </li> <li> <p> <a>CreateEventTracker</a> </p> </li> <li> <p> <a>CreateSolution</a> </p> </li> </ul> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListDatasetGroups</a> </p> </li> <li> <p> <a>DescribeDatasetGroup</a> </p> </li> <li> <p> <a>DeleteDatasetGroup</a> </p> </li> </ul></p>
     async fn create_dataset_group(
         &self,
@@ -4374,7 +4792,7 @@ impl Personalize for PersonalizeClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateDatasetGroupResponse, _>()
     }
 
-    /// <p><p>Creates a job that imports training data from your data source (an Amazon S3 bucket) to an Amazon Personalize dataset. To allow Amazon Personalize to import the training data, you must specify an AWS Identity and Access Management (IAM) role that has permission to read from the data source, as Amazon Personalize makes a copy of your data and processes it in an internal AWS system.</p> <important> <p>The dataset import job replaces any previous data in the dataset.</p> </important> <p> <b>Status</b> </p> <p>A dataset import job can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> </ul> <p>To get the status of the import job, call <a>DescribeDatasetImportJob</a>, providing the Amazon Resource Name (ARN) of the dataset import job. The dataset import is complete when the status shows as ACTIVE. If the status shows as CREATE FAILED, the response includes a <code>failureReason</code> key, which describes why the job failed.</p> <note> <p>Importing takes time. You must wait until the status shows as ACTIVE before training a model using the dataset.</p> </note> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListDatasetImportJobs</a> </p> </li> <li> <p> <a>DescribeDatasetImportJob</a> </p> </li> </ul></p>
+    /// <p><p>Creates a job that imports training data from your data source (an Amazon S3 bucket) to an Amazon Personalize dataset. To allow Amazon Personalize to import the training data, you must specify an AWS Identity and Access Management (IAM) service role that has permission to read from the data source, as Amazon Personalize makes a copy of your data and processes it in an internal AWS system. For information on granting access to your Amazon S3 bucket, see <a href="https://docs.aws.amazon.com/personalize/latest/dg/granting-personalize-s3-access.html">Giving Amazon Personalize Access to Amazon S3 Resources</a>. </p> <important> <p>The dataset import job replaces any existing data in the dataset that you imported in bulk.</p> </important> <p> <b>Status</b> </p> <p>A dataset import job can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> </ul> <p>To get the status of the import job, call <a>DescribeDatasetImportJob</a>, providing the Amazon Resource Name (ARN) of the dataset import job. The dataset import is complete when the status shows as ACTIVE. If the status shows as CREATE FAILED, the response includes a <code>failureReason</code> key, which describes why the job failed.</p> <note> <p>Importing takes time. You must wait until the status shows as ACTIVE before training a model using the dataset.</p> </note> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListDatasetImportJobs</a> </p> </li> <li> <p> <a>DescribeDatasetImportJob</a> </p> </li> </ul></p>
     async fn create_dataset_import_job(
         &self,
         input: CreateDatasetImportJobRequest,
@@ -4393,7 +4811,7 @@ impl Personalize for PersonalizeClient {
             .deserialize::<CreateDatasetImportJobResponse, _>()
     }
 
-    /// <p><p>Creates an event tracker that you use when sending event data to the specified dataset group using the <a href="https://docs.aws.amazon.com/personalize/latest/dg/API_UBS_PutEvents.html">PutEvents</a> API.</p> <p>When Amazon Personalize creates an event tracker, it also creates an <i>event-interactions</i> dataset in the dataset group associated with the event tracker. The event-interactions dataset stores the event data from the <code>PutEvents</code> call. The contents of this dataset are not available to the user.</p> <note> <p>Only one event tracker can be associated with a dataset group. You will get an error if you call <code>CreateEventTracker</code> using the same dataset group as an existing event tracker.</p> </note> <p>When you send event data you include your tracking ID. The tracking ID identifies the customer and authorizes the customer to send the data.</p> <p>The event tracker can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN<em>PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING &gt; DELETE IN</em>PROGRESS</p> </li> </ul> <p>To get the status of the event tracker, call <a>DescribeEventTracker</a>.</p> <note> <p>The event tracker must be in the ACTIVE state before using the tracking ID.</p> </note> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListEventTrackers</a> </p> </li> <li> <p> <a>DescribeEventTracker</a> </p> </li> <li> <p> <a>DeleteEventTracker</a> </p> </li> </ul></p>
+    /// <p><p>Creates an event tracker that you use when adding event data to a specified dataset group using the <a href="https://docs.aws.amazon.com/personalize/latest/dg/API_UBS_PutEvents.html">PutEvents</a> API.</p> <note> <p>Only one event tracker can be associated with a dataset group. You will get an error if you call <code>CreateEventTracker</code> using the same dataset group as an existing event tracker.</p> </note> <p>When you create an event tracker, the response includes a tracking ID, which you pass as a parameter when you use the <a href="https://docs.aws.amazon.com/personalize/latest/dg/API_UBS_PutEvents.html">PutEvents</a> operation. Amazon Personalize then appends the event data to the Interactions dataset of the dataset group you specify in your event tracker. </p> <p>The event tracker can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN<em>PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING &gt; DELETE IN</em>PROGRESS</p> </li> </ul> <p>To get the status of the event tracker, call <a>DescribeEventTracker</a>.</p> <note> <p>The event tracker must be in the ACTIVE state before using the tracking ID.</p> </note> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListEventTrackers</a> </p> </li> <li> <p> <a>DescribeEventTracker</a> </p> </li> <li> <p> <a>DeleteEventTracker</a> </p> </li> </ul></p>
     async fn create_event_tracker(
         &self,
         input: CreateEventTrackerRequest,
@@ -4411,7 +4829,7 @@ impl Personalize for PersonalizeClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateEventTrackerResponse, _>()
     }
 
-    /// <p>Creates a recommendation filter. For more information, see <a href="https://docs.aws.amazon.com/personalize/latest/dg/filters.html">Using Filters with Amazon Personalize</a>.</p>
+    /// <p>Creates a recommendation filter. For more information, see <a>filter</a>.</p>
     async fn create_filter(
         &self,
         input: CreateFilterRequest,
@@ -4447,7 +4865,7 @@ impl Personalize for PersonalizeClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateSchemaResponse, _>()
     }
 
-    /// <p><p>Creates the configuration for training a model. A trained model is known as a solution. After the configuration is created, you train the model (create a solution) by calling the <a>CreateSolutionVersion</a> operation. Every time you call <code>CreateSolutionVersion</code>, a new version of the solution is created.</p> <p>After creating a solution version, you check its accuracy by calling <a>GetSolutionMetrics</a>. When you are satisfied with the version, you deploy it using <a>CreateCampaign</a>. The campaign provides recommendations to a client through the <a href="https://docs.aws.amazon.com/personalize/latest/dg/API_RS_GetRecommendations.html">GetRecommendations</a> API.</p> <p>To train a model, Amazon Personalize requires training data and a recipe. The training data comes from the dataset group that you provide in the request. A recipe specifies the training algorithm and a feature transformation. You can specify one of the predefined recipes provided by Amazon Personalize. Alternatively, you can specify <code>performAutoML</code> and Amazon Personalize will analyze your data and select the optimum USER<em>PERSONALIZATION recipe for you.</p> <p> <b>Status</b> </p> <p>A solution can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN</em>PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING &gt; DELETE IN_PROGRESS</p> </li> </ul> <p>To get the status of the solution, call <a>DescribeSolution</a>. Wait until the status shows as ACTIVE before calling <code>CreateSolutionVersion</code>.</p> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListSolutions</a> </p> </li> <li> <p> <a>CreateSolutionVersion</a> </p> </li> <li> <p> <a>DescribeSolution</a> </p> </li> <li> <p> <a>DeleteSolution</a> </p> </li> </ul> <ul> <li> <p> <a>ListSolutionVersions</a> </p> </li> <li> <p> <a>DescribeSolutionVersion</a> </p> </li> </ul></p>
+    /// <p><p>Creates the configuration for training a model. A trained model is known as a solution. After the configuration is created, you train the model (create a solution) by calling the <a>CreateSolutionVersion</a> operation. Every time you call <code>CreateSolutionVersion</code>, a new version of the solution is created.</p> <p>After creating a solution version, you check its accuracy by calling <a>GetSolutionMetrics</a>. When you are satisfied with the version, you deploy it using <a>CreateCampaign</a>. The campaign provides recommendations to a client through the <a href="https://docs.aws.amazon.com/personalize/latest/dg/API_RS_GetRecommendations.html">GetRecommendations</a> API.</p> <p>To train a model, Amazon Personalize requires training data and a recipe. The training data comes from the dataset group that you provide in the request. A recipe specifies the training algorithm and a feature transformation. You can specify one of the predefined recipes provided by Amazon Personalize. Alternatively, you can specify <code>performAutoML</code> and Amazon Personalize will analyze your data and select the optimum USER<em>PERSONALIZATION recipe for you.</p> <note> <p>Amazon Personalize doesn&#39;t support configuring the <code>hpoObjective</code> for solution hyperparameter optimization at this time.</p> </note> <p> <b>Status</b> </p> <p>A solution can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN</em>PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> <li> <p>DELETE PENDING &gt; DELETE IN_PROGRESS</p> </li> </ul> <p>To get the status of the solution, call <a>DescribeSolution</a>. Wait until the status shows as ACTIVE before calling <code>CreateSolutionVersion</code>.</p> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListSolutions</a> </p> </li> <li> <p> <a>CreateSolutionVersion</a> </p> </li> <li> <p> <a>DescribeSolution</a> </p> </li> <li> <p> <a>DeleteSolution</a> </p> </li> </ul> <ul> <li> <p> <a>ListSolutionVersions</a> </p> </li> <li> <p> <a>DescribeSolutionVersion</a> </p> </li> </ul></p>
     async fn create_solution(
         &self,
         input: CreateSolutionRequest,
@@ -4465,7 +4883,7 @@ impl Personalize for PersonalizeClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateSolutionResponse, _>()
     }
 
-    /// <p><p>Trains or retrains an active solution. A solution is created using the <a>CreateSolution</a> operation and must be in the ACTIVE state before calling <code>CreateSolutionVersion</code>. A new version of the solution is created every time you call this operation.</p> <p> <b>Status</b> </p> <p>A solution version can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING &gt; CREATE IN_PROGRESS &gt; ACTIVE -or- CREATE FAILED</p> </li> </ul> <p>To get the status of the version, call <a>DescribeSolutionVersion</a>. Wait until the status shows as ACTIVE before calling <code>CreateCampaign</code>.</p> <p>If the status shows as CREATE FAILED, the response includes a <code>failureReason</code> key, which describes why the job failed.</p> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListSolutionVersions</a> </p> </li> <li> <p> <a>DescribeSolutionVersion</a> </p> </li> </ul> <ul> <li> <p> <a>ListSolutions</a> </p> </li> <li> <p> <a>CreateSolution</a> </p> </li> <li> <p> <a>DescribeSolution</a> </p> </li> <li> <p> <a>DeleteSolution</a> </p> </li> </ul></p>
+    /// <p><p>Trains or retrains an active solution. A solution is created using the <a>CreateSolution</a> operation and must be in the ACTIVE state before calling <code>CreateSolutionVersion</code>. A new version of the solution is created every time you call this operation.</p> <p> <b>Status</b> </p> <p>A solution version can be in one of the following states:</p> <ul> <li> <p>CREATE PENDING</p> </li> <li> <p>CREATE IN_PROGRESS</p> </li> <li> <p>ACTIVE</p> </li> <li> <p>CREATE FAILED</p> </li> <li> <p>CREATE STOPPING</p> </li> <li> <p>CREATE STOPPED</p> </li> </ul> <p>To get the status of the version, call <a>DescribeSolutionVersion</a>. Wait until the status shows as ACTIVE before calling <code>CreateCampaign</code>.</p> <p>If the status shows as CREATE FAILED, the response includes a <code>failureReason</code> key, which describes why the job failed.</p> <p class="title"> <b>Related APIs</b> </p> <ul> <li> <p> <a>ListSolutionVersions</a> </p> </li> <li> <p> <a>DescribeSolutionVersion</a> </p> </li> </ul> <ul> <li> <p> <a>ListSolutions</a> </p> </li> <li> <p> <a>CreateSolution</a> </p> </li> <li> <p> <a>DescribeSolution</a> </p> </li> <li> <p> <a>DeleteSolution</a> </p> </li> </ul></p>
     async fn create_solution_version(
         &self,
         input: CreateSolutionVersionRequest,
@@ -4678,6 +5096,25 @@ impl Personalize for PersonalizeClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeDatasetResponse, _>()
+    }
+
+    /// <p>Describes the dataset export job created by <a>CreateDatasetExportJob</a>, including the export job status.</p>
+    async fn describe_dataset_export_job(
+        &self,
+        input: DescribeDatasetExportJobRequest,
+    ) -> Result<DescribeDatasetExportJobResponse, RusotoError<DescribeDatasetExportJobError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonPersonalize.DescribeDatasetExportJob");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeDatasetExportJobError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeDatasetExportJobResponse, _>()
     }
 
     /// <p>Describes the given dataset group. For more information on dataset groups, see <a>CreateDatasetGroup</a>.</p>
@@ -4908,6 +5345,25 @@ impl Personalize for PersonalizeClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListCampaignsResponse, _>()
     }
 
+    /// <p>Returns a list of dataset export jobs that use the given dataset. When a dataset is not specified, all the dataset export jobs associated with the account are listed. The response provides the properties for each dataset export job, including the Amazon Resource Name (ARN). For more information on dataset export jobs, see <a>CreateDatasetExportJob</a>. For more information on datasets, see <a>CreateDataset</a>.</p>
+    async fn list_dataset_export_jobs(
+        &self,
+        input: ListDatasetExportJobsRequest,
+    ) -> Result<ListDatasetExportJobsResponse, RusotoError<ListDatasetExportJobsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonPersonalize.ListDatasetExportJobs");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListDatasetExportJobsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListDatasetExportJobsResponse, _>()
+    }
+
     /// <p>Returns a list of dataset groups. The response provides the properties for each dataset group, including the Amazon Resource Name (ARN). For more information on dataset groups, see <a>CreateDatasetGroup</a>.</p>
     async fn list_dataset_groups(
         &self,
@@ -5070,6 +5526,26 @@ impl Personalize for PersonalizeClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListSolutionsResponse, _>()
+    }
+
+    /// <p>Stops creating a solution version that is in a state of CREATE_PENDING or CREATE IN_PROGRESS. </p> <p>Depending on the current state of the solution version, the solution version state changes as follows:</p> <ul> <li> <p>CREATE_PENDING &gt; CREATE_STOPPED</p> <p>or</p> </li> <li> <p>CREATE_IN_PROGRESS &gt; CREATE_STOPPING &gt; CREATE_STOPPED</p> </li> </ul> <p>You are billed for all of the training completed up until you stop the solution version creation. You cannot resume creating a solution version once it has been stopped.</p>
+    async fn stop_solution_version_creation(
+        &self,
+        input: StopSolutionVersionCreationRequest,
+    ) -> Result<(), RusotoError<StopSolutionVersionCreationError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AmazonPersonalize.StopSolutionVersionCreation",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, StopSolutionVersionCreationError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Updates a campaign by either deploying a new solution or changing the value of the campaign's <code>minProvisionedTPS</code> parameter.</p> <p>To update a campaign, the campaign status must be ACTIVE or CREATE FAILED. Check the campaign status using the <a>DescribeCampaign</a> API.</p> <note> <p>You must wait until the <code>status</code> of the updated campaign is <code>ACTIVE</code> before asking the campaign for recommendations.</p> </note> <p>For more information on campaigns, see <a>CreateCampaign</a>.</p>

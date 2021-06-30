@@ -195,6 +195,39 @@ pub struct AssociateHostedConnectionRequest {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AssociateMacSecKeyRequest {
+    /// <p>The MAC Security (MACsec) CAK to associate with the dedicated connection.</p> <p>You can create the CKN/CAK pair using an industry standard tool.</p> <p> The valid values are 64 hexadecimal characters (0-9, A-E).</p> <p>If you use this request parameter, you must use the <code>ckn</code> request parameter and not use the <code>secretARN</code> request parameter.</p>
+    #[serde(rename = "cak")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cak: Option<String>,
+    /// <p>The MAC Security (MACsec) CKN to associate with the dedicated connection.</p> <p>You can create the CKN/CAK pair using an industry standard tool.</p> <p> The valid values are 64 hexadecimal characters (0-9, A-E).</p> <p>If you use this request parameter, you must use the <code>cak</code> request parameter and not use the <code>secretARN</code> request parameter.</p>
+    #[serde(rename = "ckn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ckn: Option<String>,
+    /// <p>The ID of the dedicated connection (dxcon-xxxx), or the ID of the LAG (dxlag-xxxx).</p> <p>You can use <a>DescribeConnections</a> or <a>DescribeLags</a> to retrieve connection ID.</p>
+    #[serde(rename = "connectionId")]
+    pub connection_id: String,
+    /// <p>The Amazon Resource Name (ARN) of the MAC Security (MACsec) secret key to associate with the dedicated connection.</p> <p>You can use <a>DescribeConnections</a> or <a>DescribeLags</a> to retrieve the MAC Security (MACsec) secret key.</p> <p>If you use this request parameter, you do not use the <code>ckn</code> and <code>cak</code> request parameters.</p>
+    #[serde(rename = "secretARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secret_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AssociateMacSecKeyResponse {
+    /// <p>The ID of the dedicated connection (dxcon-xxxx), or the ID of the LAG (dxlag-xxxx).</p>
+    #[serde(rename = "connectionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_id: Option<String>,
+    /// <p>The MAC Security (MACsec) security keys associated with the dedicated connection.</p>
+    #[serde(rename = "macSecKeys")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mac_sec_keys: Option<Vec<MacSecKey>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateVirtualInterfaceRequest {
     /// <p>The ID of the LAG or connection.</p>
     #[serde(rename = "connectionId")]
@@ -375,6 +408,10 @@ pub struct Connection {
     #[serde(rename = "connectionState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_state: Option<String>,
+    /// <p>The MAC Security (MACsec) connection encryption mode.</p> <p>The valid values are <code>no_encrypt</code>, <code>should_encrypt</code>, and <code>must_encrypt</code>.</p>
+    #[serde(rename = "encryptionMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_mode: Option<String>,
     /// <p>Indicates whether the connection supports a secondary BGP peer in the same address family (IPv4/IPv6).</p>
     #[serde(rename = "hasLogicalRedundancy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -395,6 +432,14 @@ pub struct Connection {
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
+    /// <p>Indicates whether the connection supports MAC Security (MACsec).</p>
+    #[serde(rename = "macSecCapable")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mac_sec_capable: Option<bool>,
+    /// <p>The MAC Security (MACsec) security keys associated with the connection.</p>
+    #[serde(rename = "macSecKeys")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mac_sec_keys: Option<Vec<MacSecKey>>,
     /// <p>The ID of the AWS account that owns the connection.</p>
     #[serde(rename = "ownerAccount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -403,6 +448,10 @@ pub struct Connection {
     #[serde(rename = "partnerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub partner_name: Option<String>,
+    /// <p>The MAC Security (MACsec) port link status of the connection.</p> <p>The valid values are <code>Encryption Up</code>, which means that there is an active Connection Key Name, or <code>Encryption Down</code>.</p>
+    #[serde(rename = "portEncryptionStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub port_encryption_status: Option<String>,
     /// <p>The name of the service provider associated with the connection.</p>
     #[serde(rename = "providerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -472,6 +521,10 @@ pub struct CreateConnectionRequest {
     #[serde(rename = "providerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_name: Option<String>,
+    /// <p>Indicates whether you want the connection to support MAC Security (MACsec).</p> <p>MAC Security (MACsec) is only available on dedicated connections. For information about MAC Security (MACsec) prerequisties, see <a href="https://docs.aws.amazon.com/directconnect/latest/UserGuide/direct-connect-mac-sec-getting-started.html#mac-sec-prerequisites">MACsec prerequisties</a> in the <i>AWS Direct Connect User Guide</i>.</p>
+    #[serde(rename = "requestMACSec")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_mac_sec: Option<bool>,
     /// <p>The tags to associate with the lag.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -613,6 +666,10 @@ pub struct CreateLagRequest {
     #[serde(rename = "providerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_name: Option<String>,
+    /// <p><p>Indicates whether the connection will support MAC Security (MACsec).</p> <note> <p>All connections in the LAG must be capable of supporting MAC Security (MACsec). For information about MAC Security (MACsec) prerequisties, see <a href="https://docs.aws.amazon.com/directconnect/latest/UserGuide/direct-connect-mac-sec-getting-started.html#mac-sec-prerequisites">MACsec prerequisties</a> in the <i>AWS Direct Connect User Guide</i>.</p> </note></p>
+    #[serde(rename = "requestMACSec")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_mac_sec: Option<bool>,
     /// <p>The tags to associate with the LAG.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -905,7 +962,7 @@ pub struct DescribeDirectConnectGatewayAssociationsRequest {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The ID of the virtual private gateway.</p>
+    /// <p>The ID of the virtual private gateway or transit gateway.</p>
     #[serde(rename = "virtualGatewayId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_gateway_id: Option<String>,
@@ -1240,6 +1297,30 @@ pub struct DisassociateConnectionFromLagRequest {
     pub lag_id: String,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DisassociateMacSecKeyRequest {
+    /// <p>The ID of the dedicated connection (dxcon-xxxx), or the ID of the LAG (dxlag-xxxx).</p> <p>You can use <a>DescribeConnections</a> or <a>DescribeLags</a> to retrieve connection ID.</p>
+    #[serde(rename = "connectionId")]
+    pub connection_id: String,
+    /// <p>The Amazon Resource Name (ARN) of the MAC Security (MACsec) secret key.</p> <p>You can use <a>DescribeConnections</a> to retrieve the ARN of the MAC Security (MACsec) secret key.</p>
+    #[serde(rename = "secretARN")]
+    pub secret_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DisassociateMacSecKeyResponse {
+    /// <p>The ID of the dedicated connection (dxcon-xxxx), or the ID of the LAG (dxlag-xxxx).</p>
+    #[serde(rename = "connectionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_id: Option<String>,
+    /// <p>The MAC Security (MACsec) security keys no longer associated with the dedicated connection.</p>
+    #[serde(rename = "macSecKeys")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mac_sec_keys: Option<Vec<MacSecKey>>,
+}
+
 /// <p>Information about an interconnect.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1335,6 +1416,10 @@ pub struct Lag {
     #[serde(rename = "connectionsBandwidth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connections_bandwidth: Option<String>,
+    /// <p>The LAG MAC Security (MACsec) encryption mode.</p> <p>The valid values are <code>no_encrypt</code>, <code>should_encrypt</code>, and <code>must_encrypt</code>.</p>
+    #[serde(rename = "encryptionMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_mode: Option<String>,
     /// <p>Indicates whether the LAG supports a secondary BGP peer in the same address family (IPv4/IPv6).</p>
     #[serde(rename = "hasLogicalRedundancy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1359,6 +1444,14 @@ pub struct Lag {
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
+    /// <p>Indicates whether the LAG supports MAC Security (MACsec).</p>
+    #[serde(rename = "macSecCapable")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mac_sec_capable: Option<bool>,
+    /// <p>The MAC Security (MACsec) security keys associated with the LAG.</p>
+    #[serde(rename = "macSecKeys")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mac_sec_keys: Option<Vec<MacSecKey>>,
     /// <p>The minimum number of physical dedicated connections that must be operational for the LAG itself to be operational.</p>
     #[serde(rename = "minimumLinks")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1459,6 +1552,10 @@ pub struct Loa {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Location {
+    /// <p>The available MAC Security (MACsec) port speeds for the location.</p>
+    #[serde(rename = "availableMacSecPortSpeeds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub available_mac_sec_port_speeds: Option<Vec<String>>,
     /// <p>The available port speeds for the location.</p>
     #[serde(rename = "availablePortSpeeds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1488,6 +1585,28 @@ pub struct Locations {
     #[serde(rename = "locations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub locations: Option<Vec<Location>>,
+}
+
+/// <p>Information about the MAC Security (MACsec) secret key.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MacSecKey {
+    /// <p>The Connection Key Name (CKN) for the MAC Security secret key.</p>
+    #[serde(rename = "ckn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ckn: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the MAC Security (MACsec) secret key.</p>
+    #[serde(rename = "secretARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secret_arn: Option<String>,
+    /// <p>The date that the MAC Security (MACsec) secret key takes effect. The value is displayed in UTC format.</p>
+    #[serde(rename = "startOn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_on: Option<String>,
+    /// <p><p>The state of the MAC Security (MACsec) secret key.</p> <p>The possible values are:</p> <ul> <li> <p> <code>associating</code>: The MAC Security (MACsec) secret key is being validated and not yet associated with the connection or LAG.</p> </li> <li> <p> <code>associated</code>: The MAC Security (MACsec) secret key is validated and associated with the connection or LAG.</p> </li> <li> <p> <code>disassociating</code>: The MAC Security (MACsec) secret key is being disassociated from the connection or LAG</p> </li> <li> <p> <code>disassociated</code>: The MAC Security (MACsec) secret key is no longer associated with the connection or LAG.</p> </li> </ul></p>
+    #[serde(rename = "state")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
 }
 
 /// <p>Information about a new BGP peer.</p>
@@ -1877,6 +1996,22 @@ pub struct UntagResourceResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateConnectionRequest {
+    /// <p>The ID of the dedicated connection.</p> <p>You can use <a>DescribeConnections</a> to retrieve the connection ID.</p>
+    #[serde(rename = "connectionId")]
+    pub connection_id: String,
+    /// <p>The name of the connection.</p>
+    #[serde(rename = "connectionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_name: Option<String>,
+    /// <p>The connection MAC Security (MACsec) encryption mode.</p> <p>The valid values are <code>no_encrypt</code>, <code>should_encrypt</code>, and <code>must_encrypt</code>.</p>
+    #[serde(rename = "encryptionMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_mode: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateDirectConnectGatewayAssociationRequest {
     /// <p>The Amazon VPC prefixes to advertise to the Direct Connect gateway.</p>
     #[serde(rename = "addAllowedPrefixesToDirectConnectGateway")]
@@ -1903,6 +2038,10 @@ pub struct UpdateDirectConnectGatewayAssociationResult {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLagRequest {
+    /// <p>The LAG MAC Security (MACsec) encryption mode.</p> <p>AWS applies the value to all connections which are part of the LAG.</p>
+    #[serde(rename = "encryptionMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_mode: Option<String>,
     /// <p>The ID of the LAG.</p>
     #[serde(rename = "lagId")]
     pub lag_id: String,
@@ -2534,6 +2673,46 @@ impl fmt::Display for AssociateHostedConnectionError {
     }
 }
 impl Error for AssociateHostedConnectionError {}
+/// Errors returned by AssociateMacSecKey
+#[derive(Debug, PartialEq)]
+pub enum AssociateMacSecKeyError {
+    /// <p>One or more parameters are not valid.</p>
+    DirectConnectClient(String),
+    /// <p>A server-side error occurred.</p>
+    DirectConnectServer(String),
+}
+
+impl AssociateMacSecKeyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateMacSecKeyError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "DirectConnectClientException" => {
+                    return RusotoError::Service(AssociateMacSecKeyError::DirectConnectClient(
+                        err.msg,
+                    ))
+                }
+                "DirectConnectServerException" => {
+                    return RusotoError::Service(AssociateMacSecKeyError::DirectConnectServer(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for AssociateMacSecKeyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AssociateMacSecKeyError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            AssociateMacSecKeyError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for AssociateMacSecKeyError {}
 /// Errors returned by AssociateVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum AssociateVirtualInterfaceError {
@@ -4328,6 +4507,46 @@ impl fmt::Display for DisassociateConnectionFromLagError {
     }
 }
 impl Error for DisassociateConnectionFromLagError {}
+/// Errors returned by DisassociateMacSecKey
+#[derive(Debug, PartialEq)]
+pub enum DisassociateMacSecKeyError {
+    /// <p>One or more parameters are not valid.</p>
+    DirectConnectClient(String),
+    /// <p>A server-side error occurred.</p>
+    DirectConnectServer(String),
+}
+
+impl DisassociateMacSecKeyError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateMacSecKeyError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "DirectConnectClientException" => {
+                    return RusotoError::Service(DisassociateMacSecKeyError::DirectConnectClient(
+                        err.msg,
+                    ))
+                }
+                "DirectConnectServerException" => {
+                    return RusotoError::Service(DisassociateMacSecKeyError::DirectConnectServer(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DisassociateMacSecKeyError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DisassociateMacSecKeyError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            DisassociateMacSecKeyError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DisassociateMacSecKeyError {}
 /// Errors returned by ListVirtualInterfaceTestHistory
 #[derive(Debug, PartialEq)]
 pub enum ListVirtualInterfaceTestHistoryError {
@@ -4538,6 +4757,46 @@ impl fmt::Display for UntagResourceError {
     }
 }
 impl Error for UntagResourceError {}
+/// Errors returned by UpdateConnection
+#[derive(Debug, PartialEq)]
+pub enum UpdateConnectionError {
+    /// <p>One or more parameters are not valid.</p>
+    DirectConnectClient(String),
+    /// <p>A server-side error occurred.</p>
+    DirectConnectServer(String),
+}
+
+impl UpdateConnectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateConnectionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "DirectConnectClientException" => {
+                    return RusotoError::Service(UpdateConnectionError::DirectConnectClient(
+                        err.msg,
+                    ))
+                }
+                "DirectConnectServerException" => {
+                    return RusotoError::Service(UpdateConnectionError::DirectConnectServer(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateConnectionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateConnectionError::DirectConnectClient(ref cause) => write!(f, "{}", cause),
+            UpdateConnectionError::DirectConnectServer(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateConnectionError {}
 /// Errors returned by UpdateDirectConnectGatewayAssociation
 #[derive(Debug, PartialEq)]
 pub enum UpdateDirectConnectGatewayAssociationError {
@@ -4723,6 +4982,12 @@ pub trait DirectConnect {
         input: AssociateHostedConnectionRequest,
     ) -> Result<Connection, RusotoError<AssociateHostedConnectionError>>;
 
+    /// <p>Associates a MAC Security (MACsec) Connection Key Name (CKN)/ Connectivity Association Key (CAK) pair with an AWS Direct Connect dedicated connection.</p> <p>You must supply either the <code>secretARN,</code> or the CKN/CAK (<code>ckn</code> and <code>cak</code>) pair in the request.</p> <p>For information about MAC Security (MACsec) key considerations, see <a href="https://docs.aws.amazon.com/directconnect/latest/UserGuide/direct-connect-mac-sec-getting-started.html#mac-sec-key-consideration">MACsec pre-shared CKN/CAK key considerations </a> in the <i>AWS Direct Connect User Guide</i>.</p>
+    async fn associate_mac_sec_key(
+        &self,
+        input: AssociateMacSecKeyRequest,
+    ) -> Result<AssociateMacSecKeyResponse, RusotoError<AssociateMacSecKeyError>>;
+
     /// <p>Associates a virtual interface with a specified link aggregation group (LAG) or connection. Connectivity to AWS is temporarily interrupted as the virtual interface is being migrated. If the target connection or LAG has an associated virtual interface with a conflicting VLAN number or a conflicting IP address, the operation fails.</p> <p>Virtual interfaces associated with a hosted connection cannot be associated with a LAG; hosted connections must be migrated along with their virtual interfaces using <a>AssociateHostedConnection</a>.</p> <p>To reassociate a virtual interface to a new connection or LAG, the requester must own either the virtual interface itself or the connection to which the virtual interface is currently associated. Additionally, the requester must own the connection or LAG for the association.</p>
     async fn associate_virtual_interface(
         &self,
@@ -4762,7 +5027,7 @@ pub trait DirectConnect {
         RusotoError<ConfirmTransitVirtualInterfaceError>,
     >;
 
-    /// <p>Creates a BGP peer on the specified virtual interface.</p> <p>You must create a BGP peer for the corresponding address family (IPv4/IPv6) in order to access AWS resources that also use that address family.</p> <p>If logical redundancy is not supported by the connection, interconnect, or LAG, the BGP peer cannot be in the same address family as an existing BGP peer on the virtual interface.</p> <p>When creating a IPv6 BGP peer, omit the Amazon address and customer address. IPv6 addresses are automatically assigned from the Amazon pool of IPv6 addresses; you cannot specify custom IPv6 addresses.</p> <p>For a public virtual interface, the Autonomous System Number (ASN) must be private or already whitelisted for the virtual interface.</p>
+    /// <p>Creates a BGP peer on the specified virtual interface.</p> <p>You must create a BGP peer for the corresponding address family (IPv4/IPv6) in order to access AWS resources that also use that address family.</p> <p>If logical redundancy is not supported by the connection, interconnect, or LAG, the BGP peer cannot be in the same address family as an existing BGP peer on the virtual interface.</p> <p>When creating a IPv6 BGP peer, omit the Amazon address and customer address. IPv6 addresses are automatically assigned from the Amazon pool of IPv6 addresses; you cannot specify custom IPv6 addresses.</p> <p>For a public virtual interface, the Autonomous System Number (ASN) must be private or already on the allow list for the virtual interface.</p>
     async fn create_bgp_peer(
         &self,
         input: CreateBGPPeerRequest,
@@ -4905,7 +5170,7 @@ pub trait DirectConnect {
         RusotoError<DescribeDirectConnectGatewayAssociationProposalsError>,
     >;
 
-    /// <p>Lists the associations between your Direct Connect gateways and virtual private gateways. You must specify a Direct Connect gateway, a virtual private gateway, or both. If you specify a Direct Connect gateway, the response contains all virtual private gateways associated with the Direct Connect gateway. If you specify a virtual private gateway, the response contains all Direct Connect gateways associated with the virtual private gateway. If you specify both, the response contains the association between the Direct Connect gateway and the virtual private gateway.</p>
+    /// <p><p>Lists the associations between your Direct Connect gateways and virtual private gateways and transit gateways. You must specify one of the following:</p> <ul> <li> <p>A Direct Connect gateway</p> <p>The response contains all virtual private gateways and transit gateways associated with the Direct Connect gateway.</p> </li> <li> <p>A virtual private gateway</p> <p>The response contains the Direct Connect gateway.</p> </li> <li> <p>A transit gateway</p> <p>The response contains the Direct Connect gateway.</p> </li> <li> <p>A Direct Connect gateway and a virtual private gateway</p> <p>The response contains the association between the Direct Connect gateway and virtual private gateway.</p> </li> <li> <p>A Direct Connect gateway and a transit gateway</p> <p>The response contains the association between the Direct Connect gateway and transit gateway.</p> </li> </ul></p>
     async fn describe_direct_connect_gateway_associations(
         &self,
         input: DescribeDirectConnectGatewayAssociationsRequest,
@@ -4985,6 +5250,12 @@ pub trait DirectConnect {
         input: DisassociateConnectionFromLagRequest,
     ) -> Result<Connection, RusotoError<DisassociateConnectionFromLagError>>;
 
+    /// <p>Removes the association between a MAC Security (MACsec) security key and an AWS Direct Connect dedicated connection.</p>
+    async fn disassociate_mac_sec_key(
+        &self,
+        input: DisassociateMacSecKeyRequest,
+    ) -> Result<DisassociateMacSecKeyResponse, RusotoError<DisassociateMacSecKeyError>>;
+
     /// <p>Lists the virtual interface failover test history.</p>
     async fn list_virtual_interface_test_history(
         &self,
@@ -5018,6 +5289,12 @@ pub trait DirectConnect {
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
+    /// <p><p>Updates the AWS Direct Connect dedicated connection configuration.</p> <p>You can update the following parameters for a connection:</p> <ul> <li> <p>The connection name</p> </li> <li> <p>The connection&#39;s MAC Security (MACsec) encryption mode.</p> </li> </ul></p>
+    async fn update_connection(
+        &self,
+        input: UpdateConnectionRequest,
+    ) -> Result<Connection, RusotoError<UpdateConnectionError>>;
+
     /// <p>Updates the specified attributes of the Direct Connect gateway association.</p> <p>Add or remove prefixes from the association.</p>
     async fn update_direct_connect_gateway_association(
         &self,
@@ -5027,7 +5304,7 @@ pub trait DirectConnect {
         RusotoError<UpdateDirectConnectGatewayAssociationError>,
     >;
 
-    /// <p>Updates the attributes of the specified link aggregation group (LAG).</p> <p>You can update the following attributes:</p> <ul> <li> <p>The name of the LAG.</p> </li> <li> <p>The value for the minimum number of connections that must be operational for the LAG itself to be operational. </p> </li> </ul> <p>When you create a LAG, the default value for the minimum number of operational connections is zero (0). If you update this value and the number of operational connections falls below the specified value, the LAG automatically goes down to avoid over-utilization of the remaining connections. Adjust this value with care, as it could force the LAG down if it is set higher than the current number of operational connections.</p>
+    /// <p><p>Updates the attributes of the specified link aggregation group (LAG).</p> <p>You can update the following LAG attributes:</p> <ul> <li> <p>The name of the LAG.</p> </li> <li> <p>The value for the minimum number of connections that must be operational for the LAG itself to be operational. </p> </li> <li> <p>The LAG&#39;s MACsec encryption mode.</p> <p>AWS assigns this value to each connection which is part of the LAG.</p> </li> <li> <p>The tags</p> </li> </ul> <note> <p>If you adjust the threshold value for the minimum number of operational connections, ensure that the new value does not cause the LAG to fall below the threshold and become non-operational.</p> </note></p>
     async fn update_lag(&self, input: UpdateLagRequest)
         -> Result<Lag, RusotoError<UpdateLagError>>;
 
@@ -5250,6 +5527,24 @@ impl DirectConnect for DirectConnectClient {
         proto::json::ResponsePayload::new(&response).deserialize::<Connection, _>()
     }
 
+    /// <p>Associates a MAC Security (MACsec) Connection Key Name (CKN)/ Connectivity Association Key (CAK) pair with an AWS Direct Connect dedicated connection.</p> <p>You must supply either the <code>secretARN,</code> or the CKN/CAK (<code>ckn</code> and <code>cak</code>) pair in the request.</p> <p>For information about MAC Security (MACsec) key considerations, see <a href="https://docs.aws.amazon.com/directconnect/latest/UserGuide/direct-connect-mac-sec-getting-started.html#mac-sec-key-consideration">MACsec pre-shared CKN/CAK key considerations </a> in the <i>AWS Direct Connect User Guide</i>.</p>
+    async fn associate_mac_sec_key(
+        &self,
+        input: AssociateMacSecKeyRequest,
+    ) -> Result<AssociateMacSecKeyResponse, RusotoError<AssociateMacSecKeyError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "OvertureService.AssociateMacSecKey");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, AssociateMacSecKeyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<AssociateMacSecKeyResponse, _>()
+    }
+
     /// <p>Associates a virtual interface with a specified link aggregation group (LAG) or connection. Connectivity to AWS is temporarily interrupted as the virtual interface is being migrated. If the target connection or LAG has an associated virtual interface with a conflicting VLAN number or a conflicting IP address, the operation fails.</p> <p>Virtual interfaces associated with a hosted connection cannot be associated with a LAG; hosted connections must be migrated along with their virtual interfaces using <a>AssociateHostedConnection</a>.</p> <p>To reassociate a virtual interface to a new connection or LAG, the requester must own either the virtual interface itself or the connection to which the virtual interface is currently associated. Additionally, the requester must own the connection or LAG for the association.</p>
     async fn associate_virtual_interface(
         &self,
@@ -5361,7 +5656,7 @@ impl DirectConnect for DirectConnectClient {
             .deserialize::<ConfirmTransitVirtualInterfaceResponse, _>()
     }
 
-    /// <p>Creates a BGP peer on the specified virtual interface.</p> <p>You must create a BGP peer for the corresponding address family (IPv4/IPv6) in order to access AWS resources that also use that address family.</p> <p>If logical redundancy is not supported by the connection, interconnect, or LAG, the BGP peer cannot be in the same address family as an existing BGP peer on the virtual interface.</p> <p>When creating a IPv6 BGP peer, omit the Amazon address and customer address. IPv6 addresses are automatically assigned from the Amazon pool of IPv6 addresses; you cannot specify custom IPv6 addresses.</p> <p>For a public virtual interface, the Autonomous System Number (ASN) must be private or already whitelisted for the virtual interface.</p>
+    /// <p>Creates a BGP peer on the specified virtual interface.</p> <p>You must create a BGP peer for the corresponding address family (IPv4/IPv6) in order to access AWS resources that also use that address family.</p> <p>If logical redundancy is not supported by the connection, interconnect, or LAG, the BGP peer cannot be in the same address family as an existing BGP peer on the virtual interface.</p> <p>When creating a IPv6 BGP peer, omit the Amazon address and customer address. IPv6 addresses are automatically assigned from the Amazon pool of IPv6 addresses; you cannot specify custom IPv6 addresses.</p> <p>For a public virtual interface, the Autonomous System Number (ASN) must be private or already on the allow list for the virtual interface.</p>
     async fn create_bgp_peer(
         &self,
         input: CreateBGPPeerRequest,
@@ -5830,7 +6125,7 @@ impl DirectConnect for DirectConnectClient {
             .deserialize::<DescribeDirectConnectGatewayAssociationProposalsResult, _>()
     }
 
-    /// <p>Lists the associations between your Direct Connect gateways and virtual private gateways. You must specify a Direct Connect gateway, a virtual private gateway, or both. If you specify a Direct Connect gateway, the response contains all virtual private gateways associated with the Direct Connect gateway. If you specify a virtual private gateway, the response contains all Direct Connect gateways associated with the virtual private gateway. If you specify both, the response contains the association between the Direct Connect gateway and the virtual private gateway.</p>
+    /// <p><p>Lists the associations between your Direct Connect gateways and virtual private gateways and transit gateways. You must specify one of the following:</p> <ul> <li> <p>A Direct Connect gateway</p> <p>The response contains all virtual private gateways and transit gateways associated with the Direct Connect gateway.</p> </li> <li> <p>A virtual private gateway</p> <p>The response contains the Direct Connect gateway.</p> </li> <li> <p>A transit gateway</p> <p>The response contains the Direct Connect gateway.</p> </li> <li> <p>A Direct Connect gateway and a virtual private gateway</p> <p>The response contains the association between the Direct Connect gateway and virtual private gateway.</p> </li> <li> <p>A Direct Connect gateway and a transit gateway</p> <p>The response contains the association between the Direct Connect gateway and transit gateway.</p> </li> </ul></p>
     async fn describe_direct_connect_gateway_associations(
         &self,
         input: DescribeDirectConnectGatewayAssociationsRequest,
@@ -6087,6 +6382,25 @@ impl DirectConnect for DirectConnectClient {
         proto::json::ResponsePayload::new(&response).deserialize::<Connection, _>()
     }
 
+    /// <p>Removes the association between a MAC Security (MACsec) security key and an AWS Direct Connect dedicated connection.</p>
+    async fn disassociate_mac_sec_key(
+        &self,
+        input: DisassociateMacSecKeyRequest,
+    ) -> Result<DisassociateMacSecKeyResponse, RusotoError<DisassociateMacSecKeyError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "OvertureService.DisassociateMacSecKey");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DisassociateMacSecKeyError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DisassociateMacSecKeyResponse, _>()
+    }
+
     /// <p>Lists the virtual interface failover test history.</p>
     async fn list_virtual_interface_test_history(
         &self,
@@ -6185,6 +6499,24 @@ impl DirectConnect for DirectConnectClient {
         proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
     }
 
+    /// <p><p>Updates the AWS Direct Connect dedicated connection configuration.</p> <p>You can update the following parameters for a connection:</p> <ul> <li> <p>The connection name</p> </li> <li> <p>The connection&#39;s MAC Security (MACsec) encryption mode.</p> </li> </ul></p>
+    async fn update_connection(
+        &self,
+        input: UpdateConnectionRequest,
+    ) -> Result<Connection, RusotoError<UpdateConnectionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "OvertureService.UpdateConnection");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateConnectionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<Connection, _>()
+    }
+
     /// <p>Updates the specified attributes of the Direct Connect gateway association.</p> <p>Add or remove prefixes from the association.</p>
     async fn update_direct_connect_gateway_association(
         &self,
@@ -6213,7 +6545,7 @@ impl DirectConnect for DirectConnectClient {
             .deserialize::<UpdateDirectConnectGatewayAssociationResult, _>()
     }
 
-    /// <p>Updates the attributes of the specified link aggregation group (LAG).</p> <p>You can update the following attributes:</p> <ul> <li> <p>The name of the LAG.</p> </li> <li> <p>The value for the minimum number of connections that must be operational for the LAG itself to be operational. </p> </li> </ul> <p>When you create a LAG, the default value for the minimum number of operational connections is zero (0). If you update this value and the number of operational connections falls below the specified value, the LAG automatically goes down to avoid over-utilization of the remaining connections. Adjust this value with care, as it could force the LAG down if it is set higher than the current number of operational connections.</p>
+    /// <p><p>Updates the attributes of the specified link aggregation group (LAG).</p> <p>You can update the following LAG attributes:</p> <ul> <li> <p>The name of the LAG.</p> </li> <li> <p>The value for the minimum number of connections that must be operational for the LAG itself to be operational. </p> </li> <li> <p>The LAG&#39;s MACsec encryption mode.</p> <p>AWS assigns this value to each connection which is part of the LAG.</p> </li> <li> <p>The tags</p> </li> </ul> <note> <p>If you adjust the threshold value for the minimum number of operational connections, ensure that the new value does not cause the LAG to fall below the threshold and become non-operational.</p> </note></p>
     async fn update_lag(
         &self,
         input: UpdateLagRequest,

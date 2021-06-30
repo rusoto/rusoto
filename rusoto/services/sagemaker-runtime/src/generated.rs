@@ -53,6 +53,10 @@ pub struct InvokeEndpointInput {
     #[serde(rename = "InferenceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inference_id: Option<String>,
+    /// <p>If the endpoint hosts multiple containers and is configured to use direct invocation, this parameter specifies the host name of the container to invoke.</p>
+    #[serde(rename = "TargetContainerHostname")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_container_hostname: Option<String>,
     /// <p>The model to request for inference when invoking a multi-model endpoint.</p>
     #[serde(rename = "TargetModel")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -198,6 +202,10 @@ impl SageMakerRuntime for SageMakerRuntimeClient {
             input.custom_attributes.as_ref(),
         );
         request.add_optional_header("X-Amzn-SageMaker-Inference-Id", input.inference_id.as_ref());
+        request.add_optional_header(
+            "X-Amzn-SageMaker-Target-Container-Hostname",
+            input.target_container_hostname.as_ref(),
+        );
         request.add_optional_header("X-Amzn-SageMaker-Target-Model", input.target_model.as_ref());
         request.add_optional_header(
             "X-Amzn-SageMaker-Target-Variant",

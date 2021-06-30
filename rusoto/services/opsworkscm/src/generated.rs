@@ -252,7 +252,7 @@ pub struct CreateServerRequest {
     #[serde(rename = "EngineModel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_model: Option<String>,
-    /// <p> The major release version of the engine that you want to use. For a Chef server, the valid value for EngineVersion is currently <code>2</code>. For a Puppet server, the valid value is <code>2017</code>. </p>
+    /// <p> The major release version of the engine that you want to use. For a Chef server, the valid value for EngineVersion is currently <code>2</code>. For a Puppet server, valid values are <code>2019</code> or <code>2017</code>. </p>
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_version: Option<String>,
@@ -451,7 +451,7 @@ pub struct DescribeServersResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Contains the response to a <code>DescribeServers</code> request.</p> <p> <i>For Chef Automate servers:</i> If <code>DescribeServersResponse$Servers$EngineAttributes</code> includes CHEF_MAJOR_UPGRADE_AVAILABLE, you can upgrade the Chef Automate server to Chef Automate 2. To be eligible for upgrade, a server running Chef Automate 1 must have had at least one successful maintenance run after November 1, 2019.</p> <p> <i>For Puppet Server:</i> <code>DescribeServersResponse$Servers$EngineAttributes</code> contains PUPPET_API_CA_CERT. This is the PEM-encoded CA certificate that is used by the Puppet API over TCP port number 8140. The CA certificate is also used to sign node certificates.</p>
+    /// <p><p>Contains the response to a <code>DescribeServers</code> request.</p> <p> <i>For Chef Automate servers:</i> If <code>DescribeServersResponse$Servers$EngineAttributes</code> includes CHEF<em>MAJOR</em>UPGRADE<em>AVAILABLE, you can upgrade the Chef Automate server to Chef Automate 2. To be eligible for upgrade, a server running Chef Automate 1 must have had at least one successful maintenance run after November 1, 2019.</p> <p> <i>For Puppet servers:</i> <code>DescribeServersResponse$Servers$EngineAttributes</code> contains the following two responses:</p> <ul> <li> <p> <code>PUPPET</em>API<em>CA</em>CERT</code>, the PEM-encoded CA certificate that is used by the Puppet API over TCP port number 8140. The CA certificate is also used to sign node certificates.</p> </li> <li> <p> <code>PUPPET<em>API</em>CRL</code>, a certificate revocation list. The certificate revocation list is for internal maintenance purposes only. For more information about the Puppet certificate revocation list, see <a href="https://puppet.com/docs/puppet/5.5/man/certificate_revocation_list.html">Man Page: puppet certificate<em>revocation</em>list</a> in the Puppet documentation.</p> </li> </ul></p>
     #[serde(rename = "Servers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub servers: Option<Vec<Server>>,
@@ -572,7 +572,11 @@ pub struct RestoreServerRequest {
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
-pub struct RestoreServerResponse {}
+pub struct RestoreServerResponse {
+    #[serde(rename = "Server")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server: Option<Server>,
+}
 
 /// <p>Describes a configuration management server. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -618,7 +622,7 @@ pub struct Server {
     #[serde(rename = "EngineModel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_model: Option<String>,
-    /// <p>The engine version of the server. For a Chef server, the valid value for EngineVersion is currently <code>2</code>. For a Puppet server, the valid value is <code>2017</code>. </p>
+    /// <p>The engine version of the server. For a Chef server, the valid value for EngineVersion is currently <code>2</code>. For a Puppet server, specify either <code>2019</code> or <code>2017</code>. </p>
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_version: Option<String>,

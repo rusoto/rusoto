@@ -34,28 +34,28 @@ pub struct AccessLog {
     pub file: Option<FileAccessLog>,
 }
 
-/// <p><p>An object that represents the AWS Cloud Map attribute information for your virtual node.</p> <note> <p>AWS Cloud Map is not available in the eu-south-1 Region.</p> </note></p>
+/// <p><p>An object that represents the Cloud Map attribute information for your virtual node.</p> <note> <p>AWS Cloud Map is not available in the eu-south-1 Region.</p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AwsCloudMapInstanceAttribute {
-    /// <p>The name of an AWS Cloud Map service instance attribute key. Any AWS Cloud Map service instance that contains the specified key and value is returned.</p>
+    /// <p>The name of an Cloud Map service instance attribute key. Any Cloud Map service instance that contains the specified key and value is returned.</p>
     #[serde(rename = "key")]
     pub key: String,
-    /// <p>The value of an AWS Cloud Map service instance attribute key. Any AWS Cloud Map service instance that contains the specified key and value is returned.</p>
+    /// <p>The value of an Cloud Map service instance attribute key. Any Cloud Map service instance that contains the specified key and value is returned.</p>
     #[serde(rename = "value")]
     pub value: String,
 }
 
-/// <p><p>An object that represents the AWS Cloud Map service discovery information for your virtual node.</p> <note> <p>AWS Cloud Map is not available in the eu-south-1 Region.</p> </note></p>
+/// <p><p>An object that represents the Cloud Map service discovery information for your virtual node.</p> <note> <p>Cloud Map is not available in the eu-south-1 Region.</p> </note></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AwsCloudMapServiceDiscovery {
     /// <p>A string map that contains attributes with values that you can use to filter instances by any custom attribute that you specified when you registered the instance. Only instances that match all of the specified key/value pairs will be returned.</p>
     #[serde(rename = "attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes: Option<Vec<AwsCloudMapInstanceAttribute>>,
-    /// <p>The name of the AWS Cloud Map namespace to use.</p>
+    /// <p>The name of the Cloud Map namespace to use.</p>
     #[serde(rename = "namespaceName")]
     pub namespace_name: String,
-    /// <p>The name of the AWS Cloud Map service to use.</p>
+    /// <p>The name of the Cloud Map service to use.</p>
     #[serde(rename = "serviceName")]
     pub service_name: String,
 }
@@ -90,6 +90,10 @@ pub struct ClientPolicy {
 /// <p>A reference to an object that represents a Transport Layer Security (TLS) client policy.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ClientPolicyTls {
+    /// <p>A reference to an object that represents a client's TLS certificate.</p>
+    #[serde(rename = "certificate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate: Option<ClientTlsCertificate>,
     /// <p>Whether the policy is enforced. The default is <code>True</code>, if a value isn't specified.</p>
     #[serde(rename = "enforce")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -101,6 +105,19 @@ pub struct ClientPolicyTls {
     /// <p>A reference to an object that represents a TLS validation context.</p>
     #[serde(rename = "validation")]
     pub validation: TlsValidationContext,
+}
+
+/// <p>An object that represents the client's certificate.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ClientTlsCertificate {
+    /// <p>An object that represents a local file certificate. The certificate must meet specific requirements and you must have proxy authorization enabled. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/tls.html">Transport Layer Security (TLS)</a>.</p>
+    #[serde(rename = "file")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file: Option<ListenerTlsFileCertificate>,
+    /// <p>A reference to an object that represents a client's TLS Secret Discovery Service certificate.</p>
+    #[serde(rename = "sds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sds: Option<ListenerTlsSdsCertificate>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -446,7 +463,7 @@ pub struct DeleteVirtualGatewayOutput {
     pub virtual_gateway: VirtualGatewayData,
 }
 
-/// <p><zonbook></zonbook><xhtml></xhtml></p>
+/// <p>Deletes a virtual node input.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteVirtualNodeInput {
@@ -701,6 +718,10 @@ pub struct DnsServiceDiscovery {
     /// <p>Specifies the DNS service discovery hostname for the virtual node. </p>
     #[serde(rename = "hostname")]
     pub hostname: String,
+    /// <p>Specifies the DNS response type for the virtual node.</p>
+    #[serde(rename = "responseType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_type: Option<String>,
 }
 
 /// <p>An object that represents a duration of time.</p>
@@ -719,7 +740,7 @@ pub struct Duration {
 /// <p>An object that represents the egress filter rules for a service mesh.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EgressFilter {
-    /// <p>The egress filter type. By default, the type is <code>DROP_ALL</code>, which allows egress only from virtual nodes to other defined resources in the service mesh (and any traffic to <code>*.amazonaws.com</code> for AWS API calls). You can set the egress filter type to <code>ALLOW_ALL</code> to allow egress to any endpoint inside or outside of the service mesh.</p>
+    /// <p>The egress filter type. By default, the type is <code>DROP_ALL</code>, which allows egress only from virtual nodes to other defined resources in the service mesh (and any traffic to <code>*.amazonaws.com</code> for Amazon Web Services API calls). You can set the egress filter type to <code>ALLOW_ALL</code> to allow egress to any endpoint inside or outside of the service mesh.</p>
     #[serde(rename = "type")]
     pub type_: String,
 }
@@ -753,6 +774,28 @@ pub struct GatewayRouteData {
     /// <p>The virtual gateway that the gateway route is associated with.</p>
     #[serde(rename = "virtualGatewayName")]
     pub virtual_gateway_name: String,
+}
+
+/// <p>An object representing the gateway route host name to match.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct GatewayRouteHostnameMatch {
+    /// <p>The exact host name to match on.</p>
+    #[serde(rename = "exact")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exact: Option<String>,
+    /// <p>The specified ending characters of the host name to match on.</p>
+    #[serde(rename = "suffix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub suffix: Option<String>,
+}
+
+/// <p>An object representing the gateway route host name to rewrite.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct GatewayRouteHostnameRewrite {
+    /// <p>The default target host name to write to.</p>
+    #[serde(rename = "defaultTargetHostname")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_target_hostname: Option<String>,
 }
 
 /// <p>An object that represents a gateway route returned by a list operation.</p>
@@ -803,6 +846,10 @@ pub struct GatewayRouteSpec {
     #[serde(rename = "httpRoute")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub http_route: Option<HttpGatewayRoute>,
+    /// <p>The ordering of the gateway routes spec.</p>
+    #[serde(rename = "priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
 }
 
 /// <p>An object that represents the current status of a gateway route.</p>
@@ -844,6 +891,10 @@ pub struct GrpcGatewayRoute {
 /// <p>An object that represents the action to take if a match is determined.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GrpcGatewayRouteAction {
+    /// <p>The gateway route action to rewrite.</p>
+    #[serde(rename = "rewrite")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rewrite: Option<GrpcGatewayRouteRewrite>,
     /// <p>An object that represents the target that traffic is routed to when a request matches the gateway route.</p>
     #[serde(rename = "target")]
     pub target: GatewayRouteTarget,
@@ -852,13 +903,70 @@ pub struct GrpcGatewayRouteAction {
 /// <p>An object that represents the criteria for determining a request match.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GrpcGatewayRouteMatch {
+    /// <p>The gateway route host name to be matched on.</p>
+    #[serde(rename = "hostname")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hostname: Option<GatewayRouteHostnameMatch>,
+    /// <p>The gateway route metadata to be matched on.</p>
+    #[serde(rename = "metadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata: Option<Vec<GrpcGatewayRouteMetadata>>,
     /// <p>The fully qualified domain name for the service to match from the request.</p>
     #[serde(rename = "serviceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_name: Option<String>,
 }
 
-/// <p>An object that represents a retry policy. Specify at least one value for at least one of the types of <code>RetryEvents</code>, a value for <code>maxRetries</code>, and a value for <code>perRetryTimeout</code>.</p>
+/// <p>An object representing the metadata of the gateway route.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct GrpcGatewayRouteMetadata {
+    /// <p>Specify <code>True</code> to match anything except the match criteria. The default value is <code>False</code>.</p>
+    #[serde(rename = "invert")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invert: Option<bool>,
+    /// <p>The criteria for determining a metadata match.</p>
+    #[serde(rename = "match")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_match: Option<GrpcMetadataMatchMethod>,
+    /// <p>A name for the gateway route metadata.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+}
+
+/// <p>An object that represents the gateway route to rewrite.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct GrpcGatewayRouteRewrite {
+    /// <p>The host name of the gateway route to rewrite.</p>
+    #[serde(rename = "hostname")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hostname: Option<GatewayRouteHostnameRewrite>,
+}
+
+/// <p>An object representing the method header to be matched.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct GrpcMetadataMatchMethod {
+    /// <p>The exact method header to be matched on.</p>
+    #[serde(rename = "exact")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exact: Option<String>,
+    /// <p>The specified beginning characters of the method header to be matched on.</p>
+    #[serde(rename = "prefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prefix: Option<String>,
+    #[serde(rename = "range")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub range: Option<MatchRange>,
+    /// <p>The regex used to match the method header.</p>
+    #[serde(rename = "regex")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regex: Option<String>,
+    /// <p>The specified ending characters of the method header to match on.</p>
+    #[serde(rename = "suffix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub suffix: Option<String>,
+}
+
+/// <p>An object that represents a retry policy. Specify at least one value for at least one of the types of <code>RetryEvents</code>, a value for <code>maxRetries</code>, and a value for <code>perRetryTimeout</code>. Both <code>server-error</code> and <code>gateway-error</code> under <code>httpRetryEvents</code> include the Envoy <code>reset</code> policy. For more information on the <code>reset</code> policy, see the <a href="https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-on">Envoy documentation</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct GrpcRetryPolicy {
     /// <p>Specify at least one of the valid values.</p>
@@ -1046,20 +1154,124 @@ pub struct HttpGatewayRoute {
 /// <p>An object that represents the action to take if a match is determined.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HttpGatewayRouteAction {
+    /// <p>The gateway route action to rewrite.</p>
+    #[serde(rename = "rewrite")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rewrite: Option<HttpGatewayRouteRewrite>,
     /// <p>An object that represents the target that traffic is routed to when a request matches the gateway route.</p>
     #[serde(rename = "target")]
     pub target: GatewayRouteTarget,
 }
 
+/// <p>An object that represents the HTTP header in the gateway route.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct HttpGatewayRouteHeader {
+    /// <p>Specify <code>True</code> to match anything except the match criteria. The default value is <code>False</code>.</p>
+    #[serde(rename = "invert")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invert: Option<bool>,
+    #[serde(rename = "match")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_match: Option<HeaderMatchMethod>,
+    /// <p>A name for the HTTP header in the gateway route that will be matched on.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+}
+
 /// <p>An object that represents the criteria for determining a request match.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HttpGatewayRouteMatch {
+    /// <p>The client request headers to match on.</p>
+    #[serde(rename = "headers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub headers: Option<Vec<HttpGatewayRouteHeader>>,
+    /// <p>The host name to match on.</p>
+    #[serde(rename = "hostname")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hostname: Option<GatewayRouteHostnameMatch>,
+    /// <p>The method to match on.</p>
+    #[serde(rename = "method")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub method: Option<String>,
+    /// <p>The path to match on.</p>
+    #[serde(rename = "path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path: Option<HttpPathMatch>,
     /// <p>Specifies the path to match requests with. This parameter must always start with <code>/</code>, which by itself matches all requests to the virtual service name. You can also match for path-based routing of requests. For example, if your virtual service name is <code>my-service.local</code> and you want the route to match requests to <code>my-service.local/metrics</code>, your prefix should be <code>/metrics</code>.</p>
     #[serde(rename = "prefix")]
-    pub prefix: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prefix: Option<String>,
+    /// <p>The query parameter to match on.</p>
+    #[serde(rename = "queryParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_parameters: Option<Vec<HttpQueryParameter>>,
 }
 
-/// <p>An object that represents a retry policy. Specify at least one value for at least one of the types of <code>RetryEvents</code>, a value for <code>maxRetries</code>, and a value for <code>perRetryTimeout</code>.</p>
+/// <p>An object that represents the path to rewrite.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct HttpGatewayRoutePathRewrite {
+    /// <p>The exact path to rewrite.</p>
+    #[serde(rename = "exact")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exact: Option<String>,
+}
+
+/// <p>An object representing the beginning characters of the route to rewrite.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct HttpGatewayRoutePrefixRewrite {
+    /// <p>The default prefix used to replace the incoming route prefix when rewritten.</p>
+    #[serde(rename = "defaultPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_prefix: Option<String>,
+    /// <p>The value used to replace the incoming route prefix when rewritten.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
+/// <p>An object representing the gateway route to rewrite.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct HttpGatewayRouteRewrite {
+    /// <p>The host name to rewrite.</p>
+    #[serde(rename = "hostname")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hostname: Option<GatewayRouteHostnameRewrite>,
+    /// <p>The path to rewrite.</p>
+    #[serde(rename = "path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path: Option<HttpGatewayRoutePathRewrite>,
+    /// <p>The specified beginning characters to rewrite.</p>
+    #[serde(rename = "prefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prefix: Option<HttpGatewayRoutePrefixRewrite>,
+}
+
+/// <p>An object representing the path to match in the request.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct HttpPathMatch {
+    /// <p>The exact path to match on.</p>
+    #[serde(rename = "exact")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exact: Option<String>,
+    /// <p>The regex used to match the path.</p>
+    #[serde(rename = "regex")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regex: Option<String>,
+}
+
+/// <p>An object that represents the query parameter in the request.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct HttpQueryParameter {
+    /// <p>The query parameter to match on.</p>
+    #[serde(rename = "match")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub route_match: Option<QueryParameterMatch>,
+    /// <p>A name for the query parameter that will be matched on.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+}
+
+/// <p>An object that represents a retry policy. Specify at least one value for at least one of the types of <code>RetryEvents</code>, a value for <code>maxRetries</code>, and a value for <code>perRetryTimeout</code>. Both <code>server-error</code> and <code>gateway-error</code> under <code>httpRetryEvents</code> include the Envoy <code>reset</code> policy. For more information on the <code>reset</code> policy, see the <a href="https://www.envoyproxy.io/docs/envoy/latest/configuration/http/http_filters/router_filter#x-envoy-retry-on">Envoy documentation</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HttpRetryPolicy {
     /// <p><p>Specify at least one of the following values.</p> <ul> <li> <p> <b>server-error</b> – HTTP status codes 500, 501, 502, 503, 504, 505, 506, 507, 508, 510, and 511</p> </li> <li> <p> <b>gateway-error</b> – HTTP status codes 502, 503, and 504</p> </li> <li> <p> <b>client-error</b> – HTTP status code 409</p> </li> <li> <p> <b>stream-error</b> – Retry on refused stream</p> </li> </ul></p>
@@ -1124,7 +1336,7 @@ pub struct HttpRouteHeader {
 /// <p>An object that represents the requirements for a route to match HTTP requests for a virtual router.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HttpRouteMatch {
-    /// <p>An object that represents the client request headers to match on.</p>
+    /// <p>The client request headers to match on.</p>
     #[serde(rename = "headers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub headers: Option<Vec<HttpRouteHeader>>,
@@ -1132,10 +1344,19 @@ pub struct HttpRouteMatch {
     #[serde(rename = "method")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub method: Option<String>,
+    /// <p>The client request path to match on.</p>
+    #[serde(rename = "path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path: Option<HttpPathMatch>,
     /// <p>Specifies the path to match requests with. This parameter must always start with <code>/</code>, which by itself matches all requests to the virtual service name. You can also match for path-based routing of requests. For example, if your virtual service name is <code>my-service.local</code> and you want the route to match requests to <code>my-service.local/metrics</code>, your prefix should be <code>/metrics</code>.</p>
     #[serde(rename = "prefix")]
-    pub prefix: String,
-    /// <p>The client request scheme to match on. Specify only one.</p>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prefix: Option<String>,
+    /// <p>The client request query parameters to match on.</p>
+    #[serde(rename = "queryParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_parameters: Option<Vec<HttpQueryParameter>>,
+    /// <p>The client request scheme to match on. Specify only one. Applicable only for HTTP2 routes.</p>
     #[serde(rename = "scheme")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scheme: Option<String>,
@@ -1448,6 +1669,7 @@ pub struct Listener {
 /// <p>An object that represents timeouts for different protocols.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ListenerTimeout {
+    /// <p>An object that represents types of timeouts. </p>
     #[serde(rename = "grpc")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub grpc: Option<GrpcTimeout>,
@@ -1468,12 +1690,16 @@ pub struct ListenerTimeout {
 /// <p>An object that represents the Transport Layer Security (TLS) properties for a listener.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ListenerTls {
-    /// <p>A reference to an object that represents a listener's TLS certificate.</p>
+    /// <p>A reference to an object that represents a listener's Transport Layer Security (TLS) certificate.</p>
     #[serde(rename = "certificate")]
     pub certificate: ListenerTlsCertificate,
     /// <p><p>Specify one of the following modes.</p> <ul> <li> <p> <b/>STRICT – Listener only accepts connections with TLS enabled. </p> </li> <li> <p> <b/>PERMISSIVE – Listener accepts connections with or without TLS enabled.</p> </li> <li> <p> <b/>DISABLED – Listener only accepts connections without TLS. </p> </li> </ul></p>
     #[serde(rename = "mode")]
     pub mode: String,
+    /// <p>A reference to an object that represents a listener's Transport Layer Security (TLS) validation context.</p>
+    #[serde(rename = "validation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validation: Option<ListenerTlsValidationContext>,
 }
 
 /// <p>An object that represents an AWS Certicate Manager (ACM) certificate.</p>
@@ -1495,6 +1721,10 @@ pub struct ListenerTlsCertificate {
     #[serde(rename = "file")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file: Option<ListenerTlsFileCertificate>,
+    /// <p>A reference to an object that represents a listener's Secret Discovery Service certificate.</p>
+    #[serde(rename = "sds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sds: Option<ListenerTlsSdsCertificate>,
 }
 
 /// <p>An object that represents a local file certificate. The certificate must meet specific requirements and you must have proxy authorization enabled. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/tls.html#virtual-node-tls-prerequisites">Transport Layer Security (TLS)</a>.</p>
@@ -1506,6 +1736,39 @@ pub struct ListenerTlsFileCertificate {
     /// <p>The private key for a certificate stored on the file system of the virtual node that the proxy is running on.</p>
     #[serde(rename = "privateKey")]
     pub private_key: String,
+}
+
+/// <p>An object that represents the listener's Secret Discovery Service certificate. The proxy must be configured with a local SDS provider via a Unix Domain Socket. See App Mesh <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/tls.html">TLS documentation</a> for more info.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ListenerTlsSdsCertificate {
+    /// <p>A reference to an object that represents the name of the secret requested from the Secret Discovery Service provider representing Transport Layer Security (TLS) materials like a certificate or certificate chain.</p>
+    #[serde(rename = "secretName")]
+    pub secret_name: String,
+}
+
+/// <p>An object that represents a listener's Transport Layer Security (TLS) validation context.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ListenerTlsValidationContext {
+    /// <p>A reference to an object that represents the SANs for a listener's Transport Layer Security (TLS) validation context.</p>
+    #[serde(rename = "subjectAlternativeNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subject_alternative_names: Option<SubjectAlternativeNames>,
+    /// <p>A reference to where to retrieve the trust chain when validating a peer’s Transport Layer Security (TLS) certificate.</p>
+    #[serde(rename = "trust")]
+    pub trust: ListenerTlsValidationContextTrust,
+}
+
+/// <p>An object that represents a listener's Transport Layer Security (TLS) validation context trust.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ListenerTlsValidationContextTrust {
+    /// <p>An object that represents a Transport Layer Security (TLS) validation context trust for a local file.</p>
+    #[serde(rename = "file")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file: Option<TlsValidationContextFileTrust>,
+    /// <p>A reference to an object that represents a listener's Transport Layer Security (TLS) Secret Discovery Service validation context trust.</p>
+    #[serde(rename = "sds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sds: Option<TlsValidationContextSdsTrust>,
 }
 
 /// <p>An object that represents the logging information for a virtual node.</p>
@@ -1618,6 +1881,15 @@ pub struct PortMapping {
     /// <p>The protocol used for the port mapping. Specify one protocol.</p>
     #[serde(rename = "protocol")]
     pub protocol: String,
+}
+
+/// <p>An object representing the query parameter to match.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct QueryParameterMatch {
+    /// <p>The exact query parameter to match on.</p>
+    #[serde(rename = "exact")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exact: Option<String>,
 }
 
 /// <p>An object that represents metadata for a resource.</p>
@@ -1741,7 +2013,7 @@ pub struct RouteStatus {
 /// <p>An object that represents the service discovery information for a virtual node.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ServiceDiscovery {
-    /// <p>Specifies any AWS Cloud Map information for the virtual node.</p>
+    /// <p>Specifies any Cloud Map information for the virtual node.</p>
     #[serde(rename = "awsCloudMap")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_cloud_map: Option<AwsCloudMapServiceDiscovery>,
@@ -1749,6 +2021,22 @@ pub struct ServiceDiscovery {
     #[serde(rename = "dns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dns: Option<DnsServiceDiscovery>,
+}
+
+/// <p>An object that represents the methods by which a subject alternative name on a peer Transport Layer Security (TLS) certificate can be matched.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct SubjectAlternativeNameMatchers {
+    /// <p>The values sent must match the specified values exactly.</p>
+    #[serde(rename = "exact")]
+    pub exact: Vec<String>,
+}
+
+/// <p>An object that represents the subject alternative names secured by the certificate.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct SubjectAlternativeNames {
+    /// <p>An object that represents the criteria for determining a SANs match.</p>
+    #[serde(rename = "match")]
+    pub route_match: Option<SubjectAlternativeNameMatchers>,
 }
 
 /// <p>Optional metadata that you apply to a resource to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
@@ -1808,15 +2096,19 @@ pub struct TcpTimeout {
     pub idle: Option<Duration>,
 }
 
-/// <p>An object that represents a Transport Layer Security (TLS) validation context.</p>
+/// <p>An object that represents how the proxy will validate its peer during Transport Layer Security (TLS) negotiation.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TlsValidationContext {
-    /// <p>A reference to an object that represents a TLS validation context trust.</p>
+    /// <p>A reference to an object that represents the SANs for a Transport Layer Security (TLS) validation context.</p>
+    #[serde(rename = "subjectAlternativeNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subject_alternative_names: Option<SubjectAlternativeNames>,
+    /// <p>A reference to where to retrieve the trust chain when validating a peer’s Transport Layer Security (TLS) certificate.</p>
     #[serde(rename = "trust")]
     pub trust: TlsValidationContextTrust,
 }
 
-/// <p>An object that represents a TLS validation context trust for an AWS Certicate Manager (ACM) certificate.</p>
+/// <p>An object that represents a Transport Layer Security (TLS) validation context trust for an Certificate Manager certificate.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TlsValidationContextAcmTrust {
     /// <p>One or more ACM Amazon Resource Name (ARN)s.</p>
@@ -1832,17 +2124,29 @@ pub struct TlsValidationContextFileTrust {
     pub certificate_chain: String,
 }
 
+/// <p>An object that represents a Transport Layer Security (TLS) Secret Discovery Service validation context trust. The proxy must be configured with a local SDS provider via a Unix Domain Socket. See App Mesh <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/tls.html">TLS documentation</a> for more info.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct TlsValidationContextSdsTrust {
+    /// <p>A reference to an object that represents the name of the secret for a Transport Layer Security (TLS) Secret Discovery Service validation context trust.</p>
+    #[serde(rename = "secretName")]
+    pub secret_name: String,
+}
+
 /// <p>An object that represents a Transport Layer Security (TLS) validation context trust.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TlsValidationContextTrust {
-    /// <p>A reference to an object that represents a TLS validation context trust for an AWS Certicate Manager (ACM) certificate.</p>
+    /// <p>A reference to an object that represents a Transport Layer Security (TLS) validation context trust for an Certificate Manager certificate.</p>
     #[serde(rename = "acm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub acm: Option<TlsValidationContextAcmTrust>,
-    /// <p>An object that represents a TLS validation context trust for a local file.</p>
+    /// <p>An object that represents a Transport Layer Security (TLS) validation context trust for a local file.</p>
     #[serde(rename = "file")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file: Option<TlsValidationContextFileTrust>,
+    /// <p>A reference to an object that represents a Transport Layer Security (TLS) Secret Discovery Service validation context trust.</p>
+    #[serde(rename = "sds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sds: Option<TlsValidationContextSdsTrust>,
 }
 
 /// <p><zonbook></zonbook><xhtml></xhtml></p>
@@ -2111,6 +2415,10 @@ pub struct VirtualGatewayClientPolicy {
 /// <p>An object that represents a Transport Layer Security (TLS) client policy.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VirtualGatewayClientPolicyTls {
+    /// <p>A reference to an object that represents a virtual gateway's client's Transport Layer Security (TLS) certificate.</p>
+    #[serde(rename = "certificate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate: Option<VirtualGatewayClientTlsCertificate>,
     /// <p>Whether the policy is enforced. The default is <code>True</code>, if a value isn't specified.</p>
     #[serde(rename = "enforce")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2119,9 +2427,22 @@ pub struct VirtualGatewayClientPolicyTls {
     #[serde(rename = "ports")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ports: Option<Vec<i64>>,
-    /// <p>A reference to an object that represents a TLS validation context.</p>
+    /// <p>A reference to an object that represents a Transport Layer Security (TLS) validation context.</p>
     #[serde(rename = "validation")]
     pub validation: VirtualGatewayTlsValidationContext,
+}
+
+/// <p>An object that represents the virtual gateway's client's Transport Layer Security (TLS) certificate.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct VirtualGatewayClientTlsCertificate {
+    /// <p>An object that represents a local file certificate. The certificate must meet specific requirements and you must have proxy authorization enabled. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/tls.html"> Transport Layer Security (TLS) </a>.</p>
+    #[serde(rename = "file")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file: Option<VirtualGatewayListenerTlsFileCertificate>,
+    /// <p>A reference to an object that represents a virtual gateway's client's Secret Discovery Service certificate.</p>
+    #[serde(rename = "sds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sds: Option<VirtualGatewayListenerTlsSdsCertificate>,
 }
 
 /// <p>An object that represents the type of virtual gateway connection pool.</p> <p>Only one protocol is used at a time and should be the same protocol as the one chosen under port mapping.</p> <p>If not present the default value for <code>maxPendingRequests</code> is <code>2147483647</code>.</p>
@@ -2254,9 +2575,13 @@ pub struct VirtualGatewayListenerTls {
     /// <p><p>Specify one of the following modes.</p> <ul> <li> <p> <b/>STRICT – Listener only accepts connections with TLS enabled. </p> </li> <li> <p> <b/>PERMISSIVE – Listener accepts connections with or without TLS enabled.</p> </li> <li> <p> <b/>DISABLED – Listener only accepts connections without TLS. </p> </li> </ul></p>
     #[serde(rename = "mode")]
     pub mode: String,
+    /// <p>A reference to an object that represents a virtual gateway's listener's Transport Layer Security (TLS) validation context.</p>
+    #[serde(rename = "validation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub validation: Option<VirtualGatewayListenerTlsValidationContext>,
 }
 
-/// <p>An object that represents an AWS Certicate Manager (ACM) certificate.</p>
+/// <p>An object that represents an Certificate Manager certificate.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VirtualGatewayListenerTlsAcmCertificate {
     /// <p>The Amazon Resource Name (ARN) for the certificate. The certificate must meet specific requirements and you must have proxy authorization enabled. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/tls.html#virtual-node-tls-prerequisites">Transport Layer Security (TLS)</a>.</p>
@@ -2267,7 +2592,7 @@ pub struct VirtualGatewayListenerTlsAcmCertificate {
 /// <p>An object that represents a listener's Transport Layer Security (TLS) certificate.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VirtualGatewayListenerTlsCertificate {
-    /// <p>A reference to an object that represents an AWS Certicate Manager (ACM) certificate.</p>
+    /// <p>A reference to an object that represents an Certificate Manager certificate.</p>
     #[serde(rename = "acm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub acm: Option<VirtualGatewayListenerTlsAcmCertificate>,
@@ -2275,6 +2600,10 @@ pub struct VirtualGatewayListenerTlsCertificate {
     #[serde(rename = "file")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file: Option<VirtualGatewayListenerTlsFileCertificate>,
+    /// <p>A reference to an object that represents a virtual gateway's listener's Secret Discovery Service certificate.</p>
+    #[serde(rename = "sds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sds: Option<VirtualGatewayListenerTlsSdsCertificate>,
 }
 
 /// <p>An object that represents a local file certificate. The certificate must meet specific requirements and you must have proxy authorization enabled. For more information, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/tls.html#virtual-node-tls-prerequisites">Transport Layer Security (TLS)</a>.</p>
@@ -2286,6 +2615,39 @@ pub struct VirtualGatewayListenerTlsFileCertificate {
     /// <p>The private key for a certificate stored on the file system of the mesh endpoint that the proxy is running on.</p>
     #[serde(rename = "privateKey")]
     pub private_key: String,
+}
+
+/// <p>An object that represents the virtual gateway's listener's Secret Discovery Service certificate.The proxy must be configured with a local SDS provider via a Unix Domain Socket. See App Mesh<a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/tls.html">TLS documentation</a> for more info. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct VirtualGatewayListenerTlsSdsCertificate {
+    /// <p>A reference to an object that represents the name of the secret secret requested from the Secret Discovery Service provider representing Transport Layer Security (TLS) materials like a certificate or certificate chain.</p>
+    #[serde(rename = "secretName")]
+    pub secret_name: String,
+}
+
+/// <p>An object that represents a virtual gateway's listener's Transport Layer Security (TLS) validation context.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct VirtualGatewayListenerTlsValidationContext {
+    /// <p>A reference to an object that represents the SANs for a virtual gateway listener's Transport Layer Security (TLS) validation context.</p>
+    #[serde(rename = "subjectAlternativeNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subject_alternative_names: Option<SubjectAlternativeNames>,
+    /// <p>A reference to where to retrieve the trust chain when validating a peer’s Transport Layer Security (TLS) certificate.</p>
+    #[serde(rename = "trust")]
+    pub trust: VirtualGatewayListenerTlsValidationContextTrust,
+}
+
+/// <p>An object that represents a virtual gateway's listener's Transport Layer Security (TLS) validation context trust.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct VirtualGatewayListenerTlsValidationContextTrust {
+    /// <p>An object that represents a Transport Layer Security (TLS) validation context trust for a local file.</p>
+    #[serde(rename = "file")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file: Option<VirtualGatewayTlsValidationContextFileTrust>,
+    /// <p>A reference to an object that represents a virtual gateway's listener's Transport Layer Security (TLS) Secret Discovery Service validation context trust.</p>
+    #[serde(rename = "sds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sds: Option<VirtualGatewayTlsValidationContextSdsTrust>,
 }
 
 /// <p>An object that represents logging information.</p>
@@ -2365,12 +2727,16 @@ pub struct VirtualGatewayStatus {
 /// <p>An object that represents a Transport Layer Security (TLS) validation context.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VirtualGatewayTlsValidationContext {
-    /// <p>A reference to an object that represents a TLS validation context trust.</p>
+    /// <p>A reference to an object that represents the SANs for a virtual gateway's listener's Transport Layer Security (TLS) validation context.</p>
+    #[serde(rename = "subjectAlternativeNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subject_alternative_names: Option<SubjectAlternativeNames>,
+    /// <p>A reference to where to retrieve the trust chain when validating a peer’s Transport Layer Security (TLS) certificate.</p>
     #[serde(rename = "trust")]
     pub trust: VirtualGatewayTlsValidationContextTrust,
 }
 
-/// <p>An object that represents a TLS validation context trust for an AWS Certicate Manager (ACM) certificate.</p>
+/// <p>An object that represents a Transport Layer Security (TLS) validation context trust for an Certificate Manager certificate.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VirtualGatewayTlsValidationContextAcmTrust {
     /// <p>One or more ACM Amazon Resource Name (ARN)s.</p>
@@ -2386,17 +2752,29 @@ pub struct VirtualGatewayTlsValidationContextFileTrust {
     pub certificate_chain: String,
 }
 
+/// <p>An object that represents a virtual gateway's listener's Transport Layer Security (TLS) Secret Discovery Service validation context trust. The proxy must be configured with a local SDS provider via a Unix Domain Socket. See App Mesh <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/tls.html">TLS documentation</a> for more info.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct VirtualGatewayTlsValidationContextSdsTrust {
+    /// <p>A reference to an object that represents the name of the secret for a virtual gateway's Transport Layer Security (TLS) Secret Discovery Service validation context trust.</p>
+    #[serde(rename = "secretName")]
+    pub secret_name: String,
+}
+
 /// <p>An object that represents a Transport Layer Security (TLS) validation context trust.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VirtualGatewayTlsValidationContextTrust {
-    /// <p>A reference to an object that represents a TLS validation context trust for an AWS Certicate Manager (ACM) certificate.</p>
+    /// <p>A reference to an object that represents a Transport Layer Security (TLS) validation context trust for an Certificate Manager certificate.</p>
     #[serde(rename = "acm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub acm: Option<VirtualGatewayTlsValidationContextAcmTrust>,
-    /// <p>An object that represents a TLS validation context trust for a local file.</p>
+    /// <p>An object that represents a Transport Layer Security (TLS) validation context trust for a local file.</p>
     #[serde(rename = "file")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file: Option<VirtualGatewayTlsValidationContextFileTrust>,
+    /// <p>A reference to an object that represents a virtual gateway's Transport Layer Security (TLS) Secret Discovery Service validation context trust.</p>
+    #[serde(rename = "sds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sds: Option<VirtualGatewayTlsValidationContextSdsTrust>,
 }
 
 /// <p><p>An object that represents the type of virtual node connection pool.</p> <p>Only one protocol is used at a time and should be the same protocol as the one chosen under port mapping.</p> <p>If not present the default value for <code>maxPendingRequests</code> is <code>2147483647</code>.</p> <p/></p>
@@ -5376,7 +5754,7 @@ pub trait AppMesh {
         input: CreateVirtualGatewayInput,
     ) -> Result<CreateVirtualGatewayOutput, RusotoError<CreateVirtualGatewayError>>;
 
-    /// <p>Creates a virtual node within a service mesh.</p> <p> A virtual node acts as a logical pointer to a particular task group, such as an Amazon ECS service or a Kubernetes deployment. When you create a virtual node, you can specify the service discovery information for your task group, and whether the proxy running in a task group will communicate with other proxies using Transport Layer Security (TLS).</p> <p>You define a <code>listener</code> for any inbound traffic that your virtual node expects. Any virtual service that your virtual node expects to communicate to is specified as a <code>backend</code>.</p> <p>The response metadata for your new virtual node contains the <code>arn</code> that is associated with the virtual node. Set this value to the full ARN; for example, <code>arn:aws:appmesh:us-west-2:123456789012:myMesh/default/virtualNode/myApp</code>) as the <code>APPMESH_RESOURCE_ARN</code> environment variable for your task group's Envoy proxy container in your task definition or pod spec. This is then mapped to the <code>node.id</code> and <code>node.cluster</code> Envoy parameters.</p> <note> <p>By default, App Mesh uses the name of the resource you specified in <code>APPMESH_RESOURCE_ARN</code> when Envoy is referring to itself in metrics and traces. You can override this behavior by setting the <code>APPMESH_RESOURCE_CLUSTER</code> environment variable with your own name.</p> <p>AWS Cloud Map is not available in the eu-south-1 Region.</p> </note> <p>For more information about virtual nodes, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_nodes.html">Virtual nodes</a>. You must be using <code>1.15.0</code> or later of the Envoy image when setting these variables. For more information about App Mesh Envoy variables, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/envoy.html">Envoy image</a> in the AWS App Mesh User Guide.</p>
+    /// <p>Creates a virtual node within a service mesh.</p> <p> A virtual node acts as a logical pointer to a particular task group, such as an Amazon ECS service or a Kubernetes deployment. When you create a virtual node, you can specify the service discovery information for your task group, and whether the proxy running in a task group will communicate with other proxies using Transport Layer Security (TLS).</p> <p>You define a <code>listener</code> for any inbound traffic that your virtual node expects. Any virtual service that your virtual node expects to communicate to is specified as a <code>backend</code>.</p> <p>The response metadata for your new virtual node contains the <code>arn</code> that is associated with the virtual node. Set this value to the full ARN; for example, <code>arn:aws:appmesh:us-west-2:123456789012:myMesh/default/virtualNode/myApp</code>) as the <code>APPMESH_RESOURCE_ARN</code> environment variable for your task group's Envoy proxy container in your task definition or pod spec. This is then mapped to the <code>node.id</code> and <code>node.cluster</code> Envoy parameters.</p> <note> <p>By default, App Mesh uses the name of the resource you specified in <code>APPMESH_RESOURCE_ARN</code> when Envoy is referring to itself in metrics and traces. You can override this behavior by setting the <code>APPMESH_RESOURCE_CLUSTER</code> environment variable with your own name.</p> </note> <p>For more information about virtual nodes, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_nodes.html">Virtual nodes</a>. You must be using <code>1.15.0</code> or later of the Envoy image when setting these variables. For more information aboutApp Mesh Envoy variables, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/envoy.html">Envoy image</a> in the AWS App Mesh User Guide.</p>
     async fn create_virtual_node(
         &self,
         input: CreateVirtualNodeInput,
@@ -5773,7 +6151,7 @@ impl AppMesh for AppMeshClient {
         }
     }
 
-    /// <p>Creates a virtual node within a service mesh.</p> <p> A virtual node acts as a logical pointer to a particular task group, such as an Amazon ECS service or a Kubernetes deployment. When you create a virtual node, you can specify the service discovery information for your task group, and whether the proxy running in a task group will communicate with other proxies using Transport Layer Security (TLS).</p> <p>You define a <code>listener</code> for any inbound traffic that your virtual node expects. Any virtual service that your virtual node expects to communicate to is specified as a <code>backend</code>.</p> <p>The response metadata for your new virtual node contains the <code>arn</code> that is associated with the virtual node. Set this value to the full ARN; for example, <code>arn:aws:appmesh:us-west-2:123456789012:myMesh/default/virtualNode/myApp</code>) as the <code>APPMESH_RESOURCE_ARN</code> environment variable for your task group's Envoy proxy container in your task definition or pod spec. This is then mapped to the <code>node.id</code> and <code>node.cluster</code> Envoy parameters.</p> <note> <p>By default, App Mesh uses the name of the resource you specified in <code>APPMESH_RESOURCE_ARN</code> when Envoy is referring to itself in metrics and traces. You can override this behavior by setting the <code>APPMESH_RESOURCE_CLUSTER</code> environment variable with your own name.</p> <p>AWS Cloud Map is not available in the eu-south-1 Region.</p> </note> <p>For more information about virtual nodes, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_nodes.html">Virtual nodes</a>. You must be using <code>1.15.0</code> or later of the Envoy image when setting these variables. For more information about App Mesh Envoy variables, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/envoy.html">Envoy image</a> in the AWS App Mesh User Guide.</p>
+    /// <p>Creates a virtual node within a service mesh.</p> <p> A virtual node acts as a logical pointer to a particular task group, such as an Amazon ECS service or a Kubernetes deployment. When you create a virtual node, you can specify the service discovery information for your task group, and whether the proxy running in a task group will communicate with other proxies using Transport Layer Security (TLS).</p> <p>You define a <code>listener</code> for any inbound traffic that your virtual node expects. Any virtual service that your virtual node expects to communicate to is specified as a <code>backend</code>.</p> <p>The response metadata for your new virtual node contains the <code>arn</code> that is associated with the virtual node. Set this value to the full ARN; for example, <code>arn:aws:appmesh:us-west-2:123456789012:myMesh/default/virtualNode/myApp</code>) as the <code>APPMESH_RESOURCE_ARN</code> environment variable for your task group's Envoy proxy container in your task definition or pod spec. This is then mapped to the <code>node.id</code> and <code>node.cluster</code> Envoy parameters.</p> <note> <p>By default, App Mesh uses the name of the resource you specified in <code>APPMESH_RESOURCE_ARN</code> when Envoy is referring to itself in metrics and traces. You can override this behavior by setting the <code>APPMESH_RESOURCE_CLUSTER</code> environment variable with your own name.</p> </note> <p>For more information about virtual nodes, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/virtual_nodes.html">Virtual nodes</a>. You must be using <code>1.15.0</code> or later of the Envoy image when setting these variables. For more information aboutApp Mesh Envoy variables, see <a href="https://docs.aws.amazon.com/app-mesh/latest/userguide/envoy.html">Envoy image</a> in the AWS App Mesh User Guide.</p>
     #[allow(unused_mut)]
     async fn create_virtual_node(
         &self,

@@ -19,6 +19,7 @@ use rusoto_core::region;
 use rusoto_core::request::{BufferedHttpResponse, DispatchSignedRequest};
 use rusoto_core::{Client, RusotoError};
 
+use rusoto_core::param::{Params, ServiceParams};
 use rusoto_core::proto;
 use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
@@ -32,7 +33,7 @@ pub struct AcceptInvitationRequest {
     pub graph_arn: String,
 }
 
-/// <p>An AWS account that is the master of or a member of a behavior graph.</p>
+/// <p>An AWS account that is the administrator account of or a member of a behavior graph.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Account {
@@ -42,6 +43,15 @@ pub struct Account {
     /// <p>The AWS account root user email address for the AWS account.</p>
     #[serde(rename = "EmailAddress")]
     pub email_address: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateGraphRequest {
+    /// <p>The tags to assign to the new behavior graph. You can add up to 50 tags. For each tag, you provide the tag key and the tag value. Each tag key can contain up to 128 characters. Each tag value can contain up to 256 characters.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -56,9 +66,13 @@ pub struct CreateGraphResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateMembersRequest {
-    /// <p>The list of AWS accounts to invite to become member accounts in the behavior graph. For each invited account, the account list contains the account identifier and the AWS account root user email address.</p>
+    /// <p>The list of AWS accounts to invite to become member accounts in the behavior graph. You can invite up to 50 accounts at a time. For each invited account, the account list contains the account identifier and the AWS account root user email address.</p>
     #[serde(rename = "Accounts")]
     pub accounts: Vec<Account>,
+    /// <p>if set to <code>true</code>, then the member accounts do not receive email notifications. By default, this is set to <code>false</code>, and the member accounts receive email notifications.</p>
+    #[serde(rename = "DisableEmailNotification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disable_email_notification: Option<bool>,
     /// <p>The ARN of the behavior graph to invite the member accounts to contribute their data to.</p>
     #[serde(rename = "GraphArn")]
     pub graph_arn: String,
@@ -92,7 +106,7 @@ pub struct DeleteGraphRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMembersRequest {
-    /// <p>The list of AWS account identifiers for the member accounts to delete from the behavior graph.</p>
+    /// <p>The list of AWS account identifiers for the member accounts to delete from the behavior graph. You can delete up to 50 member accounts at a time.</p>
     #[serde(rename = "AccountIds")]
     pub account_ids: Vec<String>,
     /// <p>The ARN of the behavior graph to delete members from.</p>
@@ -124,7 +138,7 @@ pub struct DisassociateMembershipRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetMembersRequest {
-    /// <p>The list of AWS account identifiers for the member account for which to return member details.</p> <p>You cannot use <code>GetMembers</code> to retrieve information about member accounts that were removed from the behavior graph.</p>
+    /// <p>The list of AWS account identifiers for the member account for which to return member details. You can request details for up to 50 member accounts at a time.</p> <p>You cannot use <code>GetMembers</code> to retrieve information about member accounts that were removed from the behavior graph.</p>
     #[serde(rename = "AccountIds")]
     pub account_ids: Vec<String>,
     /// <p>The ARN of the behavior graph for which to request the member details.</p>
@@ -175,7 +189,7 @@ pub struct ListGraphsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListGraphsResponse {
-    /// <p>A list of behavior graphs that the account is a master for.</p>
+    /// <p>A list of behavior graphs that the account is an administrator account for.</p>
     #[serde(rename = "GraphList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub graph_list: Option<Vec<Graph>>,
@@ -240,6 +254,23 @@ pub struct ListMembersResponse {
     pub next_token: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListTagsForResourceRequest {
+    /// <p>The ARN of the behavior graph for which to retrieve the tag values.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    /// <p>The tag values that are assigned to the behavior graph. The request returns up to 50 tag values.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
 /// <p>Details about a member account that was invited to contribute to a behavior graph.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -248,6 +279,10 @@ pub struct MemberDetail {
     #[serde(rename = "AccountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_id: Option<String>,
+    /// <p>The AWS account identifier of the administrator account for the behavior graph.</p>
+    #[serde(rename = "AdministratorId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub administrator_id: Option<String>,
     /// <p><p>For member accounts with a status of <code>ACCEPTED<em>BUT</em>DISABLED</code>, the reason that the member account is not enabled.</p> <p>The reason can have one of the following values:</p> <ul> <li> <p> <code>VOLUME<em>TOO</em>HIGH</code> - Indicates that adding the member account would cause the data volume for the behavior graph to be too high.</p> </li> <li> <p> <code>VOLUME_UNKNOWN</code> - Indicates that Detective is unable to verify the data volume for the member account. This is usually because the member account is not enrolled in Amazon GuardDuty. </p> </li> </ul></p>
     #[serde(rename = "DisabledReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -264,18 +299,6 @@ pub struct MemberDetail {
     #[serde(rename = "InvitedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invited_time: Option<f64>,
-    /// <p>The AWS account identifier of the master account for the behavior graph.</p>
-    #[serde(rename = "MasterId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub master_id: Option<String>,
-    /// <p>The member account data volume as a percentage of the maximum allowed data volume. 0 indicates 0 percent, and 100 indicates 100 percent.</p> <p>Note that this is not the percentage of the behavior graph data volume.</p> <p>For example, the data volume for the behavior graph is 80 GB per day. The maximum data volume is 160 GB per day. If the data volume for the member account is 40 GB per day, then <code>PercentOfGraphUtilization</code> is 25. It represents 25% of the maximum allowed data volume. </p>
-    #[serde(rename = "PercentOfGraphUtilization")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub percent_of_graph_utilization: Option<f64>,
-    /// <p>The date and time when the graph utilization percentage was last updated.</p>
-    #[serde(rename = "PercentOfGraphUtilizationUpdatedTime")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub percent_of_graph_utilization_updated_time: Option<f64>,
     /// <p>The current membership status of the member account. The status can have one of the following values:</p> <ul> <li> <p> <code>INVITED</code> - Indicates that the member was sent an invitation but has not yet responded.</p> </li> <li> <p> <code>VERIFICATION_IN_PROGRESS</code> - Indicates that Detective is verifying that the account identifier and email address provided for the member account match. If they do match, then Detective sends the invitation. If the email address and account identifier don't match, then the member cannot be added to the behavior graph.</p> </li> <li> <p> <code>VERIFICATION_FAILED</code> - Indicates that the account and email address provided for the member account do not match, and Detective did not send an invitation to the account.</p> </li> <li> <p> <code>ENABLED</code> - Indicates that the member account accepted the invitation to contribute to the behavior graph.</p> </li> <li> <p> <code>ACCEPTED_BUT_DISABLED</code> - Indicates that the member account accepted the invitation but is prevented from contributing data to the behavior graph. <code>DisabledReason</code> provides the reason why the member account is not enabled.</p> </li> </ul> <p>Member accounts that declined an invitation or that were removed from the behavior graph are not included.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -284,6 +307,14 @@ pub struct MemberDetail {
     #[serde(rename = "UpdatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub updated_time: Option<f64>,
+    /// <p>The data volume in bytes per day for the member account.</p>
+    #[serde(rename = "VolumeUsageInBytes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_usage_in_bytes: Option<i64>,
+    /// <p>The data and time when the member account data volume was last updated.</p>
+    #[serde(rename = "VolumeUsageUpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_usage_updated_time: Option<f64>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -305,6 +336,21 @@ pub struct StartMonitoringMemberRequest {
     pub graph_arn: String,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TagResourceRequest {
+    /// <p>The ARN of the behavior graph to assign the tags to.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>The tags to assign to the behavior graph. You can add up to 50 tags. For each tag, you provide the tag key and the tag value. Each tag key can contain up to 128 characters. Each tag value can contain up to 256 characters.</p>
+    #[serde(rename = "Tags")]
+    pub tags: ::std::collections::HashMap<String, String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TagResourceResponse {}
+
 /// <p>A member account that was included in a request but for which the request could not be processed.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -318,6 +364,21 @@ pub struct UnprocessedAccount {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reason: Option<String>,
 }
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UntagResourceRequest {
+    /// <p>The ARN of the behavior graph to remove the tags from.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>The tag keys of the tags to remove from the behavior graph. You can remove up to 50 tags at a time.</p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UntagResourceResponse {}
 
 /// Errors returned by AcceptInvitation
 #[derive(Debug, PartialEq)]
@@ -701,6 +762,44 @@ impl fmt::Display for ListMembersError {
     }
 }
 impl Error for ListMembersError {}
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>The request was valid but failed because of a problem with the service.</p>
+    InternalServer(String),
+    /// <p>The request refers to a nonexistent resource.</p>
+    ResourceNotFound(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InternalServer(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListTagsForResourceError::InternalServer(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListTagsForResourceError {}
 /// Errors returned by RejectInvitation
 #[derive(Debug, PartialEq)]
 pub enum RejectInvitationError {
@@ -797,6 +896,78 @@ impl fmt::Display for StartMonitoringMemberError {
     }
 }
 impl Error for StartMonitoringMemberError {}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>The request was valid but failed because of a problem with the service.</p>
+    InternalServer(String),
+    /// <p>The request refers to a nonexistent resource.</p>
+    ResourceNotFound(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(TagResourceError::InternalServer(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(TagResourceError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for TagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            TagResourceError::InternalServer(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for TagResourceError {}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>The request was valid but failed because of a problem with the service.</p>
+    InternalServer(String),
+    /// <p>The request refers to a nonexistent resource.</p>
+    ResourceNotFound(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServerException" => {
+                    return RusotoError::Service(UntagResourceError::InternalServer(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UntagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UntagResourceError::InternalServer(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the Amazon Detective API. Amazon Detective clients implement this trait.
 #[async_trait]
 pub trait Detective {
@@ -806,22 +977,25 @@ pub trait Detective {
         input: AcceptInvitationRequest,
     ) -> Result<(), RusotoError<AcceptInvitationError>>;
 
-    /// <p>Creates a new behavior graph for the calling account, and sets that account as the master account. This operation is called by the account that is enabling Detective.</p> <p>Before you try to enable Detective, make sure that your account has been enrolled in Amazon GuardDuty for at least 48 hours. If you do not meet this requirement, you cannot enable Detective. If you do meet the GuardDuty prerequisite, then when you make the request to enable Detective, it checks whether your data volume is within the Detective quota. If it exceeds the quota, then you cannot enable Detective. </p> <p>The operation also enables Detective for the calling account in the currently selected Region. It returns the ARN of the new behavior graph.</p> <p> <code>CreateGraph</code> triggers a process to create the corresponding data tables for the new behavior graph.</p> <p>An account can only be the master account for one behavior graph within a Region. If the same account calls <code>CreateGraph</code> with the same master account, it always returns the same behavior graph ARN. It does not create a new behavior graph.</p>
-    async fn create_graph(&self) -> Result<CreateGraphResponse, RusotoError<CreateGraphError>>;
+    /// <p>Creates a new behavior graph for the calling account, and sets that account as the administrator account. This operation is called by the account that is enabling Detective.</p> <p>Before you try to enable Detective, make sure that your account has been enrolled in Amazon GuardDuty for at least 48 hours. If you do not meet this requirement, you cannot enable Detective. If you do meet the GuardDuty prerequisite, then when you make the request to enable Detective, it checks whether your data volume is within the Detective quota. If it exceeds the quota, then you cannot enable Detective. </p> <p>The operation also enables Detective for the calling account in the currently selected Region. It returns the ARN of the new behavior graph.</p> <p> <code>CreateGraph</code> triggers a process to create the corresponding data tables for the new behavior graph.</p> <p>An account can only be the administrator account for one behavior graph within a Region. If the same account calls <code>CreateGraph</code> with the same administrator account, it always returns the same behavior graph ARN. It does not create a new behavior graph.</p>
+    async fn create_graph(
+        &self,
+        input: CreateGraphRequest,
+    ) -> Result<CreateGraphResponse, RusotoError<CreateGraphError>>;
 
-    /// <p><p>Sends a request to invite the specified AWS accounts to be member accounts in the behavior graph. This operation can only be called by the master account for a behavior graph. </p> <p> <code>CreateMembers</code> verifies the accounts and then sends invitations to the verified accounts.</p> <p>The request provides the behavior graph ARN and the list of accounts to invite.</p> <p>The response separates the requested accounts into two lists:</p> <ul> <li> <p>The accounts that <code>CreateMembers</code> was able to start the verification for. This list includes member accounts that are being verified, that have passed verification and are being sent an invitation, and that have failed verification.</p> </li> <li> <p>The accounts that <code>CreateMembers</code> was unable to process. This list includes accounts that were already invited to be member accounts in the behavior graph.</p> </li> </ul></p>
+    /// <p><p>Sends a request to invite the specified AWS accounts to be member accounts in the behavior graph. This operation can only be called by the administrator account for a behavior graph. </p> <p> <code>CreateMembers</code> verifies the accounts and then invites the verified accounts. The administrator can optionally specify to not send invitation emails to the member accounts. This would be used when the administrator manages their member accounts centrally.</p> <p>The request provides the behavior graph ARN and the list of accounts to invite.</p> <p>The response separates the requested accounts into two lists:</p> <ul> <li> <p>The accounts that <code>CreateMembers</code> was able to start the verification for. This list includes member accounts that are being verified, that have passed verification and are to be invited, and that have failed verification.</p> </li> <li> <p>The accounts that <code>CreateMembers</code> was unable to process. This list includes accounts that were already invited to be member accounts in the behavior graph.</p> </li> </ul></p>
     async fn create_members(
         &self,
         input: CreateMembersRequest,
     ) -> Result<CreateMembersResponse, RusotoError<CreateMembersError>>;
 
-    /// <p>Disables the specified behavior graph and queues it to be deleted. This operation removes the graph from each member account's list of behavior graphs.</p> <p> <code>DeleteGraph</code> can only be called by the master account for a behavior graph.</p>
+    /// <p>Disables the specified behavior graph and queues it to be deleted. This operation removes the graph from each member account's list of behavior graphs.</p> <p> <code>DeleteGraph</code> can only be called by the administrator account for a behavior graph.</p>
     async fn delete_graph(
         &self,
         input: DeleteGraphRequest,
     ) -> Result<(), RusotoError<DeleteGraphError>>;
 
-    /// <p>Deletes one or more member accounts from the master account behavior graph. This operation can only be called by a Detective master account. That account cannot use <code>DeleteMembers</code> to delete their own account from the behavior graph. To disable a behavior graph, the master account uses the <code>DeleteGraph</code> API method.</p>
+    /// <p>Deletes one or more member accounts from the administrator account's behavior graph. This operation can only be called by a Detective administrator account. That account cannot use <code>DeleteMembers</code> to delete their own account from the behavior graph. To disable a behavior graph, the administrator account uses the <code>DeleteGraph</code> API method.</p>
     async fn delete_members(
         &self,
         input: DeleteMembersRequest,
@@ -839,7 +1013,7 @@ pub trait Detective {
         input: GetMembersRequest,
     ) -> Result<GetMembersResponse, RusotoError<GetMembersError>>;
 
-    /// <p>Returns the list of behavior graphs that the calling account is a master of. This operation can only be called by a master account.</p> <p>Because an account can currently only be the master of one behavior graph within a Region, the results always contain a single graph.</p>
+    /// <p>Returns the list of behavior graphs that the calling account is an administrator account of. This operation can only be called by an administrator account.</p> <p>Because an account can currently only be the administrator of one behavior graph within a Region, the results always contain a single behavior graph.</p>
     async fn list_graphs(
         &self,
         input: ListGraphsRequest,
@@ -857,6 +1031,12 @@ pub trait Detective {
         input: ListMembersRequest,
     ) -> Result<ListMembersResponse, RusotoError<ListMembersError>>;
 
+    /// <p>Returns the tag values that are assigned to a behavior graph.</p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+
     /// <p>Rejects an invitation to contribute the account data to a behavior graph. This operation must be called by a member account that has the <code>INVITED</code> status.</p>
     async fn reject_invitation(
         &self,
@@ -868,6 +1048,18 @@ pub trait Detective {
         &self,
         input: StartMonitoringMemberRequest,
     ) -> Result<(), RusotoError<StartMonitoringMemberError>>;
+
+    /// <p>Applies tag values to a behavior graph.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+
+    /// <p>Removes tags from a behavior graph.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 }
 /// A client for the Amazon Detective API.
 #[derive(Clone)]
@@ -940,15 +1132,20 @@ impl Detective for DetectiveClient {
         }
     }
 
-    /// <p>Creates a new behavior graph for the calling account, and sets that account as the master account. This operation is called by the account that is enabling Detective.</p> <p>Before you try to enable Detective, make sure that your account has been enrolled in Amazon GuardDuty for at least 48 hours. If you do not meet this requirement, you cannot enable Detective. If you do meet the GuardDuty prerequisite, then when you make the request to enable Detective, it checks whether your data volume is within the Detective quota. If it exceeds the quota, then you cannot enable Detective. </p> <p>The operation also enables Detective for the calling account in the currently selected Region. It returns the ARN of the new behavior graph.</p> <p> <code>CreateGraph</code> triggers a process to create the corresponding data tables for the new behavior graph.</p> <p>An account can only be the master account for one behavior graph within a Region. If the same account calls <code>CreateGraph</code> with the same master account, it always returns the same behavior graph ARN. It does not create a new behavior graph.</p>
+    /// <p>Creates a new behavior graph for the calling account, and sets that account as the administrator account. This operation is called by the account that is enabling Detective.</p> <p>Before you try to enable Detective, make sure that your account has been enrolled in Amazon GuardDuty for at least 48 hours. If you do not meet this requirement, you cannot enable Detective. If you do meet the GuardDuty prerequisite, then when you make the request to enable Detective, it checks whether your data volume is within the Detective quota. If it exceeds the quota, then you cannot enable Detective. </p> <p>The operation also enables Detective for the calling account in the currently selected Region. It returns the ARN of the new behavior graph.</p> <p> <code>CreateGraph</code> triggers a process to create the corresponding data tables for the new behavior graph.</p> <p>An account can only be the administrator account for one behavior graph within a Region. If the same account calls <code>CreateGraph</code> with the same administrator account, it always returns the same behavior graph ARN. It does not create a new behavior graph.</p>
     #[allow(unused_mut)]
-    async fn create_graph(&self) -> Result<CreateGraphResponse, RusotoError<CreateGraphError>> {
+    async fn create_graph(
+        &self,
+        input: CreateGraphRequest,
+    ) -> Result<CreateGraphResponse, RusotoError<CreateGraphError>> {
         let request_uri = "/graph";
 
         let mut request = SignedRequest::new("POST", "detective", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("api.detective".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
 
         let mut response = self
             .client
@@ -967,7 +1164,7 @@ impl Detective for DetectiveClient {
         }
     }
 
-    /// <p><p>Sends a request to invite the specified AWS accounts to be member accounts in the behavior graph. This operation can only be called by the master account for a behavior graph. </p> <p> <code>CreateMembers</code> verifies the accounts and then sends invitations to the verified accounts.</p> <p>The request provides the behavior graph ARN and the list of accounts to invite.</p> <p>The response separates the requested accounts into two lists:</p> <ul> <li> <p>The accounts that <code>CreateMembers</code> was able to start the verification for. This list includes member accounts that are being verified, that have passed verification and are being sent an invitation, and that have failed verification.</p> </li> <li> <p>The accounts that <code>CreateMembers</code> was unable to process. This list includes accounts that were already invited to be member accounts in the behavior graph.</p> </li> </ul></p>
+    /// <p><p>Sends a request to invite the specified AWS accounts to be member accounts in the behavior graph. This operation can only be called by the administrator account for a behavior graph. </p> <p> <code>CreateMembers</code> verifies the accounts and then invites the verified accounts. The administrator can optionally specify to not send invitation emails to the member accounts. This would be used when the administrator manages their member accounts centrally.</p> <p>The request provides the behavior graph ARN and the list of accounts to invite.</p> <p>The response separates the requested accounts into two lists:</p> <ul> <li> <p>The accounts that <code>CreateMembers</code> was able to start the verification for. This list includes member accounts that are being verified, that have passed verification and are to be invited, and that have failed verification.</p> </li> <li> <p>The accounts that <code>CreateMembers</code> was unable to process. This list includes accounts that were already invited to be member accounts in the behavior graph.</p> </li> </ul></p>
     #[allow(unused_mut)]
     async fn create_members(
         &self,
@@ -999,7 +1196,7 @@ impl Detective for DetectiveClient {
         }
     }
 
-    /// <p>Disables the specified behavior graph and queues it to be deleted. This operation removes the graph from each member account's list of behavior graphs.</p> <p> <code>DeleteGraph</code> can only be called by the master account for a behavior graph.</p>
+    /// <p>Disables the specified behavior graph and queues it to be deleted. This operation removes the graph from each member account's list of behavior graphs.</p> <p> <code>DeleteGraph</code> can only be called by the administrator account for a behavior graph.</p>
     #[allow(unused_mut)]
     async fn delete_graph(
         &self,
@@ -1030,7 +1227,7 @@ impl Detective for DetectiveClient {
         }
     }
 
-    /// <p>Deletes one or more member accounts from the master account behavior graph. This operation can only be called by a Detective master account. That account cannot use <code>DeleteMembers</code> to delete their own account from the behavior graph. To disable a behavior graph, the master account uses the <code>DeleteGraph</code> API method.</p>
+    /// <p>Deletes one or more member accounts from the administrator account's behavior graph. This operation can only be called by a Detective administrator account. That account cannot use <code>DeleteMembers</code> to delete their own account from the behavior graph. To disable a behavior graph, the administrator account uses the <code>DeleteGraph</code> API method.</p>
     #[allow(unused_mut)]
     async fn delete_members(
         &self,
@@ -1125,7 +1322,7 @@ impl Detective for DetectiveClient {
         }
     }
 
-    /// <p>Returns the list of behavior graphs that the calling account is a master of. This operation can only be called by a master account.</p> <p>Because an account can currently only be the master of one behavior graph within a Region, the results always contain a single graph.</p>
+    /// <p>Returns the list of behavior graphs that the calling account is an administrator account of. This operation can only be called by an administrator account.</p> <p>Because an account can currently only be the administrator of one behavior graph within a Region, the results always contain a single behavior graph.</p>
     #[allow(unused_mut)]
     async fn list_graphs(
         &self,
@@ -1221,6 +1418,36 @@ impl Detective for DetectiveClient {
         }
     }
 
+    /// <p>Returns the tag values that are assigned to a behavior graph.</p>
+    #[allow(unused_mut)]
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("GET", "detective", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("api.detective".to_string());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
+    }
+
     /// <p>Rejects an invitation to contribute the account data to a behavior graph. This operation must be called by a member account that has the <code>INVITED</code> status.</p>
     #[allow(unused_mut)]
     async fn reject_invitation(
@@ -1280,6 +1507,74 @@ impl Detective for DetectiveClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(StartMonitoringMemberError::from_response(response))
+        }
+    }
+
+    /// <p>Applies tag values to a behavior graph.</p>
+    #[allow(unused_mut)]
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("POST", "detective", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("api.detective".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<TagResourceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Removes tags from a behavior graph.</p>
+    #[allow(unused_mut)]
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("DELETE", "detective", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("api.detective".to_string());
+
+        let mut params = Params::new();
+        for item in input.tag_keys.iter() {
+            params.put("tagKeys", item);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 204 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UntagResourceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
         }
     }
 }

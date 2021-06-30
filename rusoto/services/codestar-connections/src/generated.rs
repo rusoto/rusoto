@@ -129,6 +129,9 @@ pub struct CreateHostInput {
     /// <p>The name of the installed provider to be associated with your connection. The host resource represents the infrastructure where your provider type is installed. The valid provider type is GitHub Enterprise Server.</p>
     #[serde(rename = "ProviderType")]
     pub provider_type: String,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The VPC configuration to be provisioned for the host. A VPC must be configured and the infrastructure to be represented by the host must already be connected to the VPC.</p>
     #[serde(rename = "VpcConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -142,6 +145,9 @@ pub struct CreateHostOutput {
     #[serde(rename = "HostArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub host_arn: Option<String>,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]

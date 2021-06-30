@@ -113,13 +113,13 @@ pub struct Activation {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsToResourceRequest {
-    /// <p><p>The resource ID you want to tag.</p> <p>Use the ID of the resource. Here are some examples:</p> <p>ManagedInstance: mi-012345abcde</p> <p>MaintenanceWindow: mw-012345abcde</p> <p>PatchBaseline: pb-012345abcde</p> <p>For the Document and Parameter values, use the name of the resource.</p> <note> <p>The ManagedInstance type for this API action is only for on-premises managed instances. You must specify the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
+    /// <p><p>The resource ID you want to tag.</p> <p>Use the ID of the resource. Here are some examples:</p> <p>ManagedInstance: mi-012345abcde</p> <p>MaintenanceWindow: mw-012345abcde</p> <p>PatchBaseline: pb-012345abcde</p> <p>OpsMetadata object: <code>ResourceID</code> for tagging is created from the Amazon Resource Name (ARN) for the object. Specifically, <code>ResourceID</code> is created from the strings that come after the word <code>opsmetadata</code> in the ARN. For example, an OpsMetadata object with an ARN of <code>arn:aws:ssm:us-east-2:1234567890:opsmetadata/aws/ssm/MyGroup/appmanager</code> has a <code>ResourceID</code> of either <code>aws/ssm/MyGroup/appmanager</code> or <code>/aws/ssm/MyGroup/appmanager</code>.</p> <p>For the Document and Parameter values, use the name of the resource.</p> <note> <p>The ManagedInstance type for this API action is only for on-premises managed instances. You must specify the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
     /// <p><p>Specifies the type of resource you are tagging.</p> <note> <p>The ManagedInstance type for this API action is for on-premises managed instances. You must specify the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
     #[serde(rename = "ResourceType")]
     pub resource_type: String,
-    /// <p><p> One or more tags. The value parameter is required, but if you don&#39;t want the tag to have a value, specify the parameter with no value, and we set the value to an empty string. </p> <important> <p>Do not enter personally identifiable information in this field.</p> </important></p>
+    /// <p><p>One or more tags. The value parameter is required.</p> <important> <p>Do not enter personally identifiable information in this field.</p> </important></p>
     #[serde(rename = "Tags")]
     pub tags: Vec<Tag>,
 }
@@ -127,6 +127,32 @@ pub struct AddTagsToResourceRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct AddTagsToResourceResult {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AssociateOpsItemRelatedItemRequest {
+    /// <p>The type of association that you want to create between an OpsItem and a resource. OpsCenter supports <code>IsParentOf</code> and <code>RelatesTo</code> association types.</p>
+    #[serde(rename = "AssociationType")]
+    pub association_type: String,
+    /// <p>The ID of the OpsItem to which you want to associate a resource as a related item.</p>
+    #[serde(rename = "OpsItemId")]
+    pub ops_item_id: String,
+    /// <p>The type of resource that you want to associate with an OpsItem. OpsCenter supports the following types:</p> <p> <code>AWS::SSMIncidents::IncidentRecord</code>: an Incident Manager incident. Incident Manager is a capability of AWS Systems Manager.</p> <p> <code>AWS::SSM::Document</code>: a Systems Manager (SSM) document.</p>
+    #[serde(rename = "ResourceType")]
+    pub resource_type: String,
+    /// <p>The Amazon Resource Name (ARN) of the AWS resource that you want to associate with the OpsItem.</p>
+    #[serde(rename = "ResourceUri")]
+    pub resource_uri: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AssociateOpsItemRelatedItemResponse {
+    /// <p>The association ID.</p>
+    #[serde(rename = "AssociationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub association_id: Option<String>,
+}
 
 /// <p>Describes an association of a Systems Manager document and an instance.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -164,7 +190,7 @@ pub struct Association {
     #[serde(rename = "Overview")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub overview: Option<AssociationOverview>,
-    /// <p>A cron expression that specifies a schedule when the association runs.</p>
+    /// <p>A cron expression that specifies a schedule when the association runs. The schedule runs in Coordinated Universal Time (UTC).</p>
     #[serde(rename = "ScheduleExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule_expression: Option<String>,
@@ -198,6 +224,10 @@ pub struct AssociationDescription {
     #[serde(rename = "AutomationTargetParameterName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub automation_target_parameter_name: Option<String>,
+    /// <p>The names or Amazon Resource Names (ARNs) of the Systems Manager Change Calendar type documents your associations are gated under. The associations only run when that Change Calendar is open. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-change-calendar">AWS Systems Manager Change Calendar</a>.</p>
+    #[serde(rename = "CalendarNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub calendar_names: Option<Vec<String>>,
     /// <p>The severity level that is assigned to the association.</p>
     #[serde(rename = "ComplianceSeverity")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -447,6 +477,10 @@ pub struct AssociationVersionInfo {
     #[serde(rename = "AssociationVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub association_version: Option<String>,
+    /// <p>The names or Amazon Resource Names (ARNs) of the Systems Manager Change Calendar type documents your associations are gated under. The associations for this version only run when that Change Calendar is open. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-change-calendar">AWS Systems Manager Change Calendar</a>.</p>
+    #[serde(rename = "CalendarNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub calendar_names: Option<Vec<String>>,
     /// <p>The severity level that is assigned to the association.</p>
     #[serde(rename = "ComplianceSeverity")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -685,7 +719,7 @@ pub struct AutomationExecution {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AutomationExecutionFilter {
-    /// <p>One or more keys to limit the results. Valid filter keys include the following: DocumentNamePrefix, ExecutionStatus, ExecutionId, ParentExecutionId, CurrentAction, StartTimeBefore, StartTimeAfter, TargetResourceGroup.</p>
+    /// <p>One or more keys to limit the results.</p>
     #[serde(rename = "Key")]
     pub key: String,
     /// <p>The values used to limit the execution information associated with the filter's key.</p>
@@ -809,6 +843,46 @@ pub struct AutomationExecutionMetadata {
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
+}
+
+/// <p>Defines the basic information about a patch baseline override.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct BaselineOverride {
+    #[serde(rename = "ApprovalRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub approval_rules: Option<PatchRuleGroup>,
+    /// <p>A list of explicitly approved patches for the baseline.</p> <p>For information about accepted formats for lists of approved patches and rejected patches, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-approved-rejected-package-name-formats.html">About package name formats for approved and rejected patch lists</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    #[serde(rename = "ApprovedPatches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub approved_patches: Option<Vec<String>>,
+    /// <p>Defines the compliance level for approved patches. When an approved patch is reported as missing, this value describes the severity of the compliance violation.</p>
+    #[serde(rename = "ApprovedPatchesComplianceLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub approved_patches_compliance_level: Option<String>,
+    /// <p>Indicates whether the list of approved patches includes non-security updates that should be applied to the instances. The default value is 'false'. Applies to Linux instances only.</p>
+    #[serde(rename = "ApprovedPatchesEnableNonSecurity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub approved_patches_enable_non_security: Option<bool>,
+    #[serde(rename = "GlobalFilters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_filters: Option<PatchFilterGroup>,
+    /// <p>The operating system rule used by the patch baseline override.</p>
+    #[serde(rename = "OperatingSystem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operating_system: Option<String>,
+    /// <p>A list of explicitly rejected patches for the baseline.</p> <p>For information about accepted formats for lists of approved patches and rejected patches, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-approved-rejected-package-name-formats.html">About package name formats for approved and rejected patch lists</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    #[serde(rename = "RejectedPatches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rejected_patches: Option<Vec<String>>,
+    /// <p>The action for Patch Manager to take on patches included in the RejectedPackages list. A patch can be allowed only if it is a dependency of another package, or blocked entirely along with packages that include it as a dependency.</p>
+    #[serde(rename = "RejectedPatchesAction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rejected_patches_action: Option<String>,
+    /// <p>Information about the patches to use to update the instances, including target operating systems and source repositories. Applies to Linux instances only.</p>
+    #[serde(rename = "Sources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sources: Option<Vec<PatchSource>>,
 }
 
 /// <p><p/></p>
@@ -985,6 +1059,7 @@ pub struct CommandInvocation {
     #[serde(rename = "CommandId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub command_id: Option<String>,
+    /// <p>Plugins processed by the command.</p>
     #[serde(rename = "CommandPlugins")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub command_plugins: Option<Vec<CommandPlugin>>,
@@ -1239,7 +1314,7 @@ pub struct CreateActivationRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The date by which this activation request should expire. The default value is 24 hours.</p>
+    /// <p>The date by which this activation request should expire, in timestamp format, such as "2021-07-07T00:00:00". You can specify a date up to 30 days in advance. If you don't provide an expiration date, the activation code expires in 24 hours.</p>
     #[serde(rename = "ExpirationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expiration_date: Option<f64>,
@@ -1292,6 +1367,10 @@ pub struct CreateAssociationBatchRequestEntry {
     #[serde(rename = "AutomationTargetParameterName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub automation_target_parameter_name: Option<String>,
+    /// <p>The names or Amazon Resource Names (ARNs) of the Systems Manager Change Calendar type documents your associations are gated under. The associations only run when that Change Calendar is open. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-change-calendar">AWS Systems Manager Change Calendar</a>.</p>
+    #[serde(rename = "CalendarNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub calendar_names: Option<Vec<String>>,
     /// <p>The severity level to assign to the association.</p>
     #[serde(rename = "ComplianceSeverity")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1357,7 +1436,7 @@ pub struct CreateAssociationBatchResult {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateAssociationRequest {
-    /// <p>By default, when you create a new associations, the system runs it immediately after it is created and then according to the schedule you specified. Specify this option if you don't want an association to run immediately after you create it. This parameter is not supported for rate expressions.</p>
+    /// <p>By default, when you create a new association, the system runs it immediately after it is created and then according to the schedule you specified. Specify this option if you don't want an association to run immediately after you create it. This parameter is not supported for rate expressions.</p>
     #[serde(rename = "ApplyOnlyAtCronInterval")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub apply_only_at_cron_interval: Option<bool>,
@@ -1369,6 +1448,10 @@ pub struct CreateAssociationRequest {
     #[serde(rename = "AutomationTargetParameterName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub automation_target_parameter_name: Option<String>,
+    /// <p>The names or Amazon Resource Names (ARNs) of the Systems Manager Change Calendar type documents you want to gate your associations under. The associations only run when that Change Calendar is open. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-change-calendar">AWS Systems Manager Change Calendar</a>.</p>
+    #[serde(rename = "CalendarNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub calendar_names: Option<Vec<String>>,
     /// <p>The severity level to assign to the association.</p>
     #[serde(rename = "ComplianceSeverity")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1437,6 +1520,10 @@ pub struct CreateDocumentRequest {
     /// <p><p>The content for the new SSM document in JSON or YAML format. We recommend storing the contents for your new document in an external JSON or YAML file and referencing the file in a command.</p> <p>For examples, see the following topics in the <i>AWS Systems Manager User Guide</i>.</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/create-ssm-document-api.html">Create an SSM document (AWS API)</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/create-ssm-document-cli.html">Create an SSM document (AWS CLI)</a> </p> </li> <li> <p> <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/create-ssm-document-api.html">Create an SSM document (API)</a> </p> </li> </ul></p>
     #[serde(rename = "Content")]
     pub content: String,
+    /// <p>An optional field where you can specify a friendly name for the Systems Manager document. This value can differ for each version of the document. You can update this value at a later time using the <a>UpdateDocument</a> action.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
     /// <p>Specify the document format for the request. The document format can be JSON, YAML, or TEXT. JSON is the default format.</p>
     #[serde(rename = "DocumentFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1456,7 +1543,7 @@ pub struct CreateDocumentRequest {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>Specify a target type to define the kinds of resources the document can run on. For example, to run a document on EC2 instances, specify the following value: /AWS::EC2::Instance. If you specify a value of '/' the document can run on all types of resources. If you don't specify a value, the document can't run on any resources. For a list of valid resource types, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">AWS resource and property types reference</a> in the <i>AWS CloudFormation User Guide</i>. </p>
+    /// <p>Specify a target type to define the kinds of resources the document can run on. For example, to run a document on EC2 instances, specify the following value: /AWS::EC2::Instance. If you specify a value of '/' the document can run on all types of resources. If you don't specify a value, the document can't run on any resources. For a list of valid resource types, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">AWS resource and property types reference</a> in the <i>AWS CloudFormation User Guide</i>. </p>
     #[serde(rename = "TargetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_type: Option<String>,
@@ -1613,6 +1700,10 @@ pub struct CreateOpsMetadataRequest {
     /// <p>A resource ID for a new Application Manager application.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
+    /// <p><p>Optional metadata that you assign to a resource. You can specify a maximum of five tags for an OpsMetadata object. Tags enable you to categorize a resource in different ways, such as by purpose, owner, or environment. For example, you might want to tag an OpsMetadata object to identify an environment or target AWS Region. In this case, you could specify the following key-value pairs:</p> <ul> <li> <p> <code>Key=Environment,Value=Production</code> </p> </li> <li> <p> <code>Key=Region,Value=us-east-2</code> </p> </li> </ul></p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1635,7 +1726,7 @@ pub struct CreatePatchBaselineRequest {
     #[serde(rename = "ApprovedPatches")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub approved_patches: Option<Vec<String>>,
-    /// <p>Defines the compliance level for approved patches. This means that if an approved patch is reported as missing, this is the severity of the compliance violation. The default value is UNSPECIFIED.</p>
+    /// <p>Defines the compliance level for approved patches. When an approved patch is reported as missing, this value describes the severity of the compliance violation. The default value is UNSPECIFIED.</p>
     #[serde(rename = "ApprovedPatchesComplianceLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub approved_patches_compliance_level: Option<String>,
@@ -2181,7 +2272,7 @@ pub struct DescribeAutomationStepExecutionsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>A boolean that indicates whether to list step executions in reverse order by start time. The default value is false.</p>
+    /// <p>Indicates whether to list step executions in reverse order by start time. The default value is 'false'.</p>
     #[serde(rename = "ReverseOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reverse_order: Option<bool>,
@@ -2233,9 +2324,17 @@ pub struct DescribeAvailablePatchesResult {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDocumentPermissionRequest {
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
     /// <p>The name of the document for which you are the owner.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
     /// <p>The permission type for the document. The permission type can be <i>Share</i>.</p>
     #[serde(rename = "PermissionType")]
     pub permission_type: String,
@@ -2252,6 +2351,10 @@ pub struct DescribeDocumentPermissionResponse {
     #[serde(rename = "AccountSharingInfoList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_sharing_info_list: Option<Vec<AccountSharingInfo>>,
+    /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2907,6 +3010,10 @@ pub struct DescribePatchGroupStateResult {
     #[serde(rename = "Instances")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instances: Option<i64>,
+    /// <p>The number of instances where patches that are specified as "Critical" for compliance reporting in the patch baseline are not installed. These patches might be missing, have failed installation, were rejected, or were installed but awaiting a required instance reboot. The status of these instances is <code>NON_COMPLIANT</code>.</p>
+    #[serde(rename = "InstancesWithCriticalNonCompliantPatches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instances_with_critical_non_compliant_patches: Option<i64>,
     /// <p>The number of instances with patches from the patch baseline that failed to install.</p>
     #[serde(rename = "InstancesWithFailedPatches")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2935,6 +3042,14 @@ pub struct DescribePatchGroupStateResult {
     #[serde(rename = "InstancesWithNotApplicablePatches")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instances_with_not_applicable_patches: Option<i64>,
+    /// <p>The number of instances with patches installed that are specified as other than "Critical" or "Security" but are not compliant with the patch baseline. The status of these instances is NON_COMPLIANT.</p>
+    #[serde(rename = "InstancesWithOtherNonCompliantPatches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instances_with_other_non_compliant_patches: Option<i64>,
+    /// <p>The number of instances where patches that are specified as "Security" in a patch advisory are not installed. These patches might be missing, have failed installation, were rejected, or were installed but awaiting a required instance reboot. The status of these instances is <code>NON_COMPLIANT</code>.</p>
+    #[serde(rename = "InstancesWithSecurityNonCompliantPatches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instances_with_security_non_compliant_patches: Option<i64>,
     /// <p>The number of instances with <code>NotApplicable</code> patches beyond the supported limit, which are not reported by name to Systems Manager Inventory.</p>
     #[serde(rename = "InstancesWithUnreportedNotApplicablePatches")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3040,6 +3155,21 @@ pub struct DescribeSessionsResponse {
     pub sessions: Option<Vec<Session>>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DisassociateOpsItemRelatedItemRequest {
+    /// <p>The ID of the association for which you want to delete an association between the OpsItem and a related resource.</p>
+    #[serde(rename = "AssociationId")]
+    pub association_id: String,
+    /// <p>The ID of the OpsItem for which you want to delete an association between the OpsItem and a related resource.</p>
+    #[serde(rename = "OpsItemId")]
+    pub ops_item_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DisassociateOpsItemRelatedItemResponse {}
+
 /// <p>A default version of a document.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -3086,6 +3216,10 @@ pub struct DocumentDescription {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p>The friendly name of the Systems Manager document. This value can differ for each version of the document. If you want to update this value, see <a>UpdateDocument</a>.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
     /// <p>The document format, either JSON or YAML.</p>
     #[serde(rename = "DocumentFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3162,7 +3296,7 @@ pub struct DocumentDescription {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>The target type which defines the kinds of resources the document can run on. For example, /AWS::EC2::Instance. For a list of valid resource types, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">AWS resource and property types reference</a> in the <i>AWS CloudFormation User Guide</i>. </p>
+    /// <p>The target type which defines the kinds of resources the document can run on. For example, /AWS::EC2::Instance. For a list of valid resource types, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">AWS resource and property types reference</a> in the <i>AWS CloudFormation User Guide</i>. </p>
     #[serde(rename = "TargetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_type: Option<String>,
@@ -3192,6 +3326,14 @@ pub struct DocumentIdentifier {
     #[serde(rename = "Author")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub author: Option<String>,
+    /// <p>The date the Systems Manager document was created.</p>
+    #[serde(rename = "CreatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>An optional field where you can specify a friendly name for the Systems Manager document. This value can differ for each version of the document. If you want to update this value, see <a>UpdateDocument</a>.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
     /// <p>The document format, either JSON or YAML.</p>
     #[serde(rename = "DocumentFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3232,7 +3374,7 @@ pub struct DocumentIdentifier {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>The target type which defines the kinds of resources the document can run on. For example, /AWS::EC2::Instance. For a list of valid resource types, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">AWS resource and property types reference</a> in the <i>AWS CloudFormation User Guide</i>. </p>
+    /// <p>The target type which defines the kinds of resources the document can run on. For example, /AWS::EC2::Instance. For a list of valid resource types, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">AWS resource and property types reference</a> in the <i>AWS CloudFormation User Guide</i>. </p>
     #[serde(rename = "TargetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_type: Option<String>,
@@ -3242,7 +3384,7 @@ pub struct DocumentIdentifier {
     pub version_name: Option<String>,
 }
 
-/// <p>One or more filters. Use a filter to return a more specific list of documents.</p> <p>For keys, you can specify one or more tags that have been applied to a document. </p> <p>You can also use AWS-provided keys, some of which have specific allowed values. These keys and their associated values are as follows:</p> <dl> <dt>DocumentType</dt> <dd> <ul> <li> <p>ApplicationConfiguration</p> </li> <li> <p>ApplicationConfigurationSchema</p> </li> <li> <p>Automation</p> </li> <li> <p>ChangeCalendar</p> </li> <li> <p>Command</p> </li> <li> <p>DeploymentStrategy</p> </li> <li> <p>Package</p> </li> <li> <p>Policy</p> </li> <li> <p>Session</p> </li> </ul> </dd> <dt>Owner</dt> <dd> <p>Note that only one <code>Owner</code> can be specified in a request. For example: <code>Key=Owner,Values=Self</code>.</p> <ul> <li> <p>Amazon</p> </li> <li> <p>Private</p> </li> <li> <p>Public</p> </li> <li> <p>Self</p> </li> <li> <p>ThirdParty</p> </li> </ul> </dd> <dt>PlatformTypes</dt> <dd> <ul> <li> <p>Linux</p> </li> <li> <p>Windows</p> </li> </ul> </dd> </dl> <p> <code>Name</code> is another AWS-provided key. If you use <code>Name</code> as a key, you can use a name prefix to return a list of documents. For example, in the AWS CLI, to return a list of all documents that begin with <code>Te</code>, run the following command:</p> <p> <code>aws ssm list-documents --filters Key=Name,Values=Te</code> </p> <p>You can also use the <code>TargetType</code> AWS-provided key. For a list of valid resource type values that can be used with this key, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">AWS resource and property types reference</a> in the <i>AWS CloudFormation User Guide</i>.</p> <p>If you specify more than two keys, only documents that are identified by all the tags are returned in the results. If you specify more than two values for a key, documents that are identified by any of the values are returned in the results.</p> <p>To specify a custom key and value pair, use the format <code>Key=tag:tagName,Values=valueName</code>.</p> <p>For example, if you created a key called region and are using the AWS CLI to call the <code>list-documents</code> command: </p> <p> <code>aws ssm list-documents --filters Key=tag:region,Values=east,west Key=Owner,Values=Self</code> </p>
+/// <p>One or more filters. Use a filter to return a more specific list of documents.</p> <p>For keys, you can specify one or more tags that have been applied to a document. </p> <p>You can also use AWS-provided keys, some of which have specific allowed values. These keys and their associated values are as follows:</p> <dl> <dt>DocumentType</dt> <dd> <ul> <li> <p>ApplicationConfiguration</p> </li> <li> <p>ApplicationConfigurationSchema</p> </li> <li> <p>Automation</p> </li> <li> <p>ChangeCalendar</p> </li> <li> <p>Command</p> </li> <li> <p>DeploymentStrategy</p> </li> <li> <p>Package</p> </li> <li> <p>Policy</p> </li> <li> <p>Session</p> </li> </ul> </dd> <dt>Owner</dt> <dd> <p>Note that only one <code>Owner</code> can be specified in a request. For example: <code>Key=Owner,Values=Self</code>.</p> <ul> <li> <p>Amazon</p> </li> <li> <p>Private</p> </li> <li> <p>Public</p> </li> <li> <p>Self</p> </li> <li> <p>ThirdParty</p> </li> </ul> </dd> <dt>PlatformTypes</dt> <dd> <ul> <li> <p>Linux</p> </li> <li> <p>Windows</p> </li> </ul> </dd> </dl> <p> <code>Name</code> is another AWS-provided key. If you use <code>Name</code> as a key, you can use a name prefix to return a list of documents. For example, in the AWS CLI, to return a list of all documents that begin with <code>Te</code>, run the following command:</p> <p> <code>aws ssm list-documents --filters Key=Name,Values=Te</code> </p> <p>You can also use the <code>TargetType</code> AWS-provided key. For a list of valid resource type values that can be used with this key, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">AWS resource and property types reference</a> in the <i>AWS CloudFormation User Guide</i>.</p> <p>If you specify more than two keys, only documents that are identified by all the tags are returned in the results. If you specify more than two values for a key, documents that are identified by any of the values are returned in the results.</p> <p>To specify a custom key and value pair, use the format <code>Key=tag:tagName,Values=valueName</code>.</p> <p>For example, if you created a key called region and are using the AWS CLI to call the <code>list-documents</code> command: </p> <p> <code>aws ssm list-documents --filters Key=tag:region,Values=east,west Key=Owner,Values=Self</code> </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DocumentKeyValuesFilter {
@@ -3360,6 +3502,10 @@ pub struct DocumentVersionInfo {
     #[serde(rename = "CreatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_date: Option<f64>,
+    /// <p>The friendly name of the Systems Manager document. This value can differ for each version of the document. If you want to update this value, see <a>UpdateDocument</a>.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
     /// <p>The document format, either JSON or YAML.</p>
     #[serde(rename = "DocumentFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3496,10 +3642,10 @@ pub struct GetCommandInvocationRequest {
     /// <p>(Required) The parent command ID of the invocation plugin.</p>
     #[serde(rename = "CommandId")]
     pub command_id: String,
-    /// <p>(Required) The ID of the managed instance targeted by the command. A managed instance can be an EC2 instance or an instance in your hybrid environment that is configured for Systems Manager.</p>
+    /// <p>(Required) The ID of the managed instance targeted by the command. A managed instance can be an Amazon Elastic Compute Cloud (Amazon EC2) instance or an instance in your hybrid environment that is configured for AWS Systems Manager.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>(Optional) The name of the plugin for which you want detailed results. If the document contains only one plugin, the name can be omitted and the details will be returned.</p> <p>Plugin names are also referred to as step names in Systems Manager documents.</p>
+    /// <p>The name of the plugin for which you want detailed results. If the document contains only one plugin, you can omit the name and details for that plugin. If the document contains more than one plugin, you must specify the name of the plugin for which you want to view details.</p> <p>Plugin names are also referred to as <i>step names</i> in Systems Manager documents. For example, <code>aws:RunShellScript</code> is a plugin.</p> <p>To find the <code>PluginName</code>, check the document content and find the name of the plugin. Alternatively, use <a>ListCommandInvocations</a> with the <code>CommandId</code> and <code>Details</code> parameters. The <code>PluginName</code> is the <code>Name</code> attribute of the <code>CommandPlugin</code> object in the <code>CommandPlugins</code> list.</p>
     #[serde(rename = "PluginName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub plugin_name: Option<String>,
@@ -3520,7 +3666,7 @@ pub struct GetCommandInvocationResult {
     #[serde(rename = "Comment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub comment: Option<String>,
-    /// <p>The name of the document that was run. For example, AWS-RunShellScript.</p>
+    /// <p>The name of the document that was run. For example, <code>AWS-RunShellScript</code>.</p>
     #[serde(rename = "DocumentName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_name: Option<String>,
@@ -3528,11 +3674,11 @@ pub struct GetCommandInvocationResult {
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    /// <p>Duration since ExecutionStartDateTime.</p>
+    /// <p>Duration since <code>ExecutionStartDateTime</code>.</p>
     #[serde(rename = "ExecutionElapsedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_elapsed_time: Option<String>,
-    /// <p>The date and time the plugin was finished running. Date and time are written in ISO 8601 format. For example, June 7, 2017 is represented as 2017-06-7. The following sample AWS CLI command uses the <code>InvokedAfter</code> filter.</p> <p> <code>aws ssm list-commands --filters key=InvokedAfter,value=2017-06-07T00:00:00Z</code> </p> <p>If the plugin has not started to run, the string is empty.</p>
+    /// <p>The date and time the plugin finished running. Date and time are written in ISO 8601 format. For example, June 7, 2017 is represented as 2017-06-7. The following sample AWS CLI command uses the <code>InvokedAfter</code> filter.</p> <p> <code>aws ssm list-commands --filters key=InvokedAfter,value=2017-06-07T00:00:00Z</code> </p> <p>If the plugin has not started to run, the string is empty.</p>
     #[serde(rename = "ExecutionEndDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_end_date_time: Option<String>,
@@ -3544,35 +3690,35 @@ pub struct GetCommandInvocationResult {
     #[serde(rename = "InstanceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
-    /// <p>The name of the plugin for which you want detailed results. For example, aws:RunShellScript is a plugin.</p>
+    /// <p>The name of the plugin, or <i>step name</i>, for which details are reported. For example, <code>aws:RunShellScript</code> is a plugin.</p>
     #[serde(rename = "PluginName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub plugin_name: Option<String>,
-    /// <p>The error level response code for the plugin script. If the response code is -1, then the command has not started running on the instance, or it was not received by the instance.</p>
+    /// <p>The error level response code for the plugin script. If the response code is <code>-1</code>, then the command has not started running on the instance, or it was not received by the instance.</p>
     #[serde(rename = "ResponseCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_code: Option<i64>,
-    /// <p>The first 8,000 characters written by the plugin to stderr. If the command has not finished running, then this string is empty.</p>
+    /// <p>The first 8,000 characters written by the plugin to <code>stderr</code>. If the command has not finished running, then this string is empty.</p>
     #[serde(rename = "StandardErrorContent")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub standard_error_content: Option<String>,
-    /// <p>The URL for the complete text written by the plugin to stderr. If the command has not finished running, then this string is empty.</p>
+    /// <p>The URL for the complete text written by the plugin to <code>stderr</code>. If the command has not finished running, then this string is empty.</p>
     #[serde(rename = "StandardErrorUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub standard_error_url: Option<String>,
-    /// <p>The first 24,000 characters written by the plugin to stdout. If the command has not finished running, if ExecutionStatus is neither Succeeded nor Failed, then this string is empty.</p>
+    /// <p>The first 24,000 characters written by the plugin to <code>stdout</code>. If the command has not finished running, if <code>ExecutionStatus</code> is neither Succeeded nor Failed, then this string is empty.</p>
     #[serde(rename = "StandardOutputContent")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub standard_output_content: Option<String>,
-    /// <p>The URL for the complete text written by the plugin to stdout in Amazon S3. If an S3 bucket was not specified, then this string is empty.</p>
+    /// <p>The URL for the complete text written by the plugin to <code>stdout</code> in Amazon Simple Storage Service (Amazon S3). If an S3 bucket was not specified, then this string is empty.</p>
     #[serde(rename = "StandardOutputUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub standard_output_url: Option<String>,
-    /// <p>The status of this invocation plugin. This status can be different than StatusDetails.</p>
+    /// <p>The status of this invocation plugin. This status can be different than <code>StatusDetails</code>.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p><p>A detailed status of the command execution for an invocation. StatusDetails includes more information than Status because it includes states resulting from error and concurrency control parameters. StatusDetails can show different results than Status. For more information about these statuses, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-commands.html">Understanding command statuses</a> in the <i>AWS Systems Manager User Guide</i>. StatusDetails can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Delayed: The system attempted to send the command to the target, but the target was not available. The instance might not be available because of network issues, because the instance was stopped, or for similar reasons. The system will try to send the command again.</p> </li> <li> <p>Success: The command or plugin ran successfully. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command&#39;s MaxErrors limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: The command started to run on the instance, but the execution was not complete before the timeout expired. Execution timeouts count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command wasn&#39;t run successfully on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the MaxErrors limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can&#39;t be delivered to the instance. The instance might not exist or might not be responding. Undeliverable invocations don&#39;t count against the parent command&#39;s MaxErrors limit and don&#39;t contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its MaxErrors limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul></p>
+    /// <p><p>A detailed status of the command execution for an invocation. <code>StatusDetails</code> includes more information than <code>Status</code> because it includes states resulting from error and concurrency control parameters. <code>StatusDetails</code> can show different results than <code>Status</code>. For more information about these statuses, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/monitor-commands.html">Understanding command statuses</a> in the <i>AWS Systems Manager User Guide</i>. <code>StatusDetails</code> can be one of the following values:</p> <ul> <li> <p>Pending: The command has not been sent to the instance.</p> </li> <li> <p>In Progress: The command has been sent to the instance but has not reached a terminal state.</p> </li> <li> <p>Delayed: The system attempted to send the command to the target, but the target was not available. The instance might not be available because of network issues, because the instance was stopped, or for similar reasons. The system will try to send the command again.</p> </li> <li> <p>Success: The command or plugin ran successfully. This is a terminal state.</p> </li> <li> <p>Delivery Timed Out: The command was not delivered to the instance before the delivery timeout expired. Delivery timeouts do not count against the parent command&#39;s <code>MaxErrors</code> limit, but they do contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Execution Timed Out: The command started to run on the instance, but the execution was not complete before the timeout expired. Execution timeouts count against the <code>MaxErrors</code> limit of the parent command. This is a terminal state.</p> </li> <li> <p>Failed: The command wasn&#39;t run successfully on the instance. For a plugin, this indicates that the result code was not zero. For a command invocation, this indicates that the result code for one or more plugins was not zero. Invocation failures count against the <code>MaxErrors</code> limit of the parent command. This is a terminal state.</p> </li> <li> <p>Canceled: The command was terminated before it was completed. This is a terminal state.</p> </li> <li> <p>Undeliverable: The command can&#39;t be delivered to the instance. The instance might not exist or might not be responding. Undeliverable invocations don&#39;t count against the parent command&#39;s <code>MaxErrors</code> limit and don&#39;t contribute to whether the parent command status is Success or Incomplete. This is a terminal state.</p> </li> <li> <p>Terminated: The parent command exceeded its <code>MaxErrors</code> limit and subsequent command invocations were canceled by the system. This is a terminal state.</p> </li> </ul></p>
     #[serde(rename = "StatusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_details: Option<String>,
@@ -3624,6 +3770,10 @@ pub struct GetDefaultPatchBaselineResult {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetDeployablePatchSnapshotForInstanceRequest {
+    /// <p>Defines the basic information about a patch baseline override.</p>
+    #[serde(rename = "BaselineOverride")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub baseline_override: Option<BaselineOverride>,
     /// <p>The ID of the instance for which the appropriate patch snapshot should be retrieved.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
@@ -3684,6 +3834,14 @@ pub struct GetDocumentResult {
     #[serde(rename = "Content")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
+    /// <p>The date the Systems Manager document was created.</p>
+    #[serde(rename = "CreatedDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date: Option<f64>,
+    /// <p>The friendly name of the Systems Manager document. This value can differ for each version of the document. If you want to update this value, see <a>UpdateDocument</a>.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
     /// <p>The document format, either JSON or YAML.</p>
     #[serde(rename = "DocumentFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4279,7 +4437,7 @@ pub struct GetParametersByPathRequest {
     #[serde(rename = "ParameterFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_filters: Option<Vec<ParameterStringFilter>>,
-    /// <p>The hierarchy for the parameter. Hierarchies start with a forward slash (/) and end with the parameter name. A parameter name hierarchy can have a maximum of 15 levels. Here is an example of a hierarchy: <code>/Finance/Prod/IAD/WinServ2016/license33</code> </p>
+    /// <p>The hierarchy for the parameter. Hierarchies start with a forward slash (/). The hierachy is the parameter name except the last part of the parameter. For the API call to succeeed, the last part of the parameter name cannot be in the path. A parameter name hierarchy can have a maximum of 15 levels. Here is an example of a hierarchy: <code>/Finance/Prod/IAD/WinServ2016/license33 </code> </p>
     #[serde(rename = "Path")]
     pub path: String,
     /// <p><p>Retrieve all parameters within a hierarchy.</p> <important> <p>If a user has access to a path, then the user can access all levels of that path. For example, if a user has permission to access path <code>/a</code>, then the user can also access <code>/a/b</code>. Even if a user has explicitly been denied access in IAM for parameter <code>/a/b</code>, they can still call the GetParametersByPath API action recursively for <code>/a</code> and view <code>/a/b</code>.</p> </important></p>
@@ -4436,7 +4594,7 @@ pub struct GetPatchBaselineResult {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetServiceSettingRequest {
-    /// <p>The ID of the service setting to get. The setting ID can be <code>/ssm/parameter-store/default-parameter-tier</code>, <code>/ssm/parameter-store/high-throughput-enabled</code>, or <code>/ssm/managed-instance/activation-tier</code>.</p>
+    /// <p><p>The ID of the service setting to get. The setting ID can be one of the following.</p> <ul> <li> <p> <code>/ssm/automation/customer-script-log-destination</code> </p> </li> <li> <p> <code>/ssm/automation/customer-script-log-group-name</code> </p> </li> <li> <p> <code>/ssm/documents/console/public-sharing-permission</code> </p> </li> <li> <p> <code>/ssm/parameter-store/default-parameter-tier</code> </p> </li> <li> <p> <code>/ssm/parameter-store/high-throughput-enabled</code> </p> </li> <li> <p> <code>/ssm/managed-instance/activation-tier</code> </p> </li> </ul></p>
     #[serde(rename = "SettingId")]
     pub setting_id: String,
 }
@@ -4488,7 +4646,7 @@ pub struct InstanceAssociation {
     pub instance_id: Option<String>,
 }
 
-/// <p>An S3 bucket where you want to store the results of this request.</p>
+/// <p>An S3 bucket where you want to store the results of this request.</p> <p>For the minimal permissions required to enable Amazon S3 output for an association, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-state-assoc.html">Creating associations</a> in the <i>Systems Manager User Guide</i>. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InstanceAssociationOutputLocation {
     /// <p>An S3 bucket where you want to store the results of this request.</p>
@@ -4589,7 +4747,7 @@ pub struct InstanceInformation {
     #[serde(rename = "IPAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address: Option<String>,
-    /// <p>The Amazon Identity and Access Management (IAM) role assigned to the on-premises Systems Manager managed instance. This call does not return the IAM role for EC2 instances. To retrieve the IAM role for an EC2 instance, use the Amazon EC2 <code>DescribeInstances</code> action. For information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html">DescribeInstances</a> in the <i>Amazon EC2 API Reference</i> or <a href="http://docs.aws.amazon.com/cli/latest/reference/ec2/describe-instances.html">describe-instances</a> in the <i>AWS CLI Command Reference</i>.</p>
+    /// <p>The Amazon Identity and Access Management (IAM) role assigned to the on-premises Systems Manager managed instance. This call does not return the IAM role for EC2 instances. To retrieve the IAM role for an EC2 instance, use the Amazon EC2 <code>DescribeInstances</code> action. For information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html">DescribeInstances</a> in the <i>Amazon EC2 API Reference</i> or <a href="https://docs.aws.amazon.com/cli/latest/ec2/describe-instances.html">describe-instances</a> in the <i>AWS CLI Command Reference</i>.</p>
     #[serde(rename = "IamRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iam_role: Option<String>,
@@ -4613,7 +4771,7 @@ pub struct InstanceInformation {
     #[serde(rename = "LastSuccessfulAssociationExecutionDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_successful_association_execution_date: Option<f64>,
-    /// <p>The name assigned to an on-premises server or virtual machine (VM) when it is activated as a Systems Manager managed instance. The name is specified as the <code>DefaultInstanceName</code> property using the <a>CreateActivation</a> command. It is applied to the managed instance by specifying the Activation Code and Activation ID when you install SSM Agent on the instance, as explained in <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-install-managed-linux.html">Install SSM Agent for a hybrid environment (Linux)</a> and <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-install-managed-win.html">Install SSM Agent for a hybrid environment (Windows)</a>. To retrieve the Name tag of an EC2 instance, use the Amazon EC2 <code>DescribeInstances</code> action. For information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html">DescribeInstances</a> in the <i>Amazon EC2 API Reference</i> or <a href="http://docs.aws.amazon.com/cli/latest/reference/ec2/describe-instances.html">describe-instances</a> in the <i>AWS CLI Command Reference</i>.</p>
+    /// <p>The name assigned to an on-premises server or virtual machine (VM) when it is activated as a Systems Manager managed instance. The name is specified as the <code>DefaultInstanceName</code> property using the <a>CreateActivation</a> command. It is applied to the managed instance by specifying the Activation Code and Activation ID when you install SSM Agent on the instance, as explained in <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-install-managed-linux.html">Install SSM Agent for a hybrid environment (Linux)</a> and <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-install-managed-win.html">Install SSM Agent for a hybrid environment (Windows)</a>. To retrieve the Name tag of an EC2 instance, use the Amazon EC2 <code>DescribeInstances</code> action. For information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeInstances.html">DescribeInstances</a> in the <i>Amazon EC2 API Reference</i> or <a href="https://docs.aws.amazon.com/cli/latest/ec2/describe-instances.html">describe-instances</a> in the <i>AWS CLI Command Reference</i>.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -4659,7 +4817,7 @@ pub struct InstanceInformationFilter {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct InstanceInformationStringFilter {
-    /// <p>The filter key name to describe your instances. For example:</p> <p>"InstanceIds"|"AgentVersion"|"PingStatus"|"PlatformTypes"|"ActivationIds"|"IamRole"|"ResourceType"|"AssociationStatus"|"Tag Key"</p>
+    /// <p><p>The filter key name to describe your instances. For example:</p> <p>&quot;InstanceIds&quot;|&quot;AgentVersion&quot;|&quot;PingStatus&quot;|&quot;PlatformTypes&quot;|&quot;ActivationIds&quot;|&quot;IamRole&quot;|&quot;ResourceType&quot;|&quot;AssociationStatus&quot;|&quot;Tag Key&quot;</p> <important> <p> <code>Tag key</code> is not a valid filter. You must specify either <code>tag-key</code> or <code>tag:keyname</code> and a string. Here are some valid examples: tag-key, tag:123, tag:al!, tag:Windows. Here are some <i>invalid</i> examples: tag-keys, Tag Key, tag:, tagKey, abc:keyname.</p> </important></p>
     #[serde(rename = "Key")]
     pub key: String,
     /// <p>The filter values.</p>
@@ -4674,6 +4832,10 @@ pub struct InstancePatchState {
     /// <p>The ID of the patch baseline used to patch the instance.</p>
     #[serde(rename = "BaselineId")]
     pub baseline_id: String,
+    /// <p>The number of instances where patches that are specified as "Critical" for compliance reporting in the patch baseline are not installed. These patches might be missing, have failed installation, were rejected, or were installed but awaiting a required instance reboot. The status of these instances is <code>NON_COMPLIANT</code>.</p>
+    #[serde(rename = "CriticalNonCompliantCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub critical_non_compliant_count: Option<i64>,
     /// <p>The number of patches from the patch baseline that were attempted to be installed during the last patching operation, but failed to install.</p>
     #[serde(rename = "FailedCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4722,6 +4884,10 @@ pub struct InstancePatchState {
     /// <p>The time the most recent patching operation was started on the instance.</p>
     #[serde(rename = "OperationStartTime")]
     pub operation_start_time: f64,
+    /// <p>The number of instances with patches installed that are specified as other than "Critical" or "Security" but are not compliant with the patch baseline. The status of these instances is NON_COMPLIANT.</p>
+    #[serde(rename = "OtherNonCompliantCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub other_non_compliant_count: Option<i64>,
     /// <p>Placeholder information. This field will always be empty in the current release of the service.</p>
     #[serde(rename = "OwnerInformation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4733,6 +4899,10 @@ pub struct InstancePatchState {
     #[serde(rename = "RebootOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reboot_option: Option<String>,
+    /// <p>The number of instances where patches that are specified as "Security" in a patch advisory are not installed. These patches might be missing, have failed installation, were rejected, or were installed but awaiting a required instance reboot. The status of these instances is <code>NON_COMPLIANT</code>.</p>
+    #[serde(rename = "SecurityNonCompliantCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_non_compliant_count: Option<i64>,
     /// <p>The ID of the patch baseline snapshot used during the patching operation when this compliance data was collected.</p>
     #[serde(rename = "SnapshotId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5064,7 +5234,7 @@ pub struct ListCommandInvocationsRequest {
     #[serde(rename = "CommandId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub command_id: Option<String>,
-    /// <p>(Optional) If set this returns the response of the command executions and any command output. By default this is set to False. </p>
+    /// <p>(Optional) If set this returns the response of the command executions and any command output. The default value is 'false'. </p>
     #[serde(rename = "Details")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub details: Option<bool>,
@@ -5289,7 +5459,7 @@ pub struct ListDocumentsRequest {
     #[serde(rename = "DocumentFilterList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_filter_list: Option<Vec<DocumentFilter>>,
-    /// <p>One or more DocumentKeyValuesFilter objects. Use a filter to return a more specific list of results. For keys, you can specify one or more key-value pair tags that have been applied to a document. Other valid keys include <code>Owner</code>, <code>Name</code>, <code>PlatformTypes</code>, <code>DocumentType</code>, and <code>TargetType</code>. For example, to return documents you own use <code>Key=Owner,Values=Self</code>. To specify a custom key-value pair, use the format <code>Key=tag:tagName,Values=valueName</code>.</p>
+    /// <p><p>One or more <code>DocumentKeyValuesFilter</code> objects. Use a filter to return a more specific list of results. For keys, you can specify one or more key-value pair tags that have been applied to a document. Other valid keys include <code>Owner</code>, <code>Name</code>, <code>PlatformTypes</code>, <code>DocumentType</code>, and <code>TargetType</code>. For example, to return documents you own use <code>Key=Owner,Values=Self</code>. To specify a custom key-value pair, use the format <code>Key=tag:tagName,Values=valueName</code>.</p> <note> <p>This API action only supports filtering documents by using a single tag key and one or more tag values. For example: <code>Key=tag:tagName,Values=valueName1,valueName2</code> </p> </note></p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<DocumentKeyValuesFilter>>,
@@ -5396,6 +5566,40 @@ pub struct ListOpsItemEventsResponse {
     #[serde(rename = "Summaries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub summaries: Option<Vec<OpsItemEventSummary>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListOpsItemRelatedItemsRequest {
+    /// <p>One or more OpsItem filters. Use a filter to return a more specific list of results. </p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<OpsItemRelatedItemsFilter>>,
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The ID of the OpsItem for which you want to list all related-item resources.</p>
+    #[serde(rename = "OpsItemId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ops_item_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListOpsItemRelatedItemsResponse {
+    /// <p>The token for the next set of items to return. Use this token to get the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of related-item resources for the specified OpsItem.</p>
+    #[serde(rename = "Summaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub summaries: Option<Vec<OpsItemRelatedItemSummary>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -6205,7 +6409,7 @@ pub struct OpsItemEventFilter {
     pub values: Vec<String>,
 }
 
-/// <p>Summary information about an OpsItem event.</p>
+/// <p>Summary information about an OpsItem event or that associated an OpsItem with a related item.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OpsItemEventSummary {
@@ -6271,6 +6475,61 @@ pub struct OpsItemNotification {
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+}
+
+/// <p>Summary information about related-item resources for an OpsItem.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct OpsItemRelatedItemSummary {
+    /// <p>The association ID.</p>
+    #[serde(rename = "AssociationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub association_id: Option<String>,
+    /// <p>The association type.</p>
+    #[serde(rename = "AssociationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub association_type: Option<String>,
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<OpsItemIdentity>,
+    /// <p>The time the related-item association was created.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<f64>,
+    #[serde(rename = "LastModifiedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_by: Option<OpsItemIdentity>,
+    /// <p>The time the related-item association was last updated.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The OpsItem ID.</p>
+    #[serde(rename = "OpsItemId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ops_item_id: Option<String>,
+    /// <p>The resource type.</p>
+    #[serde(rename = "ResourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the related-item resource.</p>
+    #[serde(rename = "ResourceUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_uri: Option<String>,
+}
+
+/// <p>Describes a filter for a specific list of related-item resources. </p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct OpsItemRelatedItemsFilter {
+    /// <p>The name of the filter key. Supported values include <code>ResourceUri</code>, <code>ResourceType</code>, or <code>AssociationId</code>.</p>
+    #[serde(rename = "Key")]
+    pub key: String,
+    /// <p>The operator used by the filter call. The only supported operator is <code>EQUAL</code>.</p>
+    #[serde(rename = "Operator")]
+    pub operator: String,
+    /// <p>The values for the filter.</p>
+    #[serde(rename = "Values")]
+    pub values: Vec<String>,
 }
 
 /// <p>A count of OpsItems.</p>
@@ -6807,11 +7066,11 @@ pub struct PatchOrchestratorFilter {
 /// <p>Defines an approval rule for a patch baseline.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PatchRule {
-    /// <p>The number of days after the release date of each patch matched by the rule that the patch is marked as approved in the patch baseline. For example, a value of <code>7</code> means that patches are approved seven days after they are released. Not supported on Ubuntu Server.</p>
+    /// <p>The number of days after the release date of each patch matched by the rule that the patch is marked as approved in the patch baseline. For example, a value of <code>7</code> means that patches are approved seven days after they are released. Not supported on Debian Server or Ubuntu Server.</p>
     #[serde(rename = "ApproveAfterDays")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub approve_after_days: Option<i64>,
-    /// <p>The cutoff date for auto approval of released patches. Any patches released on or before this date are installed automatically. Not supported on Ubuntu Server.</p> <p>Enter dates in the format <code>YYYY-MM-DD</code>. For example, <code>2020-12-31</code>.</p>
+    /// <p>The cutoff date for auto approval of released patches. Any patches released on or before this date are installed automatically. Not supported on Debian Server or Ubuntu Server.</p> <p>Enter dates in the format <code>YYYY-MM-DD</code>. For example, <code>2020-12-31</code>.</p>
     #[serde(rename = "ApproveUntilDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub approve_until_date: Option<String>,
@@ -6839,7 +7098,7 @@ pub struct PatchRuleGroup {
 /// <p>Information about the patches to use to update the instances, including target operating systems and source repository. Applies to Linux instances only.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PatchSource {
-    /// <p>The value of the yum repo configuration. For example:</p> <p> <code>[main]</code> </p> <p> <code>cachedir=/var/cache/yum/$basesearch$releasever</code> </p> <p> <code>keepcache=0</code> </p> <p> <code>debuglevel=2</code> </p>
+    /// <p><p>The value of the yum repo configuration. For example:</p> <p> <code>[main]</code> </p> <p> <code>name=MyCustomRepository</code> </p> <p> <code>baseurl=https://my-custom-repository</code> </p> <p> <code>enabled=1</code> </p> <note> <p>For information about other options available for your yum repository configuration, see <a href="https://man7.org/linux/man-pages/man5/dnf.conf.5.html">dnf.conf(5)</a>.</p> </note></p>
     #[serde(rename = "Configuration")]
     pub configuration: String,
     /// <p>The name specified to identify the patch source.</p>
@@ -6953,7 +7212,7 @@ pub struct PutParameterRequest {
     #[serde(rename = "AllowedPattern")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_pattern: Option<String>,
-    /// <p>The data type for a <code>String</code> parameter. Supported data types include plain text and Amazon Machine Image IDs.</p> <p> <b>The following data type values are supported.</b> </p> <ul> <li> <p> <code>text</code> </p> </li> <li> <p> <code>aws:ec2:image</code> </p> </li> </ul> <p>When you create a <code>String</code> parameter and specify <code>aws:ec2:image</code>, Systems Manager validates the parameter value is in the required format, such as <code>ami-12345abcdeEXAMPLE</code>, and that the specified AMI is available in your AWS account. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-ec2-aliases.html">Native parameter support for Amazon Machine Image IDs</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p>The data type for a <code>String</code> parameter. Supported data types include plain text and Amazon Machine Image IDs.</p> <p> <b>The following data type values are supported.</b> </p> <ul> <li> <p> <code>text</code> </p> </li> <li> <p> <code>aws:ec2:image</code> </p> </li> </ul> <p>When you create a <code>String</code> parameter and specify <code>aws:ec2:image</code>, Systems Manager validates the parameter value is in the required format, such as <code>ami-12345abcdeEXAMPLE</code>, and that the specified AMI is available in your AWS account. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/parameter-store-ec2-aliases.html">Native parameter support for Amazon Machine Image IDs</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "DataType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_type: Option<String>,
@@ -6965,10 +7224,10 @@ pub struct PutParameterRequest {
     #[serde(rename = "KeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_id: Option<String>,
-    /// <p><p>The fully qualified name of the parameter that you want to add to the system. The fully qualified name includes the complete hierarchy of the parameter path and name. For parameters in a hierarchy, you must include a leading forward slash character (/) when you create or reference a parameter. For example: <code>/Dev/DBServer/MySQL/db-string13</code> </p> <p>Naming Constraints:</p> <ul> <li> <p>Parameter names are case sensitive.</p> </li> <li> <p>A parameter name must be unique within an AWS Region</p> </li> <li> <p>A parameter name can&#39;t be prefixed with &quot;aws&quot; or &quot;ssm&quot; (case-insensitive).</p> </li> <li> <p>Parameter names can include only the following symbols and letters: <code>a-zA-Z0-9_.-/</code> </p> </li> <li> <p>A parameter name can&#39;t include spaces.</p> </li> <li> <p>Parameter hierarchies are limited to a maximum depth of fifteen levels.</p> </li> </ul> <p>For additional information about valid values for parameter names, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-parameter-name-constraints.html">About requirements and constraints for parameter names</a> in the <i>AWS Systems Manager User Guide</i>.</p> <note> <p>The maximum length constraint listed below includes capacity for additional system attributes that are not part of the name. The maximum length for a parameter name, including the full length of the parameter ARN, is 1011 characters. For example, the length of the following parameter name is 65 characters, not 20 characters:</p> <p> <code>arn:aws:ssm:us-east-2:111122223333:parameter/ExampleParameterName</code> </p> </note></p>
+    /// <p><p>The fully qualified name of the parameter that you want to add to the system. The fully qualified name includes the complete hierarchy of the parameter path and name. For parameters in a hierarchy, you must include a leading forward slash character (/) when you create or reference a parameter. For example: <code>/Dev/DBServer/MySQL/db-string13</code> </p> <p>Naming Constraints:</p> <ul> <li> <p>Parameter names are case sensitive.</p> </li> <li> <p>A parameter name must be unique within an AWS Region</p> </li> <li> <p>A parameter name can&#39;t be prefixed with &quot;aws&quot; or &quot;ssm&quot; (case-insensitive).</p> </li> <li> <p>Parameter names can include only the following symbols and letters: <code>a-zA-Z0-9_.-</code> </p> <p>In addition, the slash character ( / ) is used to delineate hierarchies in parameter names. For example: <code>/Dev/Production/East/Project-ABC/MyParameter</code> </p> </li> <li> <p>A parameter name can&#39;t include spaces.</p> </li> <li> <p>Parameter hierarchies are limited to a maximum depth of fifteen levels.</p> </li> </ul> <p>For additional information about valid values for parameter names, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-su-create.html">Creating Systems Manager parameters</a> in the <i>AWS Systems Manager User Guide</i>.</p> <note> <p>The maximum length constraint listed below includes capacity for additional system attributes that are not part of the name. The maximum length for a parameter name, including the full length of the parameter ARN, is 1011 characters. For example, the length of the following parameter name is 65 characters, not 20 characters:</p> <p> <code>arn:aws:ssm:us-east-2:111122223333:parameter/ExampleParameterName</code> </p> </note></p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>Overwrite an existing parameter. If not specified, will default to "false".</p>
+    /// <p>Overwrite an existing parameter. The default value is 'false'.</p>
     #[serde(rename = "Overwrite")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub overwrite: Option<bool>,
@@ -7069,7 +7328,7 @@ pub struct RegisterTargetWithMaintenanceWindowRequest {
     /// <p>The type of target being registered with the maintenance window.</p>
     #[serde(rename = "ResourceType")]
     pub resource_type: String,
-    /// <p>The targets to register with the maintenance window. In other words, the instances to run commands on when the maintenance window runs.</p> <p>You can specify targets using instance IDs, resource group names, or tags that have been applied to instances.</p> <p> <b>Example 1</b>: Specify instance IDs</p> <p> <code>Key=InstanceIds,Values=<i>instance-id-1</i>,<i>instance-id-2</i>,<i>instance-id-3</i> </code> </p> <p> <b>Example 2</b>: Use tag key-pairs applied to instances</p> <p> <code>Key=tag:<i>my-tag-key</i>,Values=<i>my-tag-value-1</i>,<i>my-tag-value-2</i> </code> </p> <p> <b>Example 3</b>: Use tag-keys applied to instances</p> <p> <code>Key=tag-key,Values=<i>my-tag-key-1</i>,<i>my-tag-key-2</i> </code> </p> <p> <b>Example 4</b>: Use resource group names</p> <p> <code>Key=resource-groups:Name,Values=<i>resource-group-name</i> </code> </p> <p> <b>Example 5</b>: Use filters for resource group types</p> <p> <code>Key=resource-groups:ResourceTypeFilters,Values=<i>resource-type-1</i>,<i>resource-type-2</i> </code> </p> <note> <p>For <code>Key=resource-groups:ResourceTypeFilters</code>, specify resource types in the following format</p> <p> <code>Key=resource-groups:ResourceTypeFilters,Values=<i>AWS::EC2::INSTANCE</i>,<i>AWS::EC2::VPC</i> </code> </p> </note> <p>For more information about these examples formats, including the best use case for each one, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/mw-cli-tutorial-targets-examples.html">Examples: Register targets with a maintenance window</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p>The targets to register with the maintenance window. In other words, the instances to run commands on when the maintenance window runs.</p> <note> <p>If a single maintenance window task is registered with multiple targets, its task invocations occur sequentially and not in parallel. If your task must run on multiple targets at the same time, register a task for each target individually and assign each task the same priority level.</p> </note> <p>You can specify targets using instance IDs, resource group names, or tags that have been applied to instances.</p> <p> <b>Example 1</b>: Specify instance IDs</p> <p> <code>Key=InstanceIds,Values=<i>instance-id-1</i>,<i>instance-id-2</i>,<i>instance-id-3</i> </code> </p> <p> <b>Example 2</b>: Use tag key-pairs applied to instances</p> <p> <code>Key=tag:<i>my-tag-key</i>,Values=<i>my-tag-value-1</i>,<i>my-tag-value-2</i> </code> </p> <p> <b>Example 3</b>: Use tag-keys applied to instances</p> <p> <code>Key=tag-key,Values=<i>my-tag-key-1</i>,<i>my-tag-key-2</i> </code> </p> <p> <b>Example 4</b>: Use resource group names</p> <p> <code>Key=resource-groups:Name,Values=<i>resource-group-name</i> </code> </p> <p> <b>Example 5</b>: Use filters for resource group types</p> <p> <code>Key=resource-groups:ResourceTypeFilters,Values=<i>resource-type-1</i>,<i>resource-type-2</i> </code> </p> <note> <p>For <code>Key=resource-groups:ResourceTypeFilters</code>, specify resource types in the following format</p> <p> <code>Key=resource-groups:ResourceTypeFilters,Values=<i>AWS::EC2::INSTANCE</i>,<i>AWS::EC2::VPC</i> </code> </p> </note> <p>For more information about these examples formats, including the best use case for each one, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/mw-cli-tutorial-targets-examples.html">Examples: Register targets with a maintenance window</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "Targets")]
     pub targets: Vec<Target>,
     /// <p>The ID of the maintenance window the target should be registered with.</p>
@@ -7121,7 +7380,7 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
     #[serde(rename = "ServiceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
-    /// <p>The targets (either instances or maintenance window targets).</p> <note> <p>One or more targets must be specified for maintenance window Run Command-type tasks. Depending on the task, targets are optional for other maintenance window task types (Automation, AWS Lambda, and AWS Step Functions). For more information about running tasks that do not specify targets, see see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/maintenance-windows-targetless-tasks.html">Registering maintenance window tasks without targets</a> in the <i>AWS Systems Manager User Guide</i>.</p> </note> <p>Specify instances using the following format: </p> <p> <code>Key=InstanceIds,Values=&lt;instance-id-1&gt;,&lt;instance-id-2&gt;</code> </p> <p>Specify maintenance window targets using the following format:</p> <p> <code>Key=WindowTargetIds,Values=&lt;window-target-id-1&gt;,&lt;window-target-id-2&gt;</code> </p>
+    /// <p>The targets (either instances or maintenance window targets).</p> <note> <p>One or more targets must be specified for maintenance window Run Command-type tasks. Depending on the task, targets are optional for other maintenance window task types (Automation, AWS Lambda, and AWS Step Functions). For more information about running tasks that do not specify targets, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/maintenance-windows-targetless-tasks.html">Registering maintenance window tasks without targets</a> in the <i>AWS Systems Manager User Guide</i>.</p> </note> <p>Specify instances using the following format: </p> <p> <code>Key=InstanceIds,Values=&lt;instance-id-1&gt;,&lt;instance-id-2&gt;</code> </p> <p>Specify maintenance window targets using the following format:</p> <p> <code>Key=WindowTargetIds,Values=&lt;window-target-id-1&gt;,&lt;window-target-id-2&gt;</code> </p>
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
@@ -7165,7 +7424,7 @@ pub struct RelatedOpsItem {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsFromResourceRequest {
-    /// <p><p>The ID of the resource from which you want to remove tags. For example:</p> <p>ManagedInstance: mi-012345abcde</p> <p>MaintenanceWindow: mw-012345abcde</p> <p>PatchBaseline: pb-012345abcde</p> <p>For the Document and Parameter values, use the name of the resource.</p> <note> <p>The ManagedInstance type for this API action is only for on-premises managed instances. Specify the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
+    /// <p><p>The ID of the resource from which you want to remove tags. For example:</p> <p>ManagedInstance: mi-012345abcde</p> <p>MaintenanceWindow: mw-012345abcde</p> <p>PatchBaseline: pb-012345abcde</p> <p>OpsMetadata object: <code>ResourceID</code> for tagging is created from the Amazon Resource Name (ARN) for the object. Specifically, <code>ResourceID</code> is created from the strings that come after the word <code>opsmetadata</code> in the ARN. For example, an OpsMetadata object with an ARN of <code>arn:aws:ssm:us-east-2:1234567890:opsmetadata/aws/ssm/MyGroup/appmanager</code> has a <code>ResourceID</code> of either <code>aws/ssm/MyGroup/appmanager</code> or <code>/aws/ssm/MyGroup/appmanager</code>.</p> <p>For the Document and Parameter values, use the name of the resource.</p> <note> <p>The ManagedInstance type for this API action is only for on-premises managed instances. Specify the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
     /// <p><p>The type of resource from which you want to remove a tag.</p> <note> <p>The ManagedInstance type for this API action is only for on-premises managed instances. Specify the name of the managed instance in the following format: mi-ID_number. For example, mi-1a2b3c4d5e6f.</p> </note></p>
@@ -7184,7 +7443,7 @@ pub struct RemoveTagsFromResourceResult {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ResetServiceSettingRequest {
-    /// <p>The Amazon Resource Name (ARN) of the service setting to reset. The setting ID can be <code>/ssm/parameter-store/default-parameter-tier</code>, <code>/ssm/parameter-store/high-throughput-enabled</code>, or <code>/ssm/managed-instance/activation-tier</code>. For example, <code>arn:aws:ssm:us-east-1:111122223333:servicesetting/ssm/parameter-store/high-throughput-enabled</code>.</p>
+    /// <p><p>The Amazon Resource Name (ARN) of the service setting to reset. The setting ID can be one of the following.</p> <ul> <li> <p> <code>/ssm/automation/customer-script-log-destination</code> </p> </li> <li> <p> <code>/ssm/automation/customer-script-log-group-name</code> </p> </li> <li> <p> <code>/ssm/documents/console/public-sharing-permission</code> </p> </li> <li> <p> <code>/ssm/parameter-store/default-parameter-tier</code> </p> </li> <li> <p> <code>/ssm/parameter-store/high-throughput-enabled</code> </p> </li> <li> <p> <code>/ssm/managed-instance/activation-tier</code> </p> </li> </ul></p>
     #[serde(rename = "SettingId")]
     pub setting_id: String,
 }
@@ -7361,6 +7620,10 @@ pub struct ResourceDataSyncSource {
     #[serde(rename = "AwsOrganizationsSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_organizations_source: Option<ResourceDataSyncAwsOrganizationsSource>,
+    /// <p>When you create a resource data sync, if you choose one of the AWS Organizations options, then Systems Manager automatically enables all OpsData sources in the selected AWS Regions for all AWS accounts in your organization (or in the selected organization units). For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/Explorer-resouce-data-sync-multiple-accounts-and-regions.html">About multiple account and Region resource data syncs</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    #[serde(rename = "EnableAllOpsDataSources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_all_ops_data_sources: Option<bool>,
     /// <p>Whether to automatically synchronize and aggregate data from new AWS Regions when those Regions come online.</p>
     #[serde(rename = "IncludeFutureRegions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7368,7 +7631,7 @@ pub struct ResourceDataSyncSource {
     /// <p>The <code>SyncSource</code> AWS Regions included in the resource data sync.</p>
     #[serde(rename = "SourceRegions")]
     pub source_regions: Vec<String>,
-    /// <p>The type of data source for the resource data sync. <code>SourceType</code> is either <code>AwsOrganizations</code> (if an organization is present in AWS Organizations) or <code>singleAccountMultiRegions</code>.</p>
+    /// <p>The type of data source for the resource data sync. <code>SourceType</code> is either <code>AwsOrganizations</code> (if an organization is present in AWS Organizations) or <code>SingleAccountMultiRegions</code>.</p>
     #[serde(rename = "SourceType")]
     pub source_type: String,
 }
@@ -7381,6 +7644,10 @@ pub struct ResourceDataSyncSourceWithState {
     #[serde(rename = "AwsOrganizationsSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_organizations_source: Option<ResourceDataSyncAwsOrganizationsSource>,
+    /// <p>When you create a resource data sync, if you choose one of the AWS Organizations options, then Systems Manager automatically enables all OpsData sources in the selected AWS Regions for all AWS accounts in your organization (or in the selected organization units). For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/Explorer-resouce-data-sync-multiple-accounts-and-regions.html">About multiple account and Region resource data syncs</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    #[serde(rename = "EnableAllOpsDataSources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_all_ops_data_sources: Option<bool>,
     /// <p>Whether to automatically synchronize and aggregate data from new AWS Regions when those Regions come online.</p>
     #[serde(rename = "IncludeFutureRegions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7570,7 +7837,7 @@ pub struct SendCommandRequest {
     #[serde(rename = "DocumentHashType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_hash_type: Option<String>,
-    /// <p>Required. The name of the Systems Manager document to run. This can be a public document or a custom document.</p>
+    /// <p>The name of the Systems Manager document to run. This can be a public document or a custom document. To run a shared document belonging to another account, specify the document ARN. For more information about how to use shared documents, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/ssm-using-shared.html">Using shared SSM documents</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "DocumentName")]
     pub document_name: String,
     /// <p>The SSM document version to use in the request. You can specify $DEFAULT, $LATEST, or a specific version number. If you run commands by using the AWS CLI, then you must escape the first two options by using a backslash. If you specify a version number, then you don't need to use the backslash. For example:</p> <p>--document-version "\$DEFAULT"</p> <p>--document-version "\$LATEST"</p> <p>--document-version "3"</p>
@@ -7779,7 +8046,7 @@ pub struct StartAutomationExecutionRequest {
     #[serde(rename = "ClientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
-    /// <p>The name of the Automation document to use for this execution.</p>
+    /// <p>The name of the Systems Manager document to run. This can be a public document or a custom document. To run a shared document belonging to another account, specify the document ARN. For more information about how to use shared documents, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/ssm-using-shared.html">Using shared SSM documents</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "DocumentName")]
     pub document_name: String,
     /// <p>The version of the Automation document to use for this execution.</p>
@@ -7836,6 +8103,10 @@ pub struct StartAutomationExecutionResult {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartChangeRequestExecutionRequest {
+    /// <p>User-provided details about the change. If no details are provided, content specified in the <b>Template information</b> section of the associated change template is added.</p>
+    #[serde(rename = "ChangeDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub change_details: Option<String>,
     /// <p>The name of the change request associated with the runbook workflow to be run.</p>
     #[serde(rename = "ChangeRequestName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7858,6 +8129,10 @@ pub struct StartChangeRequestExecutionRequest {
     /// <p><p>Information about the Automation runbooks (Automation documents) that are run during the runbook workflow.</p> <note> <p>The Automation runbooks specified for the runbook workflow can&#39;t run until all required approvals for the change request have been received.</p> </note></p>
     #[serde(rename = "Runbooks")]
     pub runbooks: Vec<Runbook>,
+    /// <p>The time that the requester expects the runbook workflow related to the change request to complete. The time is an estimate only that the requester provides for reviewers.</p>
+    #[serde(rename = "ScheduledEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scheduled_end_time: Option<f64>,
     /// <p><p>The date and time specified in the change request to run the Automation runbooks.</p> <note> <p>The Automation runbooks specified for the runbook workflow can&#39;t run until all required approvals for the change request have been received.</p> </note></p>
     #[serde(rename = "ScheduledTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -8043,14 +8318,14 @@ pub struct Tag {
     pub value: String,
 }
 
-/// <p>An array of search criteria that targets instances using a Key,Value combination that you specify. </p> <note> <p> One or more targets must be specified for maintenance window Run Command-type tasks. Depending on the task, targets are optional for other maintenance window task types (Automation, AWS Lambda, and AWS Step Functions). For more information about running tasks that do not specify targets, see see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/maintenance-windows-targetless-tasks.html">Registering maintenance window tasks without targets</a> in the <i>AWS Systems Manager User Guide</i>.</p> </note> <p>Supported formats include the following.</p> <ul> <li> <p> <code>Key=InstanceIds,Values=<i>instance-id-1</i>,<i>instance-id-2</i>,<i>instance-id-3</i> </code> </p> </li> <li> <p> <code>Key=tag:<i>my-tag-key</i>,Values=<i>my-tag-value-1</i>,<i>my-tag-value-2</i> </code> </p> </li> <li> <p> <code>Key=tag-key,Values=<i>my-tag-key-1</i>,<i>my-tag-key-2</i> </code> </p> </li> <li> <p> <b>Run Command and Maintenance window targets only</b>: <code>Key=resource-groups:Name,Values=<i>resource-group-name</i> </code> </p> </li> <li> <p> <b>Maintenance window targets only</b>: <code>Key=resource-groups:ResourceTypeFilters,Values=<i>resource-type-1</i>,<i>resource-type-2</i> </code> </p> </li> <li> <p> <b>Automation targets only</b>: <code>Key=ResourceGroup;Values=<i>resource-group-name</i> </code> </p> </li> </ul> <p>For example:</p> <ul> <li> <p> <code>Key=InstanceIds,Values=i-02573cafcfEXAMPLE,i-0471e04240EXAMPLE,i-07782c72faEXAMPLE</code> </p> </li> <li> <p> <code>Key=tag:CostCenter,Values=CostCenter1,CostCenter2,CostCenter3</code> </p> </li> <li> <p> <code>Key=tag-key,Values=Name,Instance-Type,CostCenter</code> </p> </li> <li> <p> <b>Run Command and Maintenance window targets only</b>: <code>Key=resource-groups:Name,Values=ProductionResourceGroup</code> </p> <p>This example demonstrates how to target all resources in the resource group <b>ProductionResourceGroup</b> in your maintenance window.</p> </li> <li> <p> <b>Maintenance window targets only</b>: <code>Key=resource-groups:ResourceTypeFilters,Values=<i>AWS::EC2::INSTANCE</i>,<i>AWS::EC2::VPC</i> </code> </p> <p>This example demonstrates how to target only EC2 instances and VPCs in your maintenance window.</p> </li> <li> <p> <b>Automation targets only</b>: <code>Key=ResourceGroup,Values=MyResourceGroup</code> </p> </li> <li> <p> <b>State Manager association targets only</b>: <code>Key=InstanceIds,Values=<i>*</i> </code> </p> <p>This example demonstrates how to target all managed instances in the AWS Region where the association was created.</p> </li> </ul> <p>For more information about how to send commands that target instances using <code>Key,Value</code> parameters, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html#send-commands-targeting">Targeting multiple instances</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+/// <p>An array of search criteria that targets instances using a Key,Value combination that you specify.</p> <note> <p> One or more targets must be specified for maintenance window Run Command-type tasks. Depending on the task, targets are optional for other maintenance window task types (Automation, AWS Lambda, and AWS Step Functions). For more information about running tasks that do not specify targets, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/maintenance-windows-targetless-tasks.html">Registering maintenance window tasks without targets</a> in the <i>AWS Systems Manager User Guide</i>.</p> </note> <p>Supported formats include the following.</p> <ul> <li> <p> <code>Key=InstanceIds,Values=<i>instance-id-1</i>,<i>instance-id-2</i>,<i>instance-id-3</i> </code> </p> </li> <li> <p> <code>Key=tag:<i>my-tag-key</i>,Values=<i>my-tag-value-1</i>,<i>my-tag-value-2</i> </code> </p> </li> <li> <p> <code>Key=tag-key,Values=<i>my-tag-key-1</i>,<i>my-tag-key-2</i> </code> </p> </li> <li> <p> <b>Run Command and Maintenance window targets only</b>: <code>Key=resource-groups:Name,Values=<i>resource-group-name</i> </code> </p> </li> <li> <p> <b>Maintenance window targets only</b>: <code>Key=resource-groups:ResourceTypeFilters,Values=<i>resource-type-1</i>,<i>resource-type-2</i> </code> </p> </li> <li> <p> <b>Automation targets only</b>: <code>Key=ResourceGroup;Values=<i>resource-group-name</i> </code> </p> </li> </ul> <p>For example:</p> <ul> <li> <p> <code>Key=InstanceIds,Values=i-02573cafcfEXAMPLE,i-0471e04240EXAMPLE,i-07782c72faEXAMPLE</code> </p> </li> <li> <p> <code>Key=tag:CostCenter,Values=CostCenter1,CostCenter2,CostCenter3</code> </p> </li> <li> <p> <code>Key=tag-key,Values=Name,Instance-Type,CostCenter</code> </p> </li> <li> <p> <b>Run Command and Maintenance window targets only</b>: <code>Key=resource-groups:Name,Values=ProductionResourceGroup</code> </p> <p>This example demonstrates how to target all resources in the resource group <b>ProductionResourceGroup</b> in your maintenance window.</p> </li> <li> <p> <b>Maintenance window targets only</b>: <code>Key=resource-groups:ResourceTypeFilters,Values=<i>AWS::EC2::INSTANCE</i>,<i>AWS::EC2::VPC</i> </code> </p> <p>This example demonstrates how to target only EC2 instances and VPCs in your maintenance window.</p> </li> <li> <p> <b>Automation targets only</b>: <code>Key=ResourceGroup,Values=MyResourceGroup</code> </p> </li> <li> <p> <b>State Manager association targets only</b>: <code>Key=InstanceIds,Values=<i>*</i> </code> </p> <p>This example demonstrates how to target all managed instances in the AWS Region where the association was created.</p> </li> </ul> <p>For more information about how to send commands that target instances using <code>Key,Value</code> parameters, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html#send-commands-targeting">Targeting multiple instances</a> in the <i>AWS Systems Manager User Guide</i>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Target {
     /// <p>User-defined criteria for sending commands that target instances that meet the criteria.</p>
     #[serde(rename = "Key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    /// <p>User-defined criteria that maps to <code>Key</code>. For example, if you specified <code>tag:ServerRole</code>, you could specify <code>value:WebServer</code> to run a command on instances that include EC2 tags of <code>ServerRole,WebServer</code>. </p>
+    /// <p>User-defined criteria that maps to <code>Key</code>. For example, if you specified <code>tag:ServerRole</code>, you could specify <code>value:WebServer</code> to run a command on instances that include EC2 tags of <code>ServerRole,WebServer</code>. </p> <p>Depending on the type of <code>Target</code>, the maximum number of values for a <code>Key</code> might be lower than the global maximum of 50.</p>
     #[serde(rename = "Values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
@@ -8100,6 +8375,33 @@ pub struct TerminateSessionResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UnlabelParameterVersionRequest {
+    /// <p>One or more labels to delete from the specified parameter version.</p>
+    #[serde(rename = "Labels")]
+    pub labels: Vec<String>,
+    /// <p>The parameter name of which you want to delete one or more labels.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The specific version of the parameter which you want to delete one or more labels from. If it is not present, the call will fail.</p>
+    #[serde(rename = "ParameterVersion")]
+    pub parameter_version: i64,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UnlabelParameterVersionResult {
+    /// <p>The labels that are not attached to the given parameter version.</p>
+    #[serde(rename = "InvalidLabels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invalid_labels: Option<Vec<String>>,
+    /// <p>A list of all labels deleted from the parameter.</p>
+    #[serde(rename = "RemovedLabels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub removed_labels: Option<Vec<String>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateAssociationRequest {
     /// <p>By default, when you update an association, the system runs it immediately after it is updated and then according to the schedule you specified. Specify this option if you don't want an association to run immediately after you update it. This parameter is not supported for rate expressions.</p> <p>Also, if you specified this option when you created the association, you can reset it. To do so, specify the <code>no-apply-only-at-cron-interval</code> parameter when you update the association from the command line. This parameter forces the association to run immediately after updating it and according to the interval specified.</p>
     #[serde(rename = "ApplyOnlyAtCronInterval")]
@@ -8120,6 +8422,10 @@ pub struct UpdateAssociationRequest {
     #[serde(rename = "AutomationTargetParameterName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub automation_target_parameter_name: Option<String>,
+    /// <p>The names or Amazon Resource Names (ARNs) of the Systems Manager Change Calendar type documents you want to gate your associations under. The associations only run when that Change Calendar is open. For more information, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-change-calendar">AWS Systems Manager Change Calendar</a>.</p>
+    #[serde(rename = "CalendarNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub calendar_names: Option<Vec<String>>,
     /// <p>The severity level to assign to the association.</p>
     #[serde(rename = "ComplianceSeverity")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -8247,15 +8553,19 @@ pub struct UpdateDocumentRequest {
     /// <p>A valid JSON or YAML string.</p>
     #[serde(rename = "Content")]
     pub content: String,
+    /// <p>The friendly name of the Systems Manager document that you want to update. This value can differ for each version of the document. If you do not specify a value for this parameter in your request, the existing value is applied to the new document version.</p>
+    #[serde(rename = "DisplayName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub display_name: Option<String>,
     /// <p>Specify the document format for the new document version. Systems Manager supports JSON and YAML documents. JSON is the default format.</p>
     #[serde(rename = "DocumentFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_format: Option<String>,
-    /// <p>(Required) The latest version of the document that you want to update. The latest document version can be specified using the $LATEST variable or by the version number. Updating a previous version of a document is not supported.</p>
+    /// <p>The version of the document that you want to update. Currently, Systems Manager supports updating only the latest version of the document. You can specify the version number of the latest version or use the <code>$LATEST</code> variable.</p>
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    /// <p>The name of the document that you want to update.</p>
+    /// <p>The name of the Systems Manager document that you want to update.</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>Specify a new target type for the document.</p>
@@ -8481,7 +8791,7 @@ pub struct UpdateMaintenanceWindowTaskRequest {
     #[serde(rename = "ServiceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
-    /// <p><p>The targets (either instances or tags) to modify. Instances are specified using Key=instanceids,Values=instanceID<em>1,instanceID</em>2. Tags are specified using Key=tag<em>name,Values=tag</em>value. </p> <note> <p>One or more targets must be specified for maintenance window Run Command-type tasks. Depending on the task, targets are optional for other maintenance window task types (Automation, AWS Lambda, and AWS Step Functions). For more information about running tasks that do not specify targets, see see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/maintenance-windows-targetless-tasks.html">Registering maintenance window tasks without targets</a> in the <i>AWS Systems Manager User Guide</i>.</p> </note></p>
+    /// <p><p>The targets (either instances or tags) to modify. Instances are specified using Key=instanceids,Values=instanceID<em>1,instanceID</em>2. Tags are specified using Key=tag<em>name,Values=tag</em>value. </p> <note> <p>One or more targets must be specified for maintenance window Run Command-type tasks. Depending on the task, targets are optional for other maintenance window task types (Automation, AWS Lambda, and AWS Step Functions). For more information about running tasks that do not specify targets, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/maintenance-windows-targetless-tasks.html">Registering maintenance window tasks without targets</a> in the <i>AWS Systems Manager User Guide</i>.</p> </note></p>
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
@@ -8807,10 +9117,10 @@ pub struct UpdateResourceDataSyncResult {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateServiceSettingRequest {
-    /// <p><p>The Amazon Resource Name (ARN) of the service setting to reset. For example, <code>arn:aws:ssm:us-east-1:111122223333:servicesetting/ssm/parameter-store/high-throughput-enabled</code>. The setting ID can be one of the following.</p> <ul> <li> <p> <code>/ssm/parameter-store/default-parameter-tier</code> </p> </li> <li> <p> <code>/ssm/parameter-store/high-throughput-enabled</code> </p> </li> <li> <p> <code>/ssm/managed-instance/activation-tier</code> </p> </li> </ul></p>
+    /// <p><p>The Amazon Resource Name (ARN) of the service setting to reset. For example, <code>arn:aws:ssm:us-east-1:111122223333:servicesetting/ssm/parameter-store/high-throughput-enabled</code>. The setting ID can be one of the following.</p> <ul> <li> <p> <code>/ssm/automation/customer-script-log-destination</code> </p> </li> <li> <p> <code>/ssm/automation/customer-script-log-group-name</code> </p> </li> <li> <p> <code>/ssm/documents/console/public-sharing-permission</code> </p> </li> <li> <p> <code>/ssm/parameter-store/default-parameter-tier</code> </p> </li> <li> <p> <code>/ssm/parameter-store/high-throughput-enabled</code> </p> </li> <li> <p> <code>/ssm/managed-instance/activation-tier</code> </p> </li> </ul></p>
     #[serde(rename = "SettingId")]
     pub setting_id: String,
-    /// <p>The new value to specify for the service setting. For the <code>/ssm/parameter-store/default-parameter-tier</code> setting ID, the setting value can be one of the following.</p> <ul> <li> <p>Standard</p> </li> <li> <p>Advanced</p> </li> <li> <p>Intelligent-Tiering</p> </li> </ul> <p>For the <code>/ssm/parameter-store/high-throughput-enabled</code>, and <code>/ssm/managed-instance/activation-tier</code> setting IDs, the setting value can be true or false.</p>
+    /// <p>The new value to specify for the service setting. For the <code>/ssm/parameter-store/default-parameter-tier</code> setting ID, the setting value can be one of the following.</p> <ul> <li> <p>Standard</p> </li> <li> <p>Advanced</p> </li> <li> <p>Intelligent-Tiering</p> </li> </ul> <p>For the <code>/ssm/parameter-store/high-throughput-enabled</code>, and <code>/ssm/managed-instance/activation-tier</code> setting IDs, the setting value can be true or false.</p> <p>For the <code>/ssm/automation/customer-script-log-destination</code> setting ID, the setting value can be CloudWatch.</p> <p>For the <code>/ssm/automation/customer-script-log-group-name</code> setting ID, the setting value can be the name of a CloudWatch Logs log group.</p> <p>For the <code>/ssm/documents/console/public-sharing-permission</code> setting ID, the setting value can be Enable or Disable.</p>
     #[serde(rename = "SettingValue")]
     pub setting_value: String,
 }
@@ -8878,6 +9188,80 @@ impl fmt::Display for AddTagsToResourceError {
     }
 }
 impl Error for AddTagsToResourceError {}
+/// Errors returned by AssociateOpsItemRelatedItem
+#[derive(Debug, PartialEq)]
+pub enum AssociateOpsItemRelatedItemError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>A specified parameter argument isn't valid. Verify the available arguments and try again.</p>
+    OpsItemInvalidParameter(String),
+    /// <p>The request caused OpsItems to exceed one or more quotas. For information about OpsItem quotas, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter-learn-more.html#OpsCenter-learn-more-limits">What are the resource limits for OpsCenter?</a>.</p>
+    OpsItemLimitExceeded(String),
+    /// <p>The specified OpsItem ID doesn't exist. Verify the ID and try again.</p>
+    OpsItemNotFound(String),
+    /// <p>The Amazon Resource Name (ARN) is already associated with the OpsItem.</p>
+    OpsItemRelatedItemAlreadyExists(String),
+}
+
+impl AssociateOpsItemRelatedItemError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AssociateOpsItemRelatedItemError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        AssociateOpsItemRelatedItemError::InternalServerError(err.msg),
+                    )
+                }
+                "OpsItemInvalidParameterException" => {
+                    return RusotoError::Service(
+                        AssociateOpsItemRelatedItemError::OpsItemInvalidParameter(err.msg),
+                    )
+                }
+                "OpsItemLimitExceededException" => {
+                    return RusotoError::Service(
+                        AssociateOpsItemRelatedItemError::OpsItemLimitExceeded(err.msg),
+                    )
+                }
+                "OpsItemNotFoundException" => {
+                    return RusotoError::Service(AssociateOpsItemRelatedItemError::OpsItemNotFound(
+                        err.msg,
+                    ))
+                }
+                "OpsItemRelatedItemAlreadyExistsException" => {
+                    return RusotoError::Service(
+                        AssociateOpsItemRelatedItemError::OpsItemRelatedItemAlreadyExists(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for AssociateOpsItemRelatedItemError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AssociateOpsItemRelatedItemError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateOpsItemRelatedItemError::OpsItemInvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateOpsItemRelatedItemError::OpsItemLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateOpsItemRelatedItemError::OpsItemNotFound(ref cause) => write!(f, "{}", cause),
+            AssociateOpsItemRelatedItemError::OpsItemRelatedItemAlreadyExists(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for AssociateOpsItemRelatedItemError {}
 /// Errors returned by CancelCommand
 #[derive(Debug, PartialEq)]
 pub enum CancelCommandError {
@@ -8885,7 +9269,7 @@ pub enum CancelCommandError {
     DuplicateInstanceId(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-
+    /// <p>The specified command ID is not valid. Verify the ID and try again.</p>
     InvalidCommandId(String),
     /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
@@ -10681,6 +11065,10 @@ pub enum DescribeDocumentPermissionError {
     InternalServerError(String),
     /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
+    /// <p>You attempted to delete a document while it is still shared. You must stop sharing the document before you can delete it.</p>
+    InvalidDocumentOperation(String),
+    /// <p>The specified token is not valid.</p>
+    InvalidNextToken(String),
     /// <p>The permission type is not supported. <i>Share</i> is the only supported permission type.</p>
     InvalidPermissionType(String),
 }
@@ -10698,6 +11086,16 @@ impl DescribeDocumentPermissionError {
                 }
                 "InvalidDocument" => {
                     return RusotoError::Service(DescribeDocumentPermissionError::InvalidDocument(
+                        err.msg,
+                    ))
+                }
+                "InvalidDocumentOperation" => {
+                    return RusotoError::Service(
+                        DescribeDocumentPermissionError::InvalidDocumentOperation(err.msg),
+                    )
+                }
+                "InvalidNextToken" => {
+                    return RusotoError::Service(DescribeDocumentPermissionError::InvalidNextToken(
                         err.msg,
                     ))
                 }
@@ -10721,6 +11119,10 @@ impl fmt::Display for DescribeDocumentPermissionError {
                 write!(f, "{}", cause)
             }
             DescribeDocumentPermissionError::InvalidDocument(ref cause) => write!(f, "{}", cause),
+            DescribeDocumentPermissionError::InvalidDocumentOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeDocumentPermissionError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
             DescribeDocumentPermissionError::InvalidPermissionType(ref cause) => {
                 write!(f, "{}", cause)
             }
@@ -11802,6 +12204,74 @@ impl fmt::Display for DescribeSessionsError {
     }
 }
 impl Error for DescribeSessionsError {}
+/// Errors returned by DisassociateOpsItemRelatedItem
+#[derive(Debug, PartialEq)]
+pub enum DisassociateOpsItemRelatedItemError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>A specified parameter argument isn't valid. Verify the available arguments and try again.</p>
+    OpsItemInvalidParameter(String),
+    /// <p>The specified OpsItem ID doesn't exist. Verify the ID and try again.</p>
+    OpsItemNotFound(String),
+    /// <p>The association was not found using the parameters you specified in the call. Verify the information and try again.</p>
+    OpsItemRelatedItemAssociationNotFound(String),
+}
+
+impl DisassociateOpsItemRelatedItemError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisassociateOpsItemRelatedItemError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(
+                        DisassociateOpsItemRelatedItemError::InternalServerError(err.msg),
+                    )
+                }
+                "OpsItemInvalidParameterException" => {
+                    return RusotoError::Service(
+                        DisassociateOpsItemRelatedItemError::OpsItemInvalidParameter(err.msg),
+                    )
+                }
+                "OpsItemNotFoundException" => {
+                    return RusotoError::Service(
+                        DisassociateOpsItemRelatedItemError::OpsItemNotFound(err.msg),
+                    )
+                }
+                "OpsItemRelatedItemAssociationNotFoundException" => {
+                    return RusotoError::Service(
+                        DisassociateOpsItemRelatedItemError::OpsItemRelatedItemAssociationNotFound(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DisassociateOpsItemRelatedItemError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DisassociateOpsItemRelatedItemError::InternalServerError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateOpsItemRelatedItemError::OpsItemInvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateOpsItemRelatedItemError::OpsItemNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateOpsItemRelatedItemError::OpsItemRelatedItemAssociationNotFound(
+                ref cause,
+            ) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DisassociateOpsItemRelatedItemError {}
 /// Errors returned by GetAutomationExecution
 #[derive(Debug, PartialEq)]
 pub enum GetAutomationExecutionError {
@@ -11903,7 +12373,7 @@ impl Error for GetCalendarStateError {}
 pub enum GetCommandInvocationError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-
+    /// <p>The specified command ID is not valid. Verify the ID and try again.</p>
     InvalidCommandId(String),
     /// <p>The following problems can cause this exception:</p> <p>You do not have permission to access the instance.</p> <p>SSM Agent is not running. Verify that SSM Agent is running.</p> <p>SSM Agent is not registered with the SSM endpoint. Try reinstalling SSM Agent.</p> <p>The instance is not in valid state. Valid states are: Running, Pending, Stopped, Stopping. Invalid states are: Shutting-down and Terminated.</p>
     InvalidInstanceId(String),
@@ -13087,7 +13557,7 @@ impl Error for ListAssociationsError {}
 pub enum ListCommandInvocationsError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-
+    /// <p>The specified command ID is not valid. Verify the ID and try again.</p>
     InvalidCommandId(String),
     /// <p>The specified key is not valid.</p>
     InvalidFilterKey(String),
@@ -13151,7 +13621,7 @@ impl Error for ListCommandInvocationsError {}
 pub enum ListCommandsError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
-
+    /// <p>The specified command ID is not valid. Verify the ID and try again.</p>
     InvalidCommandId(String),
     /// <p>The specified key is not valid.</p>
     InvalidFilterKey(String),
@@ -13578,6 +14048,48 @@ impl fmt::Display for ListOpsItemEventsError {
     }
 }
 impl Error for ListOpsItemEventsError {}
+/// Errors returned by ListOpsItemRelatedItems
+#[derive(Debug, PartialEq)]
+pub enum ListOpsItemRelatedItemsError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>A specified parameter argument isn't valid. Verify the available arguments and try again.</p>
+    OpsItemInvalidParameter(String),
+}
+
+impl ListOpsItemRelatedItemsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOpsItemRelatedItemsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(ListOpsItemRelatedItemsError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "OpsItemInvalidParameterException" => {
+                    return RusotoError::Service(
+                        ListOpsItemRelatedItemsError::OpsItemInvalidParameter(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListOpsItemRelatedItemsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListOpsItemRelatedItemsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListOpsItemRelatedItemsError::OpsItemInvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListOpsItemRelatedItemsError {}
 /// Errors returned by ListOpsMetadata
 #[derive(Debug, PartialEq)]
 pub enum ListOpsMetadataError {
@@ -14053,7 +14565,7 @@ pub enum PutParameterError {
     ParameterAlreadyExists(String),
     /// <p>You have exceeded the number of parameters for this AWS account. Delete one or more parameters and try again.</p>
     ParameterLimitExceeded(String),
-    /// <p>Parameter Store retains the 100 most recently created versions of a parameter. After this number of versions has been created, Parameter Store deletes the oldest version when a new one is created. However, if the oldest version has a <i>label</i> attached to it, Parameter Store will not delete the version and instead presents this error message:</p> <p> <code>An error occurred (ParameterMaxVersionLimitExceeded) when calling the PutParameter operation: You attempted to create a new version of <i>parameter-name</i> by calling the PutParameter API with the overwrite flag. Version <i>version-number</i>, the oldest version, can't be deleted because it has a label associated with it. Move the label to another version of the parameter, and try again.</code> </p> <p>This safeguard is to prevent parameter versions with mission critical labels assigned to them from being deleted. To continue creating new parameters, first move the label from the oldest version of the parameter to a newer one for use in your operations. For information about moving parameter labels, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-labels.html#sysman-paramstore-labels-console-move">Move a parameter label (console)</a> or <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-labels.html#sysman-paramstore-labels-cli-move">Move a parameter label (CLI) </a> in the <i>AWS Systems Manager User Guide</i>. </p>
+    /// <p>Parameter Store retains the 100 most recently created versions of a parameter. After this number of versions has been created, Parameter Store deletes the oldest version when a new one is created. However, if the oldest version has a <i>label</i> attached to it, Parameter Store will not delete the version and instead presents this error message:</p> <p> <code>An error occurred (ParameterMaxVersionLimitExceeded) when calling the PutParameter operation: You attempted to create a new version of <i>parameter-name</i> by calling the PutParameter API with the overwrite flag. Version <i>version-number</i>, the oldest version, can't be deleted because it has a label associated with it. Move the label to another version of the parameter, and try again.</code> </p> <p>This safeguard is to prevent parameter versions with mission critical labels assigned to them from being deleted. To continue creating new parameters, first move the label from the oldest version of the parameter to a newer one for use in your operations. For information about moving parameter labels, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-labels.html#sysman-paramstore-labels-console-move">Move a parameter label (console)</a> or <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-labels.html#sysman-paramstore-labels-cli-move">Move a parameter label (CLI)</a> in the <i>AWS Systems Manager User Guide</i>. </p>
     ParameterMaxVersionLimitExceeded(String),
     /// <p>The parameter name is not valid.</p>
     ParameterPatternMismatch(String),
@@ -15084,6 +15596,64 @@ impl fmt::Display for TerminateSessionError {
     }
 }
 impl Error for TerminateSessionError {}
+/// Errors returned by UnlabelParameterVersion
+#[derive(Debug, PartialEq)]
+pub enum UnlabelParameterVersionError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>The parameter could not be found. Verify the name and try again.</p>
+    ParameterNotFound(String),
+    /// <p>The specified parameter version was not found. Verify the parameter name and version, and try again.</p>
+    ParameterVersionNotFound(String),
+    /// <p>There are concurrent updates for a resource that supports one update at a time.</p>
+    TooManyUpdates(String),
+}
+
+impl UnlabelParameterVersionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UnlabelParameterVersionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalServerError" => {
+                    return RusotoError::Service(UnlabelParameterVersionError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "ParameterNotFound" => {
+                    return RusotoError::Service(UnlabelParameterVersionError::ParameterNotFound(
+                        err.msg,
+                    ))
+                }
+                "ParameterVersionNotFound" => {
+                    return RusotoError::Service(
+                        UnlabelParameterVersionError::ParameterVersionNotFound(err.msg),
+                    )
+                }
+                "TooManyUpdates" => {
+                    return RusotoError::Service(UnlabelParameterVersionError::TooManyUpdates(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UnlabelParameterVersionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UnlabelParameterVersionError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UnlabelParameterVersionError::ParameterNotFound(ref cause) => write!(f, "{}", cause),
+            UnlabelParameterVersionError::ParameterVersionNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UnlabelParameterVersionError::TooManyUpdates(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UnlabelParameterVersionError {}
 /// Errors returned by UpdateAssociation
 #[derive(Debug, PartialEq)]
 pub enum UpdateAssociationError {
@@ -15939,6 +16509,12 @@ pub trait Ssm {
         input: AddTagsToResourceRequest,
     ) -> Result<AddTagsToResourceResult, RusotoError<AddTagsToResourceError>>;
 
+    /// <p>Associates a related resource to a Systems Manager OpsCenter OpsItem. For example, you can associate an Incident Manager incident or analysis with an OpsItem. Incident Manager is a capability of AWS Systems Manager.</p>
+    async fn associate_ops_item_related_item(
+        &self,
+        input: AssociateOpsItemRelatedItemRequest,
+    ) -> Result<AssociateOpsItemRelatedItemResponse, RusotoError<AssociateOpsItemRelatedItemError>>;
+
     /// <p>Attempts to cancel the command specified by the Command ID. There is no guarantee that the command will be terminated and the underlying process stopped.</p>
     async fn cancel_command(
         &self,
@@ -16332,6 +16908,15 @@ pub trait Ssm {
         input: DescribeSessionsRequest,
     ) -> Result<DescribeSessionsResponse, RusotoError<DescribeSessionsError>>;
 
+    /// <p>Deletes the association between an OpsItem and a related resource. For example, this API action can delete an Incident Manager incident from an OpsItem. Incident Manager is a capability of AWS Systems Manager.</p>
+    async fn disassociate_ops_item_related_item(
+        &self,
+        input: DisassociateOpsItemRelatedItemRequest,
+    ) -> Result<
+        DisassociateOpsItemRelatedItemResponse,
+        RusotoError<DisassociateOpsItemRelatedItemError>,
+    >;
+
     /// <p>Get detailed information about a particular Automation execution.</p>
     async fn get_automation_execution(
         &self,
@@ -16344,7 +16929,7 @@ pub trait Ssm {
         input: GetCalendarStateRequest,
     ) -> Result<GetCalendarStateResponse, RusotoError<GetCalendarStateError>>;
 
-    /// <p>Returns detailed information about command execution for an invocation or plugin. </p>
+    /// <p>Returns detailed information about command execution for an invocation or plugin.</p> <p> <code>GetCommandInvocation</code> only gives the execution status of a plugin in a document. To get the command execution status on a specific instance, use <a>ListCommandInvocations</a>. To get the command execution status across instances, use <a>ListCommands</a>.</p>
     async fn get_command_invocation(
         &self,
         input: GetCommandInvocationRequest,
@@ -16485,7 +17070,7 @@ pub trait Ssm {
         input: GetServiceSettingRequest,
     ) -> Result<GetServiceSettingResult, RusotoError<GetServiceSettingError>>;
 
-    /// <p><p>A parameter label is a user-defined alias to help you manage different versions of a parameter. When you modify a parameter, Systems Manager automatically saves a new version and increments the version number by one. A label can help you remember the purpose of a parameter when there are multiple versions. </p> <p>Parameter labels have the following requirements and restrictions.</p> <ul> <li> <p>A version of a parameter can have a maximum of 10 labels.</p> </li> <li> <p>You can&#39;t attach the same label to different versions of the same parameter. For example, if version 1 has the label Production, then you can&#39;t attach Production to version 2.</p> </li> <li> <p>You can move a label from one version of a parameter to another.</p> </li> <li> <p>You can&#39;t create a label when you create a new parameter. You must attach a label to a specific version of a parameter.</p> </li> <li> <p>You can&#39;t delete a parameter label. If you no longer want to use a parameter label, then you must move it to a different version of a parameter.</p> </li> <li> <p>A label can have a maximum of 100 characters.</p> </li> <li> <p>Labels can contain letters (case sensitive), numbers, periods (.), hyphens (-), or underscores (_).</p> </li> <li> <p>Labels can&#39;t begin with a number, &quot;aws,&quot; or &quot;ssm&quot; (not case sensitive). If a label fails to meet these requirements, then the label is not associated with a parameter and the system displays it in the list of InvalidLabels.</p> </li> </ul></p>
+    /// <p><p>A parameter label is a user-defined alias to help you manage different versions of a parameter. When you modify a parameter, Systems Manager automatically saves a new version and increments the version number by one. A label can help you remember the purpose of a parameter when there are multiple versions. </p> <p>Parameter labels have the following requirements and restrictions.</p> <ul> <li> <p>A version of a parameter can have a maximum of 10 labels.</p> </li> <li> <p>You can&#39;t attach the same label to different versions of the same parameter. For example, if version 1 has the label Production, then you can&#39;t attach Production to version 2.</p> </li> <li> <p>You can move a label from one version of a parameter to another.</p> </li> <li> <p>You can&#39;t create a label when you create a new parameter. You must attach a label to a specific version of a parameter.</p> </li> <li> <p>If you no longer want to use a parameter label, then you can either delete it or move it to a different version of a parameter.</p> </li> <li> <p>A label can have a maximum of 100 characters.</p> </li> <li> <p>Labels can contain letters (case sensitive), numbers, periods (.), hyphens (-), or underscores (_).</p> </li> <li> <p>Labels can&#39;t begin with a number, &quot;aws,&quot; or &quot;ssm&quot; (not case sensitive). If a label fails to meet these requirements, then the label is not associated with a parameter and the system displays it in the list of InvalidLabels.</p> </li> </ul></p>
     async fn label_parameter_version(
         &self,
         input: LabelParameterVersionRequest,
@@ -16556,6 +17141,12 @@ pub trait Ssm {
         &self,
         input: ListOpsItemEventsRequest,
     ) -> Result<ListOpsItemEventsResponse, RusotoError<ListOpsItemEventsError>>;
+
+    /// <p>Lists all related-item resources associated with an OpsItem.</p>
+    async fn list_ops_item_related_items(
+        &self,
+        input: ListOpsItemRelatedItemsRequest,
+    ) -> Result<ListOpsItemRelatedItemsResponse, RusotoError<ListOpsItemRelatedItemsError>>;
 
     /// <p>Systems Manager calls this API action when displaying all Application Manager OpsMetadata objects or blobs.</p>
     async fn list_ops_metadata(
@@ -16707,6 +17298,12 @@ pub trait Ssm {
         input: TerminateSessionRequest,
     ) -> Result<TerminateSessionResponse, RusotoError<TerminateSessionError>>;
 
+    /// <p>Remove a label or labels from a parameter.</p>
+    async fn unlabel_parameter_version(
+        &self,
+        input: UnlabelParameterVersionRequest,
+    ) -> Result<UnlabelParameterVersionResult, RusotoError<UnlabelParameterVersionError>>;
+
     /// <p><p>Updates an association. You can update the association name and version, the document version, schedule, parameters, and Amazon S3 output. </p> <p>In order to call this API action, your IAM user account, group, or role must be configured with permission to call the <a>DescribeAssociation</a> API action. If you don&#39;t have permission to call DescribeAssociation, then you receive the following error: <code>An error occurred (AccessDeniedException) when calling the UpdateAssociation operation: User: &lt;user<em>arn&gt; is not authorized to perform: ssm:DescribeAssociation on resource: &lt;resource</em>arn&gt;</code> </p> <important> <p>When you update an association, the association immediately runs against the specified targets.</p> </important></p>
     async fn update_association(
         &self,
@@ -16749,7 +17346,7 @@ pub trait Ssm {
         input: UpdateMaintenanceWindowTargetRequest,
     ) -> Result<UpdateMaintenanceWindowTargetResult, RusotoError<UpdateMaintenanceWindowTargetError>>;
 
-    /// <p><p>Modifies a task assigned to a maintenance window. You can&#39;t change the task type, but you can change the following values:</p> <ul> <li> <p>TaskARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> </li> <li> <p>ServiceRoleArn</p> </li> <li> <p>TaskInvocationParameters</p> </li> <li> <p>Priority</p> </li> <li> <p>MaxConcurrency</p> </li> <li> <p>MaxErrors</p> </li> </ul> <note> <p>One or more targets must be specified for maintenance window Run Command-type tasks. Depending on the task, targets are optional for other maintenance window task types (Automation, AWS Lambda, and AWS Step Functions). For more information about running tasks that do not specify targets, see see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/maintenance-windows-targetless-tasks.html">Registering maintenance window tasks without targets</a> in the <i>AWS Systems Manager User Guide</i>.</p> </note> <p>If the value for a parameter in <code>UpdateMaintenanceWindowTask</code> is null, then the corresponding field is not modified. If you set <code>Replace</code> to true, then all fields required by the <a>RegisterTaskWithMaintenanceWindow</a> action are required for this request. Optional fields that aren&#39;t specified are set to null.</p> <important> <p>When you update a maintenance window task that has options specified in <code>TaskInvocationParameters</code>, you must provide again all the <code>TaskInvocationParameters</code> values that you want to retain. The values you do not specify again are removed. For example, suppose that when you registered a Run Command task, you specified <code>TaskInvocationParameters</code> values for <code>Comment</code>, <code>NotificationConfig</code>, and <code>OutputS3BucketName</code>. If you update the maintenance window task and specify only a different <code>OutputS3BucketName</code> value, the values for <code>Comment</code> and <code>NotificationConfig</code> are removed.</p> </important></p>
+    /// <p><p>Modifies a task assigned to a maintenance window. You can&#39;t change the task type, but you can change the following values:</p> <ul> <li> <p>TaskARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> </li> <li> <p>ServiceRoleArn</p> </li> <li> <p>TaskInvocationParameters</p> </li> <li> <p>Priority</p> </li> <li> <p>MaxConcurrency</p> </li> <li> <p>MaxErrors</p> </li> </ul> <note> <p>One or more targets must be specified for maintenance window Run Command-type tasks. Depending on the task, targets are optional for other maintenance window task types (Automation, AWS Lambda, and AWS Step Functions). For more information about running tasks that do not specify targets, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/maintenance-windows-targetless-tasks.html">Registering maintenance window tasks without targets</a> in the <i>AWS Systems Manager User Guide</i>.</p> </note> <p>If the value for a parameter in <code>UpdateMaintenanceWindowTask</code> is null, then the corresponding field is not modified. If you set <code>Replace</code> to true, then all fields required by the <a>RegisterTaskWithMaintenanceWindow</a> action are required for this request. Optional fields that aren&#39;t specified are set to null.</p> <important> <p>When you update a maintenance window task that has options specified in <code>TaskInvocationParameters</code>, you must provide again all the <code>TaskInvocationParameters</code> values that you want to retain. The values you do not specify again are removed. For example, suppose that when you registered a Run Command task, you specified <code>TaskInvocationParameters</code> values for <code>Comment</code>, <code>NotificationConfig</code>, and <code>OutputS3BucketName</code>. If you update the maintenance window task and specify only a different <code>OutputS3BucketName</code> value, the values for <code>Comment</code> and <code>NotificationConfig</code> are removed.</p> </important></p>
     async fn update_maintenance_window_task(
         &self,
         input: UpdateMaintenanceWindowTaskRequest,
@@ -16847,6 +17444,26 @@ impl Ssm for SsmClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<AddTagsToResourceResult, _>()
+    }
+
+    /// <p>Associates a related resource to a Systems Manager OpsCenter OpsItem. For example, you can associate an Incident Manager incident or analysis with an OpsItem. Incident Manager is a capability of AWS Systems Manager.</p>
+    async fn associate_ops_item_related_item(
+        &self,
+        input: AssociateOpsItemRelatedItemRequest,
+    ) -> Result<AssociateOpsItemRelatedItemResponse, RusotoError<AssociateOpsItemRelatedItemError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonSSM.AssociateOpsItemRelatedItem");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, AssociateOpsItemRelatedItemError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<AssociateOpsItemRelatedItemResponse, _>()
     }
 
     /// <p>Attempts to cancel the command specified by the Command ID. There is no guarantee that the command will be terminated and the underlying process stopped.</p>
@@ -18055,6 +18672,28 @@ impl Ssm for SsmClient {
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeSessionsResponse, _>()
     }
 
+    /// <p>Deletes the association between an OpsItem and a related resource. For example, this API action can delete an Incident Manager incident from an OpsItem. Incident Manager is a capability of AWS Systems Manager.</p>
+    async fn disassociate_ops_item_related_item(
+        &self,
+        input: DisassociateOpsItemRelatedItemRequest,
+    ) -> Result<
+        DisassociateOpsItemRelatedItemResponse,
+        RusotoError<DisassociateOpsItemRelatedItemError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonSSM.DisassociateOpsItemRelatedItem");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DisassociateOpsItemRelatedItemError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DisassociateOpsItemRelatedItemResponse, _>()
+    }
+
     /// <p>Get detailed information about a particular Automation execution.</p>
     async fn get_automation_execution(
         &self,
@@ -18092,7 +18731,7 @@ impl Ssm for SsmClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetCalendarStateResponse, _>()
     }
 
-    /// <p>Returns detailed information about command execution for an invocation or plugin. </p>
+    /// <p>Returns detailed information about command execution for an invocation or plugin.</p> <p> <code>GetCommandInvocation</code> only gives the execution status of a plugin in a document. To get the command execution status on a specific instance, use <a>ListCommandInvocations</a>. To get the command execution status across instances, use <a>ListCommands</a>.</p>
     async fn get_command_invocation(
         &self,
         input: GetCommandInvocationRequest,
@@ -18524,7 +19163,7 @@ impl Ssm for SsmClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetServiceSettingResult, _>()
     }
 
-    /// <p><p>A parameter label is a user-defined alias to help you manage different versions of a parameter. When you modify a parameter, Systems Manager automatically saves a new version and increments the version number by one. A label can help you remember the purpose of a parameter when there are multiple versions. </p> <p>Parameter labels have the following requirements and restrictions.</p> <ul> <li> <p>A version of a parameter can have a maximum of 10 labels.</p> </li> <li> <p>You can&#39;t attach the same label to different versions of the same parameter. For example, if version 1 has the label Production, then you can&#39;t attach Production to version 2.</p> </li> <li> <p>You can move a label from one version of a parameter to another.</p> </li> <li> <p>You can&#39;t create a label when you create a new parameter. You must attach a label to a specific version of a parameter.</p> </li> <li> <p>You can&#39;t delete a parameter label. If you no longer want to use a parameter label, then you must move it to a different version of a parameter.</p> </li> <li> <p>A label can have a maximum of 100 characters.</p> </li> <li> <p>Labels can contain letters (case sensitive), numbers, periods (.), hyphens (-), or underscores (_).</p> </li> <li> <p>Labels can&#39;t begin with a number, &quot;aws,&quot; or &quot;ssm&quot; (not case sensitive). If a label fails to meet these requirements, then the label is not associated with a parameter and the system displays it in the list of InvalidLabels.</p> </li> </ul></p>
+    /// <p><p>A parameter label is a user-defined alias to help you manage different versions of a parameter. When you modify a parameter, Systems Manager automatically saves a new version and increments the version number by one. A label can help you remember the purpose of a parameter when there are multiple versions. </p> <p>Parameter labels have the following requirements and restrictions.</p> <ul> <li> <p>A version of a parameter can have a maximum of 10 labels.</p> </li> <li> <p>You can&#39;t attach the same label to different versions of the same parameter. For example, if version 1 has the label Production, then you can&#39;t attach Production to version 2.</p> </li> <li> <p>You can move a label from one version of a parameter to another.</p> </li> <li> <p>You can&#39;t create a label when you create a new parameter. You must attach a label to a specific version of a parameter.</p> </li> <li> <p>If you no longer want to use a parameter label, then you can either delete it or move it to a different version of a parameter.</p> </li> <li> <p>A label can have a maximum of 100 characters.</p> </li> <li> <p>Labels can contain letters (case sensitive), numbers, periods (.), hyphens (-), or underscores (_).</p> </li> <li> <p>Labels can&#39;t begin with a number, &quot;aws,&quot; or &quot;ssm&quot; (not case sensitive). If a label fails to meet these requirements, then the label is not associated with a parameter and the system displays it in the list of InvalidLabels.</p> </li> </ul></p>
     async fn label_parameter_version(
         &self,
         input: LabelParameterVersionRequest,
@@ -18743,6 +19382,25 @@ impl Ssm for SsmClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListOpsItemEventsResponse, _>()
+    }
+
+    /// <p>Lists all related-item resources associated with an OpsItem.</p>
+    async fn list_ops_item_related_items(
+        &self,
+        input: ListOpsItemRelatedItemsRequest,
+    ) -> Result<ListOpsItemRelatedItemsResponse, RusotoError<ListOpsItemRelatedItemsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonSSM.ListOpsItemRelatedItems");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListOpsItemRelatedItemsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListOpsItemRelatedItemsResponse, _>()
     }
 
     /// <p>Systems Manager calls this API action when displaying all Application Manager OpsMetadata objects or blobs.</p>
@@ -19201,6 +19859,25 @@ impl Ssm for SsmClient {
         proto::json::ResponsePayload::new(&response).deserialize::<TerminateSessionResponse, _>()
     }
 
+    /// <p>Remove a label or labels from a parameter.</p>
+    async fn unlabel_parameter_version(
+        &self,
+        input: UnlabelParameterVersionRequest,
+    ) -> Result<UnlabelParameterVersionResult, RusotoError<UnlabelParameterVersionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonSSM.UnlabelParameterVersion");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UnlabelParameterVersionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UnlabelParameterVersionResult, _>()
+    }
+
     /// <p><p>Updates an association. You can update the association name and version, the document version, schedule, parameters, and Amazon S3 output. </p> <p>In order to call this API action, your IAM user account, group, or role must be configured with permission to call the <a>DescribeAssociation</a> API action. If you don&#39;t have permission to call DescribeAssociation, then you receive the following error: <code>An error occurred (AccessDeniedException) when calling the UpdateAssociation operation: User: &lt;user<em>arn&gt; is not authorized to perform: ssm:DescribeAssociation on resource: &lt;resource</em>arn&gt;</code> </p> <important> <p>When you update an association, the association immediately runs against the specified targets.</p> </important></p>
     async fn update_association(
         &self,
@@ -19334,7 +20011,7 @@ impl Ssm for SsmClient {
             .deserialize::<UpdateMaintenanceWindowTargetResult, _>()
     }
 
-    /// <p><p>Modifies a task assigned to a maintenance window. You can&#39;t change the task type, but you can change the following values:</p> <ul> <li> <p>TaskARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> </li> <li> <p>ServiceRoleArn</p> </li> <li> <p>TaskInvocationParameters</p> </li> <li> <p>Priority</p> </li> <li> <p>MaxConcurrency</p> </li> <li> <p>MaxErrors</p> </li> </ul> <note> <p>One or more targets must be specified for maintenance window Run Command-type tasks. Depending on the task, targets are optional for other maintenance window task types (Automation, AWS Lambda, and AWS Step Functions). For more information about running tasks that do not specify targets, see see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/maintenance-windows-targetless-tasks.html">Registering maintenance window tasks without targets</a> in the <i>AWS Systems Manager User Guide</i>.</p> </note> <p>If the value for a parameter in <code>UpdateMaintenanceWindowTask</code> is null, then the corresponding field is not modified. If you set <code>Replace</code> to true, then all fields required by the <a>RegisterTaskWithMaintenanceWindow</a> action are required for this request. Optional fields that aren&#39;t specified are set to null.</p> <important> <p>When you update a maintenance window task that has options specified in <code>TaskInvocationParameters</code>, you must provide again all the <code>TaskInvocationParameters</code> values that you want to retain. The values you do not specify again are removed. For example, suppose that when you registered a Run Command task, you specified <code>TaskInvocationParameters</code> values for <code>Comment</code>, <code>NotificationConfig</code>, and <code>OutputS3BucketName</code>. If you update the maintenance window task and specify only a different <code>OutputS3BucketName</code> value, the values for <code>Comment</code> and <code>NotificationConfig</code> are removed.</p> </important></p>
+    /// <p><p>Modifies a task assigned to a maintenance window. You can&#39;t change the task type, but you can change the following values:</p> <ul> <li> <p>TaskARN. For example, you can change a RUN_COMMAND task from AWS-RunPowerShellScript to AWS-RunShellScript.</p> </li> <li> <p>ServiceRoleArn</p> </li> <li> <p>TaskInvocationParameters</p> </li> <li> <p>Priority</p> </li> <li> <p>MaxConcurrency</p> </li> <li> <p>MaxErrors</p> </li> </ul> <note> <p>One or more targets must be specified for maintenance window Run Command-type tasks. Depending on the task, targets are optional for other maintenance window task types (Automation, AWS Lambda, and AWS Step Functions). For more information about running tasks that do not specify targets, see <a href="https://docs.aws.amazon.com/systems-manager/latest/userguide/maintenance-windows-targetless-tasks.html">Registering maintenance window tasks without targets</a> in the <i>AWS Systems Manager User Guide</i>.</p> </note> <p>If the value for a parameter in <code>UpdateMaintenanceWindowTask</code> is null, then the corresponding field is not modified. If you set <code>Replace</code> to true, then all fields required by the <a>RegisterTaskWithMaintenanceWindow</a> action are required for this request. Optional fields that aren&#39;t specified are set to null.</p> <important> <p>When you update a maintenance window task that has options specified in <code>TaskInvocationParameters</code>, you must provide again all the <code>TaskInvocationParameters</code> values that you want to retain. The values you do not specify again are removed. For example, suppose that when you registered a Run Command task, you specified <code>TaskInvocationParameters</code> values for <code>Comment</code>, <code>NotificationConfig</code>, and <code>OutputS3BucketName</code>. If you update the maintenance window task and specify only a different <code>OutputS3BucketName</code> value, the values for <code>Comment</code> and <code>NotificationConfig</code> are removed.</p> </important></p>
     async fn update_maintenance_window_task(
         &self,
         input: UpdateMaintenanceWindowTaskRequest,

@@ -60,9 +60,14 @@ pub struct AddApplicationCloudWatchLoggingOptionRequest {
     /// <p>Provides the Amazon CloudWatch log stream Amazon Resource Name (ARN). </p>
     #[serde(rename = "CloudWatchLoggingOption")]
     pub cloud_watch_logging_option: CloudWatchLoggingOption,
-    /// <p>The version ID of the Kinesis Data Analytics application. You can retrieve the application version ID using <a>DescribeApplication</a>.</p>
+    /// <p>A value you use to implement strong concurrency for application updates. You must provide the <code>CurrentApplicationVersionId</code> or the <code>ConditionalToken</code>. You get the application's current <code>ConditionalToken</code> using <a>DescribeApplication</a>. For better concurrency support, use the <code>ConditionalToken</code> parameter instead of <code>CurrentApplicationVersionId</code>.</p>
+    #[serde(rename = "ConditionalToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conditional_token: Option<String>,
+    /// <p>The version ID of the Kinesis Data Analytics application. You must provide the <code>CurrentApplicationVersionId</code> or the <code>ConditionalToken</code>.You can retrieve the application version ID using <a>DescribeApplication</a>. For better concurrency support, use the <code>ConditionalToken</code> parameter instead of <code>CurrentApplicationVersionId</code>.</p>
     #[serde(rename = "CurrentApplicationVersionId")]
-    pub current_application_version_id: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_application_version_id: Option<i64>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -106,7 +111,7 @@ pub struct AddApplicationInputProcessingConfigurationResponse {
     #[serde(rename = "ApplicationARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_arn: Option<String>,
-    /// <p>Provides the current application version.</p>
+    /// <p>Provides the current application version. </p>
     #[serde(rename = "ApplicationVersionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_version_id: Option<i64>,
@@ -126,7 +131,7 @@ pub struct AddApplicationInputRequest {
     /// <p>The name of your existing application to which you want to add the streaming source.</p>
     #[serde(rename = "ApplicationName")]
     pub application_name: String,
-    /// <p>The current version of your application. You can use the <a>DescribeApplication</a> operation to find the current application version.</p>
+    /// <p>The current version of your application. You must provide the <code>ApplicationVersionID</code> or the <code>ConditionalToken</code>.You can use the <a>DescribeApplication</a> operation to find the current application version.</p>
     #[serde(rename = "CurrentApplicationVersionId")]
     pub current_application_version_id: i64,
     /// <p>The <a>Input</a> to add.</p>
@@ -219,9 +224,14 @@ pub struct AddApplicationVpcConfigurationRequest {
     /// <p>The name of an existing application.</p>
     #[serde(rename = "ApplicationName")]
     pub application_name: String,
-    /// <p>The version of the application to which you want to add the VPC configuration. You can use the <a>DescribeApplication</a> operation to get the current application version. If the version specified is not the current version, the <code>ConcurrentModificationException</code> is returned.</p>
+    /// <p>A value you use to implement strong concurrency for application updates. You must provide the <code>ApplicationVersionID</code> or the <code>ConditionalToken</code>. You get the application's current <code>ConditionalToken</code> using <a>DescribeApplication</a>. For better concurrency support, use the <code>ConditionalToken</code> parameter instead of <code>CurrentApplicationVersionId</code>.</p>
+    #[serde(rename = "ConditionalToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conditional_token: Option<String>,
+    /// <p>The version of the application to which you want to add the VPC configuration. You must provide the <code>CurrentApplicationVersionId</code> or the <code>ConditionalToken</code>. You can use the <a>DescribeApplication</a> operation to get the current application version. If the version specified is not the current version, the <code>ConcurrentModificationException</code> is returned. For better concurrency support, use the <code>ConditionalToken</code> parameter instead of <code>CurrentApplicationVersionId</code>.</p>
     #[serde(rename = "CurrentApplicationVersionId")]
-    pub current_application_version_id: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_application_version_id: Option<i64>,
     /// <p>Description of the VPC to add to the application.</p>
     #[serde(rename = "VpcConfiguration")]
     pub vpc_configuration: VpcConfiguration,
@@ -234,7 +244,7 @@ pub struct AddApplicationVpcConfigurationResponse {
     #[serde(rename = "ApplicationARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_arn: Option<String>,
-    /// <p>Provides the current application version. Kinesis Data Analytics updates the ApplicationVersionId each time you update the application. </p>
+    /// <p>Provides the current application version. Kinesis Data Analytics updates the ApplicationVersionId each time you update the application.</p>
     #[serde(rename = "ApplicationVersionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_version_id: Option<i64>,
@@ -244,7 +254,7 @@ pub struct AddApplicationVpcConfigurationResponse {
     pub vpc_configuration_description: Option<VpcConfigurationDescription>,
 }
 
-/// <p>Describes code configuration for a Flink-based Kinesis Data Analytics application.</p>
+/// <p>Describes code configuration for an application.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplicationCodeConfiguration {
@@ -257,7 +267,7 @@ pub struct ApplicationCodeConfiguration {
     pub code_content_type: String,
 }
 
-/// <p>Describes code configuration for a Flink-based Kinesis Data Analytics application.</p>
+/// <p>Describes code configuration for an application.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ApplicationCodeConfigurationDescription {
@@ -270,7 +280,7 @@ pub struct ApplicationCodeConfigurationDescription {
     pub code_content_type: String,
 }
 
-/// <p>Describes code configuration updates to a Flink-based Kinesis Data Analytics application.</p>
+/// <p>Describes code configuration updates for an application. This is supported for a Flink-based Kinesis Data Analytics application or a SQL-based Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplicationCodeConfigurationUpdate {
@@ -290,7 +300,8 @@ pub struct ApplicationCodeConfigurationUpdate {
 pub struct ApplicationConfiguration {
     /// <p>The code location and type parameters for a Flink-based Kinesis Data Analytics application.</p>
     #[serde(rename = "ApplicationCodeConfiguration")]
-    pub application_code_configuration: ApplicationCodeConfiguration,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_code_configuration: Option<ApplicationCodeConfiguration>,
     /// <p>Describes whether snapshots are enabled for a Flink-based Kinesis Data Analytics application.</p>
     #[serde(rename = "ApplicationSnapshotConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -311,6 +322,10 @@ pub struct ApplicationConfiguration {
     #[serde(rename = "VpcConfigurations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_configurations: Option<Vec<VpcConfiguration>>,
+    /// <p>The configuration parameters for a Kinesis Data Analytics Studio notebook.</p>
+    #[serde(rename = "ZeppelinApplicationConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub zeppelin_application_configuration: Option<ZeppelinApplicationConfiguration>,
 }
 
 /// <p>Describes details about the application code and starting parameters for a Kinesis Data Analytics application.</p>
@@ -347,13 +362,18 @@ pub struct ApplicationConfigurationDescription {
     #[serde(rename = "VpcConfigurationDescriptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_configuration_descriptions: Option<Vec<VpcConfigurationDescription>>,
+    /// <p>The configuration parameters for a Kinesis Data Analytics Studio notebook.</p>
+    #[serde(rename = "ZeppelinApplicationConfigurationDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub zeppelin_application_configuration_description:
+        Option<ZeppelinApplicationConfigurationDescription>,
 }
 
 /// <p>Describes updates to an application's configuration.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplicationConfigurationUpdate {
-    /// <p>Describes updates to a Flink-based Kinesis Data Analytics application's code configuration.</p>
+    /// <p>Describes updates to an application's code configuration.</p>
     #[serde(rename = "ApplicationCodeConfigurationUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_code_configuration_update: Option<ApplicationCodeConfigurationUpdate>,
@@ -377,6 +397,10 @@ pub struct ApplicationConfigurationUpdate {
     #[serde(rename = "VpcConfigurationUpdates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_configuration_updates: Option<Vec<VpcConfigurationUpdate>>,
+    /// <p>Updates to the configuration of a Kinesis Data Analytics Studio notebook.</p>
+    #[serde(rename = "ZeppelinApplicationConfigurationUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub zeppelin_application_configuration_update: Option<ZeppelinApplicationConfigurationUpdate>,
 }
 
 /// <p>Describes the application, including the application Amazon Resource Name (ARN), status, latest version, and input and output configurations.</p>
@@ -386,7 +410,7 @@ pub struct ApplicationDetail {
     /// <p>The ARN of the application.</p>
     #[serde(rename = "ApplicationARN")]
     pub application_arn: String,
-    /// <p>Provides details about the application's Java, SQL, or Scala code and starting parameters.</p>
+    /// <p>Describes details about the application code and starting parameters for a Kinesis Data Analytics application.</p>
     #[serde(rename = "ApplicationConfigurationDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_configuration_description: Option<ApplicationConfigurationDescription>,
@@ -394,6 +418,15 @@ pub struct ApplicationDetail {
     #[serde(rename = "ApplicationDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_description: Option<String>,
+    /// <p>The details of the maintenance configuration for the application.</p>
+    #[serde(rename = "ApplicationMaintenanceConfigurationDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_maintenance_configuration_description:
+        Option<ApplicationMaintenanceConfigurationDescription>,
+    /// <p>To create a Kinesis Data Analytics Studio notebook, you must set the mode to <code>INTERACTIVE</code>. However, for a Kinesis Data Analytics for Apache Flink application, the mode is optional.</p>
+    #[serde(rename = "ApplicationMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_mode: Option<String>,
     /// <p>The name of the application.</p>
     #[serde(rename = "ApplicationName")]
     pub application_name: String,
@@ -403,10 +436,26 @@ pub struct ApplicationDetail {
     /// <p>Provides the current application version. Kinesis Data Analytics updates the <code>ApplicationVersionId</code> each time you update the application.</p>
     #[serde(rename = "ApplicationVersionId")]
     pub application_version_id: i64,
+    /// <p>If you reverted the application using <a>RollbackApplication</a>, the application version when <code>RollbackApplication</code> was called.</p>
+    #[serde(rename = "ApplicationVersionRolledBackFrom")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_version_rolled_back_from: Option<i64>,
+    /// <p>The version to which you want to roll back the application.</p>
+    #[serde(rename = "ApplicationVersionRolledBackTo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_version_rolled_back_to: Option<i64>,
+    /// <p>The previous application version before the latest application update. <a>RollbackApplication</a> reverts the application to this version.</p>
+    #[serde(rename = "ApplicationVersionUpdatedFrom")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_version_updated_from: Option<i64>,
     /// <p>Describes the application Amazon CloudWatch logging options.</p>
     #[serde(rename = "CloudWatchLoggingOptionDescriptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_watch_logging_option_descriptions: Option<Vec<CloudWatchLoggingOptionDescription>>,
+    /// <p>A value you use to implement strong concurrency for application updates.</p>
+    #[serde(rename = "ConditionalToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conditional_token: Option<String>,
     /// <p>The current timestamp when the application was created.</p>
     #[serde(rename = "CreateTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -415,13 +464,34 @@ pub struct ApplicationDetail {
     #[serde(rename = "LastUpdateTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_update_timestamp: Option<f64>,
-    /// <p>The runtime environment for the application (<code>SQL-1.0</code>, <code>FLINK-1_6</code>, or <code>FLINK-1_8</code>).</p>
+    /// <p>The runtime environment for the application (<code>SQL-1_0</code>, <code>FLINK-1_6</code>, <code>FLINK-1_8</code>, or <code>FLINK-1_11</code>).</p>
     #[serde(rename = "RuntimeEnvironment")]
     pub runtime_environment: String,
     /// <p>Specifies the IAM role that the application uses to access external resources.</p>
     #[serde(rename = "ServiceExecutionRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_execution_role: Option<String>,
+}
+
+/// <p>The details of the maintenance configuration for the application.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ApplicationMaintenanceConfigurationDescription {
+    /// <p>The end time for the maintenance window.</p>
+    #[serde(rename = "ApplicationMaintenanceWindowEndTime")]
+    pub application_maintenance_window_end_time: String,
+    /// <p>The start time for the maintenance window.</p>
+    #[serde(rename = "ApplicationMaintenanceWindowStartTime")]
+    pub application_maintenance_window_start_time: String,
+}
+
+/// <p>Describes the updated maintenance configuration for the application.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ApplicationMaintenanceConfigurationUpdate {
+    /// <p>The updated start time for the maintenance window.</p>
+    #[serde(rename = "ApplicationMaintenanceWindowStartTimeUpdate")]
+    pub application_maintenance_window_start_time_update: String,
 }
 
 /// <p>Specifies the method and snapshot to use when restarting an application using previously saved application state.</p>
@@ -458,7 +528,7 @@ pub struct ApplicationSnapshotConfigurationDescription {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ApplicationSnapshotConfigurationUpdate {
-    /// <p>Describes updates to whether snapshots are enabled for a Flink-based Kinesis Data Analytics application.</p>
+    /// <p>Describes updates to whether snapshots are enabled for an application.</p>
     #[serde(rename = "SnapshotsEnabledUpdate")]
     pub snapshots_enabled_update: bool,
 }
@@ -470,6 +540,10 @@ pub struct ApplicationSummary {
     /// <p>The ARN of the application.</p>
     #[serde(rename = "ApplicationARN")]
     pub application_arn: String,
+    /// <p>For a Kinesis Data Analytics for Apache Flink application, the mode is <code>STREAMING</code>. For a Kinesis Data Analytics Studio notebook, it is <code>INTERACTIVE</code>.</p>
+    #[serde(rename = "ApplicationMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_mode: Option<String>,
     /// <p>The name of the application.</p>
     #[serde(rename = "ApplicationName")]
     pub application_name: String,
@@ -479,9 +553,21 @@ pub struct ApplicationSummary {
     /// <p>Provides the current application version.</p>
     #[serde(rename = "ApplicationVersionId")]
     pub application_version_id: i64,
-    /// <p>The runtime environment for the application (<code>SQL-1.0</code>, <code>FLINK-1_6</code>, or <code>FLINK-1_8</code>).</p>
+    /// <p>The runtime environment for the application.</p>
     #[serde(rename = "RuntimeEnvironment")]
     pub runtime_environment: String,
+}
+
+/// <p>The summary of the application version.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ApplicationVersionSummary {
+    /// <p>The status of the application.</p>
+    #[serde(rename = "ApplicationStatus")]
+    pub application_status: String,
+    /// <p>The ID of the application version. Kinesis Data Analytics updates the <code>ApplicationVersionId</code> each time you update the application.</p>
+    #[serde(rename = "ApplicationVersionId")]
+    pub application_version_id: i64,
 }
 
 /// <p>For a SQL-based Kinesis Data Analytics application, provides additional mapping information when the record format uses delimiters, such as CSV. For example, the following sample records use CSV format, where the records use the <i>'\n'</i> as the row delimiter and a comma (",") as the column delimiter: </p> <p> <code>"name1", "address1"</code> </p> <p> <code>"name2", "address2"</code> </p>
@@ -495,11 +581,38 @@ pub struct CSVMappingParameters {
     pub record_row_delimiter: String,
 }
 
+/// <p>The configuration parameters for the default AWS Glue database. You use this database for SQL queries that you write in a Kinesis Data Analytics Studio notebook.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CatalogConfiguration {
+    /// <p>The configuration parameters for the default AWS Glue database. You use this database for Apache Flink SQL queries and table API transforms that you write in a Kinesis Data Analytics Studio notebook.</p>
+    #[serde(rename = "GlueDataCatalogConfiguration")]
+    pub glue_data_catalog_configuration: GlueDataCatalogConfiguration,
+}
+
+/// <p>The configuration parameters for the default AWS Glue database. You use this database for Apache Flink SQL queries and table API transforms that you write in a Kinesis Data Analytics Studio notebook.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CatalogConfigurationDescription {
+    /// <p>The configuration parameters for the default AWS Glue database. You use this database for SQL queries that you write in a Kinesis Data Analytics Studio notebook.</p>
+    #[serde(rename = "GlueDataCatalogConfigurationDescription")]
+    pub glue_data_catalog_configuration_description: GlueDataCatalogConfigurationDescription,
+}
+
+/// <p>Updates to </p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CatalogConfigurationUpdate {
+    /// <p>Updates to the configuration parameters for the default AWS Glue database. You use this database for SQL queries that you write in a Kinesis Data Analytics Studio notebook.</p>
+    #[serde(rename = "GlueDataCatalogConfigurationUpdate")]
+    pub glue_data_catalog_configuration_update: GlueDataCatalogConfigurationUpdate,
+}
+
 /// <p>Describes an application's checkpointing configuration. Checkpointing is the process of persisting application state for fault tolerance. For more information, see <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/concepts/programming-model.html#checkpoints-for-fault-tolerance"> Checkpoints for Fault Tolerance</a> in the <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/">Apache Flink Documentation</a>.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CheckpointConfiguration {
-    /// <p><p>Describes the interval in milliseconds between checkpoint operations. </p> <note> <p>If <code>CheckpointConfiguration.ConfigurationType</code> is <code>DEFAULT</code>, the application will use a <code>CheckpointInterval</code> vaue of 60000, even if this value is set to another value using this API or in application code.</p> </note></p>
+    /// <p><p>Describes the interval in milliseconds between checkpoint operations. </p> <note> <p>If <code>CheckpointConfiguration.ConfigurationType</code> is <code>DEFAULT</code>, the application will use a <code>CheckpointInterval</code> value of 60000, even if this value is set to another value using this API or in application code.</p> </note></p>
     #[serde(rename = "CheckpointInterval")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub checkpoint_interval: Option<i64>,
@@ -520,7 +633,7 @@ pub struct CheckpointConfiguration {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CheckpointConfigurationDescription {
-    /// <p><p>Describes the interval in milliseconds between checkpoint operations. </p> <note> <p>If <code>CheckpointConfiguration.ConfigurationType</code> is <code>DEFAULT</code>, the application will use a <code>CheckpointInterval</code> vaue of 60000, even if this value is set to another value using this API or in application code.</p> </note></p>
+    /// <p><p>Describes the interval in milliseconds between checkpoint operations. </p> <note> <p>If <code>CheckpointConfiguration.ConfigurationType</code> is <code>DEFAULT</code>, the application will use a <code>CheckpointInterval</code> value of 60000, even if this value is set to another value using this API or in application code.</p> </note></p>
     #[serde(rename = "CheckpointInterval")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub checkpoint_interval: Option<i64>,
@@ -542,7 +655,7 @@ pub struct CheckpointConfigurationDescription {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CheckpointConfigurationUpdate {
-    /// <p><p>Describes updates to the interval in milliseconds between checkpoint operations.</p> <note> <p>If <code>CheckpointConfiguration.ConfigurationType</code> is <code>DEFAULT</code>, the application will use a <code>CheckpointInterval</code> vaue of 60000, even if this value is set to another value using this API or in application code.</p> </note></p>
+    /// <p><p>Describes updates to the interval in milliseconds between checkpoint operations.</p> <note> <p>If <code>CheckpointConfiguration.ConfigurationType</code> is <code>DEFAULT</code>, the application will use a <code>CheckpointInterval</code> value of 60000, even if this value is set to another value using this API or in application code.</p> </note></p>
     #[serde(rename = "CheckpointIntervalUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub checkpoint_interval_update: Option<i64>,
@@ -603,7 +716,7 @@ pub struct CloudWatchLoggingOptionUpdate {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CodeContent {
-    /// <p>Information about the Amazon S3 bucket containing the application code.</p>
+    /// <p>Information about the Amazon S3 bucket that contains the application code.</p>
     #[serde(rename = "S3ContentLocation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_content_location: Option<S3ContentLocation>,
@@ -622,7 +735,7 @@ pub struct CodeContent {
     pub zip_file_content: Option<bytes::Bytes>,
 }
 
-/// <p>Describes details about the application code for a Flink-based Kinesis Data Analytics application.</p>
+/// <p>Describes details about the code of a Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CodeContentDescription {
@@ -644,7 +757,7 @@ pub struct CodeContentDescription {
     pub text_content: Option<String>,
 }
 
-/// <p>Describes an update to the code of a Flink-based Kinesis Data Analytics application.</p>
+/// <p>Describes an update to the code of an application. Not supported for Apache Zeppelin.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CodeContentUpdate {
@@ -702,6 +815,10 @@ pub struct CreateApplicationRequest {
     #[serde(rename = "ApplicationDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_description: Option<String>,
+    /// <p>Use the <code>STREAMING</code> mode to create a Kinesis Data Analytics Studio notebook. To create a Kinesis Data Analytics Studio notebook, use the <code>INTERACTIVE</code> mode.</p>
+    #[serde(rename = "ApplicationMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_mode: Option<String>,
     /// <p>The name of your application (for example, <code>sample-app</code>).</p>
     #[serde(rename = "ApplicationName")]
     pub application_name: String,
@@ -709,7 +826,7 @@ pub struct CreateApplicationRequest {
     #[serde(rename = "CloudWatchLoggingOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_watch_logging_options: Option<Vec<CloudWatchLoggingOption>>,
-    /// <p>The runtime environment for the application (<code>SQL-1.0</code>, <code>FLINK-1_6</code>, or <code>FLINK-1_8</code>).</p>
+    /// <p>The runtime environment for the application (<code>SQL-1_0</code>, <code>FLINK-1_6</code>, <code>FLINK-1_8</code>, or <code>FLINK-1_11</code>).</p>
     #[serde(rename = "RuntimeEnvironment")]
     pub runtime_environment: String,
     /// <p>The IAM role used by the application to access Kinesis data streams, Kinesis Data Firehose delivery streams, Amazon S3 objects, and other external resources.</p>
@@ -744,6 +861,39 @@ pub struct CreateApplicationSnapshotRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CreateApplicationSnapshotResponse {}
 
+/// <p>Specifies dependency JARs, as well as JAR files that contain user-defined functions (UDF).</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CustomArtifactConfiguration {
+    /// <p> <code>UDF</code> stands for user-defined functions. This type of artifact must be in an S3 bucket. A <code>DEPENDENCY_JAR</code> can be in either Maven or an S3 bucket.</p>
+    #[serde(rename = "ArtifactType")]
+    pub artifact_type: String,
+    /// <p>The parameters required to fully specify a Maven reference.</p>
+    #[serde(rename = "MavenReference")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maven_reference: Option<MavenReference>,
+    #[serde(rename = "S3ContentLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_content_location: Option<S3ContentLocation>,
+}
+
+/// <p>Specifies a dependency JAR or a JAR of user-defined functions.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CustomArtifactConfigurationDescription {
+    /// <p> <code>UDF</code> stands for user-defined functions. This type of artifact must be in an S3 bucket. A <code>DEPENDENCY_JAR</code> can be in either Maven or an S3 bucket.</p>
+    #[serde(rename = "ArtifactType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub artifact_type: Option<String>,
+    /// <p>The parameters that are required to specify a Maven dependency.</p>
+    #[serde(rename = "MavenReferenceDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maven_reference_description: Option<MavenReference>,
+    #[serde(rename = "S3ContentLocationDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_content_location_description: Option<S3ContentLocation>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteApplicationCloudWatchLoggingOptionRequest {
@@ -753,9 +903,14 @@ pub struct DeleteApplicationCloudWatchLoggingOptionRequest {
     /// <p>The <code>CloudWatchLoggingOptionId</code> of the Amazon CloudWatch logging option to delete. You can get the <code>CloudWatchLoggingOptionId</code> by using the <a>DescribeApplication</a> operation. </p>
     #[serde(rename = "CloudWatchLoggingOptionId")]
     pub cloud_watch_logging_option_id: String,
-    /// <p>The version ID of the application. You can retrieve the application version ID using <a>DescribeApplication</a>.</p>
+    /// <p>A value you use to implement strong concurrency for application updates. You must provide the <code>CurrentApplicationVersionId</code> or the <code>ConditionalToken</code>. You get the application's current <code>ConditionalToken</code> using <a>DescribeApplication</a>. For better concurrency support, use the <code>ConditionalToken</code> parameter instead of <code>CurrentApplicationVersionId</code>.</p>
+    #[serde(rename = "ConditionalToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conditional_token: Option<String>,
+    /// <p>The version ID of the application. You must provide the <code>CurrentApplicationVersionId</code> or the <code>ConditionalToken</code>. You can retrieve the application version ID using <a>DescribeApplication</a>. For better concurrency support, use the <code>ConditionalToken</code> parameter instead of <code>CurrentApplicationVersionId</code>.</p>
     #[serde(rename = "CurrentApplicationVersionId")]
-    pub current_application_version_id: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_application_version_id: Option<i64>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -895,9 +1050,14 @@ pub struct DeleteApplicationVpcConfigurationRequest {
     /// <p>The name of an existing application.</p>
     #[serde(rename = "ApplicationName")]
     pub application_name: String,
-    /// <p>The current application version ID. You can retrieve the application version ID using <a>DescribeApplication</a>.</p>
+    /// <p>A value you use to implement strong concurrency for application updates. You must provide the <code>CurrentApplicationVersionId</code> or the <code>ConditionalToken</code>. You get the application's current <code>ConditionalToken</code> using <a>DescribeApplication</a>. For better concurrency support, use the <code>ConditionalToken</code> parameter instead of <code>CurrentApplicationVersionId</code>.</p>
+    #[serde(rename = "ConditionalToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conditional_token: Option<String>,
+    /// <p>The current application version ID. You must provide the <code>CurrentApplicationVersionId</code> or the <code>ConditionalToken</code>. You can retrieve the application version ID using <a>DescribeApplication</a>. For better concurrency support, use the <code>ConditionalToken</code> parameter instead of <code>CurrentApplicationVersionId</code>.</p>
     #[serde(rename = "CurrentApplicationVersionId")]
-    pub current_application_version_id: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_application_version_id: Option<i64>,
     /// <p>The ID of the VPC configuration to delete.</p>
     #[serde(rename = "VpcConfigurationId")]
     pub vpc_configuration_id: String,
@@ -914,6 +1074,33 @@ pub struct DeleteApplicationVpcConfigurationResponse {
     #[serde(rename = "ApplicationVersionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_version_id: Option<i64>,
+}
+
+/// <p>The information required to deploy a Kinesis Data Analytics Studio notebook as an application with durable state..</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeployAsApplicationConfiguration {
+    /// <p>The description of an Amazon S3 object that contains the Amazon Data Analytics application, including the Amazon Resource Name (ARN) of the S3 bucket, the name of the Amazon S3 object that contains the data, and the version number of the Amazon S3 object that contains the data. </p>
+    #[serde(rename = "S3ContentLocation")]
+    pub s3_content_location: S3ContentBaseLocation,
+}
+
+/// <p>The configuration information required to deploy an Amazon Data Analytics Studio notebook as an application with durable state.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeployAsApplicationConfigurationDescription {
+    /// <p>The location that holds the data required to specify an Amazon Data Analytics application.</p>
+    #[serde(rename = "S3ContentLocationDescription")]
+    pub s3_content_location_description: S3ContentBaseLocationDescription,
+}
+
+/// <p>Updates to the configuration information required to deploy an Amazon Data Analytics Studio notebook as an application with durable state..</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeployAsApplicationConfigurationUpdate {
+    /// <p>Updates to the location that holds the data required to specify an Amazon Data Analytics application.</p>
+    #[serde(rename = "S3ContentLocationUpdate")]
+    pub s3_content_location_update: S3ContentBaseLocationUpdate,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -953,6 +1140,25 @@ pub struct DescribeApplicationSnapshotResponse {
     /// <p>An object containing information about the application snapshot.</p>
     #[serde(rename = "SnapshotDetails")]
     pub snapshot_details: SnapshotDetails,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeApplicationVersionRequest {
+    /// <p>The name of the application for which you want to get the version description.</p>
+    #[serde(rename = "ApplicationName")]
+    pub application_name: String,
+    /// <p>The ID of the application version for which you want to get the description.</p>
+    #[serde(rename = "ApplicationVersionId")]
+    pub application_version_id: i64,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeApplicationVersionResponse {
+    #[serde(rename = "ApplicationVersionDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_version_detail: Option<ApplicationDetail>,
 }
 
 /// <p>Describes the data format when records are written to the destination in a SQL-based Kinesis Data Analytics application. </p>
@@ -1017,7 +1223,7 @@ pub struct EnvironmentProperties {
     pub property_groups: Vec<PropertyGroup>,
 }
 
-/// <p>Describes the execution properties for a Flink-based Kinesis Data Analytics application.</p>
+/// <p>Describes the execution properties for an Apache Flink runtime.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnvironmentPropertyDescriptions {
@@ -1027,7 +1233,7 @@ pub struct EnvironmentPropertyDescriptions {
     pub property_group_descriptions: Option<Vec<PropertyGroup>>,
 }
 
-/// <p>Describes updates to the execution property groups for a Flink-based Kinesis Data Analytics application.</p>
+/// <p>Describes updates to the execution property groups for a Flink-based Kinesis Data Analytics application or a Studio notebook.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EnvironmentPropertyUpdates {
@@ -1036,7 +1242,7 @@ pub struct EnvironmentPropertyUpdates {
     pub property_groups: Vec<PropertyGroup>,
 }
 
-/// <p>Describes configuration parameters for a Flink-based Kinesis Data Analytics application.</p>
+/// <p>Describes configuration parameters for a Flink-based Kinesis Data Analytics application or a Studio notebook.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct FlinkApplicationConfiguration {
@@ -1101,6 +1307,34 @@ pub struct FlinkRunConfiguration {
     #[serde(rename = "AllowNonRestoredState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allow_non_restored_state: Option<bool>,
+}
+
+/// <p>The configuration of the Glue Data Catalog that you use for Apache Flink SQL queries and table API transforms that you write in an application.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GlueDataCatalogConfiguration {
+    /// <p>The Amazon Resource Name (ARN) of the database.</p>
+    #[serde(rename = "DatabaseARN")]
+    pub database_arn: String,
+}
+
+/// <p>The configuration of the Glue Data Catalog that you use for Apache Flink SQL queries and table API transforms that you write in an application.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GlueDataCatalogConfigurationDescription {
+    /// <p>The Amazon Resource Name (ARN) of the database.</p>
+    #[serde(rename = "DatabaseARN")]
+    pub database_arn: String,
+}
+
+/// <p>Updates to the configuration of the Glue Data Catalog that you use for SQL queries that you write in a Kinesis Data Analytics Studio notebook.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GlueDataCatalogConfigurationUpdate {
+    /// <p>The updated Amazon Resource Name (ARN) of the database.</p>
+    #[serde(rename = "DatabaseARNUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub database_arn_update: Option<String>,
 }
 
 /// <p>When you configure the application input for a SQL-based Kinesis Data Analytics application, you specify the streaming source, the in-application stream name that is created, and the mapping between the two. </p>
@@ -1504,6 +1738,35 @@ pub struct ListApplicationSnapshotsResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListApplicationVersionsRequest {
+    /// <p>The name of the application for which you want to list all versions.</p>
+    #[serde(rename = "ApplicationName")]
+    pub application_name: String,
+    /// <p>The maximum number of versions to list in this invocation of the operation.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>If a previous invocation of this operation returned a pagination token, pass it into this value to retrieve the next set of results. For more information about pagination, see <a href="https://docs.aws.amazon.com/cli/latest/userguide/pagination.html">Using the AWS Command Line Interface's Pagination Options</a>.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListApplicationVersionsResponse {
+    /// <p>A list of the application versions and the associated configuration summaries. The list includes application versions that were rolled back.</p> <p>To get the complete description of a specific application version, invoke the <a>DescribeApplicationVersion</a> operation.</p>
+    #[serde(rename = "ApplicationVersionSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_version_summaries: Option<Vec<ApplicationVersionSummary>>,
+    /// <p>The pagination token for the next set of results, or <code>null</code> if there are no additional results. To retrieve the next set of items, pass this token into a subsequent invocation of this operation. For more information about pagination, see <a href="https://docs.aws.amazon.com/cli/latest/userguide/pagination.html">Using the AWS Command Line Interface's Pagination Options</a>.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApplicationsRequest {
     /// <p>The maximum number of applications to list.</p>
     #[serde(rename = "Limit")]
@@ -1557,7 +1820,21 @@ pub struct MappingParameters {
     pub json_mapping_parameters: Option<JSONMappingParameters>,
 }
 
-/// <p>Describes configuration parameters for Amazon CloudWatch logging for a Flink-based Kinesis Data Analytics application. For more information about CloudWatch logging, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/monitoring-overview.html">Monitoring</a>.</p>
+/// <p>The information required to specify a Maven reference. You can use Maven references to specify dependency JAR files.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct MavenReference {
+    /// <p>The artifact ID of the Maven reference.</p>
+    #[serde(rename = "ArtifactId")]
+    pub artifact_id: String,
+    /// <p>The group ID of the Maven reference.</p>
+    #[serde(rename = "GroupId")]
+    pub group_id: String,
+    /// <p>The version of the Maven reference.</p>
+    #[serde(rename = "Version")]
+    pub version: String,
+}
+
+/// <p>Describes configuration parameters for Amazon CloudWatch logging for an application. For more information about CloudWatch logging, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/monitoring-overview.html">Monitoring</a>.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MonitoringConfiguration {
@@ -1574,7 +1851,7 @@ pub struct MonitoringConfiguration {
     pub metrics_level: Option<String>,
 }
 
-/// <p>Describes configuration parameters for CloudWatch logging for a Flink-based Kinesis Data Analytics application.</p>
+/// <p>Describes configuration parameters for CloudWatch logging for an application.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MonitoringConfigurationDescription {
@@ -1592,7 +1869,7 @@ pub struct MonitoringConfigurationDescription {
     pub metrics_level: Option<String>,
 }
 
-/// <p>Describes updates to configuration parameters for Amazon CloudWatch logging for a Flink-based Kinesis Data Analytics application.</p>
+/// <p>Describes updates to configuration parameters for Amazon CloudWatch logging for an application.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct MonitoringConfigurationUpdate {
@@ -1693,7 +1970,7 @@ pub struct OutputUpdate {
     pub output_id: String,
 }
 
-/// <p>Describes parameters for how a Flink-based Kinesis Data Analytics application application executes multiple tasks simultaneously. For more information about parallelism, see <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/dev/parallel.html">Parallel Execution</a> in the <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/">Apache Flink Documentation</a>.</p>
+/// <p>Describes parameters for how a Flink-based Kinesis Data Analytics application executes multiple tasks simultaneously. For more information about parallelism, see <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/dev/parallel.html">Parallel Execution</a> in the <a href="https://ci.apache.org/projects/flink/flink-docs-release-1.8/">Apache Flink Documentation</a>.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ParallelismConfiguration {
@@ -1740,11 +2017,11 @@ pub struct ParallelismConfigurationDescription {
     pub parallelism_per_kpu: Option<i64>,
 }
 
-/// <p>Describes updates to parameters for how a Flink-based Kinesis Data Analytics application executes multiple tasks simultaneously.</p>
+/// <p>Describes updates to parameters for how an application executes multiple tasks simultaneously.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ParallelismConfigurationUpdate {
-    /// <p>Describes updates to whether the Kinesis Data Analytics service can increase the parallelism of the application in response to increased throughput.</p>
+    /// <p>Describes updates to whether the Kinesis Data Analytics service can increase the parallelism of a Flink-based Kinesis Data Analytics application in response to increased throughput.</p>
     #[serde(rename = "AutoScalingEnabledUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_scaling_enabled_update: Option<bool>,
@@ -1762,7 +2039,7 @@ pub struct ParallelismConfigurationUpdate {
     pub parallelism_update: Option<i64>,
 }
 
-/// <p>Property key-value pairs passed into a Flink-based Kinesis Data Analytics application.</p>
+/// <p>Property key-value pairs passed into an application.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PropertyGroup {
     /// <p>Describes the key of an application execution property key-value pair.</p>
@@ -1856,6 +2133,24 @@ pub struct ReferenceDataSourceUpdate {
     pub table_name_update: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RollbackApplicationRequest {
+    /// <p>The name of the application.</p>
+    #[serde(rename = "ApplicationName")]
+    pub application_name: String,
+    /// <p>The current application version ID. You can retrieve the application version ID using <a>DescribeApplication</a>.</p>
+    #[serde(rename = "CurrentApplicationVersionId")]
+    pub current_application_version_id: i64,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RollbackApplicationResponse {
+    #[serde(rename = "ApplicationDetail")]
+    pub application_detail: ApplicationDetail,
+}
+
 /// <p>Describes the starting parameters for an Kinesis Data Analytics application.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1901,7 +2196,7 @@ pub struct RunConfigurationUpdate {
     pub flink_run_configuration: Option<FlinkRunConfiguration>,
 }
 
-/// <p>Describes the location of a Flink-based Kinesis Data Analytics application's code stored in an S3 bucket.</p>
+/// <p>Describes the location of an application's code stored in an S3 bucket.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct S3ApplicationCodeLocationDescription {
@@ -1929,9 +2224,47 @@ pub struct S3Configuration {
     pub file_key: String,
 }
 
-/// <p>For a Flink-based Kinesis Data Analytics application, provides a description of an Amazon S3 object, including the Amazon Resource Name (ARN) of the S3 bucket, the name of the Amazon S3 object that contains the data, and the version number of the Amazon S3 object that contains the data. </p>
+/// <p>The S3 bucket that holds the application information.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct S3ContentBaseLocation {
+    /// <p>The base path for the S3 bucket.</p>
+    #[serde(rename = "BasePath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub base_path: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the S3 bucket.</p>
+    #[serde(rename = "BucketARN")]
+    pub bucket_arn: String,
+}
+
+/// <p>The description of the S3 base location that holds the application.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct S3ContentBaseLocationDescription {
+    /// <p>The base path for the S3 bucket.</p>
+    #[serde(rename = "BasePath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub base_path: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the S3 bucket.</p>
+    #[serde(rename = "BucketARN")]
+    pub bucket_arn: String,
+}
+
+/// <p>The information required to update the S3 base location that holds the application.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct S3ContentBaseLocationUpdate {
+    /// <p>The updated S3 bucket path.</p>
+    #[serde(rename = "BasePathUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub base_path_update: Option<String>,
+    /// <p>The updated Amazon Resource Name (ARN) of the S3 bucket.</p>
+    #[serde(rename = "BucketARNUpdate")]
+    pub bucket_arn_update: String,
+}
+
+/// <p>For a Kinesis Data Analytics application provides a description of an Amazon S3 object, including the Amazon Resource Name (ARN) of the S3 bucket, the name of the Amazon S3 object that contains the data, and the version number of the Amazon S3 object that contains the data. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3ContentLocation {
     /// <p>The Amazon Resource Name (ARN) for the S3 bucket containing the application code.</p>
     #[serde(rename = "BucketARN")]
@@ -1945,7 +2278,7 @@ pub struct S3ContentLocation {
     pub object_version: Option<String>,
 }
 
-/// <p>Describes an update for the Amazon S3 code content location for a Flink-based Kinesis Data Analytics application.</p>
+/// <p>Describes an update for the Amazon S3 code content location for an application.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct S3ContentLocationUpdate {
@@ -2115,7 +2448,8 @@ pub struct StartApplicationRequest {
     pub application_name: String,
     /// <p>Identifies the run configuration (start parameters) of a Kinesis Data Analytics application.</p>
     #[serde(rename = "RunConfiguration")]
-    pub run_configuration: RunConfiguration,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub run_configuration: Option<RunConfiguration>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -2182,6 +2516,31 @@ pub struct UntagResourceResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateApplicationMaintenanceConfigurationRequest {
+    /// <p>Describes the application maintenance configuration update.</p>
+    #[serde(rename = "ApplicationMaintenanceConfigurationUpdate")]
+    pub application_maintenance_configuration_update: ApplicationMaintenanceConfigurationUpdate,
+    /// <p>The name of the application for which you want to update the maintenance configuration.</p>
+    #[serde(rename = "ApplicationName")]
+    pub application_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateApplicationMaintenanceConfigurationResponse {
+    /// <p>The Amazon Resource Name (ARN) of the application.</p>
+    #[serde(rename = "ApplicationARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_arn: Option<String>,
+    /// <p>The application maintenance configuration description after the update.</p>
+    #[serde(rename = "ApplicationMaintenanceConfigurationDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_maintenance_configuration_description:
+        Option<ApplicationMaintenanceConfigurationDescription>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateApplicationRequest {
     /// <p>Describes application configuration updates.</p>
     #[serde(rename = "ApplicationConfigurationUpdate")]
@@ -2194,9 +2553,14 @@ pub struct UpdateApplicationRequest {
     #[serde(rename = "CloudWatchLoggingOptionUpdates")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_watch_logging_option_updates: Option<Vec<CloudWatchLoggingOptionUpdate>>,
-    /// <p>The current application version ID. You can retrieve the application version ID using <a>DescribeApplication</a>.</p>
+    /// <p>A value you use to implement strong concurrency for application updates. You must provide the <code>CurrentApplicationVersionId</code> or the <code>ConditionalToken</code>. You get the application's current <code>ConditionalToken</code> using <a>DescribeApplication</a>. For better concurrency support, use the <code>ConditionalToken</code> parameter instead of <code>CurrentApplicationVersionId</code>.</p>
+    #[serde(rename = "ConditionalToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conditional_token: Option<String>,
+    /// <p>The current application version ID. You must provide the <code>CurrentApplicationVersionId</code> or the <code>ConditionalToken</code>.You can retrieve the application version ID using <a>DescribeApplication</a>. For better concurrency support, use the <code>ConditionalToken</code> parameter instead of <code>CurrentApplicationVersionId</code>.</p>
     #[serde(rename = "CurrentApplicationVersionId")]
-    pub current_application_version_id: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_application_version_id: Option<i64>,
     /// <p>Describes updates to the application's starting parameters.</p>
     #[serde(rename = "RunConfigurationUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2260,6 +2624,100 @@ pub struct VpcConfigurationUpdate {
     /// <p>Describes an update to the ID of the VPC configuration.</p>
     #[serde(rename = "VpcConfigurationId")]
     pub vpc_configuration_id: String,
+}
+
+/// <p>The configuration of a Kinesis Data Analytics Studio notebook.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ZeppelinApplicationConfiguration {
+    /// <p>The AWS Glue Data Catalog that you use in queries in a Kinesis Data Analytics Studio notebook.</p>
+    #[serde(rename = "CatalogConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_configuration: Option<CatalogConfiguration>,
+    /// <p>Custom artifacts are dependency JARs and user-defined functions (UDF).</p>
+    #[serde(rename = "CustomArtifactsConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_artifacts_configuration: Option<Vec<CustomArtifactConfiguration>>,
+    /// <p>The information required to deploy a Kinesis Data Analytics Studio notebook as an application with durable state..</p>
+    #[serde(rename = "DeployAsApplicationConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deploy_as_application_configuration: Option<DeployAsApplicationConfiguration>,
+    /// <p>The monitoring configuration of a Kinesis Data Analytics Studio notebook.</p>
+    #[serde(rename = "MonitoringConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitoring_configuration: Option<ZeppelinMonitoringConfiguration>,
+}
+
+/// <p>The configuration of a Kinesis Data Analytics Studio notebook.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ZeppelinApplicationConfigurationDescription {
+    /// <p>The AWS Glue Data Catalog that is associated with the Kinesis Data Analytics Studio notebook.</p>
+    #[serde(rename = "CatalogConfigurationDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_configuration_description: Option<CatalogConfigurationDescription>,
+    /// <p>Custom artifacts are dependency JARs and user-defined functions (UDF).</p>
+    #[serde(rename = "CustomArtifactsConfigurationDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_artifacts_configuration_description:
+        Option<Vec<CustomArtifactConfigurationDescription>>,
+    /// <p>The parameters required to deploy a Kinesis Data Analytics Studio notebook as an application with durable state..</p>
+    #[serde(rename = "DeployAsApplicationConfigurationDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deploy_as_application_configuration_description:
+        Option<DeployAsApplicationConfigurationDescription>,
+    /// <p>The monitoring configuration of a Kinesis Data Analytics Studio notebook.</p>
+    #[serde(rename = "MonitoringConfigurationDescription")]
+    pub monitoring_configuration_description: ZeppelinMonitoringConfigurationDescription,
+}
+
+/// <p>Updates to the configuration of Kinesis Data Analytics Studio notebook.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ZeppelinApplicationConfigurationUpdate {
+    /// <p>Updates to the configuration of the AWS Glue Data Catalog that is associated with the Kinesis Data Analytics Studio notebook.</p>
+    #[serde(rename = "CatalogConfigurationUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_configuration_update: Option<CatalogConfigurationUpdate>,
+    /// <p>Updates to the customer artifacts. Custom artifacts are dependency JAR files and user-defined functions (UDF).</p>
+    #[serde(rename = "CustomArtifactsConfigurationUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_artifacts_configuration_update: Option<Vec<CustomArtifactConfiguration>>,
+    #[serde(rename = "DeployAsApplicationConfigurationUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deploy_as_application_configuration_update: Option<DeployAsApplicationConfigurationUpdate>,
+    /// <p>Updates to the monitoring configuration of a Kinesis Data Analytics Studio notebook.</p>
+    #[serde(rename = "MonitoringConfigurationUpdate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitoring_configuration_update: Option<ZeppelinMonitoringConfigurationUpdate>,
+}
+
+/// <p>Describes configuration parameters for Amazon CloudWatch logging for a Kinesis Data Analytics Studio notebook. For more information about CloudWatch logging, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/monitoring-overview.html">Monitoring</a>.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ZeppelinMonitoringConfiguration {
+    /// <p>The verbosity of the CloudWatch Logs for an application.</p>
+    #[serde(rename = "LogLevel")]
+    pub log_level: String,
+}
+
+/// <p>The monitoring configuration for Apache Zeppelin within a Kinesis Data Analytics Studio notebook.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ZeppelinMonitoringConfigurationDescription {
+    /// <p>Describes the verbosity of the CloudWatch Logs for an application.</p>
+    #[serde(rename = "LogLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_level: Option<String>,
+}
+
+/// <p>Updates to the monitoring configuration for Apache Zeppelin within a Kinesis Data Analytics Studio notebook.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ZeppelinMonitoringConfigurationUpdate {
+    /// <p>Updates to the logging level for Apache Zeppelin within a Kinesis Data Analytics Studio notebook.</p>
+    #[serde(rename = "LogLevelUpdate")]
+    pub log_level_update: String,
 }
 
 /// Errors returned by AddApplicationCloudWatchLoggingOption
@@ -3528,6 +3986,58 @@ impl fmt::Display for DescribeApplicationSnapshotError {
     }
 }
 impl Error for DescribeApplicationSnapshotError {}
+/// Errors returned by DescribeApplicationVersion
+#[derive(Debug, PartialEq)]
+pub enum DescribeApplicationVersionError {
+    /// <p>The specified input parameter value is not valid.</p>
+    InvalidArgument(String),
+    /// <p>Specified application can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation. </p>
+    UnsupportedOperation(String),
+}
+
+impl DescribeApplicationVersionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeApplicationVersionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(DescribeApplicationVersionError::InvalidArgument(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeApplicationVersionError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(
+                        DescribeApplicationVersionError::UnsupportedOperation(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeApplicationVersionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeApplicationVersionError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            DescribeApplicationVersionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeApplicationVersionError::UnsupportedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeApplicationVersionError {}
 /// Errors returned by DiscoverInputSchema
 #[derive(Debug, PartialEq)]
 pub enum DiscoverInputSchemaError {
@@ -3632,6 +4142,54 @@ impl fmt::Display for ListApplicationSnapshotsError {
     }
 }
 impl Error for ListApplicationSnapshotsError {}
+/// Errors returned by ListApplicationVersions
+#[derive(Debug, PartialEq)]
+pub enum ListApplicationVersionsError {
+    /// <p>The specified input parameter value is not valid.</p>
+    InvalidArgument(String),
+    /// <p>Specified application can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation. </p>
+    UnsupportedOperation(String),
+}
+
+impl ListApplicationVersionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListApplicationVersionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(ListApplicationVersionsError::InvalidArgument(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListApplicationVersionsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(
+                        ListApplicationVersionsError::UnsupportedOperation(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListApplicationVersionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListApplicationVersionsError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            ListApplicationVersionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListApplicationVersionsError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListApplicationVersionsError {}
 /// Errors returned by ListApplications
 #[derive(Debug, PartialEq)]
 pub enum ListApplicationsError {
@@ -3708,6 +4266,72 @@ impl fmt::Display for ListTagsForResourceError {
     }
 }
 impl Error for ListTagsForResourceError {}
+/// Errors returned by RollbackApplication
+#[derive(Debug, PartialEq)]
+pub enum RollbackApplicationError {
+    /// <p>Exception thrown as a result of concurrent modifications to an application. This error can be the result of attempting to modify an application without using the current application ID.</p>
+    ConcurrentModification(String),
+    /// <p>The specified input parameter value is not valid.</p>
+    InvalidArgument(String),
+    /// <p>The request JSON is not valid for the operation.</p>
+    InvalidRequest(String),
+    /// <p>The application is not available for this operation.</p>
+    ResourceInUse(String),
+    /// <p>Specified application can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation. </p>
+    UnsupportedOperation(String),
+}
+
+impl RollbackApplicationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RollbackApplicationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(RollbackApplicationError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(RollbackApplicationError::InvalidArgument(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(RollbackApplicationError::InvalidRequest(err.msg))
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(RollbackApplicationError::ResourceInUse(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(RollbackApplicationError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(RollbackApplicationError::UnsupportedOperation(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for RollbackApplicationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            RollbackApplicationError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            RollbackApplicationError::InvalidArgument(ref cause) => write!(f, "{}", cause),
+            RollbackApplicationError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            RollbackApplicationError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            RollbackApplicationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            RollbackApplicationError::UnsupportedOperation(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for RollbackApplicationError {}
 /// Errors returned by StartApplication
 #[derive(Debug, PartialEq)]
 pub enum StartApplicationError {
@@ -3955,6 +4579,8 @@ pub enum UpdateApplicationError {
     InvalidArgument(String),
     /// <p>The request JSON is not valid for the operation.</p>
     InvalidRequest(String),
+    /// <p>The number of allowed resources has been exceeded.</p>
+    LimitExceeded(String),
     /// <p>The application is not available for this operation.</p>
     ResourceInUse(String),
     /// <p>Specified application can't be found.</p>
@@ -3984,6 +4610,9 @@ impl UpdateApplicationError {
                 "InvalidRequestException" => {
                     return RusotoError::Service(UpdateApplicationError::InvalidRequest(err.msg))
                 }
+                "LimitExceededException" => {
+                    return RusotoError::Service(UpdateApplicationError::LimitExceeded(err.msg))
+                }
                 "ResourceInUseException" => {
                     return RusotoError::Service(UpdateApplicationError::ResourceInUse(err.msg))
                 }
@@ -4008,12 +4637,93 @@ impl fmt::Display for UpdateApplicationError {
             }
             UpdateApplicationError::InvalidArgument(ref cause) => write!(f, "{}", cause),
             UpdateApplicationError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateApplicationError::LimitExceeded(ref cause) => write!(f, "{}", cause),
             UpdateApplicationError::ResourceInUse(ref cause) => write!(f, "{}", cause),
             UpdateApplicationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
         }
     }
 }
 impl Error for UpdateApplicationError {}
+/// Errors returned by UpdateApplicationMaintenanceConfiguration
+#[derive(Debug, PartialEq)]
+pub enum UpdateApplicationMaintenanceConfigurationError {
+    /// <p>Exception thrown as a result of concurrent modifications to an application. This error can be the result of attempting to modify an application without using the current application ID.</p>
+    ConcurrentModification(String),
+    /// <p>The specified input parameter value is not valid.</p>
+    InvalidArgument(String),
+    /// <p>The application is not available for this operation.</p>
+    ResourceInUse(String),
+    /// <p>Specified application can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>The request was rejected because a specified parameter is not supported or a specified resource is not valid for this operation. </p>
+    UnsupportedOperation(String),
+}
+
+impl UpdateApplicationMaintenanceConfigurationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateApplicationMaintenanceConfigurationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(
+                        UpdateApplicationMaintenanceConfigurationError::ConcurrentModification(
+                            err.msg,
+                        ),
+                    )
+                }
+                "InvalidArgumentException" => {
+                    return RusotoError::Service(
+                        UpdateApplicationMaintenanceConfigurationError::InvalidArgument(err.msg),
+                    )
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(
+                        UpdateApplicationMaintenanceConfigurationError::ResourceInUse(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        UpdateApplicationMaintenanceConfigurationError::ResourceNotFound(err.msg),
+                    )
+                }
+                "UnsupportedOperationException" => {
+                    return RusotoError::Service(
+                        UpdateApplicationMaintenanceConfigurationError::UnsupportedOperation(
+                            err.msg,
+                        ),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateApplicationMaintenanceConfigurationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateApplicationMaintenanceConfigurationError::ConcurrentModification(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateApplicationMaintenanceConfigurationError::InvalidArgument(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateApplicationMaintenanceConfigurationError::ResourceInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateApplicationMaintenanceConfigurationError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateApplicationMaintenanceConfigurationError::UnsupportedOperation(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdateApplicationMaintenanceConfigurationError {}
 /// Trait representing the capabilities of the Kinesis Analytics V2 API. Kinesis Analytics V2 clients implement this trait.
 #[async_trait]
 pub trait KinesisAnalyticsV2 {
@@ -4071,7 +4781,7 @@ pub trait KinesisAnalyticsV2 {
         input: CreateApplicationRequest,
     ) -> Result<CreateApplicationResponse, RusotoError<CreateApplicationError>>;
 
-    /// <p><p>Creates and returns a URL that you can use to connect to an application&#39;s extension. Currently, the only available extension is the Apache Flink dashboard.</p> <p>The IAM role or user used to call this API defines the permissions to access the extension. Once the presigned URL is created, no additional permission is required to access this URL. IAM authorization policies for this API are also enforced for every HTTP request that attempts to connect to the extension. </p> <note> <p>The URL that you get from a call to CreateApplicationPresignedUrl must be used within 3 minutes to be valid. If you first try to use the URL after the 3-minute limit expires, the service returns an HTTP 403 Forbidden error.</p> </note></p>
+    /// <p><p>Creates and returns a URL that you can use to connect to an application&#39;s extension. Currently, the only available extension is the Apache Flink dashboard.</p> <p>The IAM role or user used to call this API defines the permissions to access the extension. After the presigned URL is created, no additional permission is required to access this URL. IAM authorization policies for this API are also enforced for every HTTP request that attempts to connect to the extension. </p> <p>You control the amount of time that the URL will be valid using the <code>SessionExpirationDurationInSeconds</code> parameter. If you do not provide this parameter, the returned URL is valid for twelve hours.</p> <note> <p>The URL that you get from a call to CreateApplicationPresignedUrl must be used within 3 minutes to be valid. If you first try to use the URL after the 3-minute limit expires, the service returns an HTTP 403 Forbidden error.</p> </note></p>
     async fn create_application_presigned_url(
         &self,
         input: CreateApplicationPresignedUrlRequest,
@@ -4152,6 +4862,12 @@ pub trait KinesisAnalyticsV2 {
         input: DescribeApplicationSnapshotRequest,
     ) -> Result<DescribeApplicationSnapshotResponse, RusotoError<DescribeApplicationSnapshotError>>;
 
+    /// <p><p>Provides a detailed description of a specified version of the application. To see a list of all the versions of an application, invoke the <a>ListApplicationVersions</a> operation.</p> <note> <p>This operation is supported only for Amazon Kinesis Data Analytics for Apache Flink.</p> </note></p>
+    async fn describe_application_version(
+        &self,
+        input: DescribeApplicationVersionRequest,
+    ) -> Result<DescribeApplicationVersionResponse, RusotoError<DescribeApplicationVersionError>>;
+
     /// <p>Infers a schema for a SQL-based Kinesis Data Analytics application by evaluating sample records on the specified streaming source (Kinesis data stream or Kinesis Data Firehose delivery stream) or Amazon S3 object. In the response, the operation returns the inferred schema and also the sample records that the operation used to infer the schema.</p> <p> You can use the inferred schema when configuring a streaming source for your application. When you create an application using the Kinesis Data Analytics console, the console uses this operation to infer a schema and show it in the console user interface. </p>
     async fn discover_input_schema(
         &self,
@@ -4164,6 +4880,12 @@ pub trait KinesisAnalyticsV2 {
         input: ListApplicationSnapshotsRequest,
     ) -> Result<ListApplicationSnapshotsResponse, RusotoError<ListApplicationSnapshotsError>>;
 
+    /// <p><p>Lists all the versions for the specified application, including versions that were rolled back. The response also includes a summary of the configuration associated with each version.</p> <p>To get the complete description of a specific application version, invoke the <a>DescribeApplicationVersion</a> operation.</p> <note> <p>This operation is supported only for Amazon Kinesis Data Analytics for Apache Flink.</p> </note></p>
+    async fn list_application_versions(
+        &self,
+        input: ListApplicationVersionsRequest,
+    ) -> Result<ListApplicationVersionsResponse, RusotoError<ListApplicationVersionsError>>;
+
     /// <p>Returns a list of Kinesis Data Analytics applications in your account. For each application, the response includes the application name, Amazon Resource Name (ARN), and status. </p> <p>If you want detailed information about a specific application, use <a>DescribeApplication</a>.</p>
     async fn list_applications(
         &self,
@@ -4175,6 +4897,12 @@ pub trait KinesisAnalyticsV2 {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+
+    /// <p>Reverts the application to the previous running version. You can roll back an application if you suspect it is stuck in a transient status. </p> <p>You can roll back an application only if it is in the <code>UPDATING</code> or <code>AUTOSCALING</code> status.</p> <p>When you rollback an application, it loads state data from the last successful snapshot. If the application has no snapshots, Kinesis Data Analytics rejects the rollback request.</p> <p>This action is not supported for Kinesis Data Analytics for SQL applications.</p>
+    async fn rollback_application(
+        &self,
+        input: RollbackApplicationRequest,
+    ) -> Result<RollbackApplicationResponse, RusotoError<RollbackApplicationError>>;
 
     /// <p>Starts the specified Kinesis Data Analytics application. After creating an application, you must exclusively call this operation to start your application.</p>
     async fn start_application(
@@ -4205,6 +4933,15 @@ pub trait KinesisAnalyticsV2 {
         &self,
         input: UpdateApplicationRequest,
     ) -> Result<UpdateApplicationResponse, RusotoError<UpdateApplicationError>>;
+
+    /// <p><p>Updates the maintenance configuration of the Kinesis Data Analytics application. </p> <p>You can invoke this operation on an application that is in one of the two following states: <code>READY</code> or <code>RUNNING</code>. If you invoke it when the application is in a state other than these two states, it throws a <code>ResourceInUseException</code>. The service makes use of the updated configuration the next time it schedules maintenance for the application. If you invoke this operation after the service schedules maintenance, the service will apply the configuration update the next time it schedules maintenance for the application. This means that you might not see the maintenance configuration update applied to the maintenance process that follows a successful invocation of this operation, but to the following maintenance process instead.</p> <p>To see the current maintenance configuration of your application, invoke the <a>DescribeApplication</a> operation.</p> <p>For information about application maintenance, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/maintenance.html">Kinesis Data Analytics for Apache Flink Maintenance</a>.</p> <note> <p>This operation is supported only for Amazon Kinesis Data Analytics for Apache Flink.</p> </note></p>
+    async fn update_application_maintenance_configuration(
+        &self,
+        input: UpdateApplicationMaintenanceConfigurationRequest,
+    ) -> Result<
+        UpdateApplicationMaintenanceConfigurationResponse,
+        RusotoError<UpdateApplicationMaintenanceConfigurationError>,
+    >;
 }
 /// A client for the Kinesis Analytics V2 API.
 #[derive(Clone)]
@@ -4419,7 +5156,7 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateApplicationResponse, _>()
     }
 
-    /// <p><p>Creates and returns a URL that you can use to connect to an application&#39;s extension. Currently, the only available extension is the Apache Flink dashboard.</p> <p>The IAM role or user used to call this API defines the permissions to access the extension. Once the presigned URL is created, no additional permission is required to access this URL. IAM authorization policies for this API are also enforced for every HTTP request that attempts to connect to the extension. </p> <note> <p>The URL that you get from a call to CreateApplicationPresignedUrl must be used within 3 minutes to be valid. If you first try to use the URL after the 3-minute limit expires, the service returns an HTTP 403 Forbidden error.</p> </note></p>
+    /// <p><p>Creates and returns a URL that you can use to connect to an application&#39;s extension. Currently, the only available extension is the Apache Flink dashboard.</p> <p>The IAM role or user used to call this API defines the permissions to access the extension. After the presigned URL is created, no additional permission is required to access this URL. IAM authorization policies for this API are also enforced for every HTTP request that attempts to connect to the extension. </p> <p>You control the amount of time that the URL will be valid using the <code>SessionExpirationDurationInSeconds</code> parameter. If you do not provide this parameter, the returned URL is valid for twelve hours.</p> <note> <p>The URL that you get from a call to CreateApplicationPresignedUrl must be used within 3 minutes to be valid. If you first try to use the URL after the 3-minute limit expires, the service returns an HTTP 403 Forbidden error.</p> </note></p>
     async fn create_application_presigned_url(
         &self,
         input: CreateApplicationPresignedUrlRequest,
@@ -4689,6 +5426,29 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
             .deserialize::<DescribeApplicationSnapshotResponse, _>()
     }
 
+    /// <p><p>Provides a detailed description of a specified version of the application. To see a list of all the versions of an application, invoke the <a>ListApplicationVersions</a> operation.</p> <note> <p>This operation is supported only for Amazon Kinesis Data Analytics for Apache Flink.</p> </note></p>
+    async fn describe_application_version(
+        &self,
+        input: DescribeApplicationVersionRequest,
+    ) -> Result<DescribeApplicationVersionResponse, RusotoError<DescribeApplicationVersionError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "KinesisAnalytics_20180523.DescribeApplicationVersion",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeApplicationVersionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeApplicationVersionResponse, _>()
+    }
+
     /// <p>Infers a schema for a SQL-based Kinesis Data Analytics application by evaluating sample records on the specified streaming source (Kinesis data stream or Kinesis Data Firehose delivery stream) or Amazon S3 object. In the response, the operation returns the inferred schema and also the sample records that the operation used to infer the schema.</p> <p> You can use the inferred schema when configuring a streaming source for your application. When you create an application using the Kinesis Data Analytics console, the console uses this operation to infer a schema and show it in the console user interface. </p>
     async fn discover_input_schema(
         &self,
@@ -4732,6 +5492,28 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
             .deserialize::<ListApplicationSnapshotsResponse, _>()
     }
 
+    /// <p><p>Lists all the versions for the specified application, including versions that were rolled back. The response also includes a summary of the configuration associated with each version.</p> <p>To get the complete description of a specific application version, invoke the <a>DescribeApplicationVersion</a> operation.</p> <note> <p>This operation is supported only for Amazon Kinesis Data Analytics for Apache Flink.</p> </note></p>
+    async fn list_application_versions(
+        &self,
+        input: ListApplicationVersionsRequest,
+    ) -> Result<ListApplicationVersionsResponse, RusotoError<ListApplicationVersionsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "KinesisAnalytics_20180523.ListApplicationVersions",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListApplicationVersionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListApplicationVersionsResponse, _>()
+    }
+
     /// <p>Returns a list of Kinesis Data Analytics applications in your account. For each application, the response includes the application name, Amazon Resource Name (ARN), and status. </p> <p>If you want detailed information about a specific application, use <a>DescribeApplication</a>.</p>
     async fn list_applications(
         &self,
@@ -4769,6 +5551,27 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceResponse, _>()
+    }
+
+    /// <p>Reverts the application to the previous running version. You can roll back an application if you suspect it is stuck in a transient status. </p> <p>You can roll back an application only if it is in the <code>UPDATING</code> or <code>AUTOSCALING</code> status.</p> <p>When you rollback an application, it loads state data from the last successful snapshot. If the application has no snapshots, Kinesis Data Analytics rejects the rollback request.</p> <p>This action is not supported for Kinesis Data Analytics for SQL applications.</p>
+    async fn rollback_application(
+        &self,
+        input: RollbackApplicationRequest,
+    ) -> Result<RollbackApplicationResponse, RusotoError<RollbackApplicationError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "KinesisAnalytics_20180523.RollbackApplication",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, RollbackApplicationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<RollbackApplicationResponse, _>()
     }
 
     /// <p>Starts the specified Kinesis Data Analytics application. After creating an application, you must exclusively call this operation to start your application.</p>
@@ -4862,5 +5665,33 @@ impl KinesisAnalyticsV2 for KinesisAnalyticsV2Client {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateApplicationResponse, _>()
+    }
+
+    /// <p><p>Updates the maintenance configuration of the Kinesis Data Analytics application. </p> <p>You can invoke this operation on an application that is in one of the two following states: <code>READY</code> or <code>RUNNING</code>. If you invoke it when the application is in a state other than these two states, it throws a <code>ResourceInUseException</code>. The service makes use of the updated configuration the next time it schedules maintenance for the application. If you invoke this operation after the service schedules maintenance, the service will apply the configuration update the next time it schedules maintenance for the application. This means that you might not see the maintenance configuration update applied to the maintenance process that follows a successful invocation of this operation, but to the following maintenance process instead.</p> <p>To see the current maintenance configuration of your application, invoke the <a>DescribeApplication</a> operation.</p> <p>For information about application maintenance, see <a href="https://docs.aws.amazon.com/kinesisanalytics/latest/java/maintenance.html">Kinesis Data Analytics for Apache Flink Maintenance</a>.</p> <note> <p>This operation is supported only for Amazon Kinesis Data Analytics for Apache Flink.</p> </note></p>
+    async fn update_application_maintenance_configuration(
+        &self,
+        input: UpdateApplicationMaintenanceConfigurationRequest,
+    ) -> Result<
+        UpdateApplicationMaintenanceConfigurationResponse,
+        RusotoError<UpdateApplicationMaintenanceConfigurationError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "KinesisAnalytics_20180523.UpdateApplicationMaintenanceConfiguration",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                UpdateApplicationMaintenanceConfigurationError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateApplicationMaintenanceConfigurationResponse, _>()
     }
 }

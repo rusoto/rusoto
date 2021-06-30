@@ -69,6 +69,10 @@ pub struct Channel {
 /// <p>A Common Media Application Format (CMAF) encryption configuration.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CmafEncryption {
+    /// <p>An optional 128-bit, 16-byte hex value represented by a 32-character string, used in conjunction with the key for encrypting blocks. If you don&#39;t specify a value, then MediaPackage creates the constant initialization vector (IV).</p>
+    #[serde(rename = "ConstantInitializationVector")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub constant_initialization_vector: Option<String>,
     /// <p>Time (in seconds) between each encryption key rotation.</p>
     #[serde(rename = "KeyRotationIntervalSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -683,6 +687,22 @@ pub struct EgressAccessLogs {
     pub log_group_name: Option<String>,
 }
 
+/// <p>Use encryptionContractConfiguration to configure one or more content encryption keys for your endpoints that use SPEKE 2.0.
+/// The encryption contract defines which content keys are used to encrypt the audio and video tracks in your stream.
+/// To configure the encryption contract, specify which audio and video encryption presets to use.
+/// Note the following considerations when using encryptionContractConfiguration:
+/// encryptionContractConfiguration can be used for DASH endpoints that use SPEKE 2.0. SPEKE 2.0 relies on the CPIX 2.3 specification.
+/// You must disable key rotation for this endpoint by setting keyRotationIntervalSeconds to 0.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct EncryptionContractConfiguration {
+    /// <p>A collection of audio encryption presets.</p>
+    #[serde(rename = "PresetSpeke20Audio")]
+    pub preset_speke_20_audio: String,
+    /// <p>A collection of video encryption presets.</p>
+    #[serde(rename = "PresetSpeke20Video")]
+    pub preset_speke_20_video: String,
+}
+
 /// <p>A HarvestJob resource configuration</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1268,6 +1288,9 @@ pub struct SpekeKeyProvider {
     #[serde(rename = "CertificateArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_arn: Option<String>,
+    #[serde(rename = "EncryptionContractConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_contract_configuration: Option<EncryptionContractConfiguration>,
     /// <p>The resource ID to include in key requests.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,

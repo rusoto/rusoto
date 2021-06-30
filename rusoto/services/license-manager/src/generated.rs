@@ -332,6 +332,9 @@ pub struct CreateGrantVersionRequest {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+    #[serde(rename = "StatusReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_reason: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -397,6 +400,43 @@ pub struct CreateLicenseConfigurationResponse {
     #[serde(rename = "LicenseConfigurationArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub license_configuration_arn: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateLicenseManagerReportGeneratorRequest {
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
+    #[serde(rename = "ClientToken")]
+    pub client_token: String,
+    /// <p>Description of the report generator.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Defines the type of license configuration the report generator tracks.</p>
+    #[serde(rename = "ReportContext")]
+    pub report_context: ReportContext,
+    /// <p>Frequency by which reports are generated. Reports can be generated daily, monthly, or weekly.</p>
+    #[serde(rename = "ReportFrequency")]
+    pub report_frequency: ReportFrequency,
+    /// <p>Name of the report generator.</p>
+    #[serde(rename = "ReportGeneratorName")]
+    pub report_generator_name: String,
+    /// <p>Tags to add to the report generator.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p><p>Type of reports to generate. The following report types an be generated:</p> <ul> <li> <p>License configuration report - Reports on the number and details of consumed licenses for a license configuration.</p> </li> <li> <p>Resource report - Reports on the tracked licenses and resource consumption for a license configuration.</p> </li> </ul></p>
+    #[serde(rename = "Type")]
+    pub type_: Vec<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateLicenseManagerReportGeneratorResponse {
+    /// <p>The Amazon Resource Number (ARN) of the new report generator.</p>
+    #[serde(rename = "LicenseManagerReportGeneratorArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub license_manager_report_generator_arn: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -573,6 +613,9 @@ pub struct DeleteGrantRequest {
     /// <p>Amazon Resource Name (ARN) of the grant.</p>
     #[serde(rename = "GrantArn")]
     pub grant_arn: String,
+    #[serde(rename = "StatusReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_reason: Option<String>,
     /// <p>Current version of the grant.</p>
     #[serde(rename = "Version")]
     pub version: String,
@@ -606,6 +649,18 @@ pub struct DeleteLicenseConfigurationRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteLicenseConfigurationResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteLicenseManagerReportGeneratorRequest {
+    /// <p>Amazon Resource Number (ARN) of the report generator that will be deleted.</p>
+    #[serde(rename = "LicenseManagerReportGeneratorArn")]
+    pub license_manager_report_generator_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteLicenseManagerReportGeneratorResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -868,6 +923,23 @@ pub struct GetLicenseConfigurationResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetLicenseManagerReportGeneratorRequest {
+    /// <p>mazon Resource Number (ARN) of the report generator to retrieve information on.</p>
+    #[serde(rename = "LicenseManagerReportGeneratorArn")]
+    pub license_manager_report_generator_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetLicenseManagerReportGeneratorResponse {
+    /// <p>A report generator that creates periodic reports on your license configurations.</p>
+    #[serde(rename = "ReportGenerator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub report_generator: Option<ReportGenerator>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetLicenseRequest {
     /// <p>Amazon Resource Name (ARN) of the license.</p>
     #[serde(rename = "LicenseArn")]
@@ -915,7 +987,7 @@ pub struct GetServiceSettingsResponse {
     #[serde(rename = "EnableCrossAccountsDiscovery")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_cross_accounts_discovery: Option<bool>,
-    /// <p>Amazon Resource Name (ARN) of the AWS resource share. The License Manager master account will provide member accounts with access to this share.</p>
+    /// <p>Amazon Resource Name (ARN) of the AWS resource share. The License Manager management account provides member accounts with access to this share.</p>
     #[serde(rename = "LicenseManagerResourceShareArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub license_manager_resource_share_arn: Option<String>,
@@ -1363,7 +1435,7 @@ pub struct ListAssociationsForLicenseConfigurationResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListDistributedGrantsRequest {
-    /// <p><p>Filters to scope the results. The following filters are supported:</p> <ul> <li> <p> <code>LicenseARN</code> </p> </li> <li> <p> <code>Status</code> </p> </li> <li> <p> <code>PrincipalARN</code> </p> </li> <li> <p> <code>ParentARN</code> </p> </li> </ul></p>
+    /// <p><p>Filters to scope the results. The following filters are supported:</p> <ul> <li> <p> <code>LicenseArn</code> </p> </li> <li> <p> <code>GrantStatus</code> </p> </li> <li> <p> <code>GranteePrincipalARN</code> </p> </li> <li> <p> <code>ProductSKU</code> </p> </li> <li> <p> <code>LicenseIssuerName</code> </p> </li> </ul></p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
@@ -1459,6 +1531,36 @@ pub struct ListLicenseConfigurationsResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListLicenseManagerReportGeneratorsRequest {
+    /// <p><p>Filters to scope the results. The following filters are supported: </p> <ul> <li> <p> <code>LicenseConfigurationArn</code> </p> </li> </ul></p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<Filter>>,
+    /// <p>Maximum number of results to return in a single call.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Token for the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListLicenseManagerReportGeneratorsResponse {
+    /// <p>Token for the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A report generator that creates periodic reports on your license configurations.</p>
+    #[serde(rename = "ReportGenerators")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub report_generators: Option<Vec<ReportGenerator>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLicenseSpecificationsForResourceRequest {
     /// <p>Maximum number of results to return in a single call.</p>
     #[serde(rename = "MaxResults")]
@@ -1518,7 +1620,7 @@ pub struct ListLicenseVersionsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLicensesRequest {
-    /// <p><p>Filters to scope the results. The following filters are supported:</p> <ul> <li> <p> <code>Beneficiary</code> </p> </li> <li> <p> <code>ProductSKU</code> </p> </li> <li> <p> <code>KeyFingerprint</code> </p> </li> <li> <p> <code>Status</code> </p> </li> </ul></p>
+    /// <p><p>Filters to scope the results. The following filters are supported:</p> <ul> <li> <p> <code>Beneficiary</code> </p> </li> <li> <p> <code>ProductSKU</code> </p> </li> <li> <p> <code>Fingerprint</code> </p> </li> <li> <p> <code>Status</code> </p> </li> </ul></p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
@@ -1552,7 +1654,7 @@ pub struct ListLicensesResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListReceivedGrantsRequest {
-    /// <p><p>Filters to scope the results. The following filters are supported:</p> <ul> <li> <p> <code>LicenseARN</code> </p> </li> <li> <p> <code>Status</code> </p> </li> </ul></p>
+    /// <p><p>Filters to scope the results. The following filters are supported:</p> <ul> <li> <p> <code>ProductSKU</code> </p> </li> <li> <p> <code>LicenseIssuerName</code> </p> </li> <li> <p> <code>LicenseArn</code> </p> </li> <li> <p> <code>GrantStatus</code> </p> </li> <li> <p> <code>GranterAccountId</code> </p> </li> </ul></p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
@@ -1586,7 +1688,7 @@ pub struct ListReceivedGrantsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListReceivedLicensesRequest {
-    /// <p><p>Filters to scope the results. The following filters are supported:</p> <ul> <li> <p> <code>ProductSKU</code> </p> </li> <li> <p> <code>Status</code> </p> </li> <li> <p> <code>KeyFingerprint</code> </p> </li> <li> <p> <code>Issuer</code> </p> </li> </ul></p>
+    /// <p><p>Filters to scope the results. The following filters are supported:</p> <ul> <li> <p> <code>ProductSKU</code> </p> </li> <li> <p> <code>Status</code> </p> </li> <li> <p> <code>Fingerprint</code> </p> </li> <li> <p> <code>IssuerName</code> </p> </li> <li> <p> <code>Beneficiary</code> </p> </li> </ul></p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
@@ -1667,7 +1769,7 @@ pub struct ListTagsForResourceResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTokensRequest {
-    /// <p><p>Filters to scope the results. The following filter is supported:</p> <ul> <li> <p> <code>licenseArns</code> </p> </li> </ul></p>
+    /// <p><p>Filters to scope the results. The following filter is supported:</p> <ul> <li> <p> <code>LicenseArns</code> </p> </li> </ul></p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
@@ -1769,7 +1871,7 @@ pub struct OrganizationConfiguration {
 /// <p>Describes product information for a license configuration.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ProductInformation {
-    /// <p><p>Product information filters.</p> <p>The following filters and logical operators are supported when the resource type is <code>SSM<em>MANAGED</code>:</p> <ul> <li> <p> <code>Application Name</code> - The name of the application. Logical operator is <code>EQUALS</code>.</p> </li> <li> <p> <code>Application Publisher</code> - The publisher of the application. Logical operator is <code>EQUALS</code>.</p> </li> <li> <p> <code>Application Version</code> - The version of the application. Logical operator is <code>EQUALS</code>.</p> </li> <li> <p> <code>Platform Name</code> - The name of the platform. Logical operator is <code>EQUALS</code>.</p> </li> <li> <p> <code>Platform Type</code> - The platform type. Logical operator is <code>EQUALS</code>.</p> </li> <li> <p> <code>License Included</code> - The type of license included. Logical operators are <code>EQUALS</code> and <code>NOT</em>EQUALS</code>. Possible values are: <code>sql-server-enterprise</code> | <code>sql-server-standard</code> | <code>sql-server-web</code> | <code>windows-server-datacenter</code>.</p> </li> </ul> <p>The following filters and logical operators are supported when the resource type is <code>RDS</code>:</p> <ul> <li> <p> <code>Engine Edition</code> - The edition of the database engine. Logical operator is <code>EQUALS</code>. Possible values are: <code>oracle-ee</code> | <code>oracle-se</code> | <code>oracle-se1</code> | <code>oracle-se2</code>.</p> </li> <li> <p> <code>License Pack</code> - The license pack. Logical operator is <code>EQUALS</code>. Possible values are: <code>data guard</code> | <code>diagnostic pack sqlt</code> | <code>tuning pack sqlt</code> | <code>ols</code> | <code>olap</code>.</p> </li> </ul></p>
+    /// <p><p>A Product information filter consists of a <code>ProductInformationFilterComparator</code> which is a logical operator, a <code>ProductInformationFilterName</code> which specifies the type of filter being declared, and a <code>ProductInformationFilterValue</code> that specifies the value to filter on. </p> <p>Accepted values for <code>ProductInformationFilterName</code> are listed here along with descriptions and valid options for <code>ProductInformationFilterComparator</code>. </p> <p>The following filters and are supported when the resource type is <code>SSM<em>MANAGED</code>:</p> <ul> <li> <p> <code>Application Name</code> - The name of the application. Logical operator is <code>EQUALS</code>.</p> </li> <li> <p> <code>Application Publisher</code> - The publisher of the application. Logical operator is <code>EQUALS</code>.</p> </li> <li> <p> <code>Application Version</code> - The version of the application. Logical operator is <code>EQUALS</code>.</p> </li> <li> <p> <code>Platform Name</code> - The name of the platform. Logical operator is <code>EQUALS</code>.</p> </li> <li> <p> <code>Platform Type</code> - The platform type. Logical operator is <code>EQUALS</code>.</p> </li> <li> <p> <code>Tag:key</code> - The key of a tag attached to an AWS resource you wish to exclude from automated discovery. Logical operator is <code>NOT</em>EQUALS</code>. The key for your tag must be appended to <code>Tag:</code> following the example: <code>Tag:name-of-your-key</code>. <code>ProductInformationFilterValue</code> is optional if you are not using values for the key. </p> </li> <li> <p> <code>AccountId</code> - The 12-digit ID of an AWS account you wish to exclude from automated discovery. Logical operator is <code>NOT<em>EQUALS</code>.</p> </li> <li> <p> <code>License Included</code> - The type of license included. Logical operators are <code>EQUALS</code> and <code>NOT</em>EQUALS</code>. Possible values are: <code>sql-server-enterprise</code> | <code>sql-server-standard</code> | <code>sql-server-web</code> | <code>windows-server-datacenter</code>.</p> </li> </ul> <p>The following filters and logical operators are supported when the resource type is <code>RDS</code>:</p> <ul> <li> <p> <code>Engine Edition</code> - The edition of the database engine. Logical operator is <code>EQUALS</code>. Possible values are: <code>oracle-ee</code> | <code>oracle-se</code> | <code>oracle-se1</code> | <code>oracle-se2</code>.</p> </li> <li> <p> <code>License Pack</code> - The license pack. Logical operator is <code>EQUALS</code>. Possible values are: <code>data guard</code> | <code>diagnostic pack sqlt</code> | <code>tuning pack sqlt</code> | <code>ols</code> | <code>olap</code>.</p> </li> </ul></p>
     #[serde(rename = "ProductInformationFilterList")]
     pub product_information_filter_list: Vec<ProductInformationFilter>,
     /// <p>Resource type. The possible values are <code>SSM_MANAGED</code> | <code>RDS</code>.</p>
@@ -1788,7 +1890,8 @@ pub struct ProductInformationFilter {
     pub product_information_filter_name: String,
     /// <p>Filter value.</p>
     #[serde(rename = "ProductInformationFilterValue")]
-    pub product_information_filter_value: Vec<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub product_information_filter_value: Option<Vec<String>>,
 }
 
 /// <p>Details about a provisional configuration.</p>
@@ -1811,6 +1914,9 @@ pub struct ReceivedMetadata {
     #[serde(rename = "ReceivedStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub received_status: Option<String>,
+    #[serde(rename = "ReceivedStatusReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub received_status_reason: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1836,6 +1942,85 @@ pub struct RejectGrantResponse {
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+}
+
+/// <p>Details of the license configuration that this generator reports on.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ReportContext {
+    /// <p>Amazon Resource Number (ARN) of the license configuration that this generator reports on.</p>
+    #[serde(rename = "licenseConfigurationArns")]
+    pub license_configuration_arns: Vec<String>,
+}
+
+/// <p>Details on how frequently reports are generated.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ReportFrequency {
+    /// <p>Time period between each report. The period can be daily, weekly, or monthly.</p>
+    #[serde(rename = "period")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub period: Option<String>,
+    /// <p>Number of times within the frequency period that a report will be generated. Currently only <code>1</code> is supported.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<i64>,
+}
+
+/// <p>Describe the details of a report generator.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ReportGenerator {
+    /// <p>Time the report was created.</p>
+    #[serde(rename = "CreateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_time: Option<String>,
+    /// <p>Description of the report generator.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Time the last report was generated at.</p>
+    #[serde(rename = "LastReportGenerationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_report_generation_time: Option<String>,
+    /// <p>Failure message for the last report generation attempt.</p>
+    #[serde(rename = "LastRunFailureReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_run_failure_reason: Option<String>,
+    /// <p>Status of the last report generation attempt.</p>
+    #[serde(rename = "LastRunStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_run_status: Option<String>,
+    /// <p>Amazon Resource Number (ARN) of the report generator.</p>
+    #[serde(rename = "LicenseManagerReportGeneratorArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub license_manager_report_generator_arn: Option<String>,
+    /// <p>License configuration type this generator reports on.</p>
+    #[serde(rename = "ReportContext")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub report_context: Option<ReportContext>,
+    /// <p>The AWS account ID used to create the report generator.</p>
+    #[serde(rename = "ReportCreatorAccount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub report_creator_account: Option<String>,
+    /// <p>Details on how frequently reports are generated.</p>
+    #[serde(rename = "ReportFrequency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub report_frequency: Option<ReportFrequency>,
+    /// <p>Name of the report generator.</p>
+    #[serde(rename = "ReportGeneratorName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub report_generator_name: Option<String>,
+    /// <p>Type of reports that are generated.</p>
+    #[serde(rename = "ReportType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub report_type: Option<Vec<String>>,
+    /// <p>Details of the S3 bucket that report generator reports are published to.</p>
+    #[serde(rename = "S3Location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_location: Option<S3Location>,
+    /// <p>Tags associated with the report generator.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 /// <p>Details about a resource.</p>
@@ -1866,6 +2051,20 @@ pub struct ResourceInventory {
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
+}
+
+/// <p>Details of the S3 bucket that report generator reports are published to.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct S3Location {
+    /// <p>Name of the S3 bucket reports are published to.</p>
+    #[serde(rename = "bucket")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bucket: Option<String>,
+    /// <p>Prefix of the S3 bucket reports are published to.</p>
+    #[serde(rename = "keyPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key_prefix: Option<String>,
 }
 
 /// <p>Details about a tag for a license configuration.</p>
@@ -1991,6 +2190,37 @@ pub struct UpdateLicenseConfigurationResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateLicenseManagerReportGeneratorRequest {
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
+    #[serde(rename = "ClientToken")]
+    pub client_token: String,
+    /// <p>Description of the report generator.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Amazon Resource Number (ARN) of the report generator to update.</p>
+    #[serde(rename = "LicenseManagerReportGeneratorArn")]
+    pub license_manager_report_generator_arn: String,
+    /// <p>?</p>
+    #[serde(rename = "ReportContext")]
+    pub report_context: ReportContext,
+    /// <p>Frequency by which reports are generated. The following options are avaiable:</p> <p>??? What are the APi value options?</p>
+    #[serde(rename = "ReportFrequency")]
+    pub report_frequency: ReportFrequency,
+    /// <p>Name of the report generator.</p>
+    #[serde(rename = "ReportGeneratorName")]
+    pub report_generator_name: String,
+    /// <p><p>Type of reports to generate. The following report types an be generated:</p> <ul> <li> <p>License configuration report - Reports on the number and details of consumed licenses for a license configuration.</p> </li> <li> <p>Resource report - Reports on the tracked licenses and resource consumption for a license configuration.</p> </li> </ul></p>
+    #[serde(rename = "Type")]
+    pub type_: Vec<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateLicenseManagerReportGeneratorResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLicenseSpecificationsForResourceRequest {
     /// <p>ARNs of the license configurations to add.</p>
     #[serde(rename = "AddLicenseSpecifications")]
@@ -2103,6 +2333,8 @@ pub enum CheckInLicenseError {
     Authorization(String),
     /// <p>There was a conflict processing the request. Try your request again.</p>
     Conflict(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValue(String),
     /// <p>Too many requests have been submitted. Try again after a brief wait.</p>
     RateLimitExceeded(String),
     /// <p>The resource cannot be found.</p>
@@ -2123,6 +2355,11 @@ impl CheckInLicenseError {
                 }
                 "ConflictException" => {
                     return RusotoError::Service(CheckInLicenseError::Conflict(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(CheckInLicenseError::InvalidParameterValue(
+                        err.msg,
+                    ))
                 }
                 "RateLimitExceededException" => {
                     return RusotoError::Service(CheckInLicenseError::RateLimitExceeded(err.msg))
@@ -2147,6 +2384,7 @@ impl fmt::Display for CheckInLicenseError {
             CheckInLicenseError::AccessDenied(ref cause) => write!(f, "{}", cause),
             CheckInLicenseError::Authorization(ref cause) => write!(f, "{}", cause),
             CheckInLicenseError::Conflict(ref cause) => write!(f, "{}", cause),
+            CheckInLicenseError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
             CheckInLicenseError::RateLimitExceeded(ref cause) => write!(f, "{}", cause),
             CheckInLicenseError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             CheckInLicenseError::ServerInternal(ref cause) => write!(f, "{}", cause),
@@ -2163,6 +2401,8 @@ pub enum CheckoutBorrowLicenseError {
     Authorization(String),
     /// <p>The entitlement is not allowed.</p>
     EntitlementNotAllowed(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValue(String),
     /// <p>There are no entitlements found for this license, or the entitlement maximum count is reached.</p>
     NoEntitlementsAllowed(String),
     /// <p>Too many requests have been submitted. Try again after a brief wait.</p>
@@ -2189,6 +2429,11 @@ impl CheckoutBorrowLicenseError {
                 }
                 "EntitlementNotAllowedException" => {
                     return RusotoError::Service(CheckoutBorrowLicenseError::EntitlementNotAllowed(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(CheckoutBorrowLicenseError::InvalidParameterValue(
                         err.msg,
                     ))
                 }
@@ -2234,6 +2479,7 @@ impl fmt::Display for CheckoutBorrowLicenseError {
             CheckoutBorrowLicenseError::AccessDenied(ref cause) => write!(f, "{}", cause),
             CheckoutBorrowLicenseError::Authorization(ref cause) => write!(f, "{}", cause),
             CheckoutBorrowLicenseError::EntitlementNotAllowed(ref cause) => write!(f, "{}", cause),
+            CheckoutBorrowLicenseError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
             CheckoutBorrowLicenseError::NoEntitlementsAllowed(ref cause) => write!(f, "{}", cause),
             CheckoutBorrowLicenseError::RateLimitExceeded(ref cause) => write!(f, "{}", cause),
             CheckoutBorrowLicenseError::Redirect(ref cause) => write!(f, "{}", cause),
@@ -2253,6 +2499,8 @@ pub enum CheckoutLicenseError {
     AccessDenied(String),
     /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
     Authorization(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValue(String),
     /// <p>There are no entitlements found for this license, or the entitlement maximum count is reached.</p>
     NoEntitlementsAllowed(String),
     /// <p>Too many requests have been submitted. Try again after a brief wait.</p>
@@ -2276,6 +2524,11 @@ impl CheckoutLicenseError {
                 }
                 "AuthorizationException" => {
                     return RusotoError::Service(CheckoutLicenseError::Authorization(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(CheckoutLicenseError::InvalidParameterValue(
+                        err.msg,
+                    ))
                 }
                 "NoEntitlementsAllowedException" => {
                     return RusotoError::Service(CheckoutLicenseError::NoEntitlementsAllowed(
@@ -2312,6 +2565,7 @@ impl fmt::Display for CheckoutLicenseError {
         match *self {
             CheckoutLicenseError::AccessDenied(ref cause) => write!(f, "{}", cause),
             CheckoutLicenseError::Authorization(ref cause) => write!(f, "{}", cause),
+            CheckoutLicenseError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
             CheckoutLicenseError::NoEntitlementsAllowed(ref cause) => write!(f, "{}", cause),
             CheckoutLicenseError::RateLimitExceeded(ref cause) => write!(f, "{}", cause),
             CheckoutLicenseError::Redirect(ref cause) => write!(f, "{}", cause),
@@ -2588,6 +2842,102 @@ impl fmt::Display for CreateLicenseConfigurationError {
     }
 }
 impl Error for CreateLicenseConfigurationError {}
+/// Errors returned by CreateLicenseManagerReportGenerator
+#[derive(Debug, PartialEq)]
+pub enum CreateLicenseManagerReportGeneratorError {
+    /// <p>Access to resource denied.</p>
+    AccessDenied(String),
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    Authorization(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValue(String),
+    /// <p>Too many requests have been submitted. Try again after a brief wait.</p>
+    RateLimitExceeded(String),
+    /// <p>Your resource limits have been exceeded.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The resource cannot be found.</p>
+    ResourceNotFound(String),
+    /// <p>The server experienced an internal error. Try again.</p>
+    ServerInternal(String),
+}
+
+impl CreateLicenseManagerReportGeneratorError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateLicenseManagerReportGeneratorError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        CreateLicenseManagerReportGeneratorError::AccessDenied(err.msg),
+                    )
+                }
+                "AuthorizationException" => {
+                    return RusotoError::Service(
+                        CreateLicenseManagerReportGeneratorError::Authorization(err.msg),
+                    )
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        CreateLicenseManagerReportGeneratorError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "RateLimitExceededException" => {
+                    return RusotoError::Service(
+                        CreateLicenseManagerReportGeneratorError::RateLimitExceeded(err.msg),
+                    )
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(
+                        CreateLicenseManagerReportGeneratorError::ResourceLimitExceeded(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        CreateLicenseManagerReportGeneratorError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ServerInternalException" => {
+                    return RusotoError::Service(
+                        CreateLicenseManagerReportGeneratorError::ServerInternal(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateLicenseManagerReportGeneratorError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateLicenseManagerReportGeneratorError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLicenseManagerReportGeneratorError::Authorization(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLicenseManagerReportGeneratorError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLicenseManagerReportGeneratorError::RateLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLicenseManagerReportGeneratorError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLicenseManagerReportGeneratorError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateLicenseManagerReportGeneratorError::ServerInternal(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateLicenseManagerReportGeneratorError {}
 /// Errors returned by CreateLicenseVersion
 #[derive(Debug, PartialEq)]
 pub enum CreateLicenseVersionError {
@@ -2918,6 +3268,102 @@ impl fmt::Display for DeleteLicenseConfigurationError {
     }
 }
 impl Error for DeleteLicenseConfigurationError {}
+/// Errors returned by DeleteLicenseManagerReportGenerator
+#[derive(Debug, PartialEq)]
+pub enum DeleteLicenseManagerReportGeneratorError {
+    /// <p>Access to resource denied.</p>
+    AccessDenied(String),
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    Authorization(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValue(String),
+    /// <p>Too many requests have been submitted. Try again after a brief wait.</p>
+    RateLimitExceeded(String),
+    /// <p>Your resource limits have been exceeded.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The resource cannot be found.</p>
+    ResourceNotFound(String),
+    /// <p>The server experienced an internal error. Try again.</p>
+    ServerInternal(String),
+}
+
+impl DeleteLicenseManagerReportGeneratorError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteLicenseManagerReportGeneratorError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        DeleteLicenseManagerReportGeneratorError::AccessDenied(err.msg),
+                    )
+                }
+                "AuthorizationException" => {
+                    return RusotoError::Service(
+                        DeleteLicenseManagerReportGeneratorError::Authorization(err.msg),
+                    )
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        DeleteLicenseManagerReportGeneratorError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "RateLimitExceededException" => {
+                    return RusotoError::Service(
+                        DeleteLicenseManagerReportGeneratorError::RateLimitExceeded(err.msg),
+                    )
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(
+                        DeleteLicenseManagerReportGeneratorError::ResourceLimitExceeded(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DeleteLicenseManagerReportGeneratorError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ServerInternalException" => {
+                    return RusotoError::Service(
+                        DeleteLicenseManagerReportGeneratorError::ServerInternal(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteLicenseManagerReportGeneratorError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteLicenseManagerReportGeneratorError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteLicenseManagerReportGeneratorError::Authorization(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteLicenseManagerReportGeneratorError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteLicenseManagerReportGeneratorError::RateLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteLicenseManagerReportGeneratorError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteLicenseManagerReportGeneratorError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteLicenseManagerReportGeneratorError::ServerInternal(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteLicenseManagerReportGeneratorError {}
 /// Errors returned by DeleteToken
 #[derive(Debug, PartialEq)]
 pub enum DeleteTokenError {
@@ -3280,6 +3726,102 @@ impl fmt::Display for GetLicenseConfigurationError {
     }
 }
 impl Error for GetLicenseConfigurationError {}
+/// Errors returned by GetLicenseManagerReportGenerator
+#[derive(Debug, PartialEq)]
+pub enum GetLicenseManagerReportGeneratorError {
+    /// <p>Access to resource denied.</p>
+    AccessDenied(String),
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    Authorization(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValue(String),
+    /// <p>Too many requests have been submitted. Try again after a brief wait.</p>
+    RateLimitExceeded(String),
+    /// <p>Your resource limits have been exceeded.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The resource cannot be found.</p>
+    ResourceNotFound(String),
+    /// <p>The server experienced an internal error. Try again.</p>
+    ServerInternal(String),
+}
+
+impl GetLicenseManagerReportGeneratorError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetLicenseManagerReportGeneratorError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        GetLicenseManagerReportGeneratorError::AccessDenied(err.msg),
+                    )
+                }
+                "AuthorizationException" => {
+                    return RusotoError::Service(
+                        GetLicenseManagerReportGeneratorError::Authorization(err.msg),
+                    )
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        GetLicenseManagerReportGeneratorError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "RateLimitExceededException" => {
+                    return RusotoError::Service(
+                        GetLicenseManagerReportGeneratorError::RateLimitExceeded(err.msg),
+                    )
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(
+                        GetLicenseManagerReportGeneratorError::ResourceLimitExceeded(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        GetLicenseManagerReportGeneratorError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ServerInternalException" => {
+                    return RusotoError::Service(
+                        GetLicenseManagerReportGeneratorError::ServerInternal(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetLicenseManagerReportGeneratorError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetLicenseManagerReportGeneratorError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetLicenseManagerReportGeneratorError::Authorization(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetLicenseManagerReportGeneratorError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetLicenseManagerReportGeneratorError::RateLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetLicenseManagerReportGeneratorError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetLicenseManagerReportGeneratorError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetLicenseManagerReportGeneratorError::ServerInternal(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for GetLicenseManagerReportGeneratorError {}
 /// Errors returned by GetLicenseUsage
 #[derive(Debug, PartialEq)]
 pub enum GetLicenseUsageError {
@@ -3698,6 +4240,102 @@ impl fmt::Display for ListLicenseConfigurationsError {
     }
 }
 impl Error for ListLicenseConfigurationsError {}
+/// Errors returned by ListLicenseManagerReportGenerators
+#[derive(Debug, PartialEq)]
+pub enum ListLicenseManagerReportGeneratorsError {
+    /// <p>Access to resource denied.</p>
+    AccessDenied(String),
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    Authorization(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValue(String),
+    /// <p>Too many requests have been submitted. Try again after a brief wait.</p>
+    RateLimitExceeded(String),
+    /// <p>Your resource limits have been exceeded.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The resource cannot be found.</p>
+    ResourceNotFound(String),
+    /// <p>The server experienced an internal error. Try again.</p>
+    ServerInternal(String),
+}
+
+impl ListLicenseManagerReportGeneratorsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListLicenseManagerReportGeneratorsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        ListLicenseManagerReportGeneratorsError::AccessDenied(err.msg),
+                    )
+                }
+                "AuthorizationException" => {
+                    return RusotoError::Service(
+                        ListLicenseManagerReportGeneratorsError::Authorization(err.msg),
+                    )
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        ListLicenseManagerReportGeneratorsError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "RateLimitExceededException" => {
+                    return RusotoError::Service(
+                        ListLicenseManagerReportGeneratorsError::RateLimitExceeded(err.msg),
+                    )
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(
+                        ListLicenseManagerReportGeneratorsError::ResourceLimitExceeded(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        ListLicenseManagerReportGeneratorsError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ServerInternalException" => {
+                    return RusotoError::Service(
+                        ListLicenseManagerReportGeneratorsError::ServerInternal(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListLicenseManagerReportGeneratorsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListLicenseManagerReportGeneratorsError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListLicenseManagerReportGeneratorsError::Authorization(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListLicenseManagerReportGeneratorsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListLicenseManagerReportGeneratorsError::RateLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListLicenseManagerReportGeneratorsError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListLicenseManagerReportGeneratorsError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListLicenseManagerReportGeneratorsError::ServerInternal(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListLicenseManagerReportGeneratorsError {}
 /// Errors returned by ListLicenseSpecificationsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListLicenseSpecificationsForResourceError {
@@ -4532,6 +5170,102 @@ impl fmt::Display for UpdateLicenseConfigurationError {
     }
 }
 impl Error for UpdateLicenseConfigurationError {}
+/// Errors returned by UpdateLicenseManagerReportGenerator
+#[derive(Debug, PartialEq)]
+pub enum UpdateLicenseManagerReportGeneratorError {
+    /// <p>Access to resource denied.</p>
+    AccessDenied(String),
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    Authorization(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValue(String),
+    /// <p>Too many requests have been submitted. Try again after a brief wait.</p>
+    RateLimitExceeded(String),
+    /// <p>Your resource limits have been exceeded.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The resource cannot be found.</p>
+    ResourceNotFound(String),
+    /// <p>The server experienced an internal error. Try again.</p>
+    ServerInternal(String),
+}
+
+impl UpdateLicenseManagerReportGeneratorError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateLicenseManagerReportGeneratorError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        UpdateLicenseManagerReportGeneratorError::AccessDenied(err.msg),
+                    )
+                }
+                "AuthorizationException" => {
+                    return RusotoError::Service(
+                        UpdateLicenseManagerReportGeneratorError::Authorization(err.msg),
+                    )
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        UpdateLicenseManagerReportGeneratorError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "RateLimitExceededException" => {
+                    return RusotoError::Service(
+                        UpdateLicenseManagerReportGeneratorError::RateLimitExceeded(err.msg),
+                    )
+                }
+                "ResourceLimitExceededException" => {
+                    return RusotoError::Service(
+                        UpdateLicenseManagerReportGeneratorError::ResourceLimitExceeded(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        UpdateLicenseManagerReportGeneratorError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ServerInternalException" => {
+                    return RusotoError::Service(
+                        UpdateLicenseManagerReportGeneratorError::ServerInternal(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateLicenseManagerReportGeneratorError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateLicenseManagerReportGeneratorError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateLicenseManagerReportGeneratorError::Authorization(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateLicenseManagerReportGeneratorError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateLicenseManagerReportGeneratorError::RateLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateLicenseManagerReportGeneratorError::ResourceLimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateLicenseManagerReportGeneratorError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateLicenseManagerReportGeneratorError::ServerInternal(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdateLicenseManagerReportGeneratorError {}
 /// Errors returned by UpdateLicenseSpecificationsForResource
 #[derive(Debug, PartialEq)]
 pub enum UpdateLicenseSpecificationsForResourceError {
@@ -4739,6 +5473,15 @@ pub trait LicenseManager {
         input: CreateLicenseConfigurationRequest,
     ) -> Result<CreateLicenseConfigurationResponse, RusotoError<CreateLicenseConfigurationError>>;
 
+    /// <p>Creates a new report generator.</p>
+    async fn create_license_manager_report_generator(
+        &self,
+        input: CreateLicenseManagerReportGeneratorRequest,
+    ) -> Result<
+        CreateLicenseManagerReportGeneratorResponse,
+        RusotoError<CreateLicenseManagerReportGeneratorError>,
+    >;
+
     /// <p>Creates a new version of the specified license.</p>
     async fn create_license_version(
         &self,
@@ -4768,6 +5511,15 @@ pub trait LicenseManager {
         &self,
         input: DeleteLicenseConfigurationRequest,
     ) -> Result<DeleteLicenseConfigurationResponse, RusotoError<DeleteLicenseConfigurationError>>;
+
+    /// <p>Delete an existing report generator.</p> <p>This action deletes the report generator, which stops it from generating future reports and cannot be reversed. However, the previous reports from this generator will remain in your S3 bucket.</p>
+    async fn delete_license_manager_report_generator(
+        &self,
+        input: DeleteLicenseManagerReportGeneratorRequest,
+    ) -> Result<
+        DeleteLicenseManagerReportGeneratorResponse,
+        RusotoError<DeleteLicenseManagerReportGeneratorError>,
+    >;
 
     /// <p>Deletes the specified token. Must be called in the license home Region.</p>
     async fn delete_token(
@@ -4804,6 +5556,15 @@ pub trait LicenseManager {
         &self,
         input: GetLicenseConfigurationRequest,
     ) -> Result<GetLicenseConfigurationResponse, RusotoError<GetLicenseConfigurationError>>;
+
+    /// <p>Gets information on the specified report generator.</p>
+    async fn get_license_manager_report_generator(
+        &self,
+        input: GetLicenseManagerReportGeneratorRequest,
+    ) -> Result<
+        GetLicenseManagerReportGeneratorResponse,
+        RusotoError<GetLicenseManagerReportGeneratorError>,
+    >;
 
     /// <p>Gets detailed information about the usage of the specified license.</p>
     async fn get_license_usage(
@@ -4845,6 +5606,15 @@ pub trait LicenseManager {
         &self,
         input: ListLicenseConfigurationsRequest,
     ) -> Result<ListLicenseConfigurationsResponse, RusotoError<ListLicenseConfigurationsError>>;
+
+    /// <p>Lists the report generators for your account.</p>
+    async fn list_license_manager_report_generators(
+        &self,
+        input: ListLicenseManagerReportGeneratorsRequest,
+    ) -> Result<
+        ListLicenseManagerReportGeneratorsResponse,
+        RusotoError<ListLicenseManagerReportGeneratorsError>,
+    >;
 
     /// <p>Describes the license configurations for the specified resource.</p>
     async fn list_license_specifications_for_resource(
@@ -4929,6 +5699,15 @@ pub trait LicenseManager {
         &self,
         input: UpdateLicenseConfigurationRequest,
     ) -> Result<UpdateLicenseConfigurationResponse, RusotoError<UpdateLicenseConfigurationError>>;
+
+    /// <p>Updates a report generator.</p> <p>After you make changes to a report generator, it will start generating new reports within 60 minutes of being updated.</p>
+    async fn update_license_manager_report_generator(
+        &self,
+        input: UpdateLicenseManagerReportGeneratorRequest,
+    ) -> Result<
+        UpdateLicenseManagerReportGeneratorResponse,
+        RusotoError<UpdateLicenseManagerReportGeneratorError>,
+    >;
 
     /// <p>Adds or removes the specified license configurations for the specified AWS resource.</p> <p>You can update the license specifications of AMIs, instances, and hosts. You cannot update the license specifications for launch templates and AWS CloudFormation templates, as they send license configurations to the operation that creates the resource.</p>
     async fn update_license_specifications_for_resource(
@@ -5135,6 +5914,34 @@ impl LicenseManager for LicenseManagerClient {
             .deserialize::<CreateLicenseConfigurationResponse, _>()
     }
 
+    /// <p>Creates a new report generator.</p>
+    async fn create_license_manager_report_generator(
+        &self,
+        input: CreateLicenseManagerReportGeneratorRequest,
+    ) -> Result<
+        CreateLicenseManagerReportGeneratorResponse,
+        RusotoError<CreateLicenseManagerReportGeneratorError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSLicenseManager.CreateLicenseManagerReportGenerator",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                CreateLicenseManagerReportGeneratorError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateLicenseManagerReportGeneratorResponse, _>()
+    }
+
     /// <p>Creates a new version of the specified license.</p>
     async fn create_license_version(
         &self,
@@ -5229,6 +6036,34 @@ impl LicenseManager for LicenseManagerClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<DeleteLicenseConfigurationResponse, _>()
+    }
+
+    /// <p>Delete an existing report generator.</p> <p>This action deletes the report generator, which stops it from generating future reports and cannot be reversed. However, the previous reports from this generator will remain in your S3 bucket.</p>
+    async fn delete_license_manager_report_generator(
+        &self,
+        input: DeleteLicenseManagerReportGeneratorRequest,
+    ) -> Result<
+        DeleteLicenseManagerReportGeneratorResponse,
+        RusotoError<DeleteLicenseManagerReportGeneratorError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSLicenseManager.DeleteLicenseManagerReportGenerator",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DeleteLicenseManagerReportGeneratorError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteLicenseManagerReportGeneratorResponse, _>()
     }
 
     /// <p>Deletes the specified token. Must be called in the license home Region.</p>
@@ -5339,6 +6174,34 @@ impl LicenseManager for LicenseManagerClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<GetLicenseConfigurationResponse, _>()
+    }
+
+    /// <p>Gets information on the specified report generator.</p>
+    async fn get_license_manager_report_generator(
+        &self,
+        input: GetLicenseManagerReportGeneratorRequest,
+    ) -> Result<
+        GetLicenseManagerReportGeneratorResponse,
+        RusotoError<GetLicenseManagerReportGeneratorError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSLicenseManager.GetLicenseManagerReportGenerator",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetLicenseManagerReportGeneratorError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetLicenseManagerReportGeneratorResponse, _>()
     }
 
     /// <p>Gets detailed information about the usage of the specified license.</p>
@@ -5471,6 +6334,34 @@ impl LicenseManager for LicenseManagerClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<ListLicenseConfigurationsResponse, _>()
+    }
+
+    /// <p>Lists the report generators for your account.</p>
+    async fn list_license_manager_report_generators(
+        &self,
+        input: ListLicenseManagerReportGeneratorsRequest,
+    ) -> Result<
+        ListLicenseManagerReportGeneratorsResponse,
+        RusotoError<ListLicenseManagerReportGeneratorsError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSLicenseManager.ListLicenseManagerReportGenerators",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ListLicenseManagerReportGeneratorsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListLicenseManagerReportGeneratorsResponse, _>()
     }
 
     /// <p>Describes the license configurations for the specified resource.</p>
@@ -5732,6 +6623,34 @@ impl LicenseManager for LicenseManagerClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<UpdateLicenseConfigurationResponse, _>()
+    }
+
+    /// <p>Updates a report generator.</p> <p>After you make changes to a report generator, it will start generating new reports within 60 minutes of being updated.</p>
+    async fn update_license_manager_report_generator(
+        &self,
+        input: UpdateLicenseManagerReportGeneratorRequest,
+    ) -> Result<
+        UpdateLicenseManagerReportGeneratorResponse,
+        RusotoError<UpdateLicenseManagerReportGeneratorError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSLicenseManager.UpdateLicenseManagerReportGenerator",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                UpdateLicenseManagerReportGeneratorError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateLicenseManagerReportGeneratorResponse, _>()
     }
 
     /// <p>Adds or removes the specified license configurations for the specified AWS resource.</p> <p>You can update the license specifications of AMIs, instances, and hosts. You cannot update the license specifications for launch templates and AWS CloudFormation templates, as they send license configurations to the operation that creates the resource.</p>

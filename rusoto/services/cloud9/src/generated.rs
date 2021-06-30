@@ -57,11 +57,11 @@ pub struct CreateEnvironmentEC2Request {
     #[serde(rename = "automaticStopTimeMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub automatic_stop_time_minutes: Option<i64>,
-    /// <p>A unique, case-sensitive string that helps AWS Cloud9 to ensure this operation completes no more than one time.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Client Tokens</a> in the <i>Amazon EC2 API Reference</i>.</p>
+    /// <p>A unique, case-sensitive string that helps Cloud9 to ensure this operation completes no more than one time.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/Run_Instance_Idempotency.html">Client Tokens</a> in the <i>Amazon EC2 API Reference</i>.</p>
     #[serde(rename = "clientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
-    /// <p>The connection type used for connecting to an Amazon EC2 environment.</p>
+    /// <p>The connection type used for connecting to an Amazon EC2 environment. Valid values are <code>CONNECT_SSH</code> (default) and <code>CONNECT_SSM</code> (connected through Amazon EC2 Systems Manager).</p> <p>For more information, see <a href="https://docs.aws.amazon.com/cloud9/latest/user-guide/ec2-ssm.html">Accessing no-ingress EC2 instances with Amazon EC2 Systems Manager</a> in the <i>Cloud9 User Guide</i>.</p>
     #[serde(rename = "connectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
@@ -69,21 +69,25 @@ pub struct CreateEnvironmentEC2Request {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+    /// <p><p>The identifier for the Amazon Machine Image (AMI) that&#39;s used to create the EC2 instance. To choose an AMI for the instance, you must specify a valid AMI alias or a valid Amazon EC2 Systems Manager (SSM) path.</p> <p>The default AMI is used if the parameter isn&#39;t explicitly assigned a value in the request. Because Amazon Linux AMI has ended standard support as of December 31, 2020, we recommend you choose Amazon Linux 2, which includes long term support through 2023.</p> <p> <b>AMI aliases </b> </p> <ul> <li> <p> <b>Amazon Linux (default): <code>amazonlinux-1-x86<em>64</code> </b> </p> </li> <li> <p>Amazon Linux 2: <code>amazonlinux-2-x86</em>64</code> </p> </li> <li> <p>Ubuntu 18.04: <code>ubuntu-18.04-x86<em>64</code> </p> </li> </ul> <p> <b>SSM paths</b> </p> <ul> <li> <p> <b>Amazon Linux (default): <code>resolve:ssm:/aws/service/cloud9/amis/amazonlinux-1-x86</em>64</code> </b> </p> </li> <li> <p>Amazon Linux 2: <code>resolve:ssm:/aws/service/cloud9/amis/amazonlinux-2-x86<em>64</code> </p> </li> <li> <p>Ubuntu 18.04: <code>resolve:ssm:/aws/service/cloud9/amis/ubuntu-18.04-x86</em>64</code> </p> </li> </ul></p>
+    #[serde(rename = "imageId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_id: Option<String>,
     /// <p>The type of instance to connect to the environment (for example, <code>t2.micro</code>).</p>
     #[serde(rename = "instanceType")]
     pub instance_type: String,
-    /// <p>The name of the environment to create.</p> <p>This name is visible to other AWS IAM users in the same AWS account.</p>
+    /// <p>The name of the environment to create.</p> <p>This name is visible to other IAM users in the same Amazon Web Services account.</p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p>The Amazon Resource Name (ARN) of the environment owner. This ARN can be the ARN of any AWS IAM principal. If this value is not specified, the ARN defaults to this environment's creator.</p>
+    /// <p>The Amazon Resource Name (ARN) of the environment owner. This ARN can be the ARN of any IAM principal. If this value is not specified, the ARN defaults to this environment's creator.</p>
     #[serde(rename = "ownerArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_arn: Option<String>,
-    /// <p>The ID of the subnet in Amazon VPC that AWS Cloud9 will use to communicate with the Amazon EC2 instance.</p>
+    /// <p>The ID of the subnet in Amazon VPC that Cloud9 will use to communicate with the Amazon EC2 instance.</p>
     #[serde(rename = "subnetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_id: Option<String>,
-    /// <p>An array of key-value pairs that will be associated with the new AWS Cloud9 development environment.</p>
+    /// <p>An array of key-value pairs that will be associated with the new Cloud9 development environment.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
@@ -117,8 +121,7 @@ pub struct CreateEnvironmentMembershipRequest {
 pub struct CreateEnvironmentMembershipResult {
     /// <p>Information about the environment member that was added.</p>
     #[serde(rename = "membership")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub membership: Option<EnvironmentMember>,
+    pub membership: EnvironmentMember,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -199,12 +202,10 @@ pub struct DescribeEnvironmentStatusRequest {
 pub struct DescribeEnvironmentStatusResult {
     /// <p>Any informational message about the status of the environment.</p>
     #[serde(rename = "message")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub message: Option<String>,
+    pub message: String,
     /// <p><p>The status of the environment. Available values include:</p> <ul> <li> <p> <code>connecting</code>: The environment is connecting.</p> </li> <li> <p> <code>creating</code>: The environment is being created.</p> </li> <li> <p> <code>deleting</code>: The environment is being deleted.</p> </li> <li> <p> <code>error</code>: The environment is in an error state.</p> </li> <li> <p> <code>ready</code>: The environment is ready.</p> </li> <li> <p> <code>stopped</code>: The environment is stopped.</p> </li> <li> <p> <code>stopping</code>: The environment is stopping.</p> </li> </ul></p>
     #[serde(rename = "status")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub status: Option<String>,
+    pub status: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -224,15 +225,14 @@ pub struct DescribeEnvironmentsResult {
     pub environments: Option<Vec<Environment>>,
 }
 
-/// <p>Information about an AWS Cloud9 development environment.</p>
+/// <p>Information about an Cloud9 development environment.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Environment {
     /// <p>The Amazon Resource Name (ARN) of the environment.</p>
     #[serde(rename = "arn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub arn: Option<String>,
-    /// <p>The connection type used for connecting to an Amazon EC2 environment.</p>
+    pub arn: String,
+    /// <p>The connection type used for connecting to an Amazon EC2 environment. <code>CONNECT_SSH</code> is selected by default.</p>
     #[serde(rename = "connectionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_type: Option<String>,
@@ -248,25 +248,27 @@ pub struct Environment {
     #[serde(rename = "lifecycle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lifecycle: Option<EnvironmentLifecycle>,
+    /// <p><p>Describes the status of Amazon Web Services managed temporary credentials for the Cloud9 environment. Available values are:</p> <ul> <li> <p> <code>ENABLED<em>ON</em>CREATE</code> </p> </li> <li> <p> <code>ENABLED<em>BY</em>OWNER</code> </p> </li> <li> <p> <code>DISABLED<em>BY</em>DEFAULT</code> </p> </li> <li> <p> <code>DISABLED<em>BY</em>OWNER</code> </p> </li> <li> <p> <code>DISABLED<em>BY</em>COLLABORATOR</code> </p> </li> <li> <p> <code>PENDING<em>REMOVAL</em>BY<em>COLLABORATOR</code> </p> </li> <li> <p> <code>PENDING</em>REMOVAL<em>BY</em>OWNER</code> </p> </li> <li> <p> <code>FAILED<em>REMOVAL</em>BY<em>COLLABORATOR</code> </p> </li> <li> <p> <code>ENABLED</em>BY<em>OWNER</code> </p> </li> <li> <p> <code>DISABLED</em>BY_DEFAULT</code> </p> </li> </ul></p>
+    #[serde(rename = "managedCredentialsStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub managed_credentials_status: Option<String>,
     /// <p>The name of the environment.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the environment owner.</p>
     #[serde(rename = "ownerArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub owner_arn: Option<String>,
+    pub owner_arn: String,
     /// <p><p>The type of environment. Valid values include the following:</p> <ul> <li> <p> <code>ec2</code>: An Amazon Elastic Compute Cloud (Amazon EC2) instance connects to the environment.</p> </li> <li> <p> <code>ssh</code>: Your own server connects to the environment.</p> </li> </ul></p>
     #[serde(rename = "type")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub type_: Option<String>,
+    pub type_: String,
 }
 
-/// <p>Information about the current creation or deletion lifecycle state of an AWS Cloud9 development environment.</p>
+/// <p>Information about the current creation or deletion lifecycle state of an Cloud9 development environment.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnvironmentLifecycle {
-    /// <p>If the environment failed to delete, the Amazon Resource Name (ARN) of the related AWS resource.</p>
+    /// <p>If the environment failed to delete, the Amazon Resource Name (ARN) of the related Amazon Web Services resource.</p>
     #[serde(rename = "failureResource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_resource: Option<String>,
@@ -280,30 +282,26 @@ pub struct EnvironmentLifecycle {
     pub status: Option<String>,
 }
 
-/// <p>Information about an environment member for an AWS Cloud9 development environment.</p>
+/// <p>Information about an environment member for an Cloud9 development environment.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EnvironmentMember {
     /// <p>The ID of the environment for the environment member.</p>
     #[serde(rename = "environmentId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub environment_id: Option<String>,
+    pub environment_id: String,
     /// <p>The time, expressed in epoch time format, when the environment member last opened the environment.</p>
     #[serde(rename = "lastAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_access: Option<f64>,
     /// <p><p>The type of environment member permissions associated with this environment member. Available values include:</p> <ul> <li> <p> <code>owner</code>: Owns the environment.</p> </li> <li> <p> <code>read-only</code>: Has read-only access to the environment.</p> </li> <li> <p> <code>read-write</code>: Has read-write access to the environment.</p> </li> </ul></p>
     #[serde(rename = "permissions")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub permissions: Option<String>,
+    pub permissions: String,
     /// <p>The Amazon Resource Name (ARN) of the environment member.</p>
     #[serde(rename = "userArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub user_arn: Option<String>,
-    /// <p>The user ID in AWS Identity and Access Management (AWS IAM) of the environment member.</p>
+    pub user_arn: String,
+    /// <p>The user ID in Identity and Access Management (IAM) of the environment member.</p>
     #[serde(rename = "userId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub user_id: Option<String>,
+    pub user_id: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -335,7 +333,7 @@ pub struct ListEnvironmentsResult {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
-    /// <p>The Amazon Resource Name (ARN) of the AWS Cloud9 development environment to get the tags for.</p>
+    /// <p>The Amazon Resource Name (ARN) of the Cloud9 development environment to get the tags for.</p>
     #[serde(rename = "ResourceARN")]
     pub resource_arn: String,
 }
@@ -343,13 +341,13 @@ pub struct ListTagsForResourceRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListTagsForResourceResponse {
-    /// <p>The list of tags associated with the AWS Cloud9 development environment.</p>
+    /// <p>The list of tags associated with the Cloud9 development environment.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
 }
 
-/// <p>Metadata that is associated with AWS resources. In particular, a name-value pair that can be associated with an AWS Cloud9 development environment. There are two types of tags: <i>user tags</i> and <i>system tags</i>. A user tag is created by the user. A system tag is automatically created by AWS services. A system tag is prefixed with "aws:" and cannot be modified by the user.</p>
+/// <p>Metadata that is associated with Amazon Web Services resources. In particular, a name-value pair that can be associated with an Cloud9 development environment. There are two types of tags: <i>user tags</i> and <i>system tags</i>. A user tag is created by the user. A system tag is automatically created by Amazon Web Services services. A system tag is prefixed with <code>"aws:"</code> and cannot be modified by the user.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Tag {
     /// <p>The <b>name</b> part of a tag.</p>
@@ -363,10 +361,10 @@ pub struct Tag {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TagResourceRequest {
-    /// <p>The Amazon Resource Name (ARN) of the AWS Cloud9 development environment to add tags to.</p>
+    /// <p>The Amazon Resource Name (ARN) of the Cloud9 development environment to add tags to.</p>
     #[serde(rename = "ResourceARN")]
     pub resource_arn: String,
-    /// <p>The list of tags to add to the given AWS Cloud9 development environment.</p>
+    /// <p>The list of tags to add to the given Cloud9 development environment.</p>
     #[serde(rename = "Tags")]
     pub tags: Vec<Tag>,
 }
@@ -378,10 +376,10 @@ pub struct TagResourceResponse {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
-    /// <p>The Amazon Resource Name (ARN) of the AWS Cloud9 development environment to remove tags from.</p>
+    /// <p>The Amazon Resource Name (ARN) of the Cloud9 development environment to remove tags from.</p>
     #[serde(rename = "ResourceARN")]
     pub resource_arn: String,
-    /// <p>The tag names of the tags to remove from the given AWS Cloud9 development environment.</p>
+    /// <p>The tag names of the tags to remove from the given Cloud9 development environment.</p>
     #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
 }
@@ -1334,31 +1332,31 @@ impl Error for UpdateEnvironmentMembershipError {}
 /// Trait representing the capabilities of the AWS Cloud9 API. AWS Cloud9 clients implement this trait.
 #[async_trait]
 pub trait Cloud9 {
-    /// <p>Creates an AWS Cloud9 development environment, launches an Amazon Elastic Compute Cloud (Amazon EC2) instance, and then connects from the instance to the environment.</p>
+    /// <p>Creates an Cloud9 development environment, launches an Amazon Elastic Compute Cloud (Amazon EC2) instance, and then connects from the instance to the environment.</p>
     async fn create_environment_ec2(
         &self,
         input: CreateEnvironmentEC2Request,
     ) -> Result<CreateEnvironmentEC2Result, RusotoError<CreateEnvironmentEC2Error>>;
 
-    /// <p>Adds an environment member to an AWS Cloud9 development environment.</p>
+    /// <p>Adds an environment member to an Cloud9 development environment.</p>
     async fn create_environment_membership(
         &self,
         input: CreateEnvironmentMembershipRequest,
     ) -> Result<CreateEnvironmentMembershipResult, RusotoError<CreateEnvironmentMembershipError>>;
 
-    /// <p>Deletes an AWS Cloud9 development environment. If an Amazon EC2 instance is connected to the environment, also terminates the instance.</p>
+    /// <p>Deletes an Cloud9 development environment. If an Amazon EC2 instance is connected to the environment, also terminates the instance.</p>
     async fn delete_environment(
         &self,
         input: DeleteEnvironmentRequest,
     ) -> Result<DeleteEnvironmentResult, RusotoError<DeleteEnvironmentError>>;
 
-    /// <p>Deletes an environment member from an AWS Cloud9 development environment.</p>
+    /// <p>Deletes an environment member from an Cloud9 development environment.</p>
     async fn delete_environment_membership(
         &self,
         input: DeleteEnvironmentMembershipRequest,
     ) -> Result<DeleteEnvironmentMembershipResult, RusotoError<DeleteEnvironmentMembershipError>>;
 
-    /// <p>Gets information about environment members for an AWS Cloud9 development environment.</p>
+    /// <p>Gets information about environment members for an Cloud9 development environment.</p>
     async fn describe_environment_memberships(
         &self,
         input: DescribeEnvironmentMembershipsRequest,
@@ -1367,49 +1365,49 @@ pub trait Cloud9 {
         RusotoError<DescribeEnvironmentMembershipsError>,
     >;
 
-    /// <p>Gets status information for an AWS Cloud9 development environment.</p>
+    /// <p>Gets status information for an Cloud9 development environment.</p>
     async fn describe_environment_status(
         &self,
         input: DescribeEnvironmentStatusRequest,
     ) -> Result<DescribeEnvironmentStatusResult, RusotoError<DescribeEnvironmentStatusError>>;
 
-    /// <p>Gets information about AWS Cloud9 development environments.</p>
+    /// <p>Gets information about Cloud9 development environments.</p>
     async fn describe_environments(
         &self,
         input: DescribeEnvironmentsRequest,
     ) -> Result<DescribeEnvironmentsResult, RusotoError<DescribeEnvironmentsError>>;
 
-    /// <p>Gets a list of AWS Cloud9 development environment identifiers.</p>
+    /// <p>Gets a list of Cloud9 development environment identifiers.</p>
     async fn list_environments(
         &self,
         input: ListEnvironmentsRequest,
     ) -> Result<ListEnvironmentsResult, RusotoError<ListEnvironmentsError>>;
 
-    /// <p>Gets a list of the tags associated with an AWS Cloud9 development environment.</p>
+    /// <p>Gets a list of the tags associated with an Cloud9 development environment.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
-    /// <p><p>Adds tags to an AWS Cloud9 development environment.</p> <important> <p>Tags that you add to an AWS Cloud9 environment by using this method will NOT be automatically propagated to underlying resources.</p> </important></p>
+    /// <p><p>Adds tags to an Cloud9 development environment.</p> <important> <p>Tags that you add to an Cloud9 environment by using this method will NOT be automatically propagated to underlying resources.</p> </important></p>
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
     ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
 
-    /// <p>Removes tags from an AWS Cloud9 development environment.</p>
+    /// <p>Removes tags from an Cloud9 development environment.</p>
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
-    /// <p>Changes the settings of an existing AWS Cloud9 development environment.</p>
+    /// <p>Changes the settings of an existing Cloud9 development environment.</p>
     async fn update_environment(
         &self,
         input: UpdateEnvironmentRequest,
     ) -> Result<UpdateEnvironmentResult, RusotoError<UpdateEnvironmentError>>;
 
-    /// <p>Changes the settings of an existing environment member for an AWS Cloud9 development environment.</p>
+    /// <p>Changes the settings of an existing environment member for an Cloud9 development environment.</p>
     async fn update_environment_membership(
         &self,
         input: UpdateEnvironmentMembershipRequest,
@@ -1455,7 +1453,7 @@ impl Cloud9Client {
 
 #[async_trait]
 impl Cloud9 for Cloud9Client {
-    /// <p>Creates an AWS Cloud9 development environment, launches an Amazon Elastic Compute Cloud (Amazon EC2) instance, and then connects from the instance to the environment.</p>
+    /// <p>Creates an Cloud9 development environment, launches an Amazon Elastic Compute Cloud (Amazon EC2) instance, and then connects from the instance to the environment.</p>
     async fn create_environment_ec2(
         &self,
         input: CreateEnvironmentEC2Request,
@@ -1476,7 +1474,7 @@ impl Cloud9 for Cloud9Client {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateEnvironmentEC2Result, _>()
     }
 
-    /// <p>Adds an environment member to an AWS Cloud9 development environment.</p>
+    /// <p>Adds an environment member to an Cloud9 development environment.</p>
     async fn create_environment_membership(
         &self,
         input: CreateEnvironmentMembershipRequest,
@@ -1499,7 +1497,7 @@ impl Cloud9 for Cloud9Client {
             .deserialize::<CreateEnvironmentMembershipResult, _>()
     }
 
-    /// <p>Deletes an AWS Cloud9 development environment. If an Amazon EC2 instance is connected to the environment, also terminates the instance.</p>
+    /// <p>Deletes an Cloud9 development environment. If an Amazon EC2 instance is connected to the environment, also terminates the instance.</p>
     async fn delete_environment(
         &self,
         input: DeleteEnvironmentRequest,
@@ -1520,7 +1518,7 @@ impl Cloud9 for Cloud9Client {
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteEnvironmentResult, _>()
     }
 
-    /// <p>Deletes an environment member from an AWS Cloud9 development environment.</p>
+    /// <p>Deletes an environment member from an Cloud9 development environment.</p>
     async fn delete_environment_membership(
         &self,
         input: DeleteEnvironmentMembershipRequest,
@@ -1543,7 +1541,7 @@ impl Cloud9 for Cloud9Client {
             .deserialize::<DeleteEnvironmentMembershipResult, _>()
     }
 
-    /// <p>Gets information about environment members for an AWS Cloud9 development environment.</p>
+    /// <p>Gets information about environment members for an Cloud9 development environment.</p>
     async fn describe_environment_memberships(
         &self,
         input: DescribeEnvironmentMembershipsRequest,
@@ -1568,7 +1566,7 @@ impl Cloud9 for Cloud9Client {
             .deserialize::<DescribeEnvironmentMembershipsResult, _>()
     }
 
-    /// <p>Gets status information for an AWS Cloud9 development environment.</p>
+    /// <p>Gets status information for an Cloud9 development environment.</p>
     async fn describe_environment_status(
         &self,
         input: DescribeEnvironmentStatusRequest,
@@ -1590,7 +1588,7 @@ impl Cloud9 for Cloud9Client {
             .deserialize::<DescribeEnvironmentStatusResult, _>()
     }
 
-    /// <p>Gets information about AWS Cloud9 development environments.</p>
+    /// <p>Gets information about Cloud9 development environments.</p>
     async fn describe_environments(
         &self,
         input: DescribeEnvironmentsRequest,
@@ -1611,7 +1609,7 @@ impl Cloud9 for Cloud9Client {
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeEnvironmentsResult, _>()
     }
 
-    /// <p>Gets a list of AWS Cloud9 development environment identifiers.</p>
+    /// <p>Gets a list of Cloud9 development environment identifiers.</p>
     async fn list_environments(
         &self,
         input: ListEnvironmentsRequest,
@@ -1632,7 +1630,7 @@ impl Cloud9 for Cloud9Client {
         proto::json::ResponsePayload::new(&response).deserialize::<ListEnvironmentsResult, _>()
     }
 
-    /// <p>Gets a list of the tags associated with an AWS Cloud9 development environment.</p>
+    /// <p>Gets a list of the tags associated with an Cloud9 development environment.</p>
     async fn list_tags_for_resource(
         &self,
         input: ListTagsForResourceRequest,
@@ -1653,7 +1651,7 @@ impl Cloud9 for Cloud9Client {
         proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceResponse, _>()
     }
 
-    /// <p><p>Adds tags to an AWS Cloud9 development environment.</p> <important> <p>Tags that you add to an AWS Cloud9 environment by using this method will NOT be automatically propagated to underlying resources.</p> </important></p>
+    /// <p><p>Adds tags to an Cloud9 development environment.</p> <important> <p>Tags that you add to an Cloud9 environment by using this method will NOT be automatically propagated to underlying resources.</p> </important></p>
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -1674,7 +1672,7 @@ impl Cloud9 for Cloud9Client {
         proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
     }
 
-    /// <p>Removes tags from an AWS Cloud9 development environment.</p>
+    /// <p>Removes tags from an Cloud9 development environment.</p>
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -1695,7 +1693,7 @@ impl Cloud9 for Cloud9Client {
         proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
     }
 
-    /// <p>Changes the settings of an existing AWS Cloud9 development environment.</p>
+    /// <p>Changes the settings of an existing Cloud9 development environment.</p>
     async fn update_environment(
         &self,
         input: UpdateEnvironmentRequest,
@@ -1716,7 +1714,7 @@ impl Cloud9 for Cloud9Client {
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateEnvironmentResult, _>()
     }
 
-    /// <p>Changes the settings of an existing environment member for an AWS Cloud9 development environment.</p>
+    /// <p>Changes the settings of an existing environment member for an Cloud9 development environment.</p>
     async fn update_environment_membership(
         &self,
         input: UpdateEnvironmentMembershipRequest,

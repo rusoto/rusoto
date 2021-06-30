@@ -91,6 +91,7 @@ pub trait GenerateErrorTypes {
                 // Cloudsearch needs this, look into why.
                 if error.idiomatic_error_name() != "Validation"
                     || service.service_id() == Some("CloudSearch")
+                    || service.service_id() == Some("SNS")
                 {
                     enum_types.push(format!(
                         "\n{}\n{}(String)",
@@ -125,6 +126,7 @@ pub trait GenerateErrorTypes {
                 // Cloudsearch needs this, look into why.
                 if error.idiomatic_error_name() != "Validation"
                     || service.service_id() == Some("CloudSearch")
+                    || service.service_id() == Some("SNS")
                 {
                     type_matchers.push(format!(
                         "{error_type}::{error_shape}(ref cause) => write!(f, \"{{}}\", cause)",

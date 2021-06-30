@@ -89,11 +89,53 @@ pub struct CmafPackage {
     /// <p>A list of HLS manifest configurations.</p>
     #[serde(rename = "HlsManifests")]
     pub hls_manifests: Vec<HlsManifest>,
+    /// <p>When includeEncoderConfigurationInSegments is set to true, MediaPackage places your encoder&#39;s Sequence Parameter Set (SPS), Picture Parameter Set (PPS), and Video Parameter Set (VPS) metadata in every video segment instead of in the init fragment. This lets you use different SPS/PPS/VPS settings for your assets during content playback.</p>
+    #[serde(rename = "IncludeEncoderConfigurationInSegments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_encoder_configuration_in_segments: Option<bool>,
     /// <p>Duration (in seconds) of each fragment. Actual fragments will be
     /// rounded to the nearest multiple of the source fragment duration.</p>
     #[serde(rename = "SegmentDurationSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub segment_duration_seconds: Option<i64>,
+}
+
+/// <p>The option to configure log subscription.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ConfigureLogsRequest {
+    #[serde(rename = "EgressAccessLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub egress_access_logs: Option<EgressAccessLogs>,
+    /// <p>The ID of a MediaPackage VOD PackagingGroup resource.</p>
+    #[serde(rename = "Id")]
+    pub id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ConfigureLogsResponse {
+    /// <p>The ARN of the PackagingGroup.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    #[serde(rename = "Authorization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization: Option<Authorization>,
+    /// <p>The fully qualified domain name for Assets in the PackagingGroup.</p>
+    #[serde(rename = "DomainName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_name: Option<String>,
+    #[serde(rename = "EgressAccessLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub egress_access_logs: Option<EgressAccessLogs>,
+    /// <p>The ID of the PackagingGroup.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>A new MediaPackage VOD Asset configuration.</p>
@@ -227,6 +269,9 @@ pub struct CreatePackagingGroupRequest {
     #[serde(rename = "Authorization")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authorization: Option<Authorization>,
+    #[serde(rename = "EgressAccessLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub egress_access_logs: Option<EgressAccessLogs>,
     /// <p>The ID of the PackagingGroup.</p>
     #[serde(rename = "Id")]
     pub id: String,
@@ -249,6 +294,9 @@ pub struct CreatePackagingGroupResponse {
     #[serde(rename = "DomainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name: Option<String>,
+    #[serde(rename = "EgressAccessLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub egress_access_logs: Option<EgressAccessLogs>,
     /// <p>The ID of the PackagingGroup.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -298,6 +346,10 @@ pub struct DashPackage {
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption: Option<DashEncryption>,
+    /// <p>When includeEncoderConfigurationInSegments is set to true, MediaPackage places your encoder&#39;s Sequence Parameter Set (SPS), Picture Parameter Set (PPS), and Video Parameter Set (VPS) metadata in every video segment instead of in the init fragment. This lets you use different SPS/PPS/VPS settings for your assets during content playback.</p>
+    #[serde(rename = "IncludeEncoderConfigurationInSegments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_encoder_configuration_in_segments: Option<bool>,
     /// <p>A list of triggers that controls when the outgoing Dynamic Adaptive Streaming over HTTP (DASH)
     /// Media Presentation Description (MPD) will be partitioned into multiple periods. If empty, the content will not
     /// be partitioned into more than one period. If the list contains &quot;ADS&quot;, new periods will be created where
@@ -462,6 +514,9 @@ pub struct DescribePackagingGroupResponse {
     #[serde(rename = "DomainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name: Option<String>,
+    #[serde(rename = "EgressAccessLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub egress_access_logs: Option<EgressAccessLogs>,
     /// <p>The ID of the PackagingGroup.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -469,6 +524,15 @@ pub struct DescribePackagingGroupResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>Configure egress access logging.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct EgressAccessLogs {
+    /// <p>Customize the log group name.</p>
+    #[serde(rename = "LogGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_group_name: Option<String>,
 }
 
 /// <p>The endpoint URL used to access an Asset using one PackagingConfiguration.</p>
@@ -747,6 +811,9 @@ pub struct PackagingGroup {
     #[serde(rename = "DomainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name: Option<String>,
+    #[serde(rename = "EgressAccessLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub egress_access_logs: Option<EgressAccessLogs>,
     /// <p>The ID of the PackagingGroup.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -836,6 +903,9 @@ pub struct UpdatePackagingGroupResponse {
     #[serde(rename = "DomainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub domain_name: Option<String>,
+    #[serde(rename = "EgressAccessLogs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub egress_access_logs: Option<EgressAccessLogs>,
     /// <p>The ID of the PackagingGroup.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -845,6 +915,66 @@ pub struct UpdatePackagingGroupResponse {
     pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// Errors returned by ConfigureLogs
+#[derive(Debug, PartialEq)]
+pub enum ConfigureLogsError {
+    /// <p>The client is not authorized to access the requested resource.</p>
+    Forbidden(String),
+    /// <p>An unexpected error occurred.</p>
+    InternalServerError(String),
+    /// <p>The requested resource does not exist.</p>
+    NotFound(String),
+    /// <p>An unexpected error occurred.</p>
+    ServiceUnavailable(String),
+    /// <p>The client has exceeded their resource or throttling limits.</p>
+    TooManyRequests(String),
+    /// <p>The parameters sent in the request are not valid.</p>
+    UnprocessableEntity(String),
+}
+
+impl ConfigureLogsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ConfigureLogsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ForbiddenException" => {
+                    return RusotoError::Service(ConfigureLogsError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(ConfigureLogsError::InternalServerError(err.msg))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(ConfigureLogsError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(ConfigureLogsError::ServiceUnavailable(err.msg))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(ConfigureLogsError::TooManyRequests(err.msg))
+                }
+                "UnprocessableEntityException" => {
+                    return RusotoError::Service(ConfigureLogsError::UnprocessableEntity(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ConfigureLogsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ConfigureLogsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            ConfigureLogsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ConfigureLogsError::NotFound(ref cause) => write!(f, "{}", cause),
+            ConfigureLogsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            ConfigureLogsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+            ConfigureLogsError::UnprocessableEntity(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ConfigureLogsError {}
 /// Errors returned by CreateAsset
 #[derive(Debug, PartialEq)]
 pub enum CreateAssetError {
@@ -1814,6 +1944,12 @@ impl Error for UpdatePackagingGroupError {}
 /// Trait representing the capabilities of the MediaPackage Vod API. MediaPackage Vod clients implement this trait.
 #[async_trait]
 pub trait MediaPackageVod {
+    /// <p>Changes the packaging group&#39;s properities to configure log subscription</p>
+    async fn configure_logs(
+        &self,
+        input: ConfigureLogsRequest,
+    ) -> Result<ConfigureLogsResponse, RusotoError<ConfigureLogsError>>;
+
     /// <p>Creates a new MediaPackage VOD Asset resource.</p>
     async fn create_asset(
         &self,
@@ -1953,6 +2089,37 @@ impl MediaPackageVodClient {
 
 #[async_trait]
 impl MediaPackageVod for MediaPackageVodClient {
+    /// <p>Changes the packaging group&#39;s properities to configure log subscription</p>
+    #[allow(unused_mut)]
+    async fn configure_logs(
+        &self,
+        input: ConfigureLogsRequest,
+    ) -> Result<ConfigureLogsResponse, RusotoError<ConfigureLogsError>> {
+        let request_uri = format!("/packaging_groups/{id}/configure_logs", id = input.id);
+
+        let mut request = SignedRequest::new("PUT", "mediapackage-vod", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ConfigureLogsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ConfigureLogsError::from_response(response))
+        }
+    }
+
     /// <p>Creates a new MediaPackage VOD Asset resource.</p>
     #[allow(unused_mut)]
     async fn create_asset(

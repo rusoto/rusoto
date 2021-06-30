@@ -276,6 +276,10 @@ pub struct CreatePredictorRequest {
     #[serde(rename = "AlgorithmArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub algorithm_arn: Option<String>,
+    /// <p>Used to overide the default AutoML strategy, which is to optimize predictor accuracy. To apply an AutoML strategy that minimizes training time, use <code>LatencyOptimized</code>.</p> <p>This parameter is only valid for predictors trained using AutoML.</p>
+    #[serde(rename = "AutoMLOverrideStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_ml_override_strategy: Option<String>,
     /// <p>An AWS Key Management Service (KMS) key and the AWS Identity and Access Management (IAM) role that Amazon Forecast can assume to access the key.</p>
     #[serde(rename = "EncryptionConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -389,7 +393,7 @@ pub struct DatasetImportJobSummary {
     #[serde(rename = "DatasetImportJobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dataset_import_job_name: Option<String>,
-    /// <p><p>The last time that the dataset was modified. The time depends on the status of the job, as follows:</p> <ul> <li> <p> <code>CREATE<em>PENDING</code> - The same time as <code>CreationTime</code>.</p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> - The current timestamp.</p> </li> <li> <p> <code>ACTIVE</code> or <code>CREATE</em>FAILED</code> - When the job finished or failed.</p> </li> </ul></p>
+    /// <p><p>The last time the resource was modified. The timestamp depends on the status of the job:</p> <ul> <li> <p> <code>CREATE<em>PENDING</code> - The <code>CreationTime</code>.</p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> - The current timestamp.</p> </li> <li> <p> <code>CREATE</em>STOPPING</code> - The current timestamp.</p> </li> <li> <p> <code>CREATE<em>STOPPED</code> - When the job stopped.</p> </li> <li> <p> <code>ACTIVE</code> or <code>CREATE</em>FAILED</code> - When the job finished or failed.</p> </li> </ul></p>
     #[serde(rename = "LastModificationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modification_time: Option<f64>,
@@ -397,7 +401,7 @@ pub struct DatasetImportJobSummary {
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    /// <p><p>The status of the dataset import job. The status is reflected in the status of the dataset. For example, when the import job status is <code>CREATE<em>IN</em>PROGRESS</code>, the status of the dataset is <code>UPDATE<em>IN</em>PROGRESS</code>. States include:</p> <ul> <li> <p> <code>ACTIVE</code> </p> </li> <li> <p> <code>CREATE<em>PENDING</code>, <code>CREATE</em>IN<em>PROGRESS</code>, <code>CREATE</em>FAILED</code> </p> </li> <li> <p> <code>DELETE<em>PENDING</code>, <code>DELETE</em>IN<em>PROGRESS</code>, <code>DELETE</em>FAILED</code> </p> </li> </ul></p>
+    /// <p><p>The status of the dataset import job. States include:</p> <ul> <li> <p> <code>ACTIVE</code> </p> </li> <li> <p> <code>CREATE<em>PENDING</code>, <code>CREATE</em>IN<em>PROGRESS</code>, <code>CREATE</em>FAILED</code> </p> </li> <li> <p> <code>DELETE<em>PENDING</code>, <code>DELETE</em>IN<em>PROGRESS</code>, <code>DELETE</em>FAILED</code> </p> </li> <li> <p> <code>CREATE<em>STOPPING</code>, <code>CREATE</em>STOPPED</code> </p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -491,6 +495,14 @@ pub struct DeletePredictorRequest {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteResourceTreeRequest {
+    /// <p>The Amazon Resource Name (ARN) of the parent resource to delete. All child resources of the parent resource will also be deleted.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeDatasetGroupRequest {
     /// <p>The Amazon Resource Name (ARN) of the dataset group.</p>
     #[serde(rename = "DatasetGroupArn")]
@@ -565,6 +577,10 @@ pub struct DescribeDatasetImportJobResponse {
     #[serde(rename = "DatasetImportJobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dataset_import_job_name: Option<String>,
+    /// <p>The estimated time remaining in minutes for the dataset import job to complete.</p>
+    #[serde(rename = "EstimatedTimeRemainingInMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub estimated_time_remaining_in_minutes: Option<i64>,
     /// <p>Statistical information about each field in the input data.</p>
     #[serde(rename = "FieldStatistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -573,7 +589,7 @@ pub struct DescribeDatasetImportJobResponse {
     #[serde(rename = "GeolocationFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub geolocation_format: Option<String>,
-    /// <p><p>The last time that the dataset was modified. The time depends on the status of the job, as follows:</p> <ul> <li> <p> <code>CREATE<em>PENDING</code> - The same time as <code>CreationTime</code>.</p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> - The current timestamp.</p> </li> <li> <p> <code>ACTIVE</code> or <code>CREATE</em>FAILED</code> - When the job finished or failed.</p> </li> </ul></p>
+    /// <p><p>The last time the resource was modified. The timestamp depends on the status of the job:</p> <ul> <li> <p> <code>CREATE<em>PENDING</code> - The <code>CreationTime</code>.</p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> - The current timestamp.</p> </li> <li> <p> <code>CREATE</em>STOPPING</code> - The current timestamp.</p> </li> <li> <p> <code>CREATE<em>STOPPED</code> - When the job stopped.</p> </li> <li> <p> <code>ACTIVE</code> or <code>CREATE</em>FAILED</code> - When the job finished or failed.</p> </li> </ul></p>
     #[serde(rename = "LastModificationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modification_time: Option<f64>,
@@ -581,7 +597,7 @@ pub struct DescribeDatasetImportJobResponse {
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    /// <p><p>The status of the dataset import job. The status is reflected in the status of the dataset. For example, when the import job status is <code>CREATE<em>IN</em>PROGRESS</code>, the status of the dataset is <code>UPDATE<em>IN</em>PROGRESS</code>. States include:</p> <ul> <li> <p> <code>ACTIVE</code> </p> </li> <li> <p> <code>CREATE<em>PENDING</code>, <code>CREATE</em>IN<em>PROGRESS</code>, <code>CREATE</em>FAILED</code> </p> </li> <li> <p> <code>DELETE<em>PENDING</code>, <code>DELETE</em>IN<em>PROGRESS</code>, <code>DELETE</em>FAILED</code> </p> </li> </ul></p>
+    /// <p><p>The status of the dataset import job. States include:</p> <ul> <li> <p> <code>ACTIVE</code> </p> </li> <li> <p> <code>CREATE<em>PENDING</code>, <code>CREATE</em>IN<em>PROGRESS</code>, <code>CREATE</em>FAILED</code> </p> </li> <li> <p> <code>DELETE<em>PENDING</code>, <code>DELETE</em>IN<em>PROGRESS</code>, <code>DELETE</em>FAILED</code> </p> </li> <li> <p> <code>CREATE<em>STOPPING</code>, <code>CREATE</em>STOPPED</code> </p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -683,7 +699,7 @@ pub struct DescribeForecastExportJobResponse {
     #[serde(rename = "ForecastExportJobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub forecast_export_job_name: Option<String>,
-    /// <p>When the last successful export job finished.</p>
+    /// <p><p>The last time the resource was modified. The timestamp depends on the status of the job:</p> <ul> <li> <p> <code>CREATE<em>PENDING</code> - The <code>CreationTime</code>.</p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> - The current timestamp.</p> </li> <li> <p> <code>CREATE</em>STOPPING</code> - The current timestamp.</p> </li> <li> <p> <code>CREATE<em>STOPPED</code> - When the job stopped.</p> </li> <li> <p> <code>ACTIVE</code> or <code>CREATE</em>FAILED</code> - When the job finished or failed.</p> </li> </ul></p>
     #[serde(rename = "LastModificationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modification_time: Option<f64>,
@@ -691,7 +707,7 @@ pub struct DescribeForecastExportJobResponse {
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    /// <p><p>The status of the forecast export job. States include:</p> <ul> <li> <p> <code>ACTIVE</code> </p> </li> <li> <p> <code>CREATE<em>PENDING</code>, <code>CREATE</em>IN<em>PROGRESS</code>, <code>CREATE</em>FAILED</code> </p> </li> <li> <p> <code>DELETE<em>PENDING</code>, <code>DELETE</em>IN<em>PROGRESS</code>, <code>DELETE</em>FAILED</code> </p> </li> </ul> <note> <p>The <code>Status</code> of the forecast export job must be <code>ACTIVE</code> before you can access the forecast in your S3 bucket.</p> </note></p>
+    /// <p><p>The status of the forecast export job. States include:</p> <ul> <li> <p> <code>ACTIVE</code> </p> </li> <li> <p> <code>CREATE<em>PENDING</code>, <code>CREATE</em>IN<em>PROGRESS</code>, <code>CREATE</em>FAILED</code> </p> </li> <li> <p> <code>CREATE<em>STOPPING</code>, <code>CREATE</em>STOPPED</code> </p> </li> <li> <p> <code>DELETE<em>PENDING</code>, <code>DELETE</em>IN<em>PROGRESS</code>, <code>DELETE</em>FAILED</code> </p> </li> </ul> <note> <p>The <code>Status</code> of the forecast export job must be <code>ACTIVE</code> before you can access the forecast in your S3 bucket.</p> </note></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -716,6 +732,10 @@ pub struct DescribeForecastResponse {
     #[serde(rename = "DatasetGroupArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dataset_group_arn: Option<String>,
+    /// <p>The estimated time remaining in minutes for the forecast job to complete.</p>
+    #[serde(rename = "EstimatedTimeRemainingInMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub estimated_time_remaining_in_minutes: Option<i64>,
     /// <p>The forecast ARN as specified in the request.</p>
     #[serde(rename = "ForecastArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -728,7 +748,7 @@ pub struct DescribeForecastResponse {
     #[serde(rename = "ForecastTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub forecast_types: Option<Vec<String>>,
-    /// <p>Initially, the same as <code>CreationTime</code> (status is <code>CREATE_PENDING</code>). Updated when inference (creating the forecast) starts (status changed to <code>CREATE_IN_PROGRESS</code>), and when inference is complete (status changed to <code>ACTIVE</code>) or fails (status changed to <code>CREATE_FAILED</code>).</p>
+    /// <p><p>The last time the resource was modified. The timestamp depends on the status of the job:</p> <ul> <li> <p> <code>CREATE<em>PENDING</code> - The <code>CreationTime</code>.</p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> - The current timestamp.</p> </li> <li> <p> <code>CREATE</em>STOPPING</code> - The current timestamp.</p> </li> <li> <p> <code>CREATE<em>STOPPED</code> - When the job stopped.</p> </li> <li> <p> <code>ACTIVE</code> or <code>CREATE</em>FAILED</code> - When the job finished or failed.</p> </li> </ul></p>
     #[serde(rename = "LastModificationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modification_time: Option<f64>,
@@ -740,7 +760,7 @@ pub struct DescribeForecastResponse {
     #[serde(rename = "PredictorArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub predictor_arn: Option<String>,
-    /// <p><p>The status of the forecast. States include:</p> <ul> <li> <p> <code>ACTIVE</code> </p> </li> <li> <p> <code>CREATE<em>PENDING</code>, <code>CREATE</em>IN<em>PROGRESS</code>, <code>CREATE</em>FAILED</code> </p> </li> <li> <p> <code>DELETE<em>PENDING</code>, <code>DELETE</em>IN<em>PROGRESS</code>, <code>DELETE</em>FAILED</code> </p> </li> </ul> <note> <p>The <code>Status</code> of the forecast must be <code>ACTIVE</code> before you can query or export the forecast.</p> </note></p>
+    /// <p><p>The status of the forecast. States include:</p> <ul> <li> <p> <code>ACTIVE</code> </p> </li> <li> <p> <code>CREATE<em>PENDING</code>, <code>CREATE</em>IN<em>PROGRESS</code>, <code>CREATE</em>FAILED</code> </p> </li> <li> <p> <code>CREATE<em>STOPPING</code>, <code>CREATE</em>STOPPED</code> </p> </li> <li> <p> <code>DELETE<em>PENDING</code>, <code>DELETE</em>IN<em>PROGRESS</code>, <code>DELETE</em>FAILED</code> </p> </li> </ul> <note> <p>The <code>Status</code> of the forecast must be <code>ACTIVE</code> before you can query or export the forecast.</p> </note></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -764,7 +784,7 @@ pub struct DescribePredictorBacktestExportJobResponse {
     #[serde(rename = "Destination")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination: Option<DataDestination>,
-    /// <p>When the last successful export job finished.</p>
+    /// <p><p>The last time the resource was modified. The timestamp depends on the status of the job:</p> <ul> <li> <p> <code>CREATE<em>PENDING</code> - The <code>CreationTime</code>.</p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> - The current timestamp.</p> </li> <li> <p> <code>CREATE</em>STOPPING</code> - The current timestamp.</p> </li> <li> <p> <code>CREATE<em>STOPPED</code> - When the job stopped.</p> </li> <li> <p> <code>ACTIVE</code> or <code>CREATE</em>FAILED</code> - When the job finished or failed.</p> </li> </ul></p>
     #[serde(rename = "LastModificationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modification_time: Option<f64>,
@@ -784,7 +804,7 @@ pub struct DescribePredictorBacktestExportJobResponse {
     #[serde(rename = "PredictorBacktestExportJobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub predictor_backtest_export_job_name: Option<String>,
-    /// <p><p>The status of the predictor backtest export job. States include: </p> <ul> <li> <p> <code>ACTIVE</code> </p> </li> <li> <p> <code>CREATE<em>PENDING</code> </p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> </p> </li> <li> <p> <code>CREATE</em>FAILED</code> </p> </li> <li> <p> <code>DELETE<em>PENDING</code> </p> </li> <li> <p> <code>DELETE</em>IN<em>PROGRESS</code> </p> </li> <li> <p> <code>DELETE</em>FAILED</code> </p> </li> </ul></p>
+    /// <p><p>The status of the predictor backtest export job. States include: </p> <ul> <li> <p> <code>ACTIVE</code> </p> </li> <li> <p> <code>CREATE<em>PENDING</code>, <code>CREATE</em>IN<em>PROGRESS</code>, <code>CREATE</em>FAILED</code> </p> </li> <li> <p> <code>CREATE<em>STOPPING</code>, <code>CREATE</em>STOPPED</code> </p> </li> <li> <p> <code>DELETE<em>PENDING</code>, <code>DELETE</em>IN<em>PROGRESS</code>, <code>DELETE</em>FAILED</code> </p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -809,6 +829,10 @@ pub struct DescribePredictorResponse {
     #[serde(rename = "AutoMLAlgorithmArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_ml_algorithm_arns: Option<Vec<String>>,
+    /// <p>The AutoML strategy used to train the predictor. Unless <code>LatencyOptimized</code> is specified, the AutoML strategy optimizes predictor accuracy.</p> <p>This parameter is only valid for predictors trained using AutoML.</p>
+    #[serde(rename = "AutoMLOverrideStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_ml_override_strategy: Option<String>,
     /// <p>When the model training task was created.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -821,6 +845,10 @@ pub struct DescribePredictorResponse {
     #[serde(rename = "EncryptionConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_config: Option<EncryptionConfig>,
+    /// <p>The estimated time remaining in minutes for the predictor training job to complete.</p>
+    #[serde(rename = "EstimatedTimeRemainingInMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub estimated_time_remaining_in_minutes: Option<i64>,
     /// <p>Used to override the default evaluation parameters of the specified algorithm. Amazon Forecast evaluates a predictor by splitting a dataset into training data and testing data. The evaluation parameters define how to perform the split and the number of iterations.</p>
     #[serde(rename = "EvaluationParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -845,7 +873,7 @@ pub struct DescribePredictorResponse {
     #[serde(rename = "InputDataConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_data_config: Option<InputDataConfig>,
-    /// <p>Initially, the same as <code>CreationTime</code> (when the status is <code>CREATE_PENDING</code>). This value is updated when training starts (when the status changes to <code>CREATE_IN_PROGRESS</code>), and when training has completed (when the status changes to <code>ACTIVE</code>) or fails (when the status changes to <code>CREATE_FAILED</code>).</p>
+    /// <p><p>The last time the resource was modified. The timestamp depends on the status of the job:</p> <ul> <li> <p> <code>CREATE<em>PENDING</code> - The <code>CreationTime</code>.</p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> - The current timestamp.</p> </li> <li> <p> <code>CREATE</em>STOPPING</code> - The current timestamp.</p> </li> <li> <p> <code>CREATE<em>STOPPED</code> - When the job stopped.</p> </li> <li> <p> <code>ACTIVE</code> or <code>CREATE</em>FAILED</code> - When the job finished or failed.</p> </li> </ul></p>
     #[serde(rename = "LastModificationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modification_time: Option<f64>,
@@ -873,7 +901,7 @@ pub struct DescribePredictorResponse {
     #[serde(rename = "PredictorName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub predictor_name: Option<String>,
-    /// <p><p>The status of the predictor. States include:</p> <ul> <li> <p> <code>ACTIVE</code> </p> </li> <li> <p> <code>CREATE<em>PENDING</code>, <code>CREATE</em>IN<em>PROGRESS</code>, <code>CREATE</em>FAILED</code> </p> </li> <li> <p> <code>DELETE<em>PENDING</code>, <code>DELETE</em>IN<em>PROGRESS</code>, <code>DELETE</em>FAILED</code> </p> </li> <li> <p> <code>UPDATE<em>PENDING</code>, <code>UPDATE</em>IN<em>PROGRESS</code>, <code>UPDATE</em>FAILED</code> </p> </li> </ul> <note> <p>The <code>Status</code> of the predictor must be <code>ACTIVE</code> before you can use the predictor to create a forecast.</p> </note></p>
+    /// <p><p>The status of the predictor. States include:</p> <ul> <li> <p> <code>ACTIVE</code> </p> </li> <li> <p> <code>CREATE<em>PENDING</code>, <code>CREATE</em>IN<em>PROGRESS</code>, <code>CREATE</em>FAILED</code> </p> </li> <li> <p> <code>DELETE<em>PENDING</code>, <code>DELETE</em>IN<em>PROGRESS</code>, <code>DELETE</em>FAILED</code> </p> </li> <li> <p> <code>CREATE<em>STOPPING</code>, <code>CREATE</em>STOPPED</code> </p> </li> </ul> <note> <p>The <code>Status</code> of the predictor must be <code>ACTIVE</code> before you can use the predictor to create a forecast.</p> </note></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1014,7 +1042,7 @@ pub struct ForecastExportJobSummary {
     #[serde(rename = "ForecastExportJobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub forecast_export_job_name: Option<String>,
-    /// <p>When the last successful export job finished.</p>
+    /// <p><p>The last time the resource was modified. The timestamp depends on the status of the job:</p> <ul> <li> <p> <code>CREATE<em>PENDING</code> - The <code>CreationTime</code>.</p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> - The current timestamp.</p> </li> <li> <p> <code>CREATE</em>STOPPING</code> - The current timestamp.</p> </li> <li> <p> <code>CREATE<em>STOPPED</code> - When the job stopped.</p> </li> <li> <p> <code>ACTIVE</code> or <code>CREATE</em>FAILED</code> - When the job finished or failed.</p> </li> </ul></p>
     #[serde(rename = "LastModificationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modification_time: Option<f64>,
@@ -1022,7 +1050,7 @@ pub struct ForecastExportJobSummary {
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
-    /// <p><p>The status of the forecast export job. States include:</p> <ul> <li> <p> <code>ACTIVE</code> </p> </li> <li> <p> <code>CREATE<em>PENDING</code>, <code>CREATE</em>IN<em>PROGRESS</code>, <code>CREATE</em>FAILED</code> </p> </li> <li> <p> <code>DELETE<em>PENDING</code>, <code>DELETE</em>IN<em>PROGRESS</code>, <code>DELETE</em>FAILED</code> </p> </li> </ul> <note> <p>The <code>Status</code> of the forecast export job must be <code>ACTIVE</code> before you can access the forecast in your S3 bucket.</p> </note></p>
+    /// <p><p>The status of the forecast export job. States include:</p> <ul> <li> <p> <code>ACTIVE</code> </p> </li> <li> <p> <code>CREATE<em>PENDING</code>, <code>CREATE</em>IN<em>PROGRESS</code>, <code>CREATE</em>FAILED</code> </p> </li> <li> <p> <code>CREATE<em>STOPPING</code>, <code>CREATE</em>STOPPED</code> </p> </li> <li> <p> <code>DELETE<em>PENDING</code>, <code>DELETE</em>IN<em>PROGRESS</code>, <code>DELETE</em>FAILED</code> </p> </li> </ul> <note> <p>The <code>Status</code> of the forecast export job must be <code>ACTIVE</code> before you can access the forecast in your S3 bucket.</p> </note></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1048,7 +1076,7 @@ pub struct ForecastSummary {
     #[serde(rename = "ForecastName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub forecast_name: Option<String>,
-    /// <p>Initially, the same as <code>CreationTime</code> (status is <code>CREATE_PENDING</code>). Updated when inference (creating the forecast) starts (status changed to <code>CREATE_IN_PROGRESS</code>), and when inference is complete (status changed to <code>ACTIVE</code>) or fails (status changed to <code>CREATE_FAILED</code>).</p>
+    /// <p><p>The last time the resource was modified. The timestamp depends on the status of the job:</p> <ul> <li> <p> <code>CREATE<em>PENDING</code> - The <code>CreationTime</code>.</p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> - The current timestamp.</p> </li> <li> <p> <code>CREATE</em>STOPPING</code> - The current timestamp.</p> </li> <li> <p> <code>CREATE<em>STOPPED</code> - When the job stopped.</p> </li> <li> <p> <code>ACTIVE</code> or <code>CREATE</em>FAILED</code> - When the job finished or failed.</p> </li> </ul></p>
     #[serde(rename = "LastModificationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modification_time: Option<f64>,
@@ -1060,7 +1088,7 @@ pub struct ForecastSummary {
     #[serde(rename = "PredictorArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub predictor_arn: Option<String>,
-    /// <p><p>The status of the forecast. States include:</p> <ul> <li> <p> <code>ACTIVE</code> </p> </li> <li> <p> <code>CREATE<em>PENDING</code>, <code>CREATE</em>IN<em>PROGRESS</code>, <code>CREATE</em>FAILED</code> </p> </li> <li> <p> <code>DELETE<em>PENDING</code>, <code>DELETE</em>IN<em>PROGRESS</code>, <code>DELETE</em>FAILED</code> </p> </li> </ul> <note> <p>The <code>Status</code> of the forecast must be <code>ACTIVE</code> before you can query or export the forecast.</p> </note></p>
+    /// <p><p>The status of the forecast. States include:</p> <ul> <li> <p> <code>ACTIVE</code> </p> </li> <li> <p> <code>CREATE<em>PENDING</code>, <code>CREATE</em>IN<em>PROGRESS</code>, <code>CREATE</em>FAILED</code> </p> </li> <li> <p> <code>CREATE<em>STOPPING</code>, <code>CREATE</em>STOPPED</code> </p> </li> <li> <p> <code>DELETE<em>PENDING</code>, <code>DELETE</em>IN<em>PROGRESS</code>, <code>DELETE</em>FAILED</code> </p> </li> </ul> <note> <p>The <code>Status</code> of the forecast must be <code>ACTIVE</code> before you can query or export the forecast.</p> </note></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1077,6 +1105,10 @@ pub struct GetAccuracyMetricsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetAccuracyMetricsResponse {
+    /// <p>The AutoML strategy used to train the predictor. Unless <code>LatencyOptimized</code> is specified, the AutoML strategy optimizes predictor accuracy.</p> <p>This parameter is only valid for predictors trained using AutoML.</p>
+    #[serde(rename = "AutoMLOverrideStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_ml_override_strategy: Option<String>,
     /// <p>An array of results from evaluating the predictor.</p>
     #[serde(rename = "PredictorEvaluationResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1267,7 +1299,7 @@ pub struct ListForecastsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPredictorBacktestExportJobsRequest {
-    /// <p><p>An array of filters. For each filter, provide a condition and a match statement. The condition is either <code>IS</code> or <code>IS<em>NOT</code>, which specifies whether to include or exclude the predictor backtest export jobs that match the statement from the list. The match statement consists of a key and a value.</p> <p> <b>Filter properties</b> </p> <ul> <li> <p> <code>Condition</code> - The condition to apply. Valid values are <code>IS</code> and <code>IS</em>NOT</code>. To include the predictor backtest export jobs that match the statement, specify <code>IS</code>. To exclude matching predictor backtest export jobs, specify <code>IS_NOT</code>.</p> </li> <li> <p> <code>Key</code> - The name of the parameter to filter on. Valid values are <code>PredictorBacktestExportJobArn</code> and <code>Status</code>.</p> </li> <li> <p> <code>Value</code> - The value to match.</p> </li> </ul></p>
+    /// <p><p>An array of filters. For each filter, provide a condition and a match statement. The condition is either <code>IS</code> or <code>IS<em>NOT</code>, which specifies whether to include or exclude the predictor backtest export jobs that match the statement from the list. The match statement consists of a key and a value.</p> <p> <b>Filter properties</b> </p> <ul> <li> <p> <code>Condition</code> - The condition to apply. Valid values are <code>IS</code> and <code>IS</em>NOT</code>. To include the predictor backtest export jobs that match the statement, specify <code>IS</code>. To exclude matching predictor backtest export jobs, specify <code>IS_NOT</code>.</p> </li> <li> <p> <code>Key</code> - The name of the parameter to filter on. Valid values are <code>PredictorArn</code> and <code>Status</code>.</p> </li> <li> <p> <code>Value</code> - The value to match.</p> </li> </ul></p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
@@ -1383,7 +1415,7 @@ pub struct PredictorBacktestExportJobSummary {
     #[serde(rename = "Destination")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination: Option<DataDestination>,
-    /// <p>When the last successful export job finished.</p>
+    /// <p><p>The last time the resource was modified. The timestamp depends on the status of the job:</p> <ul> <li> <p> <code>CREATE<em>PENDING</code> - The <code>CreationTime</code>.</p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> - The current timestamp.</p> </li> <li> <p> <code>CREATE</em>STOPPING</code> - The current timestamp.</p> </li> <li> <p> <code>CREATE<em>STOPPED</code> - When the job stopped.</p> </li> <li> <p> <code>ACTIVE</code> or <code>CREATE</em>FAILED</code> - When the job finished or failed.</p> </li> </ul></p>
     #[serde(rename = "LastModificationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modification_time: Option<f64>,
@@ -1399,7 +1431,7 @@ pub struct PredictorBacktestExportJobSummary {
     #[serde(rename = "PredictorBacktestExportJobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub predictor_backtest_export_job_name: Option<String>,
-    /// <p><p>The status of the predictor backtest export job. States include: </p> <ul> <li> <p> <code>ACTIVE</code> </p> </li> <li> <p> <code>CREATE<em>PENDING</code> </p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> </p> </li> <li> <p> <code>CREATE</em>FAILED</code> </p> </li> <li> <p> <code>DELETE<em>PENDING</code> </p> </li> <li> <p> <code>DELETE</em>IN<em>PROGRESS</code> </p> </li> <li> <p> <code>DELETE</em>FAILED</code> </p> </li> </ul></p>
+    /// <p><p>The status of the predictor backtest export job. States include: </p> <ul> <li> <p> <code>ACTIVE</code> </p> </li> <li> <p> <code>CREATE<em>PENDING</code>, <code>CREATE</em>IN<em>PROGRESS</code>, <code>CREATE</em>FAILED</code> </p> </li> <li> <p> <code>CREATE<em>STOPPING</code>, <code>CREATE</em>STOPPED</code> </p> </li> <li> <p> <code>DELETE<em>PENDING</code>, <code>DELETE</em>IN<em>PROGRESS</code>, <code>DELETE</em>FAILED</code> </p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1441,7 +1473,7 @@ pub struct PredictorSummary {
     #[serde(rename = "DatasetGroupArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dataset_group_arn: Option<String>,
-    /// <p>Initially, the same as <code>CreationTime</code> (status is <code>CREATE_PENDING</code>). Updated when training starts (status changed to <code>CREATE_IN_PROGRESS</code>), and when training is complete (status changed to <code>ACTIVE</code>) or fails (status changed to <code>CREATE_FAILED</code>).</p>
+    /// <p><p>The last time the resource was modified. The timestamp depends on the status of the job:</p> <ul> <li> <p> <code>CREATE<em>PENDING</code> - The <code>CreationTime</code>.</p> </li> <li> <p> <code>CREATE</em>IN<em>PROGRESS</code> - The current timestamp.</p> </li> <li> <p> <code>CREATE</em>STOPPING</code> - The current timestamp.</p> </li> <li> <p> <code>CREATE<em>STOPPED</code> - When the job stopped.</p> </li> <li> <p> <code>ACTIVE</code> or <code>CREATE</em>FAILED</code> - When the job finished or failed.</p> </li> </ul></p>
     #[serde(rename = "LastModificationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modification_time: Option<f64>,
@@ -1457,7 +1489,7 @@ pub struct PredictorSummary {
     #[serde(rename = "PredictorName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub predictor_name: Option<String>,
-    /// <p><p>The status of the predictor. States include:</p> <ul> <li> <p> <code>ACTIVE</code> </p> </li> <li> <p> <code>CREATE<em>PENDING</code>, <code>CREATE</em>IN<em>PROGRESS</code>, <code>CREATE</em>FAILED</code> </p> </li> <li> <p> <code>DELETE<em>PENDING</code>, <code>DELETE</em>IN<em>PROGRESS</code>, <code>DELETE</em>FAILED</code> </p> </li> <li> <p> <code>UPDATE<em>PENDING</code>, <code>UPDATE</em>IN<em>PROGRESS</code>, <code>UPDATE</em>FAILED</code> </p> </li> </ul> <note> <p>The <code>Status</code> of the predictor must be <code>ACTIVE</code> before you can use the predictor to create a forecast.</p> </note></p>
+    /// <p><p>The status of the predictor. States include:</p> <ul> <li> <p> <code>ACTIVE</code> </p> </li> <li> <p> <code>CREATE<em>PENDING</code>, <code>CREATE</em>IN<em>PROGRESS</code>, <code>CREATE</em>FAILED</code> </p> </li> <li> <p> <code>DELETE<em>PENDING</code>, <code>DELETE</em>IN<em>PROGRESS</code>, <code>DELETE</em>FAILED</code> </p> </li> <li> <p> <code>CREATE<em>STOPPING</code>, <code>CREATE</em>STOPPED</code> </p> </li> </ul> <note> <p>The <code>Status</code> of the predictor must be <code>ACTIVE</code> before you can use the predictor to create a forecast.</p> </note></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1508,22 +1540,38 @@ pub struct Statistics {
     #[serde(rename = "Avg")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub avg: Option<f64>,
-    /// <p>The number of values in the field.</p>
+    /// <p>The number of values in the field. If the response value is -1, refer to <code>CountLong</code>.</p>
     #[serde(rename = "Count")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub count: Option<i64>,
-    /// <p>The number of distinct values in the field.</p>
+    /// <p>The number of distinct values in the field. If the response value is -1, refer to <code>CountDistinctLong</code>.</p>
     #[serde(rename = "CountDistinct")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub count_distinct: Option<i64>,
-    /// <p>The number of NAN (not a number) values in the field.</p>
+    /// <p>The number of distinct values in the field. <code>CountDistinctLong</code> is used instead of <code>CountDistinct</code> if the value is greater than 2,147,483,647.</p>
+    #[serde(rename = "CountDistinctLong")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub count_distinct_long: Option<i64>,
+    /// <p>The number of values in the field. <code>CountLong</code> is used instead of <code>Count</code> if the value is greater than 2,147,483,647.</p>
+    #[serde(rename = "CountLong")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub count_long: Option<i64>,
+    /// <p>The number of NAN (not a number) values in the field. If the response value is -1, refer to <code>CountNanLong</code>.</p>
     #[serde(rename = "CountNan")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub count_nan: Option<i64>,
-    /// <p>The number of null values in the field.</p>
+    /// <p>The number of NAN (not a number) values in the field. <code>CountNanLong</code> is used instead of <code>CountNan</code> if the value is greater than 2,147,483,647.</p>
+    #[serde(rename = "CountNanLong")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub count_nan_long: Option<i64>,
+    /// <p>The number of null values in the field. If the response value is -1, refer to <code>CountNullLong</code>.</p>
     #[serde(rename = "CountNull")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub count_null: Option<i64>,
+    /// <p>The number of null values in the field. <code>CountNullLong</code> is used instead of <code>CountNull</code> if the value is greater than 2,147,483,647.</p>
+    #[serde(rename = "CountNullLong")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub count_null_long: Option<i64>,
     /// <p>For a numeric field, the maximum value in the field.</p>
     #[serde(rename = "Max")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1536,6 +1584,14 @@ pub struct Statistics {
     #[serde(rename = "Stddev")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stddev: Option<f64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StopResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) that identifies the resource to stop. The supported ARNs are <code>DatasetImportJobArn</code>, <code>PredictorArn</code>, <code>PredictorBacktestExportJobArn</code>, <code>ForecastArn</code>, and <code>ForecastExportJobArn</code>. </p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
 }
 
 /// <p>Describes a supplementary feature of a dataset group. This object is part of the <a>InputDataConfig</a> object. Forecast supports the Weather Index and Holidays built-in featurizations.</p> <p> <b>Weather Index</b> </p> <p>The Amazon Forecast Weather Index is a built-in featurization that incorporates historical and projected weather information into your model. The Weather Index supplements your datasets with over two years of historical weather data and up to 14 days of projected weather data. For more information, see <a href="https://docs.aws.amazon.com/forecast/latest/dg/weather.html">Amazon Forecast Weather Index</a>.</p> <p> <b>Holidays</b> </p> <p>Holidays is a built-in featurization that incorporates a feature-engineered dataset of national holiday information into your model. It provides native support for the holiday calendars of 66 countries. To view the holiday calendars, refer to the <a href="http://jollyday.sourceforge.net/data.html">Jollyday</a> library. For more information, see <a href="https://docs.aws.amazon.com/forecast/latest/dg/holidays.html">Holidays Featurization</a>.</p>
@@ -2399,6 +2455,48 @@ impl fmt::Display for DeletePredictorBacktestExportJobError {
     }
 }
 impl Error for DeletePredictorBacktestExportJobError {}
+/// Errors returned by DeleteResourceTree
+#[derive(Debug, PartialEq)]
+pub enum DeleteResourceTreeError {
+    /// <p>We can't process the request because it includes an invalid value or a value that exceeds the valid range.</p>
+    InvalidInput(String),
+    /// <p>The specified resource is in use.</p>
+    ResourceInUse(String),
+    /// <p>We can't find a resource with that Amazon Resource Name (ARN). Check the ARN and try again.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteResourceTreeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteResourceTreeError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(DeleteResourceTreeError::InvalidInput(err.msg))
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(DeleteResourceTreeError::ResourceInUse(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteResourceTreeError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteResourceTreeError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteResourceTreeError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            DeleteResourceTreeError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            DeleteResourceTreeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteResourceTreeError {}
 /// Errors returned by DescribeDataset
 #[derive(Debug, PartialEq)]
 pub enum DescribeDatasetError {
@@ -3003,6 +3101,48 @@ impl fmt::Display for ListTagsForResourceError {
     }
 }
 impl Error for ListTagsForResourceError {}
+/// Errors returned by StopResource
+#[derive(Debug, PartialEq)]
+pub enum StopResourceError {
+    /// <p>We can't process the request because it includes an invalid value or a value that exceeds the valid range.</p>
+    InvalidInput(String),
+    /// <p>The limit on the number of resources per account has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>We can't find a resource with that Amazon Resource Name (ARN). Check the ARN and try again.</p>
+    ResourceNotFound(String),
+}
+
+impl StopResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidInputException" => {
+                    return RusotoError::Service(StopResourceError::InvalidInput(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(StopResourceError::LimitExceeded(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(StopResourceError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for StopResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StopResourceError::InvalidInput(ref cause) => write!(f, "{}", cause),
+            StopResourceError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            StopResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StopResourceError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -3213,6 +3353,12 @@ pub trait Forecast {
         input: DeletePredictorBacktestExportJobRequest,
     ) -> Result<(), RusotoError<DeletePredictorBacktestExportJobError>>;
 
+    /// <p><p>Deletes an entire resource tree. This operation will delete the parent resource and its child resources.</p> <p>Child resources are resources that were created from another resource. For example, when a forecast is generated from a predictor, the forecast is the child resource and the predictor is the parent resource.</p> <p>Amazon Forecast resources possess the following parent-child resource hierarchies:</p> <ul> <li> <p> <b>Dataset</b>: dataset import jobs</p> </li> <li> <p> <b>Dataset Group</b>: predictors, predictor backtest export jobs, forecasts, forecast export jobs</p> </li> <li> <p> <b>Predictor</b>: predictor backtest export jobs, forecasts, forecast export jobs</p> </li> <li> <p> <b>Forecast</b>: forecast export jobs</p> </li> </ul> <note> <p> <code>DeleteResourceTree</code> will only delete Amazon Forecast resources, and will not delete datasets or exported files stored in Amazon S3. </p> </note></p>
+    async fn delete_resource_tree(
+        &self,
+        input: DeleteResourceTreeRequest,
+    ) -> Result<(), RusotoError<DeleteResourceTreeError>>;
+
     /// <p><p>Describes an Amazon Forecast dataset created using the <a>CreateDataset</a> operation.</p> <p>In addition to listing the parameters specified in the <code>CreateDataset</code> request, this operation includes the following dataset properties:</p> <ul> <li> <p> <code>CreationTime</code> </p> </li> <li> <p> <code>LastModificationTime</code> </p> </li> <li> <p> <code>Status</code> </p> </li> </ul></p>
     async fn describe_dataset(
         &self,
@@ -3314,6 +3460,12 @@ pub trait Forecast {
         &self,
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+
+    /// <p><p>Stops a resource.</p> <p>The resource undergoes the following states: <code>CREATE<em>STOPPING</code> and <code>CREATE</em>STOPPED</code>. You cannot resume a resource once it has been stopped.</p> <p>This operation can be applied to the following resources (and their corresponding child resources):</p> <ul> <li> <p>Dataset Import Job</p> </li> <li> <p>Predictor Job</p> </li> <li> <p>Forecast Job</p> </li> <li> <p>Forecast Export Job</p> </li> <li> <p>Predictor Backtest Export Job</p> </li> </ul></p>
+    async fn stop_resource(
+        &self,
+        input: StopResourceRequest,
+    ) -> Result<(), RusotoError<StopResourceError>>;
 
     /// <p>Associates the specified tags to a resource with the specified <code>resourceArn</code>. If existing tags on a resource are not specified in the request parameters, they are not changed. When a resource is deleted, the tags associated with that resource are also deleted.</p>
     async fn tag_resource(
@@ -3636,6 +3788,23 @@ impl Forecast for ForecastClient {
         Ok(())
     }
 
+    /// <p><p>Deletes an entire resource tree. This operation will delete the parent resource and its child resources.</p> <p>Child resources are resources that were created from another resource. For example, when a forecast is generated from a predictor, the forecast is the child resource and the predictor is the parent resource.</p> <p>Amazon Forecast resources possess the following parent-child resource hierarchies:</p> <ul> <li> <p> <b>Dataset</b>: dataset import jobs</p> </li> <li> <p> <b>Dataset Group</b>: predictors, predictor backtest export jobs, forecasts, forecast export jobs</p> </li> <li> <p> <b>Predictor</b>: predictor backtest export jobs, forecasts, forecast export jobs</p> </li> <li> <p> <b>Forecast</b>: forecast export jobs</p> </li> </ul> <note> <p> <code>DeleteResourceTree</code> will only delete Amazon Forecast resources, and will not delete datasets or exported files stored in Amazon S3. </p> </note></p>
+    async fn delete_resource_tree(
+        &self,
+        input: DeleteResourceTreeRequest,
+    ) -> Result<(), RusotoError<DeleteResourceTreeError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonForecast.DeleteResourceTree");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteResourceTreeError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
     /// <p><p>Describes an Amazon Forecast dataset created using the <a>CreateDataset</a> operation.</p> <p>In addition to listing the parameters specified in the <code>CreateDataset</code> request, this operation includes the following dataset properties:</p> <ul> <li> <p> <code>CreationTime</code> </p> </li> <li> <p> <code>LastModificationTime</code> </p> </li> <li> <p> <code>Status</code> </p> </li> </ul></p>
     async fn describe_dataset(
         &self,
@@ -3945,6 +4114,23 @@ impl Forecast for ForecastClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceResponse, _>()
+    }
+
+    /// <p><p>Stops a resource.</p> <p>The resource undergoes the following states: <code>CREATE<em>STOPPING</code> and <code>CREATE</em>STOPPED</code>. You cannot resume a resource once it has been stopped.</p> <p>This operation can be applied to the following resources (and their corresponding child resources):</p> <ul> <li> <p>Dataset Import Job</p> </li> <li> <p>Predictor Job</p> </li> <li> <p>Forecast Job</p> </li> <li> <p>Forecast Export Job</p> </li> <li> <p>Predictor Backtest Export Job</p> </li> </ul></p>
+    async fn stop_resource(
+        &self,
+        input: StopResourceRequest,
+    ) -> Result<(), RusotoError<StopResourceError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AmazonForecast.StopResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, StopResourceError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Associates the specified tags to a resource with the specified <code>resourceArn</code>. If existing tags on a resource are not specified in the request parameters, they are not changed. When a resource is deleted, the tags associated with that resource are also deleted.</p>

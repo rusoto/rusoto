@@ -623,6 +623,10 @@ pub struct CreateDataSetRequest {
     /// <p>An ID for the dataset that you want to create. This ID is unique per AWS Region for each AWS account.</p>
     #[serde(rename = "DataSetId")]
     pub data_set_id: String,
+    /// <p>The folder that contains fields and nested subfolders for your dataset.</p>
+    #[serde(rename = "FieldFolders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub field_folders: Option<::std::collections::HashMap<String, FieldFolder>>,
     /// <p>Indicates whether you want to import the data into SPICE.</p>
     #[serde(rename = "ImportMode")]
     pub import_mode: String,
@@ -711,7 +715,7 @@ pub struct CreateDataSourceRequest {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>The type of the data source. Currently, the supported types for this operation are: <code>ATHENA, AURORA, AURORA_POSTGRESQL, MARIADB, MYSQL, POSTGRESQL, PRESTO, REDSHIFT, S3, SNOWFLAKE, SPARK, SQLSERVER, TERADATA</code>. Use <code>ListDataSources</code> to return a list of all data sources.</p>
+    /// <p>The type of the data source. Currently, the supported types for this operation are: <code>ATHENA, AURORA, AURORA_POSTGRESQL, AMAZON_ELASTICSEARCH, MARIADB, MYSQL, POSTGRESQL, PRESTO, REDSHIFT, S3, SNOWFLAKE, SPARK, SQLSERVER, TERADATA</code>. Use <code>ListDataSources</code> to return a list of all data sources.</p> <p> <code>AMAZON_ELASTICSEARCH</code> is for Amazon managed Elasticsearch Service.</p>
     #[serde(rename = "Type")]
     pub type_: String,
     /// <p>Use this parameter only when you want QuickSight to use a VPC connection when connecting to your underlying source.</p>
@@ -740,6 +744,92 @@ pub struct CreateDataSourceResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
     /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateFolderMembershipRequest {
+    /// <p>The AWS Account ID.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The folder ID.</p>
+    #[serde(rename = "FolderId")]
+    pub folder_id: String,
+    /// <p>The ID of the asset (the dashboard, analysis, or dataset).</p>
+    #[serde(rename = "MemberId")]
+    pub member_id: String,
+    /// <p>The type of the member, including <code>DASHBOARD</code>, <code>ANALYSIS</code>, and <code>DATASET</code>.</p>
+    #[serde(rename = "MemberType")]
+    pub member_type: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateFolderMembershipResponse {
+    /// <p>Information about the member in the folder.</p>
+    #[serde(rename = "FolderMember")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub folder_member: Option<FolderMember>,
+    /// <p>The request ID.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The status of the folder membership. If succeeded, the status is <code>SC_OK (200)</code>.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateFolderRequest {
+    /// <p>The AWS Account ID.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The folder ID.</p>
+    #[serde(rename = "FolderId")]
+    pub folder_id: String,
+    /// <p>The type of folder. By default, <code>folderType</code> is <code>SHARED</code>.</p>
+    #[serde(rename = "FolderType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub folder_type: Option<String>,
+    /// <p>The name of the folder.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) for the parent folder.</p> <p> <code>ParentFolderArn</code> can be null. An empty <code>parentFolderArn</code> creates a root-level folder.</p>
+    #[serde(rename = "ParentFolderArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_folder_arn: Option<String>,
+    /// <p>A structure that describes the principals and the resource-level permissions of a folder.</p> <p>To specify no permissions, omit <code>Permissions</code>.</p>
+    #[serde(rename = "Permissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permissions: Option<Vec<ResourcePermission>>,
+    /// <p>Tags for the folder.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateFolderResponse {
+    /// <p>The Amazon Resource Name (ARN) for the newly created folder.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The folder ID for the newly created folder.</p>
+    #[serde(rename = "FolderId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub folder_id: Option<String>,
+    /// <p>The request ID for the newly created folder.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The status of the newly created folder. If succeeded, the status is <code>SC_OK (200)</code>.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<i64>,
@@ -1446,6 +1536,10 @@ pub struct DataSet {
     #[serde(rename = "DataSetId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_set_id: Option<String>,
+    /// <p>The folder that contains fields and nested subfolders for your dataset.</p>
+    #[serde(rename = "FieldFolders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub field_folders: Option<::std::collections::HashMap<String, FieldFolder>>,
     /// <p>A value that indicates whether you want to import the data into SPICE.</p>
     #[serde(rename = "ImportMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1909,6 +2003,68 @@ pub struct DeleteDataSourceResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
     /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteFolderMembershipRequest {
+    /// <p>The AWS Account ID.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The Folder ID.</p>
+    #[serde(rename = "FolderId")]
+    pub folder_id: String,
+    /// <p>The ID of the asset (the dashboard, analysis, or dataset) that you want to delete.</p>
+    #[serde(rename = "MemberId")]
+    pub member_id: String,
+    /// <p>The type of the member, including <code>DASHBOARD</code>, <code>ANALYSIS</code>, and <code>DATASET</code> </p>
+    #[serde(rename = "MemberType")]
+    pub member_type: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteFolderMembershipResponse {
+    /// <p>The request ID.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The status of deleting the asset. If succeeded, the status is <code>SC_OK (200)</code>.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteFolderRequest {
+    /// <p>The AWS Account ID for the folder.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The folder ID.</p>
+    #[serde(rename = "FolderId")]
+    pub folder_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteFolderResponse {
+    /// <p>The Amazon Resource Name of the deleted folder.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The folder ID.</p>
+    #[serde(rename = "FolderId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub folder_id: Option<String>,
+    /// <p>The request ID.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The status of deleting the folder. If succeeded, the status is <code>SC_OK (200)</code>.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<i64>,
@@ -2567,6 +2723,106 @@ pub struct DescribeDataSourceResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeFolderPermissionsRequest {
+    /// <p>The AWS Account ID.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The folder ID.</p>
+    #[serde(rename = "FolderId")]
+    pub folder_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeFolderPermissionsResponse {
+    /// <p>The Amazon Resource Name (ARN) for the folder.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The folder ID.</p>
+    #[serde(rename = "FolderId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub folder_id: Option<String>,
+    /// <p>Information about the permissions on the folder.</p>
+    #[serde(rename = "Permissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permissions: Option<Vec<ResourcePermission>>,
+    /// <p>The request ID.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The status. If succeeded, the status is <code>SC_OK</code>.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeFolderRequest {
+    /// <p>The AWS account ID.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The folder ID.</p>
+    #[serde(rename = "FolderId")]
+    pub folder_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeFolderResolvedPermissionsRequest {
+    /// <p>The AWS account ID.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The folder ID.</p>
+    #[serde(rename = "FolderId")]
+    pub folder_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeFolderResolvedPermissionsResponse {
+    /// <p>The Amazon Resource Name (ARN).</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The folder ID.</p>
+    #[serde(rename = "FolderId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub folder_id: Option<String>,
+    /// <p>Information about the permissions on the dashboard.</p>
+    #[serde(rename = "Permissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permissions: Option<Vec<ResourcePermission>>,
+    /// <p>The request ID.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The status. If succeeded, the status is <code>SC_OK</code> </p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeFolderResponse {
+    /// <p>Information about the folder.</p>
+    #[serde(rename = "Folder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub folder: Option<Folder>,
+    /// <p>The request ID.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The status. If succeeded, the status is <code>SC_OK (200)</code>.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeGroupRequest {
     /// <p>The ID for the AWS account that the group is in. Currently, you use the ID for the AWS account that contains your Amazon QuickSight account.</p>
     #[serde(rename = "AwsAccountId")]
@@ -2947,12 +3203,121 @@ pub struct ExportToCSVOption {
     pub availability_status: Option<String>,
 }
 
+/// <p>A FieldFolder element is a folder that contains fields and nested subfolders.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct FieldFolder {
+    /// <p>A folder has a list of columns. A column can only be in one folder.</p>
+    #[serde(rename = "columns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub columns: Option<Vec<String>>,
+    /// <p>The description for a field folder.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+}
+
 /// <p>A transform operation that filters rows based on a condition.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FilterOperation {
     /// <p>An expression that must evaluate to a Boolean value. Rows for which the expression evaluates to true are kept in the dataset.</p>
     #[serde(rename = "ConditionExpression")]
     pub condition_expression: String,
+}
+
+/// <p>A folder.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Folder {
+    /// <p>The folder Amazon Resource Name (ARN).</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The time that the folder was created.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<f64>,
+    /// <p>The folder ID.</p>
+    #[serde(rename = "FolderId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub folder_id: Option<String>,
+    /// <p>An array of ancestor folder ARN strings.</p>
+    #[serde(rename = "FolderPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub folder_path: Option<Vec<String>>,
+    /// <p>The type of the folder.</p>
+    #[serde(rename = "FolderType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub folder_type: Option<String>,
+    /// <p>The time that the folder was last updated.</p>
+    #[serde(rename = "LastUpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_time: Option<f64>,
+    /// <p>A display name for the folder.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+/// <p>An asset in a folder, such as a dashboard, analysis, or dataset.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FolderMember {
+    /// <p>The ID of the asset.</p>
+    #[serde(rename = "MemberId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub member_id: Option<String>,
+    /// <p>The type of the asset.</p>
+    #[serde(rename = "MemberType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub member_type: Option<String>,
+}
+
+/// <p>Searches a folder by a filter.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct FolderSearchFilter {
+    /// <p>The name of the value that you want to use as a filter. For example, <code>"Name": "PARENT_FOLDER_ARN"</code>.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The comparison operator that you want to use as a filter. For example, <code>"Operator": "StringEquals"</code>.</p>
+    #[serde(rename = "Operator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operator: Option<String>,
+    /// <p>The value of the named item (in this example, <code>PARENT_FOLDER_ARN</code>), that you want to use as a filter. For example, <code>"Value": "arn:aws:quicksight:us-east-1:1:folder/folderId"</code>.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
+/// <p>A summary of the folder. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct FolderSummary {
+    /// <p>The Amazon Resource Name (ARN).</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The time that the folder was created.</p>
+    #[serde(rename = "CreatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time: Option<f64>,
+    /// <p>The folder ID.</p>
+    #[serde(rename = "FolderId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub folder_id: Option<String>,
+    /// <p>The type of folder.</p>
+    #[serde(rename = "FolderType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub folder_type: Option<String>,
+    /// <p>The time that the folder was last updated.</p>
+    #[serde(rename = "LastUpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_time: Option<f64>,
+    /// <p>The display name of the folder.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
 }
 
 /// <p>Geospatial column group that denotes a hierarchy.</p>
@@ -3448,6 +3813,83 @@ pub struct ListDataSourcesResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
     /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListFolderMembersRequest {
+    /// <p>The AWS account ID.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The folder ID.</p>
+    #[serde(rename = "FolderId")]
+    pub folder_id: String,
+    /// <p>The maximum number of results to be returned per request.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results, or null if there are no more results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListFolderMembersResponse {
+    /// <p>A structure that contains all of the folder members (dashboards, analyses, and datasets) in the folder.</p>
+    #[serde(rename = "FolderMemberList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub folder_member_list: Option<Vec<MemberIdArnPair>>,
+    /// <p>The token for the next set of results, or null if there are no more results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The request ID.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The status. If succeeded, the status is <code>SC_OK</code> </p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListFoldersRequest {
+    /// <p>The AWS account ID.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The maximum number of results to be returned per request.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results, or null if there are no more results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListFoldersResponse {
+    /// <p>A structure that contains all of the folders in your AWS account. This structure provides basic information about the folders.</p>
+    #[serde(rename = "FolderSummaryList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub folder_summary_list: Option<Vec<FolderSummary>>,
+    /// <p>The token for the next set of results, or null if there are no more results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The request ID.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The status. If succeeded, the status is <code>SC_OK</code> </p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<i64>,
@@ -4108,6 +4550,20 @@ pub struct MariaDbParameters {
     pub port: i64,
 }
 
+/// <p>An object that consists of the member Amazon Resource Name (ARN) and member ID.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MemberIdArnPair {
+    /// <p>The Amazon Resource Name (ARN) of the member.</p>
+    #[serde(rename = "MemberArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub member_arn: Option<String>,
+    /// <p>The ID of the member.</p>
+    #[serde(rename = "MemberId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub member_id: Option<String>,
+}
+
 /// <p>MySQL parameters.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MySqlParameters {
@@ -4322,6 +4778,10 @@ pub struct RegisterUserRequest {
     /// <p>The ID for the AWS account that the user is in. Currently, you use the ID for the AWS account that contains your Amazon QuickSight account.</p>
     #[serde(rename = "AwsAccountId")]
     pub aws_account_id: String,
+    /// <p>The URL of the custom OpenID Connect (OIDC) provider that provides identity to let a user federate into QuickSight with an associated AWS Identity and Access Management (IAM) role. This parameter should only be used when <code>ExternalLoginFederationProviderType</code> parameter is set to <code>CUSTOM_OIDC</code>.</p>
+    #[serde(rename = "CustomFederationProviderUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_federation_provider_url: Option<String>,
     /// <p>(Enterprise edition only) The name of the custom permissions profile that you want to assign to this user. Customized permissions allows you to control a user's access by restricting access the following operations:</p> <ul> <li> <p>Create and update data sources</p> </li> <li> <p>Create and update datasets</p> </li> <li> <p>Create and update email reports</p> </li> <li> <p>Subscribe to email reports</p> </li> </ul> <p>To add custom permissions to an existing user, use <code> <a>UpdateUser</a> </code> instead.</p> <p>A set of custom permissions includes any combination of these restrictions. Currently, you need to create the profile names for custom permission sets by using the QuickSight console. Then, you use the <code>RegisterUser</code> API operation to assign the named set of permissions to a QuickSight user. </p> <p>QuickSight custom permissions are applied through IAM policies. Therefore, they override the permissions typically granted by assigning QuickSight users to one of the default security cohorts in QuickSight (admin, author, reader).</p> <p>This feature is available only to QuickSight Enterprise edition subscriptions that use SAML 2.0-Based Federation for Single Sign-On (SSO).</p>
     #[serde(rename = "CustomPermissionsName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4329,6 +4789,14 @@ pub struct RegisterUserRequest {
     /// <p>The email address of the user that you want to register.</p>
     #[serde(rename = "Email")]
     pub email: String,
+    /// <p><p>The type of supported external login provider that provides identity to let a user federate into Amazon QuickSight with an associated AWS Identity and Access Management (IAM) role. The type of supported external login provider can be one of the following.</p> <ul> <li> <p> <code>COGNITO</code>: Amazon Cognito. The provider URL is cognito-identity.amazonaws.com. When choosing the <code>COGNITO</code> provider type, don’t use the &quot;CustomFederationProviderUrl&quot; parameter which is only needed when the external provider is custom.</p> </li> <li> <p> <code>CUSTOM<em>OIDC</code>: Custom OpenID Connect (OIDC) provider. When choosing <code>CUSTOM</em>OIDC</code> type, use the <code>CustomFederationProviderUrl</code> parameter to provide the custom OIDC provider URL.</p> </li> </ul></p>
+    #[serde(rename = "ExternalLoginFederationProviderType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_login_federation_provider_type: Option<String>,
+    /// <p>The identity ID for a user in the external login provider.</p>
+    #[serde(rename = "ExternalLoginId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_login_id: Option<String>,
     /// <p>The ARN of the IAM user or role that you are registering with Amazon QuickSight. </p>
     #[serde(rename = "IamArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4463,17 +4931,21 @@ pub struct RowInfo {
     pub rows_ingested: Option<i64>,
 }
 
-/// <p>The row-level security configuration for the dataset.</p>
+/// <p>Information about a dataset that contains permissions for row-level security (RLS). The permissions dataset maps fields to users or groups. For more information, see <a href="https://docs.aws.amazon.com/quicksight/latest/user/restrict-access-to-a-data-set-using-row-level-security.html">Using Row-Level Security (RLS) to Restrict Access to a Dataset</a> in the <i>Amazon QuickSight User Guide</i>.</p> <p>The option to deny permissions by setting <code>PermissionPolicy</code> to <code>DENY_ACCESS</code> is not supported for new RLS datasets.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RowLevelPermissionDataSet {
-    /// <p>The Amazon Resource Name (ARN) of the permission dataset.</p>
+    /// <p>The Amazon Resource Name (ARN) of the dataset that contains permissions for RLS.</p>
     #[serde(rename = "Arn")]
     pub arn: String,
-    /// <p>The namespace associated with the row-level permissions dataset.</p>
+    /// <p>The user or group rules associated with the dataset that contains permissions for RLS.</p> <p>By default, <code>FormatVersion</code> is <code>VERSION_1</code>. When <code>FormatVersion</code> is <code>VERSION_1</code>, <code>UserName</code> and <code>GroupName</code> are required. When <code>FormatVersion</code> is <code>VERSION_2</code>, <code>UserARN</code> and <code>GroupARN</code> are required, and <code>Namespace</code> must not exist.</p>
+    #[serde(rename = "FormatVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub format_version: Option<String>,
+    /// <p>The namespace associated with the dataset that contains permissions for RLS.</p>
     #[serde(rename = "Namespace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub namespace: Option<String>,
-    /// <p>Permission policy.</p>
+    /// <p>The type of permissions to use when interpretting the permissions for RLS. <code>DENY_ACCESS</code> is included for backward compatibility only.</p>
     #[serde(rename = "PermissionPolicy")]
     pub permission_policy: String,
 }
@@ -4486,13 +4958,13 @@ pub struct S3Parameters {
     pub manifest_file_location: ManifestFileLocation,
 }
 
-/// <p>A physical table type for as S3 data source.</p>
+/// <p>A physical table type for an S3 data source.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3Source {
-    /// <p>The amazon Resource Name (ARN) for the data source.</p>
+    /// <p>The Amazon Resource Name (ARN) for the data source.</p>
     #[serde(rename = "DataSourceArn")]
     pub data_source_arn: String,
-    /// <p>A physical table type for as S3 data source.</p>
+    /// <p><p>A physical table type for an S3 data source.</p> <note> <p>For non-JSON files, only <code>STRING</code> data types are supported in input columns.</p> </note></p>
     #[serde(rename = "InputColumns")]
     pub input_columns: Vec<InputColumn>,
     /// <p>Information about the format for the S3 source file or files.</p>
@@ -4576,6 +5048,46 @@ pub struct SearchDashboardsResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
     /// <p>The HTTP status of the request.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct SearchFoldersRequest {
+    /// <p>The AWS account ID.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The filters to apply to the search. Currently, you can search only by the parent folder ARN. For example, <code>"Filters": [ { "Name": "PARENT_FOLDER_ARN", "Operator": "StringEquals", "Value": "arn:aws:quicksight:us-east-1:1:folder/folderId" } ]</code>.</p>
+    #[serde(rename = "Filters")]
+    pub filters: Vec<FolderSearchFilter>,
+    /// <p>The maximum number of results to be returned per request.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results, or null if there are no more results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct SearchFoldersResponse {
+    /// <p>A structure that contains all of the folders in your AWS account. This structure provides basic information about the folders.</p>
+    #[serde(rename = "FolderSummaryList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub folder_summary_list: Option<Vec<FolderSummary>>,
+    /// <p>The token for the next set of results, or null if there are no more results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The request ID.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The status. If succeeded, the status is <code>SC_OK</code>.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<i64>,
@@ -5636,6 +6148,10 @@ pub struct UpdateDataSetRequest {
     /// <p>The ID for the dataset that you want to update. This ID is unique per AWS Region for each AWS account.</p>
     #[serde(rename = "DataSetId")]
     pub data_set_id: String,
+    /// <p>The folder that contains fields and nested subfolders for your dataset.</p>
+    #[serde(rename = "FieldFolders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub field_folders: Option<::std::collections::HashMap<String, FieldFolder>>,
     /// <p>Indicates whether you want to import the data into SPICE.</p>
     #[serde(rename = "ImportMode")]
     pub import_mode: String,
@@ -5777,6 +6293,85 @@ pub struct UpdateDataSourceResponse {
     #[serde(rename = "UpdateStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub update_status: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateFolderPermissionsRequest {
+    /// <p>The AWS account ID.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The folder ID.</p>
+    #[serde(rename = "FolderId")]
+    pub folder_id: String,
+    /// <p>The permissions that you want to grant on a resource.</p>
+    #[serde(rename = "GrantPermissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub grant_permissions: Option<Vec<ResourcePermission>>,
+    /// <p>The permissions that you want to revoke from a resource.</p>
+    #[serde(rename = "RevokePermissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revoke_permissions: Option<Vec<ResourcePermission>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateFolderPermissionsResponse {
+    /// <p>The Amazon Resource Name (ARN).</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The folder ID.</p>
+    #[serde(rename = "FolderId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub folder_id: Option<String>,
+    /// <p>Information about the permissions on the dashboard.</p>
+    #[serde(rename = "Permissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permissions: Option<Vec<ResourcePermission>>,
+    /// <p>The request ID.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The status. If succeeded, the status is <code>SC_OK</code>.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateFolderRequest {
+    /// <p>The AWS account ID.</p>
+    #[serde(rename = "AwsAccountId")]
+    pub aws_account_id: String,
+    /// <p>The folder ID.</p>
+    #[serde(rename = "FolderId")]
+    pub folder_id: String,
+    /// <p>The name of the folder.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateFolderResponse {
+    /// <p>The Amazon Resource Name (ARN).</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The folder ID.</p>
+    #[serde(rename = "FolderId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub folder_id: Option<String>,
+    /// <p>The request ID.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>The status. If succeeded, the status is <code>SC_OK</code>.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -6141,6 +6736,10 @@ pub struct UpdateUserRequest {
     /// <p>The ID for the AWS account that the user is in. Currently, you use the ID for the AWS account that contains your Amazon QuickSight account.</p>
     #[serde(rename = "AwsAccountId")]
     pub aws_account_id: String,
+    /// <p>The URL of the custom OpenID Connect (OIDC) provider that provides identity to let a user federate into QuickSight with an associated AWS Identity and Access Management (IAM) role. This parameter should only be used when <code>ExternalLoginFederationProviderType</code> parameter is set to <code>CUSTOM_OIDC</code>.</p>
+    #[serde(rename = "CustomFederationProviderUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_federation_provider_url: Option<String>,
     /// <p>(Enterprise edition only) The name of the custom permissions profile that you want to assign to this user. Customized permissions allows you to control a user's access by restricting access the following operations:</p> <ul> <li> <p>Create and update data sources</p> </li> <li> <p>Create and update datasets</p> </li> <li> <p>Create and update email reports</p> </li> <li> <p>Subscribe to email reports</p> </li> </ul> <p>A set of custom permissions includes any combination of these restrictions. Currently, you need to create the profile names for custom permission sets by using the QuickSight console. Then, you use the <code>RegisterUser</code> API operation to assign the named set of permissions to a QuickSight user. </p> <p>QuickSight custom permissions are applied through IAM policies. Therefore, they override the permissions typically granted by assigning QuickSight users to one of the default security cohorts in QuickSight (admin, author, reader).</p> <p>This feature is available only to QuickSight Enterprise edition subscriptions that use SAML 2.0-Based Federation for Single Sign-On (SSO).</p>
     #[serde(rename = "CustomPermissionsName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6148,6 +6747,14 @@ pub struct UpdateUserRequest {
     /// <p>The email address of the user that you want to update.</p>
     #[serde(rename = "Email")]
     pub email: String,
+    /// <p><p>The type of supported external login provider that provides identity to let a user federate into QuickSight with an associated AWS Identity and Access Management (IAM) role. The type of supported external login provider can be one of the following.</p> <ul> <li> <p> <code>COGNITO</code>: Amazon Cognito. The provider URL is cognito-identity.amazonaws.com. When choosing the <code>COGNITO</code> provider type, don’t use the &quot;CustomFederationProviderUrl&quot; parameter which is only needed when the external provider is custom.</p> </li> <li> <p> <code>CUSTOM<em>OIDC</code>: Custom OpenID Connect (OIDC) provider. When choosing <code>CUSTOM</em>OIDC</code> type, use the <code>CustomFederationProviderUrl</code> parameter to provide the custom OIDC provider URL.</p> </li> <li> <p> <code>NONE</code>: This clears all the previously saved external login information for a user. Use <code> <a>DescribeUser</a> </code> API to check the external login information.</p> </li> </ul></p>
+    #[serde(rename = "ExternalLoginFederationProviderType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_login_federation_provider_type: Option<String>,
+    /// <p>The identity ID for a user in the external login provider.</p>
+    #[serde(rename = "ExternalLoginId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_login_id: Option<String>,
     /// <p>The namespace. Currently, you should set this to <code>default</code>.</p>
     #[serde(rename = "Namespace")]
     pub namespace: String,
@@ -6225,6 +6832,18 @@ pub struct User {
     #[serde(rename = "Email")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub email: Option<String>,
+    /// <p><p>The type of supported external login provider that provides identity to let the user federate into Amazon QuickSight with an associated IAM role. The type can be one of the following.</p> <ul> <li> <p> <code>COGNITO</code>: Amazon Cognito. The provider URL is cognito-identity.amazonaws.com.</p> </li> <li> <p> <code>CUSTOM_OIDC</code>: Custom OpenID Connect (OIDC) provider.</p> </li> </ul></p>
+    #[serde(rename = "ExternalLoginFederationProviderType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_login_federation_provider_type: Option<String>,
+    /// <p>The URL of the external login provider.</p>
+    #[serde(rename = "ExternalLoginFederationProviderUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_login_federation_provider_url: Option<String>,
+    /// <p>The identity ID for the user in the external login provider.</p>
+    #[serde(rename = "ExternalLoginId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub external_login_id: Option<String>,
     /// <p>The type of identity authentication used by the user.</p>
     #[serde(rename = "IdentityType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6693,6 +7312,170 @@ impl fmt::Display for CreateDataSourceError {
     }
 }
 impl Error for CreateDataSourceError {}
+/// Errors returned by CreateFolder
+#[derive(Debug, PartialEq)]
+pub enum CreateFolderError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>Updating or deleting a resource can cause an inconsistent state.</p>
+    Conflict(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>A limit is exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The resource specified already exists. </p>
+    ResourceExists(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl CreateFolderError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFolderError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateFolderError::AccessDenied(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(CreateFolderError::Conflict(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(CreateFolderError::InternalFailure(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(CreateFolderError::InvalidParameterValue(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateFolderError::LimitExceeded(err.msg))
+                }
+                "ResourceExistsException" => {
+                    return RusotoError::Service(CreateFolderError::ResourceExists(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateFolderError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateFolderError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(CreateFolderError::UnsupportedUserEdition(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateFolderError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateFolderError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateFolderError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateFolderError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateFolderError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            CreateFolderError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateFolderError::ResourceExists(ref cause) => write!(f, "{}", cause),
+            CreateFolderError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateFolderError::Throttling(ref cause) => write!(f, "{}", cause),
+            CreateFolderError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateFolderError {}
+/// Errors returned by CreateFolderMembership
+#[derive(Debug, PartialEq)]
+pub enum CreateFolderMembershipError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>A limit is exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The resource specified already exists. </p>
+    ResourceExists(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl CreateFolderMembershipError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateFolderMembershipError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(CreateFolderMembershipError::AccessDenied(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(CreateFolderMembershipError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        CreateFolderMembershipError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateFolderMembershipError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceExistsException" => {
+                    return RusotoError::Service(CreateFolderMembershipError::ResourceExists(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateFolderMembershipError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateFolderMembershipError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(
+                        CreateFolderMembershipError::UnsupportedUserEdition(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateFolderMembershipError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateFolderMembershipError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            CreateFolderMembershipError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateFolderMembershipError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            CreateFolderMembershipError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateFolderMembershipError::ResourceExists(ref cause) => write!(f, "{}", cause),
+            CreateFolderMembershipError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateFolderMembershipError::Throttling(ref cause) => write!(f, "{}", cause),
+            CreateFolderMembershipError::UnsupportedUserEdition(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateFolderMembershipError {}
 /// Errors returned by CreateGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateGroupError {
@@ -7699,6 +8482,148 @@ impl fmt::Display for DeleteDataSourceError {
     }
 }
 impl Error for DeleteDataSourceError {}
+/// Errors returned by DeleteFolder
+#[derive(Debug, PartialEq)]
+pub enum DeleteFolderError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>Updating or deleting a resource can cause an inconsistent state.</p>
+    Conflict(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more preconditions aren't met.</p>
+    PreconditionNotMet(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl DeleteFolderError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFolderError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteFolderError::AccessDenied(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(DeleteFolderError::Conflict(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(DeleteFolderError::InternalFailure(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(DeleteFolderError::InvalidParameterValue(err.msg))
+                }
+                "PreconditionNotMetException" => {
+                    return RusotoError::Service(DeleteFolderError::PreconditionNotMet(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteFolderError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteFolderError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(DeleteFolderError::UnsupportedUserEdition(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteFolderError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteFolderError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteFolderError::Conflict(ref cause) => write!(f, "{}", cause),
+            DeleteFolderError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteFolderError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteFolderError::PreconditionNotMet(ref cause) => write!(f, "{}", cause),
+            DeleteFolderError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteFolderError::Throttling(ref cause) => write!(f, "{}", cause),
+            DeleteFolderError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteFolderError {}
+/// Errors returned by DeleteFolderMembership
+#[derive(Debug, PartialEq)]
+pub enum DeleteFolderMembershipError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl DeleteFolderMembershipError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteFolderMembershipError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DeleteFolderMembershipError::AccessDenied(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(DeleteFolderMembershipError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        DeleteFolderMembershipError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteFolderMembershipError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteFolderMembershipError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(
+                        DeleteFolderMembershipError::UnsupportedUserEdition(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteFolderMembershipError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteFolderMembershipError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DeleteFolderMembershipError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteFolderMembershipError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteFolderMembershipError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteFolderMembershipError::Throttling(ref cause) => write!(f, "{}", cause),
+            DeleteFolderMembershipError::UnsupportedUserEdition(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteFolderMembershipError {}
 /// Errors returned by DeleteGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteGroupError {
@@ -9069,6 +9994,230 @@ impl fmt::Display for DescribeDataSourcePermissionsError {
     }
 }
 impl Error for DescribeDataSourcePermissionsError {}
+/// Errors returned by DescribeFolder
+#[derive(Debug, PartialEq)]
+pub enum DescribeFolderError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl DescribeFolderError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFolderError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DescribeFolderError::AccessDenied(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(DescribeFolderError::InternalFailure(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(DescribeFolderError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeFolderError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeFolderError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(DescribeFolderError::UnsupportedUserEdition(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeFolderError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeFolderError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeFolderError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeFolderError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DescribeFolderError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeFolderError::Throttling(ref cause) => write!(f, "{}", cause),
+            DescribeFolderError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeFolderError {}
+/// Errors returned by DescribeFolderPermissions
+#[derive(Debug, PartialEq)]
+pub enum DescribeFolderPermissionsError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl DescribeFolderPermissionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeFolderPermissionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(DescribeFolderPermissionsError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(DescribeFolderPermissionsError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        DescribeFolderPermissionsError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeFolderPermissionsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeFolderPermissionsError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(
+                        DescribeFolderPermissionsError::UnsupportedUserEdition(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeFolderPermissionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeFolderPermissionsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            DescribeFolderPermissionsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeFolderPermissionsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeFolderPermissionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeFolderPermissionsError::Throttling(ref cause) => write!(f, "{}", cause),
+            DescribeFolderPermissionsError::UnsupportedUserEdition(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeFolderPermissionsError {}
+/// Errors returned by DescribeFolderResolvedPermissions
+#[derive(Debug, PartialEq)]
+pub enum DescribeFolderResolvedPermissionsError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl DescribeFolderResolvedPermissionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeFolderResolvedPermissionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        DescribeFolderResolvedPermissionsError::AccessDenied(err.msg),
+                    )
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(
+                        DescribeFolderResolvedPermissionsError::InternalFailure(err.msg),
+                    )
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        DescribeFolderResolvedPermissionsError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeFolderResolvedPermissionsError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(
+                        DescribeFolderResolvedPermissionsError::Throttling(err.msg),
+                    )
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(
+                        DescribeFolderResolvedPermissionsError::UnsupportedUserEdition(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeFolderResolvedPermissionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeFolderResolvedPermissionsError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeFolderResolvedPermissionsError::InternalFailure(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeFolderResolvedPermissionsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeFolderResolvedPermissionsError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeFolderResolvedPermissionsError::Throttling(ref cause) => write!(f, "{}", cause),
+            DescribeFolderResolvedPermissionsError::UnsupportedUserEdition(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeFolderResolvedPermissionsError {}
 /// Errors returned by DescribeGroup
 #[derive(Debug, PartialEq)]
 pub enum DescribeGroupError {
@@ -10301,6 +11450,142 @@ impl fmt::Display for ListDataSourcesError {
     }
 }
 impl Error for ListDataSourcesError {}
+/// Errors returned by ListFolderMembers
+#[derive(Debug, PartialEq)]
+pub enum ListFolderMembersError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>The <code>NextToken</code> value isn't valid.</p>
+    InvalidNextToken(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl ListFolderMembersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFolderMembersError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ListFolderMembersError::AccessDenied(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(ListFolderMembersError::InternalFailure(err.msg))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(ListFolderMembersError::InvalidNextToken(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(ListFolderMembersError::InvalidParameterValue(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListFolderMembersError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListFolderMembersError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(ListFolderMembersError::UnsupportedUserEdition(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListFolderMembersError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListFolderMembersError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListFolderMembersError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListFolderMembersError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListFolderMembersError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListFolderMembersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListFolderMembersError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListFolderMembersError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListFolderMembersError {}
+/// Errors returned by ListFolders
+#[derive(Debug, PartialEq)]
+pub enum ListFoldersError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>The <code>NextToken</code> value isn't valid.</p>
+    InvalidNextToken(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl ListFoldersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListFoldersError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ListFoldersError::AccessDenied(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(ListFoldersError::InternalFailure(err.msg))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(ListFoldersError::InvalidNextToken(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(ListFoldersError::InvalidParameterValue(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListFoldersError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListFoldersError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(ListFoldersError::UnsupportedUserEdition(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListFoldersError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListFoldersError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListFoldersError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListFoldersError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListFoldersError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListFoldersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListFoldersError::Throttling(ref cause) => write!(f, "{}", cause),
+            ListFoldersError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListFoldersError {}
 /// Errors returned by ListGroupMemberships
 #[derive(Debug, PartialEq)]
 pub enum ListGroupMembershipsError {
@@ -11629,6 +12914,74 @@ impl fmt::Display for SearchDashboardsError {
     }
 }
 impl Error for SearchDashboardsError {}
+/// Errors returned by SearchFolders
+#[derive(Debug, PartialEq)]
+pub enum SearchFoldersError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>The <code>NextToken</code> value isn't valid.</p>
+    InvalidNextToken(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl SearchFoldersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<SearchFoldersError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(SearchFoldersError::AccessDenied(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(SearchFoldersError::InternalFailure(err.msg))
+                }
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(SearchFoldersError::InvalidNextToken(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(SearchFoldersError::InvalidParameterValue(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(SearchFoldersError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(SearchFoldersError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(SearchFoldersError::UnsupportedUserEdition(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for SearchFoldersError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            SearchFoldersError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            SearchFoldersError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            SearchFoldersError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            SearchFoldersError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            SearchFoldersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            SearchFoldersError::Throttling(ref cause) => write!(f, "{}", cause),
+            SearchFoldersError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for SearchFoldersError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -12543,6 +13896,160 @@ impl fmt::Display for UpdateDataSourcePermissionsError {
     }
 }
 impl Error for UpdateDataSourcePermissionsError {}
+/// Errors returned by UpdateFolder
+#[derive(Debug, PartialEq)]
+pub enum UpdateFolderError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>Updating or deleting a resource can cause an inconsistent state.</p>
+    Conflict(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>The resource specified already exists. </p>
+    ResourceExists(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl UpdateFolderError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFolderError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UpdateFolderError::AccessDenied(err.msg))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(UpdateFolderError::Conflict(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(UpdateFolderError::InternalFailure(err.msg))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(UpdateFolderError::InvalidParameterValue(err.msg))
+                }
+                "ResourceExistsException" => {
+                    return RusotoError::Service(UpdateFolderError::ResourceExists(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateFolderError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateFolderError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(UpdateFolderError::UnsupportedUserEdition(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateFolderError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateFolderError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateFolderError::Conflict(ref cause) => write!(f, "{}", cause),
+            UpdateFolderError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateFolderError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            UpdateFolderError::ResourceExists(ref cause) => write!(f, "{}", cause),
+            UpdateFolderError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateFolderError::Throttling(ref cause) => write!(f, "{}", cause),
+            UpdateFolderError::UnsupportedUserEdition(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateFolderError {}
+/// Errors returned by UpdateFolderPermissions
+#[derive(Debug, PartialEq)]
+pub enum UpdateFolderPermissionsError {
+    /// <p>You don't have access to this item. The provided credentials couldn't be validated. You might not be authorized to carry out the request. Make sure that your account is authorized to use the Amazon QuickSight service, that your policies have the correct permissions, and that you are using the correct access keys.</p>
+    AccessDenied(String),
+    /// <p>An internal failure occurred.</p>
+    InternalFailure(String),
+    /// <p>One or more parameters has a value that isn't valid.</p>
+    InvalidParameterValue(String),
+    /// <p>A limit is exceeded.</p>
+    LimitExceeded(String),
+    /// <p>One or more resources can't be found.</p>
+    ResourceNotFound(String),
+    /// <p>Access is throttled.</p>
+    Throttling(String),
+    /// <p>This error indicates that you are calling an operation on an Amazon QuickSight subscription where the edition doesn't include support for that operation. Amazon QuickSight currently has Standard Edition and Enterprise Edition. Not every operation and capability is available in every edition.</p>
+    UnsupportedUserEdition(String),
+}
+
+impl UpdateFolderPermissionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFolderPermissionsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UpdateFolderPermissionsError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(UpdateFolderPermissionsError::InternalFailure(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        UpdateFolderPermissionsError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(UpdateFolderPermissionsError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateFolderPermissionsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateFolderPermissionsError::Throttling(err.msg))
+                }
+                "UnsupportedUserEditionException" => {
+                    return RusotoError::Service(
+                        UpdateFolderPermissionsError::UnsupportedUserEdition(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateFolderPermissionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateFolderPermissionsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UpdateFolderPermissionsError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            UpdateFolderPermissionsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateFolderPermissionsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateFolderPermissionsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateFolderPermissionsError::Throttling(ref cause) => write!(f, "{}", cause),
+            UpdateFolderPermissionsError::UnsupportedUserEdition(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdateFolderPermissionsError {}
 /// Errors returned by UpdateGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateGroupError {
@@ -13216,6 +14723,18 @@ pub trait Quicksight {
         input: CreateDataSourceRequest,
     ) -> Result<CreateDataSourceResponse, RusotoError<CreateDataSourceError>>;
 
+    /// <p>Creates an empty shared folder.</p>
+    async fn create_folder(
+        &self,
+        input: CreateFolderRequest,
+    ) -> Result<CreateFolderResponse, RusotoError<CreateFolderError>>;
+
+    /// <p>Adds an asset, such as a dashboard, analysis, or dataset into a folder.</p>
+    async fn create_folder_membership(
+        &self,
+        input: CreateFolderMembershipRequest,
+    ) -> Result<CreateFolderMembershipResponse, RusotoError<CreateFolderMembershipError>>;
+
     /// <p>Creates an Amazon QuickSight group.</p> <p>The permissions resource is <code>arn:aws:quicksight:us-east-1:<i>&lt;relevant-aws-account-id&gt;</i>:group/default/<i>&lt;group-name&gt;</i> </code>.</p> <p>The response is a group object.</p>
     async fn create_group(
         &self,
@@ -13299,6 +14818,18 @@ pub trait Quicksight {
         &self,
         input: DeleteDataSourceRequest,
     ) -> Result<DeleteDataSourceResponse, RusotoError<DeleteDataSourceError>>;
+
+    /// <p>Deletes an empty folder.</p>
+    async fn delete_folder(
+        &self,
+        input: DeleteFolderRequest,
+    ) -> Result<DeleteFolderResponse, RusotoError<DeleteFolderError>>;
+
+    /// <p>Removes an asset, such as a dashboard, analysis, or dataset, from a folder.</p>
+    async fn delete_folder_membership(
+        &self,
+        input: DeleteFolderMembershipRequest,
+    ) -> Result<DeleteFolderMembershipResponse, RusotoError<DeleteFolderMembershipError>>;
 
     /// <p>Removes a user group from Amazon QuickSight. </p>
     async fn delete_group(
@@ -13423,6 +14954,27 @@ pub trait Quicksight {
         RusotoError<DescribeDataSourcePermissionsError>,
     >;
 
+    /// <p>Describes a folder.</p>
+    async fn describe_folder(
+        &self,
+        input: DescribeFolderRequest,
+    ) -> Result<DescribeFolderResponse, RusotoError<DescribeFolderError>>;
+
+    /// <p>Describes permissions for a folder.</p>
+    async fn describe_folder_permissions(
+        &self,
+        input: DescribeFolderPermissionsRequest,
+    ) -> Result<DescribeFolderPermissionsResponse, RusotoError<DescribeFolderPermissionsError>>;
+
+    /// <p>Describes the folder resolved permissions. Permissions consists of both folder direct permissions and the inherited permissions from the ancestor folders.</p>
+    async fn describe_folder_resolved_permissions(
+        &self,
+        input: DescribeFolderResolvedPermissionsRequest,
+    ) -> Result<
+        DescribeFolderResolvedPermissionsResponse,
+        RusotoError<DescribeFolderResolvedPermissionsError>,
+    >;
+
     /// <p>Returns an Amazon QuickSight group's description and Amazon Resource Name (ARN). </p>
     async fn describe_group(
         &self,
@@ -13530,6 +15082,18 @@ pub trait Quicksight {
         &self,
         input: ListDataSourcesRequest,
     ) -> Result<ListDataSourcesResponse, RusotoError<ListDataSourcesError>>;
+
+    /// <p>List all assets (<code>DASHBOARD</code>, <code>ANALYSIS</code>, and <code>DATASET</code>) in a folder. </p>
+    async fn list_folder_members(
+        &self,
+        input: ListFolderMembersRequest,
+    ) -> Result<ListFolderMembersResponse, RusotoError<ListFolderMembersError>>;
+
+    /// <p>Lists all folders in an account.</p>
+    async fn list_folders(
+        &self,
+        input: ListFoldersRequest,
+    ) -> Result<ListFoldersResponse, RusotoError<ListFoldersError>>;
 
     /// <p>Lists member users in a group.</p>
     async fn list_group_memberships(
@@ -13648,6 +15212,12 @@ pub trait Quicksight {
         input: SearchDashboardsRequest,
     ) -> Result<SearchDashboardsResponse, RusotoError<SearchDashboardsError>>;
 
+    /// <p>Searches the subfolders in a folder.</p>
+    async fn search_folders(
+        &self,
+        input: SearchFoldersRequest,
+    ) -> Result<SearchFoldersResponse, RusotoError<SearchFoldersError>>;
+
     /// <p><p>Assigns one or more tags (key-value pairs) to the specified QuickSight resource. </p> <p>Tags can help you organize and categorize your resources. You can also use them to scope user permissions, by granting a user permission to access or change only resources with certain tag values. You can use the <code>TagResource</code> operation with a resource that already has tags. If you specify a new tag key for the resource, this tag is appended to the list of tags associated with the resource. If you specify a tag key that is already associated with the resource, the new tag value that you specify replaces the previous value for that tag.</p> <p>You can associate as many as 50 tags with a resource. QuickSight supports tagging on data set, data source, dashboard, and template. </p> <p>Tagging for QuickSight works in a similar way to tagging for other AWS services, except for the following:</p> <ul> <li> <p>You can&#39;t use tags to track AWS costs for QuickSight. This restriction is because QuickSight costs are based on users and SPICE capacity, which aren&#39;t taggable resources.</p> </li> <li> <p>QuickSight doesn&#39;t currently support the Tag Editor for AWS Resource Groups.</p> </li> </ul></p>
     async fn tag_resource(
         &self,
@@ -13728,6 +15298,18 @@ pub trait Quicksight {
         &self,
         input: UpdateDataSourcePermissionsRequest,
     ) -> Result<UpdateDataSourcePermissionsResponse, RusotoError<UpdateDataSourcePermissionsError>>;
+
+    /// <p>Updates the name of a folder.</p>
+    async fn update_folder(
+        &self,
+        input: UpdateFolderRequest,
+    ) -> Result<UpdateFolderResponse, RusotoError<UpdateFolderError>>;
+
+    /// <p>Updates permissions of a folder.</p>
+    async fn update_folder_permissions(
+        &self,
+        input: UpdateFolderPermissionsRequest,
+    ) -> Result<UpdateFolderPermissionsResponse, RusotoError<UpdateFolderPermissionsError>>;
 
     /// <p>Changes a group description. </p>
     async fn update_group(
@@ -14038,6 +15620,76 @@ impl Quicksight for QuicksightClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CreateDataSourceError::from_response(response))
+        }
+    }
+
+    /// <p>Creates an empty shared folder.</p>
+    #[allow(unused_mut)]
+    async fn create_folder(
+        &self,
+        input: CreateFolderRequest,
+    ) -> Result<CreateFolderResponse, RusotoError<CreateFolderError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/folders/{folder_id}",
+            aws_account_id = input.aws_account_id,
+            folder_id = input.folder_id
+        );
+
+        let mut request = SignedRequest::new("POST", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateFolderResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateFolderError::from_response(response))
+        }
+    }
+
+    /// <p>Adds an asset, such as a dashboard, analysis, or dataset into a folder.</p>
+    #[allow(unused_mut)]
+    async fn create_folder_membership(
+        &self,
+        input: CreateFolderMembershipRequest,
+    ) -> Result<CreateFolderMembershipResponse, RusotoError<CreateFolderMembershipError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/folders/{folder_id}/members/{member_type}/{member_id}",
+            aws_account_id = input.aws_account_id,
+            folder_id = input.folder_id,
+            member_id = input.member_id,
+            member_type = input.member_type
+        );
+
+        let mut request = SignedRequest::new("PUT", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateFolderMembershipResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateFolderMembershipError::from_response(response))
         }
     }
 
@@ -14541,6 +16193,73 @@ impl Quicksight for QuicksightClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteDataSourceError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes an empty folder.</p>
+    #[allow(unused_mut)]
+    async fn delete_folder(
+        &self,
+        input: DeleteFolderRequest,
+    ) -> Result<DeleteFolderResponse, RusotoError<DeleteFolderError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/folders/{folder_id}",
+            aws_account_id = input.aws_account_id,
+            folder_id = input.folder_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteFolderResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteFolderError::from_response(response))
+        }
+    }
+
+    /// <p>Removes an asset, such as a dashboard, analysis, or dataset, from a folder.</p>
+    #[allow(unused_mut)]
+    async fn delete_folder_membership(
+        &self,
+        input: DeleteFolderMembershipRequest,
+    ) -> Result<DeleteFolderMembershipResponse, RusotoError<DeleteFolderMembershipError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/folders/{folder_id}/members/{member_type}/{member_id}",
+            aws_account_id = input.aws_account_id,
+            folder_id = input.folder_id,
+            member_id = input.member_id,
+            member_type = input.member_type
+        );
+
+        let mut request = SignedRequest::new("DELETE", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DeleteFolderMembershipResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteFolderMembershipError::from_response(response))
         }
     }
 
@@ -15237,6 +16956,111 @@ impl Quicksight for QuicksightClient {
         }
     }
 
+    /// <p>Describes a folder.</p>
+    #[allow(unused_mut)]
+    async fn describe_folder(
+        &self,
+        input: DescribeFolderRequest,
+    ) -> Result<DescribeFolderResponse, RusotoError<DescribeFolderError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/folders/{folder_id}",
+            aws_account_id = input.aws_account_id,
+            folder_id = input.folder_id
+        );
+
+        let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeFolderResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeFolderError::from_response(response))
+        }
+    }
+
+    /// <p>Describes permissions for a folder.</p>
+    #[allow(unused_mut)]
+    async fn describe_folder_permissions(
+        &self,
+        input: DescribeFolderPermissionsRequest,
+    ) -> Result<DescribeFolderPermissionsResponse, RusotoError<DescribeFolderPermissionsError>>
+    {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/folders/{folder_id}/permissions",
+            aws_account_id = input.aws_account_id,
+            folder_id = input.folder_id
+        );
+
+        let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeFolderPermissionsResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeFolderPermissionsError::from_response(response))
+        }
+    }
+
+    /// <p>Describes the folder resolved permissions. Permissions consists of both folder direct permissions and the inherited permissions from the ancestor folders.</p>
+    #[allow(unused_mut)]
+    async fn describe_folder_resolved_permissions(
+        &self,
+        input: DescribeFolderResolvedPermissionsRequest,
+    ) -> Result<
+        DescribeFolderResolvedPermissionsResponse,
+        RusotoError<DescribeFolderResolvedPermissionsError>,
+    > {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/folders/{folder_id}/resolved-permissions",
+            aws_account_id = input.aws_account_id,
+            folder_id = input.folder_id
+        );
+
+        let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeFolderResolvedPermissionsResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeFolderResolvedPermissionsError::from_response(
+                response,
+            ))
+        }
+    }
+
     /// <p>Returns an Amazon QuickSight group's description and Amazon Resource Name (ARN). </p>
     #[allow(unused_mut)]
     async fn describe_group(
@@ -15928,6 +17752,89 @@ impl Quicksight for QuicksightClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ListDataSourcesError::from_response(response))
+        }
+    }
+
+    /// <p>List all assets (<code>DASHBOARD</code>, <code>ANALYSIS</code>, and <code>DATASET</code>) in a folder. </p>
+    #[allow(unused_mut)]
+    async fn list_folder_members(
+        &self,
+        input: ListFolderMembersRequest,
+    ) -> Result<ListFolderMembersResponse, RusotoError<ListFolderMembersError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/folders/{folder_id}/members",
+            aws_account_id = input.aws_account_id,
+            folder_id = input.folder_id
+        );
+
+        let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("max-results", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("next-token", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListFolderMembersResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListFolderMembersError::from_response(response))
+        }
+    }
+
+    /// <p>Lists all folders in an account.</p>
+    #[allow(unused_mut)]
+    async fn list_folders(
+        &self,
+        input: ListFoldersRequest,
+    ) -> Result<ListFoldersResponse, RusotoError<ListFoldersError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/folders",
+            aws_account_id = input.aws_account_id
+        );
+
+        let mut request = SignedRequest::new("GET", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("max-results", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("next-token", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListFoldersResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListFoldersError::from_response(response))
         }
     }
 
@@ -16696,6 +18603,41 @@ impl Quicksight for QuicksightClient {
         }
     }
 
+    /// <p>Searches the subfolders in a folder.</p>
+    #[allow(unused_mut)]
+    async fn search_folders(
+        &self,
+        input: SearchFoldersRequest,
+    ) -> Result<SearchFoldersResponse, RusotoError<SearchFoldersError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/search/folders",
+            aws_account_id = input.aws_account_id
+        );
+
+        let mut request = SignedRequest::new("POST", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<SearchFoldersResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(SearchFoldersError::from_response(response))
+        }
+    }
+
     /// <p><p>Assigns one or more tags (key-value pairs) to the specified QuickSight resource. </p> <p>Tags can help you organize and categorize your resources. You can also use them to scope user permissions, by granting a user permission to access or change only resources with certain tag values. You can use the <code>TagResource</code> operation with a resource that already has tags. If you specify a new tag key for the resource, this tag is appended to the list of tags associated with the resource. If you specify a tag key that is already associated with the resource, the new tag value that you specify replaces the previous value for that tag.</p> <p>You can associate as many as 50 tags with a resource. QuickSight supports tagging on data set, data source, dashboard, and template. </p> <p>Tagging for QuickSight works in a similar way to tagging for other AWS services, except for the following:</p> <ul> <li> <p>You can&#39;t use tags to track AWS costs for QuickSight. This restriction is because QuickSight costs are based on users and SPICE capacity, which aren&#39;t taggable resources.</p> </li> <li> <p>QuickSight doesn&#39;t currently support the Tag Editor for AWS Resource Groups.</p> </li> </ul></p>
     #[allow(unused_mut)]
     async fn tag_resource(
@@ -17172,6 +19114,77 @@ impl Quicksight for QuicksightClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateDataSourcePermissionsError::from_response(response))
+        }
+    }
+
+    /// <p>Updates the name of a folder.</p>
+    #[allow(unused_mut)]
+    async fn update_folder(
+        &self,
+        input: UpdateFolderRequest,
+    ) -> Result<UpdateFolderResponse, RusotoError<UpdateFolderError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/folders/{folder_id}",
+            aws_account_id = input.aws_account_id,
+            folder_id = input.folder_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let mut result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateFolderResponse, _>()?;
+
+            result.status = Some(response.status.as_u16() as i64);
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateFolderError::from_response(response))
+        }
+    }
+
+    /// <p>Updates permissions of a folder.</p>
+    #[allow(unused_mut)]
+    async fn update_folder_permissions(
+        &self,
+        input: UpdateFolderPermissionsRequest,
+    ) -> Result<UpdateFolderPermissionsResponse, RusotoError<UpdateFolderPermissionsError>> {
+        let request_uri = format!(
+            "/accounts/{aws_account_id}/folders/{folder_id}/permissions",
+            aws_account_id = input.aws_account_id,
+            folder_id = input.folder_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "quicksight", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateFolderPermissionsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateFolderPermissionsError::from_response(response))
         }
     }
 

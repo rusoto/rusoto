@@ -150,7 +150,7 @@ pub struct ChannelActivity {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ChannelMessages {
-    /// <p>Specifies one or more keys that identify the Amazon Simple Storage Service (Amazon S3) objects that save your channel messages.</p>
+    /// <p>Specifies one or more keys that identify the Amazon Simple Storage Service (Amazon S3) objects that save your channel messages.</p> <p>You must use the full path for the key.</p> <p>Example path: <code>channel/mychannel/__dt=2020-02-29 00:00:00/1582940490000_1582940520000_123456789012_mychannel_0_2118.0.json.gz</code> </p>
     #[serde(rename = "s3Paths")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s_3_paths: Option<Vec<String>>,
@@ -368,6 +368,10 @@ pub struct CreateDatastoreRequest {
     /// <p>The name of the data store.</p>
     #[serde(rename = "datastoreName")]
     pub datastore_name: String,
+    /// <p> Contains information about the partitions in a data store. </p>
+    #[serde(rename = "datastorePartitions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub datastore_partitions: Option<DatastorePartitions>,
     /// <p>Where data store data is stored. You can choose one of <code>serviceManagedS3</code> or <code>customerManagedS3</code> storage. If not specified, the default is <code>serviceManagedS3</code>. You cannot change this storage option after the data store is created.</p>
     #[serde(rename = "datastoreStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -720,6 +724,10 @@ pub struct Datastore {
     #[serde(rename = "creationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
+    /// <p> Contains information about the partitions in a data store. </p>
+    #[serde(rename = "datastorePartitions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub datastore_partitions: Option<DatastorePartitions>,
     /// <p>Contains the configuration information of file formats. AWS IoT Analytics data stores support JSON and <a href="https://parquet.apache.org/">Parquet</a>.</p> <p>The default file format is JSON. You can specify only one format.</p> <p>You can't change the file format after you create the data store.</p>
     #[serde(rename = "fileFormatConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -759,6 +767,28 @@ pub struct DatastoreActivity {
     /// <p>The name of the datastore activity.</p>
     #[serde(rename = "name")]
     pub name: String,
+}
+
+/// <p> A single partition in a data store. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct DatastorePartition {
+    /// <p> A partition defined by an <code>attributeName</code>. </p>
+    #[serde(rename = "attributePartition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attribute_partition: Option<Partition>,
+    /// <p> A partition defined by an <code>attributeName</code> and a timestamp format. </p>
+    #[serde(rename = "timestampPartition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timestamp_partition: Option<TimestampPartition>,
+}
+
+/// <p> Contains information about partitions in a data store. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct DatastorePartitions {
+    /// <p> A list of partitions in a data store. </p>
+    #[serde(rename = "partitions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub partitions: Option<Vec<DatastorePartition>>,
 }
 
 /// <p>Statistical information about the data store.</p>
@@ -810,6 +840,10 @@ pub struct DatastoreSummary {
     #[serde(rename = "datastoreName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub datastore_name: Option<String>,
+    /// <p> Contains information about the partitions in a data store. </p>
+    #[serde(rename = "datastorePartitions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub datastore_partitions: Option<DatastorePartitions>,
     /// <p>Where data store data is stored.</p>
     #[serde(rename = "datastoreStorage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1394,6 +1428,14 @@ pub struct ParquetConfiguration {
     pub schema_definition: Option<SchemaDefinition>,
 }
 
+/// <p> A single partition. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Partition {
+    /// <p> The attribute name of the partition. </p>
+    #[serde(rename = "attributeName")]
+    pub attribute_name: String,
+}
+
 /// <p>Contains information about a pipeline.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1663,7 +1705,7 @@ pub struct Schedule {
 /// <p>Information needed to define a schema.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SchemaDefinition {
-    /// <p>Specifies one or more columns that store your data.</p> <p>Each schema can have up to 100 columns. Each column can have up to 100 nested types</p>
+    /// <p>Specifies one or more columns that store your data.</p> <p>Each schema can have up to 100 columns. Each column can have up to 100 nested types.</p>
     #[serde(rename = "columns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub columns: Option<Vec<Column>>,
@@ -1768,6 +1810,18 @@ pub struct TagResourceRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
+
+/// <p> A partition defined by a timestamp. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct TimestampPartition {
+    /// <p> The attribute name of the partition defined by a timestamp. </p>
+    #[serde(rename = "attributeName")]
+    pub attribute_name: String,
+    /// <p> The timestamp format of a partition defined by a timestamp. </p>
+    #[serde(rename = "timestampFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timestamp_format: Option<String>,
+}
 
 /// <p>Information about the dataset whose content generation triggers the new dataset content generation.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
@@ -3864,7 +3918,7 @@ pub trait IotAnalytics {
         input: CreateDatasetContentRequest,
     ) -> Result<CreateDatasetContentResponse, RusotoError<CreateDatasetContentError>>;
 
-    /// <p>Creates a data store, which is a repository for messages.</p>
+    /// <p>Creates a data store, which is a repository for messages. Only data stores that are used to save pipeline data can be configured with <code>ParquetConfiguration</code>.</p>
     async fn create_datastore(
         &self,
         input: CreateDatastoreRequest,
@@ -4237,7 +4291,7 @@ impl IotAnalytics for IotAnalyticsClient {
         }
     }
 
-    /// <p>Creates a data store, which is a repository for messages.</p>
+    /// <p>Creates a data store, which is a repository for messages. Only data stores that are used to save pipeline data can be configured with <code>ParquetConfiguration</code>.</p>
     #[allow(unused_mut)]
     async fn create_datastore(
         &self,

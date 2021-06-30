@@ -197,6 +197,10 @@ pub struct ClusterMetadata {
     #[serde(rename = "Notification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification: Option<Notification>,
+    /// <p>Represents metadata and configuration settings for services on an AWS Snow Family device.</p>
+    #[serde(rename = "OnDeviceServiceConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub on_device_service_configuration: Option<OnDeviceServiceConfiguration>,
     /// <p>The arrays of <a>JobResource</a> objects that can include updated <a>S3Resource</a> objects or <a>LambdaResource</a> objects.</p>
     #[serde(rename = "Resources")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -264,7 +268,7 @@ pub struct CreateClusterRequest {
     #[serde(rename = "ForwardingAddressId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub forwarding_address_id: Option<String>,
-    /// <p>The type of job for this cluster. Currently, the only job type supported for clusters is <code>LOCAL_USE</code>.</p>
+    /// <p>The type of job for this cluster. Currently, the only job type supported for clusters is <code>LOCAL_USE</code>.</p> <p>For more information, see "https://docs.aws.amazon.com/snowball/latest/snowcone-guide/snow-device-types.html" (Snow Family Devices and Capacity) in the <i>Snowcone User Guide</i> or "https://docs.aws.amazon.com/snowball/latest/developer-guide/snow-device-types.html" (Snow Family Devices and Capacity) in the <i>Snowcone User Guide</i>.</p>
     #[serde(rename = "JobType")]
     pub job_type: String,
     /// <p>The <code>KmsKeyARN</code> value that you want to associate with this cluster. <code>KmsKeyARN</code> values are created by using the <a href="https://docs.aws.amazon.com/kms/latest/APIReference/API_CreateKey.html">CreateKey</a> API action in AWS Key Management Service (AWS KMS). </p>
@@ -275,19 +279,26 @@ pub struct CreateClusterRequest {
     #[serde(rename = "Notification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification: Option<Notification>,
+    /// <p>Specifies the service or services on the Snow Family device that your transferred data will be exported from or imported into. AWS Snow Family supports Amazon S3 and NFS (Network File System).</p>
+    #[serde(rename = "OnDeviceServiceConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub on_device_service_configuration: Option<OnDeviceServiceConfiguration>,
+    /// <p>Allows you to securely operate and manage Snow devices in a cluster remotely from outside of your internal network. When set to <code>INSTALLED_AUTOSTART</code>, remote management will automatically be available when the device arrives at your location. Otherwise, you need to use the Snowball Client to manage the device.</p>
+    #[serde(rename = "RemoteManagement")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remote_management: Option<String>,
     /// <p>The resources associated with the cluster job. These resources include Amazon S3 buckets and optional AWS Lambda functions written in the Python language. </p>
     #[serde(rename = "Resources")]
     pub resources: JobResource,
     /// <p>The <code>RoleARN</code> that you want to associate with this cluster. <code>RoleArn</code> values are created by using the <a href="https://docs.aws.amazon.com/IAM/latest/APIReference/API_CreateRole.html">CreateRole</a> API action in AWS Identity and Access Management (IAM).</p>
     #[serde(rename = "RoleARN")]
     pub role_arn: String,
-    /// <p><p>The shipping speed for each node in this cluster. This speed doesn&#39;t dictate how soon you&#39;ll get each Snowball Edge device, rather it represents how quickly each device moves to its destination while in transit. Regional shipping speeds are as follows: </p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, Snow devices shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snow devices shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snow device are delivered in one to seven days.</p> </li> <li> <p>In the United States of America (US), you have access to one-day shipping and two-day shipping.</p> </li> </ul> <ul> <li> <p>In Australia, you have access to express shipping. Typically, devices shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snow devices shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snow device are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul></p>
+    /// <p><p>The shipping speed for each node in this cluster. This speed doesn&#39;t dictate how soon you&#39;ll get each Snowball Edge device, rather it represents how quickly each device moves to its destination while in transit. Regional shipping speeds are as follows: </p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, Snow devices shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snow devices shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snow devices are delivered in one to seven days.</p> </li> <li> <p>In the United States of America (US), you have access to one-day shipping and two-day shipping.</p> </li> </ul> <ul> <li> <p>In Australia, you have access to express shipping. Typically, devices shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snow devices shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snow devices are delivered in one to seven days.</p> </li> <li> <p>In the US, you have access to one-day shipping and two-day shipping.</p> </li> </ul></p>
     #[serde(rename = "ShippingOption")]
     pub shipping_option: String,
-    /// <p><p>The type of AWS Snow Family device to use for this cluster. </p> <note> <p>For cluster jobs, AWS Snow Family currently supports only the <code>EDGE</code> device type.</p> </note></p>
+    /// <p>The type of AWS Snow Family device to use for this cluster. </p> <note> <p>For cluster jobs, AWS Snow Family currently supports only the <code>EDGE</code> device type.</p> </note> <p>For more information, see "https://docs.aws.amazon.com/snowball/latest/snowcone-guide/snow-device-types.html" (Snow Family Devices and Capacity) in the <i>Snowcone User Guide</i> or "https://docs.aws.amazon.com/snowball/latest/developer-guide/snow-device-types.html" (Snow Family Devices and Capacity) in the <i>Snowcone User Guide</i>.</p>
     #[serde(rename = "SnowballType")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub snowball_type: Option<String>,
+    pub snowball_type: String,
     /// <p>The tax documents required in your AWS Region.</p>
     #[serde(rename = "TaxDocuments")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -318,11 +329,11 @@ pub struct CreateJobRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Defines the device configuration for an AWS Snowcone job.</p>
+    /// <p>Defines the device configuration for an AWS Snowcone job.</p> <p>For more information, see "https://docs.aws.amazon.com/snowball/latest/snowcone-guide/snow-device-types.html" (Snow Family Devices and Capacity) in the <i>Snowcone User Guide</i> or "https://docs.aws.amazon.com/snowball/latest/developer-guide/snow-device-types.html" (Snow Family Devices and Capacity) in the <i>Snowcone User Guide</i>.</p>
     #[serde(rename = "DeviceConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub device_configuration: Option<DeviceConfiguration>,
-    /// <p>The forwarding address ID for a job. This field is not supported in most regions.</p>
+    /// <p>The forwarding address ID for a job. This field is not supported in most Regions.</p>
     #[serde(rename = "ForwardingAddressId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub forwarding_address_id: Option<String>,
@@ -334,10 +345,22 @@ pub struct CreateJobRequest {
     #[serde(rename = "KmsKeyARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_arn: Option<String>,
+    /// <p>The ID of the long-term pricing type for the device.</p>
+    #[serde(rename = "LongTermPricingId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub long_term_pricing_id: Option<String>,
     /// <p>Defines the Amazon Simple Notification Service (Amazon SNS) notification settings for this job.</p>
     #[serde(rename = "Notification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification: Option<Notification>,
+    /// <p>Specifies the service or services on the Snow Family device that your transferred data will be exported from or imported into. AWS Snow Family supports Amazon S3 and NFS (Network File System).</p>
+    #[serde(rename = "OnDeviceServiceConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub on_device_service_configuration: Option<OnDeviceServiceConfiguration>,
+    /// <p>Allows you to securely operate and manage Snowcone devices remotely from outside of your internal network. When set to <code>INSTALLED_AUTOSTART</code>, remote management will automatically be available when the device arrives at your location. Otherwise, you need to use the Snowball Client to manage the device.</p>
+    #[serde(rename = "RemoteManagement")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remote_management: Option<String>,
     /// <p>Defines the Amazon S3 buckets associated with this job.</p> <p>With <code>IMPORT</code> jobs, you specify the bucket or buckets that your transferred data will be imported into.</p> <p>With <code>EXPORT</code> jobs, you specify the bucket or buckets that your transferred data will be exported from. Optionally, you can also specify a <code>KeyRange</code> value. If you choose to export a range, you define the length of the range by providing either an inclusive <code>BeginMarker</code> value, an inclusive <code>EndMarker</code> value, or both. Ranges are UTF-8 binary sorted.</p>
     #[serde(rename = "Resources")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -350,11 +373,11 @@ pub struct CreateJobRequest {
     #[serde(rename = "ShippingOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub shipping_option: Option<String>,
-    /// <p>If your job is being created in one of the US regions, you have the option of specifying what size Snow device you'd like for this job. In all other regions, Snowballs come with 80 TB in storage capacity.</p>
+    /// <p>If your job is being created in one of the US regions, you have the option of specifying what size Snow device you'd like for this job. In all other regions, Snowballs come with 80 TB in storage capacity.</p> <p>For more information, see "https://docs.aws.amazon.com/snowball/latest/snowcone-guide/snow-device-types.html" (Snow Family Devices and Capacity) in the <i>Snowcone User Guide</i> or "https://docs.aws.amazon.com/snowball/latest/developer-guide/snow-device-types.html" (Snow Family Devices and Capacity) in the <i>Snowcone User Guide</i>.</p>
     #[serde(rename = "SnowballCapacityPreference")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowball_capacity_preference: Option<String>,
-    /// <p>The type of AWS Snow Family device to use for this job. </p> <note> <p>For cluster jobs, AWS Snow Family currently supports only the <code>EDGE</code> device type.</p> </note> <p>The type of AWS Snow device to use for this job. Currently, the only supported device type for cluster jobs is <code>EDGE</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/snowball/latest/developer-guide/device-differences.html">Snowball Edge Device Options</a> in the Snowball Edge Developer Guide.</p>
+    /// <p>The type of AWS Snow Family device to use for this job. </p> <note> <p>For cluster jobs, AWS Snow Family currently supports only the <code>EDGE</code> device type.</p> </note> <p>The type of AWS Snow device to use for this job. Currently, the only supported device type for cluster jobs is <code>EDGE</code>.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/snowball/latest/developer-guide/device-differences.html">Snowball Edge Device Options</a> in the Snowball Edge Developer Guide.</p> <p>For more information, see "https://docs.aws.amazon.com/snowball/latest/snowcone-guide/snow-device-types.html" (Snow Family Devices and Capacity) in the <i>Snowcone User Guide</i> or "https://docs.aws.amazon.com/snowball/latest/developer-guide/snow-device-types.html" (Snow Family Devices and Capacity) in the <i>Snowcone User Guide</i>.</p>
     #[serde(rename = "SnowballType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowball_type: Option<String>,
@@ -375,8 +398,33 @@ pub struct CreateJobResult {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateLongTermPricingRequest {
+    /// <p>Specifies whether the current long-term pricing type for the device should be renewed.</p>
+    #[serde(rename = "IsLongTermPricingAutoRenew")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_long_term_pricing_auto_renew: Option<bool>,
+    /// <p>The type of long-term pricing option you want for the device, either 1-year or 3-year long-term pricing.</p>
+    #[serde(rename = "LongTermPricingType")]
+    pub long_term_pricing_type: String,
+    /// <p>The type of AWS Snow Family device to use for the long-term pricing job.</p>
+    #[serde(rename = "SnowballType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub snowball_type: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateLongTermPricingResult {
+    /// <p>The ID of the long-term pricing type for the device.</p>
+    #[serde(rename = "LongTermPricingId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub long_term_pricing_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateReturnShippingLabelRequest {
-    /// <p>The ID for a job that you want to create the return shipping label for. For example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>
+    /// <p>The ID for a job that you want to create the return shipping label for; for example, <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>
     #[serde(rename = "JobId")]
     pub job_id: String,
     /// <p>The shipping speed for a particular job. This speed doesn't dictate how soon the device is returned to AWS. This speed represents how quickly it moves to its destination while in transit. Regional shipping speeds are as follows:</p>
@@ -502,8 +550,7 @@ pub struct DescribeJobResult {
 pub struct DescribeReturnShippingLabelRequest {
     /// <p>The automatically generated ID for a job, for example <code>JID123e4567-e89b-12d3-a456-426655440000</code>.</p>
     #[serde(rename = "JobId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub job_id: Option<String>,
+    pub job_id: String,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -577,7 +624,7 @@ pub struct GetJobUnlockCodeRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetJobUnlockCodeResult {
-    /// <p>The <code>UnlockCode</code> value for the specified job. The <code>UnlockCode</code> value can be accessed for up to 90 days after the job has been created.</p>
+    /// <p>The <code>UnlockCode</code> value for the specified job. The <code>UnlockCode</code> value can be accessed for up to 360 days after the job has been created.</p>
     #[serde(rename = "UnlockCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unlock_code: Option<String>,
@@ -729,10 +776,22 @@ pub struct JobMetadata {
     #[serde(rename = "KmsKeyARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_arn: Option<String>,
+    /// <p>The ID of the long-term pricing type for the device.</p>
+    #[serde(rename = "LongTermPricingId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub long_term_pricing_id: Option<String>,
     /// <p>The Amazon Simple Notification Service (Amazon SNS) notification settings associated with a specific job. The <code>Notification</code> object is returned as a part of the response syntax of the <code>DescribeJob</code> action in the <code>JobMetadata</code> data type.</p>
     #[serde(rename = "Notification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification: Option<Notification>,
+    /// <p>Represents metadata and configuration settings for services on an AWS Snow Family device.</p>
+    #[serde(rename = "OnDeviceServiceConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub on_device_service_configuration: Option<OnDeviceServiceConfiguration>,
+    /// <p>Allows you to securely operate and manage Snowcone devices remotely from outside of your internal network. When set to <code>INSTALLED_AUTOSTART</code>, remote management will automatically be available when the device arrives at your location. Otherwise, you need to use the Snowball Client to manage the device.</p>
+    #[serde(rename = "RemoteManagement")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remote_management: Option<String>,
     /// <p>An array of <code>S3Resource</code> objects. Each <code>S3Resource</code> object represents an Amazon S3 bucket that your transferred data will be exported from or imported into.</p>
     #[serde(rename = "Resources")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -745,7 +804,7 @@ pub struct JobMetadata {
     #[serde(rename = "ShippingDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub shipping_details: Option<ShippingDetails>,
-    /// <p>The Snow device capacity preference for this job, specified at job creation. In US regions, you can choose between 50 TB and 80 TB Snowballs. All other regions use 80 TB capacity Snowballs.</p>
+    /// <p>The Snow device capacity preference for this job, specified at job creation. In US regions, you can choose between 50 TB and 80 TB Snowballs. All other regions use 80 TB capacity Snowballs.</p> <p>For more information, see "https://docs.aws.amazon.com/snowball/latest/snowcone-guide/snow-device-types.html" (Snow Family Devices and Capacity) in the <i>Snowcone User Guide</i> or "https://docs.aws.amazon.com/snowball/latest/developer-guide/snow-device-types.html" (Snow Family Devices and Capacity) in the <i>Snowcone User Guide</i>.</p>
     #[serde(rename = "SnowballCapacityPreference")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowball_capacity_preference: Option<String>,
@@ -909,6 +968,91 @@ pub struct ListJobsResult {
     pub next_token: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListLongTermPricingRequest {
+    /// <p>The maximum number of <code>ListLongTermPricing</code> objects to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Because HTTP requests are stateless, this is the starting point for your next list of <code>ListLongTermPricing</code> to return.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListLongTermPricingResult {
+    /// <p>Each <code>LongTermPricingEntry</code> object contains a status, ID, and other information about the <code>LongTermPricing</code> type. </p>
+    #[serde(rename = "LongTermPricingEntries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub long_term_pricing_entries: Option<Vec<LongTermPricingListEntry>>,
+    /// <p>Because HTTP requests are stateless, this is the starting point for your next list of returned <code>ListLongTermPricing</code> list.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p>Each <code>LongTermPricingListEntry</code> object contains information about a long-term pricing type.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct LongTermPricingListEntry {
+    /// <p>The current active jobs on the device the long-term pricing type.</p>
+    #[serde(rename = "CurrentActiveJob")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_active_job: Option<String>,
+    /// <p>If set to <code>true</code>, specifies that the current long-term pricing type for the device should be automatically renewed before the long-term pricing contract expires.</p>
+    #[serde(rename = "IsLongTermPricingAutoRenew")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_long_term_pricing_auto_renew: Option<bool>,
+    /// <p>The IDs of the jobs that are associated with a long-term pricing type.</p>
+    #[serde(rename = "JobIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_ids: Option<Vec<String>>,
+    /// <p>The end date the long-term pricing contract.</p>
+    #[serde(rename = "LongTermPricingEndDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub long_term_pricing_end_date: Option<f64>,
+    /// <p>The ID of the long-term pricing type for the device.</p>
+    #[serde(rename = "LongTermPricingId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub long_term_pricing_id: Option<String>,
+    /// <p>The start date of the long-term pricing contract.</p>
+    #[serde(rename = "LongTermPricingStartDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub long_term_pricing_start_date: Option<f64>,
+    /// <p>The status of the long-term pricing type.</p>
+    #[serde(rename = "LongTermPricingStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub long_term_pricing_status: Option<String>,
+    /// <p>The type of long-term pricing that was selected for the device.</p>
+    #[serde(rename = "LongTermPricingType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub long_term_pricing_type: Option<String>,
+    /// <p>A new device that replaces a device that is ordered with long-term pricing.</p>
+    #[serde(rename = "ReplacementJob")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replacement_job: Option<String>,
+    /// <p>The type of AWS Snow Family device associated with this long-term pricing job.</p>
+    #[serde(rename = "SnowballType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub snowball_type: Option<String>,
+}
+
+/// <p>An object that represents metadata and configuration settings for NFS service on an AWS Snow Family device.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct NFSOnDeviceServiceConfiguration {
+    /// <p>The maximum NFS storage for one Snowball Family device.</p>
+    #[serde(rename = "StorageLimit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub storage_limit: Option<i64>,
+    /// <p>The scale unit of the NFS storage on the device.</p> <p>Valid values: TB.</p>
+    #[serde(rename = "StorageUnit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub storage_unit: Option<String>,
+}
+
 /// <p>The Amazon Simple Notification Service (Amazon SNS) notification settings associated with a specific job. The <code>Notification</code> object is returned as a part of the response syntax of the <code>DescribeJob</code> action in the <code>JobMetadata</code> data type.</p> <p>When the notification settings are defined during job creation, you can choose to notify based on a specific set of job states using the <code>JobStatesToNotify</code> array of strings, or you can specify that you want to have Amazon SNS notifications sent out for all job states with <code>NotifyAll</code> set to true.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Notification {
@@ -920,10 +1064,19 @@ pub struct Notification {
     #[serde(rename = "NotifyAll")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notify_all: Option<bool>,
-    /// <p>The new SNS <code>TopicArn</code> that you want to associate with this job. You can create Amazon Resource Names (ARNs) for topics by using the <a href="https://docs.aws.amazon.com/sns/latest/api/API_CreateTopic.html">CreateTopic</a> Amazon SNS API action.</p> <p>You can subscribe email addresses to an Amazon SNS topic through the AWS Management Console, or by using the <a href="https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html">Subscribe</a> AWS Simple Notification Service (SNS) API action.</p>
+    /// <p>The new SNS <code>TopicArn</code> that you want to associate with this job. You can create Amazon Resource Names (ARNs) for topics by using the <a href="https://docs.aws.amazon.com/sns/latest/api/API_CreateTopic.html">CreateTopic</a> Amazon SNS API action.</p> <p>You can subscribe email addresses to an Amazon SNS topic through the AWS Management Console, or by using the <a href="https://docs.aws.amazon.com/sns/latest/api/API_Subscribe.html">Subscribe</a> Amazon Simple Notification Service (Amazon SNS) API action.</p>
     #[serde(rename = "SnsTopicARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sns_topic_arn: Option<String>,
+}
+
+/// <p>An object that represents metadata and configuration settings for services on an AWS Snow Family device.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct OnDeviceServiceConfiguration {
+    /// <p>Represents the NFS service on a Snow Family device.</p>
+    #[serde(rename = "NFSOnDeviceService")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub nfs_on_device_service: Option<NFSOnDeviceServiceConfiguration>,
 }
 
 /// <p>Each <code>S3Resource</code> object represents an Amazon S3 bucket that your transferred data will be exported from or imported into. For export jobs, this object can have an optional <code>KeyRange</code> value. The length of the range is defined at job creation, and has either an inclusive <code>BeginMarker</code>, an inclusive <code>EndMarker</code>, or both. Ranges are UTF-8 binary sorted.</p>
@@ -937,6 +1090,10 @@ pub struct S3Resource {
     #[serde(rename = "KeyRange")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_range: Option<KeyRange>,
+    /// <p>Specifies the service or services on the Snow Family device that your transferred data will be exported from or imported into. AWS Snow Family supports Amazon S3 and NFS (Network File System).</p>
+    #[serde(rename = "TargetOnDeviceServices")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_on_device_services: Option<Vec<TargetOnDeviceService>>,
 }
 
 /// <p>The <code>Status</code> and <code>TrackingNumber</code> information for an inbound or outbound shipment.</p>
@@ -965,7 +1122,7 @@ pub struct ShippingDetails {
     #[serde(rename = "OutboundShipment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub outbound_shipment: Option<Shipment>,
-    /// <p><p>The shipping speed for a particular job. This speed doesn&#39;t dictate how soon you&#39;ll get the Snow device from the job&#39;s creation date. This speed represents how quickly it moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, Snow devices shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snow devices shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snow device are delivered in one to seven days.</p> </li> <li> <p>In the United States of America (US), you have access to one-day shipping and two-day shipping.</p> </li> </ul></p>
+    /// <p><p>The shipping speed for a particular job. This speed doesn&#39;t dictate how soon you&#39;ll get the Snow device from the job&#39;s creation date. This speed represents how quickly it moves to its destination while in transit. Regional shipping speeds are as follows:</p> <ul> <li> <p>In Australia, you have access to express shipping. Typically, Snow devices shipped express are delivered in about a day.</p> </li> <li> <p>In the European Union (EU), you have access to express shipping. Typically, Snow devices shipped express are delivered in about a day. In addition, most countries in the EU have access to standard shipping, which typically takes less than a week, one way.</p> </li> <li> <p>In India, Snow devices are delivered in one to seven days.</p> </li> <li> <p>In the United States of America (US), you have access to one-day shipping and two-day shipping.</p> </li> </ul></p>
     #[serde(rename = "ShippingOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub shipping_option: Option<String>,
@@ -978,6 +1135,19 @@ pub struct SnowconeDeviceConfiguration {
     #[serde(rename = "WirelessConnection")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub wireless_connection: Option<WirelessConnection>,
+}
+
+/// <p>An object that represents the service or services on the Snow Family device that your transferred data will be exported from or imported into. AWS Snow Family supports Amazon S3 and NFS (Network File System).</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct TargetOnDeviceService {
+    /// <p>Specifies the name of the service on the Snow Family device that your transferred data will be exported from or imported into.</p>
+    #[serde(rename = "ServiceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_name: Option<String>,
+    /// <p>Specifies whether the data is being imported or exported. You can import or export the data, or use it locally on the device.</p>
+    #[serde(rename = "TransferOption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transfer_option: Option<String>,
 }
 
 /// <p>The tax documents required in your AWS Region.</p>
@@ -1010,6 +1180,10 @@ pub struct UpdateClusterRequest {
     #[serde(rename = "Notification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification: Option<Notification>,
+    /// <p>Specifies the service or services on the Snow Family device that your transferred data will be exported from or imported into. AWS Snow Family supports Amazon S3 and NFS (Network File System).</p>
+    #[serde(rename = "OnDeviceServiceConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub on_device_service_configuration: Option<OnDeviceServiceConfiguration>,
     /// <p>The updated arrays of <a>JobResource</a> objects that can include updated <a>S3Resource</a> objects or <a>LambdaResource</a> objects.</p>
     #[serde(rename = "Resources")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1050,6 +1224,10 @@ pub struct UpdateJobRequest {
     #[serde(rename = "Notification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification: Option<Notification>,
+    /// <p>Specifies the service or services on the Snow Family device that your transferred data will be exported from or imported into. AWS Snow Family supports Amazon S3 and NFS (Network File System).</p>
+    #[serde(rename = "OnDeviceServiceConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub on_device_service_configuration: Option<OnDeviceServiceConfiguration>,
     /// <p>The updated <code>JobResource</code> object, or the updated <a>JobResource</a> object. </p>
     #[serde(rename = "Resources")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1062,7 +1240,7 @@ pub struct UpdateJobRequest {
     #[serde(rename = "ShippingOption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub shipping_option: Option<String>,
-    /// <p>The updated <code>SnowballCapacityPreference</code> of this job's <a>JobMetadata</a> object. The 50 TB Snowballs are only available in the US regions.</p>
+    /// <p>The updated <code>SnowballCapacityPreference</code> of this job's <a>JobMetadata</a> object. The 50 TB Snowballs are only available in the US regions.</p> <p>For more information, see "https://docs.aws.amazon.com/snowball/latest/snowcone-guide/snow-device-types.html" (Snow Family Devices and Capacity) in the <i>Snowcone User Guide</i> or "https://docs.aws.amazon.com/snowball/latest/developer-guide/snow-device-types.html" (Snow Family Devices and Capacity) in the <i>Snowcone User Guide</i>.</p>
     #[serde(rename = "SnowballCapacityPreference")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub snowball_capacity_preference: Option<String>,
@@ -1086,6 +1264,26 @@ pub struct UpdateJobShipmentStateRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateJobShipmentStateResult {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateLongTermPricingRequest {
+    /// <p>If set to <code>true</code>, specifies that the current long-term pricing type for the device should be automatically renewed before the long-term pricing contract expires.</p>
+    #[serde(rename = "IsLongTermPricingAutoRenew")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_long_term_pricing_auto_renew: Option<bool>,
+    /// <p>The ID of the long-term pricing type for the device.</p>
+    #[serde(rename = "LongTermPricingId")]
+    pub long_term_pricing_id: String,
+    /// <p>Specifies that a device that is ordered with long-term pricing should be replaced with a new device.</p>
+    #[serde(rename = "ReplacementJob")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replacement_job: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateLongTermPricingResult {}
 
 /// <p>Configures the wireless connection on an AWS Snowcone device.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
@@ -1269,7 +1467,7 @@ impl Error for CreateClusterError {}
 /// Errors returned by CreateJob
 #[derive(Debug, PartialEq)]
 pub enum CreateJobError {
-    /// <p>Job creation failed. Currently, clusters support five nodes. If you have less than five nodes for your cluster and you have more nodes to create for this cluster, try again and create jobs until your cluster has exactly five notes.</p>
+    /// <p>Job creation failed. Currently, clusters support five nodes. If you have fewer than five nodes for your cluster and you have more nodes to create for this cluster, try again and create jobs until your cluster has exactly five nodes.</p>
     ClusterLimitExceeded(String),
     /// <p>Your IAM user lacks the necessary Amazon EC2 permissions to perform the attempted action.</p>
     Ec2RequestFailed(String),
@@ -1320,6 +1518,38 @@ impl fmt::Display for CreateJobError {
     }
 }
 impl Error for CreateJobError {}
+/// Errors returned by CreateLongTermPricing
+#[derive(Debug, PartialEq)]
+pub enum CreateLongTermPricingError {
+    /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
+    InvalidResource(String),
+}
+
+impl CreateLongTermPricingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateLongTermPricingError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidResourceException" => {
+                    return RusotoError::Service(CreateLongTermPricingError::InvalidResource(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateLongTermPricingError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateLongTermPricingError::InvalidResource(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateLongTermPricingError {}
 /// Errors returned by CreateReturnShippingLabel
 #[derive(Debug, PartialEq)]
 pub enum CreateReturnShippingLabelError {
@@ -1828,6 +2058,44 @@ impl fmt::Display for ListJobsError {
     }
 }
 impl Error for ListJobsError {}
+/// Errors returned by ListLongTermPricing
+#[derive(Debug, PartialEq)]
+pub enum ListLongTermPricingError {
+    /// <p>The <code>NextToken</code> string was altered unexpectedly, and the operation has stopped. Run the operation without changing the <code>NextToken</code> string, and try again.</p>
+    InvalidNextToken(String),
+    /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
+    InvalidResource(String),
+}
+
+impl ListLongTermPricingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListLongTermPricingError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidNextTokenException" => {
+                    return RusotoError::Service(ListLongTermPricingError::InvalidNextToken(
+                        err.msg,
+                    ))
+                }
+                "InvalidResourceException" => {
+                    return RusotoError::Service(ListLongTermPricingError::InvalidResource(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListLongTermPricingError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListLongTermPricingError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListLongTermPricingError::InvalidResource(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListLongTermPricingError {}
 /// Errors returned by UpdateCluster
 #[derive(Debug, PartialEq)]
 pub enum UpdateClusterError {
@@ -1887,7 +2155,7 @@ impl Error for UpdateClusterError {}
 /// Errors returned by UpdateJob
 #[derive(Debug, PartialEq)]
 pub enum UpdateJobError {
-    /// <p>Job creation failed. Currently, clusters support five nodes. If you have less than five nodes for your cluster and you have more nodes to create for this cluster, try again and create jobs until your cluster has exactly five notes.</p>
+    /// <p>Job creation failed. Currently, clusters support five nodes. If you have fewer than five nodes for your cluster and you have more nodes to create for this cluster, try again and create jobs until your cluster has exactly five nodes.</p>
     ClusterLimitExceeded(String),
     /// <p>Your IAM user lacks the necessary Amazon EC2 permissions to perform the attempted action.</p>
     Ec2RequestFailed(String),
@@ -1984,6 +2252,38 @@ impl fmt::Display for UpdateJobShipmentStateError {
     }
 }
 impl Error for UpdateJobShipmentStateError {}
+/// Errors returned by UpdateLongTermPricing
+#[derive(Debug, PartialEq)]
+pub enum UpdateLongTermPricingError {
+    /// <p>The specified resource can't be found. Check the information you provided in your last request, and try again.</p>
+    InvalidResource(String),
+}
+
+impl UpdateLongTermPricingError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateLongTermPricingError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidResourceException" => {
+                    return RusotoError::Service(UpdateLongTermPricingError::InvalidResource(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateLongTermPricingError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateLongTermPricingError::InvalidResource(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateLongTermPricingError {}
 /// Trait representing the capabilities of the Amazon Snowball API. Amazon Snowball clients implement this trait.
 #[async_trait]
 pub trait Snowball {
@@ -2011,11 +2311,17 @@ pub trait Snowball {
         input: CreateClusterRequest,
     ) -> Result<CreateClusterResult, RusotoError<CreateClusterError>>;
 
-    /// <p>Creates a job to import or export data between Amazon S3 and your on-premises data center. Your AWS account must have the right trust policies and permissions in place to create a job for a Snow device. If you're creating a job for a node in a cluster, you only need to provide the <code>clusterId</code> value; the other job attributes are inherited from the cluster. </p>
+    /// <p><p>Creates a job to import or export data between Amazon S3 and your on-premises data center. Your AWS account must have the right trust policies and permissions in place to create a job for a Snow device. If you&#39;re creating a job for a node in a cluster, you only need to provide the <code>clusterId</code> value; the other job attributes are inherited from the cluster. </p> <note> <p>Only the Snowball; Edge device type is supported when ordering clustered jobs.</p> <p>The device capacity is optional.</p> <p>Availability of device types differ by AWS Region. For more information about Region availability, see <a href="https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/?p=ngi&amp;loc=4">AWS Regional Services</a>.</p> </note> <p/> <p class="title"> <b>AWS Snow Family device types and their capacities.</b> </p> <ul> <li> <p>Snow Family device type: <b>SNC1<em>SSD</b> </p> <ul> <li> <p>Capacity: T14</p> </li> <li> <p>Description: Snowcone </p> </li> </ul> <p/> </li> <li> <p>Snow Family device type: <b>SNC1</em>HDD</b> </p> <ul> <li> <p>Capacity: T8</p> </li> <li> <p>Description: Snowcone </p> </li> </ul> <p/> </li> <li> <p>Device type: <b>EDGE<em>S</b> </p> <ul> <li> <p>Capacity: T98</p> </li> <li> <p>Description: Snowball Edge Storage Optimized for data transfer only </p> </li> </ul> <p/> </li> <li> <p>Device type: <b>EDGE</em>CG</b> </p> <ul> <li> <p>Capacity: T42</p> </li> <li> <p>Description: Snowball Edge Compute Optimized with GPU</p> </li> </ul> <p/> </li> <li> <p>Device type: <b>EDGE_C</b> </p> <ul> <li> <p>Capacity: T42</p> </li> <li> <p>Description: Snowball Edge Compute Optimized without GPU</p> </li> </ul> <p/> </li> <li> <p>Device type: <b>EDGE</b> </p> <ul> <li> <p>Capacity: T100</p> </li> <li> <p>Description: Snowball Edge Storage Optimized with EC2 Compute</p> </li> </ul> <p/> </li> <li> <p>Device type: <b>STANDARD</b> </p> <ul> <li> <p>Capacity: T50</p> </li> <li> <p>Description: Original Snowball device</p> <note> <p>This device is only available in the Ningxia, Beijing, and Singapore AWS Regions. </p> </note> </li> </ul> <p/> </li> <li> <p>Device type: <b>STANDARD</b> </p> <ul> <li> <p>Capacity: T80</p> </li> <li> <p>Description: Original Snowball device</p> <note> <p>This device is only available in the Ningxia, Beijing, and Singapore AWS Regions. </p> </note> </li> </ul> <p/> </li> </ul></p>
     async fn create_job(
         &self,
         input: CreateJobRequest,
     ) -> Result<CreateJobResult, RusotoError<CreateJobError>>;
+
+    /// <p>Creates a job with the long-term usage option for a device. The long-term usage is a 1-year or 3-year long-term pricing type for the device. You are billed upfront, and AWS provides discounts for long-term pricing. </p>
+    async fn create_long_term_pricing(
+        &self,
+        input: CreateLongTermPricingRequest,
+    ) -> Result<CreateLongTermPricingResult, RusotoError<CreateLongTermPricingError>>;
 
     /// <p>Creates a shipping label that will be used to return the Snow device to AWS.</p>
     async fn create_return_shipping_label(
@@ -2053,13 +2359,13 @@ pub trait Snowball {
         input: DescribeReturnShippingLabelRequest,
     ) -> Result<DescribeReturnShippingLabelResult, RusotoError<DescribeReturnShippingLabelError>>;
 
-    /// <p>Returns a link to an Amazon S3 presigned URL for the manifest file associated with the specified <code>JobId</code> value. You can access the manifest file for up to 60 minutes after this request has been made. To access the manifest file after 60 minutes have passed, you'll have to make another call to the <code>GetJobManifest</code> action.</p> <p>The manifest is an encrypted file that you can download after your job enters the <code>WithCustomer</code> status. The manifest is decrypted by using the <code>UnlockCode</code> code value, when you pass both values to the Snow device through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of an <code>UnlockCode</code> value in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snow device associated with that job.</p> <p>The credentials of a given job, including its manifest file and unlock code, expire 90 days after the job is created.</p>
+    /// <p>Returns a link to an Amazon S3 presigned URL for the manifest file associated with the specified <code>JobId</code> value. You can access the manifest file for up to 60 minutes after this request has been made. To access the manifest file after 60 minutes have passed, you'll have to make another call to the <code>GetJobManifest</code> action.</p> <p>The manifest is an encrypted file that you can download after your job enters the <code>WithCustomer</code> status. The manifest is decrypted by using the <code>UnlockCode</code> code value, when you pass both values to the Snow device through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of an <code>UnlockCode</code> value in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snow device associated with that job.</p> <p>The credentials of a given job, including its manifest file and unlock code, expire 360 days after the job is created.</p>
     async fn get_job_manifest(
         &self,
         input: GetJobManifestRequest,
     ) -> Result<GetJobManifestResult, RusotoError<GetJobManifestError>>;
 
-    /// <p>Returns the <code>UnlockCode</code> code value for the specified job. A particular <code>UnlockCode</code> value can be accessed for up to 90 days after the associated job has been created.</p> <p>The <code>UnlockCode</code> value is a 29-character code with 25 alphanumeric characters and 4 hyphens. This code is used to decrypt the manifest file when it is passed along with the manifest to the Snow device through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of the <code>UnlockCode</code> in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snow device associated with that job.</p>
+    /// <p>Returns the <code>UnlockCode</code> code value for the specified job. A particular <code>UnlockCode</code> value can be accessed for up to 360 days after the associated job has been created.</p> <p>The <code>UnlockCode</code> value is a 29-character code with 25 alphanumeric characters and 4 hyphens. This code is used to decrypt the manifest file when it is passed along with the manifest to the Snow device through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of the <code>UnlockCode</code> in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snow device associated with that job.</p>
     async fn get_job_unlock_code(
         &self,
         input: GetJobUnlockCodeRequest,
@@ -2100,6 +2406,12 @@ pub trait Snowball {
         input: ListJobsRequest,
     ) -> Result<ListJobsResult, RusotoError<ListJobsError>>;
 
+    /// <p>Lists all long-term pricing types.</p>
+    async fn list_long_term_pricing(
+        &self,
+        input: ListLongTermPricingRequest,
+    ) -> Result<ListLongTermPricingResult, RusotoError<ListLongTermPricingError>>;
+
     /// <p>While a cluster's <code>ClusterState</code> value is in the <code>AwaitingQuorum</code> state, you can update some of the information associated with a cluster. Once the cluster changes to a different job state, usually 60 minutes after the cluster being created, this action is no longer available.</p>
     async fn update_cluster(
         &self,
@@ -2112,11 +2424,17 @@ pub trait Snowball {
         input: UpdateJobRequest,
     ) -> Result<UpdateJobResult, RusotoError<UpdateJobError>>;
 
-    /// <p>Updates the state when a the shipment states changes to a different state.</p>
+    /// <p>Updates the state when a shipment state changes to a different state.</p>
     async fn update_job_shipment_state(
         &self,
         input: UpdateJobShipmentStateRequest,
     ) -> Result<UpdateJobShipmentStateResult, RusotoError<UpdateJobShipmentStateError>>;
+
+    /// <p>Updates the long-term pricing type.</p>
+    async fn update_long_term_pricing(
+        &self,
+        input: UpdateLongTermPricingRequest,
+    ) -> Result<UpdateLongTermPricingResult, RusotoError<UpdateLongTermPricingError>>;
 }
 /// A client for the Amazon Snowball API.
 #[derive(Clone)]
@@ -2242,7 +2560,7 @@ impl Snowball for SnowballClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateClusterResult, _>()
     }
 
-    /// <p>Creates a job to import or export data between Amazon S3 and your on-premises data center. Your AWS account must have the right trust policies and permissions in place to create a job for a Snow device. If you're creating a job for a node in a cluster, you only need to provide the <code>clusterId</code> value; the other job attributes are inherited from the cluster. </p>
+    /// <p><p>Creates a job to import or export data between Amazon S3 and your on-premises data center. Your AWS account must have the right trust policies and permissions in place to create a job for a Snow device. If you&#39;re creating a job for a node in a cluster, you only need to provide the <code>clusterId</code> value; the other job attributes are inherited from the cluster. </p> <note> <p>Only the Snowball; Edge device type is supported when ordering clustered jobs.</p> <p>The device capacity is optional.</p> <p>Availability of device types differ by AWS Region. For more information about Region availability, see <a href="https://aws.amazon.com/about-aws/global-infrastructure/regional-product-services/?p=ngi&amp;loc=4">AWS Regional Services</a>.</p> </note> <p/> <p class="title"> <b>AWS Snow Family device types and their capacities.</b> </p> <ul> <li> <p>Snow Family device type: <b>SNC1<em>SSD</b> </p> <ul> <li> <p>Capacity: T14</p> </li> <li> <p>Description: Snowcone </p> </li> </ul> <p/> </li> <li> <p>Snow Family device type: <b>SNC1</em>HDD</b> </p> <ul> <li> <p>Capacity: T8</p> </li> <li> <p>Description: Snowcone </p> </li> </ul> <p/> </li> <li> <p>Device type: <b>EDGE<em>S</b> </p> <ul> <li> <p>Capacity: T98</p> </li> <li> <p>Description: Snowball Edge Storage Optimized for data transfer only </p> </li> </ul> <p/> </li> <li> <p>Device type: <b>EDGE</em>CG</b> </p> <ul> <li> <p>Capacity: T42</p> </li> <li> <p>Description: Snowball Edge Compute Optimized with GPU</p> </li> </ul> <p/> </li> <li> <p>Device type: <b>EDGE_C</b> </p> <ul> <li> <p>Capacity: T42</p> </li> <li> <p>Description: Snowball Edge Compute Optimized without GPU</p> </li> </ul> <p/> </li> <li> <p>Device type: <b>EDGE</b> </p> <ul> <li> <p>Capacity: T100</p> </li> <li> <p>Description: Snowball Edge Storage Optimized with EC2 Compute</p> </li> </ul> <p/> </li> <li> <p>Device type: <b>STANDARD</b> </p> <ul> <li> <p>Capacity: T50</p> </li> <li> <p>Description: Original Snowball device</p> <note> <p>This device is only available in the Ningxia, Beijing, and Singapore AWS Regions. </p> </note> </li> </ul> <p/> </li> <li> <p>Device type: <b>STANDARD</b> </p> <ul> <li> <p>Capacity: T80</p> </li> <li> <p>Description: Original Snowball device</p> <note> <p>This device is only available in the Ningxia, Beijing, and Singapore AWS Regions. </p> </note> </li> </ul> <p/> </li> </ul></p>
     async fn create_job(
         &self,
         input: CreateJobRequest,
@@ -2261,6 +2579,27 @@ impl Snowball for SnowballClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateJobResult, _>()
+    }
+
+    /// <p>Creates a job with the long-term usage option for a device. The long-term usage is a 1-year or 3-year long-term pricing type for the device. You are billed upfront, and AWS provides discounts for long-term pricing. </p>
+    async fn create_long_term_pricing(
+        &self,
+        input: CreateLongTermPricingRequest,
+    ) -> Result<CreateLongTermPricingResult, RusotoError<CreateLongTermPricingError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSIESnowballJobManagementService.CreateLongTermPricing",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateLongTermPricingError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateLongTermPricingResult, _>()
     }
 
     /// <p>Creates a shipping label that will be used to return the Snow device to AWS.</p>
@@ -2392,7 +2731,7 @@ impl Snowball for SnowballClient {
             .deserialize::<DescribeReturnShippingLabelResult, _>()
     }
 
-    /// <p>Returns a link to an Amazon S3 presigned URL for the manifest file associated with the specified <code>JobId</code> value. You can access the manifest file for up to 60 minutes after this request has been made. To access the manifest file after 60 minutes have passed, you'll have to make another call to the <code>GetJobManifest</code> action.</p> <p>The manifest is an encrypted file that you can download after your job enters the <code>WithCustomer</code> status. The manifest is decrypted by using the <code>UnlockCode</code> code value, when you pass both values to the Snow device through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of an <code>UnlockCode</code> value in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snow device associated with that job.</p> <p>The credentials of a given job, including its manifest file and unlock code, expire 90 days after the job is created.</p>
+    /// <p>Returns a link to an Amazon S3 presigned URL for the manifest file associated with the specified <code>JobId</code> value. You can access the manifest file for up to 60 minutes after this request has been made. To access the manifest file after 60 minutes have passed, you'll have to make another call to the <code>GetJobManifest</code> action.</p> <p>The manifest is an encrypted file that you can download after your job enters the <code>WithCustomer</code> status. The manifest is decrypted by using the <code>UnlockCode</code> code value, when you pass both values to the Snow device through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of an <code>UnlockCode</code> value in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snow device associated with that job.</p> <p>The credentials of a given job, including its manifest file and unlock code, expire 360 days after the job is created.</p>
     async fn get_job_manifest(
         &self,
         input: GetJobManifestRequest,
@@ -2413,7 +2752,7 @@ impl Snowball for SnowballClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetJobManifestResult, _>()
     }
 
-    /// <p>Returns the <code>UnlockCode</code> code value for the specified job. A particular <code>UnlockCode</code> value can be accessed for up to 90 days after the associated job has been created.</p> <p>The <code>UnlockCode</code> value is a 29-character code with 25 alphanumeric characters and 4 hyphens. This code is used to decrypt the manifest file when it is passed along with the manifest to the Snow device through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of the <code>UnlockCode</code> in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snow device associated with that job.</p>
+    /// <p>Returns the <code>UnlockCode</code> code value for the specified job. A particular <code>UnlockCode</code> value can be accessed for up to 360 days after the associated job has been created.</p> <p>The <code>UnlockCode</code> value is a 29-character code with 25 alphanumeric characters and 4 hyphens. This code is used to decrypt the manifest file when it is passed along with the manifest to the Snow device through the Snowball client when the client is started for the first time.</p> <p>As a best practice, we recommend that you don't save a copy of the <code>UnlockCode</code> in the same location as the manifest file for that job. Saving these separately helps prevent unauthorized parties from gaining access to the Snow device associated with that job.</p>
     async fn get_job_unlock_code(
         &self,
         input: GetJobUnlockCodeRequest,
@@ -2555,6 +2894,27 @@ impl Snowball for SnowballClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ListJobsResult, _>()
     }
 
+    /// <p>Lists all long-term pricing types.</p>
+    async fn list_long_term_pricing(
+        &self,
+        input: ListLongTermPricingRequest,
+    ) -> Result<ListLongTermPricingResult, RusotoError<ListLongTermPricingError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSIESnowballJobManagementService.ListLongTermPricing",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListLongTermPricingError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListLongTermPricingResult, _>()
+    }
+
     /// <p>While a cluster's <code>ClusterState</code> value is in the <code>AwaitingQuorum</code> state, you can update some of the information associated with a cluster. Once the cluster changes to a different job state, usually 60 minutes after the cluster being created, this action is no longer available.</p>
     async fn update_cluster(
         &self,
@@ -2597,7 +2957,7 @@ impl Snowball for SnowballClient {
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateJobResult, _>()
     }
 
-    /// <p>Updates the state when a the shipment states changes to a different state.</p>
+    /// <p>Updates the state when a shipment state changes to a different state.</p>
     async fn update_job_shipment_state(
         &self,
         input: UpdateJobShipmentStateRequest,
@@ -2617,5 +2977,26 @@ impl Snowball for SnowballClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<UpdateJobShipmentStateResult, _>()
+    }
+
+    /// <p>Updates the long-term pricing type.</p>
+    async fn update_long_term_pricing(
+        &self,
+        input: UpdateLongTermPricingRequest,
+    ) -> Result<UpdateLongTermPricingResult, RusotoError<UpdateLongTermPricingError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "AWSIESnowballJobManagementService.UpdateLongTermPricing",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateLongTermPricingError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateLongTermPricingResult, _>()
     }
 }

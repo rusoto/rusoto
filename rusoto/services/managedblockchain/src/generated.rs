@@ -94,6 +94,10 @@ pub struct CreateNetworkInput {
     /// <p>The name of the network.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>Tags to assign to the network. Each tag consists of a key and optional value.</p> <p>When specifying tags during creation, you can specify multiple key-value pairs in a single request, with an overall maximum of 50 tags added to each resource.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/managed-blockchain/latest/ethereum-dev/tagging-resources.html">Tagging Resources</a> in the <i>Amazon Managed Blockchain Ethereum Developer Guide</i>, or <a href="https://docs.aws.amazon.com/managed-blockchain/latest/hyperledger-fabric-dev/tagging-resources.html">Tagging Resources</a> in the <i>Amazon Managed Blockchain Hyperledger Fabric Developer Guide</i>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p> The voting rules used by the network to determine if a proposal is approved. </p>
     #[serde(rename = "VotingPolicy")]
     pub voting_policy: VotingPolicy,
@@ -128,6 +132,10 @@ pub struct CreateNodeInput {
     /// <p>The properties of a node configuration.</p>
     #[serde(rename = "NodeConfiguration")]
     pub node_configuration: NodeConfiguration,
+    /// <p>Tags to assign to the node. Each tag consists of a key and optional value.</p> <p>When specifying tags during creation, you can specify multiple key-value pairs in a single request, with an overall maximum of 50 tags added to each resource.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/managed-blockchain/latest/ethereum-dev/tagging-resources.html">Tagging Resources</a> in the <i>Amazon Managed Blockchain Ethereum Developer Guide</i>, or <a href="https://docs.aws.amazon.com/managed-blockchain/latest/hyperledger-fabric-dev/tagging-resources.html">Tagging Resources</a> in the <i>Amazon Managed Blockchain Hyperledger Fabric Developer Guide</i>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -158,6 +166,10 @@ pub struct CreateProposalInput {
     /// <p> The unique identifier of the network for which the proposal is made.</p>
     #[serde(rename = "NetworkId")]
     pub network_id: String,
+    /// <p>Tags to assign to the proposal. Each tag consists of a key and optional value.</p> <p>When specifying tags during creation, you can specify multiple key-value pairs in a single request, with an overall maximum of 50 tags added to each resource. If the proposal is for a network invitation, the invitation inherits the tags added to the proposal.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/managed-blockchain/latest/ethereum-dev/tagging-resources.html">Tagging Resources</a> in the <i>Amazon Managed Blockchain Ethereum Developer Guide</i>, or <a href="https://docs.aws.amazon.com/managed-blockchain/latest/hyperledger-fabric-dev/tagging-resources.html">Tagging Resources</a> in the <i>Amazon Managed Blockchain Hyperledger Fabric Developer Guide</i>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -288,6 +300,10 @@ pub struct GetProposalOutput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Invitation {
+    /// <p>The Amazon Resource Name (ARN) of the invitation. For more information about ARNs and their format, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs)</a> in the <i>AWS General Reference</i>.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
     /// <p>The date and time that the invitation was created.</p>
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -520,6 +536,23 @@ pub struct ListProposalsOutput {
     pub proposals: Option<Vec<ProposalSummary>>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListTagsForResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the resource. For more information about ARNs and their format, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs)</a> in the <i>AWS General Reference</i>.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    /// <p>The tags assigned to the resource.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
 /// <p>A configuration for logging events.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LogConfiguration {
@@ -542,6 +575,10 @@ pub struct LogConfigurations {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Member {
+    /// <p>The Amazon Resource Name (ARN) of the member. For more information about ARNs and their format, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs)</a> in the <i>AWS General Reference</i>.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
     /// <p>The date and time that the member was created.</p>
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -558,6 +595,10 @@ pub struct Member {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the customer managed key in AWS Key Management Service (AWS KMS) that the member uses for encryption at rest. If the value of this parameter is <code>"AWS Owned KMS Key"</code>, the member uses an AWS owned KMS key for encryption. This parameter is inherited by the nodes that this member owns.</p>
+    #[serde(rename = "KmsKeyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_arn: Option<String>,
     /// <p>Configuration properties for logging events associated with a member.</p>
     #[serde(rename = "LogPublishingConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -570,10 +611,14 @@ pub struct Member {
     #[serde(rename = "NetworkId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub network_id: Option<String>,
-    /// <p><p>The status of a member.</p> <ul> <li> <p> <code>CREATING</code> - The AWS account is in the process of creating a member.</p> </li> <li> <p> <code>AVAILABLE</code> - The member has been created and can participate in the network.</p> </li> <li> <p> <code>CREATE_FAILED</code> - The AWS account attempted to create a member and creation failed.</p> </li> <li> <p> <code>DELETING</code> - The member and all associated resources are in the process of being deleted. Either the AWS account that owns the member deleted it, or the member is being deleted as the result of an <code>APPROVED</code> <code>PROPOSAL</code> to remove the member.</p> </li> <li> <p> <code>DELETED</code> - The member can no longer participate on the network and all associated resources are deleted. Either the AWS account that owns the member deleted it, or the member is being deleted as the result of an <code>APPROVED</code> <code>PROPOSAL</code> to remove the member.</p> </li> </ul></p>
+    /// <p><p>The status of a member.</p> <ul> <li> <p> <code>CREATING</code> - The AWS account is in the process of creating a member.</p> </li> <li> <p> <code>AVAILABLE</code> - The member has been created and can participate in the network.</p> </li> <li> <p> <code>CREATE<em>FAILED</code> - The AWS account attempted to create a member and creation failed.</p> </li> <li> <p> <code>UPDATING</code> - The member is in the process of being updated.</p> </li> <li> <p> <code>DELETING</code> - The member and all associated resources are in the process of being deleted. Either the AWS account that owns the member deleted it, or the member is being deleted as the result of an <code>APPROVED</code> <code>PROPOSAL</code> to remove the member.</p> </li> <li> <p> <code>DELETED</code> - The member can no longer participate on the network and all associated resources are deleted. Either the AWS account that owns the member deleted it, or the member is being deleted as the result of an <code>APPROVED</code> <code>PROPOSAL</code> to remove the member.</p> </li> <li> <p> <code>INACCESSIBLE</em>ENCRYPTION_KEY</code> - The member is impaired and might not function as expected because it cannot access the specified customer managed key in AWS KMS for encryption at rest. Either the KMS key was disabled or deleted, or the grants on the key were revoked.</p> <p>The effect of disabling or deleting a key, or revoking a grant is not immediate. The member resource might take some time to find that the key is inaccessible. When a resource is in this state, we recommend deleting and recreating the resource.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+    /// <p>Tags assigned to the member. Tags consist of a key and optional value. For more information about tags, see <a href="https://docs.aws.amazon.com/managed-blockchain/latest/hyperledger-fabric-dev/tagging-resources.html">Tagging Resources</a> in the <i>Amazon Managed Blockchain Hyperledger Fabric Developer Guide</i>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Configuration properties of the member.</p> <p>Applies only to Hyperledger Fabric.</p>
@@ -587,6 +632,10 @@ pub struct MemberConfiguration {
     /// <p>Configuration properties of the blockchain framework relevant to the member.</p>
     #[serde(rename = "FrameworkConfiguration")]
     pub framework_configuration: MemberFrameworkConfiguration,
+    /// <p><p>The Amazon Resource Name (ARN) of the customer managed key in AWS Key Management Service (AWS KMS) to use for encryption at rest in the member. This parameter is inherited by any nodes that this member creates.</p> <p>Use one of the following options to specify this parameter:</p> <ul> <li> <p> <b>Undefined or empty string</b> - The member uses an AWS owned KMS key for encryption by default.</p> </li> <li> <p> <b>A valid symmetric customer managed KMS key</b> - The member uses the specified key for encryption.</p> <p>Amazon Managed Blockchain doesn&#39;t support asymmetric keys. For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/symmetric-asymmetric.html">Using symmetric and asymmetric keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>The following is an example of a KMS key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul></p>
+    #[serde(rename = "KmsKeyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_arn: Option<String>,
     /// <p>Configuration properties for logging events associated with a member of a Managed Blockchain network.</p>
     #[serde(rename = "LogPublishingConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -594,6 +643,10 @@ pub struct MemberConfiguration {
     /// <p>The name of the member.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>Tags assigned to the member. Tags consist of a key and optional value. For more information about tags, see <a href="https://docs.aws.amazon.com/managed-blockchain/latest/hyperledger-fabric-dev/tagging-resources.html">Tagging Resources</a> in the <i>Amazon Managed Blockchain Hyperledger Fabric Developer Guide</i>.</p> <p>When specifying tags during creation, you can specify multiple key-value pairs in a single request, with an overall maximum of 50 tags added to each resource.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Attributes of Hyperledger Fabric for a member in a Managed Blockchain network using the Hyperledger Fabric framework.</p>
@@ -664,6 +717,10 @@ pub struct MemberLogPublishingConfiguration {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct MemberSummary {
+    /// <p>The Amazon Resource Name (ARN) of the member. For more information about ARNs and their format, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs)</a> in the <i>AWS General Reference</i>.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
     /// <p>The date and time that the member was created.</p>
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -684,7 +741,7 @@ pub struct MemberSummary {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p><p>The status of the member.</p> <ul> <li> <p> <code>CREATING</code> - The AWS account is in the process of creating a member.</p> </li> <li> <p> <code>AVAILABLE</code> - The member has been created and can participate in the network.</p> </li> <li> <p> <code>CREATE_FAILED</code> - The AWS account attempted to create a member and creation failed.</p> </li> <li> <p> <code>DELETING</code> - The member and all associated resources are in the process of being deleted. Either the AWS account that owns the member deleted it, or the member is being deleted as the result of an <code>APPROVED</code> <code>PROPOSAL</code> to remove the member.</p> </li> <li> <p> <code>DELETED</code> - The member can no longer participate on the network and all associated resources are deleted. Either the AWS account that owns the member deleted it, or the member is being deleted as the result of an <code>APPROVED</code> <code>PROPOSAL</code> to remove the member.</p> </li> </ul></p>
+    /// <p><p>The status of the member.</p> <ul> <li> <p> <code>CREATING</code> - The AWS account is in the process of creating a member.</p> </li> <li> <p> <code>AVAILABLE</code> - The member has been created and can participate in the network.</p> </li> <li> <p> <code>CREATE<em>FAILED</code> - The AWS account attempted to create a member and creation failed.</p> </li> <li> <p> <code>UPDATING</code> - The member is in the process of being updated.</p> </li> <li> <p> <code>DELETING</code> - The member and all associated resources are in the process of being deleted. Either the AWS account that owns the member deleted it, or the member is being deleted as the result of an <code>APPROVED</code> <code>PROPOSAL</code> to remove the member.</p> </li> <li> <p> <code>DELETED</code> - The member can no longer participate on the network and all associated resources are deleted. Either the AWS account that owns the member deleted it, or the member is being deleted as the result of an <code>APPROVED</code> <code>PROPOSAL</code> to remove the member.</p> </li> <li> <p> <code>INACCESSIBLE</em>ENCRYPTION_KEY</code> - The member is impaired and might not function as expected because it cannot access the specified customer managed key in AWS Key Management Service (AWS KMS) for encryption at rest. Either the KMS key was disabled or deleted, or the grants on the key were revoked.</p> <p>The effect of disabling or deleting a key, or revoking a grant is not immediate. The member resource might take some time to find that the key is inaccessible. When a resource is in this state, we recommend deleting and recreating the resource.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -694,6 +751,10 @@ pub struct MemberSummary {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Network {
+    /// <p>The Amazon Resource Name (ARN) of the network. For more information about ARNs and their format, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs)</a> in the <i>AWS General Reference</i>.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
     /// <p>The date and time that the network was created.</p>
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -726,6 +787,10 @@ pub struct Network {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+    /// <p>Tags assigned to the network. Each tag consists of a key and optional value.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/managed-blockchain/latest/ethereum-dev/tagging-resources.html">Tagging Resources</a> in the <i>Amazon Managed Blockchain Ethereum Developer Guide</i>, or <a href="https://docs.aws.amazon.com/managed-blockchain/latest/hyperledger-fabric-dev/tagging-resources.html">Tagging Resources</a> in the <i>Amazon Managed Blockchain Hyperledger Fabric Developer Guide</i>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The voting rules for the network to decide if a proposal is accepted.</p>
     #[serde(rename = "VotingPolicy")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -736,7 +801,7 @@ pub struct Network {
     pub vpc_endpoint_service_name: Option<String>,
 }
 
-/// <p>Attributes of Ethereum for a network.</p>
+/// <p>Attributes of Ethereum for a network. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NetworkEthereumAttributes {
@@ -773,7 +838,7 @@ pub struct NetworkFabricConfiguration {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NetworkFrameworkAttributes {
-    /// <p>Attributes of an Ethereum network for Managed Blockchain resources participating in an Ethereum network.</p>
+    /// <p>Attributes of an Ethereum network for Managed Blockchain resources participating in an Ethereum network. </p>
     #[serde(rename = "Ethereum")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ethereum: Option<NetworkEthereumAttributes>,
@@ -797,6 +862,10 @@ pub struct NetworkFrameworkConfiguration {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NetworkSummary {
+    /// <p>The Amazon Resource Name (ARN) of the network. For more information about ARNs and their format, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs)</a> in the <i>AWS General Reference</i>.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
     /// <p>The date and time that the network was created.</p>
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -831,7 +900,11 @@ pub struct NetworkSummary {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Node {
-    /// <p>The Availability Zone in which the node exists.</p>
+    /// <p>The Amazon Resource Name (ARN) of the node. For more information about ARNs and their format, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs)</a> in the <i>AWS General Reference</i>.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The Availability Zone in which the node exists. Required for Ethereum nodes. </p>
     #[serde(rename = "AvailabilityZone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zone: Option<String>,
@@ -851,6 +924,10 @@ pub struct Node {
     #[serde(rename = "InstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_type: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the customer managed key in AWS Key Management Service (AWS KMS) that the node uses for encryption at rest. If the value of this parameter is <code>"AWS Owned KMS Key"</code>, the node uses an AWS owned KMS key for encryption. The node inherits this parameter from the member that it belongs to.</p> <p>Applies only to Hyperledger Fabric.</p>
+    #[serde(rename = "KmsKeyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_arn: Option<String>,
     /// <p>Configuration properties for logging events associated with a peer node on a Hyperledger Fabric network on Managed Blockchain.</p>
     #[serde(rename = "LogPublishingConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -867,17 +944,21 @@ pub struct Node {
     #[serde(rename = "StateDB")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state_db: Option<String>,
-    /// <p>The status of the node.</p>
+    /// <p><p>The status of the node.</p> <ul> <li> <p> <code>CREATING</code> - The AWS account is in the process of creating a node.</p> </li> <li> <p> <code>AVAILABLE</code> - The node has been created and can participate in the network.</p> </li> <li> <p> <code>UNHEALTHY</code> - The node is impaired and might not function as expected. Amazon Managed Blockchain automatically finds nodes in this state and tries to recover them. If a node is recoverable, it returns to <code>AVAILABLE</code>. Otherwise, it moves to <code>FAILED</code> status.</p> </li> <li> <p> <code>CREATE<em>FAILED</code> - The AWS account attempted to create a node and creation failed.</p> </li> <li> <p> <code>UPDATING</code> - The node is in the process of being updated.</p> </li> <li> <p> <code>DELETING</code> - The node is in the process of being deleted.</p> </li> <li> <p> <code>DELETED</code> - The node can no longer participate on the network.</p> </li> <li> <p> <code>FAILED</code> - The node is no longer functional, cannot be recovered, and must be deleted.</p> </li> <li> <p> <code>INACCESSIBLE</em>ENCRYPTION_KEY</code> - The node is impaired and might not function as expected because it cannot access the specified customer managed key in AWS KMS for encryption at rest. Either the KMS key was disabled or deleted, or the grants on the key were revoked.</p> <p>The effect of disabling or deleting a key, or revoking a grant is not immediate. The node resource might take some time to find that the key is inaccessible. When a resource is in this state, we recommend deleting and recreating the resource.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+    /// <p>Tags assigned to the node. Each tag consists of a key and optional value.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/managed-blockchain/latest/ethereum-dev/tagging-resources.html">Tagging Resources</a> in the <i>Amazon Managed Blockchain Ethereum Developer Guide</i>, or <a href="https://docs.aws.amazon.com/managed-blockchain/latest/hyperledger-fabric-dev/tagging-resources.html">Tagging Resources</a> in the <i>Amazon Managed Blockchain Hyperledger Fabric Developer Guide</i>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Configuration properties of a node.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct NodeConfiguration {
-    /// <p>The Availability Zone in which the node exists.</p>
+    /// <p>The Availability Zone in which the node exists. Required for Ethereum nodes. </p>
     #[serde(rename = "AvailabilityZone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zone: Option<String>,
@@ -939,7 +1020,7 @@ pub struct NodeFabricLogPublishingConfiguration {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NodeFrameworkAttributes {
-    /// <p>Attributes of Ethereum for a node on a Managed Blockchain network that uses Ethereum.</p>
+    /// <p>Attributes of Ethereum for a node on a Managed Blockchain network that uses Ethereum. </p>
     #[serde(rename = "Ethereum")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ethereum: Option<NodeEthereumAttributes>,
@@ -962,6 +1043,10 @@ pub struct NodeLogPublishingConfiguration {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct NodeSummary {
+    /// <p>The Amazon Resource Name (ARN) of the node. For more information about ARNs and their format, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs)</a> in the <i>AWS General Reference</i>.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
     /// <p>The Availability Zone in which the node exists.</p>
     #[serde(rename = "AvailabilityZone")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -992,6 +1077,10 @@ pub struct Proposal {
     #[serde(rename = "Actions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub actions: Option<ProposalActions>,
+    /// <p>The Amazon Resource Name (ARN) of the proposal. For more information about ARNs and their format, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs)</a> in the <i>AWS General Reference</i>.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
     /// <p> The date and time that the proposal was created. </p>
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1032,6 +1121,10 @@ pub struct Proposal {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+    /// <p>Tags assigned to the proposal. Each tag consists of a key and optional value.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/managed-blockchain/latest/ethereum-dev/tagging-resources.html">Tagging Resources</a> in the <i>Amazon Managed Blockchain Ethereum Developer Guide</i>, or <a href="https://docs.aws.amazon.com/managed-blockchain/latest/hyperledger-fabric-dev/tagging-resources.html">Tagging Resources</a> in the <i>Amazon Managed Blockchain Hyperledger Fabric Developer Guide</i>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p> The current total of <code>YES</code> votes cast on the proposal by members. </p>
     #[serde(rename = "YesVoteCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1055,6 +1148,10 @@ pub struct ProposalActions {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ProposalSummary {
+    /// <p>The Amazon Resource Name (ARN) of the proposal. For more information about ARNs and their format, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs)</a> in the <i>AWS General Reference</i>.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
     /// <p> The date and time that the proposal was created. </p>
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1104,6 +1201,36 @@ pub struct RemoveAction {
     #[serde(rename = "MemberId")]
     pub member_id: String,
 }
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the resource. For more information about ARNs and their format, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs)</a> in the <i>AWS General Reference</i>.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>The tags to assign to the specified resource. Tag values can be empty, for example, <code>"MyTagKey" : ""</code>. You can specify multiple key-value pairs in a single request, with an overall maximum of 50 tags added to each resource.</p>
+    #[serde(rename = "Tags")]
+    pub tags: ::std::collections::HashMap<String, String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TagResourceResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UntagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the resource. For more information about ARNs and their format, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs)</a> in the <i>AWS General Reference</i>.</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>The tag keys.</p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UntagResourceResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1208,12 +1335,14 @@ pub enum CreateMemberError {
     ResourceAlreadyExists(String),
     /// <p>The maximum number of resources of that type already exist. Ensure the resources requested are within the boundaries of the service edition and your account limits.</p>
     ResourceLimitExceeded(String),
-    /// <p>A requested resource does not exist on the network. It may have been deleted or referenced inaccurately.</p>
+    /// <p>A requested resource does not exist. It may have been deleted or referenced inaccurately.</p>
     ResourceNotFound(String),
     /// <p>The requested resource exists but is not in a status that can complete the operation.</p>
     ResourceNotReady(String),
     /// <p>The request or operation could not be performed because a service is throttling requests. The most common source of throttling errors is launching EC2 instances such that your service limit for EC2 instances is exceeded. Request a limit increase or delete unused resources if possible.</p>
     Throttling(String),
+    /// <p><p/></p>
+    TooManyTags(String),
 }
 
 impl CreateMemberError {
@@ -1244,6 +1373,9 @@ impl CreateMemberError {
                 "ThrottlingException" => {
                     return RusotoError::Service(CreateMemberError::Throttling(err.msg))
                 }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(CreateMemberError::TooManyTags(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -1263,6 +1395,7 @@ impl fmt::Display for CreateMemberError {
             CreateMemberError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             CreateMemberError::ResourceNotReady(ref cause) => write!(f, "{}", cause),
             CreateMemberError::Throttling(ref cause) => write!(f, "{}", cause),
+            CreateMemberError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -1282,6 +1415,8 @@ pub enum CreateNetworkError {
     ResourceLimitExceeded(String),
     /// <p>The request or operation could not be performed because a service is throttling requests. The most common source of throttling errors is launching EC2 instances such that your service limit for EC2 instances is exceeded. Request a limit increase or delete unused resources if possible.</p>
     Throttling(String),
+    /// <p><p/></p>
+    TooManyTags(String),
 }
 
 impl CreateNetworkError {
@@ -1306,6 +1441,9 @@ impl CreateNetworkError {
                 "ThrottlingException" => {
                     return RusotoError::Service(CreateNetworkError::Throttling(err.msg))
                 }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(CreateNetworkError::TooManyTags(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -1323,6 +1461,7 @@ impl fmt::Display for CreateNetworkError {
             CreateNetworkError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
             CreateNetworkError::ResourceLimitExceeded(ref cause) => write!(f, "{}", cause),
             CreateNetworkError::Throttling(ref cause) => write!(f, "{}", cause),
+            CreateNetworkError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -1340,12 +1479,14 @@ pub enum CreateNodeError {
     ResourceAlreadyExists(String),
     /// <p>The maximum number of resources of that type already exist. Ensure the resources requested are within the boundaries of the service edition and your account limits.</p>
     ResourceLimitExceeded(String),
-    /// <p>A requested resource does not exist on the network. It may have been deleted or referenced inaccurately.</p>
+    /// <p>A requested resource does not exist. It may have been deleted or referenced inaccurately.</p>
     ResourceNotFound(String),
     /// <p>The requested resource exists but is not in a status that can complete the operation.</p>
     ResourceNotReady(String),
     /// <p>The request or operation could not be performed because a service is throttling requests. The most common source of throttling errors is launching EC2 instances such that your service limit for EC2 instances is exceeded. Request a limit increase or delete unused resources if possible.</p>
     Throttling(String),
+    /// <p><p/></p>
+    TooManyTags(String),
 }
 
 impl CreateNodeError {
@@ -1376,6 +1517,9 @@ impl CreateNodeError {
                 "ThrottlingException" => {
                     return RusotoError::Service(CreateNodeError::Throttling(err.msg))
                 }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(CreateNodeError::TooManyTags(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -1395,6 +1539,7 @@ impl fmt::Display for CreateNodeError {
             CreateNodeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             CreateNodeError::ResourceNotReady(ref cause) => write!(f, "{}", cause),
             CreateNodeError::Throttling(ref cause) => write!(f, "{}", cause),
+            CreateNodeError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -1408,12 +1553,14 @@ pub enum CreateProposalError {
     InternalServiceError(String),
     /// <p>The action or operation requested is invalid. Verify that the action is typed correctly.</p>
     InvalidRequest(String),
-    /// <p>A requested resource does not exist on the network. It may have been deleted or referenced inaccurately.</p>
+    /// <p>A requested resource does not exist. It may have been deleted or referenced inaccurately.</p>
     ResourceNotFound(String),
     /// <p>The requested resource exists but is not in a status that can complete the operation.</p>
     ResourceNotReady(String),
     /// <p>The request or operation could not be performed because a service is throttling requests. The most common source of throttling errors is launching EC2 instances such that your service limit for EC2 instances is exceeded. Request a limit increase or delete unused resources if possible.</p>
     Throttling(String),
+    /// <p><p/></p>
+    TooManyTags(String),
 }
 
 impl CreateProposalError {
@@ -1438,6 +1585,9 @@ impl CreateProposalError {
                 "ThrottlingException" => {
                     return RusotoError::Service(CreateProposalError::Throttling(err.msg))
                 }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(CreateProposalError::TooManyTags(err.msg))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -1455,6 +1605,7 @@ impl fmt::Display for CreateProposalError {
             CreateProposalError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             CreateProposalError::ResourceNotReady(ref cause) => write!(f, "{}", cause),
             CreateProposalError::Throttling(ref cause) => write!(f, "{}", cause),
+            CreateProposalError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -1468,7 +1619,7 @@ pub enum DeleteMemberError {
     InternalServiceError(String),
     /// <p>The action or operation requested is invalid. Verify that the action is typed correctly.</p>
     InvalidRequest(String),
-    /// <p>A requested resource does not exist on the network. It may have been deleted or referenced inaccurately.</p>
+    /// <p>A requested resource does not exist. It may have been deleted or referenced inaccurately.</p>
     ResourceNotFound(String),
     /// <p>The requested resource exists but is not in a status that can complete the operation.</p>
     ResourceNotReady(String),
@@ -1528,7 +1679,7 @@ pub enum DeleteNodeError {
     InternalServiceError(String),
     /// <p>The action or operation requested is invalid. Verify that the action is typed correctly.</p>
     InvalidRequest(String),
-    /// <p>A requested resource does not exist on the network. It may have been deleted or referenced inaccurately.</p>
+    /// <p>A requested resource does not exist. It may have been deleted or referenced inaccurately.</p>
     ResourceNotFound(String),
     /// <p>The requested resource exists but is not in a status that can complete the operation.</p>
     ResourceNotReady(String),
@@ -1588,7 +1739,7 @@ pub enum GetMemberError {
     InternalServiceError(String),
     /// <p>The action or operation requested is invalid. Verify that the action is typed correctly.</p>
     InvalidRequest(String),
-    /// <p>A requested resource does not exist on the network. It may have been deleted or referenced inaccurately.</p>
+    /// <p>A requested resource does not exist. It may have been deleted or referenced inaccurately.</p>
     ResourceNotFound(String),
     /// <p>The request or operation could not be performed because a service is throttling requests. The most common source of throttling errors is launching EC2 instances such that your service limit for EC2 instances is exceeded. Request a limit increase or delete unused resources if possible.</p>
     Throttling(String),
@@ -1642,7 +1793,7 @@ pub enum GetNetworkError {
     InternalServiceError(String),
     /// <p>The action or operation requested is invalid. Verify that the action is typed correctly.</p>
     InvalidRequest(String),
-    /// <p>A requested resource does not exist on the network. It may have been deleted or referenced inaccurately.</p>
+    /// <p>A requested resource does not exist. It may have been deleted or referenced inaccurately.</p>
     ResourceNotFound(String),
     /// <p>The request or operation could not be performed because a service is throttling requests. The most common source of throttling errors is launching EC2 instances such that your service limit for EC2 instances is exceeded. Request a limit increase or delete unused resources if possible.</p>
     Throttling(String),
@@ -1696,7 +1847,7 @@ pub enum GetNodeError {
     InternalServiceError(String),
     /// <p>The action or operation requested is invalid. Verify that the action is typed correctly.</p>
     InvalidRequest(String),
-    /// <p>A requested resource does not exist on the network. It may have been deleted or referenced inaccurately.</p>
+    /// <p>A requested resource does not exist. It may have been deleted or referenced inaccurately.</p>
     ResourceNotFound(String),
     /// <p>The request or operation could not be performed because a service is throttling requests. The most common source of throttling errors is launching EC2 instances such that your service limit for EC2 instances is exceeded. Request a limit increase or delete unused resources if possible.</p>
     Throttling(String),
@@ -1750,7 +1901,7 @@ pub enum GetProposalError {
     InternalServiceError(String),
     /// <p>The action or operation requested is invalid. Verify that the action is typed correctly.</p>
     InvalidRequest(String),
-    /// <p>A requested resource does not exist on the network. It may have been deleted or referenced inaccurately.</p>
+    /// <p>A requested resource does not exist. It may have been deleted or referenced inaccurately.</p>
     ResourceNotFound(String),
     /// <p>The request or operation could not be performed because a service is throttling requests. The most common source of throttling errors is launching EC2 instances such that your service limit for EC2 instances is exceeded. Request a limit increase or delete unused resources if possible.</p>
     Throttling(String),
@@ -1806,7 +1957,7 @@ pub enum ListInvitationsError {
     InvalidRequest(String),
     /// <p>The maximum number of resources of that type already exist. Ensure the resources requested are within the boundaries of the service edition and your account limits.</p>
     ResourceLimitExceeded(String),
-    /// <p>A requested resource does not exist on the network. It may have been deleted or referenced inaccurately.</p>
+    /// <p>A requested resource does not exist. It may have been deleted or referenced inaccurately.</p>
     ResourceNotFound(String),
     /// <p>The request or operation could not be performed because a service is throttling requests. The most common source of throttling errors is launching EC2 instances such that your service limit for EC2 instances is exceeded. Request a limit increase or delete unused resources if possible.</p>
     Throttling(String),
@@ -2062,7 +2213,7 @@ pub enum ListProposalsError {
     InternalServiceError(String),
     /// <p>The action or operation requested is invalid. Verify that the action is typed correctly.</p>
     InvalidRequest(String),
-    /// <p>A requested resource does not exist on the network. It may have been deleted or referenced inaccurately.</p>
+    /// <p>A requested resource does not exist. It may have been deleted or referenced inaccurately.</p>
     ResourceNotFound(String),
     /// <p>The request or operation could not be performed because a service is throttling requests. The most common source of throttling errors is launching EC2 instances such that your service limit for EC2 instances is exceeded. Request a limit increase or delete unused resources if possible.</p>
     Throttling(String),
@@ -2107,6 +2258,60 @@ impl fmt::Display for ListProposalsError {
     }
 }
 impl Error for ListProposalsError {}
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
+    InternalServiceError(String),
+    /// <p>The action or operation requested is invalid. Verify that the action is typed correctly.</p>
+    InvalidRequest(String),
+    /// <p>A requested resource does not exist. It may have been deleted or referenced inaccurately.</p>
+    ResourceNotFound(String),
+    /// <p>The requested resource exists but is not in a status that can complete the operation.</p>
+    ResourceNotReady(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InternalServiceError(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotReadyException" => {
+                    return RusotoError::Service(ListTagsForResourceError::ResourceNotReady(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListTagsForResourceError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotReady(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListTagsForResourceError {}
 /// Errors returned by RejectInvitation
 #[derive(Debug, PartialEq)]
 pub enum RejectInvitationError {
@@ -2118,7 +2323,7 @@ pub enum RejectInvitationError {
     InternalServiceError(String),
     /// <p>The action or operation requested is invalid. Verify that the action is typed correctly.</p>
     InvalidRequest(String),
-    /// <p>A requested resource does not exist on the network. It may have been deleted or referenced inaccurately.</p>
+    /// <p>A requested resource does not exist. It may have been deleted or referenced inaccurately.</p>
     ResourceNotFound(String),
     /// <p>The request or operation could not be performed because a service is throttling requests. The most common source of throttling errors is launching EC2 instances such that your service limit for EC2 instances is exceeded. Request a limit increase or delete unused resources if possible.</p>
     Throttling(String),
@@ -2169,6 +2374,108 @@ impl fmt::Display for RejectInvitationError {
     }
 }
 impl Error for RejectInvitationError {}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
+    InternalServiceError(String),
+    /// <p>The action or operation requested is invalid. Verify that the action is typed correctly.</p>
+    InvalidRequest(String),
+    /// <p>A requested resource does not exist. It may have been deleted or referenced inaccurately.</p>
+    ResourceNotFound(String),
+    /// <p>The requested resource exists but is not in a status that can complete the operation.</p>
+    ResourceNotReady(String),
+    /// <p><p/></p>
+    TooManyTags(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(TagResourceError::InternalServiceError(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(TagResourceError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(TagResourceError::ResourceNotFound(err.msg))
+                }
+                "ResourceNotReadyException" => {
+                    return RusotoError::Service(TagResourceError::ResourceNotReady(err.msg))
+                }
+                "TooManyTagsException" => {
+                    return RusotoError::Service(TagResourceError::TooManyTags(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for TagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            TagResourceError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotReady(ref cause) => write!(f, "{}", cause),
+            TagResourceError::TooManyTags(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for TagResourceError {}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
+    InternalServiceError(String),
+    /// <p>The action or operation requested is invalid. Verify that the action is typed correctly.</p>
+    InvalidRequest(String),
+    /// <p>A requested resource does not exist. It may have been deleted or referenced inaccurately.</p>
+    ResourceNotFound(String),
+    /// <p>The requested resource exists but is not in a status that can complete the operation.</p>
+    ResourceNotReady(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceErrorException" => {
+                    return RusotoError::Service(UntagResourceError::InternalServiceError(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UntagResourceError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(err.msg))
+                }
+                "ResourceNotReadyException" => {
+                    return RusotoError::Service(UntagResourceError::ResourceNotReady(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UntagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UntagResourceError::InternalServiceError(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotReady(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateMember
 #[derive(Debug, PartialEq)]
 pub enum UpdateMemberError {
@@ -2178,7 +2485,7 @@ pub enum UpdateMemberError {
     InternalServiceError(String),
     /// <p>The action or operation requested is invalid. Verify that the action is typed correctly.</p>
     InvalidRequest(String),
-    /// <p>A requested resource does not exist on the network. It may have been deleted or referenced inaccurately.</p>
+    /// <p>A requested resource does not exist. It may have been deleted or referenced inaccurately.</p>
     ResourceNotFound(String),
     /// <p>The request or operation could not be performed because a service is throttling requests. The most common source of throttling errors is launching EC2 instances such that your service limit for EC2 instances is exceeded. Request a limit increase or delete unused resources if possible.</p>
     Throttling(String),
@@ -2232,7 +2539,7 @@ pub enum UpdateNodeError {
     InternalServiceError(String),
     /// <p>The action or operation requested is invalid. Verify that the action is typed correctly.</p>
     InvalidRequest(String),
-    /// <p>A requested resource does not exist on the network. It may have been deleted or referenced inaccurately.</p>
+    /// <p>A requested resource does not exist. It may have been deleted or referenced inaccurately.</p>
     ResourceNotFound(String),
     /// <p>The request or operation could not be performed because a service is throttling requests. The most common source of throttling errors is launching EC2 instances such that your service limit for EC2 instances is exceeded. Request a limit increase or delete unused resources if possible.</p>
     Throttling(String),
@@ -2288,7 +2595,7 @@ pub enum VoteOnProposalError {
     InternalServiceError(String),
     /// <p>The action or operation requested is invalid. Verify that the action is typed correctly.</p>
     InvalidRequest(String),
-    /// <p>A requested resource does not exist on the network. It may have been deleted or referenced inaccurately.</p>
+    /// <p>A requested resource does not exist. It may have been deleted or referenced inaccurately.</p>
     ResourceNotFound(String),
     /// <p>The request or operation could not be performed because a service is throttling requests. The most common source of throttling errors is launching EC2 instances such that your service limit for EC2 instances is exceeded. Request a limit increase or delete unused resources if possible.</p>
     Throttling(String),
@@ -2436,11 +2743,29 @@ pub trait ManagedBlockchain {
         input: ListProposalsInput,
     ) -> Result<ListProposalsOutput, RusotoError<ListProposalsError>>;
 
+    /// <p>Returns a list of tags for the specified resource. Each tag consists of a key and optional value.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/managed-blockchain/latest/ethereum-dev/tagging-resources.html">Tagging Resources</a> in the <i>Amazon Managed Blockchain Ethereum Developer Guide</i>, or <a href="https://docs.aws.amazon.com/managed-blockchain/latest/hyperledger-fabric-dev/tagging-resources.html">Tagging Resources</a> in the <i>Amazon Managed Blockchain Hyperledger Fabric Developer Guide</i>.</p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+
     /// <p>Rejects an invitation to join a network. This action can be called by a principal in an AWS account that has received an invitation to create a member and join a network.</p> <p>Applies only to Hyperledger Fabric.</p>
     async fn reject_invitation(
         &self,
         input: RejectInvitationInput,
     ) -> Result<RejectInvitationOutput, RusotoError<RejectInvitationError>>;
+
+    /// <p>Adds or overwrites the specified tags for the specified Amazon Managed Blockchain resource. Each tag consists of a key and optional value.</p> <p>When you specify a tag key that already exists, the tag value is overwritten with the new value. Use <code>UntagResource</code> to remove tag keys.</p> <p>A resource can have up to 50 tags. If you try to create more than 50 tags for a resource, your request fails and returns an error.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/managed-blockchain/latest/ethereum-dev/tagging-resources.html">Tagging Resources</a> in the <i>Amazon Managed Blockchain Ethereum Developer Guide</i>, or <a href="https://docs.aws.amazon.com/managed-blockchain/latest/hyperledger-fabric-dev/tagging-resources.html">Tagging Resources</a> in the <i>Amazon Managed Blockchain Hyperledger Fabric Developer Guide</i>.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+
+    /// <p>Removes the specified tags from the Amazon Managed Blockchain resource.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/managed-blockchain/latest/ethereum-dev/tagging-resources.html">Tagging Resources</a> in the <i>Amazon Managed Blockchain Ethereum Developer Guide</i>, or <a href="https://docs.aws.amazon.com/managed-blockchain/latest/hyperledger-fabric-dev/tagging-resources.html">Tagging Resources</a> in the <i>Amazon Managed Blockchain Hyperledger Fabric Developer Guide</i>.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
     /// <p>Updates a member configuration with new parameters.</p> <p>Applies only to Hyperledger Fabric.</p>
     async fn update_member(
@@ -3108,6 +3433,35 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         }
     }
 
+    /// <p>Returns a list of tags for the specified resource. Each tag consists of a key and optional value.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/managed-blockchain/latest/ethereum-dev/tagging-resources.html">Tagging Resources</a> in the <i>Amazon Managed Blockchain Ethereum Developer Guide</i>, or <a href="https://docs.aws.amazon.com/managed-blockchain/latest/hyperledger-fabric-dev/tagging-resources.html">Tagging Resources</a> in the <i>Amazon Managed Blockchain Hyperledger Fabric Developer Guide</i>.</p>
+    #[allow(unused_mut)]
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request =
+            SignedRequest::new("GET", "managedblockchain", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListTagsForResourceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListTagsForResourceError::from_response(response))
+        }
+    }
+
     /// <p>Rejects an invitation to join a network. This action can be called by a principal in an AWS account that has received an invitation to create a member and join a network.</p> <p>Applies only to Hyperledger Fabric.</p>
     #[allow(unused_mut)]
     async fn reject_invitation(
@@ -3137,6 +3491,73 @@ impl ManagedBlockchain for ManagedBlockchainClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(RejectInvitationError::from_response(response))
+        }
+    }
+
+    /// <p>Adds or overwrites the specified tags for the specified Amazon Managed Blockchain resource. Each tag consists of a key and optional value.</p> <p>When you specify a tag key that already exists, the tag value is overwritten with the new value. Use <code>UntagResource</code> to remove tag keys.</p> <p>A resource can have up to 50 tags. If you try to create more than 50 tags for a resource, your request fails and returns an error.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/managed-blockchain/latest/ethereum-dev/tagging-resources.html">Tagging Resources</a> in the <i>Amazon Managed Blockchain Ethereum Developer Guide</i>, or <a href="https://docs.aws.amazon.com/managed-blockchain/latest/hyperledger-fabric-dev/tagging-resources.html">Tagging Resources</a> in the <i>Amazon Managed Blockchain Hyperledger Fabric Developer Guide</i>.</p>
+    #[allow(unused_mut)]
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request =
+            SignedRequest::new("POST", "managedblockchain", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<TagResourceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(TagResourceError::from_response(response))
+        }
+    }
+
+    /// <p>Removes the specified tags from the Amazon Managed Blockchain resource.</p> <p>For more information about tags, see <a href="https://docs.aws.amazon.com/managed-blockchain/latest/ethereum-dev/tagging-resources.html">Tagging Resources</a> in the <i>Amazon Managed Blockchain Ethereum Developer Guide</i>, or <a href="https://docs.aws.amazon.com/managed-blockchain/latest/hyperledger-fabric-dev/tagging-resources.html">Tagging Resources</a> in the <i>Amazon Managed Blockchain Hyperledger Fabric Developer Guide</i>.</p>
+    #[allow(unused_mut)]
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        let request_uri = format!("/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request =
+            SignedRequest::new("DELETE", "managedblockchain", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        for item in input.tag_keys.iter() {
+            params.put("tagKeys", item);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UntagResourceResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UntagResourceError::from_response(response))
         }
     }
 

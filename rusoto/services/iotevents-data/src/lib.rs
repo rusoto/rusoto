@@ -12,7 +12,7 @@
 #![doc(
     html_logo_url = "https://raw.githubusercontent.com/rusoto/rusoto/master/assets/logo-square.png"
 )]
-//! <p>AWS IoT Events monitors your equipment or device fleets for failures or changes in operation, and triggers actions when such events occur. AWS IoT Events Data API commands enable you to send inputs to detectors, list detectors, and view or update a detector's status.</p>
+//! <p>AWS IoT Events monitors your equipment or device fleets for failures or changes in operation, and triggers actions when such events occur. You can use AWS IoT Events Data API commands to send inputs to detectors, list detectors, and view or update a detector's status.</p> <p> For more information, see <a href="https://docs.aws.amazon.com/iotevents/latest/developerguide/what-is-iotevents.html">What is AWS IoT Events?</a> in the <i>AWS IoT Events Developer Guide</i>.</p>
 //!
 //! If you're using the service, you're probably looking for [IotEventsDataClient](struct.IotEventsDataClient.html) and [IotEventsData](trait.IotEventsData.html).
 

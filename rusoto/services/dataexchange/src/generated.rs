@@ -438,6 +438,38 @@ pub struct ExportAssetsToS3ResponseDetails {
     pub revision_id: String,
 }
 
+/// <p>Details of the operation to be performed by the job.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ExportRevisionsToS3RequestDetails {
+    /// <p>The unique identifier for the data set associated with this export job.</p>
+    #[serde(rename = "DataSetId")]
+    pub data_set_id: String,
+    /// <p>Encryption configuration for the export job.</p>
+    #[serde(rename = "Encryption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption: Option<ExportServerSideEncryption>,
+    /// <p>The destination for the revision.</p>
+    #[serde(rename = "RevisionDestinations")]
+    pub revision_destinations: Vec<RevisionDestinationEntry>,
+}
+
+/// <p>Details about the export revisions to Amazon S3 response.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ExportRevisionsToS3ResponseDetails {
+    /// <p>The unique identifier for the data set associated with this export job.</p>
+    #[serde(rename = "DataSetId")]
+    pub data_set_id: String,
+    /// <p>Encryption configuration of the export job.</p>
+    #[serde(rename = "Encryption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption: Option<ExportServerSideEncryption>,
+    /// <p>The destination in Amazon S3 where the revision is exported.</p>
+    #[serde(rename = "RevisionDestinations")]
+    pub revision_destinations: Vec<RevisionDestinationEntry>,
+}
+
 /// <p>Encryption configuration of the export job. Includes the encryption type as well as the AWS KMS key. The KMS key is only necessary if you chose the KMS encryption type.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ExportServerSideEncryption {
@@ -968,6 +1000,10 @@ pub struct RequestDetails {
     #[serde(rename = "ExportAssetsToS3")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub export_assets_to_s3: Option<ExportAssetsToS3RequestDetails>,
+    /// <p>Details about the export to Amazon S3 request.</p>
+    #[serde(rename = "ExportRevisionsToS3")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub export_revisions_to_s3: Option<ExportRevisionsToS3RequestDetails>,
     /// <p>Details about the import from signed URL request.</p>
     #[serde(rename = "ImportAssetFromSignedUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -990,6 +1026,10 @@ pub struct ResponseDetails {
     #[serde(rename = "ExportAssetsToS3")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub export_assets_to_s3: Option<ExportAssetsToS3ResponseDetails>,
+    /// <p>Details for the export revisions to Amazon S3 response.</p>
+    #[serde(rename = "ExportRevisionsToS3")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub export_revisions_to_s3: Option<ExportRevisionsToS3ResponseDetails>,
     /// <p>Details for the import from signed URL response.</p>
     #[serde(rename = "ImportAssetFromSignedUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -998,6 +1038,21 @@ pub struct ResponseDetails {
     #[serde(rename = "ImportAssetsFromS3")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub import_assets_from_s3: Option<ImportAssetsFromS3ResponseDetails>,
+}
+
+/// <p>The destination where the assets in the revision will be exported.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct RevisionDestinationEntry {
+    /// <p>The S3 bucket that is the destination for the assets in the revision.</p>
+    #[serde(rename = "Bucket")]
+    pub bucket: String,
+    /// <p>A string representing the pattern for generated names of the individual assets in the revision. For more information about key patterns, see <a href="https://docs.aws.amazon.com/data-exchange/latest/userguide/jobs.html#revision-export-keypatterns">Key patterns when exporting revisions</a>.</p>
+    #[serde(rename = "KeyPattern")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key_pattern: Option<String>,
+    /// <p>The unique identifier for the revision.</p>
+    #[serde(rename = "RevisionId")]
+    pub revision_id: String,
 }
 
 /// <p>A revision is a container for one or more assets.</p>

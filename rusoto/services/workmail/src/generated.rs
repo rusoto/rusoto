@@ -211,6 +211,69 @@ pub struct CreateGroupResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateMobileDeviceAccessRuleRequest {
+    /// <p>The idempotency token for the client request.</p>
+    #[serde(rename = "ClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_token: Option<String>,
+    /// <p>The rule description.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Device models that the rule will match.</p>
+    #[serde(rename = "DeviceModels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_models: Option<Vec<String>>,
+    /// <p>Device operating systems that the rule will match.</p>
+    #[serde(rename = "DeviceOperatingSystems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_operating_systems: Option<Vec<String>>,
+    /// <p>Device types that the rule will match.</p>
+    #[serde(rename = "DeviceTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_types: Option<Vec<String>>,
+    /// <p>Device user agents that the rule will match.</p>
+    #[serde(rename = "DeviceUserAgents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_user_agents: Option<Vec<String>>,
+    /// <p>The effect of the rule when it matches. Allowed values are <code>ALLOW</code> or <code>DENY</code>.</p>
+    #[serde(rename = "Effect")]
+    pub effect: String,
+    /// <p>The rule name.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>Device models that the rule <b>will not</b> match. All other device models will match.</p>
+    #[serde(rename = "NotDeviceModels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_device_models: Option<Vec<String>>,
+    /// <p>Device operating systems that the rule <b>will not</b> match. All other device operating systems will match.</p>
+    #[serde(rename = "NotDeviceOperatingSystems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_device_operating_systems: Option<Vec<String>>,
+    /// <p>Device types that the rule <b>will not</b> match. All other device types will match.</p>
+    #[serde(rename = "NotDeviceTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_device_types: Option<Vec<String>>,
+    /// <p>Device user agents that the rule <b>will not</b> match. All other device user agents will match.</p>
+    #[serde(rename = "NotDeviceUserAgents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_device_user_agents: Option<Vec<String>>,
+    /// <p>The Amazon WorkMail organization under which the rule will be created.</p>
+    #[serde(rename = "OrganizationId")]
+    pub organization_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateMobileDeviceAccessRuleResponse {
+    /// <p>The identifier for the newly created mobile device access rule.</p>
+    #[serde(rename = "MobileDeviceAccessRuleId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mobile_device_access_rule_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateOrganizationRequest {
     /// <p>The organization alias.</p>
     #[serde(rename = "Alias")]
@@ -372,6 +435,21 @@ pub struct DeleteMailboxPermissionsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteMailboxPermissionsResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteMobileDeviceAccessRuleRequest {
+    /// <p>The identifier of the rule to be deleted.</p>
+    #[serde(rename = "MobileDeviceAccessRuleId")]
+    pub mobile_device_access_rule_id: String,
+    /// <p>The Amazon WorkMail organization under which the rule will be deleted.</p>
+    #[serde(rename = "OrganizationId")]
+    pub organization_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteMobileDeviceAccessRuleResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -858,6 +936,43 @@ pub struct GetMailboxDetailsResponse {
     pub mailbox_size: Option<f64>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetMobileDeviceAccessEffectRequest {
+    /// <p>Device model the simulated user will report.</p>
+    #[serde(rename = "DeviceModel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_model: Option<String>,
+    /// <p>Device operating system the simulated user will report.</p>
+    #[serde(rename = "DeviceOperatingSystem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_operating_system: Option<String>,
+    /// <p>Device type the simulated user will report.</p>
+    #[serde(rename = "DeviceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_type: Option<String>,
+    /// <p>Device user agent the simulated user will report.</p>
+    #[serde(rename = "DeviceUserAgent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_user_agent: Option<String>,
+    /// <p>The Amazon WorkMail organization to simulate the access effect for.</p>
+    #[serde(rename = "OrganizationId")]
+    pub organization_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetMobileDeviceAccessEffectResponse {
+    /// <p>The effect of the simulated access, <code>ALLOW</code> or <code>DENY</code>, after evaluating mobile device access rules in the Amazon WorkMail organization for the simulated user parameters.</p>
+    #[serde(rename = "Effect")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub effect: Option<String>,
+    /// <p>A list of the rules which matched the simulated user input and produced the effect.</p>
+    #[serde(rename = "MatchedRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub matched_rules: Option<Vec<MobileDeviceAccessMatchedRule>>,
+}
+
 /// <p>The representation of an Amazon WorkMail group.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1057,6 +1172,23 @@ pub struct ListMailboxPermissionsResponse {
     #[serde(rename = "Permissions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub permissions: Option<Vec<Permission>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListMobileDeviceAccessRulesRequest {
+    /// <p>The Amazon WorkMail organization for which to list the rules.</p>
+    #[serde(rename = "OrganizationId")]
+    pub organization_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListMobileDeviceAccessRulesResponse {
+    /// <p>The list of mobile device access rules that exist under the specified Amazon WorkMail organization.</p>
+    #[serde(rename = "Rules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rules: Option<Vec<MobileDeviceAccessRule>>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1262,6 +1394,82 @@ pub struct Member {
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
+}
+
+/// <p>The rule that a simulated user matches.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MobileDeviceAccessMatchedRule {
+    /// <p>Identifier of the rule that a simulated user matches.</p>
+    #[serde(rename = "MobileDeviceAccessRuleId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mobile_device_access_rule_id: Option<String>,
+    /// <p>Name of a rule that a simulated user matches.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+/// <p>A rule that controls access to mobile devices for an Amazon WorkMail group.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MobileDeviceAccessRule {
+    /// <p>The date and time at which an access rule was created.</p>
+    #[serde(rename = "DateCreated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub date_created: Option<f64>,
+    /// <p>The date and time at which an access rule was modified.</p>
+    #[serde(rename = "DateModified")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub date_modified: Option<f64>,
+    /// <p>The description of a mobile access rule.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Device models that a rule will match.</p>
+    #[serde(rename = "DeviceModels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_models: Option<Vec<String>>,
+    /// <p>Device operating systems that a rule will match.</p>
+    #[serde(rename = "DeviceOperatingSystems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_operating_systems: Option<Vec<String>>,
+    /// <p>Device types that a rule will match. </p>
+    #[serde(rename = "DeviceTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_types: Option<Vec<String>>,
+    /// <p>Device user agents that a rule will match.</p>
+    #[serde(rename = "DeviceUserAgents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_user_agents: Option<Vec<String>>,
+    /// <p>The effect of the rule when it matches. Allowed values are <code>ALLOW</code> or <code>DENY</code>.</p>
+    #[serde(rename = "Effect")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub effect: Option<String>,
+    /// <p>The ID assigned to a mobile access rule. </p>
+    #[serde(rename = "MobileDeviceAccessRuleId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mobile_device_access_rule_id: Option<String>,
+    /// <p>The name of a mobile access rule.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>Device models that a rule <b>will not</b> match. All other device models will match.</p>
+    #[serde(rename = "NotDeviceModels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_device_models: Option<Vec<String>>,
+    /// <p>Device operating systems that a rule <b>will not</b> match. All other device types will match.</p>
+    #[serde(rename = "NotDeviceOperatingSystems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_device_operating_systems: Option<Vec<String>>,
+    /// <p>Device types that a rule <b>will not</b> match. All other device types will match.</p>
+    #[serde(rename = "NotDeviceTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_device_types: Option<Vec<String>>,
+    /// <p>Device user agents that a rule <b>will not</b> match. All other device user agents will match.</p>
+    #[serde(rename = "NotDeviceUserAgents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_device_user_agents: Option<Vec<String>>,
 }
 
 /// <p>The representation of an organization.</p>
@@ -1564,6 +1772,63 @@ pub struct UpdateMailboxQuotaRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UpdateMailboxQuotaResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateMobileDeviceAccessRuleRequest {
+    /// <p>The updated rule description.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Device models that the updated rule will match.</p>
+    #[serde(rename = "DeviceModels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_models: Option<Vec<String>>,
+    /// <p>Device operating systems that the updated rule will match.</p>
+    #[serde(rename = "DeviceOperatingSystems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_operating_systems: Option<Vec<String>>,
+    /// <p>Device types that the updated rule will match.</p>
+    #[serde(rename = "DeviceTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_types: Option<Vec<String>>,
+    /// <p>User agents that the updated rule will match.</p>
+    #[serde(rename = "DeviceUserAgents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_user_agents: Option<Vec<String>>,
+    /// <p>The effect of the rule when it matches. Allowed values are <code>ALLOW</code> or <code>DENY</code>.</p>
+    #[serde(rename = "Effect")]
+    pub effect: String,
+    /// <p>The identifier of the rule to be updated.</p>
+    #[serde(rename = "MobileDeviceAccessRuleId")]
+    pub mobile_device_access_rule_id: String,
+    /// <p>The updated rule name.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>Device models that the updated rule <b>will not</b> match. All other device models will match.</p>
+    #[serde(rename = "NotDeviceModels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_device_models: Option<Vec<String>>,
+    /// <p>Device operating systems that the updated rule <b>will not</b> match. All other device operating systems will match.</p>
+    #[serde(rename = "NotDeviceOperatingSystems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_device_operating_systems: Option<Vec<String>>,
+    /// <p>Device types that the updated rule <b>will not</b> match. All other device types will match.</p>
+    #[serde(rename = "NotDeviceTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_device_types: Option<Vec<String>>,
+    /// <p>User agents that the updated rule <b>will not</b> match. All other user agents will match.</p>
+    #[serde(rename = "NotDeviceUserAgents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub not_device_user_agents: Option<Vec<String>>,
+    /// <p>The Amazon WorkMail organization under which the rule will be updated.</p>
+    #[serde(rename = "OrganizationId")]
+    pub organization_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateMobileDeviceAccessRuleResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -2012,6 +2277,70 @@ impl fmt::Display for CreateGroupError {
     }
 }
 impl Error for CreateGroupError {}
+/// Errors returned by CreateMobileDeviceAccessRule
+#[derive(Debug, PartialEq)]
+pub enum CreateMobileDeviceAccessRuleError {
+    /// <p>One or more of the input parameters don't match the service's restrictions.</p>
+    InvalidParameter(String),
+    /// <p>The request exceeds the limit of the resource.</p>
+    LimitExceeded(String),
+    /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
+    OrganizationNotFound(String),
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
+    OrganizationState(String),
+}
+
+impl CreateMobileDeviceAccessRuleError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateMobileDeviceAccessRuleError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        CreateMobileDeviceAccessRuleError::InvalidParameter(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateMobileDeviceAccessRuleError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "OrganizationNotFoundException" => {
+                    return RusotoError::Service(
+                        CreateMobileDeviceAccessRuleError::OrganizationNotFound(err.msg),
+                    )
+                }
+                "OrganizationStateException" => {
+                    return RusotoError::Service(
+                        CreateMobileDeviceAccessRuleError::OrganizationState(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateMobileDeviceAccessRuleError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateMobileDeviceAccessRuleError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateMobileDeviceAccessRuleError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateMobileDeviceAccessRuleError::OrganizationNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateMobileDeviceAccessRuleError::OrganizationState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateMobileDeviceAccessRuleError {}
 /// Errors returned by CreateOrganization
 #[derive(Debug, PartialEq)]
 pub enum CreateOrganizationError {
@@ -2450,6 +2779,62 @@ impl fmt::Display for DeleteMailboxPermissionsError {
     }
 }
 impl Error for DeleteMailboxPermissionsError {}
+/// Errors returned by DeleteMobileDeviceAccessRule
+#[derive(Debug, PartialEq)]
+pub enum DeleteMobileDeviceAccessRuleError {
+    /// <p>One or more of the input parameters don't match the service's restrictions.</p>
+    InvalidParameter(String),
+    /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
+    OrganizationNotFound(String),
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
+    OrganizationState(String),
+}
+
+impl DeleteMobileDeviceAccessRuleError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteMobileDeviceAccessRuleError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        DeleteMobileDeviceAccessRuleError::InvalidParameter(err.msg),
+                    )
+                }
+                "OrganizationNotFoundException" => {
+                    return RusotoError::Service(
+                        DeleteMobileDeviceAccessRuleError::OrganizationNotFound(err.msg),
+                    )
+                }
+                "OrganizationStateException" => {
+                    return RusotoError::Service(
+                        DeleteMobileDeviceAccessRuleError::OrganizationState(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteMobileDeviceAccessRuleError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteMobileDeviceAccessRuleError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteMobileDeviceAccessRuleError::OrganizationNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteMobileDeviceAccessRuleError::OrganizationState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteMobileDeviceAccessRuleError {}
 /// Errors returned by DeleteOrganization
 #[derive(Debug, PartialEq)]
 pub enum DeleteOrganizationError {
@@ -3302,6 +3687,60 @@ impl fmt::Display for GetMailboxDetailsError {
     }
 }
 impl Error for GetMailboxDetailsError {}
+/// Errors returned by GetMobileDeviceAccessEffect
+#[derive(Debug, PartialEq)]
+pub enum GetMobileDeviceAccessEffectError {
+    /// <p>One or more of the input parameters don't match the service's restrictions.</p>
+    InvalidParameter(String),
+    /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
+    OrganizationNotFound(String),
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
+    OrganizationState(String),
+}
+
+impl GetMobileDeviceAccessEffectError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetMobileDeviceAccessEffectError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        GetMobileDeviceAccessEffectError::InvalidParameter(err.msg),
+                    )
+                }
+                "OrganizationNotFoundException" => {
+                    return RusotoError::Service(
+                        GetMobileDeviceAccessEffectError::OrganizationNotFound(err.msg),
+                    )
+                }
+                "OrganizationStateException" => {
+                    return RusotoError::Service(
+                        GetMobileDeviceAccessEffectError::OrganizationState(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetMobileDeviceAccessEffectError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetMobileDeviceAccessEffectError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            GetMobileDeviceAccessEffectError::OrganizationNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetMobileDeviceAccessEffectError::OrganizationState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for GetMobileDeviceAccessEffectError {}
 /// Errors returned by ListAccessControlRules
 #[derive(Debug, PartialEq)]
 pub enum ListAccessControlRulesError {
@@ -3604,6 +4043,60 @@ impl fmt::Display for ListMailboxPermissionsError {
     }
 }
 impl Error for ListMailboxPermissionsError {}
+/// Errors returned by ListMobileDeviceAccessRules
+#[derive(Debug, PartialEq)]
+pub enum ListMobileDeviceAccessRulesError {
+    /// <p>One or more of the input parameters don't match the service's restrictions.</p>
+    InvalidParameter(String),
+    /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
+    OrganizationNotFound(String),
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
+    OrganizationState(String),
+}
+
+impl ListMobileDeviceAccessRulesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListMobileDeviceAccessRulesError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        ListMobileDeviceAccessRulesError::InvalidParameter(err.msg),
+                    )
+                }
+                "OrganizationNotFoundException" => {
+                    return RusotoError::Service(
+                        ListMobileDeviceAccessRulesError::OrganizationNotFound(err.msg),
+                    )
+                }
+                "OrganizationStateException" => {
+                    return RusotoError::Service(
+                        ListMobileDeviceAccessRulesError::OrganizationState(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListMobileDeviceAccessRulesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListMobileDeviceAccessRulesError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListMobileDeviceAccessRulesError::OrganizationNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListMobileDeviceAccessRulesError::OrganizationState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListMobileDeviceAccessRulesError {}
 /// Errors returned by ListOrganizations
 #[derive(Debug, PartialEq)]
 pub enum ListOrganizationsError {
@@ -4366,6 +4859,70 @@ impl fmt::Display for UpdateMailboxQuotaError {
     }
 }
 impl Error for UpdateMailboxQuotaError {}
+/// Errors returned by UpdateMobileDeviceAccessRule
+#[derive(Debug, PartialEq)]
+pub enum UpdateMobileDeviceAccessRuleError {
+    /// <p>The identifier supplied for the user, group, or resource does not exist in your organization.</p>
+    EntityNotFound(String),
+    /// <p>One or more of the input parameters don't match the service's restrictions.</p>
+    InvalidParameter(String),
+    /// <p>An operation received a valid organization identifier that either doesn't belong or exist in the system.</p>
+    OrganizationNotFound(String),
+    /// <p>The organization must have a valid state to perform certain operations on the organization or its members.</p>
+    OrganizationState(String),
+}
+
+impl UpdateMobileDeviceAccessRuleError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateMobileDeviceAccessRuleError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "EntityNotFoundException" => {
+                    return RusotoError::Service(UpdateMobileDeviceAccessRuleError::EntityNotFound(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        UpdateMobileDeviceAccessRuleError::InvalidParameter(err.msg),
+                    )
+                }
+                "OrganizationNotFoundException" => {
+                    return RusotoError::Service(
+                        UpdateMobileDeviceAccessRuleError::OrganizationNotFound(err.msg),
+                    )
+                }
+                "OrganizationStateException" => {
+                    return RusotoError::Service(
+                        UpdateMobileDeviceAccessRuleError::OrganizationState(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateMobileDeviceAccessRuleError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateMobileDeviceAccessRuleError::EntityNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateMobileDeviceAccessRuleError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateMobileDeviceAccessRuleError::OrganizationNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateMobileDeviceAccessRuleError::OrganizationState(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for UpdateMobileDeviceAccessRuleError {}
 /// Errors returned by UpdatePrimaryEmailAddress
 #[derive(Debug, PartialEq)]
 pub enum UpdatePrimaryEmailAddressError {
@@ -4605,6 +5162,12 @@ pub trait Workmail {
         input: CreateGroupRequest,
     ) -> Result<CreateGroupResponse, RusotoError<CreateGroupError>>;
 
+    /// <p>Creates a new mobile device access rule for the specified Amazon WorkMail organization.</p>
+    async fn create_mobile_device_access_rule(
+        &self,
+        input: CreateMobileDeviceAccessRuleRequest,
+    ) -> Result<CreateMobileDeviceAccessRuleResponse, RusotoError<CreateMobileDeviceAccessRuleError>>;
+
     /// <p>Creates a new Amazon WorkMail organization. Optionally, you can choose to associate an existing AWS Directory Service directory with your organization. If an AWS Directory Service directory ID is specified, the organization alias must match the directory alias. If you choose not to associate an existing directory with your organization, then we create a new Amazon WorkMail directory for you. For more information, see <a href="https://docs.aws.amazon.com/workmail/latest/adminguide/add_new_organization.html">Adding an organization</a> in the <i>Amazon WorkMail Administrator Guide</i>.</p> <p>You can associate multiple email domains with an organization, then set your default email domain from the Amazon WorkMail console. You can also associate a domain that is managed in an Amazon Route 53 public hosted zone. For more information, see <a href="https://docs.aws.amazon.com/workmail/latest/adminguide/add_domain.html">Adding a domain</a> and <a href="https://docs.aws.amazon.com/workmail/latest/adminguide/default_domain.html">Choosing the default domain</a> in the <i>Amazon WorkMail Administrator Guide</i>.</p> <p>Optionally, you can use a customer managed master key from AWS Key Management Service (AWS KMS) to encrypt email for your organization. If you don't associate an AWS KMS key, Amazon WorkMail creates a default AWS managed master key for you.</p>
     async fn create_organization(
         &self,
@@ -4646,6 +5209,12 @@ pub trait Workmail {
         &self,
         input: DeleteMailboxPermissionsRequest,
     ) -> Result<DeleteMailboxPermissionsResponse, RusotoError<DeleteMailboxPermissionsError>>;
+
+    /// <p>Deletes a mobile device access rule for the specified Amazon WorkMail organization.</p>
+    async fn delete_mobile_device_access_rule(
+        &self,
+        input: DeleteMobileDeviceAccessRuleRequest,
+    ) -> Result<DeleteMobileDeviceAccessRuleResponse, RusotoError<DeleteMobileDeviceAccessRuleError>>;
 
     /// <p>Deletes an Amazon WorkMail organization and all underlying AWS resources managed by Amazon WorkMail as part of the organization. You can choose whether to delete the associated directory. For more information, see <a href="https://docs.aws.amazon.com/workmail/latest/adminguide/remove_organization.html">Removing an organization</a> in the <i>Amazon WorkMail Administrator Guide</i>.</p>
     async fn delete_organization(
@@ -4740,6 +5309,12 @@ pub trait Workmail {
         input: GetMailboxDetailsRequest,
     ) -> Result<GetMailboxDetailsResponse, RusotoError<GetMailboxDetailsError>>;
 
+    /// <p>Simulates the effect of the mobile device access rules for the given attributes of a sample access event. Use this method to test the effects of the current set of mobile device access rules for the Amazon WorkMail organization for a particular user's attributes.</p>
+    async fn get_mobile_device_access_effect(
+        &self,
+        input: GetMobileDeviceAccessEffectRequest,
+    ) -> Result<GetMobileDeviceAccessEffectResponse, RusotoError<GetMobileDeviceAccessEffectError>>;
+
     /// <p>Lists the access control rules for the specified organization.</p>
     async fn list_access_control_rules(
         &self,
@@ -4775,6 +5350,12 @@ pub trait Workmail {
         &self,
         input: ListMailboxPermissionsRequest,
     ) -> Result<ListMailboxPermissionsResponse, RusotoError<ListMailboxPermissionsError>>;
+
+    /// <p>Lists the mobile device access rules for the specified Amazon WorkMail organization.</p>
+    async fn list_mobile_device_access_rules(
+        &self,
+        input: ListMobileDeviceAccessRulesRequest,
+    ) -> Result<ListMobileDeviceAccessRulesResponse, RusotoError<ListMobileDeviceAccessRulesError>>;
 
     /// <p>Returns summaries of the customer's organizations.</p>
     async fn list_organizations(
@@ -4859,6 +5440,12 @@ pub trait Workmail {
         &self,
         input: UpdateMailboxQuotaRequest,
     ) -> Result<UpdateMailboxQuotaResponse, RusotoError<UpdateMailboxQuotaError>>;
+
+    /// <p>Updates a mobile device access rule for the specified Amazon WorkMail organization.</p>
+    async fn update_mobile_device_access_rule(
+        &self,
+        input: UpdateMobileDeviceAccessRuleRequest,
+    ) -> Result<UpdateMobileDeviceAccessRuleResponse, RusotoError<UpdateMobileDeviceAccessRuleError>>;
 
     /// <p>Updates the primary email for a user, group, or resource. The current email is moved into the list of aliases (or swapped between an existing alias and the current primary email), and the email provided in the input is promoted as the primary.</p>
     async fn update_primary_email_address(
@@ -5009,6 +5596,29 @@ impl Workmail for WorkmailClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CreateGroupResponse, _>()
     }
 
+    /// <p>Creates a new mobile device access rule for the specified Amazon WorkMail organization.</p>
+    async fn create_mobile_device_access_rule(
+        &self,
+        input: CreateMobileDeviceAccessRuleRequest,
+    ) -> Result<CreateMobileDeviceAccessRuleResponse, RusotoError<CreateMobileDeviceAccessRuleError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "WorkMailService.CreateMobileDeviceAccessRule",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateMobileDeviceAccessRuleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateMobileDeviceAccessRuleResponse, _>()
+    }
+
     /// <p>Creates a new Amazon WorkMail organization. Optionally, you can choose to associate an existing AWS Directory Service directory with your organization. If an AWS Directory Service directory ID is specified, the organization alias must match the directory alias. If you choose not to associate an existing directory with your organization, then we create a new Amazon WorkMail directory for you. For more information, see <a href="https://docs.aws.amazon.com/workmail/latest/adminguide/add_new_organization.html">Adding an organization</a> in the <i>Amazon WorkMail Administrator Guide</i>.</p> <p>You can associate multiple email domains with an organization, then set your default email domain from the Amazon WorkMail console. You can also associate a domain that is managed in an Amazon Route 53 public hosted zone. For more information, see <a href="https://docs.aws.amazon.com/workmail/latest/adminguide/add_domain.html">Adding a domain</a> and <a href="https://docs.aws.amazon.com/workmail/latest/adminguide/default_domain.html">Choosing the default domain</a> in the <i>Amazon WorkMail Administrator Guide</i>.</p> <p>Optionally, you can use a customer managed master key from AWS Key Management Service (AWS KMS) to encrypt email for your organization. If you don't associate an AWS KMS key, Amazon WorkMail creates a default AWS managed master key for you.</p>
     async fn create_organization(
         &self,
@@ -5135,6 +5745,29 @@ impl Workmail for WorkmailClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<DeleteMailboxPermissionsResponse, _>()
+    }
+
+    /// <p>Deletes a mobile device access rule for the specified Amazon WorkMail organization.</p>
+    async fn delete_mobile_device_access_rule(
+        &self,
+        input: DeleteMobileDeviceAccessRuleRequest,
+    ) -> Result<DeleteMobileDeviceAccessRuleResponse, RusotoError<DeleteMobileDeviceAccessRuleError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "WorkMailService.DeleteMobileDeviceAccessRule",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteMobileDeviceAccessRuleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteMobileDeviceAccessRuleResponse, _>()
     }
 
     /// <p>Deletes an Amazon WorkMail organization and all underlying AWS resources managed by Amazon WorkMail as part of the organization. You can choose whether to delete the associated directory. For more information, see <a href="https://docs.aws.amazon.com/workmail/latest/adminguide/remove_organization.html">Removing an organization</a> in the <i>Amazon WorkMail Administrator Guide</i>.</p>
@@ -5429,6 +6062,29 @@ impl Workmail for WorkmailClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetMailboxDetailsResponse, _>()
     }
 
+    /// <p>Simulates the effect of the mobile device access rules for the given attributes of a sample access event. Use this method to test the effects of the current set of mobile device access rules for the Amazon WorkMail organization for a particular user's attributes.</p>
+    async fn get_mobile_device_access_effect(
+        &self,
+        input: GetMobileDeviceAccessEffectRequest,
+    ) -> Result<GetMobileDeviceAccessEffectResponse, RusotoError<GetMobileDeviceAccessEffectError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "WorkMailService.GetMobileDeviceAccessEffect",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetMobileDeviceAccessEffectError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetMobileDeviceAccessEffectResponse, _>()
+    }
+
     /// <p>Lists the access control rules for the specified organization.</p>
     async fn list_access_control_rules(
         &self,
@@ -5538,6 +6194,29 @@ impl Workmail for WorkmailClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<ListMailboxPermissionsResponse, _>()
+    }
+
+    /// <p>Lists the mobile device access rules for the specified Amazon WorkMail organization.</p>
+    async fn list_mobile_device_access_rules(
+        &self,
+        input: ListMobileDeviceAccessRulesRequest,
+    ) -> Result<ListMobileDeviceAccessRulesResponse, RusotoError<ListMobileDeviceAccessRulesError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "WorkMailService.ListMobileDeviceAccessRules",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListMobileDeviceAccessRulesError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ListMobileDeviceAccessRulesResponse, _>()
     }
 
     /// <p>Returns summaries of the customer's organizations.</p>
@@ -5794,6 +6473,29 @@ impl Workmail for WorkmailClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateMailboxQuotaResponse, _>()
+    }
+
+    /// <p>Updates a mobile device access rule for the specified Amazon WorkMail organization.</p>
+    async fn update_mobile_device_access_rule(
+        &self,
+        input: UpdateMobileDeviceAccessRuleRequest,
+    ) -> Result<UpdateMobileDeviceAccessRuleResponse, RusotoError<UpdateMobileDeviceAccessRuleError>>
+    {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "WorkMailService.UpdateMobileDeviceAccessRule",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateMobileDeviceAccessRuleError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateMobileDeviceAccessRuleResponse, _>()
     }
 
     /// <p>Updates the primary email for a user, group, or resource. The current email is moved into the list of aliases (or swapped between an existing alias and the current primary email), and the email provided in the input is promoted as the primary.</p>

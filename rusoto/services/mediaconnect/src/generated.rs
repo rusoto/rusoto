@@ -25,6 +25,31 @@ use rusoto_core::signature::SignedRequest;
 #[allow(unused_imports)]
 use serde::{Deserialize, Serialize};
 use serde_json;
+/// <p>A request to add media streams to the flow.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AddFlowMediaStreamsRequest {
+    /// <p>The Amazon Resource Name (ARN) of the flow.</p>
+    #[serde(rename = "FlowArn")]
+    pub flow_arn: String,
+    /// <p>The media streams that you want to add to the flow.</p>
+    #[serde(rename = "MediaStreams")]
+    pub media_streams: Vec<AddMediaStreamRequest>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AddFlowMediaStreamsResponse {
+    /// <p>The ARN of the flow that you added media streams to.</p>
+    #[serde(rename = "FlowArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub flow_arn: Option<String>,
+    /// <p>The media streams that you added to the flow.</p>
+    #[serde(rename = "MediaStreams")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub media_streams: Option<Vec<MediaStream>>,
+}
+
 /// <p>A request to add outputs to the specified flow.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -100,6 +125,37 @@ pub struct AddFlowVpcInterfacesResponse {
     pub vpc_interfaces: Option<Vec<VpcInterface>>,
 }
 
+/// <p>The media stream that you want to add to the flow.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AddMediaStreamRequest {
+    /// <p>The attributes that you want to assign to the new media stream.</p>
+    #[serde(rename = "Attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<MediaStreamAttributesRequest>,
+    /// <p>The sample rate (in Hz) for the stream. If the media stream type is video or ancillary data, set this value to 90000. If the media stream type is audio, set this value to either 48000 or 96000.</p>
+    #[serde(rename = "ClockRate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub clock_rate: Option<i64>,
+    /// <p>A description that can help you quickly identify what your media stream is used for.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>A unique identifier for the media stream.</p>
+    #[serde(rename = "MediaStreamId")]
+    pub media_stream_id: i64,
+    /// <p>A name that helps you distinguish one media stream from another.</p>
+    #[serde(rename = "MediaStreamName")]
+    pub media_stream_name: String,
+    /// <p>The type of media stream.</p>
+    #[serde(rename = "MediaStreamType")]
+    pub media_stream_type: String,
+    /// <p>The resolution of the video.</p>
+    #[serde(rename = "VideoFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub video_format: Option<String>,
+}
+
 /// <p>The output that you want to add to this flow.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -124,6 +180,14 @@ pub struct AddOutputRequest {
     #[serde(rename = "MaxLatency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_latency: Option<i64>,
+    /// <p>The media streams that are associated with the output, and the parameters for those associations.</p>
+    #[serde(rename = "MediaStreamOutputConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub media_stream_output_configurations: Option<Vec<MediaStreamOutputConfigurationRequest>>,
+    /// <p>The minimum latency in milliseconds for SRT-based streams. In streams that use the SRT protocol, this value that you set on your MediaConnect source or output represents the minimal potential latency of that connection. The latency of the stream is set to the highest number between the sender’s minimum latency and the receiver’s minimum latency.</p>
+    #[serde(rename = "MinLatency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min_latency: Option<i64>,
     /// <p>The name of the output. This value must be unique within the current flow.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -165,6 +229,10 @@ pub struct CreateFlowRequest {
     #[serde(rename = "Entitlements")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entitlements: Option<Vec<GrantEntitlementRequest>>,
+    /// <p>The media streams that you want to add to the flow. You can associate these media streams with sources and outputs on the flow.</p>
+    #[serde(rename = "MediaStreams")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub media_streams: Option<Vec<AddMediaStreamRequest>>,
     /// <p>The name of the flow.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -267,12 +335,70 @@ pub struct DescribeReservationResponse {
     pub reservation: Option<Reservation>,
 }
 
+/// <p>The transport parameters that are associated with an outbound media stream.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DestinationConfiguration {
+    /// <p>The IP address where contents of the media stream will be sent.</p>
+    #[serde(rename = "DestinationIp")]
+    pub destination_ip: String,
+    /// <p>The port to use when the content of the media stream is distributed to the output.</p>
+    #[serde(rename = "DestinationPort")]
+    pub destination_port: i64,
+    /// <p>The VPC interface that is used for the media stream associated with the output.</p>
+    #[serde(rename = "Interface")]
+    pub interface: Interface,
+    /// <p>The IP address that the receiver requires in order to establish a connection with the flow. This value is represented by the elastic network interface IP address of the VPC. This field applies only to outputs that use the CDI or ST 2110 JPEG XS protocol.</p>
+    #[serde(rename = "OutboundIp")]
+    pub outbound_ip: String,
+}
+
+/// <p>The transport parameters that you want to associate with an outbound media stream.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DestinationConfigurationRequest {
+    /// <p>The IP address where you want MediaConnect to send contents of the media stream.</p>
+    #[serde(rename = "DestinationIp")]
+    pub destination_ip: String,
+    /// <p>The port that you want MediaConnect to use when it distributes the media stream to the output.</p>
+    #[serde(rename = "DestinationPort")]
+    pub destination_port: i64,
+    /// <p>The VPC interface that you want to use for the media stream associated with the output.</p>
+    #[serde(rename = "Interface")]
+    pub interface: InterfaceRequest,
+}
+
+/// <p>A collection of parameters that determine how MediaConnect will convert the content. These fields only apply to outputs on flows that have a CDI source.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct EncodingParameters {
+    /// <p>A value that is used to calculate compression for an output. The bitrate of the output is calculated as follows: Output bitrate = (1 / compressionFactor) * (source bitrate) This property only applies to outputs that use the ST 2110 JPEG XS protocol, with a flow source that uses the CDI protocol. Valid values are floating point numbers in the range of 3.0 to 10.0, inclusive.</p>
+    #[serde(rename = "CompressionFactor")]
+    pub compression_factor: f64,
+    /// <p>A setting on the encoder that drives compression settings. This property only applies to video media streams associated with outputs that use the ST 2110 JPEG XS protocol, with a flow source that uses the CDI protocol.</p>
+    #[serde(rename = "EncoderProfile")]
+    pub encoder_profile: String,
+}
+
+/// <p>A collection of parameters that determine how MediaConnect will convert the content. These fields only apply to outputs on flows that have a CDI source.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct EncodingParametersRequest {
+    /// <p>A value that is used to calculate compression for an output. The bitrate of the output is calculated as follows: Output bitrate = (1 / compressionFactor) * (source bitrate) This property only applies to outputs that use the ST 2110 JPEG XS protocol, with a flow source that uses the CDI protocol. Valid values are floating point numbers in the range of 3.0 to 10.0, inclusive.</p>
+    #[serde(rename = "CompressionFactor")]
+    pub compression_factor: f64,
+    /// <p>A setting on the encoder that drives compression settings. This property only applies to video media streams associated with outputs that use the ST 2110 JPEG XS protocol, if at least one source on the flow uses the CDI protocol.</p>
+    #[serde(rename = "EncoderProfile")]
+    pub encoder_profile: String,
+}
+
 /// <p>Information about the encryption of the flow.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Encryption {
     /// <p>The type of algorithm that is used for the encryption (such as aes128, aes192, or aes256).</p>
     #[serde(rename = "Algorithm")]
-    pub algorithm: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub algorithm: Option<String>,
     /// <p>A 128-bit, 16-byte hex value represented by a 32-character string, to be used with the key for encrypting content. This parameter is not valid for static key encryption.</p>
     #[serde(rename = "ConstantInitializationVector")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -340,10 +466,18 @@ pub struct Entitlement {
 /// <p>The settings for source failover</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FailoverConfig {
+    /// <p>The type of failover you choose for this flow. MERGE combines the source streams into a single stream, allowing graceful recovery from any single-source loss. FAILOVER allows switching between different streams.</p>
+    #[serde(rename = "FailoverMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failover_mode: Option<String>,
     /// <p>Search window time to look for dash-7 packets</p>
     #[serde(rename = "RecoveryWindow")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recovery_window: Option<i64>,
+    /// <p>The priority you want to assign to a source. You can have a primary stream and a backup stream or two equally prioritized streams.</p>
+    #[serde(rename = "SourcePriority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_priority: Option<SourcePriority>,
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -370,6 +504,10 @@ pub struct Flow {
     /// <p>The Amazon Resource Name (ARN), a unique identifier for any AWS resource, of the flow.</p>
     #[serde(rename = "FlowArn")]
     pub flow_arn: String,
+    /// <p>The media streams that are associated with the flow. After you associate a media stream with a source, you can also associate it with outputs on the flow.</p>
+    #[serde(rename = "MediaStreams")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub media_streams: Option<Vec<MediaStream>>,
     /// <p>The name of the flow.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -391,6 +529,74 @@ pub struct Flow {
     #[serde(rename = "VpcInterfaces")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_interfaces: Option<Vec<VpcInterface>>,
+}
+
+/// <p>FMTP</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Fmtp {
+    /// <p>The format of the audio channel.</p>
+    #[serde(rename = "ChannelOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_order: Option<String>,
+    /// <p>The format that is used for the representation of color.</p>
+    #[serde(rename = "Colorimetry")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub colorimetry: Option<String>,
+    /// <p>The frame rate for the video stream, in frames/second. For example: 60000/1001. If you specify a whole number, MediaConnect uses a ratio of N/1. For example, if you specify 60, MediaConnect uses 60/1 as the exactFramerate.</p>
+    #[serde(rename = "ExactFramerate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exact_framerate: Option<String>,
+    /// <p>The pixel aspect ratio (PAR) of the video.</p>
+    #[serde(rename = "Par")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub par: Option<String>,
+    /// <p>The encoding range of the video.</p>
+    #[serde(rename = "Range")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub range: Option<String>,
+    /// <p>The type of compression that was used to smooth the video’s appearance</p>
+    #[serde(rename = "ScanMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scan_mode: Option<String>,
+    /// <p>The transfer characteristic system (TCS) that is used in the video.</p>
+    #[serde(rename = "Tcs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tcs: Option<String>,
+}
+
+/// <p>The settings that you want to use to define the media stream.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct FmtpRequest {
+    /// <p>The format of the audio channel.</p>
+    #[serde(rename = "ChannelOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_order: Option<String>,
+    /// <p>The format that is used for the representation of color.</p>
+    #[serde(rename = "Colorimetry")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub colorimetry: Option<String>,
+    /// <p>The frame rate for the video stream, in frames/second. For example: 60000/1001. If you specify a whole number, MediaConnect uses a ratio of N/1. For example, if you specify 60, MediaConnect uses 60/1 as the exactFramerate.</p>
+    #[serde(rename = "ExactFramerate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exact_framerate: Option<String>,
+    /// <p>The pixel aspect ratio (PAR) of the video.</p>
+    #[serde(rename = "Par")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub par: Option<String>,
+    /// <p>The encoding range of the video.</p>
+    #[serde(rename = "Range")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub range: Option<String>,
+    /// <p>The type of compression that was used to smooth the video’s appearance.</p>
+    #[serde(rename = "ScanMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scan_mode: Option<String>,
+    /// <p>The transfer characteristic system (TCS) that is used in the video.</p>
+    #[serde(rename = "Tcs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tcs: Option<String>,
 }
 
 /// <p>The entitlements that you want to grant on a flow.</p>
@@ -445,6 +651,51 @@ pub struct GrantFlowEntitlementsResponse {
     #[serde(rename = "FlowArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub flow_arn: Option<String>,
+}
+
+/// <p>The transport parameters that are associated with an incoming media stream.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct InputConfiguration {
+    /// <p>The IP address that the flow listens on for incoming content for a media stream.</p>
+    #[serde(rename = "InputIp")]
+    pub input_ip: String,
+    /// <p>The port that the flow listens on for an incoming media stream.</p>
+    #[serde(rename = "InputPort")]
+    pub input_port: i64,
+    /// <p>The VPC interface where the media stream comes in from.</p>
+    #[serde(rename = "Interface")]
+    pub interface: Interface,
+}
+
+/// <p>The transport parameters that you want to associate with an incoming media stream.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct InputConfigurationRequest {
+    /// <p>The port that you want the flow to listen on for an incoming media stream.</p>
+    #[serde(rename = "InputPort")]
+    pub input_port: i64,
+    /// <p>The VPC interface that you want to use for the incoming media stream.</p>
+    #[serde(rename = "Interface")]
+    pub interface: InterfaceRequest,
+}
+
+/// <p>The VPC interface that is used for the media stream associated with the source or output.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Interface {
+    /// <p>The name of the VPC interface.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+/// <p>The VPC interface that you want to designate where the media stream is coming from or going to.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct InterfaceRequest {
+    /// <p>The name of the VPC interface.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -608,6 +859,139 @@ pub struct ListedFlow {
     pub status: String,
 }
 
+/// <p>A single track or stream of media that contains video, audio, or ancillary data. After you add a media stream to a flow, you can associate it with sources and outputs on that flow, as long as they use the CDI protocol or the ST 2110 JPEG XS protocol. Each source or output can consist of one or many media streams.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MediaStream {
+    /// <p>Attributes that are related to the media stream.</p>
+    #[serde(rename = "Attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<MediaStreamAttributes>,
+    /// <p>The sample rate for the stream. This value is measured in Hz.</p>
+    #[serde(rename = "ClockRate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub clock_rate: Option<i64>,
+    /// <p>A description that can help you quickly identify what your media stream is used for.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The format type number (sometimes referred to as RTP payload type) of the media stream. MediaConnect assigns this value to the media stream. For ST 2110 JPEG XS outputs, you need to provide this value to the receiver.</p>
+    #[serde(rename = "Fmt")]
+    pub fmt: i64,
+    /// <p>A unique identifier for the media stream.</p>
+    #[serde(rename = "MediaStreamId")]
+    pub media_stream_id: i64,
+    /// <p>A name that helps you distinguish one media stream from another.</p>
+    #[serde(rename = "MediaStreamName")]
+    pub media_stream_name: String,
+    /// <p>The type of media stream.</p>
+    #[serde(rename = "MediaStreamType")]
+    pub media_stream_type: String,
+    /// <p>The resolution of the video.</p>
+    #[serde(rename = "VideoFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub video_format: Option<String>,
+}
+
+/// <p>Attributes that are related to the media stream.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MediaStreamAttributes {
+    /// <p>A set of parameters that define the media stream.</p>
+    #[serde(rename = "Fmtp")]
+    pub fmtp: Fmtp,
+    /// <p>The audio language, in a format that is recognized by the receiver.</p>
+    #[serde(rename = "Lang")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lang: Option<String>,
+}
+
+/// <p>Attributes that are related to the media stream.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct MediaStreamAttributesRequest {
+    /// <p>The settings that you want to use to define the media stream.</p>
+    #[serde(rename = "Fmtp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fmtp: Option<FmtpRequest>,
+    /// <p>The audio language, in a format that is recognized by the receiver.</p>
+    #[serde(rename = "Lang")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lang: Option<String>,
+}
+
+/// <p>The media stream that is associated with the output, and the parameters for that association.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MediaStreamOutputConfiguration {
+    /// <p>The transport parameters that are associated with each outbound media stream.</p>
+    #[serde(rename = "DestinationConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_configurations: Option<Vec<DestinationConfiguration>>,
+    /// <p>The format that was used to encode the data. For ancillary data streams, set the encoding name to smpte291. For audio streams, set the encoding name to pcm. For video, 2110 streams, set the encoding name to raw. For video, JPEG XS streams, set the encoding name to jxsv.</p>
+    #[serde(rename = "EncodingName")]
+    pub encoding_name: String,
+    /// <p>Encoding parameters</p>
+    #[serde(rename = "EncodingParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encoding_parameters: Option<EncodingParameters>,
+    /// <p>The name of the media stream.</p>
+    #[serde(rename = "MediaStreamName")]
+    pub media_stream_name: String,
+}
+
+/// <p>The media stream that you want to associate with the output, and the parameters for that association.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct MediaStreamOutputConfigurationRequest {
+    /// <p>The transport parameters that you want to associate with the media stream.</p>
+    #[serde(rename = "DestinationConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_configurations: Option<Vec<DestinationConfigurationRequest>>,
+    /// <p>The format that will be used to encode the data. For ancillary data streams, set the encoding name to smpte291. For audio streams, set the encoding name to pcm. For video, 2110 streams, set the encoding name to raw. For video, JPEG XS streams, set the encoding name to jxsv.</p>
+    #[serde(rename = "EncodingName")]
+    pub encoding_name: String,
+    /// <p>A collection of parameters that determine how MediaConnect will convert the content. These fields only apply to outputs on flows that have a CDI source.</p>
+    #[serde(rename = "EncodingParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encoding_parameters: Option<EncodingParametersRequest>,
+    /// <p>The name of the media stream that is associated with the output.</p>
+    #[serde(rename = "MediaStreamName")]
+    pub media_stream_name: String,
+}
+
+/// <p>The media stream that is associated with the source, and the parameters for that association.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct MediaStreamSourceConfiguration {
+    /// <p>The format that was used to encode the data. For ancillary data streams, set the encoding name to smpte291. For audio streams, set the encoding name to pcm. For video, 2110 streams, set the encoding name to raw. For video, JPEG XS streams, set the encoding name to jxsv.</p>
+    #[serde(rename = "EncodingName")]
+    pub encoding_name: String,
+    /// <p>The transport parameters that are associated with an incoming media stream.</p>
+    #[serde(rename = "InputConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_configurations: Option<Vec<InputConfiguration>>,
+    /// <p>The name of the media stream.</p>
+    #[serde(rename = "MediaStreamName")]
+    pub media_stream_name: String,
+}
+
+/// <p>The definition of a media stream that you want to associate with the source.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct MediaStreamSourceConfigurationRequest {
+    /// <p>The format you want to use to encode the data. For ancillary data streams, set the encoding name to smpte291. For audio streams, set the encoding name to pcm. For video, 2110 streams, set the encoding name to raw. For video, JPEG XS streams, set the encoding name to jxsv.</p>
+    #[serde(rename = "EncodingName")]
+    pub encoding_name: String,
+    /// <p>The transport parameters that you want to associate with the media stream.</p>
+    #[serde(rename = "InputConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_configurations: Option<Vec<InputConfigurationRequest>>,
+    /// <p>The name of the media stream.</p>
+    #[serde(rename = "MediaStreamName")]
+    pub media_stream_name: String,
+}
+
 /// <p>Messages that provide the state of the flow.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -671,10 +1055,18 @@ pub struct Output {
     #[serde(rename = "EntitlementArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entitlement_arn: Option<String>,
+    /// <p>The IP address that the receiver requires in order to establish a connection with the flow. For public networking, the ListenerAddress is represented by the elastic IP address of the flow. For private networking, the ListenerAddress is represented by the elastic network interface IP address of the VPC. This field applies only to outputs that use the Zixi pull or SRT listener protocol.</p>
+    #[serde(rename = "ListenerAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub listener_address: Option<String>,
     /// <p>The input ARN of the AWS Elemental MediaLive channel. This parameter is relevant only for outputs that were added by creating a MediaLive input.</p>
     #[serde(rename = "MediaLiveInputArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_live_input_arn: Option<String>,
+    /// <p>The configuration for each media stream that is associated with the output.</p>
+    #[serde(rename = "MediaStreamOutputConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub media_stream_output_configurations: Option<Vec<MediaStreamOutputConfiguration>>,
     /// <p>The name of the output. This value must be unique within the current flow.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -716,6 +1108,30 @@ pub struct PurchaseOfferingResponse {
     #[serde(rename = "Reservation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reservation: Option<Reservation>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RemoveFlowMediaStreamRequest {
+    /// <p>The Amazon Resource Name (ARN) of the flow.</p>
+    #[serde(rename = "FlowArn")]
+    pub flow_arn: String,
+    /// <p>The name of the media stream that you want to remove.</p>
+    #[serde(rename = "MediaStreamName")]
+    pub media_stream_name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RemoveFlowMediaStreamResponse {
+    /// <p>The Amazon Resource Name (ARN) of the flow.</p>
+    #[serde(rename = "FlowArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub flow_arn: Option<String>,
+    /// <p>The name of the media stream that was removed.</p>
+    #[serde(rename = "MediaStreamName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub media_stream_name: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -904,6 +1320,18 @@ pub struct SetSourceRequest {
     #[serde(rename = "MaxLatency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_latency: Option<i64>,
+    /// <p>The size of the buffer (in milliseconds) to use to sync incoming source data.</p>
+    #[serde(rename = "MaxSyncBuffer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_sync_buffer: Option<i64>,
+    /// <p>The media streams that are associated with the source, and the parameters for those associations.</p>
+    #[serde(rename = "MediaStreamSourceConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub media_stream_source_configurations: Option<Vec<MediaStreamSourceConfigurationRequest>>,
+    /// <p>The minimum latency in milliseconds for SRT-based streams. In streams that use the SRT protocol, this value that you set on your MediaConnect source or output represents the minimal potential latency of that connection. The latency of the stream is set to the highest number between the sender’s minimum latency and the receiver’s minimum latency.</p>
+    #[serde(rename = "MinLatency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min_latency: Option<i64>,
     /// <p>The name of the source.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -954,6 +1382,10 @@ pub struct Source {
     #[serde(rename = "IngestPort")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ingest_port: Option<i64>,
+    /// <p>The media streams that are associated with the source, and the parameters for those associations.</p>
+    #[serde(rename = "MediaStreamSourceConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub media_stream_source_configurations: Option<Vec<MediaStreamSourceConfiguration>>,
     /// <p>The name of the source.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -964,7 +1396,7 @@ pub struct Source {
     #[serde(rename = "Transport")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transport: Option<Transport>,
-    /// <p>The name of the VPC Interface this Source is configured with.</p>
+    /// <p>The name of the VPC interface that is used for this source.</p>
     #[serde(rename = "VpcInterfaceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_interface_name: Option<String>,
@@ -972,6 +1404,15 @@ pub struct Source {
     #[serde(rename = "WhitelistCidr")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub whitelist_cidr: Option<String>,
+}
+
+/// <p>The priority you want to assign to a source. You can have a primary stream and a backup stream or two equally prioritized streams.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct SourcePriority {
+    /// <p>The name of the source you choose as the primary source for this flow.</p>
+    #[serde(rename = "PrimarySource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub primary_source: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -1044,6 +1485,14 @@ pub struct Transport {
     #[serde(rename = "MaxLatency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_latency: Option<i64>,
+    /// <p>The size of the buffer (in milliseconds) to use to sync incoming source data.</p>
+    #[serde(rename = "MaxSyncBuffer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_sync_buffer: Option<i64>,
+    /// <p>The minimum latency in milliseconds for SRT-based streams. In streams that use the SRT protocol, this value that you set on your MediaConnect source or output represents the minimal potential latency of that connection. The latency of the stream is set to the highest number between the sender’s minimum latency and the receiver’s minimum latency.</p>
+    #[serde(rename = "MinLatency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min_latency: Option<i64>,
     /// <p>The protocol that is used by the source or output.</p>
     #[serde(rename = "Protocol")]
     pub protocol: String,
@@ -1118,10 +1567,18 @@ pub struct UpdateEncryption {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateFailoverConfig {
+    /// <p>The type of failover you choose for this flow. MERGE combines the source streams into a single stream, allowing graceful recovery from any single-source loss. FAILOVER allows switching between different streams.</p>
+    #[serde(rename = "FailoverMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failover_mode: Option<String>,
     /// <p>Recovery window time to look for dash-7 packets</p>
     #[serde(rename = "RecoveryWindow")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub recovery_window: Option<i64>,
+    /// <p>The priority you want to assign to a source. You can have a primary stream and a backup stream or two equally prioritized streams.</p>
+    #[serde(rename = "SourcePriority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_priority: Option<SourcePriority>,
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -1168,6 +1625,51 @@ pub struct UpdateFlowEntitlementResponse {
     pub flow_arn: Option<String>,
 }
 
+/// <p>The fields that you want to update in the media stream.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateFlowMediaStreamRequest {
+    /// <p>The attributes that you want to assign to the media stream.</p>
+    #[serde(rename = "Attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<MediaStreamAttributesRequest>,
+    /// <p>The sample rate (in Hz) for the stream. If the media stream type is video or ancillary data, set this value to 90000. If the media stream type is audio, set this value to either 48000 or 96000.</p>
+    #[serde(rename = "ClockRate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub clock_rate: Option<i64>,
+    /// <p>Description</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the flow.</p>
+    #[serde(rename = "FlowArn")]
+    pub flow_arn: String,
+    /// <p>The name of the media stream that you want to update.</p>
+    #[serde(rename = "MediaStreamName")]
+    pub media_stream_name: String,
+    /// <p>The type of media stream.</p>
+    #[serde(rename = "MediaStreamType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub media_stream_type: Option<String>,
+    /// <p>The resolution of the video.</p>
+    #[serde(rename = "VideoFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub video_format: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateFlowMediaStreamResponse {
+    /// <p>The ARN of the flow that is associated with the media stream that you updated.</p>
+    #[serde(rename = "FlowArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub flow_arn: Option<String>,
+    /// <p>The media stream that you updated.</p>
+    #[serde(rename = "MediaStream")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub media_stream: Option<MediaStream>,
+}
+
 /// <p>The fields that you want to update in the output.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1195,6 +1697,14 @@ pub struct UpdateFlowOutputRequest {
     #[serde(rename = "MaxLatency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_latency: Option<i64>,
+    /// <p>The media streams that are associated with the output, and the parameters for those associations.</p>
+    #[serde(rename = "MediaStreamOutputConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub media_stream_output_configurations: Option<Vec<MediaStreamOutputConfigurationRequest>>,
+    /// <p>The minimum latency in milliseconds for SRT-based streams. In streams that use the SRT protocol, this value that you set on your MediaConnect source or output represents the minimal potential latency of that connection. The latency of the stream is set to the highest number between the sender’s minimum latency and the receiver’s minimum latency.</p>
+    #[serde(rename = "MinLatency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min_latency: Option<i64>,
     /// <p>The ARN of the output that you want to update.</p>
     #[serde(rename = "OutputArn")]
     pub output_arn: String,
@@ -1288,6 +1798,18 @@ pub struct UpdateFlowSourceRequest {
     #[serde(rename = "MaxLatency")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_latency: Option<i64>,
+    /// <p>The size of the buffer (in milliseconds) to use to sync incoming source data.</p>
+    #[serde(rename = "MaxSyncBuffer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_sync_buffer: Option<i64>,
+    /// <p>The media streams that are associated with the source, and the parameters for those associations.</p>
+    #[serde(rename = "MediaStreamSourceConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub media_stream_source_configurations: Option<Vec<MediaStreamSourceConfigurationRequest>>,
+    /// <p>The minimum latency in milliseconds for SRT-based streams. In streams that use the SRT protocol, this value that you set on your MediaConnect source or output represents the minimal potential latency of that connection. The latency of the stream is set to the highest number between the sender’s minimum latency and the receiver’s minimum latency.</p>
+    #[serde(rename = "MinLatency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min_latency: Option<i64>,
     /// <p>The protocol that is used by the source.</p>
     #[serde(rename = "Protocol")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1299,7 +1821,7 @@ pub struct UpdateFlowSourceRequest {
     #[serde(rename = "StreamId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_id: Option<String>,
-    /// <p>The name of the VPC Interface to configure this Source with.</p>
+    /// <p>The name of the VPC interface to use for this source.</p>
     #[serde(rename = "VpcInterfaceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vpc_interface_name: Option<String>,
@@ -1332,6 +1854,9 @@ pub struct VpcInterface {
     /// <p>IDs of the network interfaces created in customer&#39;s account by MediaConnect.</p>
     #[serde(rename = "NetworkInterfaceIds")]
     pub network_interface_ids: Vec<String>,
+    /// <p>The type of network interface.</p>
+    #[serde(rename = "NetworkInterfaceType")]
+    pub network_interface_type: String,
     /// <p>Role Arn MediaConnect can assumes to create ENIs in customer&#39;s account</p>
     #[serde(rename = "RoleArn")]
     pub role_arn: String,
@@ -1359,6 +1884,10 @@ pub struct VpcInterfaceRequest {
     /// <p>The name of the VPC Interface. This value must be unique within the current flow.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>The type of network interface. If this value is not included in the request, MediaConnect uses ENA as the networkInterfaceType.</p>
+    #[serde(rename = "NetworkInterfaceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_interface_type: Option<String>,
     /// <p>Role Arn MediaConnect can assumes to create ENIs in customer&#39;s account</p>
     #[serde(rename = "RoleArn")]
     pub role_arn: String,
@@ -1370,6 +1899,70 @@ pub struct VpcInterfaceRequest {
     pub subnet_id: String,
 }
 
+/// Errors returned by AddFlowMediaStreams
+#[derive(Debug, PartialEq)]
+pub enum AddFlowMediaStreamsError {
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    BadRequest(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    Forbidden(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    InternalServerError(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    NotFound(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    ServiceUnavailable(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    TooManyRequests(String),
+}
+
+impl AddFlowMediaStreamsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AddFlowMediaStreamsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(AddFlowMediaStreamsError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(AddFlowMediaStreamsError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(AddFlowMediaStreamsError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(AddFlowMediaStreamsError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(AddFlowMediaStreamsError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(AddFlowMediaStreamsError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for AddFlowMediaStreamsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AddFlowMediaStreamsError::BadRequest(ref cause) => write!(f, "{}", cause),
+            AddFlowMediaStreamsError::Forbidden(ref cause) => write!(f, "{}", cause),
+            AddFlowMediaStreamsError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            AddFlowMediaStreamsError::NotFound(ref cause) => write!(f, "{}", cause),
+            AddFlowMediaStreamsError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            AddFlowMediaStreamsError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for AddFlowMediaStreamsError {}
 /// Errors returned by AddFlowOutputs
 #[derive(Debug, PartialEq)]
 pub enum AddFlowOutputsError {
@@ -2234,6 +2827,72 @@ impl fmt::Display for PurchaseOfferingError {
     }
 }
 impl Error for PurchaseOfferingError {}
+/// Errors returned by RemoveFlowMediaStream
+#[derive(Debug, PartialEq)]
+pub enum RemoveFlowMediaStreamError {
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    BadRequest(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    Forbidden(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    InternalServerError(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    NotFound(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    ServiceUnavailable(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    TooManyRequests(String),
+}
+
+impl RemoveFlowMediaStreamError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveFlowMediaStreamError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(RemoveFlowMediaStreamError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(RemoveFlowMediaStreamError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(RemoveFlowMediaStreamError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(RemoveFlowMediaStreamError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(RemoveFlowMediaStreamError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(RemoveFlowMediaStreamError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for RemoveFlowMediaStreamError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            RemoveFlowMediaStreamError::BadRequest(ref cause) => write!(f, "{}", cause),
+            RemoveFlowMediaStreamError::Forbidden(ref cause) => write!(f, "{}", cause),
+            RemoveFlowMediaStreamError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            RemoveFlowMediaStreamError::NotFound(ref cause) => write!(f, "{}", cause),
+            RemoveFlowMediaStreamError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            RemoveFlowMediaStreamError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for RemoveFlowMediaStreamError {}
 /// Errors returned by RemoveFlowOutput
 #[derive(Debug, PartialEq)]
 pub enum RemoveFlowOutputError {
@@ -2820,6 +3479,72 @@ impl fmt::Display for UpdateFlowEntitlementError {
     }
 }
 impl Error for UpdateFlowEntitlementError {}
+/// Errors returned by UpdateFlowMediaStream
+#[derive(Debug, PartialEq)]
+pub enum UpdateFlowMediaStreamError {
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    BadRequest(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    Forbidden(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    InternalServerError(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    NotFound(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    ServiceUnavailable(String),
+    /// <p>Exception raised by AWS Elemental MediaConnect. See the error message and documentation for the operation for more information on the cause of this exception.</p>
+    TooManyRequests(String),
+}
+
+impl UpdateFlowMediaStreamError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateFlowMediaStreamError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(UpdateFlowMediaStreamError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(UpdateFlowMediaStreamError::Forbidden(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(UpdateFlowMediaStreamError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(UpdateFlowMediaStreamError::NotFound(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(UpdateFlowMediaStreamError::ServiceUnavailable(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(UpdateFlowMediaStreamError::TooManyRequests(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateFlowMediaStreamError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateFlowMediaStreamError::BadRequest(ref cause) => write!(f, "{}", cause),
+            UpdateFlowMediaStreamError::Forbidden(ref cause) => write!(f, "{}", cause),
+            UpdateFlowMediaStreamError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UpdateFlowMediaStreamError::NotFound(ref cause) => write!(f, "{}", cause),
+            UpdateFlowMediaStreamError::ServiceUnavailable(ref cause) => write!(f, "{}", cause),
+            UpdateFlowMediaStreamError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateFlowMediaStreamError {}
 /// Errors returned by UpdateFlowOutput
 #[derive(Debug, PartialEq)]
 pub enum UpdateFlowOutputError {
@@ -2947,6 +3672,12 @@ impl Error for UpdateFlowSourceError {}
 /// Trait representing the capabilities of the AWS MediaConnect API. AWS MediaConnect clients implement this trait.
 #[async_trait]
 pub trait MediaConnect {
+    /// <p>Adds media streams to an existing flow. After you add a media stream to a flow, you can associate it with a source and/or an output that uses the ST 2110 JPEG XS or CDI protocol.</p>
+    async fn add_flow_media_streams(
+        &self,
+        input: AddFlowMediaStreamsRequest,
+    ) -> Result<AddFlowMediaStreamsResponse, RusotoError<AddFlowMediaStreamsError>>;
+
     /// <p>Adds outputs to an existing flow. You can create up to 50 outputs per flow.</p>
     async fn add_flow_outputs(
         &self,
@@ -3037,6 +3768,12 @@ pub trait MediaConnect {
         input: PurchaseOfferingRequest,
     ) -> Result<PurchaseOfferingResponse, RusotoError<PurchaseOfferingError>>;
 
+    /// <p>Removes a media stream from a flow. This action is only available if the media stream is not associated with a source or output.</p>
+    async fn remove_flow_media_stream(
+        &self,
+        input: RemoveFlowMediaStreamRequest,
+    ) -> Result<RemoveFlowMediaStreamResponse, RusotoError<RemoveFlowMediaStreamError>>;
+
     /// <p>Removes an output from an existing flow. This request can be made only on an output that does not have an entitlement associated with it. If the output has an entitlement, you must revoke the entitlement instead. When an entitlement is revoked from a flow, the service automatically removes the associated output.</p>
     async fn remove_flow_output(
         &self,
@@ -3097,6 +3834,12 @@ pub trait MediaConnect {
         input: UpdateFlowEntitlementRequest,
     ) -> Result<UpdateFlowEntitlementResponse, RusotoError<UpdateFlowEntitlementError>>;
 
+    /// <p>Updates an existing media stream.</p>
+    async fn update_flow_media_stream(
+        &self,
+        input: UpdateFlowMediaStreamRequest,
+    ) -> Result<UpdateFlowMediaStreamResponse, RusotoError<UpdateFlowMediaStreamError>>;
+
     /// <p>Updates an existing flow output.</p>
     async fn update_flow_output(
         &self,
@@ -3149,6 +3892,40 @@ impl MediaConnectClient {
 
 #[async_trait]
 impl MediaConnect for MediaConnectClient {
+    /// <p>Adds media streams to an existing flow. After you add a media stream to a flow, you can associate it with a source and/or an output that uses the ST 2110 JPEG XS or CDI protocol.</p>
+    #[allow(unused_mut)]
+    async fn add_flow_media_streams(
+        &self,
+        input: AddFlowMediaStreamsRequest,
+    ) -> Result<AddFlowMediaStreamsResponse, RusotoError<AddFlowMediaStreamsError>> {
+        let request_uri = format!(
+            "/v1/flows/{flow_arn}/mediaStreams",
+            flow_arn = input.flow_arn
+        );
+
+        let mut request = SignedRequest::new("POST", "mediaconnect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AddFlowMediaStreamsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AddFlowMediaStreamsError::from_response(response))
+        }
+    }
+
     /// <p>Adds outputs to an existing flow. You can create up to 50 outputs per flow.</p>
     #[allow(unused_mut)]
     async fn add_flow_outputs(
@@ -3638,6 +4415,38 @@ impl MediaConnect for MediaConnectClient {
         }
     }
 
+    /// <p>Removes a media stream from a flow. This action is only available if the media stream is not associated with a source or output.</p>
+    #[allow(unused_mut)]
+    async fn remove_flow_media_stream(
+        &self,
+        input: RemoveFlowMediaStreamRequest,
+    ) -> Result<RemoveFlowMediaStreamResponse, RusotoError<RemoveFlowMediaStreamError>> {
+        let request_uri = format!(
+            "/v1/flows/{flow_arn}/mediaStreams/{media_stream_name}",
+            flow_arn = input.flow_arn,
+            media_stream_name = input.media_stream_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "mediaconnect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 200 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<RemoveFlowMediaStreamResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(RemoveFlowMediaStreamError::from_response(response))
+        }
+    }
+
     /// <p>Removes an output from an existing flow. This request can be made only on an output that does not have an entitlement associated with it. If the output has an entitlement, you must revoke the entitlement instead. When an entitlement is revoked from a flow, the service automatically removes the associated output.</p>
     #[allow(unused_mut)]
     async fn remove_flow_output(
@@ -3948,6 +4757,41 @@ impl MediaConnect for MediaConnectClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateFlowEntitlementError::from_response(response))
+        }
+    }
+
+    /// <p>Updates an existing media stream.</p>
+    #[allow(unused_mut)]
+    async fn update_flow_media_stream(
+        &self,
+        input: UpdateFlowMediaStreamRequest,
+    ) -> Result<UpdateFlowMediaStreamResponse, RusotoError<UpdateFlowMediaStreamError>> {
+        let request_uri = format!(
+            "/v1/flows/{flow_arn}/mediaStreams/{media_stream_name}",
+            flow_arn = input.flow_arn,
+            media_stream_name = input.media_stream_name
+        );
+
+        let mut request = SignedRequest::new("PUT", "mediaconnect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 202 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateFlowMediaStreamResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateFlowMediaStreamError::from_response(response))
         }
     }
 
