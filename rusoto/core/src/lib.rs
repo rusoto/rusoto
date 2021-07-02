@@ -19,7 +19,7 @@
 //! Rusoto is an [AWS](https://aws.amazon.com/) SDK for Rust.
 //! A high level overview is available in `README.md` at <https://github.com/rusoto/rusoto>.
 
-#[cfg(feature = "rustls")]
+#[cfg(any(feature = "rustls", feature = "rustls-webpki"))]
 use hyper_rustls as tls;
 #[cfg(feature = "native-tls")]
 use hyper_tls as tls;
