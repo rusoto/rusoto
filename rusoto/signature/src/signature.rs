@@ -464,7 +464,7 @@ impl SignedRequest {
         // Normalize URI paths according to RFC 3986. Remove redundant and relative path components. Each path segment must be URI-encoded twice (except for Amazon S3 which only gets URI-encoded once).
         // see https://docs.aws.amazon.com/general/latest/gr/sigv4-create-canonical-request.html
         let canonical_uri = if &self.service != "s3" {
-            utf8_percent_encode(&self.canonical_uri, &STRICT_PATH_ENCODE_SET).collect::<String>()
+            utf8_percent_encode(&self.canonical_uri, &STRICT_SIG_PATH_ENCODE_SET).collect::<String>()
         } else {
             self.canonical_uri.clone()
         };
@@ -736,7 +736,10 @@ pub const STRICT_ENCODE_SET: AsciiSet = NON_ALPHANUMERIC
     .remove(b'~');
 
 /// This struct is used to maintain the URI path encoding
-pub const STRICT_PATH_ENCODE_SET: AsciiSet = STRICT_ENCODE_SET.remove(b'/');
+pub const STRICT_PATH_ENCODE_SET: AsciiSet = STRICT_ENCODE_SET.remove(b'/').remove(b'$');
+
+/// This struct is used to maintain the URI path encoding in signatures
+pub const STRICT_SIG_PATH_ENCODE_SET: AsciiSet = STRICT_ENCODE_SET.remove(b'/');
 
 #[inline]
 #[doc(hidden)]
@@ -890,6 +893,13 @@ mod tests {
             request.canonical_uri()
         );
     }
+
+    #[test]
+    fn path_dollar_sign() {
+        assert_eq!(super::canonical_uri("path/$route", &Region::default()), "path/$route");
+        assert_eq!(utf8_percent_encode("path/$route", &STRICT_SIG_PATH_ENCODE_SET).collect::<String>(), "path/%24route");
+    }
+
     #[test]
     fn query_encoding_escaped_chars() {
         query_encoding_escaped_chars_range(0u8, 45u8); // \0 to '-'
