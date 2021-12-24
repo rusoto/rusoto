@@ -223,11 +223,17 @@ impl HttpClient {
         #[cfg(feature = "native-tls")]
         let connector = HttpsConnector::new();
 
-        #[cfg(all(feature = "rustls", not(feature = "rustls-webpki")))]
-        let connector = HttpsConnector::with_native_roots();
+        #[cfg(feature = "rustls")]
+        let connector = {
+            let builder = crate::tls::HttpsConnectorBuilder::new();
 
-        #[cfg(feature = "rustls-webpki")]
-        let connector = HttpsConnector::with_webpki_roots();
+            #[cfg(not(feature = "rustls-webpki"))]
+            let builder = builder.with_native_roots();
+            #[cfg(feature = "rustls-webpki")]
+            let builder = builder.with_webpki_roots();
+
+            builder.https_only().enable_http2().build()
+        };
 
         Ok(Self::from_connector(connector))
     }
@@ -237,11 +243,17 @@ impl HttpClient {
         #[cfg(feature = "native-tls")]
         let connector = HttpsConnector::new();
 
-        #[cfg(all(feature = "rustls", not(feature = "rustls-webpki")))]
-        let connector = HttpsConnector::with_native_roots();
+        #[cfg(feature = "rustls")]
+        let connector = {
+            let builder = crate::tls::HttpsConnectorBuilder::new();
 
-        #[cfg(feature = "rustls-webpki")]
-        let connector = HttpsConnector::with_webpki_roots();
+            #[cfg(not(feature = "rustls-webpki"))]
+            let builder = builder.with_native_roots();
+            #[cfg(feature = "rustls-webpki")]
+            let builder = builder.with_webpki_roots();
+
+            builder.https_only().enable_http2().build()
+        };
 
         Ok(Self::from_connector_with_config(connector, config))
     }
