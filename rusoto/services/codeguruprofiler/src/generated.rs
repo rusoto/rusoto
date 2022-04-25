@@ -2304,8 +2304,10 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<ConfigureAgentResponse, _>()?;
+
+            let mut result = ConfigureAgentResponse::default();
+            result.configuration = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AgentConfiguration, _>()?;
 
             Ok(result)
         } else {
@@ -2340,8 +2342,10 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 201 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<CreateProfilingGroupResponse, _>()?;
+
+            let mut result = CreateProfilingGroupResponse::default();
+            result.profiling_group = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ProfilingGroupDescription, _>()?;
 
             Ok(result)
         } else {
@@ -2404,8 +2408,10 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<DescribeProfilingGroupResponse, _>()?;
+
+            let mut result = DescribeProfilingGroupResponse::default();
+            result.profiling_group = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ProfilingGroupDescription, _>()?;
 
             Ok(result)
         } else {
@@ -3053,8 +3059,10 @@ impl CodeGuruProfiler for CodeGuruProfilerClient {
             .map_err(RusotoError::from)?;
         if response.status.as_u16() == 200 {
             let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
-            let result = proto::json::ResponsePayload::new(&response)
-                .deserialize::<UpdateProfilingGroupResponse, _>()?;
+
+            let mut result = UpdateProfilingGroupResponse::default();
+            result.profiling_group = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ProfilingGroupDescription, _>()?;
 
             Ok(result)
         } else {
