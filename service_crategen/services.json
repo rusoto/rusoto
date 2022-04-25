@@ -1223,6 +1223,18 @@
     "protocolVersion": "2018-06-27",
     "baseTypeName": "Textract"
   },
+  "timestream-query": {
+    "version": "0.46.0",
+    "coreVersion": "0.46.0",
+    "protocolVersion": "2018-11-01",
+    "baseTypeName": "TimestreamQuery"
+  },
+  "timestream-write": {
+    "version": "0.46.0",
+    "coreVersion": "0.46.0",
+    "protocolVersion": "2018-11-01",
+    "baseTypeName": "TimestreamWrite"
+  },
   "transcribe": {
     "version": "0.48.0",
     "coreVersion": "0.48.0",
