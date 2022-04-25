@@ -34,6 +34,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.46.0] - 2021-01-05
 
+- Implement S3 select event-streams deserialization
 - Display `rusoto_core::Client` in docs
 - Fix unsoundness in `rusoto_mock::MultipleMockRequestDispatcher`
 - Add ability to set local agent appended to the default User-Agent

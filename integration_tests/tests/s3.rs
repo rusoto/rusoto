@@ -23,8 +23,10 @@ use rusoto_s3::{
     CompletedPart, CopyObjectRequest, CreateBucketRequest, CreateMultipartUploadRequest,
     DeleteBucketRequest, DeleteObjectRequest, GetObjectError, GetObjectRequest, HeadObjectRequest,
     ListObjectsRequest, ListObjectsV2Request, PutBucketCorsRequest, PutObjectRequest, S3Client,
-    StreamingBody, UploadPartCopyRequest, UploadPartRequest, S3,
+    StreamingBody, UploadPartCopyRequest, UploadPartRequest, S3, SelectObjectContentRequest, 
+    OutputSerialization, JSONOutput, JSONInput, InputSerialization,
 };
+use serde::{Deserialize, Serialize};
 
 fn generate_unique_name() -> String {
     let mut rng = rand::thread_rng();
@@ -636,6 +638,99 @@ async fn test_name_space_truncate() {
     test_delete_object(&test_client.s3, &bucket_name, &filename_spaces).await;
 
     test_client.cleanup().await;
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize, Deserialize)]
+struct User {
+    id: usize,
+    lastname: String,
+    firstname: String,
+}
+
+#[cfg(not(feature = "disable_ceph_unsupported"))]
+#[tokio::test]
+// test to select S3 object content and deserialize it.
+async fn test_select_object_content() {
+    init_logging();
+
+    let bucket_name = generate_unique_name();
+    let test_client = TestS3Client::new(bucket_name.clone());
+    test_client.create_test_bucket(bucket_name.clone()).await;
+
+    let filename = format!("test_file_{}_for_s3_select", OffsetDateTime::now_utc().second());
+    let user1 = User { id: 1, firstname: "john".into(), lastname: "doe".into()};
+    let user2 = User { id: 2, firstname: "anakin".into(), lastname: "sky".into()};
+    let users = vec![user1, user2];
+
+    let users_jsonl = serde_json::to_string(&users)
+        .expect("Can't serialize users in json")
+        .replace("},{","}\n{")
+        .replace("[","")
+        .replace("]","");
+
+    let put_request = PutObjectRequest {
+        bucket: bucket_name.to_owned(),
+        key: filename.to_owned(),
+        body: Some(users_jsonl.into_bytes().into()),
+        ..Default::default()
+    };
+
+    test_client.s3
+        .put_object(put_request)
+        .await
+        .expect("Failed to put test object");
+
+    let select = SelectObjectContentRequest {
+        bucket: bucket_name.to_owned(),
+        key: filename.to_owned(),
+        expression: "SELECT * FROM S3Object".to_owned(),
+        expression_type: "SQL".to_owned(),
+        input_serialization: InputSerialization {
+            json: Some(JSONInput {
+                type_: Some("LINES".to_owned()),
+                ..Default::default()
+            }),
+            ..Default::default()
+        },
+        output_serialization: OutputSerialization {
+            json: Some(JSONOutput {
+                ..Default::default()
+            }),
+            ..Default::default()
+        },
+        ..Default::default()
+    };
+            
+    let mut event_stream = test_client
+        .s3
+        .select_object_content(select)
+        .await
+        .expect("Failed to select test object")
+        .payload
+        .expect("Failed to return the event stream");
+        
+    let mut users_selected: Vec<User> = Vec::default();
+
+    async {
+        while let Ok(Some(item)) = event_stream.try_next().await {
+            match item {
+                rusoto_s3::SelectObjectContentEventStreamItem::Records(records_event) => {
+                    users_selected = serde_json::Deserializer::from_slice(
+                        &records_event
+                            .payload
+                            .expect("Failed to return the event payload")
+                            .slice(0..)
+                        )
+                        .into_iter::<User>()
+                        .map(|x| x.expect("Failed to deserialize the record"))
+                        .collect();
+                },
+                _ => {},
+            }
+        }
+    }.await;
+    
+    assert_eq!(users, users_selected);
 }
 
 async fn test_multipart_upload(
