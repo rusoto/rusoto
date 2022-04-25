@@ -10,7 +10,11 @@
 pub use crate::container::ContainerProvider;
 pub use crate::environment::EnvironmentProvider;
 pub use crate::instance_metadata::InstanceMetadataProvider;
-pub use crate::profile::ProfileProvider;
+pub use crate::profile::{ProfileProvider, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY,
+                         AWS_SESSION_TOKEN, ROLE_ARN, ROLE_SESSION_NAME,
+                         EXTERNAL_ID, SOURCE_PROFILE, CREDENTIAL_SOURCE,
+                         MFA_SERIAL, ENDPOINT_DISCOVERY_ENABLED, CREDENTIAL_PROCESS,
+                         WEB_IDENTITY_TOKEN_FILE};
 pub use crate::secrets::Secret;
 pub use crate::static_provider::StaticProvider;
 pub use crate::variable::Variable;

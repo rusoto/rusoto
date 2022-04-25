@@ -1,9 +1,15 @@
+use std::str::FromStr;
+
 use async_trait::async_trait;
 use chrono::prelude::*;
 use chrono::Duration;
 
 use rusoto_core;
-use rusoto_core::RusotoError;
+use rusoto_core::credential::{
+    AwsCredentials, CredentialsError, ProfileProvider, ProvideAwsCredentials, EXTERNAL_ID,
+    MFA_SERIAL, ROLE_ARN, ROLE_SESSION_NAME, SOURCE_PROFILE,
+};
+use rusoto_core::{HttpClient, Region, RusotoError};
 
 use crate::{
     AssumeRoleError, AssumeRoleRequest, AssumeRoleResponse, AssumeRoleWithSAMLError,
@@ -15,7 +21,6 @@ use crate::{
     GetFederationTokenResponse, GetSessionTokenError, GetSessionTokenRequest,
     GetSessionTokenResponse, Sts, StsClient,
 };
-use rusoto_core::credential::{AwsCredentials, CredentialsError, ProvideAwsCredentials};
 
 pub const DEFAULT_DURATION_SECONDS: i32 = 3600;
 pub const DEFAULT_ROLE_DURATION_SECONDS: i32 = 900;
@@ -270,6 +275,58 @@ impl StsAssumeRoleSessionCredentialsProvider {
         }
     }
 
+    /// Creates a new `StsAssumeRoleSessionCredentialsProvider` with the given [ProfileProvider].
+    ///
+    /// * `profile_provider` - [ProfileProvider] for the profile containing session information.
+    pub fn with_profile_provider(
+        profile_provider: ProfileProvider,
+    ) -> Result<StsAssumeRoleSessionCredentialsProvider, CredentialsError> {
+        let mut profile_provider = profile_provider.clone();
+
+        let properties = profile_provider.profile_properties()?;
+
+        // in case the profile has a source_profile used to assume the role, that will be our
+        // credentials provider for our client
+        if let Some(source) = properties.get(SOURCE_PROFILE) {
+            profile_provider.set_profile(source);
+        };
+
+        let region = profile_provider
+            .region_from_profile()?
+            .map_or_else(|| Ok(Region::default()), |r| Region::from_str(&r))
+            .map_err(|e| CredentialsError::new(e))?;
+
+        let sts_client = StsClient::new_with(
+            HttpClient::new().expect("failed to create request dispatcher"),
+            profile_provider,
+            region,
+        );
+
+        let role_arn = properties
+            .get(ROLE_ARN)
+            .cloned()
+            .ok_or(CredentialsError::new(
+                "Profile is missing mandatory role_arn entry",
+            ))?;
+        let session_name =
+            properties
+                .get(ROLE_SESSION_NAME)
+                .cloned()
+                .ok_or(CredentialsError::new(
+                    "Profile is missing mandatory role_session_name entry",
+                ))?;
+
+        Ok(StsAssumeRoleSessionCredentialsProvider::new(
+            sts_client,
+            role_arn,
+            session_name,
+            properties.get(EXTERNAL_ID).cloned(),
+            None,
+            None,
+            properties.get(MFA_SERIAL).cloned(),
+        ))
+    }
+
     /// Set the MFA code for use when acquiring session tokens.
     pub fn set_mfa_code<S>(&mut self, code: S)
     where
@@ -415,4 +472,19 @@ fn sts_futures_are_send() {
     is_send::<StsSessionCredentialsProvider>();
     is_send::<StsAssumeRoleSessionCredentialsProvider>();
     is_send::<StsWebIdentityFederationSessionCredentialsProvider>();
+}
+
+#[test]
+fn sts_assume_from_profile() {
+    let provider = ProfileProvider::with_configuration(
+        "test_resources/profiles/multiple_profile_credentials",
+        "bar",
+    );
+
+    let sts_profile = StsAssumeRoleSessionCredentialsProvider::with_profile_provider(provider);
+
+    assert!(sts_profile.is_ok());
+    let sts_profile = sts_profile.unwrap();
+    assert_eq!(sts_profile.role_arn, "arn:aws:iam::account_id:role/MyRole");
+    assert_eq!(sts_profile.session_name, "bar-assuming-foo");
 }

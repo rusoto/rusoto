@@ -1,6 +1,6 @@
 //! The Credentials Provider for Credentials stored in a profile inside of a Credentials file.
 
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::fs;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
@@ -17,7 +17,35 @@ const AWS_CONFIG_FILE: &str = "AWS_CONFIG_FILE";
 const AWS_PROFILE: &str = "AWS_PROFILE";
 const AWS_SHARED_CREDENTIALS_FILE: &str = "AWS_SHARED_CREDENTIALS_FILE";
 const DEFAULT: &str = "default";
+/// AWS Region to use when creating clients.
 const REGION: &str = "region";
+
+/// Property name for specifying the Amazon AWS Access Key
+pub const AWS_ACCESS_KEY_ID: &str = "aws_access_key_id";
+/// Property name for specifying the Amazon AWS Secret Access Key
+pub const AWS_SECRET_ACCESS_KEY: &str = "aws_secret_access_key";
+/// Property name for specifying the Amazon AWS Session Token
+pub const AWS_SESSION_TOKEN: &str = "aws_session_token";
+/// Backward compatibility for SESSION Token
+pub const AWS_SECURITY_TOKEN: &str = "aws_security_token";
+/// Property name for specifying the IAM role to assume
+pub const ROLE_ARN: &str = "role_arn";
+/// Property name for specifying the IAM role session name
+pub const ROLE_SESSION_NAME: &str = "role_session_name";
+/// Property name for specifying the IAM role external id
+pub const EXTERNAL_ID: &str = "external_id";
+/// Property name for specifying the profile credentials to use when assuming a role
+pub const SOURCE_PROFILE: &str = "source_profile";
+/// Property name for specifying the credential source to use when assuming a role
+pub const CREDENTIAL_SOURCE: &str = "credential_source";
+/// Property name for specifying the identification number of the MFA device
+pub const MFA_SERIAL: &str = "mfa_serial";
+/// Property name for specifying whether or not endpoint discovery is enabled.
+pub const ENDPOINT_DISCOVERY_ENABLED: &str = "aws_endpoint_discovery_enabled";
+/// An external process that should be invoked to load credentials.
+pub const CREDENTIAL_PROCESS: &str = "credential_process";
+///
+pub const WEB_IDENTITY_TOKEN_FILE: &str = "web_identity_token_file";
 
 /// Provides AWS credentials from a profile in a credentials file, or from a credential process.
 ///
@@ -50,9 +78,9 @@ impl ProfileProvider {
     /// Create a new `ProfileProvider` for the credentials file at the given path, using
     /// the given profile.
     pub fn with_configuration<F, P>(file_path: F, profile: P) -> ProfileProvider
-    where
-        F: Into<PathBuf>,
-        P: Into<String>,
+        where
+            F: Into<PathBuf>,
+            P: Into<String>,
     {
         ProfileProvider {
             file_path: file_path.into(),
@@ -64,8 +92,8 @@ impl ProfileProvider {
     /// the profile name from environment variable ```AWS_PROFILE``` or fall-back to ```"default"```
     /// if ```AWS_PROFILE``` is not set.
     pub fn with_default_configuration<F>(file_path: F) -> ProfileProvider
-    where
-        F: Into<PathBuf>,
+        where
+            F: Into<PathBuf>,
     {
         ProfileProvider::with_configuration(file_path, ProfileProvider::default_profile_name())
     }
@@ -177,18 +205,27 @@ impl ProfileProvider {
 
     /// Set the credentials file path.
     pub fn set_file_path<F>(&mut self, file_path: F)
-    where
-        F: Into<PathBuf>,
+        where
+            F: Into<PathBuf>,
     {
         self.file_path = file_path.into();
     }
 
     /// Set the profile name.
     pub fn set_profile<P>(&mut self, profile: P)
-    where
-        P: Into<String>,
+        where
+            P: Into<String>,
     {
         self.profile = profile.into();
+    }
+
+    /// Returns the current profile's properties
+    pub fn profile_properties(&self) -> Result<HashMap<String, String>, CredentialsError> {
+        parse_credentials_file(&self.file_path).and_then(|mut profiles| {
+            profiles
+                .remove(self.profile())
+                .ok_or_else(|| CredentialsError::new("profile not found"))
+        })
     }
 }
 
@@ -221,11 +258,7 @@ impl ProvideAwsCredentials for ProfileProvider {
             }
             Ok(None) => {
                 // credential_process is not set, parse the credentials file
-                parse_credentials_file(self.file_path()).and_then(|mut profiles| {
-                    profiles
-                        .remove(self.profile())
-                        .ok_or_else(|| CredentialsError::new("profile not found"))
-                })
+                get_credentials_from_profile(self.profile_properties()?)
             }
             Err(err) => Err(err),
         }
@@ -310,10 +343,27 @@ fn parse_config_file(file_path: &Path) -> Option<HashMap<String, HashMap<String,
     Some(result.0)
 }
 
+fn get_credentials_from_profile(
+    profile_config: HashMap<String, String>
+) -> Result<AwsCredentials, CredentialsError> {
+    let access_key = profile_config.get(AWS_ACCESS_KEY_ID);
+    let secret_key = profile_config.get(AWS_SECRET_ACCESS_KEY);
+    let mut token = profile_config.get(AWS_SESSION_TOKEN);
+    if token == None {
+        token = profile_config.get(AWS_SECURITY_TOKEN);
+    }
+
+    if let (Some(access), Some(secret)) = (access_key, secret_key) {
+        Ok(AwsCredentials::new(access, secret, token.cloned(), None))
+    } else {
+        Err(CredentialsError::new("No credentials found in the profile"))
+    }
+}
+
 /// Parses a Credentials file into a Map of <`ProfileName`, `AwsCredentials`>
 fn parse_credentials_file(
     file_path: &Path,
-) -> Result<HashMap<String, AwsCredentials>, CredentialsError> {
+) -> Result<HashMap<String, HashMap<String, String>>, CredentialsError> {
     match fs::metadata(file_path) {
         Err(_) => {
             return Err(CredentialsError::new(format!(
@@ -332,12 +382,18 @@ fn parse_credentials_file(
     };
 
     let file = File::open(file_path)?;
-
-    let mut profiles: HashMap<String, AwsCredentials> = HashMap::new();
-    let mut access_key: Option<String> = None;
-    let mut secret_key: Option<String> = None;
-    let mut token: Option<String> = None;
     let mut profile_name: Option<String> = None;
+    let mut profiles: HashMap<String, HashMap<String, String>> = HashMap::new();
+
+    let authorized_keys: HashSet<_> = [
+        REGION, AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY,
+        AWS_SESSION_TOKEN, ROLE_ARN, ROLE_SESSION_NAME,
+        EXTERNAL_ID, SOURCE_PROFILE, CREDENTIAL_SOURCE,
+        MFA_SERIAL, ENDPOINT_DISCOVERY_ENABLED, CREDENTIAL_PROCESS,
+        WEB_IDENTITY_TOKEN_FILE,
+    ].iter().map(|s| s.to_string()).collect();
+
+    let mut current_profile: HashMap<String, String> = HashMap::new();
 
     let file_lines = BufReader::new(&file);
     for (line_no, line) in file_lines.lines().enumerate() {
@@ -356,55 +412,28 @@ fn parse_credentials_file(
 
         // handle the opening of named profile blocks
         if let Some(new_profile_name) = parse_profile_name(&unwrapped_line) {
-            if let (Some(profile), Some(access), Some(secret)) =
-                (profile_name, access_key, secret_key)
-            {
-                let creds = AwsCredentials::new(access, secret, token, None);
-                profiles.insert(profile, creds);
+            if let Some(profile) = &profile_name {
+                profiles.insert(profile.clone(), current_profile.clone());
+                current_profile.clear();
             }
-
-            access_key = None;
-            secret_key = None;
-            token = None;
 
             profile_name = Some(new_profile_name.to_owned());
             continue;
         }
 
         // otherwise look for key=value pairs we care about
-        let lower_case_line = unwrapped_line.to_ascii_lowercase().to_string();
-
-        if lower_case_line.contains("aws_access_key_id") && access_key.is_none() {
-            let v: Vec<&str> = unwrapped_line.split('=').collect();
-            if !v.is_empty() {
-                access_key = Some(v[1].trim_matches(' ').to_string());
+        let v: Vec<&str> = unwrapped_line.split('=').collect();
+        if !v.is_empty() {
+            let lower_case_key = v[0].to_ascii_lowercase().trim().to_string();
+            if authorized_keys.contains(&lower_case_key) {
+                current_profile.insert(lower_case_key, v[1].trim_matches(' ').to_string());
             }
-        } else if lower_case_line.contains("aws_secret_access_key") && secret_key.is_none() {
-            let v: Vec<&str> = unwrapped_line.split('=').collect();
-            if !v.is_empty() {
-                secret_key = Some(v[1].trim_matches(' ').to_string());
-            }
-        } else if lower_case_line.contains("aws_session_token") && token.is_none() {
-            let v: Vec<&str> = unwrapped_line.split('=').collect();
-            if !v.is_empty() {
-                token = Some(v[1].trim_matches(' ').to_string());
-            }
-        } else if lower_case_line.contains("aws_security_token") {
-            if token.is_none() {
-                let v: Vec<&str> = unwrapped_line.split('=').collect();
-                if !v.is_empty() {
-                    token = Some(v[1].trim_matches(' ').to_string());
-                }
-            }
-        } else {
-            // Ignore unrecognized fields
-            continue;
         }
     }
 
-    if let (Some(profile), Some(access), Some(secret)) = (profile_name, access_key, secret_key) {
-        let creds = AwsCredentials::new(access, secret, token, None);
-        profiles.insert(profile, creds);
+    if let Some(profile) = &profile_name {
+        profiles.insert(profile.clone(), current_profile.clone());
+        current_profile.clear();
     }
 
     if profiles.is_empty() {
@@ -501,6 +530,8 @@ mod tests {
         let default_profile = profiles
             .get(DEFAULT)
             .expect("No Default profile in default_profile_credentials");
+        let default_profile = get_credentials_from_profile(default_profile.clone())
+            .expect("No Default profile in default_profile_credentials");
         assert_eq!(default_profile.aws_access_key_id(), "foo");
         assert_eq!(default_profile.aws_secret_access_key(), "bar");
     }
@@ -518,12 +549,14 @@ mod tests {
         let foo_profile = profiles
             .get("foo")
             .expect("No foo profile in multiple_profile_credentials");
+        let foo_profile = get_credentials_from_profile(foo_profile.clone()).expect("No Default profile in default_profile_credentials");
         assert_eq!(foo_profile.aws_access_key_id(), "foo_access_key");
         assert_eq!(foo_profile.aws_secret_access_key(), "foo_secret_key");
 
         let bar_profile = profiles
             .get("bar")
             .expect("No bar profile in multiple_profile_credentials");
+        let bar_profile = get_credentials_from_profile(bar_profile.clone()).expect("No Default profile in default_profile_credentials");
         assert_eq!(bar_profile.aws_access_key_id(), "bar_access_key");
         assert_eq!(bar_profile.aws_secret_access_key(), "bar_secret_key");
     }
@@ -540,6 +573,7 @@ mod tests {
         let default_profile = profiles
             .get(DEFAULT)
             .expect("No default profile in full_profile_credentials");
+        let default_profile = get_credentials_from_profile(default_profile.clone()).expect("No Default profile in default_profile_credentials");
         assert_eq!(default_profile.aws_access_key_id(), "foo");
         assert_eq!(default_profile.aws_secret_access_key(), "bar");
     }
@@ -680,6 +714,7 @@ mod tests {
         let default_profile = profiles
             .get(DEFAULT)
             .expect("No default profile in full_profile_credentials");
+        let default_profile = get_credentials_from_profile(default_profile.clone()).expect("No Default profile in default_profile_credentials");
         assert_eq!(default_profile.aws_access_key_id(), "foo");
         assert_eq!(default_profile.aws_secret_access_key(), "bar");
     }
@@ -766,5 +801,4 @@ mod tests {
             None
         );
     }
-
 }
