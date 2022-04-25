@@ -43,64 +43,64 @@ pub struct AccessLogSettings {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Api {
     /// <p>The URI of the API, of the form {api-id}.execute-api.{region}.amazonaws.com. The stage name is typically appended to this URI to form a complete path to a deployed API stage.</p>
-    #[serde(rename = "ApiEndpoint")]
+    #[serde(rename = "apiEndpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_endpoint: Option<String>,
     /// <p>Specifies whether an API is managed by API Gateway. You can't update or delete a managed API by using API Gateway. A managed API can be deleted only through the tooling or service that created it.</p>
-    #[serde(rename = "ApiGatewayManaged")]
+    #[serde(rename = "apiGatewayManaged")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_gateway_managed: Option<bool>,
     /// <p>The API ID.</p>
-    #[serde(rename = "ApiId")]
+    #[serde(rename = "apiId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_id: Option<String>,
     /// <p>An API key selection expression. Supported only for WebSocket APIs. See <a href="https://docs.aws.amazon.com/apigateway/latest/developerguide/apigateway-websocket-api-selection-expressions.html#apigateway-websocket-api-apikey-selection-expressions">API Key Selection Expressions</a>.</p>
-    #[serde(rename = "ApiKeySelectionExpression")]
+    #[serde(rename = "apiKeySelectionExpression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub api_key_selection_expression: Option<String>,
     /// <p>A CORS configuration. Supported only for HTTP APIs.</p>
-    #[serde(rename = "CorsConfiguration")]
+    #[serde(rename = "corsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cors_configuration: Option<Cors>,
     /// <p>The timestamp when the API was created.</p>
-    #[serde(rename = "CreatedDate")]
+    #[serde(rename = "createdDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub created_date: Option<f64>,
+    pub created_date: Option<String>,
     /// <p>The description of the API.</p>
-    #[serde(rename = "Description")]
+    #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
     /// <p>Specifies whether clients can invoke your API by using the default execute-api endpoint. By default, clients can invoke your API with the default https://{api_id}.execute-api.{region}.amazonaws.com endpoint. To require that clients use a custom domain name to invoke your API, disable the default endpoint.</p>
-    #[serde(rename = "DisableExecuteApiEndpoint")]
+    #[serde(rename = "disableExecuteApiEndpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disable_execute_api_endpoint: Option<bool>,
     /// <p>Avoid validating models when creating a deployment. Supported only for WebSocket APIs.</p>
-    #[serde(rename = "DisableSchemaValidation")]
+    #[serde(rename = "disableSchemaValidation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disable_schema_validation: Option<bool>,
     /// <p>The validation information during API import. This may include particular properties of your OpenAPI definition which are ignored during import. Supported only for HTTP APIs.</p>
-    #[serde(rename = "ImportInfo")]
+    #[serde(rename = "importInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub import_info: Option<Vec<String>>,
     /// <p>The name of the API.</p>
-    #[serde(rename = "Name")]
+    #[serde(rename = "name")]
     pub name: String,
     /// <p>The API protocol.</p>
-    #[serde(rename = "ProtocolType")]
+    #[serde(rename = "protocolType")]
     pub protocol_type: String,
     /// <p>The route selection expression for the API. For HTTP APIs, the routeSelectionExpression must be ${request.method} ${request.path}. If not provided, this will be the default for HTTP APIs. This property is required for WebSocket APIs.</p>
-    #[serde(rename = "RouteSelectionExpression")]
+    #[serde(rename = "routeSelectionExpression")]
     pub route_selection_expression: String,
     /// <p>A collection of tags associated with the API.</p>
-    #[serde(rename = "Tags")]
+    #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>A version identifier for the API.</p>
-    #[serde(rename = "Version")]
+    #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
     /// <p>The warning messages reported when failonwarnings is turned on during API import.</p>
-    #[serde(rename = "Warnings")]
+    #[serde(rename = "warnings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub warnings: Option<Vec<String>>,
 }
@@ -1632,11 +1632,10 @@ pub struct GetApisRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetApisResponse {
     /// <p>The elements from this collection.</p>
-    #[serde(rename = "Items")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub items: Option<Vec<Api>>,
     /// <p>The next page of elements from this collection. Not valid for the last element of the collection.</p>
-    #[serde(rename = "NextToken")]
+    #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
