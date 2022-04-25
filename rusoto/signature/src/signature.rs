@@ -678,7 +678,7 @@ fn canonical_values(values: &[Vec<u8>]) -> String {
 }
 
 fn skipped_headers(header: &str) -> bool {
-    ["authorization", "content-length", "user-agent"].contains(&header)
+    ["authorization", "content-length"].contains(&header)
 }
 
 /// Returns standardised URI
