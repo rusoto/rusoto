@@ -2,8 +2,8 @@
 # Rusoto S3
 Rust SDK for Amazon Simple Storage Service
 
-<a href="https://docs.rs/rusoto_s3/0.47.0" title="API Docs"><img src="https://img.shields.io/badge/API-docs-blue.svg" alt="api-docs-badge"></img></a>
-<a href="https://crates.io/crates/rusoto_s3/0.47.0" title="Crates.io"><img src="https://img.shields.io/crates/v/rusoto_core.svg" alt="crates-io"></img></a>
+<a href="https://docs.rs/rusoto_s3/0.48.0" title="API Docs"><img src="https://img.shields.io/badge/API-docs-blue.svg" alt="api-docs-badge"></img></a>
+<a href="https://crates.io/crates/rusoto_s3/0.48.0" title="Crates.io"><img src="https://img.shields.io/crates/v/rusoto_core.svg" alt="crates-io"></img></a>
 <a href="#license" title="License: MIT"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="license-badge"></img></a>
 <a href="https://discordapp.com/invite/WMJ4DWp"><img src="https://img.shields.io/discord/670751965273391124"></img></a>
 
@@ -28,7 +28,7 @@ To use `rusoto_s3` in your application, add it as a dependency in your `Cargo.to
 
 ```toml
 [dependencies]
-rusoto_s3 = "0.47.0"
+rusoto_s3 = "0.48.0"
 ```
 
 ## Crate Features

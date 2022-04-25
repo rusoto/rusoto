@@ -5,7 +5,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+(Please put changes here.)
+
+## [0.48.0] - 2022-04-24
+
 - Remove [`macie`](https://github.com/boto/botocore/blob/81e0b0026f9eb21be658cf0dd4c17e0dc173346f/botocore/data/macie/2017-12-19/service-2.json#L27), [`mobile`](https://stackoverflow.com/a/64990655), and [`worklink`](https://github.com/boto/botocore/blob/81e0b0026f9eb21be658cf0dd4c17e0dc173346f/botocore/data/worklink/2018-09-25/service-2.json#L33-L34) services, which have had their DNS records removed
+- Add support for ap-southeast-3, Asia Pacific (Jakarta)
+- Add Clone derived trait to TlsError
+- Allow the user to choose between rustls and rustls-webpki, and make only the former depend on native cert support
 - Update `hyper-rustls` to `0.23`
 
 ## [0.47.0] - 2021-06-29
@@ -417,7 +424,8 @@ such as an S3 key returned in `list_objects_v2`
 - Type aliases removed.  Example: we no longer use `BucketName` which was an alias for `String`.
 - travis-cargo from TravisCI builds
 
-[Unreleased]: https://github.com/rusoto/rusoto/compare/rusoto-v0.47.0...HEAD
+[Unreleased]: https://github.com/rusoto/rusoto/compare/rusoto-v0.48.0...HEAD
+[0.48.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.47.0...rusoto-v0.48.0
 [0.47.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.46.0...rusoto-v0.47.0
 [0.46.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.45.0...rusoto-v0.46.0
 [0.45.0]: https://github.com/rusoto/rusoto/compare/rusoto-v0.44.0...rusoto-v0.45.0
