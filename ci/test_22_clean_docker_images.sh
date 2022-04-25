@@ -1,0 +1,1 @@
+test_12_clean_docker_images.sh

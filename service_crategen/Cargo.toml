@@ -32,3 +32,5 @@ debug-assertions = false
 [features]
 nightly-testing = []
 unstable = []
+
+[workspace]

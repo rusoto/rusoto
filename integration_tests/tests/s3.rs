@@ -24,6 +24,7 @@ use rusoto_s3::{
     DeleteBucketRequest, DeleteObjectRequest, GetObjectError, GetObjectRequest, HeadObjectRequest,
     ListObjectsRequest, ListObjectsV2Request, PutBucketCorsRequest, PutObjectRequest, S3Client,
     StreamingBody, UploadPartCopyRequest, UploadPartRequest, S3,
+    util::AddressingStyle,
 };
 
 fn generate_unique_name() -> String {
@@ -49,23 +50,56 @@ struct TestS3Client {
 impl TestS3Client {
     // construct S3 testing client
     fn new(bucket_name: String) -> TestS3Client {
+        use hyper::client::HttpConnector;
+        use hyper_proxy::{Proxy, ProxyConnector, Intercept};
+        use rusoto_core::request::HttpClient;
+        use rusoto_core::credential::ChainProvider;
+    
         let region = if let Ok(endpoint) = env::var("S3_ENDPOINT") {
             let region = Region::Custom {
                 name: "us-east-1".to_owned(),
                 endpoint: endpoint.to_owned(),
             };
             println!(
-                "picked up non-standard endpoint {:?} from S3_ENDPOINT env. variable",
-                region
+                "picked up non-standard endpoint {:?} from S3_ENDPOINT environment variable.",
+                region,
             );
             region
         } else {
             Region::UsEast1
         };
 
+        // We will need to set proxy host in order to test virtual-hosted-style buckets
+        // without a DNS server.
+        let mut s3 = match env::var("S3_PROXY") {
+            Ok(proxy_uri) => {
+                let proxy_uri = proxy_uri.parse().expect("Failed to parse the proxy URI");
+                println!(
+                    "picked up non-standard HTTP proxy {:?} from S3_PROXY environment variable.",
+                    proxy_uri,
+                );
+                let proxy = Proxy::new(Intercept::All, proxy_uri);
+                let proxy_connector = ProxyConnector::from_proxy(HttpConnector::new(), proxy)
+                    .expect("Failed to create a proxy connector");
+                let http = HttpClient::from_connector(proxy_connector);
+                S3Client::new_with(http, ChainProvider::new(), region.to_owned())
+            },
+            Err(_) => S3Client::new(region.to_owned())
+        };
+
+        // Set the AddressingStyle based on an environment variable S3_ADDRESSING_STYLE.
+        let addr_style = create_addressing_style();
+        if addr_style != AddressingStyle::default() {
+            println!(
+                "picked up non-standard S3 addressing style `{:?}` from S3_ADDRESSING_STYLE environment variable.",
+                addr_style,
+            );
+        }
+        s3.config_mut().addressing_style = addr_style;
+
         TestS3Client {
-            region: region.to_owned(),
-            s3: S3Client::new(region),
+            region,
+            s3,
             bucket_name: bucket_name.to_owned(),
             bucket_deleted: false,
         }
@@ -79,7 +113,7 @@ impl TestS3Client {
             self.s3.clone()
         } else {
             S3Client::new_with(
-                rusoto_core::request::HttpClient::new().expect("Failed to creat HTTP client"),
+                rusoto_core::request::HttpClient::new().expect("Failed to create HTTP client"),
                 StaticProvider::from(AwsCredentials::default()),
                 self.region.clone(),
             )
@@ -155,6 +189,46 @@ impl TestS3Client {
             Ok(_) => println!("Deleted S3 bucket: {}", bucket_name),
             Err(e) => println!("Failed to delete S3 bucket: {}", e),
         };
+    }
+}
+
+fn create_reqwest_client() -> reqwest::Client {
+    use reqwest::{Client, ClientBuilder, Proxy};
+
+    match env::var("S3_PROXY") {
+        Ok(proxy_uri) =>
+            ClientBuilder::new()
+                .proxy(Proxy::http(&proxy_uri).expect("Failed to set proxy to a reqwest::Client"))
+                .build().expect("Failed to build a reqwest::Client"),
+        Err(_) =>
+            Client::new()
+    }
+}
+
+/// Create an S3 addressing style. Default variant is `Auto` is the default and it will
+/// use virtual-hosted-style whenever possible and fall back to path-style when necessary. 
+/// If and environment variable `S3_ADDRESSING_STYLE` has a value `path`, then `Path`
+/// variant is created, which will always use path-style. 
+fn create_addressing_style() -> AddressingStyle {
+    if let Ok(style) = env::var("S3_ADDRESSING_STYLE") {
+        if style.eq_ignore_ascii_case("path") {
+            return AddressingStyle::Path;
+        }
+    }
+    AddressingStyle::Auto
+}
+
+fn create_presigned_req_option(expires_in: Option<Duration>) -> PreSignedRequestOption {
+    if let Some(expires_in) = expires_in {
+        PreSignedRequestOption {
+            expires_in,
+            addressing_style: create_addressing_style(),
+        }
+    } else {
+        PreSignedRequestOption {
+            addressing_style: create_addressing_style(),
+            ..Default::default()
+        }
     }
 }
 
@@ -689,12 +763,11 @@ async fn test_multipart_upload(
     }
     // upload the second part via a pre-signed url
     {
-        let options = PreSignedRequestOption {
-            expires_in: Duration::from_secs(60 * 30),
-        };
-        let presigned_multipart_put = part_req2.get_presigned_url(region, credentials, &options);
+        let options = create_presigned_req_option(Some(Duration::from_secs(60 * 30)));
+        let presigned_multipart_put = part_req2.get_presigned_url(region, credentials, &options)
+            .expect("Creating presigned url failed");
         println!("presigned multipart put: {:#?}", presigned_multipart_put);
-        let client = reqwest::Client::new();
+        let client = create_reqwest_client();
         let res = client
             .put(&presigned_multipart_put)
             .body(String::from("foo"))
@@ -1182,9 +1255,11 @@ async fn test_get_object_with_presigned_url(
         key: filename.to_owned(),
         ..Default::default()
     };
-    let presigned_url = req.get_presigned_url(region, credentials, &Default::default());
+    let presigned_url = req.get_presigned_url(region, credentials, &create_presigned_req_option(None))
+        .expect("Creating presigned url failed");
     println!("get object presigned url: {:#?}", presigned_url);
-    let res = reqwest::get(&presigned_url).await.expect("Couldn't get object via presigned url");
+    let client = create_reqwest_client();
+    let res = client.get(&presigned_url).send().await.expect("Couldn't get object via presigned url");
     assert_eq!(res.status(), http::StatusCode::OK);
     let size = res.content_length().unwrap_or(0);
     assert!(size > 0);
@@ -1203,13 +1278,13 @@ async fn test_get_object_with_expired_presigned_url(
         key: filename.to_owned(),
         ..Default::default()
     };
-    let opt = PreSignedRequestOption {
-        expires_in: ::std::time::Duration::from_secs(1),
-    };
-    let presigned_url = req.get_presigned_url(region, credentials, &opt);
+    let opt = create_presigned_req_option(Some(Duration::from_secs(1)));
+    let presigned_url = req.get_presigned_url(region, credentials, &opt)
+        .expect("Creating presigned url failed");
     ::std::thread::sleep(::std::time::Duration::from_secs(2));
     println!("get object presigned url: {:#?}", presigned_url);
-    let res = reqwest::get(&presigned_url).await.expect("Presigned url failure");
+    let client = create_reqwest_client();
+    let res = client.get(&presigned_url).send().await.expect("Presigned url failure");
     assert_eq!(res.status(), http::StatusCode::FORBIDDEN);
 }
 
@@ -1224,11 +1299,12 @@ async fn test_put_object_with_presigned_url(
         key: filename.to_owned(),
         ..Default::default()
     };
-    let presigned_url = req.get_presigned_url(region, credentials, &Default::default());
+    let presigned_url = req.get_presigned_url(region, credentials, &create_presigned_req_option(None))
+        .expect("Creating presigned url failed");
     println!("put object presigned url: {:#?}", presigned_url);
     let mut map = HashMap::new();
     map.insert("test", "data");
-    let client = reqwest::Client::new();
+    let client = create_reqwest_client();
     let res = client
         .put(&presigned_url)
         .json(&map)
@@ -1249,9 +1325,10 @@ async fn test_delete_object_with_presigned_url(
         key: filename.to_owned(),
         ..Default::default()
     };
-    let presigned_url = req.get_presigned_url(region, credentials, &Default::default());
+    let presigned_url = req.get_presigned_url(region, credentials, &create_presigned_req_option(None))
+        .expect("Creating presigned url failed");
     println!("delete object presigned url: {:#?}", presigned_url);
-    let client = reqwest::Client::new();
+    let client = create_reqwest_client();
     let res = client
         .delete(&presigned_url)
         .send().await

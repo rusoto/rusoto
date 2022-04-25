@@ -70,7 +70,7 @@ pub fn generate_services(
 
         // Panicking on error is okay because we can't do anything if the definition isn't present
         #[allow(clippy::match_wild_err_arm)]
-            let service = match ServiceDefinition::load(name, &service_config.protocol_version) {
+        let service = match ServiceDefinition::load(name, &service_config.protocol_version) {
             Ok(sd) => Service::new(service_config, sd),
             Err(_) => panic!("Failed to load service {}. Make sure the botocore submodule has been initialized!", name),
         };

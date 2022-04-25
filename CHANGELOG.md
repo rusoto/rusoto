@@ -34,6 +34,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.46.0] - 2021-01-05
 
+- (Breaking Change) Changed the default S3 addressing style from "path-style" to "virtual-hosted-style"
+  as [AWS has deprecated path-style access to S3 buckets][aws-s3-path-deprecation-plan]. 
+  * If you need the old behavior, change `S3Config.addressing_style` of a `S3Client`
+    from `Auto` to `Path`.
+- (Breaking Change) Changed the return type of S3 `get_presigned_url()` from `String`
+  to `Result<String, InvalidDnsNameError>`.
+  * This change is needed to support different S3 addressing styles in presigned URL.
 - Display `rusoto_core::Client` in docs
 - Fix unsoundness in `rusoto_mock::MultipleMockRequestDispatcher`
 - Add ability to set local agent appended to the default User-Agent
@@ -49,6 +56,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Swap `pin-project` for the lighter weight `pin-project-lite`
 - Disable `chrono`'s `oldtime` feature
 - Remove dependency on `regex`
+
+[aws-s3-path-deprecation-plan]: https://aws.amazon.com/blogs/aws/amazon-s3-path-deprecation-plan-the-rest-of-the-story/
 
 ## [0.45.0] - 2020-07-22
 

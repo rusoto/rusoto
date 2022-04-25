@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 set -Eeu
 
-# Test Ceph with S3 virtual-hosted-style addressing.
+# Test Ceph with S3 path-style addressing.
 
 export AWS_ACCESS_KEY_ID=ANTN35UAENTS5UIAEATD
 export AWS_SECRET_ACCESS_KEY=TtnuieannGt2rGuie2t8Tt7urarg5nauedRndrur
 export DOMAIN=localhost
 export S3_ENDPOINT="http://$DOMAIN:9000"
 export S3_PROXY=http://127.0.0.1:9000
+export S3_ADDRESSING_STYLE=path
 
 GIT_ROOT=$(git rev-parse --show-toplevel)
 cd "$GIT_ROOT/integration_tests"
@@ -26,5 +27,5 @@ cd "$GIT_ROOT/integration_tests"
     --run-opt=--env=CEPH_PUBLIC_NETWORK=0.0.0.0/0 \
     --run-arg=DEMO \
     --run-opt=--hostname=localhost \
-    "--run-opt=-v=$GIT_ROOT/ci/ceph.conf:/etc/ceph.conf:ro" \
+    "--run-opt=-v=$GIT_ROOT/.semaphoreci/ceph.conf:/etc/ceph.conf:ro" \
     -- cargo test --features s3,disable_ceph_unsupported ---- --test-threads 1

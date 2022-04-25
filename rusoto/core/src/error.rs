@@ -15,6 +15,8 @@ pub enum RusotoError<E> {
     Service(E),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
+    /// The endpoint sub-domain has invalid DNS name. (Only S3 service will generate this error)
+    InvalidDnsName(InvalidDnsNameError),
     /// An error was encountered with AWS credentials.
     Credentials(CredentialsError),
     /// A validation error occurred.  Details from AWS are provided.
@@ -80,6 +82,7 @@ impl<E: Error + 'static> fmt::Display for RusotoError<E> {
             RusotoError::Validation(ref cause) => write!(f, "{}", cause),
             RusotoError::Credentials(ref err) => write!(f, "{}", err),
             RusotoError::HttpDispatch(ref dispatch_error) => write!(f, "{}", dispatch_error),
+            RusotoError::InvalidDnsName(ref dns_error) => write!(f, "{}", dns_error),
             RusotoError::ParseError(ref cause) => write!(f, "{}", cause),
             RusotoError::Unknown(ref cause) => write!(
                 f,
@@ -100,5 +103,26 @@ impl<E: Error + 'static> Error for RusotoError<E> {
             RusotoError::HttpDispatch(ref err) => Some(err),
             _ => None,
         }
+    }
+}
+
+/// The endpoint sub-domain has invalid DNS name. (Only S3 service will generate this error)
+#[derive(Clone, Debug, PartialEq)]
+pub struct InvalidDnsNameError {
+    message: String,
+}
+
+impl InvalidDnsNameError {
+    /// Creates a new `InvalidDnsNameError` with the message.
+    pub fn new(message: String) -> Self {
+        Self { message }
+    }
+}
+
+impl Error for InvalidDnsNameError {}
+
+impl fmt::Display for InvalidDnsNameError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.message)
     }
 }

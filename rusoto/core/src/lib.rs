@@ -44,7 +44,7 @@ pub mod proto;
 #[doc(hidden)]
 pub mod serialization;
 
-pub use crate::error::{RusotoError, RusotoResult};
+pub use crate::error::{InvalidDnsNameError, RusotoError, RusotoResult};
 pub use crate::region::Region;
 pub use crate::request::{DispatchSignedRequest, HttpClient, HttpConfig, HttpDispatchError};
 pub use crate::stream::ByteStream;

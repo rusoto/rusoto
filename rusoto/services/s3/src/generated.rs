@@ -19322,11 +19322,15 @@ pub trait S3 {
         input: WriteGetObjectResponseRequest,
     ) -> Result<(), RusotoError<WriteGetObjectResponseError>>;
 }
+
+use crate::util::S3Config;
+
 /// A client for the Amazon S3 API.
 #[derive(Clone)]
 pub struct S3Client {
     client: Client,
     region: region::Region,
+    config: S3Config,
 }
 
 impl S3Client {
@@ -19337,6 +19341,7 @@ impl S3Client {
         S3Client {
             client: Client::shared(),
             region,
+            config: S3Config::default(),
         }
     }
 
@@ -19352,11 +19357,35 @@ impl S3Client {
         S3Client {
             client: Client::new_with(credentials_provider, request_dispatcher),
             region,
+            config: S3Config::default(),
         }
     }
 
     pub fn new_with_client(client: Client, region: region::Region) -> S3Client {
-        S3Client { client, region }
+        S3Client {
+            client,
+            region,
+            config: S3Config::default(),
+        }
+    }
+
+    pub fn set_config(&mut self, config: S3Config) {
+        self.config = config;
+    }
+
+    pub fn config(&self) -> &S3Config {
+        &self.config
+    }
+
+    pub fn config_mut(&mut self) -> &mut S3Config {
+        &mut self.config
+    }
+
+    pub fn build_s3_hostname<T>(&self, bucket: &str) -> Result<(bool, String), RusotoError<T>> {
+        self.config
+            .addressing_style
+            .build_s3_hostname(&self.region, bucket)
+            .map_err(|e| RusotoError::InvalidDnsName(e))
     }
 }
 
@@ -19368,7 +19397,13 @@ impl S3 for S3Client {
         &self,
         input: AbortMultipartUploadRequest,
     ) -> Result<AbortMultipartUploadOutput, RusotoError<AbortMultipartUploadError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            format!("/{key}", key = input.key).into()
+        } else {
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).into()
+        };
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -19380,6 +19415,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put("uploadId", &input.upload_id);
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, AbortMultipartUploadError::from_response)
@@ -19397,7 +19434,13 @@ impl S3 for S3Client {
         &self,
         input: CompleteMultipartUploadRequest,
     ) -> Result<CompleteMultipartUploadOutput, RusotoError<CompleteMultipartUploadError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            format!("/{key}", key = input.key).into()
+        } else {
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).into()
+        };
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
@@ -19420,6 +19463,7 @@ impl S3 for S3Client {
         } else {
             request.set_payload(Some(Vec::new()));
         }
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, CompleteMultipartUploadError::from_response)
@@ -19451,7 +19495,13 @@ impl S3 for S3Client {
         &self,
         input: CopyObjectRequest,
     ) -> Result<CopyObjectOutput, RusotoError<CopyObjectError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            format!("/{key}", key = input.key).into()
+        } else {
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -19563,6 +19613,8 @@ impl S3 for S3Client {
             input.website_redirect_location.as_ref(),
         );
 
+        request.set_hostname(Some(hostname));
+
         let mut response = self
             .sign_and_dispatch(request, CopyObjectError::from_response)
             .await?;
@@ -19603,7 +19655,13 @@ impl S3 for S3Client {
         &self,
         input: CreateBucketRequest,
     ) -> Result<CreateBucketOutput, RusotoError<CreateBucketError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -19632,6 +19690,7 @@ impl S3 for S3Client {
         } else {
             request.set_payload(Some(Vec::new()));
         }
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, CreateBucketError::from_response)
@@ -19649,7 +19708,13 @@ impl S3 for S3Client {
         &self,
         input: CreateMultipartUploadRequest,
     ) -> Result<CreateMultipartUploadOutput, RusotoError<CreateMultipartUploadError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            format!("/{key}", key = input.key).into()
+        } else {
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).into()
+        };
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
@@ -19726,6 +19791,8 @@ impl S3 for S3Client {
         params.put_key("uploads");
         request.set_params(params);
 
+        request.set_hostname(Some(hostname));
+
         let mut response = self
             .sign_and_dispatch(request, CreateMultipartUploadError::from_response)
             .await?;
@@ -19765,7 +19832,13 @@ impl S3 for S3Client {
         &self,
         input: DeleteBucketRequest,
     ) -> Result<(), RusotoError<DeleteBucketError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -19773,6 +19846,8 @@ impl S3 for S3Client {
             "x-amz-expected-bucket-owner",
             input.expected_bucket_owner.as_ref(),
         );
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, DeleteBucketError::from_response)
@@ -19788,7 +19863,13 @@ impl S3 for S3Client {
         &self,
         input: DeleteBucketAnalyticsConfigurationRequest,
     ) -> Result<(), RusotoError<DeleteBucketAnalyticsConfigurationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -19800,6 +19881,8 @@ impl S3 for S3Client {
         params.put("id", &input.id);
         params.put_key("analytics");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(
@@ -19818,7 +19901,13 @@ impl S3 for S3Client {
         &self,
         input: DeleteBucketCorsRequest,
     ) -> Result<(), RusotoError<DeleteBucketCorsError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -19829,6 +19918,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("cors");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, DeleteBucketCorsError::from_response)
@@ -19844,7 +19935,13 @@ impl S3 for S3Client {
         &self,
         input: DeleteBucketEncryptionRequest,
     ) -> Result<(), RusotoError<DeleteBucketEncryptionError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -19855,6 +19952,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("encryption");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, DeleteBucketEncryptionError::from_response)
@@ -19870,7 +19969,13 @@ impl S3 for S3Client {
         &self,
         input: DeleteBucketIntelligentTieringConfigurationRequest,
     ) -> Result<(), RusotoError<DeleteBucketIntelligentTieringConfigurationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -19878,6 +19983,8 @@ impl S3 for S3Client {
         params.put("id", &input.id);
         params.put_key("intelligent-tiering");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(
@@ -19896,7 +20003,13 @@ impl S3 for S3Client {
         &self,
         input: DeleteBucketInventoryConfigurationRequest,
     ) -> Result<(), RusotoError<DeleteBucketInventoryConfigurationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -19908,6 +20021,8 @@ impl S3 for S3Client {
         params.put("id", &input.id);
         params.put_key("inventory");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(
@@ -19926,7 +20041,13 @@ impl S3 for S3Client {
         &self,
         input: DeleteBucketLifecycleRequest,
     ) -> Result<(), RusotoError<DeleteBucketLifecycleError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -19937,6 +20058,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("lifecycle");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, DeleteBucketLifecycleError::from_response)
@@ -19952,7 +20075,13 @@ impl S3 for S3Client {
         &self,
         input: DeleteBucketMetricsConfigurationRequest,
     ) -> Result<(), RusotoError<DeleteBucketMetricsConfigurationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -19964,6 +20093,8 @@ impl S3 for S3Client {
         params.put("id", &input.id);
         params.put_key("metrics");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(
@@ -19982,7 +20113,13 @@ impl S3 for S3Client {
         &self,
         input: DeleteBucketOwnershipControlsRequest,
     ) -> Result<(), RusotoError<DeleteBucketOwnershipControlsError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -19993,6 +20130,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("ownershipControls");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, DeleteBucketOwnershipControlsError::from_response)
@@ -20008,7 +20147,13 @@ impl S3 for S3Client {
         &self,
         input: DeleteBucketPolicyRequest,
     ) -> Result<(), RusotoError<DeleteBucketPolicyError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -20019,6 +20164,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("policy");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, DeleteBucketPolicyError::from_response)
@@ -20034,7 +20181,13 @@ impl S3 for S3Client {
         &self,
         input: DeleteBucketReplicationRequest,
     ) -> Result<(), RusotoError<DeleteBucketReplicationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -20045,6 +20198,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("replication");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, DeleteBucketReplicationError::from_response)
@@ -20060,7 +20215,13 @@ impl S3 for S3Client {
         &self,
         input: DeleteBucketTaggingRequest,
     ) -> Result<(), RusotoError<DeleteBucketTaggingError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -20071,6 +20232,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("tagging");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, DeleteBucketTaggingError::from_response)
@@ -20086,7 +20249,13 @@ impl S3 for S3Client {
         &self,
         input: DeleteBucketWebsiteRequest,
     ) -> Result<(), RusotoError<DeleteBucketWebsiteError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -20097,6 +20266,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("website");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, DeleteBucketWebsiteError::from_response)
@@ -20112,7 +20283,13 @@ impl S3 for S3Client {
         &self,
         input: DeleteObjectRequest,
     ) -> Result<DeleteObjectOutput, RusotoError<DeleteObjectError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            format!("/{key}", key = input.key).into()
+        } else {
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).into()
+        };
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -20131,6 +20308,8 @@ impl S3 for S3Client {
             params.put("versionId", x);
         }
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, DeleteObjectError::from_response)
@@ -20153,7 +20332,13 @@ impl S3 for S3Client {
         &self,
         input: DeleteObjectTaggingRequest,
     ) -> Result<DeleteObjectTaggingOutput, RusotoError<DeleteObjectTaggingError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            format!("/{key}", key = input.key).into()
+        } else {
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).into()
+        };
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -20167,6 +20352,8 @@ impl S3 for S3Client {
         }
         params.put_key("tagging");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, DeleteObjectTaggingError::from_response)
@@ -20184,7 +20371,13 @@ impl S3 for S3Client {
         &self,
         input: DeleteObjectsRequest,
     ) -> Result<DeleteObjectsOutput, RusotoError<DeleteObjectsError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
@@ -20205,6 +20398,7 @@ impl S3 for S3Client {
         DeleteSerializer::serialize(&mut writer, "Delete", &input.delete);
         request.set_payload(Some(writer.into_inner()));
         request.maybe_set_content_md5_header();
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, DeleteObjectsError::from_response)
@@ -20226,7 +20420,13 @@ impl S3 for S3Client {
         &self,
         input: DeletePublicAccessBlockRequest,
     ) -> Result<(), RusotoError<DeletePublicAccessBlockError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
@@ -20237,6 +20437,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("publicAccessBlock");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, DeletePublicAccessBlockError::from_response)
@@ -20255,7 +20457,13 @@ impl S3 for S3Client {
         GetBucketAccelerateConfigurationOutput,
         RusotoError<GetBucketAccelerateConfigurationError>,
     > {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -20266,6 +20474,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("accelerate");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(
@@ -20290,7 +20500,13 @@ impl S3 for S3Client {
         &self,
         input: GetBucketAclRequest,
     ) -> Result<GetBucketAclOutput, RusotoError<GetBucketAclError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -20301,6 +20517,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("acl");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, GetBucketAclError::from_response)
@@ -20325,7 +20543,13 @@ impl S3 for S3Client {
         GetBucketAnalyticsConfigurationOutput,
         RusotoError<GetBucketAnalyticsConfigurationError>,
     > {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -20337,6 +20561,8 @@ impl S3 for S3Client {
         params.put("id", &input.id);
         params.put_key("analytics");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, GetBucketAnalyticsConfigurationError::from_response)
@@ -20358,7 +20584,13 @@ impl S3 for S3Client {
         &self,
         input: GetBucketCorsRequest,
     ) -> Result<GetBucketCorsOutput, RusotoError<GetBucketCorsError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -20369,6 +20601,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("cors");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, GetBucketCorsError::from_response)
@@ -20390,7 +20624,13 @@ impl S3 for S3Client {
         &self,
         input: GetBucketEncryptionRequest,
     ) -> Result<GetBucketEncryptionOutput, RusotoError<GetBucketEncryptionError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -20401,6 +20641,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("encryption");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, GetBucketEncryptionError::from_response)
@@ -20425,7 +20667,13 @@ impl S3 for S3Client {
         GetBucketIntelligentTieringConfigurationOutput,
         RusotoError<GetBucketIntelligentTieringConfigurationError>,
     > {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -20433,6 +20681,8 @@ impl S3 for S3Client {
         params.put("id", &input.id);
         params.put_key("intelligent-tiering");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(
@@ -20463,7 +20713,13 @@ impl S3 for S3Client {
         GetBucketInventoryConfigurationOutput,
         RusotoError<GetBucketInventoryConfigurationError>,
     > {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -20475,6 +20731,8 @@ impl S3 for S3Client {
         params.put("id", &input.id);
         params.put_key("inventory");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, GetBucketInventoryConfigurationError::from_response)
@@ -20496,7 +20754,13 @@ impl S3 for S3Client {
         &self,
         input: GetBucketLifecycleRequest,
     ) -> Result<GetBucketLifecycleOutput, RusotoError<GetBucketLifecycleError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -20507,6 +20771,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("lifecycle");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, GetBucketLifecycleError::from_response)
@@ -20531,7 +20797,13 @@ impl S3 for S3Client {
         GetBucketLifecycleConfigurationOutput,
         RusotoError<GetBucketLifecycleConfigurationError>,
     > {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -20542,6 +20814,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("lifecycle");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, GetBucketLifecycleConfigurationError::from_response)
@@ -20595,7 +20869,13 @@ impl S3 for S3Client {
         &self,
         input: GetBucketLoggingRequest,
     ) -> Result<GetBucketLoggingOutput, RusotoError<GetBucketLoggingError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -20606,6 +20886,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("logging");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, GetBucketLoggingError::from_response)
@@ -20628,7 +20910,13 @@ impl S3 for S3Client {
         input: GetBucketMetricsConfigurationRequest,
     ) -> Result<GetBucketMetricsConfigurationOutput, RusotoError<GetBucketMetricsConfigurationError>>
     {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -20640,6 +20928,8 @@ impl S3 for S3Client {
         params.put("id", &input.id);
         params.put_key("metrics");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, GetBucketMetricsConfigurationError::from_response)
@@ -20661,7 +20951,13 @@ impl S3 for S3Client {
         &self,
         input: GetBucketNotificationConfigurationRequest,
     ) -> Result<NotificationConfigurationDeprecated, RusotoError<GetBucketNotificationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -20672,6 +20968,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("notification");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, GetBucketNotificationError::from_response)
@@ -20694,7 +20992,13 @@ impl S3 for S3Client {
         input: GetBucketNotificationConfigurationRequest,
     ) -> Result<NotificationConfiguration, RusotoError<GetBucketNotificationConfigurationError>>
     {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -20705,6 +21009,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("notification");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(
@@ -20730,7 +21036,13 @@ impl S3 for S3Client {
         input: GetBucketOwnershipControlsRequest,
     ) -> Result<GetBucketOwnershipControlsOutput, RusotoError<GetBucketOwnershipControlsError>>
     {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -20741,6 +21053,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("ownershipControls");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, GetBucketOwnershipControlsError::from_response)
@@ -20762,7 +21076,13 @@ impl S3 for S3Client {
         &self,
         input: GetBucketPolicyRequest,
     ) -> Result<GetBucketPolicyOutput, RusotoError<GetBucketPolicyError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -20773,6 +21093,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("policy");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, GetBucketPolicyError::from_response)
@@ -20792,7 +21114,13 @@ impl S3 for S3Client {
         &self,
         input: GetBucketPolicyStatusRequest,
     ) -> Result<GetBucketPolicyStatusOutput, RusotoError<GetBucketPolicyStatusError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -20803,6 +21131,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("policyStatus");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, GetBucketPolicyStatusError::from_response)
@@ -20824,7 +21154,13 @@ impl S3 for S3Client {
         &self,
         input: GetBucketReplicationRequest,
     ) -> Result<GetBucketReplicationOutput, RusotoError<GetBucketReplicationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -20835,6 +21171,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("replication");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, GetBucketReplicationError::from_response)
@@ -20856,7 +21194,13 @@ impl S3 for S3Client {
         &self,
         input: GetBucketRequestPaymentRequest,
     ) -> Result<GetBucketRequestPaymentOutput, RusotoError<GetBucketRequestPaymentError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -20867,6 +21211,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("requestPayment");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, GetBucketRequestPaymentError::from_response)
@@ -20888,7 +21234,13 @@ impl S3 for S3Client {
         &self,
         input: GetBucketTaggingRequest,
     ) -> Result<GetBucketTaggingOutput, RusotoError<GetBucketTaggingError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -20899,6 +21251,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("tagging");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, GetBucketTaggingError::from_response)
@@ -20920,7 +21274,13 @@ impl S3 for S3Client {
         &self,
         input: GetBucketVersioningRequest,
     ) -> Result<GetBucketVersioningOutput, RusotoError<GetBucketVersioningError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -20931,6 +21291,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("versioning");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, GetBucketVersioningError::from_response)
@@ -20952,7 +21314,13 @@ impl S3 for S3Client {
         &self,
         input: GetBucketWebsiteRequest,
     ) -> Result<GetBucketWebsiteOutput, RusotoError<GetBucketWebsiteError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -20963,6 +21331,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("website");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, GetBucketWebsiteError::from_response)
@@ -20984,7 +21354,13 @@ impl S3 for S3Client {
         &self,
         input: GetObjectRequest,
     ) -> Result<GetObjectOutput, RusotoError<GetObjectError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            format!("/{key}", key = input.key).into()
+        } else {
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -21036,6 +21412,8 @@ impl S3 for S3Client {
             params.put("versionId", x);
         }
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, GetObjectError::from_response)
@@ -21120,7 +21498,13 @@ impl S3 for S3Client {
         &self,
         input: GetObjectAclRequest,
     ) -> Result<GetObjectAclOutput, RusotoError<GetObjectAclError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            format!("/{key}", key = input.key).into()
+        } else {
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -21135,6 +21519,8 @@ impl S3 for S3Client {
         }
         params.put_key("acl");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, GetObjectAclError::from_response)
@@ -21156,7 +21542,13 @@ impl S3 for S3Client {
         &self,
         input: GetObjectLegalHoldRequest,
     ) -> Result<GetObjectLegalHoldOutput, RusotoError<GetObjectLegalHoldError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            format!("/{key}", key = input.key).into()
+        } else {
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -21171,6 +21563,8 @@ impl S3 for S3Client {
         }
         params.put_key("legal-hold");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, GetObjectLegalHoldError::from_response)
@@ -21193,7 +21587,13 @@ impl S3 for S3Client {
         input: GetObjectLockConfigurationRequest,
     ) -> Result<GetObjectLockConfigurationOutput, RusotoError<GetObjectLockConfigurationError>>
     {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -21204,6 +21604,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("object-lock");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, GetObjectLockConfigurationError::from_response)
@@ -21225,7 +21627,13 @@ impl S3 for S3Client {
         &self,
         input: GetObjectRetentionRequest,
     ) -> Result<GetObjectRetentionOutput, RusotoError<GetObjectRetentionError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            format!("/{key}", key = input.key).into()
+        } else {
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -21240,6 +21648,8 @@ impl S3 for S3Client {
         }
         params.put_key("retention");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, GetObjectRetentionError::from_response)
@@ -21261,7 +21671,13 @@ impl S3 for S3Client {
         &self,
         input: GetObjectTaggingRequest,
     ) -> Result<GetObjectTaggingOutput, RusotoError<GetObjectTaggingError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            format!("/{key}", key = input.key).into()
+        } else {
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -21276,6 +21692,8 @@ impl S3 for S3Client {
         }
         params.put_key("tagging");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, GetObjectTaggingError::from_response)
@@ -21297,7 +21715,13 @@ impl S3 for S3Client {
         &self,
         input: GetObjectTorrentRequest,
     ) -> Result<GetObjectTorrentOutput, RusotoError<GetObjectTorrentError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            format!("/{key}", key = input.key).into()
+        } else {
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -21309,6 +21733,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("torrent");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, GetObjectTorrentError::from_response)
@@ -21326,7 +21752,13 @@ impl S3 for S3Client {
         &self,
         input: GetPublicAccessBlockRequest,
     ) -> Result<GetPublicAccessBlockOutput, RusotoError<GetPublicAccessBlockError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -21337,6 +21769,8 @@ impl S3 for S3Client {
         let mut params = Params::new();
         params.put_key("publicAccessBlock");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, GetPublicAccessBlockError::from_response)
@@ -21358,7 +21792,13 @@ impl S3 for S3Client {
         &self,
         input: HeadBucketRequest,
     ) -> Result<(), RusotoError<HeadBucketError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("HEAD", "s3", &self.region, &request_uri);
 
@@ -21366,6 +21806,8 @@ impl S3 for S3Client {
             "x-amz-expected-bucket-owner",
             input.expected_bucket_owner.as_ref(),
         );
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, HeadBucketError::from_response)
@@ -21381,7 +21823,13 @@ impl S3 for S3Client {
         &self,
         input: HeadObjectRequest,
     ) -> Result<HeadObjectOutput, RusotoError<HeadObjectError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            format!("/{key}", key = input.key).into()
+        } else {
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).into()
+        };
 
         let mut request = SignedRequest::new("HEAD", "s3", &self.region, &request_uri);
 
@@ -21415,6 +21863,8 @@ impl S3 for S3Client {
             params.put("versionId", x);
         }
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, HeadObjectError::from_response)
@@ -21498,7 +21948,13 @@ impl S3 for S3Client {
         ListBucketAnalyticsConfigurationsOutput,
         RusotoError<ListBucketAnalyticsConfigurationsError>,
     > {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -21512,6 +21968,8 @@ impl S3 for S3Client {
         }
         params.put_key("analytics");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(
@@ -21539,7 +21997,13 @@ impl S3 for S3Client {
         ListBucketIntelligentTieringConfigurationsOutput,
         RusotoError<ListBucketIntelligentTieringConfigurationsError>,
     > {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -21549,6 +22013,8 @@ impl S3 for S3Client {
         }
         params.put_key("intelligent-tiering");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(
@@ -21579,7 +22045,13 @@ impl S3 for S3Client {
         ListBucketInventoryConfigurationsOutput,
         RusotoError<ListBucketInventoryConfigurationsError>,
     > {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -21593,6 +22065,8 @@ impl S3 for S3Client {
         }
         params.put_key("inventory");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(
@@ -21620,7 +22094,13 @@ impl S3 for S3Client {
         ListBucketMetricsConfigurationsOutput,
         RusotoError<ListBucketMetricsConfigurationsError>,
     > {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -21634,6 +22114,8 @@ impl S3 for S3Client {
         }
         params.put_key("metrics");
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, ListBucketMetricsConfigurationsError::from_response)
@@ -21676,7 +22158,13 @@ impl S3 for S3Client {
         &self,
         input: ListMultipartUploadsRequest,
     ) -> Result<ListMultipartUploadsOutput, RusotoError<ListMultipartUploadsError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -21706,6 +22194,8 @@ impl S3 for S3Client {
         params.put_key("uploads");
         request.set_params(params);
 
+        request.set_hostname(Some(hostname));
+
         let mut response = self
             .sign_and_dispatch(request, ListMultipartUploadsError::from_response)
             .await?;
@@ -21726,7 +22216,13 @@ impl S3 for S3Client {
         &self,
         input: ListObjectVersionsRequest,
     ) -> Result<ListObjectVersionsOutput, RusotoError<ListObjectVersionsError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -21756,6 +22252,8 @@ impl S3 for S3Client {
         params.put_key("versions");
         request.set_params(params);
 
+        request.set_hostname(Some(hostname));
+
         let mut response = self
             .sign_and_dispatch(request, ListObjectVersionsError::from_response)
             .await?;
@@ -21776,7 +22274,13 @@ impl S3 for S3Client {
         &self,
         input: ListObjectsRequest,
     ) -> Result<ListObjectsOutput, RusotoError<ListObjectsError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -21803,6 +22307,8 @@ impl S3 for S3Client {
         }
         request.set_params(params);
 
+        request.set_hostname(Some(hostname));
+
         let mut response = self
             .sign_and_dispatch(request, ListObjectsError::from_response)
             .await?;
@@ -21823,7 +22329,13 @@ impl S3 for S3Client {
         &self,
         input: ListObjectsV2Request,
     ) -> Result<ListObjectsV2Output, RusotoError<ListObjectsV2Error>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -21857,6 +22369,8 @@ impl S3 for S3Client {
         params.put("list-type", "2");
         request.set_params(params);
 
+        request.set_hostname(Some(hostname));
+
         let mut response = self
             .sign_and_dispatch(request, ListObjectsV2Error::from_response)
             .await?;
@@ -21877,7 +22391,13 @@ impl S3 for S3Client {
         &self,
         input: ListPartsRequest,
     ) -> Result<ListPartsOutput, RusotoError<ListPartsError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            format!("/{key}", key = input.key).into()
+        } else {
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).into()
+        };
 
         let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
 
@@ -21895,6 +22415,8 @@ impl S3 for S3Client {
         }
         params.put("uploadId", &input.upload_id);
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, ListPartsError::from_response)
@@ -21918,7 +22440,13 @@ impl S3 for S3Client {
         &self,
         input: PutBucketAccelerateConfigurationRequest,
     ) -> Result<(), RusotoError<PutBucketAccelerateConfigurationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -21936,6 +22464,7 @@ impl S3 for S3Client {
             &input.accelerate_configuration,
         );
         request.set_payload(Some(writer.into_inner()));
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(
@@ -21954,7 +22483,13 @@ impl S3 for S3Client {
         &self,
         input: PutBucketAclRequest,
     ) -> Result<(), RusotoError<PutBucketAclError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -21987,6 +22522,7 @@ impl S3 for S3Client {
             request.set_payload(Some(Vec::new()));
         }
         request.maybe_set_content_md5_header();
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, PutBucketAclError::from_response)
@@ -22002,7 +22538,13 @@ impl S3 for S3Client {
         &self,
         input: PutBucketAnalyticsConfigurationRequest,
     ) -> Result<(), RusotoError<PutBucketAnalyticsConfigurationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -22021,6 +22563,7 @@ impl S3 for S3Client {
             &input.analytics_configuration,
         );
         request.set_payload(Some(writer.into_inner()));
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, PutBucketAnalyticsConfigurationError::from_response)
@@ -22036,7 +22579,13 @@ impl S3 for S3Client {
         &self,
         input: PutBucketCorsRequest,
     ) -> Result<(), RusotoError<PutBucketCorsError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -22056,6 +22605,7 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
         request.maybe_set_content_md5_header();
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, PutBucketCorsError::from_response)
@@ -22071,7 +22621,13 @@ impl S3 for S3Client {
         &self,
         input: PutBucketEncryptionRequest,
     ) -> Result<(), RusotoError<PutBucketEncryptionError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -22091,6 +22647,7 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
         request.maybe_set_content_md5_header();
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, PutBucketEncryptionError::from_response)
@@ -22106,7 +22663,13 @@ impl S3 for S3Client {
         &self,
         input: PutBucketIntelligentTieringConfigurationRequest,
     ) -> Result<(), RusotoError<PutBucketIntelligentTieringConfigurationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -22121,6 +22684,7 @@ impl S3 for S3Client {
             &input.intelligent_tiering_configuration,
         );
         request.set_payload(Some(writer.into_inner()));
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(
@@ -22139,7 +22703,13 @@ impl S3 for S3Client {
         &self,
         input: PutBucketInventoryConfigurationRequest,
     ) -> Result<(), RusotoError<PutBucketInventoryConfigurationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -22158,6 +22728,7 @@ impl S3 for S3Client {
             &input.inventory_configuration,
         );
         request.set_payload(Some(writer.into_inner()));
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, PutBucketInventoryConfigurationError::from_response)
@@ -22173,7 +22744,13 @@ impl S3 for S3Client {
         &self,
         input: PutBucketLifecycleRequest,
     ) -> Result<(), RusotoError<PutBucketLifecycleError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -22197,6 +22774,7 @@ impl S3 for S3Client {
             request.set_payload(Some(Vec::new()));
         }
         request.maybe_set_content_md5_header();
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, PutBucketLifecycleError::from_response)
@@ -22212,7 +22790,13 @@ impl S3 for S3Client {
         &self,
         input: PutBucketLifecycleConfigurationRequest,
     ) -> Result<(), RusotoError<PutBucketLifecycleConfigurationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -22235,6 +22819,7 @@ impl S3 for S3Client {
             request.set_payload(Some(Vec::new()));
         }
         request.maybe_set_content_md5_header();
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, PutBucketLifecycleConfigurationError::from_response)
@@ -22250,7 +22835,13 @@ impl S3 for S3Client {
         &self,
         input: PutBucketLoggingRequest,
     ) -> Result<(), RusotoError<PutBucketLoggingError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -22270,6 +22861,7 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
         request.maybe_set_content_md5_header();
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, PutBucketLoggingError::from_response)
@@ -22285,7 +22877,13 @@ impl S3 for S3Client {
         &self,
         input: PutBucketMetricsConfigurationRequest,
     ) -> Result<(), RusotoError<PutBucketMetricsConfigurationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -22304,6 +22902,7 @@ impl S3 for S3Client {
             &input.metrics_configuration,
         );
         request.set_payload(Some(writer.into_inner()));
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, PutBucketMetricsConfigurationError::from_response)
@@ -22319,7 +22918,13 @@ impl S3 for S3Client {
         &self,
         input: PutBucketNotificationRequest,
     ) -> Result<(), RusotoError<PutBucketNotificationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -22339,6 +22944,7 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
         request.maybe_set_content_md5_header();
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, PutBucketNotificationError::from_response)
@@ -22354,7 +22960,13 @@ impl S3 for S3Client {
         &self,
         input: PutBucketNotificationConfigurationRequest,
     ) -> Result<(), RusotoError<PutBucketNotificationConfigurationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -22372,6 +22984,7 @@ impl S3 for S3Client {
             &input.notification_configuration,
         );
         request.set_payload(Some(writer.into_inner()));
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(
@@ -22390,7 +23003,13 @@ impl S3 for S3Client {
         &self,
         input: PutBucketOwnershipControlsRequest,
     ) -> Result<(), RusotoError<PutBucketOwnershipControlsError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -22410,6 +23029,7 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
         request.maybe_set_content_md5_header();
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, PutBucketOwnershipControlsError::from_response)
@@ -22425,7 +23045,13 @@ impl S3 for S3Client {
         &self,
         input: PutBucketPolicyRequest,
     ) -> Result<(), RusotoError<PutBucketPolicyError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -22443,6 +23069,7 @@ impl S3 for S3Client {
         request.set_params(params);
         request.set_payload(Some(input.policy.into_bytes()));
         request.maybe_set_content_md5_header();
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, PutBucketPolicyError::from_response)
@@ -22458,7 +23085,13 @@ impl S3 for S3Client {
         &self,
         input: PutBucketReplicationRequest,
     ) -> Result<(), RusotoError<PutBucketReplicationError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -22479,6 +23112,7 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
         request.maybe_set_content_md5_header();
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, PutBucketReplicationError::from_response)
@@ -22494,7 +23128,13 @@ impl S3 for S3Client {
         &self,
         input: PutBucketRequestPaymentRequest,
     ) -> Result<(), RusotoError<PutBucketRequestPaymentError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -22514,6 +23154,7 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
         request.maybe_set_content_md5_header();
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, PutBucketRequestPaymentError::from_response)
@@ -22529,7 +23170,13 @@ impl S3 for S3Client {
         &self,
         input: PutBucketTaggingRequest,
     ) -> Result<(), RusotoError<PutBucketTaggingError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -22545,6 +23192,7 @@ impl S3 for S3Client {
         TaggingSerializer::serialize(&mut writer, "Tagging", &input.tagging);
         request.set_payload(Some(writer.into_inner()));
         request.maybe_set_content_md5_header();
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, PutBucketTaggingError::from_response)
@@ -22560,7 +23208,13 @@ impl S3 for S3Client {
         &self,
         input: PutBucketVersioningRequest,
     ) -> Result<(), RusotoError<PutBucketVersioningError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -22581,6 +23235,7 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
         request.maybe_set_content_md5_header();
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, PutBucketVersioningError::from_response)
@@ -22596,7 +23251,13 @@ impl S3 for S3Client {
         &self,
         input: PutBucketWebsiteRequest,
     ) -> Result<(), RusotoError<PutBucketWebsiteError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -22616,6 +23277,7 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
         request.maybe_set_content_md5_header();
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, PutBucketWebsiteError::from_response)
@@ -22631,7 +23293,13 @@ impl S3 for S3Client {
         &self,
         input: PutObjectRequest,
     ) -> Result<PutObjectOutput, RusotoError<PutObjectError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            format!("/{key}", key = input.key).into()
+        } else {
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -22710,6 +23378,7 @@ impl S3 for S3Client {
         if let Some(__body) = input.body {
             request.set_payload_stream(__body);
         }
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, PutObjectError::from_response)
@@ -22747,7 +23416,13 @@ impl S3 for S3Client {
         &self,
         input: PutObjectAclRequest,
     ) -> Result<PutObjectAclOutput, RusotoError<PutObjectAclError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            format!("/{key}", key = input.key).into()
+        } else {
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -22784,6 +23459,7 @@ impl S3 for S3Client {
             request.set_payload(Some(Vec::new()));
         }
         request.maybe_set_content_md5_header();
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, PutObjectAclError::from_response)
@@ -22801,7 +23477,13 @@ impl S3 for S3Client {
         &self,
         input: PutObjectLegalHoldRequest,
     ) -> Result<PutObjectLegalHoldOutput, RusotoError<PutObjectLegalHoldError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            format!("/{key}", key = input.key).into()
+        } else {
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -22829,6 +23511,7 @@ impl S3 for S3Client {
             request.set_payload(Some(Vec::new()));
         }
         request.maybe_set_content_md5_header();
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, PutObjectLegalHoldError::from_response)
@@ -22847,7 +23530,13 @@ impl S3 for S3Client {
         input: PutObjectLockConfigurationRequest,
     ) -> Result<PutObjectLockConfigurationOutput, RusotoError<PutObjectLockConfigurationError>>
     {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -22873,6 +23562,7 @@ impl S3 for S3Client {
             request.set_payload(Some(Vec::new()));
         }
         request.maybe_set_content_md5_header();
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, PutObjectLockConfigurationError::from_response)
@@ -22890,7 +23580,13 @@ impl S3 for S3Client {
         &self,
         input: PutObjectRetentionRequest,
     ) -> Result<PutObjectRetentionOutput, RusotoError<PutObjectRetentionError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            format!("/{key}", key = input.key).into()
+        } else {
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -22922,6 +23618,7 @@ impl S3 for S3Client {
             request.set_payload(Some(Vec::new()));
         }
         request.maybe_set_content_md5_header();
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, PutObjectRetentionError::from_response)
@@ -22939,7 +23636,13 @@ impl S3 for S3Client {
         &self,
         input: PutObjectTaggingRequest,
     ) -> Result<PutObjectTaggingOutput, RusotoError<PutObjectTaggingError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            format!("/{key}", key = input.key).into()
+        } else {
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -22959,6 +23662,7 @@ impl S3 for S3Client {
         TaggingSerializer::serialize(&mut writer, "Tagging", &input.tagging);
         request.set_payload(Some(writer.into_inner()));
         request.maybe_set_content_md5_header();
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, PutObjectTaggingError::from_response)
@@ -22976,7 +23680,13 @@ impl S3 for S3Client {
         &self,
         input: PutPublicAccessBlockRequest,
     ) -> Result<(), RusotoError<PutPublicAccessBlockError>> {
-        let request_uri = format!("/{bucket}", bucket = input.bucket);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            "/".into()
+        } else {
+            format!("/{bucket}", bucket = input.bucket).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -22996,6 +23706,7 @@ impl S3 for S3Client {
         );
         request.set_payload(Some(writer.into_inner()));
         request.maybe_set_content_md5_header();
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, PutPublicAccessBlockError::from_response)
@@ -23011,7 +23722,13 @@ impl S3 for S3Client {
         &self,
         input: RestoreObjectRequest,
     ) -> Result<RestoreObjectOutput, RusotoError<RestoreObjectError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            format!("/{key}", key = input.key).into()
+        } else {
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).into()
+        };
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
@@ -23037,6 +23754,7 @@ impl S3 for S3Client {
         } else {
             request.set_payload(Some(Vec::new()));
         }
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, RestoreObjectError::from_response)
@@ -23055,7 +23773,13 @@ impl S3 for S3Client {
         &self,
         input: SelectObjectContentRequest,
     ) -> Result<SelectObjectContentOutput, RusotoError<SelectObjectContentError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            format!("/{key}", key = input.key).into()
+        } else {
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).into()
+        };
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
 
@@ -23087,6 +23811,7 @@ impl S3 for S3Client {
             "http://s3.amazonaws.com/doc/2006-03-01/",
         );
         request.set_payload(Some(writer.into_inner()));
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, SelectObjectContentError::from_response)
@@ -23101,7 +23826,13 @@ impl S3 for S3Client {
         &self,
         input: UploadPartRequest,
     ) -> Result<UploadPartOutput, RusotoError<UploadPartError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            format!("/{key}", key = input.key).into()
+        } else {
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -23131,6 +23862,7 @@ impl S3 for S3Client {
         if let Some(__body) = input.body {
             request.set_payload_stream(__body);
         }
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, UploadPartError::from_response)
@@ -23163,7 +23895,13 @@ impl S3 for S3Client {
         &self,
         input: UploadPartCopyRequest,
     ) -> Result<UploadPartCopyOutput, RusotoError<UploadPartCopyError>> {
-        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+        let (is_virtual, hostname) = self.build_s3_hostname(&input.bucket)?;
+
+        let request_uri: std::borrow::Cow<'_, str> = if is_virtual {
+            format!("/{key}", key = input.key).into()
+        } else {
+            format!("/{bucket}/{key}", bucket = input.bucket, key = input.key).into()
+        };
 
         let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
 
@@ -23222,6 +23960,8 @@ impl S3 for S3Client {
         params.put("partNumber", &input.part_number);
         params.put("uploadId", &input.upload_id);
         request.set_params(params);
+
+        request.set_hostname(Some(hostname));
 
         let mut response = self
             .sign_and_dispatch(request, UploadPartCopyError::from_response)

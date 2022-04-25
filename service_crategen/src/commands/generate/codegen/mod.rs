@@ -190,10 +190,104 @@ where
              service_name = service.name())?;
 
     protocol_generator.generate_method_signatures(writer, service)?;
-
     writeln!(writer, "}}")?;
 
-    writeln!(writer,
+    let client_type_name = service.client_type_name();
+    let client_struct_and_impl = if service.service_type_name() == "S3" {
+        generate_s3_client_struct_and_impl(service.name(), &client_type_name)
+    } else {
+        generate_generic_client_struct_and_impl(service.name(), &client_type_name)
+    };
+
+    writeln!(
+        writer,
+        "{client_struct_and_impl}
+
+        #[async_trait]
+        impl {trait_name} for {type_name} {{
+        ",
+        client_struct_and_impl = client_struct_and_impl,
+        type_name = client_type_name,
+        trait_name = service.service_type_name(),
+    )?;
+
+    protocol_generator.generate_method_impls(writer, service)?;
+    writeln!(writer, "}}")
+}
+
+// See ...
+fn generate_s3_client_struct_and_impl(service_name: &str, client_type_name: &str) -> String {
+    format!(
+        "
+        use crate::util::S3Config;
+
+        /// A client for the {service_name} API.
+        #[derive(Clone)]
+        pub struct {type_name} {{
+            client: Client,
+            region: region::Region,
+            config: S3Config,
+        }}
+
+        impl {type_name} {{
+            /// Creates a client backed by the default tokio event loop.
+            ///
+            /// The client will use the default credentials provider and tls client.
+            pub fn new(region: region::Region) -> {type_name} {{
+                {type_name} {{
+                    client: Client::shared(),
+                    region,
+                    config: S3Config::default(),
+                }}
+            }}
+
+            pub fn new_with<P, D>(request_dispatcher: D, credentials_provider: P, region: region::Region) -> {type_name}
+                where P: ProvideAwsCredentials + Send + Sync + 'static,
+                      D: DispatchSignedRequest + Send + Sync + 'static,
+            {{
+                {type_name} {{
+                    client: Client::new_with(credentials_provider, request_dispatcher),
+                    region,
+                    config: S3Config::default(),
+                }}
+            }}
+
+            pub fn new_with_client(client: Client, region: region::Region) -> {type_name}
+            {{
+                {type_name} {{
+                    client,
+                    region,
+                    config: S3Config::default(),
+                }}
+            }}
+
+            pub fn set_config(&mut self, config: S3Config) {{
+                self.config = config;
+            }}
+        
+            pub fn config(&self) -> &S3Config {{
+                &self.config
+            }}
+        
+            pub fn config_mut(&mut self) -> &mut S3Config {{
+                &mut self.config
+            }}
+        
+            pub fn build_s3_hostname<T>(&self, bucket: &str) -> Result<(bool, String), RusotoError<T>> {{
+                self.config
+                    .addressing_style
+                    .build_s3_hostname(&self.region, bucket)
+                    .map_err(|e| RusotoError::InvalidDnsName(e))
+            }}
+        }}
+        ",
+        service_name = service_name,
+        type_name = client_type_name,
+    )
+}
+
+fn generate_generic_client_struct_and_impl(service_name: &str, client_type_name: &str) -> String {
+    format!(
         "/// A client for the {service_name} API.
         #[derive(Clone)]
         pub struct {type_name} {{
@@ -208,7 +302,7 @@ where
             pub fn new(region: region::Region) -> {type_name} {{
                 {type_name} {{
                     client: Client::shared(),
-                    region
+                    region,
                 }}
             }}
 
@@ -218,7 +312,7 @@ where
             {{
                 {type_name} {{
                     client: Client::new_with(credentials_provider, request_dispatcher),
-                    region
+                    region,
                 }}
             }}
 
@@ -226,20 +320,14 @@ where
             {{
                 {type_name} {{
                     client,
-                    region
+                    region,
                 }}
             }}
         }}
-
-        #[async_trait]
-        impl {trait_name} for {type_name} {{
         ",
-        service_name = service.name(),
-        type_name = service.client_type_name(),
-        trait_name = service.service_type_name(),
-    )?;
-    protocol_generator.generate_method_impls(writer, service)?;
-    writeln!(writer, "}}")
+        service_name = service_name,
+        type_name = client_type_name,
+    )
 }
 
 pub fn get_rust_type(
