@@ -401,10 +401,6 @@ path = "../rusoto/services/neptune"
 optional = true
 path = "../rusoto/services/machinelearning"
 
-[dependencies.rusoto_macie]
-optional = true
-path = "../rusoto/services/macie"
-
 [dependencies.rusoto_marketplacecommerceanalytics]
 optional = true
 path = "../rusoto/services/marketplacecommerceanalytics"
@@ -436,10 +432,6 @@ path = "../rusoto/services/mediatailor"
 [dependencies.rusoto_mgh]
 optional = true
 path = "../rusoto/services/mgh"
-
-[dependencies.rusoto_mobile]
-optional = true
-path = "../rusoto/services/mobile"
 
 [dependencies.rusoto_mq]
 optional = true
@@ -613,10 +605,6 @@ path = "../rusoto/services/waf-regional"
 optional = true
 path = "../rusoto/services/workdocs"
 
-[dependencies.rusoto_worklink]
-optional = true
-path = "../rusoto/services/worklink"
-
 [dependencies.rusoto_workmail]
 optional = true
 path = "../rusoto/services/workmail"
@@ -758,7 +746,6 @@ all = [
 	"logs",
 	"neptune",
 	"machinelearning",
-	"macie",
 	"marketplacecommerceanalytics",
 	"marketplace-entitlement",
 	"mediaconvert",
@@ -767,7 +754,6 @@ all = [
 	"mediastore",
 	"mediatailor",
 	"mgh",
-	"mobile",
 	"mq",
 	"mturk",
 	"opsworks",
@@ -811,7 +797,6 @@ all = [
 	"waf",
 	"waf-regional",
 	"workdocs",
-	"worklink",
 	"workmail",
 	"workspaces",
 	"xray",
@@ -916,7 +901,6 @@ lex-runtime = ["rusoto_lex_runtime"]
 logs = ["rusoto_logs", "rusoto_core/encoding"]
 neptune = ["rusoto_neptune"]
 machinelearning = ["rusoto_machinelearning"]
-macie = ["rusoto_macie"]
 marketplacecommerceanalytics = ["rusoto_marketplacecommerceanalytics"]
 marketplace-entitlement = ["rusoto_marketplace_entitlement"]
 mediaconvert = ["rusoto_mediaconvert"]
@@ -925,7 +909,6 @@ mediapackage = ["rusoto_mediapackage"]
 mediastore = ["rusoto_mediastore"]
 mediatailor = ["rusoto_mediatailor"]
 mgh = ["rusoto_mgh"]
-mobile = ["rusoto_mobile"]
 mq = ["rusoto_mq"]
 mturk = ["rusoto_mturk"]
 opsworks = ["rusoto_opsworks"]
@@ -971,7 +954,6 @@ waf-regional = ["rusoto_waf_regional"]
 workmail = ["rusoto_workmail"]
 workspaces = ["rusoto_workspaces"]
 workdocs = ["rusoto_workdocs"]
-worklink = ["rusoto_worklink"]
 xray = ["rusoto_xray"]
 amplify = ["rusoto_amplify"]
 apigatewaymanagementapi = ["rusoto_apigatewaymanagementapi"]
