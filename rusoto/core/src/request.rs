@@ -223,7 +223,7 @@ impl HttpClient {
         #[cfg(feature = "native-tls")]
         let connector = HttpsConnector::new();
 
-        #[cfg(feature = "rustls")]
+        #[cfg(any(feature = "rustls", feature = "rustls-webpki"))]
         let connector = {
             let builder = crate::tls::HttpsConnectorBuilder::new();
 
@@ -243,7 +243,7 @@ impl HttpClient {
         #[cfg(feature = "native-tls")]
         let connector = HttpsConnector::new();
 
-        #[cfg(feature = "rustls")]
+        #[cfg(any(feature = "rustls", feature = "rustls-webpki"))]
         let connector = {
             let builder = crate::tls::HttpsConnectorBuilder::new();
 
