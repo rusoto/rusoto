@@ -232,7 +232,7 @@ impl HttpClient {
             #[cfg(feature = "rustls-webpki")]
             let builder = builder.with_webpki_roots();
 
-            builder.https_only().enable_http2().build()
+            builder.https_or_http().enable_http1().enable_http2().build()
         };
 
         Ok(Self::from_connector(connector))
@@ -252,7 +252,7 @@ impl HttpClient {
             #[cfg(feature = "rustls-webpki")]
             let builder = builder.with_webpki_roots();
 
-            builder.https_only().enable_http2().build()
+            builder.https_or_http().enable_http1().enable_http2().build()
         };
 
         Ok(Self::from_connector_with_config(connector, config))
