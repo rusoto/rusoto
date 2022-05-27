@@ -210,6 +210,7 @@ impl<D: DispatchSignedRequest> DispatchSignedRequest for Arc<D> {
     }
 }
 
+#[derive(Clone)]
 /// Http client for use with AWS services.
 pub struct HttpClient<C = HttpsConnector<HttpConnector>> {
     inner: HyperClient<C, Body>,
