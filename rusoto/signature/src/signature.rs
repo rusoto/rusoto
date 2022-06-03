@@ -688,10 +688,10 @@ fn canonical_uri(path: &str, region: &Region) -> String {
         _ => None,
     };
     match (endpoint_path, path) {
+        (Some(prefix), _) if prefix != "/" => encode_uri_path(&(prefix.to_owned() + path)),
         (Some(prefix), "") => prefix.to_string(),
         (None, "") => "/".to_string(),
-        (Some(prefix), _) => encode_uri_path(&(prefix.to_owned() + path)),
-        _ => encode_uri_path(path),
+        (Some(_) | None, _) => encode_uri_path(path),
     }
 }
 
@@ -1055,6 +1055,16 @@ mod tests {
                 &Region::Custom {
                     name: Region::UsEast1.name().into(),
                     endpoint: "http://localhost:8000".into()
+                }
+            ),
+            "/foo"
+        );
+        assert_eq!(
+            super::canonical_uri(
+                "/foo",
+                &Region::Custom {
+                    name: Region::UsEast1.name().into(),
+                    endpoint: "http://localhost:8000/".into()
                 }
             ),
             "/foo"
