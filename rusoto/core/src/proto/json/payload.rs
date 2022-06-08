@@ -1,4 +1,5 @@
 use bytes::Bytes;
+use http::StatusCode;
 use log::*;
 use serde::de::DeserializeOwned;
 use serde_json::from_slice;
@@ -8,6 +9,7 @@ use super::super::super::RusotoError;
 
 pub struct ResponsePayload {
     body: Bytes,
+    status: StatusCode,
 }
 
 impl ResponsePayload {
@@ -24,10 +26,17 @@ impl ResponsePayload {
         debug!("Response body: {:?}", body);
         debug!("Response status: {}", res.status);
 
-        Self { body }
+        Self { body, status: res.status }
     }
 
     pub fn deserialize<T: DeserializeOwned, E>(&self) -> Result<T, RusotoError<E>> {
-        Ok(from_slice(&self.body)?)
+        match from_slice(&self.body) {
+            Ok(t) => Ok(t),
+            Err(e) => {
+                error!("Response body: {:?}", self.body);
+                error!("Response status: {:?}", self.status);
+                Err(e.into())
+            }
+        }
     }
 }
