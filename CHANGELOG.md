@@ -5,7 +5,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-(Please put changes here.)
+- Remove host HTTP header when using rustls 
 
 ## [0.48.0] - 2022-04-24
 
