@@ -444,6 +444,10 @@ where
         message: format!("error building request: {}", err),
     })?;
 
+    // we use HTTP/2 with rustls, the host header is required to sign the request
+    // Google cloud storage rejects HTTP/2 payloads containing a host header
+    #[cfg(any(feature = "rustls", feature = "rustls-webpki"))]
+    hyper_headers.remove("host");
     *http_request.headers_mut() = hyper_headers;
 
     let f = client.request(http_request);
