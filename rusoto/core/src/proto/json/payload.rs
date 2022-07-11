@@ -58,7 +58,7 @@ mod tests {
         let mut logger = Logger::start();
 
         let mut bmut = BytesMut::with_capacity(1024);
-        bmut.put(&b"lorem ipsum error"[..]);
+        bmut.put(&b"<xml"[..]);
         let response = ResponsePayload{ body: bmut.freeze(), status: http::StatusCode::OK};
 
         let deserialized = response.deserialize::<TestEmptyStruct, RusotoError<TestEmptyStruct>>();
