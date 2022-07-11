@@ -40,3 +40,33 @@ impl ResponsePayload {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use bytes::{BytesMut, BufMut};
+    use serde::Deserialize;
+    use crate::{proto::json::ResponsePayload, RusotoError};
+    use logtest::Logger;
+
+    #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+    pub struct TestEmptyStruct {
+        pub test: Option<String>
+    }
+
+    #[test]
+    fn test_dump_raw_error_when_deserialize_fails() {
+        let mut logger = Logger::start();
+
+        let mut bmut = BytesMut::with_capacity(1024);
+        bmut.put(&b"lorem ipsum error"[..]);
+        let response = ResponsePayload{ body: bmut.freeze(), status: http::StatusCode::OK};
+
+        let deserialized = response.deserialize::<TestEmptyStruct, RusotoError<TestEmptyStruct>>();
+
+        match deserialized {
+            Ok(_) => println!("beep"),
+            Err(_) => println!("boop"),
+        }
+        assert_eq!(logger.pop().unwrap().args(), "Response body: b\"lorem ipsum error\"");
+    }
+}
