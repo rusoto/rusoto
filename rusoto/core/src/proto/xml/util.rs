@@ -242,7 +242,7 @@ where
 
     loop {
         match stack.peek() {
-            Some(&Ok(XmlEvent::EndElement { .. })) => break,
+            Some(&Ok(XmlEvent::EndElement { .. })) | None => break,
             Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
                 let local_name = name.local_name.to_owned();
                 handle_element(&local_name, stack, &mut obj)?;
