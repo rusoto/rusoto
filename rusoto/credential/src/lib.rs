@@ -239,7 +239,7 @@ impl<P: ProvideAwsCredentials + Send + Sync> ProvideAwsCredentials for Arc<P> {
 #[async_trait]
 impl ProvideAwsCredentials for Box<dyn ProvideAwsCredentials + Send + Sync> {
     async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
-        self.credentials().await
+        self.as_ref().credentials().await
     }
 }
 
