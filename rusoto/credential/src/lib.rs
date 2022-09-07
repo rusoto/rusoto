@@ -236,6 +236,13 @@ impl<P: ProvideAwsCredentials + Send + Sync> ProvideAwsCredentials for Arc<P> {
     }
 }
 
+#[async_trait]
+impl ProvideAwsCredentials for Box<dyn ProvideAwsCredentials + Send + Sync> {
+    async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
+        self.as_ref().credentials().await
+    }
+}
+
 /// Wrapper for `ProvideAwsCredentials` that caches the credentials returned by the
 /// wrapped provider.  Each time the credentials are accessed, they are checked to see if
 /// they have expired, in which case they are retrieved from the wrapped provider again.
