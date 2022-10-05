@@ -130,6 +130,13 @@ impl MockRequestDispatcher {
         self
     }
 
+    /// Mocks the service response body that would be
+    /// returned from AWS
+    pub fn with_bytes_body(mut self, body: &[u8]) -> MockRequestDispatcher {
+        self.body = body.to_vec();
+        self
+    }
+
     /// Mocks the json serialized response body what would be
     /// returned from AWS
     pub fn with_json_body<B>(mut self, body: B) -> MockRequestDispatcher
