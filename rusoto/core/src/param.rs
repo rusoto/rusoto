@@ -5,17 +5,17 @@
 //! Supports optional parameters for calling SQS and ETS.
 
 use std::collections::BTreeMap;
-/// Paramaters for HTTP Request stored as a `BTreeMap`
+/// Parameters for HTTP Request stored as a `BTreeMap`
 pub type Params = BTreeMap<String, Option<String>>;
 
 /// Key:value pair for an service parameter.
 pub trait ServiceParams {
-    /// Add a new paramater with a key and val
+    /// Add a new parameter with a key and val
     ///
     /// * `key` - The key of the parameter to add.
-    /// * `val` - The value of the paramater to add.
+    /// * `val` - The value of the parameter to add.
     fn put<T: ToParam>(&mut self, key: &str, val: T);
-    /// Add a new paramater with a key
+    /// Add a new parameter with a key
     fn put_key(&mut self, key: &str);
 }
 
@@ -29,9 +29,9 @@ impl ServiceParams for Params {
     }
 }
 
-/// Trait for implementing type to paramater conversion
+/// Trait for implementing type to parameter conversion
 pub trait ToParam {
-    /// Renders this paramater to a String
+    /// Renders this parameter to a String
     fn to_param(&self) -> String;
 }
 
@@ -55,7 +55,7 @@ impl<'a, T> ToParam for &'a T
 where
     T: ToParam + ?Sized,
 {
-    /// Converts a generic type to a paramater
+    /// Converts a generic type to a parameter
     fn to_param(&self) -> String {
         ToParam::to_param(&**self)
     }
@@ -69,7 +69,7 @@ impl ToParam for str {
 }
 
 impl ToParam for String {
-    /// Converts a String to a paramater
+    /// Converts a String to a parameter
     fn to_param(&self) -> String {
         self.clone()
     }

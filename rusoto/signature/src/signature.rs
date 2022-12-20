@@ -90,7 +90,7 @@ pub struct SignedRequest {
     pub path: String,
     /// The HTTP Request Headers
     pub headers: BTreeMap<String, Vec<Vec<u8>>>,
-    /// The HTTP request paramaters
+    /// The HTTP request parameters
     pub params: Params,
     /// The HTTP/HTTPS protocol
     pub scheme: Option<String>,
@@ -185,7 +185,7 @@ impl SignedRequest {
 
     /// Returns the current query string
     ///
-    /// Converts a paramater such as "example param": "examplekey" into "&example+param=examplekey"
+    /// Converts a parameter such as "example param": "examplekey" into "&example+param=examplekey"
     pub fn canonical_query_string(&self) -> &str {
         &self.canonical_query_string
     }
@@ -267,7 +267,7 @@ impl SignedRequest {
         self.params.insert(key.into(), Some(value.into()));
     }
 
-    /// Sets paramaters with a given variable of `Params` type
+    /// Sets parameters with a given variable of `Params` type
     pub fn set_params(&mut self, params: Params) {
         self.params = params;
     }
@@ -695,7 +695,7 @@ fn canonical_uri(path: &str, region: &Region) -> String {
     }
 }
 
-/// Canonicalizes query while iterating through the given paramaters
+/// Canonicalizes query while iterating through the given parameters
 ///
 /// Read more about it: [HERE](http://docs.aws.amazon.com/AmazonS3/latest/API/sigv4-query-string-auth.html#query-string-auth-v4-signing)
 fn build_canonical_query_string(params: &Params) -> String {
