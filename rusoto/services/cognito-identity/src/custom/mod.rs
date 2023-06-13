@@ -1,27 +1,15 @@
-
 //! The Credentials provider from Cognito.
 
-use rusoto_core::Region;
 use async_trait::async_trait;
+use rusoto_core::Region;
 
 use rusoto_core::credential::{
-    AwsCredentials, 
-    CredentialsError,
-    ProvideAwsCredentials,
-    StaticProvider
+    AwsCredentials, CredentialsError, ProvideAwsCredentials, StaticProvider,
 };
 
-use crate::generated::{
-    GetCredentialsForIdentityInput,
-    CognitoIdentityClient,
-    CognitoIdentity
-};
+use crate::generated::{CognitoIdentity, CognitoIdentityClient, GetCredentialsForIdentityInput};
 
-use chrono::{
-    offset::Utc,
-    DateTime,
-    NaiveDateTime
-};
+use chrono::{offset::Utc, DateTime, NaiveDateTime};
 
 use std::collections::HashMap;
 
@@ -39,7 +27,7 @@ use std::collections::HashMap;
 ///     .region(Region::EuCentral1)
 ///     .login("graph.facebook.com".to_string(), "FBTOKEN".to_string())
 ///     .build();
-/// 
+///
 /// ```
 
 /// <p>The Cognito credential provider.</p>
@@ -52,7 +40,7 @@ pub struct CognitoProvider {
     /// <p>A set of optional name-value pairs that map provider names to provider tokens. The name-value pair will follow the syntax "provider_name": "provider_user_identifier".</p> <p>Logins should not be specified when trying to get credentials for an unauthenticated identity.</p> <p>The Logins parameter is required when using identities associated with external identity providers such as FaceBook. For examples of <code>Logins</code> maps, see the code examples in the <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/external-identity-providers.html">External Identity Providers</a> section of the Amazon Cognito Developer Guide.</p>
     logins: Option<HashMap<String, String>>,
     /// <p>The Amazon Resource Name (ARN) of the role to be assumed when multiple roles were received in the token from the identity provider. For example, a SAML-based identity provider. This parameter is optional for identity providers that do not support role customization.</p>
-    custom_role_arn: Option<String>
+    custom_role_arn: Option<String>,
 }
 
 /// <p>A builder for the Cognito credential provider.</p>
@@ -61,40 +49,40 @@ pub struct CognitoProviderBuilder {
     identity_id: Option<String>,
     region: Option<Region>,
     logins: Option<HashMap<String, String>>,
-    custom_role_arn: Option<String>
+    custom_role_arn: Option<String>,
 }
 
 impl CognitoProviderBuilder {
     /// <p>Build the provider.</p>
-    pub fn build(self) -> CognitoProvider { 
+    pub fn build(self) -> CognitoProvider {
         CognitoProvider {
             identity_id: self.identity_id.expect("no identity id provided"),
             region: self.region.unwrap_or(Region::default()),
             logins: self.logins,
-            custom_role_arn: self.custom_role_arn
+            custom_role_arn: self.custom_role_arn,
         }
     }
 
     /// <p>Set the identity id.</p>
-    pub fn identity_id(mut self, identity_id: String)-> Self {
+    pub fn identity_id(mut self, identity_id: String) -> Self {
         self.identity_id = Some(identity_id);
         self
     }
 
     /// <p>Set the region.</p>
-    pub fn region(mut self, region: Region)-> Self {
+    pub fn region(mut self, region: Region) -> Self {
         self.region = Some(region);
         self
     }
 
     /// <p>Set the custom role arn.</p>
-    pub fn custom_role_arn(mut self, arn: String)-> Self {
+    pub fn custom_role_arn(mut self, arn: String) -> Self {
         self.custom_role_arn = Some(arn);
         self
     }
 
     /// <p>Add a pair provider/token.</p>
-    pub fn login(mut self, provider: String, token: String)-> Self {
+    pub fn login(mut self, provider: String, token: String) -> Self {
         if self.logins == None {
             self.logins = Some(HashMap::new());
         }
@@ -112,12 +100,12 @@ impl CognitoProvider {
 
 #[async_trait]
 impl ProvideAwsCredentials for CognitoProvider {
-
     async fn credentials(&self) -> Result<AwsCredentials, CredentialsError> {
         let client = CognitoIdentityClient::new_with(
-            rusoto_core::request::HttpClient::new().map_err(|e| CredentialsError::new(format!("{:?}", e)))?,
+            rusoto_core::request::HttpClient::new()
+                .map_err(|e| CredentialsError::new(format!("{:?}", e)))?,
             StaticProvider::from(AwsCredentials::default()),
-            self.region.clone()
+            self.region.clone(),
         );
         let input = GetCredentialsForIdentityInput {
             identity_id: self.identity_id.clone(),
@@ -126,24 +114,33 @@ impl ProvideAwsCredentials for CognitoProvider {
             ..Default::default()
         };
 
-        let resp = client.get_credentials_for_identity(input).await.map_err(|e| CredentialsError::new(format!("{:?}", e)))?;
-        
-        let creds = resp.credentials.ok_or(CredentialsError::new("no credentials were found in the response"))?;
-        Ok(
-            AwsCredentials::new(
-                creds.access_key_id.ok_or(CredentialsError::new("no access key id was found in the response"))?, 
-                creds.secret_key.ok_or(CredentialsError::new("no secret key was found in the response"))?, 
-                creds.session_token, 
-                creds.expiration.map(|x| DateTime::from_utc(NaiveDateTime::from_timestamp(x as i64, 0), Utc)) 
-            )
-        )
+        let resp = client
+            .get_credentials_for_identity(input)
+            .await
+            .map_err(|e| CredentialsError::new(format!("{:?}", e)))?;
+
+        let creds = resp.credentials.ok_or(CredentialsError::new(
+            "no credentials were found in the response",
+        ))?;
+        Ok(AwsCredentials::new(
+            creds.access_key_id.ok_or(CredentialsError::new(
+                "no access key id was found in the response",
+            ))?,
+            creds.secret_key.ok_or(CredentialsError::new(
+                "no secret key was found in the response",
+            ))?,
+            creds.session_token,
+            creds.expiration.map(|x| {
+                DateTime::from_utc(NaiveDateTime::from_timestamp_opt(x as i64, 0).unwrap(), Utc)
+            }),
+        ))
     }
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-        
+
     #[test]
     #[should_panic(expected = "no identity id provided")]
     fn builder_empty() {
@@ -154,13 +151,15 @@ mod tests {
     #[should_panic(expected = "no identity id provided")]
     fn builder_no_identity_id() {
         CognitoProvider::builder()
-        .login("provider".to_string(), "token".to_string())
-        .build();
+            .login("provider".to_string(), "token".to_string())
+            .build();
     }
 
     #[test]
     fn builder_simple() {
-        let provider = CognitoProvider::builder().identity_id("id_id".to_string()).build();
+        let provider = CognitoProvider::builder()
+            .identity_id("id_id".to_string())
+            .build();
         assert_eq!(provider.identity_id, "id_id");
         assert_eq!(provider.region, Region::default());
         assert_eq!(provider.logins, None);
@@ -206,4 +205,3 @@ mod tests {
         assert_eq!(provider.custom_role_arn, None);
     }
 }
-
