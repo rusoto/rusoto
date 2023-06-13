@@ -5,11 +5,11 @@ use std::fs;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
+use std::process::Command;
 
 use async_trait::async_trait;
 use dirs_next::home_dir;
 use serde::Deserialize;
-use tokio::process::Command;
 
 use crate::{non_empty_env_var, AwsCredentials, CredentialsError, ProvideAwsCredentials};
 
@@ -73,8 +73,8 @@ impl ProfileProvider {
     /// Create a new `ProfileProvider` for the default credentials file path using
     /// the given profile.
     pub fn with_default_credentials<P>(profile: P) -> Result<ProfileProvider, CredentialsError>
-        where
-            P: Into<String>,
+    where
+        P: Into<String>,
     {
         let profile_location = ProfileProvider::default_profile_location()?;
         Ok(ProfileProvider {
@@ -104,13 +104,12 @@ impl ProfileProvider {
     /// config file path (`ProfileProvider.file_path`) and profile (`ProfileProvider.profile`).
     /// As these fields do not require a region field to be defined, an `Option` type is returned
     pub fn region_from_profile(&self) -> Result<Option<String>, CredentialsError> {
-        Ok(
-            parse_config_file(&self.file_path).and_then(|config| {
-                config
-                    .get(&self.profile)
-                    .and_then(|props| props.get(REGION))
-                    .map(std::borrow::ToOwned::to_owned)
-            }))
+        Ok(parse_config_file(&self.file_path).and_then(|config| {
+            config
+                .get(&self.profile)
+                .and_then(|props| props.get(REGION))
+                .map(std::borrow::ToOwned::to_owned)
+        }))
     }
 
     /// Default config file location:
@@ -206,7 +205,7 @@ impl ProvideAwsCredentials for ProfileProvider {
             Ok(Some(command)) => {
                 // credential_process is set, create the future
                 let mut command = parse_command_str(&command)?;
-                let output = command.output().await.map_err(|e| {
+                let output = command.output().map_err(|e| {
                     CredentialsError::new(format!("Credential process failed: {:?}", e))
                 })?;
                 if output.status.success() {
@@ -741,16 +740,11 @@ mod tests {
 
     #[test]
     fn region_from_profile() {
-        let provider = ProfileProvider::with_configuration(
-            "tests/sample-data/multiple_profile_config",
-            "foo",
-        );
+        let provider =
+            ProfileProvider::with_configuration("tests/sample-data/multiple_profile_config", "foo");
         let maybe_region = provider.region_from_profile().unwrap();
 
-        assert_eq!(
-            maybe_region,
-            Some("us-east-3".to_string())
-        );
+        assert_eq!(maybe_region, Some("us-east-3".to_string()));
     }
 
     #[test]
@@ -761,10 +755,6 @@ mod tests {
         );
         let maybe_region = provider.region_from_profile().unwrap();
 
-        assert_eq!(
-            maybe_region,
-            None
-        );
+        assert_eq!(maybe_region, None);
     }
-
 }
