@@ -388,7 +388,7 @@ impl SignedRequest {
         let signature = sign_string(
             &string_to_sign,
             creds.aws_secret_access_key(),
-            current_time.date().naive_utc(),
+            current_time.naive_utc().into(),
             &self.region.name(),
             &self.service,
         );
@@ -493,7 +493,7 @@ impl SignedRequest {
         let signature = sign_string(
             &string_to_sign,
             creds.aws_secret_access_key(),
-            date.date().naive_utc(),
+            date.naive_utc().into(),
             &self.region_for_service(),
             &self.service,
         );
