@@ -212,9 +212,9 @@ impl PreSignedRequest for UploadPartRequest {
     ) -> String {
         let request_uri = format!("/{bucket}/{key}", bucket = self.bucket, key = self.key);
         let mut request = SignedRequest::new("PUT", "s3", &region, &request_uri);
-
         request.add_param("partNumber", &self.part_number.to_string());
         request.add_param("uploadId", &self.upload_id);
+        request.add_header("x-amz-sdk-checksum-algorithm", "CRC32");
 
         add_headers!(
             self, request;
