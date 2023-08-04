@@ -21280,14 +21280,12 @@ impl S3 for S3Client {
             "x-amz-bypass-governance-retention",
             input.bypass_governance_retention.as_ref(),
         );
-        request.add_optional_header(
-            "x-amz-sdk-checksum-algorithm",
-            input.checksum_algorithm.as_ref(),
-        );
+
         request.add_optional_header(
             "x-amz-expected-bucket-owner",
             input.expected_bucket_owner.as_ref(),
         );
+        // request.add_header("Content-MD5", "d41d8cd98f00b204e9800998ecf8427e");
         request.add_optional_header("x-amz-mfa", input.mfa.as_ref());
         request.add_optional_header("x-amz-request-payer", input.request_payer.as_ref());
         let mut params = Params::new();
@@ -21296,7 +21294,7 @@ impl S3 for S3Client {
         let mut writer = EventWriter::new(Vec::new());
         DeleteSerializer::serialize(&mut writer, "Delete", &input.delete);
         request.set_payload(Some(writer.into_inner()));
-
+        request.maybe_set_content_md5_header();
         let mut response = self
             .sign_and_dispatch(request, DeleteObjectsError::from_response)
             .await?;
