@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 (Please put changes here.)
 
+- Avoid caching `CredentialError` in `AutoRefreshingProvider`.
+
 ## [0.48.0] - 2022-04-24
 
 - Remove [`macie`](https://github.com/boto/botocore/blob/81e0b0026f9eb21be658cf0dd4c17e0dc173346f/botocore/data/macie/2017-12-19/service-2.json#L27), [`mobile`](https://stackoverflow.com/a/64990655), and [`worklink`](https://github.com/boto/botocore/blob/81e0b0026f9eb21be658cf0dd4c17e0dc173346f/botocore/data/worklink/2018-09-25/service-2.json#L33-L34) services, which have had their DNS records removed
