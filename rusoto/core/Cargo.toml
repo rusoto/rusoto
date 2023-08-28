@@ -28,7 +28,7 @@ crc32fast = "1.2"
 futures = "0.3"
 http = "0.2"
 hyper = { version = "0.14", features = ["client", "http1", "http2", "tcp"] }
-hyper-rustls = { version = "0.23", optional = true, default-features = false, features = [ "http1", "http2", "tls12", "logging" ] }
+hyper-rustls = { version = "0.24", optional = true, default-features = false, features = [ "http1", "http2", "tls12", "logging" ] }
 hyper-tls = { version = "0.5.0", optional = true }
 lazy_static = "1.4"
 log = "0.4"
