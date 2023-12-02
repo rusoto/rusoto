@@ -116,6 +116,30 @@ pub enum Region {
     /// Region that covers southern part Africa
     AfSouth1,
 
+    /// Region that covers the Southern part of Asia Pacific
+    ApSouth2,
+
+    /// Region that covers the Southern part of Asia Pacific
+    ApSoutheast4,
+
+    /// Region that covers Central Europe
+    EuCentral2,
+
+    /// Region that covers Southern Europe
+    EuSouth2,
+
+    /// Region that covers Israel
+    IlCentral1,
+
+    /// Region that covers the Middle East
+    MeCentral1,
+
+    /// Region that covers the Eastern part of the United States for the US Government
+    UsGovEast2,
+
+    /// Region that covers the Western part of the United States for the US Government
+    UsGovWest2,
+
     /// Specifies a custom region, such as a local Ceph target
     Custom {
         /// Name of the endpoint (e.g. `"eu-east-2"`).
@@ -166,6 +190,14 @@ impl Region {
             Region::CnNorth1 => "cn-north-1",
             Region::CnNorthwest1 => "cn-northwest-1",
             Region::AfSouth1 => "af-south-1",
+            Region::ApSouth2 => "ap-south-2",
+            Region::ApSoutheast4 => "ap-southeast-4",
+            Region::EuCentral2 => "eu-central-2",
+            Region::EuSouth2 => "eu-south-2",
+            Region::IlCentral1 => "il-central-1",
+            Region::MeCentral1 => "me-central-1",
+            Region::UsGovEast2 => "us-gov-east-2",
+            Region::UsGovWest2 => "us-gov-west-2",
             Region::Custom { ref name, .. } => name,
         }
     }
@@ -267,6 +299,14 @@ impl FromStr for Region {
             "cn-north-1" | "cnnorth1" => Ok(Region::CnNorth1),
             "cn-northwest-1" | "cnnorthwest1" => Ok(Region::CnNorthwest1),
             "af-south-1" | "afsouth1" => Ok(Region::AfSouth1),
+            "ap-south-2" | "apsouth2" => Ok(Region::ApSouth2),
+            "ap-southeast-4" | "apsoutheast4" => Ok(Region::ApSoutheast4),
+            "eu-central-2" | "eucentral2" => Ok(Region::EuCentral2),
+            "eu-south-2" | "eusouth2" => Ok(Region::EuSouth2),
+            "il-central-1" | "ilcentral1" => Ok(Region::IlCentral1),
+            "me-central-1" | "mecentral1" => Ok(Region::MeCentral1),
+            "us-gov-east-2" | "usgoveast2" => Ok(Region::UsGovEast2),
+            "us-gov-west-2" | "usgovwest2" => Ok(Region::UsGovWest2),
             s => Err(ParseRegionError::new(s)),
         }
     }
@@ -343,6 +383,14 @@ mod tests {
         assert_eq!("cn-north-1".parse(), Ok(Region::CnNorth1));
         assert_eq!("cn-northwest-1".parse(), Ok(Region::CnNorthwest1));
         assert_eq!("af-south-1".parse(), Ok(Region::AfSouth1));
+        assert_eq!("ap-south-2".parse(), Ok(Region::ApSouth2));
+        assert_eq!("ap-southeast-4".parse(), Ok(Region::ApSoutheast4));
+        assert_eq!("eu-central-2".parse(), Ok(Region::EuCentral2));
+        assert_eq!("eu-south-2".parse(), Ok(Region::EuSouth2));
+        assert_eq!("il-central-1".parse(), Ok(Region::IlCentral1));
+        assert_eq!("me-central-1".parse(), Ok(Region::MeCentral1));
+        assert_eq!("us-gov-east-2".parse(), Ok(Region::UsGovEast2));
+        assert_eq!("us-gov-west-2".parse(), Ok(Region::UsGovWest2));
     }
 
     #[test]
@@ -373,6 +421,14 @@ mod tests {
         assert_tokens(&Region::CnNorth1, &tokens_for_region("cn-north-1"));
         assert_tokens(&Region::CnNorthwest1, &tokens_for_region("cn-northwest-1"));
         assert_tokens(&Region::AfSouth1, &tokens_for_region("af-south-1"));
+        assert_tokens(&Region::ApSouth2, &tokens_for_region("ap-south-2"));
+        assert_tokens(&Region::ApSoutheast4, &tokens_for_region("ap-southeast-4"));
+        assert_tokens(&Region::EuCentral2, &tokens_for_region("eu-central-2"));
+        assert_tokens(&Region::EuSouth2, &tokens_for_region("eu-south-2"));
+        assert_tokens(&Region::IlCentral1, &tokens_for_region("il-central-1"));
+        assert_tokens(&Region::MeCentral1, &tokens_for_region("me-central-1"));
+        assert_tokens(&Region::UsGovEast2, &tokens_for_region("us-gov-east-2"));
+        assert_tokens(&Region::UsGovWest2, &tokens_for_region("us-gov-west-2"));
     }
 
     fn tokens_for_region(name: &'static str) -> [Token; 4] {

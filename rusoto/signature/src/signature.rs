@@ -388,7 +388,7 @@ impl SignedRequest {
         let signature = sign_string(
             &string_to_sign,
             creds.aws_secret_access_key(),
-            current_time.date().naive_utc(),
+            current_time.naive_utc().date(),
             &self.region.name(),
             &self.service,
         );
@@ -493,7 +493,7 @@ impl SignedRequest {
         let signature = sign_string(
             &string_to_sign,
             creds.aws_secret_access_key(),
-            date.date().naive_utc(),
+            date.naive_utc().date(),
             &self.region_for_service(),
             &self.service,
         );
@@ -959,7 +959,7 @@ mod tests {
 
     #[test]
     fn signature_generation() {
-        let date = NaiveDate::from_ymd(0, 1, 1);
+        let date = NaiveDate::from_ymd_opt(0, 1, 1).unwrap();
         let signature_foo = super::sign_string(
             "foo",
             "wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY",
