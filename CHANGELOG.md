@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add Clone derived trait to TlsError
 - Allow the user to choose between rustls and rustls-webpki, and make only the former depend on native cert support
 - Update `hyper-rustls` to `0.23`
+- Avoid caching `CredentialError` in `AutoRefreshingProvider`.
 
 ## [0.47.0] - 2021-06-29
 
