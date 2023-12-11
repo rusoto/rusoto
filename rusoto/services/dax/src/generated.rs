@@ -62,10 +62,14 @@ pub struct Cluster {
     #[serde(rename = "ClusterArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster_arn: Option<String>,
-    /// <p>The configuration endpoint for this DAX cluster, consisting of a DNS name and a port number. Client applications can specify this endpoint, rather than an individual node endpoint, and allow the DAX client software to intelligently route requests and responses to nodes in the DAX cluster.</p>
+    /// <p>The endpoint for this DAX cluster, consisting of a DNS name, a port number, and a URL. Applications should use the URL to configure the DAX client to find their cluster.</p>
     #[serde(rename = "ClusterDiscoveryEndpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster_discovery_endpoint: Option<Endpoint>,
+    /// <p><p>The type of encryption supported by the cluster&#39;s endpoint. Values are:</p> <ul> <li> <p> <code>NONE</code> for no encryption</p> <p> <code>TLS</code> for Transport Layer Security</p> </li> </ul></p>
+    #[serde(rename = "ClusterEndpointEncryptionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_endpoint_encryption_type: Option<String>,
     /// <p>The name of the DAX cluster.</p>
     #[serde(rename = "ClusterName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -131,6 +135,10 @@ pub struct CreateClusterRequest {
     #[serde(rename = "AvailabilityZones")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zones: Option<Vec<String>>,
+    /// <p><p>The type of encryption the cluster&#39;s endpoint should support. Values are:</p> <ul> <li> <p> <code>NONE</code> for no encryption</p> </li> <li> <p> <code>TLS</code> for Transport Layer Security</p> </li> </ul></p>
+    #[serde(rename = "ClusterEndpointEncryptionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_endpoint_encryption_type: Option<String>,
     /// <p><p>The cluster identifier. This parameter is stored as a lowercase string.</p> <p> <b>Constraints:</b> </p> <ul> <li> <p>A name must contain from 1 to 20 alphanumeric characters or hyphens.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>A name cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     #[serde(rename = "ClusterName")]
     pub cluster_name: String,
@@ -505,7 +513,7 @@ pub struct DescribeSubnetGroupsResponse {
     pub subnet_groups: Option<Vec<SubnetGroup>>,
 }
 
-/// <p>Represents the information required for client programs to connect to the configuration endpoint for a DAX cluster, or to an individual node within the cluster.</p>
+/// <p>Represents the information required for client programs to connect to the endpoint for a DAX cluster.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Endpoint {
@@ -517,6 +525,10 @@ pub struct Endpoint {
     #[serde(rename = "Port")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<i64>,
+    /// <p>The URL that applications should use to connect to the endpoint. The default ports are 8111 for the "dax" protocol and 9111 for the "daxs" protocol.</p>
+    #[serde(rename = "URL")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
 }
 
 /// <p>Represents a single occurrence of something interesting within the system. Some examples of events are creating a DAX cluster, adding or removing a node, or rebooting a node.</p>
@@ -642,7 +654,7 @@ pub struct NotificationConfiguration {
     #[serde(rename = "TopicArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub topic_arn: Option<String>,
-    /// <p>The current state of the topic.</p>
+    /// <p>The current state of the topic. A value of “active” means that notifications will be sent to the topic. A value of “inactive” means that notifications will not be sent to the topic.</p>
     #[serde(rename = "TopicStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub topic_status: Option<String>,
@@ -896,7 +908,7 @@ pub struct UpdateClusterRequest {
     #[serde(rename = "NotificationTopicArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_topic_arn: Option<String>,
-    /// <p>The current state of the topic.</p>
+    /// <p>The current state of the topic. A value of “active” means that notifications will be sent to the topic. A value of “inactive” means that notifications will not be sent to the topic.</p>
     #[serde(rename = "NotificationTopicStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_topic_status: Option<String>,
@@ -929,7 +941,7 @@ pub struct UpdateParameterGroupRequest {
     /// <p>The name of the parameter group.</p>
     #[serde(rename = "ParameterGroupName")]
     pub parameter_group_name: String,
-    /// <p>An array of name-value pairs for the parameters in the group. Each element in the array represents a single parameter.</p>
+    /// <p><p>An array of name-value pairs for the parameters in the group. Each element in the array represents a single parameter.</p> <note> <p> <code>record-ttl-millis</code> and <code>query-ttl-millis</code> are the only supported parameter names. For more details, see <a href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DAX.cluster-management.html#DAX.cluster-management.custom-settings.ttl">Configuring TTL Settings</a>.</p> </note></p>
     #[serde(rename = "ParameterNameValues")]
     pub parameter_name_values: Vec<ParameterNameValue>,
 }
@@ -995,6 +1007,8 @@ pub enum CreateClusterError {
     ParameterGroupNotFoundFault(String),
     /// <p>The specified service linked role (SLR) was not found.</p>
     ServiceLinkedRoleNotFoundFault(String),
+    /// <p>You have reached the maximum number of x509 certificates that can be created for encrypted clusters in a 30 day period. Contact AWS customer support to discuss options for continuing to create encrypted clusters.</p>
+    ServiceQuotaExceeded(String),
     /// <p>The requested subnet group name does not refer to an existing subnet group.</p>
     SubnetGroupNotFoundFault(String),
     /// <p>You have exceeded the maximum number of tags for this DAX cluster.</p>
@@ -1063,6 +1077,9 @@ impl CreateClusterError {
                         CreateClusterError::ServiceLinkedRoleNotFoundFault(err.msg),
                     )
                 }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(CreateClusterError::ServiceQuotaExceeded(err.msg))
+                }
                 "SubnetGroupNotFoundFault" => {
                     return RusotoError::Service(CreateClusterError::SubnetGroupNotFoundFault(
                         err.msg,
@@ -1106,6 +1123,7 @@ impl fmt::Display for CreateClusterError {
             }
             CreateClusterError::ParameterGroupNotFoundFault(ref cause) => write!(f, "{}", cause),
             CreateClusterError::ServiceLinkedRoleNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateClusterError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
             CreateClusterError::SubnetGroupNotFoundFault(ref cause) => write!(f, "{}", cause),
             CreateClusterError::TagQuotaPerResourceExceeded(ref cause) => write!(f, "{}", cause),
         }

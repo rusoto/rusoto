@@ -286,6 +286,9 @@ pub struct CreateFunctionRequest {
     #[serde(rename = "responseMappingTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_mapping_template: Option<String>,
+    #[serde(rename = "syncConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sync_config: Option<SyncConfig>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -666,6 +669,9 @@ pub struct FunctionConfiguration {
     #[serde(rename = "responseMappingTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_mapping_template: Option<String>,
+    #[serde(rename = "syncConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sync_config: Option<SyncConfig>,
 }
 
 /// <p>Represents the input of a <code>GetApiCache</code> operation.</p>
@@ -1505,6 +1511,9 @@ pub struct UpdateFunctionRequest {
     #[serde(rename = "responseMappingTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_mapping_template: Option<String>,
+    #[serde(rename = "syncConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sync_config: Option<SyncConfig>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]

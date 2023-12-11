@@ -274,6 +274,10 @@ pub struct CreateProtectionGroupRequest {
     #[serde(rename = "ResourceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
+    /// <p>One or more tag key-value pairs for the protection group.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -289,6 +293,10 @@ pub struct CreateProtectionRequest {
     /// <p><p>The ARN (Amazon Resource Name) of the resource to be protected.</p> <p>The ARN should be in one of the following formats:</p> <ul> <li> <p>For an Application Load Balancer: <code>arn:aws:elasticloadbalancing:<i>region</i>:<i>account-id</i>:loadbalancer/app/<i>load-balancer-name</i>/<i>load-balancer-id</i> </code> </p> </li> <li> <p>For an Elastic Load Balancer (Classic Load Balancer): <code>arn:aws:elasticloadbalancing:<i>region</i>:<i>account-id</i>:loadbalancer/<i>load-balancer-name</i> </code> </p> </li> <li> <p>For an AWS CloudFront distribution: <code>arn:aws:cloudfront::<i>account-id</i>:distribution/<i>distribution-id</i> </code> </p> </li> <li> <p>For an AWS Global Accelerator accelerator: <code>arn:aws:globalaccelerator::<i>account-id</i>:accelerator/<i>accelerator-id</i> </code> </p> </li> <li> <p>For Amazon Route 53: <code>arn:aws:route53:::hostedzone/<i>hosted-zone-id</i> </code> </p> </li> <li> <p>For an Elastic IP address: <code>arn:aws:ec2:<i>region</i>:<i>account-id</i>:eip-allocation/<i>allocation-id</i> </code> </p> </li> </ul></p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
+    /// <p>One or more tag key-value pairs for the <a>Protection</a> object that is created.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -662,6 +670,23 @@ pub struct ListResourcesInProtectionGroupResponse {
     pub resource_arns: Vec<String>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListTagsForResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the resource to get tags for.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    /// <p>A list of tag key and value pairs associated with the specified resource.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
 /// <p>The mitigation applied to a DDoS attack.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -688,6 +713,10 @@ pub struct Protection {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The ARN (Amazon Resource Name) of the protection.</p>
+    #[serde(rename = "ProtectionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protection_arn: Option<String>,
     /// <p>The ARN (Amazon Resource Name) of the AWS resource that is protected.</p>
     #[serde(rename = "ResourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -707,6 +736,10 @@ pub struct ProtectionGroup {
     /// <p>The criteria to use to choose the protected resources for inclusion in the group. You can include all resources that have protections, provide a list of resource Amazon Resource Names (ARNs), or include all resources of a specified resource type.</p>
     #[serde(rename = "Pattern")]
     pub pattern: String,
+    /// <p>The ARN (Amazon Resource Name) of the protection group.</p>
+    #[serde(rename = "ProtectionGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protection_group_arn: Option<String>,
     /// <p>The name of the protection group. You use this to identify the protection group in lists and to manage the protection group, for example to update, delete, or describe it. </p>
     #[serde(rename = "ProtectionGroupId")]
     pub protection_group_id: String,
@@ -801,6 +834,10 @@ pub struct Subscription {
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
+    /// <p>The ARN (Amazon Resource Name) of the subscription.</p>
+    #[serde(rename = "SubscriptionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subscription_arn: Option<String>,
     /// <p>Limits settings for your subscription. </p>
     #[serde(rename = "SubscriptionLimits")]
     pub subscription_limits: SubscriptionLimits,
@@ -865,6 +902,34 @@ pub struct SummarizedCounter {
     pub unit: Option<String>,
 }
 
+/// <p>A tag associated with an AWS resource. Tags are key:value pairs that you can use to categorize and manage your resources, for purposes like billing or other management. Typically, the tag key represents a category, such as "environment", and the tag value represents a specific value within that category, such as "test," "development," or "production". Or you might set the tag key to "customer" and the value to the customer name or ID. You can specify one or more tags to add to each AWS resource, up to 50 tags for a resource.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Tag {
+    /// <p>Part of the key:value pair that defines a tag. You can use a tag key to describe a category of information, such as "customer." Tag keys are case-sensitive.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// <p>Part of the key:value pair that defines a tag. You can use a tag value to describe a specific value within a category, such as "companyA" or "companyB." Tag values are case-sensitive.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the resource that you want to add or update tags for.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+    /// <p>The tags that you want to modify or add to the resource.</p>
+    #[serde(rename = "Tags")]
+    pub tags: Vec<Tag>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TagResourceResponse {}
+
 /// <p>The time range. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TimeRange {
@@ -877,6 +942,21 @@ pub struct TimeRange {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub to_exclusive: Option<f64>,
 }
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UntagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the resource that you want to remove tags from.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+    /// <p>The tag key for each tag that you want to remove from the resource.</p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UntagResourceResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -950,7 +1030,7 @@ pub enum AssociateDRTLogBucketError {
     InvalidOperation(String),
     /// <p>Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties. </p>
     InvalidParameter(String),
-    /// <p>Exception that indicates that the operation would exceed a limit.</p> <p> <code>Type</code> is the type of limit that would be exceeded.</p> <p> <code>Limit</code> is the threshold that would be exceeded.</p>
+    /// <p>Exception that indicates that the operation would exceed a limit.</p>
     LimitsExceeded(String),
     /// <p>The ARN of the role that you specifed does not exist.</p>
     NoAssociatedRole(String),
@@ -1096,7 +1176,7 @@ pub enum AssociateHealthCheckError {
     InternalError(String),
     /// <p>Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties. </p>
     InvalidParameter(String),
-    /// <p>Exception that indicates that the operation would exceed a limit.</p> <p> <code>Type</code> is the type of limit that would be exceeded.</p> <p> <code>Limit</code> is the threshold that would be exceeded.</p>
+    /// <p>Exception that indicates that the operation would exceed a limit.</p>
     LimitsExceeded(String),
     /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
     OptimisticLock(String),
@@ -1230,9 +1310,11 @@ pub enum CreateProtectionError {
     InternalError(String),
     /// <p>Exception that indicates that the operation would not cause any change to occur.</p>
     InvalidOperation(String),
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties. </p>
+    InvalidParameter(String),
     /// <p>Exception that indicates that the resource is invalid. You might not have access to the resource, or the resource might not exist.</p>
     InvalidResource(String),
-    /// <p>Exception that indicates that the operation would exceed a limit.</p> <p> <code>Type</code> is the type of limit that would be exceeded.</p> <p> <code>Limit</code> is the threshold that would be exceeded.</p>
+    /// <p>Exception that indicates that the operation would exceed a limit.</p>
     LimitsExceeded(String),
     /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
     OptimisticLock(String),
@@ -1251,6 +1333,9 @@ impl CreateProtectionError {
                 }
                 "InvalidOperationException" => {
                     return RusotoError::Service(CreateProtectionError::InvalidOperation(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(CreateProtectionError::InvalidParameter(err.msg))
                 }
                 "InvalidResourceException" => {
                     return RusotoError::Service(CreateProtectionError::InvalidResource(err.msg))
@@ -1282,6 +1367,7 @@ impl fmt::Display for CreateProtectionError {
         match *self {
             CreateProtectionError::InternalError(ref cause) => write!(f, "{}", cause),
             CreateProtectionError::InvalidOperation(ref cause) => write!(f, "{}", cause),
+            CreateProtectionError::InvalidParameter(ref cause) => write!(f, "{}", cause),
             CreateProtectionError::InvalidResource(ref cause) => write!(f, "{}", cause),
             CreateProtectionError::LimitsExceeded(ref cause) => write!(f, "{}", cause),
             CreateProtectionError::OptimisticLock(ref cause) => write!(f, "{}", cause),
@@ -1298,7 +1384,7 @@ pub enum CreateProtectionGroupError {
     InternalError(String),
     /// <p>Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties. </p>
     InvalidParameter(String),
-    /// <p>Exception that indicates that the operation would exceed a limit.</p> <p> <code>Type</code> is the type of limit that would be exceeded.</p> <p> <code>Limit</code> is the threshold that would be exceeded.</p>
+    /// <p>Exception that indicates that the operation would exceed a limit.</p>
     LimitsExceeded(String),
     /// <p>Exception that indicates that the resource state has been modified by another client. Retrieve the resource and then retry your request.</p>
     OptimisticLock(String),
@@ -2329,6 +2415,146 @@ impl fmt::Display for ListResourcesInProtectionGroupError {
     }
 }
 impl Error for ListResourcesInProtectionGroupError {}
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    InternalError(String),
+    /// <p>Exception that indicates that the resource is invalid. You might not have access to the resource, or the resource might not exist.</p>
+    InvalidResource(String),
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
+    ResourceNotFound(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InternalError(err.msg))
+                }
+                "InvalidResourceException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InvalidResource(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListTagsForResourceError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidResource(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListTagsForResourceError {}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    InternalError(String),
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties. </p>
+    InvalidParameter(String),
+    /// <p>Exception that indicates that the resource is invalid. You might not have access to the resource, or the resource might not exist.</p>
+    InvalidResource(String),
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
+    ResourceNotFound(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(TagResourceError::InternalError(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(TagResourceError::InvalidParameter(err.msg))
+                }
+                "InvalidResourceException" => {
+                    return RusotoError::Service(TagResourceError::InvalidResource(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(TagResourceError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for TagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            TagResourceError::InternalError(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidResource(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for TagResourceError {}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
+    InternalError(String),
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. If available, this exception includes details in additional properties. </p>
+    InvalidParameter(String),
+    /// <p>Exception that indicates that the resource is invalid. You might not have access to the resource, or the resource might not exist.</p>
+    InvalidResource(String),
+    /// <p>Exception indicating the specified resource does not exist. If available, this exception includes details in additional properties. </p>
+    ResourceNotFound(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalErrorException" => {
+                    return RusotoError::Service(UntagResourceError::InternalError(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(UntagResourceError::InvalidParameter(err.msg))
+                }
+                "InvalidResourceException" => {
+                    return RusotoError::Service(UntagResourceError::InvalidResource(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UntagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UntagResourceError::InternalError(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidResource(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UntagResourceError {}
 /// Errors returned by UpdateEmergencyContactSettings
 #[derive(Debug, PartialEq)]
 pub enum UpdateEmergencyContactSettingsError {
@@ -2666,6 +2892,24 @@ pub trait Shield {
         ListResourcesInProtectionGroupResponse,
         RusotoError<ListResourcesInProtectionGroupError>,
     >;
+
+    /// <p>Gets information about AWS tags for a specified Amazon Resource Name (ARN) in AWS Shield.</p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+
+    /// <p>Adds or updates tags for a resource in AWS Shield.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+
+    /// <p>Removes tags from a resource in AWS Shield.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 
     /// <p>Updates the details of the list of email addresses and phone numbers that the DDoS Response Team (DRT) can use to contact you if you have proactive engagement enabled, for escalations to the DRT and to initiate proactive customer support.</p>
     async fn update_emergency_contact_settings(
@@ -3246,6 +3490,60 @@ impl Shield for ShieldClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<ListResourcesInProtectionGroupResponse, _>()
+    }
+
+    /// <p>Gets information about AWS tags for a specified Amazon Resource Name (ARN) in AWS Shield.</p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSShield_20160616.ListTagsForResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceResponse, _>()
+    }
+
+    /// <p>Adds or updates tags for a resource in AWS Shield.</p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSShield_20160616.TagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, TagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
+    }
+
+    /// <p>Removes tags from a resource in AWS Shield.</p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSShield_20160616.UntagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UntagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
     }
 
     /// <p>Updates the details of the list of email addresses and phone numbers that the DDoS Response Team (DRT) can use to contact you if you have proactive engagement enabled, for escalations to the DRT and to initiate proactive customer support.</p>

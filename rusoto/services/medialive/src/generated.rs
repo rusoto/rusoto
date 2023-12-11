@@ -124,6 +124,14 @@ pub struct AncillarySourceSettings {
     pub source_ancillary_channel_number: Option<i64>,
 }
 
+/// <p>Archive Cdn Settings</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ArchiveCdnSettings {
+    #[serde(rename = "ArchiveS3Settings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub archive_s3_settings: Option<ArchiveS3Settings>,
+}
+
 /// <p>Archive Container Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ArchiveContainerSettings {
@@ -138,6 +146,10 @@ pub struct ArchiveContainerSettings {
 /// <p>Archive Group Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ArchiveGroupSettings {
+    /// <p>Parameters that control interactions with the CDN.</p>
+    #[serde(rename = "ArchiveCdnSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub archive_cdn_settings: Option<ArchiveCdnSettings>,
     /// <p>A directory and base filename where archive files should be written.</p>
     #[serde(rename = "Destination")]
     pub destination: OutputLocationRef,
@@ -161,6 +173,15 @@ pub struct ArchiveOutputSettings {
     #[serde(rename = "NameModifier")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name_modifier: Option<String>,
+}
+
+/// <p>Archive S3 Settings</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ArchiveS3Settings {
+    /// <p>Specify the canned ACL to apply to each S3 request. Defaults to none.</p>
+    #[serde(rename = "CannedAcl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub canned_acl: Option<String>,
 }
 
 /// <p>Arib Destination Settings</p>
@@ -822,6 +843,32 @@ pub struct CaptionLanguageMapping {
     pub language_description: String,
 }
 
+/// <p>Caption Rectangle</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct CaptionRectangle {
+    /// <p>See the description in leftOffset.
+    /// For height, specify the entire height of the rectangle as a percentage of the underlying frame height. For example, &quot;80&quot; means the rectangle height is 80% of the underlying frame height. The topOffset and rectangleHeight must add up to 100% or less.
+    /// This field corresponds to tts:extent - Y in the TTML standard.</p>
+    #[serde(rename = "Height")]
+    pub height: f64,
+    /// <p>Applies only if you plan to convert these source captions to EBU-TT-D or TTML in an output. (Make sure to leave the default if you don&#39;t have either of these formats in the output.) You can define a display rectangle for the captions that is smaller than the underlying video frame. You define the rectangle by specifying the position of the left edge, top edge, bottom edge, and right edge of the rectangle, all within the underlying video frame. The units for the measurements are percentages.
+    /// If you specify a value for one of these fields, you must specify a value for all of them.
+    /// For leftOffset, specify the position of the left edge of the rectangle, as a percentage of the underlying frame width, and relative to the left edge of the frame. For example, &quot;10&quot; means the measurement is 10% of the underlying frame width. The rectangle left edge starts at that position from the left edge of the frame.
+    /// This field corresponds to tts:origin - X in the TTML standard.</p>
+    #[serde(rename = "LeftOffset")]
+    pub left_offset: f64,
+    /// <p>See the description in leftOffset.
+    /// For topOffset, specify the position of the top edge of the rectangle, as a percentage of the underlying frame height, and relative to the top edge of the frame. For example, &quot;10&quot; means the measurement is 10% of the underlying frame height. The rectangle top edge starts at that position from the top edge of the frame.
+    /// This field corresponds to tts:origin - Y in the TTML standard.</p>
+    #[serde(rename = "TopOffset")]
+    pub top_offset: f64,
+    /// <p>See the description in leftOffset.
+    /// For width, specify the entire width of the rectangle as a percentage of the underlying frame width. For example, &quot;80&quot; means the rectangle width is 80% of the underlying frame width. The leftOffset and rectangleWidth must add up to 100% or less.
+    /// This field corresponds to tts:extent - X in the TTML standard.</p>
+    #[serde(rename = "Width")]
+    pub width: f64,
+}
+
 /// <p>Output groups for this Live Event. Output groups contain information about where streams should be distributed.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CaptionSelector {
@@ -941,6 +988,10 @@ pub struct Channel {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Settings for VPC output</p>
+    #[serde(rename = "Vpc")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc: Option<VpcOutputSettingsDescription>,
 }
 
 /// <p>Placeholder documentation for ChannelEgressEndpoint</p>
@@ -1014,6 +1065,10 @@ pub struct ChannelSummary {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Settings for VPC output</p>
+    #[serde(rename = "Vpc")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc: Option<VpcOutputSettingsDescription>,
 }
 
 /// <p>Passthrough applies no color space conversion to the output</p>
@@ -1067,6 +1122,10 @@ pub struct CreateChannelRequest {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Settings for VPC output</p>
+    #[serde(rename = "Vpc")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc: Option<VpcOutputSettings>,
 }
 
 /// <p>Placeholder documentation for CreateChannelResponse</p>
@@ -1225,6 +1284,33 @@ pub struct CreateMultiplexResponse {
     pub multiplex: Option<Multiplex>,
 }
 
+/// <p>A request to create a partner input</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreatePartnerInputRequest {
+    /// <p>Unique ID of the input.</p>
+    #[serde(rename = "InputId")]
+    pub input_id: String,
+    /// <p>Unique identifier of the request to ensure the request is handled
+    /// exactly once in case of retries.</p>
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>A collection of key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>Placeholder documentation for CreatePartnerInputResponse</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreatePartnerInputResponse {
+    #[serde(rename = "Input")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input: Option<Input>,
+}
+
 /// <p>Placeholder documentation for CreateTagsRequest</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1313,6 +1399,10 @@ pub struct DeleteChannelResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Settings for VPC output</p>
+    #[serde(rename = "Vpc")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc: Option<VpcOutputSettingsDescription>,
 }
 
 /// <p>Placeholder documentation for DeleteInputRequest</p>
@@ -1625,6 +1715,10 @@ pub struct DescribeChannelResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Settings for VPC output</p>
+    #[serde(rename = "Vpc")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc: Option<VpcOutputSettingsDescription>,
 }
 
 /// <p>Placeholder documentation for DescribeInputDeviceRequest</p>
@@ -1755,6 +1849,10 @@ pub struct DescribeInputResponse {
     #[serde(rename = "InputDevices")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_devices: Option<Vec<InputDeviceSettings>>,
+    /// <p>A list of IDs for all Inputs which are partners of this one.</p>
+    #[serde(rename = "InputPartnerIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_partner_ids: Option<Vec<String>>,
     /// <p>Certain pull input sources can be dynamic, meaning that they can have their URL&#39;s dynamically changes
     /// during input switch actions. Presently, this functionality only works with MP4_FILE inputs.</p>
     #[serde(rename = "InputSourceType")]
@@ -2211,6 +2309,11 @@ pub struct DvbSubDestinationSettings {
 /// <p>Dvb Sub Source Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DvbSubSourceSettings {
+    /// <p>If you will configure a WebVTT caption description that references this caption selector, use this field to
+    /// provide the language to consider when translating the image-based source to text.</p>
+    #[serde(rename = "OcrLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ocr_language: Option<String>,
     /// <p>When using DVB-Sub with Burn-In or SMPTE-TT, use this PID for the source content. Unused for DVB-Sub passthrough. All DVB-Sub content is passed through, regardless of selectors.</p>
     #[serde(rename = "Pid")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2314,6 +2417,10 @@ pub struct Eac3Settings {
 /// <p>Ebu Tt DDestination Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EbuTtDDestinationSettings {
+    /// <p>Applies only if you plan to convert these source captions to EBU-TT-D or TTML in an output. Complete this field if you want to include the name of the copyright holder in the copyright metadata tag in the TTML</p>
+    #[serde(rename = "CopyrightHolder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub copyright_holder: Option<String>,
     /// <p>Specifies how to handle the gap between the lines (in multi-line captions).</p>
     ///
     /// <ul>
@@ -2403,6 +2510,10 @@ pub struct EncoderSettings {
     #[serde(rename = "GlobalConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub global_configuration: Option<GlobalConfiguration>,
+    /// <p>Settings for motion graphics.</p>
+    #[serde(rename = "MotionGraphicsConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub motion_graphics_configuration: Option<MotionGraphicsConfiguration>,
     /// <p>Nielsen configuration settings.</p>
     #[serde(rename = "NielsenConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2505,13 +2616,29 @@ pub struct FollowModeScheduleActionStartSettings {
     pub reference_action_name: String,
 }
 
+/// <p>Frame Capture Cdn Settings</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct FrameCaptureCdnSettings {
+    #[serde(rename = "FrameCaptureS3Settings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub frame_capture_s3_settings: Option<FrameCaptureS3Settings>,
+}
+
 /// <p>Frame Capture Group Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FrameCaptureGroupSettings {
     /// <p>The destination for the frame capture files. Either the URI for an Amazon S3 bucket and object, plus a file name prefix (for example, s3ssl://sportsDelivery/highlights/20180820/curling-) or the URI for a MediaStore container, plus a file name prefix (for example, mediastoressl://sportsDelivery/20180820/curling-). The final file names consist of the prefix from the destination field (for example, &quot;curling-&quot;) + name modifier + the counter (5 digits, starting from 00001) + extension (which is always .jpg).  For example, curling-low.00001.jpg</p>
     #[serde(rename = "Destination")]
     pub destination: OutputLocationRef,
+    /// <p>Parameters that control interactions with the CDN.</p>
+    #[serde(rename = "FrameCaptureCdnSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub frame_capture_cdn_settings: Option<FrameCaptureCdnSettings>,
 }
+
+/// <p>Frame Capture Hls Settings</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct FrameCaptureHlsSettings {}
 
 /// <p>Frame Capture Output Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
@@ -2522,12 +2649,22 @@ pub struct FrameCaptureOutputSettings {
     pub name_modifier: Option<String>,
 }
 
+/// <p>Frame Capture S3 Settings</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct FrameCaptureS3Settings {
+    /// <p>Specify the canned ACL to apply to each S3 request. Defaults to none.</p>
+    #[serde(rename = "CannedAcl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub canned_acl: Option<String>,
+}
+
 /// <p>Frame Capture Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FrameCaptureSettings {
     /// <p>The frequency at which to capture frames for inclusion in the output. May be specified in either seconds or milliseconds, as specified by captureIntervalUnits.</p>
     #[serde(rename = "CaptureInterval")]
-    pub capture_interval: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capture_interval: Option<i64>,
     /// <p>Unit for the frame capture interval.</p>
     #[serde(rename = "CaptureIntervalUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2591,7 +2728,7 @@ pub struct H264FilterSettings {
 /// <p>H264 Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct H264Settings {
-    /// <p>Adaptive quantization. Allows intra-frame quantizers to vary to improve visual quality.</p>
+    /// <p>Enables or disables adaptive quantization, which is a technique MediaLive can apply to video on a frame-by-frame basis to produce more compression without losing quality. There are three types of adaptive quantization: flicker, spatial, and temporal. Set the field in one of these ways: Set to Auto. Recommended. For each type of AQ, MediaLive will determine if AQ is needed, and if so, the appropriate strength. Set a strength (a value other than Auto or Disable). This strength will apply to any of the AQ fields that you choose to enable. Set to Disabled to disable all types of adaptive quantization.</p>
     #[serde(rename = "AdaptiveQuantization")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub adaptive_quantization: Option<String>,
@@ -2631,7 +2768,7 @@ pub struct H264Settings {
     #[serde(rename = "FixedAfd")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fixed_afd: Option<String>,
-    /// <p>If set to enabled, adjust quantization within each frame to reduce flicker or &#39;pop&#39; on I-frames.</p>
+    /// <p>Flicker AQ makes adjustments within each frame to reduce flicker or &#39;pop&#39; on I-frames. The value to enter in this field depends on the value in the Adaptive quantization field: If you have set the Adaptive quantization field to Auto, MediaLive ignores any value in this field. MediaLive will determine if flicker AQ is appropriate and will apply the appropriate strength. If you have set the Adaptive quantization field to a strength, you can set this field to Enabled or Disabled. Enabled: MediaLive will apply flicker AQ using the specified strength. Disabled: MediaLive won&#39;t apply flicker AQ. If you have set the Adaptive quantization to Disabled, MediaLive ignores any value in this field and doesn&#39;t apply flicker AQ.</p>
     #[serde(rename = "FlickerAq")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub flicker_aq: Option<String>,
@@ -2719,10 +2856,11 @@ pub struct H264Settings {
     #[serde(rename = "QualityLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quality_level: Option<String>,
-    /// <p>Controls the target quality for the video encode. Applies only when the rate control mode is QVBR. Set values for the QVBR quality level field and Max bitrate field that suit your most important viewing devices. Recommended values are:
+    /// <p>Controls the target quality for the video encode. Applies only when the rate control mode is QVBR. You can set a target quality or you can let MediaLive determine the best quality. To set a target quality, enter values in the QVBR quality level field and the Max bitrate field. Enter values that suit your most important viewing devices. Recommended values are:
     /// - Primary screen: Quality level: 8 to 10. Max bitrate: 4M
     /// - PC or tablet: Quality level: 7. Max bitrate: 1.5M to 3M
-    /// - Smartphone: Quality level: 6. Max bitrate: 1M to 1.5M</p>
+    /// - Smartphone: Quality level: 6. Max bitrate: 1M to 1.5M
+    /// To let MediaLive decide, leave the QVBR quality level field empty, and in Max bitrate enter the maximum rate you want in the video. For more information, see the section called &quot;Video - rate control mode&quot; in the MediaLive user guide</p>
     #[serde(rename = "QvbrQualityLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub qvbr_quality_level: Option<i64>,
@@ -2761,11 +2899,11 @@ pub struct H264Settings {
     #[serde(rename = "Slices")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub slices: Option<i64>,
-    /// <p>Softness. Selects quantizer matrix, larger values reduce high-frequency content in the encoded image.</p>
+    /// <p>Softness. Selects quantizer matrix, larger values reduce high-frequency content in the encoded image.  If not set to zero, must be greater than 15.</p>
     #[serde(rename = "Softness")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub softness: Option<i64>,
-    /// <p>If set to enabled, adjust quantization within each frame based on spatial variation of content complexity.</p>
+    /// <p>Spatial AQ makes adjustments within each frame based on spatial variation of content complexity. The value to enter in this field depends on the value in the Adaptive quantization field: If you have set the Adaptive quantization field to Auto, MediaLive ignores any value in this field. MediaLive will determine if spatial AQ is appropriate and will apply the appropriate strength. If you have set the Adaptive quantization field to a strength, you can set this field to Enabled or Disabled. Enabled: MediaLive will apply spatial AQ using the specified strength. Disabled: MediaLive won&#39;t apply spatial AQ. If you have set the Adaptive quantization to Disabled, MediaLive ignores any value in this field and doesn&#39;t apply spatial AQ.</p>
     #[serde(rename = "SpatialAq")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub spatial_aq: Option<String>,
@@ -2777,7 +2915,7 @@ pub struct H264Settings {
     #[serde(rename = "Syntax")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub syntax: Option<String>,
-    /// <p>If set to enabled, adjust quantization within each frame based on temporal variation of content complexity.</p>
+    /// <p>Temporal makes adjustments within each frame based on temporal variation of content complexity. The value to enter in this field depends on the value in the Adaptive quantization field: If you have set the Adaptive quantization field to Auto, MediaLive ignores any value in this field. MediaLive will determine if temporal AQ is appropriate and will apply the appropriate strength. If you have set the Adaptive quantization field to a strength, you can set this field to Enabled or Disabled. Enabled: MediaLive will apply temporal AQ using the specified strength. Disabled: MediaLive won&#39;t apply temporal AQ. If you have set the Adaptive quantization to Disabled, MediaLive ignores any value in this field and doesn&#39;t apply temporal AQ.</p>
     #[serde(rename = "TemporalAq")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub temporal_aq: Option<String>,
@@ -3034,6 +3172,9 @@ pub struct HlsCdnSettings {
     #[serde(rename = "HlsMediaStoreSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hls_media_store_settings: Option<HlsMediaStoreSettings>,
+    #[serde(rename = "HlsS3Settings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hls_s3_settings: Option<HlsS3Settings>,
     #[serde(rename = "HlsWebdavSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hls_webdav_settings: Option<HlsWebdavSettings>,
@@ -3269,6 +3410,10 @@ pub struct HlsInputSettings {
     #[serde(rename = "RetryInterval")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retry_interval: Option<i64>,
+    /// <p>Identifies the source for the SCTE-35 messages that MediaLive will ingest. Messages can be ingested from the content segments (in the stream) or from tags in the playlist (the HLS manifest). MediaLive ignores SCTE-35 information in the source that is not selected.</p>
+    #[serde(rename = "Scte35Source")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scte_35_source: Option<String>,
 }
 
 /// <p>Hls Media Store Settings</p>
@@ -3317,6 +3462,15 @@ pub struct HlsOutputSettings {
     pub segment_modifier: Option<String>,
 }
 
+/// <p>Hls S3 Settings</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct HlsS3Settings {
+    /// <p>Specify the canned ACL to apply to each S3 request. Defaults to none.</p>
+    #[serde(rename = "CannedAcl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub canned_acl: Option<String>,
+}
+
 /// <p>Hls Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsSettings {
@@ -3326,6 +3480,9 @@ pub struct HlsSettings {
     #[serde(rename = "Fmp4HlsSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fmp_4_hls_settings: Option<Fmp4HlsSettings>,
+    #[serde(rename = "FrameCaptureHlsSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub frame_capture_hls_settings: Option<FrameCaptureHlsSettings>,
     #[serde(rename = "StandardHlsSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub standard_hls_settings: Option<StandardHlsSettings>,
@@ -3364,6 +3521,10 @@ pub struct HlsWebdavSettings {
     pub restart_delay: Option<i64>,
 }
 
+/// <p>Html Motion Graphics Settings</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct HtmlMotionGraphicsSettings {}
+
 /// <p>Settings to configure an action so that it occurs as soon as possible.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ImmediateModeScheduleActionStartSettings {}
@@ -3397,6 +3558,10 @@ pub struct Input {
     #[serde(rename = "InputDevices")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_devices: Option<Vec<InputDeviceSettings>>,
+    /// <p>A list of IDs for all Inputs which are partners of this one.</p>
+    #[serde(rename = "InputPartnerIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_partner_ids: Option<Vec<String>>,
     /// <p>Certain pull input sources can be dynamic, meaning that they can have their URL&#39;s dynamically changes
     /// during input switch actions. Presently, this functionality only works with MP4_FILE inputs.</p>
     #[serde(rename = "InputSourceType")]
@@ -4621,6 +4786,50 @@ pub struct MediaPackageOutputDestinationSettings {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MediaPackageOutputSettings {}
 
+/// <p>Settings to specify the rendering of motion graphics into the video stream.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct MotionGraphicsActivateScheduleActionSettings {
+    /// <p>Duration (in milliseconds) that motion graphics should render on to the video stream. Leaving out this property or setting to 0 will result in rendering continuing until a deactivate action is processed.</p>
+    #[serde(rename = "Duration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub duration: Option<i64>,
+    /// <p>Key used to extract the password from EC2 Parameter store</p>
+    #[serde(rename = "PasswordParam")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub password_param: Option<String>,
+    /// <p>URI of the HTML5 content to be rendered into the live stream.</p>
+    #[serde(rename = "Url")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    /// <p>Documentation update needed</p>
+    #[serde(rename = "Username")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub username: Option<String>,
+}
+
+/// <p>Motion Graphics Configuration</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct MotionGraphicsConfiguration {
+    #[serde(rename = "MotionGraphicsInsertion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub motion_graphics_insertion: Option<String>,
+    /// <p>Motion Graphics Settings</p>
+    #[serde(rename = "MotionGraphicsSettings")]
+    pub motion_graphics_settings: MotionGraphicsSettings,
+}
+
+/// <p>Settings to specify the ending of rendering motion graphics into the video stream.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct MotionGraphicsDeactivateScheduleActionSettings {}
+
+/// <p>Motion Graphics Settings</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct MotionGraphicsSettings {
+    #[serde(rename = "HtmlMotionGraphicsSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub html_motion_graphics_settings: Option<HtmlMotionGraphicsSettings>,
+}
+
 /// <p>Mp2 Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Mp2Settings {
@@ -5403,6 +5612,14 @@ pub struct PipelineDetail {
     #[serde(rename = "ActiveInputSwitchActionName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub active_input_switch_action_name: Option<String>,
+    /// <p>The name of the motion graphics activate action that occurred most recently and that resulted in the current graphics URI for this pipeline.</p>
+    #[serde(rename = "ActiveMotionGraphicsActionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_motion_graphics_action_name: Option<String>,
+    /// <p>The current URI being used for HTML5 motion graphics for this pipeline.</p>
+    #[serde(rename = "ActiveMotionGraphicsUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub active_motion_graphics_uri: Option<String>,
     /// <p>Pipeline ID</p>
     #[serde(rename = "PipelineId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5708,6 +5925,16 @@ pub struct ScheduleActionSettings {
     #[serde(rename = "InputSwitchSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_switch_settings: Option<InputSwitchScheduleActionSettings>,
+    /// <p>Action to activate a motion graphics image overlay</p>
+    #[serde(rename = "MotionGraphicsImageActivateSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub motion_graphics_image_activate_settings:
+        Option<MotionGraphicsActivateScheduleActionSettings>,
+    /// <p>Action to deactivate a motion graphics image overlay</p>
+    #[serde(rename = "MotionGraphicsImageDeactivateSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub motion_graphics_image_deactivate_settings:
+        Option<MotionGraphicsDeactivateScheduleActionSettings>,
     /// <p>Action to pause or unpause one or both channel pipelines</p>
     #[serde(rename = "PauseStateSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5776,6 +6003,11 @@ pub struct Scte27DestinationSettings {}
 /// <p>Scte27 Source Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Scte27SourceSettings {
+    /// <p>If you will configure a WebVTT caption description that references this caption selector, use this field to
+    /// provide the language to consider when translating the image-based source to text.</p>
+    #[serde(rename = "OcrLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ocr_language: Option<String>,
     /// <p>The pid field is used in conjunction with the caption selector languageCode field as follows:
     /// - Specify PID and Language: Extracts captions from that PID; the language is &quot;informational&quot;.
     /// - Specify PID and omit Language: Extracts the specified PID.
@@ -6020,6 +6252,10 @@ pub struct StartChannelResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Settings for VPC output</p>
+    #[serde(rename = "Vpc")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc: Option<VpcOutputSettingsDescription>,
 }
 
 /// <p>Placeholder documentation for StartMultiplexRequest</p>
@@ -6232,6 +6468,10 @@ pub struct StopChannelResponse {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Settings for VPC output</p>
+    #[serde(rename = "Vpc")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc: Option<VpcOutputSettingsDescription>,
 }
 
 /// <p>Placeholder documentation for StopMultiplexRequest</p>
@@ -6309,6 +6549,10 @@ pub struct TeletextDestinationSettings {}
 /// <p>Teletext Source Settings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TeletextSourceSettings {
+    /// <p>Optionally defines a region where TTML style captions will be displayed</p>
+    #[serde(rename = "OutputRectangle")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_rectangle: Option<CaptionRectangle>,
     /// <p>Specifies the teletext page number within the data stream from which to extract captions. Range of 0x100 (256) to 0x8FF (2303). Unused for passthrough. Should be specified as a hexadecimal string with no &quot;0x&quot; prefix.</p>
     #[serde(rename = "PageNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6356,6 +6600,10 @@ pub struct TransferInputDeviceRequest {
     #[serde(rename = "TargetCustomerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_customer_id: Option<String>,
+    /// <p>The target AWS region to transfer the device.</p>
+    #[serde(rename = "TargetRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_region: Option<String>,
     /// <p>An optional message for the recipient. Maximum 280 characters.</p>
     #[serde(rename = "TransferMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6822,6 +7070,10 @@ pub struct VideoSelector {
     #[serde(rename = "ColorSpace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub color_space: Option<String>,
+    /// <p>Color space settings</p>
+    #[serde(rename = "ColorSpaceSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub color_space_settings: Option<VideoSelectorColorSpaceSettings>,
     /// <p>Applies only if colorSpace is a value other than follow. This field controls how the value in the colorSpace field will be used. fallback means that when the input does include color space data, that data will be used, but when the input has no color space data, the value in colorSpace will be used. Choose fallback if your input is sometimes missing color space data, but when it does have color space data, that data is correct. force means to always use the value in colorSpace. Choose force if your input usually has no color space data or might have unreliable color space data.</p>
     #[serde(rename = "ColorSpaceUsage")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6830,6 +7082,14 @@ pub struct VideoSelector {
     #[serde(rename = "SelectorSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub selector_settings: Option<VideoSelectorSettings>,
+}
+
+/// <p>Video Selector Color Space Settings</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct VideoSelectorColorSpaceSettings {
+    #[serde(rename = "Hdr10Settings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hdr_10_settings: Option<Hdr10Settings>,
 }
 
 /// <p>Video Selector Pid</p>
@@ -6859,6 +7119,52 @@ pub struct VideoSelectorSettings {
     #[serde(rename = "VideoSelectorProgramId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub video_selector_program_id: Option<VideoSelectorProgramId>,
+}
+
+/// <p>The properties for a private VPC Output
+/// When this property is specified, the output egress addresses will be created in a user specified VPC</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct VpcOutputSettings {
+    /// <p>List of public address allocation ids to associate with ENIs that will be created in Output VPC.
+    /// Must specify one for SINGLE_PIPELINE, two for STANDARD channels</p>
+    #[serde(rename = "PublicAddressAllocationIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub public_address_allocation_ids: Option<Vec<String>>,
+    /// <p>A list of up to 5 EC2 VPC security group IDs to attach to the Output VPC network interfaces.
+    /// If none are specified then the VPC default security group will be used</p>
+    #[serde(rename = "SecurityGroupIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_group_ids: Option<Vec<String>>,
+    /// <p>A list of VPC subnet IDs from the same VPC.
+    /// If STANDARD channel, subnet IDs must be mapped to two unique availability zones (AZ).</p>
+    #[serde(rename = "SubnetIds")]
+    pub subnet_ids: Vec<String>,
+}
+
+/// <p>The properties for a private VPC Output</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct VpcOutputSettingsDescription {
+    /// <p>The Availability Zones where the vpc subnets are located.
+    /// The first Availability Zone applies to the first subnet in the list of subnets.
+    /// The second Availability Zone applies to the second subnet.</p>
+    #[serde(rename = "AvailabilityZones")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zones: Option<Vec<String>>,
+    /// <p>A list of Elastic Network Interfaces created by MediaLive in the customer&#39;s VPC</p>
+    #[serde(rename = "NetworkInterfaceIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_interface_ids: Option<Vec<String>>,
+    /// <p>A list of up EC2 VPC security group IDs attached to the Output VPC network interfaces.</p>
+    #[serde(rename = "SecurityGroupIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_group_ids: Option<Vec<String>>,
+    /// <p>A list of VPC subnet IDs from the same VPC.
+    /// If STANDARD channel, subnet IDs must be mapped to two unique availability zones (AZ).</p>
+    #[serde(rename = "SubnetIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subnet_ids: Option<Vec<String>>,
 }
 
 /// <p>Wav Settings</p>
@@ -7712,6 +8018,68 @@ impl fmt::Display for CreateMultiplexProgramError {
     }
 }
 impl Error for CreateMultiplexProgramError {}
+/// Errors returned by CreatePartnerInput
+#[derive(Debug, PartialEq)]
+pub enum CreatePartnerInputError {
+    /// <p>Placeholder documentation for BadGatewayException</p>
+    BadGateway(String),
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for GatewayTimeoutException</p>
+    GatewayTimeout(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for TooManyRequestsException</p>
+    TooManyRequests(String),
+}
+
+impl CreatePartnerInputError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreatePartnerInputError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadGatewayException" => {
+                    return RusotoError::Service(CreatePartnerInputError::BadGateway(err.msg))
+                }
+                "BadRequestException" => {
+                    return RusotoError::Service(CreatePartnerInputError::BadRequest(err.msg))
+                }
+                "ForbiddenException" => {
+                    return RusotoError::Service(CreatePartnerInputError::Forbidden(err.msg))
+                }
+                "GatewayTimeoutException" => {
+                    return RusotoError::Service(CreatePartnerInputError::GatewayTimeout(err.msg))
+                }
+                "InternalServerErrorException" => {
+                    return RusotoError::Service(CreatePartnerInputError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(CreatePartnerInputError::TooManyRequests(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreatePartnerInputError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreatePartnerInputError::BadGateway(ref cause) => write!(f, "{}", cause),
+            CreatePartnerInputError::BadRequest(ref cause) => write!(f, "{}", cause),
+            CreatePartnerInputError::Forbidden(ref cause) => write!(f, "{}", cause),
+            CreatePartnerInputError::GatewayTimeout(ref cause) => write!(f, "{}", cause),
+            CreatePartnerInputError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            CreatePartnerInputError::TooManyRequests(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreatePartnerInputError {}
 /// Errors returned by CreateTags
 #[derive(Debug, PartialEq)]
 pub enum CreateTagsError {
@@ -10841,6 +11209,12 @@ pub trait MediaLive {
         input: CreateMultiplexProgramRequest,
     ) -> Result<CreateMultiplexProgramResponse, RusotoError<CreateMultiplexProgramError>>;
 
+    /// <p>Create a partner input</p>
+    async fn create_partner_input(
+        &self,
+        input: CreatePartnerInputRequest,
+    ) -> Result<CreatePartnerInputResponse, RusotoError<CreatePartnerInputError>>;
+
     /// <p>Create tags for a resource</p>
     async fn create_tags(
         &self,
@@ -11491,6 +11865,40 @@ impl MediaLive for MediaLiveClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CreateMultiplexProgramError::from_response(response))
+        }
+    }
+
+    /// <p>Create a partner input</p>
+    #[allow(unused_mut)]
+    async fn create_partner_input(
+        &self,
+        input: CreatePartnerInputRequest,
+    ) -> Result<CreatePartnerInputResponse, RusotoError<CreatePartnerInputError>> {
+        let request_uri = format!(
+            "/prod/inputs/{input_id}/partners",
+            input_id = input.input_id
+        );
+
+        let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.as_u16() == 201 {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreatePartnerInputResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreatePartnerInputError::from_response(response))
         }
     }
 

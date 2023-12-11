@@ -331,6 +331,10 @@ pub struct CreateCollectionRequest {
     /// <p>ID for the collection that you are creating.</p>
     #[serde(rename = "CollectionId")]
     pub collection_id: String,
+    /// <p> A set of tags (key-value pairs) that you want to attach to the collection. </p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -370,12 +374,20 @@ pub struct CreateProjectResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateProjectVersionRequest {
+    /// <p>The identifier for your AWS Key Management Service (AWS KMS) customer master key (CMK). You can supply the Amazon Resource Name (ARN) of your CMK, the ID of your CMK, or an alias for your CMK. The key is used to encrypt training and test images copied into the service for model training. Your source images are unaffected. The key is also used to encrypt training results and manifest files written to the output Amazon S3 bucket (<code>OutputConfig</code>).</p> <p>If you don't specify a value for <code>KmsKeyId</code>, images copied into the service are encrypted using a key that AWS owns and manages.</p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
     /// <p>The Amazon S3 location to store the results of training.</p>
     #[serde(rename = "OutputConfig")]
     pub output_config: OutputConfig,
     /// <p>The ARN of the Amazon Rekognition Custom Labels project that manages the model that you want to train.</p>
     #[serde(rename = "ProjectArn")]
     pub project_arn: String,
+    /// <p> A set of tags (key-value pairs) that you want to attach to the model. </p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The dataset to use for testing.</p>
     #[serde(rename = "TestingData")]
     pub testing_data: TestingData,
@@ -414,6 +426,10 @@ pub struct CreateStreamProcessorRequest {
     /// <p>Face recognition input parameters to be used by the stream processor. Includes the collection to use for face recognition and the face attributes to detect.</p>
     #[serde(rename = "Settings")]
     pub settings: StreamProcessorSettings,
+    /// <p> A set of tags (key-value pairs) that you want to attach to the stream processor. </p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -864,7 +880,7 @@ pub struct DetectionFilter {
     #[serde(rename = "MinBoundingBoxWidth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub min_bounding_box_width: Option<f32>,
-    /// <p>Sets confidence of word detection. Words with detection confidence below this will be excluded from the result. Values should be between 0.5 and 1 as Text in Video will not return any result below 0.5.</p>
+    /// <p>Sets the confidence of word detection. Words with detection confidence below this will be excluded from the result. Values should be between 50 and 100 as Text in Video will not return any result below 50.</p>
     #[serde(rename = "MinConfidence")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub min_confidence: Option<f32>,
@@ -1819,6 +1835,23 @@ pub struct ListStreamProcessorsResponse {
     pub stream_processors: Option<Vec<StreamProcessor>>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListTagsForResourceRequest {
+    /// <p> Amazon Resource Name (ARN) of the model, collection, or stream processor that contains the tags that you want a list of. </p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    /// <p> A list of key-value tags assigned to the resource. </p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
 /// <p>Provides information about a single type of unsafe content found in an image or video. Each type of moderated content has a label within a hierarchical taxonomy. For more information, see Detecting Unsafe Content in the Amazon Rekognition Developer Guide.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2016,6 +2049,10 @@ pub struct ProjectVersionDescription {
     #[serde(rename = "EvaluationResult")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub evaluation_result: Option<EvaluationResult>,
+    /// <p>The identifer for the AWS Key Management Service (AWS KMS) customer master key that was used to encrypt the model during training. </p>
+    #[serde(rename = "KmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_id: Option<String>,
     /// <p>The location of the summary manifest. The summary manifest provides aggregate data validation results for the training and test datasets.</p>
     #[serde(rename = "ManifestSummary")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2118,7 +2155,7 @@ pub struct ProtectiveEquipmentSummary {
     #[serde(rename = "PersonsWithRequiredEquipment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub persons_with_required_equipment: Option<Vec<i64>>,
-    /// <p>An array of IDs for persons who are not wearing all of the types of PPE specified in the RequiredEquipmentTypes field of the detected personal protective equipment. </p>
+    /// <p>An array of IDs for persons who are not wearing all of the types of PPE specified in the <code>RequiredEquipmentTypes</code> field of the detected personal protective equipment. </p>
     #[serde(rename = "PersonsWithoutRequiredEquipment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub persons_without_required_equipment: Option<Vec<i64>>,
@@ -2772,6 +2809,21 @@ pub struct Sunglasses {
     pub value: Option<bool>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct TagResourceRequest {
+    /// <p> Amazon Resource Name (ARN) of the model, collection, or stream processor that you want to assign the tags to. </p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p> The key-value tags to assign to the resource. </p>
+    #[serde(rename = "Tags")]
+    pub tags: ::std::collections::HashMap<String, String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct TagResourceResponse {}
+
 /// <p>Information about a technical cue segment. For more information, see <a>SegmentDetection</a>.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2902,6 +2954,21 @@ pub struct UnindexedFace {
     pub reasons: Option<Vec<String>>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UntagResourceRequest {
+    /// <p> Amazon Resource Name (ARN) of the model, collection, or stream processor that you want to remove the tags from. </p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p> A list of the tags that you want to remove. </p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UntagResourceResponse {}
+
 /// <p>Contains the Amazon S3 bucket location of the validation data for a model training job. </p> <p>The validation data includes error information for individual JSON lines in the dataset. For more information, see Debugging a Failed Model Training in the Amazon Rekognition Custom Labels Developer Guide. </p> <p>You get the <code>ValidationData</code> object for the training dataset (<a>TrainingDataResult</a>) and the test dataset (<a>TestingDataResult</a>) by calling <a>DescribeProjectVersions</a>. </p> <p>The assets array contains a single <a>Asset</a> object. The <a>GroundTruthManifest</a> field of the Asset object contains the S3 bucket location of the validation data. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -2957,7 +3024,7 @@ pub struct VideoMetadata {
 pub enum CompareFacesError {
     /// <p>You are not authorized to perform the action.</p>
     AccessDenied(String),
-    /// <p>The input image size exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p>
+    /// <p>The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment, the image size or resolution exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p>
     ImageTooLarge(String),
     /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
     InternalServerError(String),
@@ -3037,8 +3104,10 @@ pub enum CreateCollectionError {
     InvalidParameter(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>A collection with the specified ID already exists.</p>
+    /// <p>A resource with the specified ID already exists.</p>
     ResourceAlreadyExists(String),
+    /// <p><p/> <p>The size of the collection exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p></p>
+    ServiceQuotaExceeded(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
 }
@@ -3068,6 +3137,11 @@ impl CreateCollectionError {
                         err.msg,
                     ))
                 }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(CreateCollectionError::ServiceQuotaExceeded(
+                        err.msg,
+                    ))
+                }
                 "ThrottlingException" => {
                     return RusotoError::Service(CreateCollectionError::Throttling(err.msg))
                 }
@@ -3089,6 +3163,7 @@ impl fmt::Display for CreateCollectionError {
                 write!(f, "{}", cause)
             }
             CreateCollectionError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateCollectionError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
             CreateCollectionError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -3177,8 +3252,10 @@ pub enum CreateProjectVersionError {
     ProvisionedThroughputExceeded(String),
     /// <p>The specified resource is already being used.</p>
     ResourceInUse(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
+    /// <p><p/> <p>The size of the collection exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p></p>
+    ServiceQuotaExceeded(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
 }
@@ -3216,6 +3293,11 @@ impl CreateProjectVersionError {
                         err.msg,
                     ))
                 }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(CreateProjectVersionError::ServiceQuotaExceeded(
+                        err.msg,
+                    ))
+                }
                 "ThrottlingException" => {
                     return RusotoError::Service(CreateProjectVersionError::Throttling(err.msg))
                 }
@@ -3239,6 +3321,7 @@ impl fmt::Display for CreateProjectVersionError {
             }
             CreateProjectVersionError::ResourceInUse(ref cause) => write!(f, "{}", cause),
             CreateProjectVersionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateProjectVersionError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
             CreateProjectVersionError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -3259,6 +3342,8 @@ pub enum CreateStreamProcessorError {
     ProvisionedThroughputExceeded(String),
     /// <p>The specified resource is already being used.</p>
     ResourceInUse(String),
+    /// <p><p/> <p>The size of the collection exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p></p>
+    ServiceQuotaExceeded(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
 }
@@ -3291,6 +3376,11 @@ impl CreateStreamProcessorError {
                 "ResourceInUseException" => {
                     return RusotoError::Service(CreateStreamProcessorError::ResourceInUse(err.msg))
                 }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(CreateStreamProcessorError::ServiceQuotaExceeded(
+                        err.msg,
+                    ))
+                }
                 "ThrottlingException" => {
                     return RusotoError::Service(CreateStreamProcessorError::Throttling(err.msg))
                 }
@@ -3313,6 +3403,7 @@ impl fmt::Display for CreateStreamProcessorError {
                 write!(f, "{}", cause)
             }
             CreateStreamProcessorError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            CreateStreamProcessorError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
             CreateStreamProcessorError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -3329,7 +3420,7 @@ pub enum DeleteCollectionError {
     InvalidParameter(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -3395,7 +3486,7 @@ pub enum DeleteFacesError {
     InvalidParameter(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -3459,7 +3550,7 @@ pub enum DeleteProjectError {
     ProvisionedThroughputExceeded(String),
     /// <p>The specified resource is already being used.</p>
     ResourceInUse(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -3527,7 +3618,7 @@ pub enum DeleteProjectVersionError {
     ProvisionedThroughputExceeded(String),
     /// <p>The specified resource is already being used.</p>
     ResourceInUse(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -3603,7 +3694,7 @@ pub enum DeleteStreamProcessorError {
     ProvisionedThroughputExceeded(String),
     /// <p>The specified resource is already being used.</p>
     ResourceInUse(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -3677,7 +3768,7 @@ pub enum DescribeCollectionError {
     InvalidParameter(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -3745,7 +3836,7 @@ pub enum DescribeProjectVersionsError {
     InvalidParameter(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -3893,7 +3984,7 @@ pub enum DescribeStreamProcessorError {
     InvalidParameter(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -3959,7 +4050,7 @@ impl Error for DescribeStreamProcessorError {}
 pub enum DetectCustomLabelsError {
     /// <p>You are not authorized to perform the action.</p>
     AccessDenied(String),
-    /// <p>The input image size exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p>
+    /// <p>The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment, the image size or resolution exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p>
     ImageTooLarge(String),
     /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
     InternalServerError(String),
@@ -3973,7 +4064,7 @@ pub enum DetectCustomLabelsError {
     LimitExceeded(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p>The requested resource isn't ready. For example, this exception occurs when you call <code>DetectCustomLabels</code> with a model version that isn't deployed. </p>
     ResourceNotReady(String),
@@ -4057,7 +4148,7 @@ impl Error for DetectCustomLabelsError {}
 pub enum DetectFacesError {
     /// <p>You are not authorized to perform the action.</p>
     AccessDenied(String),
-    /// <p>The input image size exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p>
+    /// <p>The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment, the image size or resolution exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p>
     ImageTooLarge(String),
     /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
     InternalServerError(String),
@@ -4131,7 +4222,7 @@ impl Error for DetectFacesError {}
 pub enum DetectLabelsError {
     /// <p>You are not authorized to perform the action.</p>
     AccessDenied(String),
-    /// <p>The input image size exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p>
+    /// <p>The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment, the image size or resolution exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p>
     ImageTooLarge(String),
     /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
     InternalServerError(String),
@@ -4207,7 +4298,7 @@ pub enum DetectModerationLabelsError {
     AccessDenied(String),
     /// <p>The number of in-progress human reviews you have has exceeded the number allowed.</p>
     HumanLoopQuotaExceeded(String),
-    /// <p>The input image size exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p>
+    /// <p>The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment, the image size or resolution exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p>
     ImageTooLarge(String),
     /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
     InternalServerError(String),
@@ -4301,7 +4392,7 @@ impl Error for DetectModerationLabelsError {}
 pub enum DetectProtectiveEquipmentError {
     /// <p>You are not authorized to perform the action.</p>
     AccessDenied(String),
-    /// <p>The input image size exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p>
+    /// <p>The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment, the image size or resolution exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p>
     ImageTooLarge(String),
     /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
     InternalServerError(String),
@@ -4393,7 +4484,7 @@ impl Error for DetectProtectiveEquipmentError {}
 pub enum DetectTextError {
     /// <p>You are not authorized to perform the action.</p>
     AccessDenied(String),
-    /// <p>The input image size exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p>
+    /// <p>The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment, the image size or resolution exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p>
     ImageTooLarge(String),
     /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
     InternalServerError(String),
@@ -4473,7 +4564,7 @@ pub enum GetCelebrityInfoError {
     InvalidParameter(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -4541,7 +4632,7 @@ pub enum GetCelebrityRecognitionError {
     InvalidParameter(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -4623,7 +4714,7 @@ pub enum GetContentModerationError {
     InvalidParameter(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -4701,7 +4792,7 @@ pub enum GetFaceDetectionError {
     InvalidParameter(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -4775,7 +4866,7 @@ pub enum GetFaceSearchError {
     InvalidParameter(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -4845,7 +4936,7 @@ pub enum GetLabelDetectionError {
     InvalidParameter(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -4919,7 +5010,7 @@ pub enum GetPersonTrackingError {
     InvalidParameter(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -4993,7 +5084,7 @@ pub enum GetSegmentDetectionError {
     InvalidParameter(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -5071,7 +5162,7 @@ pub enum GetTextDetectionError {
     InvalidParameter(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -5137,7 +5228,7 @@ impl Error for GetTextDetectionError {}
 pub enum IndexFacesError {
     /// <p>You are not authorized to perform the action.</p>
     AccessDenied(String),
-    /// <p>The input image size exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p>
+    /// <p>The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment, the image size or resolution exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p>
     ImageTooLarge(String),
     /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
     InternalServerError(String),
@@ -5149,7 +5240,7 @@ pub enum IndexFacesError {
     InvalidS3Object(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p><p/> <p>The size of the collection exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p></p>
     ServiceQuotaExceeded(String),
@@ -5231,7 +5322,7 @@ pub enum ListCollectionsError {
     InvalidParameter(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -5303,7 +5394,7 @@ pub enum ListFacesError {
     InvalidParameter(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -5428,12 +5519,82 @@ impl fmt::Display for ListStreamProcessorsError {
     }
 }
 impl Error for ListStreamProcessorsError {}
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>You are not authorized to perform the action.</p>
+    AccessDenied(String),
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    InternalServerError(String),
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    InvalidParameter(String),
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    ProvisionedThroughputExceeded(String),
+    /// <p>The resource specified in the request cannot be found.</p>
+    ResourceNotFound(String),
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListTagsForResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ListTagsForResourceError::AccessDenied(err.msg))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(ListTagsForResourceError::InternalServerError(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(ListTagsForResourceError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(
+                        ListTagsForResourceError::ProvisionedThroughputExceeded(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListTagsForResourceError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListTagsForResourceError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListTagsForResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::ProvisionedThroughputExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListTagsForResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListTagsForResourceError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListTagsForResourceError {}
 /// Errors returned by RecognizeCelebrities
 #[derive(Debug, PartialEq)]
 pub enum RecognizeCelebritiesError {
     /// <p>You are not authorized to perform the action.</p>
     AccessDenied(String),
-    /// <p>The input image size exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p>
+    /// <p>The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment, the image size or resolution exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p>
     ImageTooLarge(String),
     /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
     InternalServerError(String),
@@ -5523,7 +5684,7 @@ pub enum SearchFacesError {
     InvalidParameter(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -5579,7 +5740,7 @@ impl Error for SearchFacesError {}
 pub enum SearchFacesByImageError {
     /// <p>You are not authorized to perform the action.</p>
     AccessDenied(String),
-    /// <p>The input image size exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p>
+    /// <p>The input image size exceeds the allowed limit. If you are calling DetectProtectiveEquipment, the image size or resolution exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p>
     ImageTooLarge(String),
     /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
     InternalServerError(String),
@@ -5591,7 +5752,7 @@ pub enum SearchFacesByImageError {
     InvalidS3Object(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -5963,7 +6124,7 @@ pub enum StartFaceSearchError {
     LimitExceeded(String),
     /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
     ProvisionedThroughputExceeded(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -6231,7 +6392,7 @@ pub enum StartProjectVersionError {
     ProvisionedThroughputExceeded(String),
     /// <p>The specified resource is already being used.</p>
     ResourceInUse(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -6403,7 +6564,7 @@ pub enum StartStreamProcessorError {
     ProvisionedThroughputExceeded(String),
     /// <p>The specified resource is already being used.</p>
     ResourceInUse(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -6567,7 +6728,7 @@ pub enum StopProjectVersionError {
     ProvisionedThroughputExceeded(String),
     /// <p>The specified resource is already being used.</p>
     ResourceInUse(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -6639,7 +6800,7 @@ pub enum StopStreamProcessorError {
     ProvisionedThroughputExceeded(String),
     /// <p>The specified resource is already being used.</p>
     ResourceInUse(String),
-    /// <p>The collection specified in the request cannot be found.</p>
+    /// <p>The resource specified in the request cannot be found.</p>
     ResourceNotFound(String),
     /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
     Throttling(String),
@@ -6702,16 +6863,146 @@ impl fmt::Display for StopStreamProcessorError {
     }
 }
 impl Error for StopStreamProcessorError {}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>You are not authorized to perform the action.</p>
+    AccessDenied(String),
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    InternalServerError(String),
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    InvalidParameter(String),
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    ProvisionedThroughputExceeded(String),
+    /// <p>The resource specified in the request cannot be found.</p>
+    ResourceNotFound(String),
+    /// <p><p/> <p>The size of the collection exceeds the allowed limit. For more information, see Limits in Amazon Rekognition in the Amazon Rekognition Developer Guide. </p></p>
+    ServiceQuotaExceeded(String),
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<TagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(TagResourceError::AccessDenied(err.msg))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(TagResourceError::InternalServerError(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(TagResourceError::InvalidParameter(err.msg))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(TagResourceError::ProvisionedThroughputExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(TagResourceError::ResourceNotFound(err.msg))
+                }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(TagResourceError::ServiceQuotaExceeded(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(TagResourceError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for TagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            TagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            TagResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ProvisionedThroughputExceeded(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            TagResourceError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
+            TagResourceError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for TagResourceError {}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>You are not authorized to perform the action.</p>
+    AccessDenied(String),
+    /// <p>Amazon Rekognition experienced a service issue. Try your call again.</p>
+    InternalServerError(String),
+    /// <p>Input parameter violated a constraint. Validate your parameter before calling the API operation again.</p>
+    InvalidParameter(String),
+    /// <p>The number of requests exceeded your throughput limit. If you want to increase this limit, contact Amazon Rekognition.</p>
+    ProvisionedThroughputExceeded(String),
+    /// <p>The resource specified in the request cannot be found.</p>
+    ResourceNotFound(String),
+    /// <p>Amazon Rekognition is temporarily unable to process the request. Try your call again.</p>
+    Throttling(String),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UntagResourceError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(UntagResourceError::AccessDenied(err.msg))
+                }
+                "InternalServerError" => {
+                    return RusotoError::Service(UntagResourceError::InternalServerError(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(UntagResourceError::InvalidParameter(err.msg))
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return RusotoError::Service(UntagResourceError::ProvisionedThroughputExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UntagResourceError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UntagResourceError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UntagResourceError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UntagResourceError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InternalServerError(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ProvisionedThroughputExceeded(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UntagResourceError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UntagResourceError {}
 /// Trait representing the capabilities of the Amazon Rekognition API. Amazon Rekognition clients implement this trait.
 #[async_trait]
 pub trait Rekognition {
-    /// <p>Compares a face in the <i>source</i> input image with each of the 100 largest faces detected in the <i>target</i> input image. </p> <note> <p> If the source image contains multiple faces, the service detects the largest face and compares it with each face detected in the target image. </p> </note> <p>You pass the input and target images either as base64-encoded image bytes or as references to images in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes isn't supported. The image must be formatted as a PNG or JPEG file. </p> <p>In response, the operation returns an array of face matches ordered by similarity score in descending order. For each face match, the response provides a bounding box of the face, facial landmarks, pose details (pitch, role, and yaw), quality (brightness and sharpness), and confidence value (indicating the level of confidence that the bounding box contains a face). The response also provides a similarity score, which indicates how closely the faces match. </p> <note> <p>By default, only faces with a similarity score of greater than or equal to 80% are returned in the response. You can change this value by specifying the <code>SimilarityThreshold</code> parameter.</p> </note> <p> <code>CompareFaces</code> also returns an array of faces that don't match the source image. For each face, it returns a bounding box, confidence value, landmarks, pose details, and quality. The response also returns information about the face in the source image, including the bounding box of the face and confidence value.</p> <p>The <code>QualityFilter</code> input parameter allows you to filter out detected faces that don’t meet a required quality bar. The quality bar is based on a variety of common use cases. Use <code>QualityFilter</code> to set the quality bar by specifying <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>. If you do not want to filter detected faces, specify <code>NONE</code>. The default value is <code>NONE</code>. </p> <p>If the image doesn't contain Exif metadata, <code>CompareFaces</code> returns orientation information for the source and target images. Use these values to display the images with the correct image orientation.</p> <p>If no faces are detected in the source or target images, <code>CompareFaces</code> returns an <code>InvalidParameterException</code> error. </p> <note> <p> This is a stateless API operation. That is, data returned by this operation doesn't persist.</p> </note> <p>For an example, see Comparing Faces in Images in the Amazon Rekognition Developer Guide.</p> <p>This operation requires permissions to perform the <code>rekognition:CompareFaces</code> action.</p>
+    /// <p>Compares a face in the <i>source</i> input image with each of the 100 largest faces detected in the <i>target</i> input image. </p> <p> If the source image contains multiple faces, the service detects the largest face and compares it with each face detected in the target image. </p> <note> <p>CompareFaces uses machine learning algorithms, which are probabilistic. A false negative is an incorrect prediction that a face in the target image has a low similarity confidence score when compared to the face in the source image. To reduce the probability of false negatives, we recommend that you compare the target image against multiple source images. If you plan to use <code>CompareFaces</code> to make a decision that impacts an individual's rights, privacy, or access to services, we recommend that you pass the result to a human for review and further validation before taking action.</p> </note> <p>You pass the input and target images either as base64-encoded image bytes or as references to images in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes isn't supported. The image must be formatted as a PNG or JPEG file. </p> <p>In response, the operation returns an array of face matches ordered by similarity score in descending order. For each face match, the response provides a bounding box of the face, facial landmarks, pose details (pitch, role, and yaw), quality (brightness and sharpness), and confidence value (indicating the level of confidence that the bounding box contains a face). The response also provides a similarity score, which indicates how closely the faces match. </p> <note> <p>By default, only faces with a similarity score of greater than or equal to 80% are returned in the response. You can change this value by specifying the <code>SimilarityThreshold</code> parameter.</p> </note> <p> <code>CompareFaces</code> also returns an array of faces that don't match the source image. For each face, it returns a bounding box, confidence value, landmarks, pose details, and quality. The response also returns information about the face in the source image, including the bounding box of the face and confidence value.</p> <p>The <code>QualityFilter</code> input parameter allows you to filter out detected faces that don’t meet a required quality bar. The quality bar is based on a variety of common use cases. Use <code>QualityFilter</code> to set the quality bar by specifying <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>. If you do not want to filter detected faces, specify <code>NONE</code>. The default value is <code>NONE</code>. </p> <p>If the image doesn't contain Exif metadata, <code>CompareFaces</code> returns orientation information for the source and target images. Use these values to display the images with the correct image orientation.</p> <p>If no faces are detected in the source or target images, <code>CompareFaces</code> returns an <code>InvalidParameterException</code> error. </p> <note> <p> This is a stateless API operation. That is, data returned by this operation doesn't persist.</p> </note> <p>For an example, see Comparing Faces in Images in the Amazon Rekognition Developer Guide.</p> <p>This operation requires permissions to perform the <code>rekognition:CompareFaces</code> action.</p>
     async fn compare_faces(
         &self,
         input: CompareFacesRequest,
     ) -> Result<CompareFacesResponse, RusotoError<CompareFacesError>>;
 
-    /// <p>Creates a collection in an AWS Region. You can add faces to the collection using the <a>IndexFaces</a> operation. </p> <p>For example, you might create collections, one for each of your application users. A user can then index faces using the <code>IndexFaces</code> operation and persist results in a specific collection. Then, a user can search the collection for faces in the user-specific container. </p> <p>When you create a collection, it is associated with the latest version of the face model version.</p> <note> <p>Collection names are case-sensitive.</p> </note> <p>This operation requires permissions to perform the <code>rekognition:CreateCollection</code> action.</p>
+    /// <p>Creates a collection in an AWS Region. You can add faces to the collection using the <a>IndexFaces</a> operation. </p> <p>For example, you might create collections, one for each of your application users. A user can then index faces using the <code>IndexFaces</code> operation and persist results in a specific collection. Then, a user can search the collection for faces in the user-specific container. </p> <p>When you create a collection, it is associated with the latest version of the face model version.</p> <note> <p>Collection names are case-sensitive.</p> </note> <p>This operation requires permissions to perform the <code>rekognition:CreateCollection</code> action. If you want to tag your collection, you also require permission to perform the <code>rekognition:TagResource</code> operation.</p>
     async fn create_collection(
         &self,
         input: CreateCollectionRequest,
@@ -6729,7 +7020,7 @@ pub trait Rekognition {
         input: CreateProjectVersionRequest,
     ) -> Result<CreateProjectVersionResponse, RusotoError<CreateProjectVersionError>>;
 
-    /// <p>Creates an Amazon Rekognition stream processor that you can use to detect and recognize faces in a streaming video.</p> <p>Amazon Rekognition Video is a consumer of live video from Amazon Kinesis Video Streams. Amazon Rekognition Video sends analysis results to Amazon Kinesis Data Streams.</p> <p>You provide as input a Kinesis video stream (<code>Input</code>) and a Kinesis data stream (<code>Output</code>) stream. You also specify the face recognition criteria in <code>Settings</code>. For example, the collection containing faces that you want to recognize. Use <code>Name</code> to assign an identifier for the stream processor. You use <code>Name</code> to manage the stream processor. For example, you can start processing the source video by calling <a>StartStreamProcessor</a> with the <code>Name</code> field. </p> <p>After you have finished analyzing a streaming video, use <a>StopStreamProcessor</a> to stop processing. You can delete the stream processor by calling <a>DeleteStreamProcessor</a>.</p>
+    /// <p>Creates an Amazon Rekognition stream processor that you can use to detect and recognize faces in a streaming video.</p> <p>Amazon Rekognition Video is a consumer of live video from Amazon Kinesis Video Streams. Amazon Rekognition Video sends analysis results to Amazon Kinesis Data Streams.</p> <p>You provide as input a Kinesis video stream (<code>Input</code>) and a Kinesis data stream (<code>Output</code>) stream. You also specify the face recognition criteria in <code>Settings</code>. For example, the collection containing faces that you want to recognize. Use <code>Name</code> to assign an identifier for the stream processor. You use <code>Name</code> to manage the stream processor. For example, you can start processing the source video by calling <a>StartStreamProcessor</a> with the <code>Name</code> field. </p> <p>After you have finished analyzing a streaming video, use <a>StopStreamProcessor</a> to stop processing. You can delete the stream processor by calling <a>DeleteStreamProcessor</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:CreateStreamProcessor</code> action. If you want to tag your stream processor, you also require permission to perform the <code>rekognition:TagResource</code> operation.</p>
     async fn create_stream_processor(
         &self,
         input: CreateStreamProcessorRequest,
@@ -6903,6 +7194,12 @@ pub trait Rekognition {
         input: ListStreamProcessorsRequest,
     ) -> Result<ListStreamProcessorsResponse, RusotoError<ListStreamProcessorsError>>;
 
+    /// <p> Returns a list of tags in an Amazon Rekognition collection, stream processor, or Custom Labels model. </p> <p>This operation requires permissions to perform the <code>rekognition:ListTagsForResource</code> action. </p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
+
     /// <p>Returns an array of celebrities recognized in the input image. For more information, see Recognizing Celebrities in the Amazon Rekognition Developer Guide. </p> <p> <code>RecognizeCelebrities</code> returns the 64 largest faces in the image. It lists recognized celebrities in the <code>CelebrityFaces</code> array and unrecognized faces in the <code>UnrecognizedFaces</code> array. <code>RecognizeCelebrities</code> doesn't return celebrities whose faces aren't among the largest 64 faces in the image.</p> <p>For each celebrity recognized, <code>RecognizeCelebrities</code> returns a <code>Celebrity</code> object. The <code>Celebrity</code> object contains the celebrity name, ID, URL links to additional information, match confidence, and a <code>ComparedFace</code> object that you can use to locate the celebrity's face on the image.</p> <p>Amazon Rekognition doesn't retain information about which images a celebrity has been recognized in. Your application must store this information and use the <code>Celebrity</code> ID property as a unique identifier for the celebrity. If you don't store the celebrity name or additional information URLs returned by <code>RecognizeCelebrities</code>, you will need the ID to identify the celebrity in a call to the <a>GetCelebrityInfo</a> operation.</p> <p>You pass the input image either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes is not supported. The image must be either a PNG or JPEG formatted file. </p> <p>For an example, see Recognizing Celebrities in an Image in the Amazon Rekognition Developer Guide.</p> <p>This operation requires permissions to perform the <code>rekognition:RecognizeCelebrities</code> operation.</p>
     async fn recognize_celebrities(
         &self,
@@ -6915,7 +7212,7 @@ pub trait Rekognition {
         input: SearchFacesRequest,
     ) -> Result<SearchFacesResponse, RusotoError<SearchFacesError>>;
 
-    /// <p>For a given input image, first detects the largest face in the image, and then searches the specified collection for matching faces. The operation compares the features of the input face with faces in the specified collection. </p> <note> <p>To search for all faces in an input image, you might first call the <a>IndexFaces</a> operation, and then use the face IDs returned in subsequent calls to the <a>SearchFaces</a> operation. </p> <p> You can also call the <code>DetectFaces</code> operation and use the bounding boxes in the response to make face crops, which then you can pass in to the <code>SearchFacesByImage</code> operation. </p> </note> <p>You pass the input image either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes is not supported. The image must be either a PNG or JPEG formatted file. </p> <p> The response returns an array of faces that match, ordered by similarity score with the highest similarity first. More specifically, it is an array of metadata for each face match found. Along with the metadata, the response also includes a <code>similarity</code> indicating how similar the face is to the input face. In the response, the operation also returns the bounding box (and a confidence level that the bounding box contains a face) of the face that Amazon Rekognition used for the input image. </p> <p>For an example, Searching for a Face Using an Image in the Amazon Rekognition Developer Guide.</p> <p>The <code>QualityFilter</code> input parameter allows you to filter out detected faces that don’t meet a required quality bar. The quality bar is based on a variety of common use cases. Use <code>QualityFilter</code> to set the quality bar for filtering by specifying <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>. If you do not want to filter detected faces, specify <code>NONE</code>. The default value is <code>NONE</code>.</p> <note> <p>To use quality filtering, you need a collection associated with version 3 of the face model or higher. To get the version of the face model associated with a collection, call <a>DescribeCollection</a>. </p> </note> <p>This operation requires permissions to perform the <code>rekognition:SearchFacesByImage</code> action.</p>
+    /// <p>For a given input image, first detects the largest face in the image, and then searches the specified collection for matching faces. The operation compares the features of the input face with faces in the specified collection. </p> <note> <p>To search for all faces in an input image, you might first call the <a>IndexFaces</a> operation, and then use the face IDs returned in subsequent calls to the <a>SearchFaces</a> operation. </p> <p> You can also call the <code>DetectFaces</code> operation and use the bounding boxes in the response to make face crops, which then you can pass in to the <code>SearchFacesByImage</code> operation. </p> </note> <p>You pass the input image either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes is not supported. The image must be either a PNG or JPEG formatted file. </p> <p> The response returns an array of faces that match, ordered by similarity score with the highest similarity first. More specifically, it is an array of metadata for each face match found. Along with the metadata, the response also includes a <code>similarity</code> indicating how similar the face is to the input face. In the response, the operation also returns the bounding box (and a confidence level that the bounding box contains a face) of the face that Amazon Rekognition used for the input image. </p> <p>If no faces are detected in the input image, <code>SearchFacesByImage</code> returns an <code>InvalidParameterException</code> error. </p> <p>For an example, Searching for a Face Using an Image in the Amazon Rekognition Developer Guide.</p> <p>The <code>QualityFilter</code> input parameter allows you to filter out detected faces that don’t meet a required quality bar. The quality bar is based on a variety of common use cases. Use <code>QualityFilter</code> to set the quality bar for filtering by specifying <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>. If you do not want to filter detected faces, specify <code>NONE</code>. The default value is <code>NONE</code>.</p> <note> <p>To use quality filtering, you need a collection associated with version 3 of the face model or higher. To get the version of the face model associated with a collection, call <a>DescribeCollection</a>. </p> </note> <p>This operation requires permissions to perform the <code>rekognition:SearchFacesByImage</code> action.</p>
     async fn search_faces_by_image(
         &self,
         input: SearchFacesByImageRequest,
@@ -6992,6 +7289,18 @@ pub trait Rekognition {
         &self,
         input: StopStreamProcessorRequest,
     ) -> Result<StopStreamProcessorResponse, RusotoError<StopStreamProcessorError>>;
+
+    /// <p> Adds one or more key-value tags to an Amazon Rekognition collection, stream processor, or Custom Labels model. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS Resources</a>. </p> <p>This operation requires permissions to perform the <code>rekognition:TagResource</code> action. </p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>>;
+
+    /// <p> Removes one or more tags from an Amazon Rekognition collection, stream processor, or Custom Labels model. </p> <p>This operation requires permissions to perform the <code>rekognition:UntagResource</code> action. </p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
 }
 /// A client for the Amazon Rekognition API.
 #[derive(Clone)]
@@ -7033,7 +7342,7 @@ impl RekognitionClient {
 
 #[async_trait]
 impl Rekognition for RekognitionClient {
-    /// <p>Compares a face in the <i>source</i> input image with each of the 100 largest faces detected in the <i>target</i> input image. </p> <note> <p> If the source image contains multiple faces, the service detects the largest face and compares it with each face detected in the target image. </p> </note> <p>You pass the input and target images either as base64-encoded image bytes or as references to images in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes isn't supported. The image must be formatted as a PNG or JPEG file. </p> <p>In response, the operation returns an array of face matches ordered by similarity score in descending order. For each face match, the response provides a bounding box of the face, facial landmarks, pose details (pitch, role, and yaw), quality (brightness and sharpness), and confidence value (indicating the level of confidence that the bounding box contains a face). The response also provides a similarity score, which indicates how closely the faces match. </p> <note> <p>By default, only faces with a similarity score of greater than or equal to 80% are returned in the response. You can change this value by specifying the <code>SimilarityThreshold</code> parameter.</p> </note> <p> <code>CompareFaces</code> also returns an array of faces that don't match the source image. For each face, it returns a bounding box, confidence value, landmarks, pose details, and quality. The response also returns information about the face in the source image, including the bounding box of the face and confidence value.</p> <p>The <code>QualityFilter</code> input parameter allows you to filter out detected faces that don’t meet a required quality bar. The quality bar is based on a variety of common use cases. Use <code>QualityFilter</code> to set the quality bar by specifying <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>. If you do not want to filter detected faces, specify <code>NONE</code>. The default value is <code>NONE</code>. </p> <p>If the image doesn't contain Exif metadata, <code>CompareFaces</code> returns orientation information for the source and target images. Use these values to display the images with the correct image orientation.</p> <p>If no faces are detected in the source or target images, <code>CompareFaces</code> returns an <code>InvalidParameterException</code> error. </p> <note> <p> This is a stateless API operation. That is, data returned by this operation doesn't persist.</p> </note> <p>For an example, see Comparing Faces in Images in the Amazon Rekognition Developer Guide.</p> <p>This operation requires permissions to perform the <code>rekognition:CompareFaces</code> action.</p>
+    /// <p>Compares a face in the <i>source</i> input image with each of the 100 largest faces detected in the <i>target</i> input image. </p> <p> If the source image contains multiple faces, the service detects the largest face and compares it with each face detected in the target image. </p> <note> <p>CompareFaces uses machine learning algorithms, which are probabilistic. A false negative is an incorrect prediction that a face in the target image has a low similarity confidence score when compared to the face in the source image. To reduce the probability of false negatives, we recommend that you compare the target image against multiple source images. If you plan to use <code>CompareFaces</code> to make a decision that impacts an individual's rights, privacy, or access to services, we recommend that you pass the result to a human for review and further validation before taking action.</p> </note> <p>You pass the input and target images either as base64-encoded image bytes or as references to images in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes isn't supported. The image must be formatted as a PNG or JPEG file. </p> <p>In response, the operation returns an array of face matches ordered by similarity score in descending order. For each face match, the response provides a bounding box of the face, facial landmarks, pose details (pitch, role, and yaw), quality (brightness and sharpness), and confidence value (indicating the level of confidence that the bounding box contains a face). The response also provides a similarity score, which indicates how closely the faces match. </p> <note> <p>By default, only faces with a similarity score of greater than or equal to 80% are returned in the response. You can change this value by specifying the <code>SimilarityThreshold</code> parameter.</p> </note> <p> <code>CompareFaces</code> also returns an array of faces that don't match the source image. For each face, it returns a bounding box, confidence value, landmarks, pose details, and quality. The response also returns information about the face in the source image, including the bounding box of the face and confidence value.</p> <p>The <code>QualityFilter</code> input parameter allows you to filter out detected faces that don’t meet a required quality bar. The quality bar is based on a variety of common use cases. Use <code>QualityFilter</code> to set the quality bar by specifying <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>. If you do not want to filter detected faces, specify <code>NONE</code>. The default value is <code>NONE</code>. </p> <p>If the image doesn't contain Exif metadata, <code>CompareFaces</code> returns orientation information for the source and target images. Use these values to display the images with the correct image orientation.</p> <p>If no faces are detected in the source or target images, <code>CompareFaces</code> returns an <code>InvalidParameterException</code> error. </p> <note> <p> This is a stateless API operation. That is, data returned by this operation doesn't persist.</p> </note> <p>For an example, see Comparing Faces in Images in the Amazon Rekognition Developer Guide.</p> <p>This operation requires permissions to perform the <code>rekognition:CompareFaces</code> action.</p>
     async fn compare_faces(
         &self,
         input: CompareFacesRequest,
@@ -7051,7 +7360,7 @@ impl Rekognition for RekognitionClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CompareFacesResponse, _>()
     }
 
-    /// <p>Creates a collection in an AWS Region. You can add faces to the collection using the <a>IndexFaces</a> operation. </p> <p>For example, you might create collections, one for each of your application users. A user can then index faces using the <code>IndexFaces</code> operation and persist results in a specific collection. Then, a user can search the collection for faces in the user-specific container. </p> <p>When you create a collection, it is associated with the latest version of the face model version.</p> <note> <p>Collection names are case-sensitive.</p> </note> <p>This operation requires permissions to perform the <code>rekognition:CreateCollection</code> action.</p>
+    /// <p>Creates a collection in an AWS Region. You can add faces to the collection using the <a>IndexFaces</a> operation. </p> <p>For example, you might create collections, one for each of your application users. A user can then index faces using the <code>IndexFaces</code> operation and persist results in a specific collection. Then, a user can search the collection for faces in the user-specific container. </p> <p>When you create a collection, it is associated with the latest version of the face model version.</p> <note> <p>Collection names are case-sensitive.</p> </note> <p>This operation requires permissions to perform the <code>rekognition:CreateCollection</code> action. If you want to tag your collection, you also require permission to perform the <code>rekognition:TagResource</code> operation.</p>
     async fn create_collection(
         &self,
         input: CreateCollectionRequest,
@@ -7106,7 +7415,7 @@ impl Rekognition for RekognitionClient {
             .deserialize::<CreateProjectVersionResponse, _>()
     }
 
-    /// <p>Creates an Amazon Rekognition stream processor that you can use to detect and recognize faces in a streaming video.</p> <p>Amazon Rekognition Video is a consumer of live video from Amazon Kinesis Video Streams. Amazon Rekognition Video sends analysis results to Amazon Kinesis Data Streams.</p> <p>You provide as input a Kinesis video stream (<code>Input</code>) and a Kinesis data stream (<code>Output</code>) stream. You also specify the face recognition criteria in <code>Settings</code>. For example, the collection containing faces that you want to recognize. Use <code>Name</code> to assign an identifier for the stream processor. You use <code>Name</code> to manage the stream processor. For example, you can start processing the source video by calling <a>StartStreamProcessor</a> with the <code>Name</code> field. </p> <p>After you have finished analyzing a streaming video, use <a>StopStreamProcessor</a> to stop processing. You can delete the stream processor by calling <a>DeleteStreamProcessor</a>.</p>
+    /// <p>Creates an Amazon Rekognition stream processor that you can use to detect and recognize faces in a streaming video.</p> <p>Amazon Rekognition Video is a consumer of live video from Amazon Kinesis Video Streams. Amazon Rekognition Video sends analysis results to Amazon Kinesis Data Streams.</p> <p>You provide as input a Kinesis video stream (<code>Input</code>) and a Kinesis data stream (<code>Output</code>) stream. You also specify the face recognition criteria in <code>Settings</code>. For example, the collection containing faces that you want to recognize. Use <code>Name</code> to assign an identifier for the stream processor. You use <code>Name</code> to manage the stream processor. For example, you can start processing the source video by calling <a>StartStreamProcessor</a> with the <code>Name</code> field. </p> <p>After you have finished analyzing a streaming video, use <a>StopStreamProcessor</a> to stop processing. You can delete the stream processor by calling <a>DeleteStreamProcessor</a>.</p> <p>This operation requires permissions to perform the <code>rekognition:CreateStreamProcessor</code> action. If you want to tag your stream processor, you also require permission to perform the <code>rekognition:TagResource</code> operation.</p>
     async fn create_stream_processor(
         &self,
         input: CreateStreamProcessorRequest,
@@ -7642,6 +7951,24 @@ impl Rekognition for RekognitionClient {
             .deserialize::<ListStreamProcessorsResponse, _>()
     }
 
+    /// <p> Returns a list of tags in an Amazon Rekognition collection, stream processor, or Custom Labels model. </p> <p>This operation requires permissions to perform the <code>rekognition:ListTagsForResource</code> action. </p>
+    async fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "RekognitionService.ListTagsForResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListTagsForResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListTagsForResourceResponse, _>()
+    }
+
     /// <p>Returns an array of celebrities recognized in the input image. For more information, see Recognizing Celebrities in the Amazon Rekognition Developer Guide. </p> <p> <code>RecognizeCelebrities</code> returns the 64 largest faces in the image. It lists recognized celebrities in the <code>CelebrityFaces</code> array and unrecognized faces in the <code>UnrecognizedFaces</code> array. <code>RecognizeCelebrities</code> doesn't return celebrities whose faces aren't among the largest 64 faces in the image.</p> <p>For each celebrity recognized, <code>RecognizeCelebrities</code> returns a <code>Celebrity</code> object. The <code>Celebrity</code> object contains the celebrity name, ID, URL links to additional information, match confidence, and a <code>ComparedFace</code> object that you can use to locate the celebrity's face on the image.</p> <p>Amazon Rekognition doesn't retain information about which images a celebrity has been recognized in. Your application must store this information and use the <code>Celebrity</code> ID property as a unique identifier for the celebrity. If you don't store the celebrity name or additional information URLs returned by <code>RecognizeCelebrities</code>, you will need the ID to identify the celebrity in a call to the <a>GetCelebrityInfo</a> operation.</p> <p>You pass the input image either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes is not supported. The image must be either a PNG or JPEG formatted file. </p> <p>For an example, see Recognizing Celebrities in an Image in the Amazon Rekognition Developer Guide.</p> <p>This operation requires permissions to perform the <code>rekognition:RecognizeCelebrities</code> operation.</p>
     async fn recognize_celebrities(
         &self,
@@ -7679,7 +8006,7 @@ impl Rekognition for RekognitionClient {
         proto::json::ResponsePayload::new(&response).deserialize::<SearchFacesResponse, _>()
     }
 
-    /// <p>For a given input image, first detects the largest face in the image, and then searches the specified collection for matching faces. The operation compares the features of the input face with faces in the specified collection. </p> <note> <p>To search for all faces in an input image, you might first call the <a>IndexFaces</a> operation, and then use the face IDs returned in subsequent calls to the <a>SearchFaces</a> operation. </p> <p> You can also call the <code>DetectFaces</code> operation and use the bounding boxes in the response to make face crops, which then you can pass in to the <code>SearchFacesByImage</code> operation. </p> </note> <p>You pass the input image either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes is not supported. The image must be either a PNG or JPEG formatted file. </p> <p> The response returns an array of faces that match, ordered by similarity score with the highest similarity first. More specifically, it is an array of metadata for each face match found. Along with the metadata, the response also includes a <code>similarity</code> indicating how similar the face is to the input face. In the response, the operation also returns the bounding box (and a confidence level that the bounding box contains a face) of the face that Amazon Rekognition used for the input image. </p> <p>For an example, Searching for a Face Using an Image in the Amazon Rekognition Developer Guide.</p> <p>The <code>QualityFilter</code> input parameter allows you to filter out detected faces that don’t meet a required quality bar. The quality bar is based on a variety of common use cases. Use <code>QualityFilter</code> to set the quality bar for filtering by specifying <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>. If you do not want to filter detected faces, specify <code>NONE</code>. The default value is <code>NONE</code>.</p> <note> <p>To use quality filtering, you need a collection associated with version 3 of the face model or higher. To get the version of the face model associated with a collection, call <a>DescribeCollection</a>. </p> </note> <p>This operation requires permissions to perform the <code>rekognition:SearchFacesByImage</code> action.</p>
+    /// <p>For a given input image, first detects the largest face in the image, and then searches the specified collection for matching faces. The operation compares the features of the input face with faces in the specified collection. </p> <note> <p>To search for all faces in an input image, you might first call the <a>IndexFaces</a> operation, and then use the face IDs returned in subsequent calls to the <a>SearchFaces</a> operation. </p> <p> You can also call the <code>DetectFaces</code> operation and use the bounding boxes in the response to make face crops, which then you can pass in to the <code>SearchFacesByImage</code> operation. </p> </note> <p>You pass the input image either as base64-encoded image bytes or as a reference to an image in an Amazon S3 bucket. If you use the AWS CLI to call Amazon Rekognition operations, passing image bytes is not supported. The image must be either a PNG or JPEG formatted file. </p> <p> The response returns an array of faces that match, ordered by similarity score with the highest similarity first. More specifically, it is an array of metadata for each face match found. Along with the metadata, the response also includes a <code>similarity</code> indicating how similar the face is to the input face. In the response, the operation also returns the bounding box (and a confidence level that the bounding box contains a face) of the face that Amazon Rekognition used for the input image. </p> <p>If no faces are detected in the input image, <code>SearchFacesByImage</code> returns an <code>InvalidParameterException</code> error. </p> <p>For an example, Searching for a Face Using an Image in the Amazon Rekognition Developer Guide.</p> <p>The <code>QualityFilter</code> input parameter allows you to filter out detected faces that don’t meet a required quality bar. The quality bar is based on a variety of common use cases. Use <code>QualityFilter</code> to set the quality bar for filtering by specifying <code>LOW</code>, <code>MEDIUM</code>, or <code>HIGH</code>. If you do not want to filter detected faces, specify <code>NONE</code>. The default value is <code>NONE</code>.</p> <note> <p>To use quality filtering, you need a collection associated with version 3 of the face model or higher. To get the version of the face model associated with a collection, call <a>DescribeCollection</a>. </p> </note> <p>This operation requires permissions to perform the <code>rekognition:SearchFacesByImage</code> action.</p>
     async fn search_faces_by_image(
         &self,
         input: SearchFacesByImageRequest,
@@ -7919,5 +8246,41 @@ impl Rekognition for RekognitionClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<StopStreamProcessorResponse, _>()
+    }
+
+    /// <p> Adds one or more key-value tags to an Amazon Rekognition collection, stream processor, or Custom Labels model. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_tagging.html">Tagging AWS Resources</a>. </p> <p>This operation requires permissions to perform the <code>rekognition:TagResource</code> action. </p>
+    async fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> Result<TagResourceResponse, RusotoError<TagResourceError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "RekognitionService.TagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, TagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<TagResourceResponse, _>()
+    }
+
+    /// <p> Removes one or more tags from an Amazon Rekognition collection, stream processor, or Custom Labels model. </p> <p>This operation requires permissions to perform the <code>rekognition:UntagResource</code> action. </p>
+    async fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "RekognitionService.UntagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UntagResourceError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
     }
 }

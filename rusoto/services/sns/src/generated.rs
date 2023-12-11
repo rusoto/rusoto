@@ -291,7 +291,7 @@ impl CreateEndpointResponseDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreatePlatformApplicationInput {
-    /// <p>For a list of attributes, see <a href="https://docs.aws.amazon.com/sns/latest/api/API_SetPlatformApplicationAttributes.html">SetPlatformApplicationAttributes</a> </p>
+    /// <p>For a list of attributes, see <a href="https://docs.aws.amazon.com/sns/latest/api/API_SetPlatformApplicationAttributes.html">SetPlatformApplicationAttributes</a>.</p>
     pub attributes: ::std::collections::HashMap<String, String>,
     /// <p>Application names must be made up of only uppercase and lowercase ASCII letters, numbers, underscores, hyphens, and periods, and must be between 1 and 256 characters long.</p>
     pub name: String,
@@ -393,11 +393,57 @@ impl CreatePlatformEndpointInputSerializer {
     }
 }
 
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateSMSSandboxPhoneNumberInput {
+    /// <p>The language to use for sending the OTP. The default value is <code>en-US</code>.</p>
+    pub language_code: Option<String>,
+    /// <p>The destination phone number to verify. On verification, Amazon SNS adds this phone number to the list of verified phone numbers that you can send SMS messages to.</p>
+    pub phone_number: String,
+}
+
+/// Serialize `CreateSMSSandboxPhoneNumberInput` contents to a `SignedRequest`.
+struct CreateSMSSandboxPhoneNumberInputSerializer;
+impl CreateSMSSandboxPhoneNumberInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateSMSSandboxPhoneNumberInput) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.language_code {
+            params.put(&format!("{}{}", prefix, "LanguageCode"), &field_value);
+        }
+        params.put(&format!("{}{}", prefix, "PhoneNumber"), &obj.phone_number);
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct CreateSMSSandboxPhoneNumberResult {}
+
+#[allow(dead_code)]
+struct CreateSMSSandboxPhoneNumberResultDeserializer;
+impl CreateSMSSandboxPhoneNumberResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateSMSSandboxPhoneNumberResult, XmlParseError> {
+        xml_util::start_element(tag_name, stack)?;
+
+        let obj = CreateSMSSandboxPhoneNumberResult::default();
+
+        xml_util::end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 /// <p>Input for CreateTopic action.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateTopicInput {
-    /// <p><p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>CreateTopic</code> action uses:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The policy that defines how Amazon SNS retries failed deliveries to HTTP/S endpoints.</p> </li> <li> <p> <code>DisplayName</code> – The display name to use for a topic with SMS subscriptions.</p> </li> <li> <p> <code>FifoTopic</code> – Set to true to create a FIFO topic.</p> </li> <li> <p> <code>Policy</code> – The policy that defines who can access your topic. By default, only the topic owner can publish or subscribe to the topic.</p> </li> </ul> <p>The following attribute applies only to <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html">server-side-encryption</a>:</p> <ul> <li> <p> <code>KmsMasterKeyId</code> – The ID of an AWS-managed customer master key (CMK) for Amazon SNS or a custom CMK. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html#sse-key-terms">Key Terms</a>. For more examples, see <a href="https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters">KeyId</a> in the <i>AWS Key Management Service API Reference</i>. </p> </li> </ul> <p>The following attributes apply only to <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-fifo-topics.html">FIFO topics</a>:</p> <ul> <li> <p> <code>FifoTopic</code> – When this is set to <code>true</code>, a FIFO topic is created.</p> </li> <li> <p> <code>ContentBasedDeduplication</code> – Enables content-based deduplication for FIFO topics. </p> <ul> <li> <p>By default, <code>ContentBasedDeduplication</code> is set to <code>false</code>. If you create a FIFO topic and this attribute is <code>false</code>, you must specify a value for the <code>MessageDeduplicationId</code> parameter for the <a href="https://docs.aws.amazon.com/sns/latest/api/API_Publish.html">Publish</a> action. </p> </li> <li> <p>When you set <code>ContentBasedDeduplication</code> to <code>true</code>, Amazon SNS uses a SHA-256 hash to generate the <code>MessageDeduplicationId</code> using the body of the message (but not the attributes of the message).</p> <p>(Optional) To override the generated value, you can specify a value for the the <code>MessageDeduplicationId</code> parameter for the <code>Publish</code> action.</p> </li> </ul> </li> </ul></p>
+    /// <p><p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>CreateTopic</code> action uses:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The policy that defines how Amazon SNS retries failed deliveries to HTTP/S endpoints.</p> </li> <li> <p> <code>DisplayName</code> – The display name to use for a topic with SMS subscriptions.</p> </li> <li> <p> <code>FifoTopic</code> – Set to true to create a FIFO topic.</p> </li> <li> <p> <code>Policy</code> – The policy that defines who can access your topic. By default, only the topic owner can publish or subscribe to the topic.</p> </li> </ul> <p>The following attribute applies only to <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html">server-side encryption</a>:</p> <ul> <li> <p> <code>KmsMasterKeyId</code> – The ID of an AWS managed customer master key (CMK) for Amazon SNS or a custom CMK. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html#sse-key-terms">Key Terms</a>. For more examples, see <a href="https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters">KeyId</a> in the <i>AWS Key Management Service API Reference</i>. </p> </li> </ul> <p>The following attributes apply only to <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-fifo-topics.html">FIFO topics</a>:</p> <ul> <li> <p> <code>FifoTopic</code> – When this is set to <code>true</code>, a FIFO topic is created.</p> </li> <li> <p> <code>ContentBasedDeduplication</code> – Enables content-based deduplication for FIFO topics.</p> <ul> <li> <p>By default, <code>ContentBasedDeduplication</code> is set to <code>false</code>. If you create a FIFO topic and this attribute is <code>false</code>, you must specify a value for the <code>MessageDeduplicationId</code> parameter for the <a href="https://docs.aws.amazon.com/sns/latest/api/API_Publish.html">Publish</a> action. </p> </li> <li> <p>When you set <code>ContentBasedDeduplication</code> to <code>true</code>, Amazon SNS uses a SHA-256 hash to generate the <code>MessageDeduplicationId</code> using the body of the message (but not the attributes of the message).</p> <p>(Optional) To override the generated value, you can specify a value for the <code>MessageDeduplicationId</code> parameter for the <code>Publish</code> action.</p> </li> </ul> </li> </ul></p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
     /// <p>The name of the topic you want to create.</p> <p>Constraints: Topic names must be made up of only uppercase and lowercase ASCII letters, numbers, underscores, and hyphens, and must be between 1 and 256 characters long.</p> <p>For a FIFO (first-in-first-out) topic, the name must end with the <code>.fifo</code> suffix. </p>
     pub name: String,
@@ -512,6 +558,47 @@ impl DeletePlatformApplicationInputSerializer {
     }
 }
 
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteSMSSandboxPhoneNumberInput {
+    /// <p>The destination phone number to delete.</p>
+    pub phone_number: String,
+}
+
+/// Serialize `DeleteSMSSandboxPhoneNumberInput` contents to a `SignedRequest`.
+struct DeleteSMSSandboxPhoneNumberInputSerializer;
+impl DeleteSMSSandboxPhoneNumberInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteSMSSandboxPhoneNumberInput) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "PhoneNumber"), &obj.phone_number);
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct DeleteSMSSandboxPhoneNumberResult {}
+
+#[allow(dead_code)]
+struct DeleteSMSSandboxPhoneNumberResultDeserializer;
+impl DeleteSMSSandboxPhoneNumberResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteSMSSandboxPhoneNumberResult, XmlParseError> {
+        xml_util::start_element(tag_name, stack)?;
+
+        let obj = DeleteSMSSandboxPhoneNumberResult::default();
+
+        xml_util::end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteTopicInput {
@@ -714,6 +801,51 @@ impl GetSMSAttributesResponseDeserializer {
         )
     }
 }
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetSMSSandboxAccountStatusInput {}
+
+/// Serialize `GetSMSSandboxAccountStatusInput` contents to a `SignedRequest`.
+struct GetSMSSandboxAccountStatusInputSerializer;
+impl GetSMSSandboxAccountStatusInputSerializer {
+    fn serialize(_params: &mut Params, name: &str, _obj: &GetSMSSandboxAccountStatusInput) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct GetSMSSandboxAccountStatusResult {
+    /// <p>Indicates whether the calling account is in the SMS sandbox.</p>
+    pub is_in_sandbox: bool,
+}
+
+#[allow(dead_code)]
+struct GetSMSSandboxAccountStatusResultDeserializer;
+impl GetSMSSandboxAccountStatusResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetSMSSandboxAccountStatusResult, XmlParseError> {
+        deserialize_elements::<_, GetSMSSandboxAccountStatusResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "IsInSandbox" => {
+                        obj.is_in_sandbox = BooleanDeserializer::deserialize("IsInSandbox", stack)?;
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Input for GetSubscriptionAttributes.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -742,7 +874,7 @@ impl GetSubscriptionAttributesInputSerializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetSubscriptionAttributesResponse {
-    /// <p><p>A map of the subscription&#39;s attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>ConfirmationWasAuthenticated</code> – <code>true</code> if the subscription confirmation request was authenticated.</p> </li> <li> <p> <code>DeliveryPolicy</code> – The JSON serialization of the subscription&#39;s delivery policy.</p> </li> <li> <p> <code>EffectiveDeliveryPolicy</code> – The JSON serialization of the effective delivery policy that takes into account the topic delivery policy and account system defaults.</p> </li> <li> <p> <code>FilterPolicy</code> – The filter policy JSON that is assigned to the subscription. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-message-filtering.html">Amazon SNS Message Filtering</a> in the <i>Amazon SNS Developer Guide</i>.</p> </li> <li> <p> <code>Owner</code> – The AWS account ID of the subscription&#39;s owner.</p> </li> <li> <p> <code>PendingConfirmation</code> – <code>true</code> if the subscription hasn&#39;t been confirmed. To confirm a pending subscription, call the <code>ConfirmSubscription</code> action with a confirmation token.</p> </li> <li> <p> <code>RawMessageDelivery</code> – <code>true</code> if raw message delivery is enabled for the subscription. Raw messages are free of JSON formatting and can be sent to HTTP/S and Amazon SQS endpoints.</p> </li> <li> <p> <code>RedrivePolicy</code> – When specified, sends undeliverable messages to the specified Amazon SQS dead-letter queue. Messages that can&#39;t be delivered due to client errors (for example, when the subscribed endpoint is unreachable) or server errors (for example, when the service that powers the subscribed endpoint becomes unavailable) are held in the dead-letter queue for further analysis or reprocessing.</p> </li> <li> <p> <code>SubscriptionArn</code> – The subscription&#39;s ARN.</p> </li> <li> <p> <code>TopicArn</code> – The topic ARN that the subscription is associated with.</p> </li> </ul></p>
+    /// <p><p>A map of the subscription&#39;s attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>ConfirmationWasAuthenticated</code> – <code>true</code> if the subscription confirmation request was authenticated.</p> </li> <li> <p> <code>DeliveryPolicy</code> – The JSON serialization of the subscription&#39;s delivery policy.</p> </li> <li> <p> <code>EffectiveDeliveryPolicy</code> – The JSON serialization of the effective delivery policy that takes into account the topic delivery policy and account system defaults.</p> </li> <li> <p> <code>FilterPolicy</code> – The filter policy JSON that is assigned to the subscription. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-message-filtering.html">Amazon SNS Message Filtering</a> in the <i>Amazon SNS Developer Guide</i>.</p> </li> <li> <p> <code>Owner</code> – The AWS account ID of the subscription&#39;s owner.</p> </li> <li> <p> <code>PendingConfirmation</code> – <code>true</code> if the subscription hasn&#39;t been confirmed. To confirm a pending subscription, call the <code>ConfirmSubscription</code> action with a confirmation token.</p> </li> <li> <p> <code>RawMessageDelivery</code> – <code>true</code> if raw message delivery is enabled for the subscription. Raw messages are free of JSON formatting and can be sent to HTTP/S and Amazon SQS endpoints.</p> </li> <li> <p> <code>RedrivePolicy</code> – When specified, sends undeliverable messages to the specified Amazon SQS dead-letter queue. Messages that can&#39;t be delivered due to client errors (for example, when the subscribed endpoint is unreachable) or server errors (for example, when the service that powers the subscribed endpoint becomes unavailable) are held in the dead-letter queue for further analysis or reprocessing.</p> </li> <li> <p> <code>SubscriptionArn</code> – The subscription&#39;s ARN.</p> </li> <li> <p> <code>TopicArn</code> – The topic ARN that the subscription is associated with.</p> </li> </ul> <p>The following attribute applies only to Amazon Kinesis Data Firehose delivery stream subscriptions:</p> <ul> <li> <p> <code>SubscriptionRoleArn</code> – The ARN of the IAM role that has the following:</p> <ul> <li> <p>Permission to write to the Kinesis Data Firehose delivery stream</p> </li> <li> <p>Amazon SNS listed as a trusted entity</p> </li> </ul> <p>Specifying a valid ARN for this attribute is required for Kinesis Data Firehose delivery stream subscriptions. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-firehose-as-subscriber.html">Fanout to Kinesis Data Firehose delivery streams</a> in the <i>Amazon SNS Developer Guide</i>.</p> </li> </ul></p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
 }
 
@@ -797,7 +929,7 @@ impl GetTopicAttributesInputSerializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct GetTopicAttributesResponse {
-    /// <p><p>A map of the topic&#39;s attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The JSON serialization of the topic&#39;s delivery policy.</p> </li> <li> <p> <code>DisplayName</code> – The human-readable name used in the <code>From</code> field for notifications to <code>email</code> and <code>email-json</code> endpoints.</p> </li> <li> <p> <code>Owner</code> – The AWS account ID of the topic&#39;s owner.</p> </li> <li> <p> <code>Policy</code> – The JSON serialization of the topic&#39;s access control policy.</p> </li> <li> <p> <code>SubscriptionsConfirmed</code> – The number of confirmed subscriptions for the topic.</p> </li> <li> <p> <code>SubscriptionsDeleted</code> – The number of deleted subscriptions for the topic.</p> </li> <li> <p> <code>SubscriptionsPending</code> – The number of subscriptions pending confirmation for the topic.</p> </li> <li> <p> <code>TopicArn</code> – The topic&#39;s ARN.</p> </li> <li> <p> <code>EffectiveDeliveryPolicy</code> – The JSON serialization of the effective delivery policy, taking system defaults into account.</p> </li> </ul> <p>The following attribute applies only to <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html">server-side-encryption</a>:</p> <ul> <li> <p> <code>KmsMasterKeyId</code> - The ID of an AWS-managed customer master key (CMK) for Amazon SNS or a custom CMK. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html#sse-key-terms">Key Terms</a>. For more examples, see <a href="https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters">KeyId</a> in the <i>AWS Key Management Service API Reference</i>.</p> </li> </ul> <p>The following attributes apply only to <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-fifo-topics.html">FIFO topics</a>:</p> <ul> <li> <p> <code>FifoTopic</code> – When this is set to <code>true</code>, a FIFO topic is created.</p> </li> <li> <p> <code>ContentBasedDeduplication</code> – Enables content-based deduplication for FIFO topics. </p> <ul> <li> <p>By default, <code>ContentBasedDeduplication</code> is set to <code>false</code>. If you create a FIFO topic and this attribute is <code>false</code>, you must specify a value for the <code>MessageDeduplicationId</code> parameter for the <a href="https://docs.aws.amazon.com/sns/latest/api/API_Publish.html">Publish</a> action. </p> </li> <li> <p>When you set <code>ContentBasedDeduplication</code> to <code>true</code>, Amazon SNS uses a SHA-256 hash to generate the <code>MessageDeduplicationId</code> using the body of the message (but not the attributes of the message).</p> <p>(Optional) To override the generated value, you can specify a value for the the <code>MessageDeduplicationId</code> parameter for the <code>Publish</code> action.</p> </li> </ul> </li> </ul></p>
+    /// <p><p>A map of the topic&#39;s attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The JSON serialization of the topic&#39;s delivery policy.</p> </li> <li> <p> <code>DisplayName</code> – The human-readable name used in the <code>From</code> field for notifications to <code>email</code> and <code>email-json</code> endpoints.</p> </li> <li> <p> <code>Owner</code> – The AWS account ID of the topic&#39;s owner.</p> </li> <li> <p> <code>Policy</code> – The JSON serialization of the topic&#39;s access control policy.</p> </li> <li> <p> <code>SubscriptionsConfirmed</code> – The number of confirmed subscriptions for the topic.</p> </li> <li> <p> <code>SubscriptionsDeleted</code> – The number of deleted subscriptions for the topic.</p> </li> <li> <p> <code>SubscriptionsPending</code> – The number of subscriptions pending confirmation for the topic.</p> </li> <li> <p> <code>TopicArn</code> – The topic&#39;s ARN.</p> </li> <li> <p> <code>EffectiveDeliveryPolicy</code> – The JSON serialization of the effective delivery policy, taking system defaults into account.</p> </li> </ul> <p>The following attribute applies only to <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html">server-side-encryption</a>:</p> <ul> <li> <p> <code>KmsMasterKeyId</code> - The ID of an AWS-managed customer master key (CMK) for Amazon SNS or a custom CMK. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html#sse-key-terms">Key Terms</a>. For more examples, see <a href="https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters">KeyId</a> in the <i>AWS Key Management Service API Reference</i>.</p> </li> </ul> <p>The following attributes apply only to <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-fifo-topics.html">FIFO topics</a>:</p> <ul> <li> <p> <code>FifoTopic</code> – When this is set to <code>true</code>, a FIFO topic is created.</p> </li> <li> <p> <code>ContentBasedDeduplication</code> – Enables content-based deduplication for FIFO topics.</p> <ul> <li> <p>By default, <code>ContentBasedDeduplication</code> is set to <code>false</code>. If you create a FIFO topic and this attribute is <code>false</code>, you must specify a value for the <code>MessageDeduplicationId</code> parameter for the <a href="https://docs.aws.amazon.com/sns/latest/api/API_Publish.html">Publish</a> action. </p> </li> <li> <p>When you set <code>ContentBasedDeduplication</code> to <code>true</code>, Amazon SNS uses a SHA-256 hash to generate the <code>MessageDeduplicationId</code> using the body of the message (but not the attributes of the message).</p> <p>(Optional) To override the generated value, you can specify a value for the <code>MessageDeduplicationId</code> parameter for the <code>Publish</code> action.</p> </li> </ul> </li> </ul></p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
 }
 
@@ -825,6 +957,14 @@ impl GetTopicAttributesResponseDeserializer {
                 Ok(())
             },
         )
+    }
+}
+#[allow(dead_code)]
+struct Iso2CountryCodeDeserializer;
+impl Iso2CountryCodeDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Input for ListEndpointsByPlatformApplication action.</p>
@@ -930,6 +1070,74 @@ impl ListOfPlatformApplicationsDeserializer {
             }
             Ok(())
         })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListOriginationNumbersRequest {
+    /// <p>The maximum number of origination numbers to return.</p>
+    pub max_results: Option<i64>,
+    /// <p>Token that the previous <code>ListOriginationNumbers</code> request returns.</p>
+    pub next_token: Option<String>,
+}
+
+/// Serialize `ListOriginationNumbersRequest` contents to a `SignedRequest`.
+struct ListOriginationNumbersRequestSerializer;
+impl ListOriginationNumbersRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ListOriginationNumbersRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.max_results {
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct ListOriginationNumbersResult {
+    /// <p>A <code>NextToken</code> string is returned when you call the <code>ListOriginationNumbers</code> operation if additional pages of records are available.</p>
+    pub next_token: Option<String>,
+    /// <p>A list of the calling account's verified and pending origination numbers.</p>
+    pub phone_numbers: Option<Vec<PhoneNumberInformation>>,
+}
+
+#[allow(dead_code)]
+struct ListOriginationNumbersResultDeserializer;
+impl ListOriginationNumbersResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListOriginationNumbersResult, XmlParseError> {
+        deserialize_elements::<_, ListOriginationNumbersResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "NextToken" => {
+                        obj.next_token =
+                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
+                    }
+                    "PhoneNumbers" => {
+                        obj.phone_numbers.get_or_insert(vec![]).extend(
+                            PhoneNumberInformationListDeserializer::deserialize(
+                                "PhoneNumbers",
+                                stack,
+                            )?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
     }
 }
 /// <p>The input for the <code>ListPhoneNumbersOptedOut</code> action.</p>
@@ -1046,6 +1254,73 @@ impl ListPlatformApplicationsResponseDeserializer {
                         obj.platform_applications.get_or_insert(vec![]).extend(
                             ListOfPlatformApplicationsDeserializer::deserialize(
                                 "PlatformApplications",
+                                stack,
+                            )?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListSMSSandboxPhoneNumbersInput {
+    /// <p>The maximum number of phone numbers to return.</p>
+    pub max_results: Option<i64>,
+    /// <p>Token that the previous <code>ListSMSSandboxPhoneNumbersInput</code> request returns.</p>
+    pub next_token: Option<String>,
+}
+
+/// Serialize `ListSMSSandboxPhoneNumbersInput` contents to a `SignedRequest`.
+struct ListSMSSandboxPhoneNumbersInputSerializer;
+impl ListSMSSandboxPhoneNumbersInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ListSMSSandboxPhoneNumbersInput) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.max_results {
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct ListSMSSandboxPhoneNumbersResult {
+    /// <p>A <code>NextToken</code> string is returned when you call the <code>ListSMSSandboxPhoneNumbersInput</code> operation if additional pages of records are available.</p>
+    pub next_token: Option<String>,
+    /// <p>A list of the calling account's pending and verified phone numbers.</p>
+    pub phone_numbers: Vec<SMSSandboxPhoneNumber>,
+}
+
+#[allow(dead_code)]
+struct ListSMSSandboxPhoneNumbersResultDeserializer;
+impl ListSMSSandboxPhoneNumbersResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListSMSSandboxPhoneNumbersResult, XmlParseError> {
+        deserialize_elements::<_, ListSMSSandboxPhoneNumbersResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "NextToken" => {
+                        obj.next_token = Some(StringDeserializer::deserialize("NextToken", stack)?);
+                    }
+                    "PhoneNumbers" => {
+                        obj.phone_numbers.extend(
+                            SMSSandboxPhoneNumberListDeserializer::deserialize(
+                                "PhoneNumbers",
                                 stack,
                             )?,
                         );
@@ -1415,11 +1690,37 @@ impl NextTokenDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+#[allow(dead_code)]
+struct NumberCapabilityDeserializer;
+impl NumberCapabilityDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+#[allow(dead_code)]
+struct NumberCapabilityListDeserializer;
+impl NumberCapabilityListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(NumberCapabilityDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
 /// <p>Input for the OptInPhoneNumber action.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct OptInPhoneNumberInput {
-    /// <p>The phone number to opt in.</p>
+    /// <p>The phone number to opt in. Use E.164 format.</p>
     pub phone_number: String,
 }
 
@@ -1466,6 +1767,83 @@ impl PhoneNumberDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+/// <p>A list of phone numbers and their metadata.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct PhoneNumberInformation {
+    /// <p>The date and time when the phone number was created.</p>
+    pub created_at: Option<String>,
+    /// <p>The two-character code for the country or region, in ISO 3166-1 alpha-2 format.</p>
+    pub iso_2_country_code: Option<String>,
+    /// <p>The capabilities of each phone number.</p>
+    pub number_capabilities: Option<Vec<String>>,
+    /// <p>The phone number.</p>
+    pub phone_number: Option<String>,
+    /// <p>The list of supported routes.</p>
+    pub route_type: Option<String>,
+    /// <p>The status of the phone number.</p>
+    pub status: Option<String>,
+}
+
+#[allow(dead_code)]
+struct PhoneNumberInformationDeserializer;
+impl PhoneNumberInformationDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PhoneNumberInformation, XmlParseError> {
+        deserialize_elements::<_, PhoneNumberInformation, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "CreatedAt" => {
+                    obj.created_at = Some(TimestampDeserializer::deserialize("CreatedAt", stack)?);
+                }
+                "Iso2CountryCode" => {
+                    obj.iso_2_country_code = Some(Iso2CountryCodeDeserializer::deserialize(
+                        "Iso2CountryCode",
+                        stack,
+                    )?);
+                }
+                "NumberCapabilities" => {
+                    obj.number_capabilities.get_or_insert(vec![]).extend(
+                        NumberCapabilityListDeserializer::deserialize("NumberCapabilities", stack)?,
+                    );
+                }
+                "PhoneNumber" => {
+                    obj.phone_number = Some(StringDeserializer::deserialize("PhoneNumber", stack)?);
+                }
+                "RouteType" => {
+                    obj.route_type = Some(RouteTypeDeserializer::deserialize("RouteType", stack)?);
+                }
+                "Status" => {
+                    obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct PhoneNumberInformationListDeserializer;
+impl PhoneNumberInformationListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<PhoneNumberInformation>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(PhoneNumberInformationDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
 #[allow(dead_code)]
 struct PhoneNumberListDeserializer;
 impl PhoneNumberListDeserializer {
@@ -1482,6 +1860,14 @@ impl PhoneNumberListDeserializer {
             }
             Ok(())
         })
+    }
+}
+#[allow(dead_code)]
+struct PhoneNumberStringDeserializer;
+impl PhoneNumberStringDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
 /// <p>Platform application object.</p>
@@ -1655,6 +2041,81 @@ impl RemovePermissionInputSerializer {
     }
 }
 
+#[allow(dead_code)]
+struct RouteTypeDeserializer;
+impl RouteTypeDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+/// <p>A verified or pending destination phone number in the SMS sandbox.</p> <p>When you start using Amazon SNS to send SMS messages, your AWS account is in the <i>SMS sandbox</i>. The SMS sandbox provides a safe environment for you to try Amazon SNS features without risking your reputation as an SMS sender. While your account is in the SMS sandbox, you can use all of the features of Amazon SNS. However, you can send SMS messages only to verified destination phone numbers. For more information, including how to move out of the sandbox to send messages without restrictions, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html">SMS sandbox</a> in the <i>Amazon SNS Developer Guide</i>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct SMSSandboxPhoneNumber {
+    /// <p>The destination phone number.</p>
+    pub phone_number: Option<String>,
+    /// <p>The destination phone number's verification status.</p>
+    pub status: Option<String>,
+}
+
+#[allow(dead_code)]
+struct SMSSandboxPhoneNumberDeserializer;
+impl SMSSandboxPhoneNumberDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SMSSandboxPhoneNumber, XmlParseError> {
+        deserialize_elements::<_, SMSSandboxPhoneNumber, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "PhoneNumber" => {
+                    obj.phone_number = Some(PhoneNumberStringDeserializer::deserialize(
+                        "PhoneNumber",
+                        stack,
+                    )?);
+                }
+                "Status" => {
+                    obj.status = Some(
+                        SMSSandboxPhoneNumberVerificationStatusDeserializer::deserialize(
+                            "Status", stack,
+                        )?,
+                    );
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct SMSSandboxPhoneNumberListDeserializer;
+impl SMSSandboxPhoneNumberListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<SMSSandboxPhoneNumber>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(SMSSandboxPhoneNumberDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct SMSSandboxPhoneNumberVerificationStatusDeserializer;
+impl SMSSandboxPhoneNumberVerificationStatusDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
 /// <p>Input for SetEndpointAttributes action.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1765,7 +2226,7 @@ impl SetSMSAttributesResponseDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetSubscriptionAttributesInput {
-    /// <p><p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that this action uses:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The policy that defines how Amazon SNS retries failed deliveries to HTTP/S endpoints.</p> </li> <li> <p> <code>FilterPolicy</code> – The simple JSON object that lets your subscriber receive only a subset of messages, rather than receiving every message published to the topic.</p> </li> <li> <p> <code>RawMessageDelivery</code> – When set to <code>true</code>, enables raw message delivery to Amazon SQS or HTTP/S endpoints. This eliminates the need for the endpoints to process JSON formatting, which is otherwise created for Amazon SNS metadata.</p> </li> <li> <p> <code>RedrivePolicy</code> – When specified, sends undeliverable messages to the specified Amazon SQS dead-letter queue. Messages that can&#39;t be delivered due to client errors (for example, when the subscribed endpoint is unreachable) or server errors (for example, when the service that powers the subscribed endpoint becomes unavailable) are held in the dead-letter queue for further analysis or reprocessing.</p> </li> </ul></p>
+    /// <p><p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that this action uses:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The policy that defines how Amazon SNS retries failed deliveries to HTTP/S endpoints.</p> </li> <li> <p> <code>FilterPolicy</code> – The simple JSON object that lets your subscriber receive only a subset of messages, rather than receiving every message published to the topic.</p> </li> <li> <p> <code>RawMessageDelivery</code> – When set to <code>true</code>, enables raw message delivery to Amazon SQS or HTTP/S endpoints. This eliminates the need for the endpoints to process JSON formatting, which is otherwise created for Amazon SNS metadata.</p> </li> <li> <p> <code>RedrivePolicy</code> – When specified, sends undeliverable messages to the specified Amazon SQS dead-letter queue. Messages that can&#39;t be delivered due to client errors (for example, when the subscribed endpoint is unreachable) or server errors (for example, when the service that powers the subscribed endpoint becomes unavailable) are held in the dead-letter queue for further analysis or reprocessing.</p> </li> </ul> <p>The following attribute applies only to Amazon Kinesis Data Firehose delivery stream subscriptions:</p> <ul> <li> <p> <code>SubscriptionRoleArn</code> – The ARN of the IAM role that has the following:</p> <ul> <li> <p>Permission to write to the Kinesis Data Firehose delivery stream</p> </li> <li> <p>Amazon SNS listed as a trusted entity</p> </li> </ul> <p>Specifying a valid ARN for this attribute is required for Kinesis Data Firehose delivery stream subscriptions. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-firehose-as-subscriber.html">Fanout to Kinesis Data Firehose delivery streams</a> in the <i>Amazon SNS Developer Guide</i>.</p> </li> </ul></p>
     pub attribute_name: String,
     /// <p>The new value for the attribute in JSON format.</p>
     pub attribute_value: Option<String>,
@@ -1800,7 +2261,7 @@ impl SetSubscriptionAttributesInputSerializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SetTopicAttributesInput {
-    /// <p><p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>SetTopicAttributes</code> action uses:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The policy that defines how Amazon SNS retries failed deliveries to HTTP/S endpoints.</p> </li> <li> <p> <code>DisplayName</code> – The display name to use for a topic with SMS subscriptions.</p> </li> <li> <p> <code>Policy</code> – The policy that defines who can access your topic. By default, only the topic owner can publish or subscribe to the topic.</p> </li> </ul> <p>The following attribute applies only to <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html">server-side-encryption</a>:</p> <ul> <li> <p> <code>KmsMasterKeyId</code> – The ID of an AWS-managed customer master key (CMK) for Amazon SNS or a custom CMK. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html#sse-key-terms">Key Terms</a>. For more examples, see <a href="https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters">KeyId</a> in the <i>AWS Key Management Service API Reference</i>. </p> </li> </ul> <p>The following attribute applies only to <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-fifo-topics.html">FIFO topics</a>:</p> <ul> <li> <p> <code>ContentBasedDeduplication</code> – Enables content-based deduplication for FIFO topics. </p> <ul> <li> <p>By default, <code>ContentBasedDeduplication</code> is set to <code>false</code>. If you create a FIFO topic and this attribute is <code>false</code>, you must specify a value for the <code>MessageDeduplicationId</code> parameter for the <a href="https://docs.aws.amazon.com/sns/latest/api/API_Publish.html">Publish</a> action. </p> </li> <li> <p>When you set <code>ContentBasedDeduplication</code> to <code>true</code>, Amazon SNS uses a SHA-256 hash to generate the <code>MessageDeduplicationId</code> using the body of the message (but not the attributes of the message).</p> <p>(Optional) To override the generated value, you can specify a value for the the <code>MessageDeduplicationId</code> parameter for the <code>Publish</code> action.</p> </li> </ul> </li> </ul></p>
+    /// <p><p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>SetTopicAttributes</code> action uses:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The policy that defines how Amazon SNS retries failed deliveries to HTTP/S endpoints.</p> </li> <li> <p> <code>DisplayName</code> – The display name to use for a topic with SMS subscriptions.</p> </li> <li> <p> <code>Policy</code> – The policy that defines who can access your topic. By default, only the topic owner can publish or subscribe to the topic.</p> </li> </ul> <p>The following attribute applies only to <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html">server-side-encryption</a>:</p> <ul> <li> <p> <code>KmsMasterKeyId</code> – The ID of an AWS-managed customer master key (CMK) for Amazon SNS or a custom CMK. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-server-side-encryption.html#sse-key-terms">Key Terms</a>. For more examples, see <a href="https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters">KeyId</a> in the <i>AWS Key Management Service API Reference</i>. </p> </li> </ul> <p>The following attribute applies only to <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-fifo-topics.html">FIFO topics</a>:</p> <ul> <li> <p> <code>ContentBasedDeduplication</code> – Enables content-based deduplication for FIFO topics.</p> <ul> <li> <p>By default, <code>ContentBasedDeduplication</code> is set to <code>false</code>. If you create a FIFO topic and this attribute is <code>false</code>, you must specify a value for the <code>MessageDeduplicationId</code> parameter for the <a href="https://docs.aws.amazon.com/sns/latest/api/API_Publish.html">Publish</a> action. </p> </li> <li> <p>When you set <code>ContentBasedDeduplication</code> to <code>true</code>, Amazon SNS uses a SHA-256 hash to generate the <code>MessageDeduplicationId</code> using the body of the message (but not the attributes of the message).</p> <p>(Optional) To override the generated value, you can specify a value for the <code>MessageDeduplicationId</code> parameter for the <code>Publish</code> action.</p> </li> </ul> </li> </ul></p>
     pub attribute_name: String,
     /// <p>The new value for the attribute.</p>
     pub attribute_value: Option<String>,
@@ -1840,11 +2301,11 @@ impl StringDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct SubscribeInput {
-    /// <p><p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>SetTopicAttributes</code> action uses:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The policy that defines how Amazon SNS retries failed deliveries to HTTP/S endpoints.</p> </li> <li> <p> <code>FilterPolicy</code> – The simple JSON object that lets your subscriber receive only a subset of messages, rather than receiving every message published to the topic.</p> </li> <li> <p> <code>RawMessageDelivery</code> – When set to <code>true</code>, enables raw message delivery to Amazon SQS or HTTP/S endpoints. This eliminates the need for the endpoints to process JSON formatting, which is otherwise created for Amazon SNS metadata.</p> </li> <li> <p> <code>RedrivePolicy</code> – When specified, sends undeliverable messages to the specified Amazon SQS dead-letter queue. Messages that can&#39;t be delivered due to client errors (for example, when the subscribed endpoint is unreachable) or server errors (for example, when the service that powers the subscribed endpoint becomes unavailable) are held in the dead-letter queue for further analysis or reprocessing.</p> </li> </ul></p>
+    /// <p><p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>SetTopicAttributes</code> action uses:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The policy that defines how Amazon SNS retries failed deliveries to HTTP/S endpoints.</p> </li> <li> <p> <code>FilterPolicy</code> – The simple JSON object that lets your subscriber receive only a subset of messages, rather than receiving every message published to the topic.</p> </li> <li> <p> <code>RawMessageDelivery</code> – When set to <code>true</code>, enables raw message delivery to Amazon SQS or HTTP/S endpoints. This eliminates the need for the endpoints to process JSON formatting, which is otherwise created for Amazon SNS metadata.</p> </li> <li> <p> <code>RedrivePolicy</code> – When specified, sends undeliverable messages to the specified Amazon SQS dead-letter queue. Messages that can&#39;t be delivered due to client errors (for example, when the subscribed endpoint is unreachable) or server errors (for example, when the service that powers the subscribed endpoint becomes unavailable) are held in the dead-letter queue for further analysis or reprocessing.</p> </li> </ul> <p>The following attribute applies only to Amazon Kinesis Data Firehose delivery stream subscriptions:</p> <ul> <li> <p> <code>SubscriptionRoleArn</code> – The ARN of the IAM role that has the following:</p> <ul> <li> <p>Permission to write to the Kinesis Data Firehose delivery stream</p> </li> <li> <p>Amazon SNS listed as a trusted entity</p> </li> </ul> <p>Specifying a valid ARN for this attribute is required for Kinesis Data Firehose delivery stream subscriptions. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-firehose-as-subscriber.html">Fanout to Kinesis Data Firehose delivery streams</a> in the <i>Amazon SNS Developer Guide</i>.</p> </li> </ul></p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
-    /// <p><p>The endpoint that you want to receive notifications. Endpoints vary by protocol:</p> <ul> <li> <p>For the <code>http</code> protocol, the (public) endpoint is a URL beginning with <code>http://</code> </p> </li> <li> <p>For the <code>https</code> protocol, the (public) endpoint is a URL beginning with <code>https://</code> </p> </li> <li> <p>For the <code>email</code> protocol, the endpoint is an email address</p> </li> <li> <p>For the <code>email-json</code> protocol, the endpoint is an email address</p> </li> <li> <p>For the <code>sms</code> protocol, the endpoint is a phone number of an SMS-enabled device</p> </li> <li> <p>For the <code>sqs</code> protocol, the endpoint is the ARN of an Amazon SQS queue</p> </li> <li> <p>For the <code>application</code> protocol, the endpoint is the EndpointArn of a mobile app and device.</p> </li> <li> <p>For the <code>lambda</code> protocol, the endpoint is the ARN of an Amazon Lambda function.</p> </li> </ul></p>
+    /// <p><p>The endpoint that you want to receive notifications. Endpoints vary by protocol:</p> <ul> <li> <p>For the <code>http</code> protocol, the (public) endpoint is a URL beginning with <code>http://</code>.</p> </li> <li> <p>For the <code>https</code> protocol, the (public) endpoint is a URL beginning with <code>https://</code>.</p> </li> <li> <p>For the <code>email</code> protocol, the endpoint is an email address.</p> </li> <li> <p>For the <code>email-json</code> protocol, the endpoint is an email address.</p> </li> <li> <p>For the <code>sms</code> protocol, the endpoint is a phone number of an SMS-enabled device.</p> </li> <li> <p>For the <code>sqs</code> protocol, the endpoint is the ARN of an Amazon SQS queue.</p> </li> <li> <p>For the <code>application</code> protocol, the endpoint is the EndpointArn of a mobile app and device.</p> </li> <li> <p>For the <code>lambda</code> protocol, the endpoint is the ARN of an AWS Lambda function.</p> </li> <li> <p>For the <code>firehose</code> protocol, the endpoint is the ARN of an Amazon Kinesis Data Firehose delivery stream.</p> </li> </ul></p>
     pub endpoint: Option<String>,
-    /// <p><p>The protocol you want to use. Supported protocols include:</p> <ul> <li> <p> <code>http</code> – delivery of JSON-encoded message via HTTP POST</p> </li> <li> <p> <code>https</code> – delivery of JSON-encoded message via HTTPS POST</p> </li> <li> <p> <code>email</code> – delivery of message via SMTP</p> </li> <li> <p> <code>email-json</code> – delivery of JSON-encoded message via SMTP</p> </li> <li> <p> <code>sms</code> – delivery of message via SMS</p> </li> <li> <p> <code>sqs</code> – delivery of JSON-encoded message to an Amazon SQS queue</p> </li> <li> <p> <code>application</code> – delivery of JSON-encoded message to an EndpointArn for a mobile app and device.</p> </li> <li> <p> <code>lambda</code> – delivery of JSON-encoded message to an Amazon Lambda function.</p> </li> </ul></p>
+    /// <p><p>The protocol that you want to use. Supported protocols include:</p> <ul> <li> <p> <code>http</code> – delivery of JSON-encoded message via HTTP POST</p> </li> <li> <p> <code>https</code> – delivery of JSON-encoded message via HTTPS POST</p> </li> <li> <p> <code>email</code> – delivery of message via SMTP</p> </li> <li> <p> <code>email-json</code> – delivery of JSON-encoded message via SMTP</p> </li> <li> <p> <code>sms</code> – delivery of message via SMS</p> </li> <li> <p> <code>sqs</code> – delivery of JSON-encoded message to an Amazon SQS queue</p> </li> <li> <p> <code>application</code> – delivery of JSON-encoded message to an EndpointArn for a mobile app and device</p> </li> <li> <p> <code>lambda</code> – delivery of JSON-encoded message to an AWS Lambda function</p> </li> <li> <p> <code>firehose</code> – delivery of JSON-encoded message to an Amazon Kinesis Data Firehose delivery stream.</p> </li> </ul></p>
     pub protocol: String,
     /// <p>Sets whether the response from the <code>Subscribe</code> request includes the subscription ARN, even if the subscription is not yet confirmed.</p> <p>If you set this parameter to <code>true</code>, the response includes the ARN in all cases, even if the subscription is not yet confirmed. In addition to the ARN for confirmed subscriptions, the response also includes the <code>pending subscription</code> ARN value for subscriptions that aren't yet confirmed. A subscription becomes confirmed when the subscriber calls the <code>ConfirmSubscription</code> action with a confirmation token.</p> <p/> <p>The default value is <code>false</code>.</p>
     pub return_subscription_arn: Option<bool>,
@@ -2176,6 +2637,14 @@ impl TagValueDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+#[allow(dead_code)]
+struct TimestampDeserializer;
+impl TimestampDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
 /// <p>A wrapper type for the topic's Amazon Resource Name (ARN). To retrieve a topic's attributes, use <code>GetTopicAttributes</code>.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -2329,6 +2798,54 @@ impl UntagResourceResponseDeserializer {
         xml_util::start_element(tag_name, stack)?;
 
         let obj = UntagResourceResponse::default();
+
+        xml_util::end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct VerifySMSSandboxPhoneNumberInput {
+    /// <p>The OTP sent to the destination number from the <code>CreateSMSSandBoxPhoneNumber</code> call.</p>
+    pub one_time_password: String,
+    /// <p>The destination phone number to verify.</p>
+    pub phone_number: String,
+}
+
+/// Serialize `VerifySMSSandboxPhoneNumberInput` contents to a `SignedRequest`.
+struct VerifySMSSandboxPhoneNumberInputSerializer;
+impl VerifySMSSandboxPhoneNumberInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &VerifySMSSandboxPhoneNumberInput) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "OneTimePassword"),
+            &obj.one_time_password,
+        );
+        params.put(&format!("{}{}", prefix, "PhoneNumber"), &obj.phone_number);
+    }
+}
+
+/// <p>The destination phone number's verification status.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct VerifySMSSandboxPhoneNumberResult {}
+
+#[allow(dead_code)]
+struct VerifySMSSandboxPhoneNumberResultDeserializer;
+impl VerifySMSSandboxPhoneNumberResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<VerifySMSSandboxPhoneNumberResult, XmlParseError> {
+        xml_util::start_element(tag_name, stack)?;
+
+        let obj = VerifySMSSandboxPhoneNumberResult::default();
 
         xml_util::end_element(tag_name, stack)?;
 
@@ -2703,6 +3220,98 @@ impl fmt::Display for CreatePlatformEndpointError {
     }
 }
 impl Error for CreatePlatformEndpointError {}
+/// Errors returned by CreateSMSSandboxPhoneNumber
+#[derive(Debug, PartialEq)]
+pub enum CreateSMSSandboxPhoneNumberError {
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    /// <p>Indicates an internal service error.</p>
+    InternalError(String),
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    /// <p>Indicates that the specified phone number opted out of receiving SMS messages from your AWS account. You can't send SMS messages to phone numbers that opt out.</p>
+    OptedOut(String),
+    /// <p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
+    Throttled(String),
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    UserError(String),
+}
+
+impl CreateSMSSandboxPhoneNumberError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<CreateSMSSandboxPhoneNumberError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AuthorizationError" => {
+                        return RusotoError::Service(
+                            CreateSMSSandboxPhoneNumberError::AuthorizationError(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InternalError" => {
+                        return RusotoError::Service(
+                            CreateSMSSandboxPhoneNumberError::InternalError(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameter" => {
+                        return RusotoError::Service(
+                            CreateSMSSandboxPhoneNumberError::InvalidParameter(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "OptedOut" => {
+                        return RusotoError::Service(CreateSMSSandboxPhoneNumberError::OptedOut(
+                            parsed_error.message,
+                        ))
+                    }
+                    "Throttled" => {
+                        return RusotoError::Service(CreateSMSSandboxPhoneNumberError::Throttled(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UserError" => {
+                        return RusotoError::Service(CreateSMSSandboxPhoneNumberError::UserError(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for CreateSMSSandboxPhoneNumberError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateSMSSandboxPhoneNumberError::AuthorizationError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateSMSSandboxPhoneNumberError::InternalError(ref cause) => write!(f, "{}", cause),
+            CreateSMSSandboxPhoneNumberError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateSMSSandboxPhoneNumberError::OptedOut(ref cause) => write!(f, "{}", cause),
+            CreateSMSSandboxPhoneNumberError::Throttled(ref cause) => write!(f, "{}", cause),
+            CreateSMSSandboxPhoneNumberError::UserError(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateSMSSandboxPhoneNumberError {}
 /// Errors returned by CreateTopic
 #[derive(Debug, PartialEq)]
 pub enum CreateTopicError {
@@ -2933,6 +3542,100 @@ impl fmt::Display for DeletePlatformApplicationError {
     }
 }
 impl Error for DeletePlatformApplicationError {}
+/// Errors returned by DeleteSMSSandboxPhoneNumber
+#[derive(Debug, PartialEq)]
+pub enum DeleteSMSSandboxPhoneNumberError {
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    /// <p>Indicates an internal service error.</p>
+    InternalError(String),
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    /// <p>Can’t perform the action on the specified resource. Make sure that the resource exists.</p>
+    ResourceNotFound(String),
+    /// <p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
+    Throttled(String),
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    UserError(String),
+}
+
+impl DeleteSMSSandboxPhoneNumberError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DeleteSMSSandboxPhoneNumberError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AuthorizationError" => {
+                        return RusotoError::Service(
+                            DeleteSMSSandboxPhoneNumberError::AuthorizationError(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InternalError" => {
+                        return RusotoError::Service(
+                            DeleteSMSSandboxPhoneNumberError::InternalError(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameter" => {
+                        return RusotoError::Service(
+                            DeleteSMSSandboxPhoneNumberError::InvalidParameter(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ResourceNotFound" => {
+                        return RusotoError::Service(
+                            DeleteSMSSandboxPhoneNumberError::ResourceNotFound(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "Throttled" => {
+                        return RusotoError::Service(DeleteSMSSandboxPhoneNumberError::Throttled(
+                            parsed_error.message,
+                        ))
+                    }
+                    "UserError" => {
+                        return RusotoError::Service(DeleteSMSSandboxPhoneNumberError::UserError(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DeleteSMSSandboxPhoneNumberError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteSMSSandboxPhoneNumberError::AuthorizationError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteSMSSandboxPhoneNumberError::InternalError(ref cause) => write!(f, "{}", cause),
+            DeleteSMSSandboxPhoneNumberError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DeleteSMSSandboxPhoneNumberError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteSMSSandboxPhoneNumberError::Throttled(ref cause) => write!(f, "{}", cause),
+            DeleteSMSSandboxPhoneNumberError::UserError(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteSMSSandboxPhoneNumberError {}
 /// Errors returned by DeleteTopic
 #[derive(Debug, PartialEq)]
 pub enum DeleteTopicError {
@@ -3243,6 +3946,72 @@ impl fmt::Display for GetSMSAttributesError {
     }
 }
 impl Error for GetSMSAttributesError {}
+/// Errors returned by GetSMSSandboxAccountStatus
+#[derive(Debug, PartialEq)]
+pub enum GetSMSSandboxAccountStatusError {
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    /// <p>Indicates an internal service error.</p>
+    InternalError(String),
+    /// <p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
+    Throttled(String),
+}
+
+impl GetSMSSandboxAccountStatusError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetSMSSandboxAccountStatusError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AuthorizationError" => {
+                        return RusotoError::Service(
+                            GetSMSSandboxAccountStatusError::AuthorizationError(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InternalError" => {
+                        return RusotoError::Service(
+                            GetSMSSandboxAccountStatusError::InternalError(parsed_error.message),
+                        )
+                    }
+                    "Throttled" => {
+                        return RusotoError::Service(GetSMSSandboxAccountStatusError::Throttled(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for GetSMSSandboxAccountStatusError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetSMSSandboxAccountStatusError::AuthorizationError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetSMSSandboxAccountStatusError::InternalError(ref cause) => write!(f, "{}", cause),
+            GetSMSSandboxAccountStatusError::Throttled(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetSMSSandboxAccountStatusError {}
 /// Errors returned by GetSubscriptionAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetSubscriptionAttributesError {
@@ -3471,6 +4240,82 @@ impl fmt::Display for ListEndpointsByPlatformApplicationError {
     }
 }
 impl Error for ListEndpointsByPlatformApplicationError {}
+/// Errors returned by ListOriginationNumbers
+#[derive(Debug, PartialEq)]
+pub enum ListOriginationNumbersError {
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    /// <p>Indicates an internal service error.</p>
+    InternalError(String),
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    /// <p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
+    Throttled(String),
+    /// <p>Indicates that a parameter in the request is invalid.</p>
+    Validation(String),
+}
+
+impl ListOriginationNumbersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListOriginationNumbersError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AuthorizationError" => {
+                        return RusotoError::Service(
+                            ListOriginationNumbersError::AuthorizationError(parsed_error.message),
+                        )
+                    }
+                    "InternalError" => {
+                        return RusotoError::Service(ListOriginationNumbersError::InternalError(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameter" => {
+                        return RusotoError::Service(ListOriginationNumbersError::InvalidParameter(
+                            parsed_error.message,
+                        ))
+                    }
+                    "Throttled" => {
+                        return RusotoError::Service(ListOriginationNumbersError::Throttled(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        return RusotoError::Service(ListOriginationNumbersError::Validation(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ListOriginationNumbersError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListOriginationNumbersError::AuthorizationError(ref cause) => write!(f, "{}", cause),
+            ListOriginationNumbersError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListOriginationNumbersError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListOriginationNumbersError::Throttled(ref cause) => write!(f, "{}", cause),
+            ListOriginationNumbersError::Validation(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListOriginationNumbersError {}
 /// Errors returned by ListPhoneNumbersOptedOut
 #[derive(Debug, PartialEq)]
 pub enum ListPhoneNumbersOptedOutError {
@@ -3599,6 +4444,88 @@ impl fmt::Display for ListPlatformApplicationsError {
     }
 }
 impl Error for ListPlatformApplicationsError {}
+/// Errors returned by ListSMSSandboxPhoneNumbers
+#[derive(Debug, PartialEq)]
+pub enum ListSMSSandboxPhoneNumbersError {
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    /// <p>Indicates an internal service error.</p>
+    InternalError(String),
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    /// <p>Can’t perform the action on the specified resource. Make sure that the resource exists.</p>
+    ResourceNotFound(String),
+    /// <p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
+    Throttled(String),
+}
+
+impl ListSMSSandboxPhoneNumbersError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListSMSSandboxPhoneNumbersError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AuthorizationError" => {
+                        return RusotoError::Service(
+                            ListSMSSandboxPhoneNumbersError::AuthorizationError(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InternalError" => {
+                        return RusotoError::Service(
+                            ListSMSSandboxPhoneNumbersError::InternalError(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameter" => {
+                        return RusotoError::Service(
+                            ListSMSSandboxPhoneNumbersError::InvalidParameter(parsed_error.message),
+                        )
+                    }
+                    "ResourceNotFound" => {
+                        return RusotoError::Service(
+                            ListSMSSandboxPhoneNumbersError::ResourceNotFound(parsed_error.message),
+                        )
+                    }
+                    "Throttled" => {
+                        return RusotoError::Service(ListSMSSandboxPhoneNumbersError::Throttled(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ListSMSSandboxPhoneNumbersError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListSMSSandboxPhoneNumbersError::AuthorizationError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ListSMSSandboxPhoneNumbersError::InternalError(ref cause) => write!(f, "{}", cause),
+            ListSMSSandboxPhoneNumbersError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListSMSSandboxPhoneNumbersError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListSMSSandboxPhoneNumbersError::Throttled(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListSMSSandboxPhoneNumbersError {}
 /// Errors returned by ListSubscriptions
 #[derive(Debug, PartialEq)]
 pub enum ListSubscriptionsError {
@@ -3736,7 +4663,7 @@ pub enum ListTagsForResourceError {
     ConcurrentAccess(String),
     /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    /// <p>Can't tag resource. Verify that the topic exists.</p>
+    /// <p>Can’t perform the action on the specified resource. Make sure that the resource exists.</p>
     ResourceNotFound(String),
     /// <p>The request doesn't comply with the IAM tag policy. Correct your request and then retry it.</p>
     TagPolicy(String),
@@ -4620,7 +5547,7 @@ pub enum TagResourceError {
     ConcurrentAccess(String),
     /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    /// <p>Can't tag resource. Verify that the topic exists.</p>
+    /// <p>Can’t perform the action on the specified resource. Make sure that the resource exists.</p>
     ResourceNotFound(String),
     /// <p>A tag has been added to a resource with the same ARN as a deleted resource. Wait a short while and then retry the operation.</p>
     StaleTag(String),
@@ -4788,7 +5715,7 @@ pub enum UntagResourceError {
     ConcurrentAccess(String),
     /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
-    /// <p>Can't tag resource. Verify that the topic exists.</p>
+    /// <p>Can’t perform the action on the specified resource. Make sure that the resource exists.</p>
     ResourceNotFound(String),
     /// <p>A tag has been added to a resource with the same ARN as a deleted resource. Wait a short while and then retry the operation.</p>
     StaleTag(String),
@@ -4871,6 +5798,100 @@ impl fmt::Display for UntagResourceError {
     }
 }
 impl Error for UntagResourceError {}
+/// Errors returned by VerifySMSSandboxPhoneNumber
+#[derive(Debug, PartialEq)]
+pub enum VerifySMSSandboxPhoneNumberError {
+    /// <p>Indicates that the user has been denied access to the requested resource.</p>
+    AuthorizationError(String),
+    /// <p>Indicates an internal service error.</p>
+    InternalError(String),
+    /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
+    InvalidParameter(String),
+    /// <p>Can’t perform the action on the specified resource. Make sure that the resource exists.</p>
+    ResourceNotFound(String),
+    /// <p>Indicates that the rate at which requests have been submitted for this action exceeds the limit for your account.</p>
+    Throttled(String),
+    /// <p>Indicates that the one-time password (OTP) used for verification is invalid.</p>
+    Verification(String),
+}
+
+impl VerifySMSSandboxPhoneNumberError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<VerifySMSSandboxPhoneNumberError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "AuthorizationError" => {
+                        return RusotoError::Service(
+                            VerifySMSSandboxPhoneNumberError::AuthorizationError(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InternalError" => {
+                        return RusotoError::Service(
+                            VerifySMSSandboxPhoneNumberError::InternalError(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameter" => {
+                        return RusotoError::Service(
+                            VerifySMSSandboxPhoneNumberError::InvalidParameter(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "ResourceNotFound" => {
+                        return RusotoError::Service(
+                            VerifySMSSandboxPhoneNumberError::ResourceNotFound(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "Throttled" => {
+                        return RusotoError::Service(VerifySMSSandboxPhoneNumberError::Throttled(
+                            parsed_error.message,
+                        ))
+                    }
+                    "VerificationException" => {
+                        return RusotoError::Service(
+                            VerifySMSSandboxPhoneNumberError::Verification(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for VerifySMSSandboxPhoneNumberError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            VerifySMSSandboxPhoneNumberError::AuthorizationError(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            VerifySMSSandboxPhoneNumberError::InternalError(ref cause) => write!(f, "{}", cause),
+            VerifySMSSandboxPhoneNumberError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            VerifySMSSandboxPhoneNumberError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            VerifySMSSandboxPhoneNumberError::Throttled(ref cause) => write!(f, "{}", cause),
+            VerifySMSSandboxPhoneNumberError::Verification(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for VerifySMSSandboxPhoneNumberError {}
 /// Trait representing the capabilities of the Amazon SNS API. Amazon SNS clients implement this trait.
 #[async_trait]
 pub trait Sns {
@@ -4904,6 +5925,12 @@ pub trait Sns {
         input: CreatePlatformEndpointInput,
     ) -> Result<CreateEndpointResponse, RusotoError<CreatePlatformEndpointError>>;
 
+    /// <p>Adds a destination phone number to an AWS account in the SMS sandbox and sends a one-time password (OTP) to that phone number.</p> <p>When you start using Amazon SNS to send SMS messages, your AWS account is in the <i>SMS sandbox</i>. The SMS sandbox provides a safe environment for you to try Amazon SNS features without risking your reputation as an SMS sender. While your account is in the SMS sandbox, you can use all of the features of Amazon SNS. However, you can send SMS messages only to verified destination phone numbers. For more information, including how to move out of the sandbox to send messages without restrictions, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html">SMS sandbox</a> in the <i>Amazon SNS Developer Guide</i>.</p>
+    async fn create_sms_sandbox_phone_number(
+        &self,
+        input: CreateSMSSandboxPhoneNumberInput,
+    ) -> Result<CreateSMSSandboxPhoneNumberResult, RusotoError<CreateSMSSandboxPhoneNumberError>>;
+
     /// <p>Creates a topic to which notifications can be published. Users can create at most 100,000 standard topics (at most 1,000 FIFO topics). For more information, see <a href="http://aws.amazon.com/sns/">https://aws.amazon.com/sns</a>. This action is idempotent, so if the requester already owns a topic with the specified name, that topic's ARN is returned without creating a new topic.</p>
     async fn create_topic(
         &self,
@@ -4921,6 +5948,12 @@ pub trait Sns {
         &self,
         input: DeletePlatformApplicationInput,
     ) -> Result<(), RusotoError<DeletePlatformApplicationError>>;
+
+    /// <p>Deletes an AWS account's verified or pending phone number from the SMS sandbox.</p> <p>When you start using Amazon SNS to send SMS messages, your AWS account is in the <i>SMS sandbox</i>. The SMS sandbox provides a safe environment for you to try Amazon SNS features without risking your reputation as an SMS sender. While your account is in the SMS sandbox, you can use all of the features of Amazon SNS. However, you can send SMS messages only to verified destination phone numbers. For more information, including how to move out of the sandbox to send messages without restrictions, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html">SMS sandbox</a> in the <i>Amazon SNS Developer Guide</i>.</p>
+    async fn delete_sms_sandbox_phone_number(
+        &self,
+        input: DeleteSMSSandboxPhoneNumberInput,
+    ) -> Result<DeleteSMSSandboxPhoneNumberResult, RusotoError<DeleteSMSSandboxPhoneNumberError>>;
 
     /// <p>Deletes a topic and all its subscriptions. Deleting a topic might prevent some messages previously sent to the topic from being delivered to subscribers. This action is idempotent, so deleting a topic that does not exist does not result in an error.</p>
     async fn delete_topic(
@@ -4949,6 +5982,12 @@ pub trait Sns {
         input: GetSMSAttributesInput,
     ) -> Result<GetSMSAttributesResponse, RusotoError<GetSMSAttributesError>>;
 
+    /// <p>Retrieves the SMS sandbox status for the calling AWS account in the target AWS Region.</p> <p>When you start using Amazon SNS to send SMS messages, your AWS account is in the <i>SMS sandbox</i>. The SMS sandbox provides a safe environment for you to try Amazon SNS features without risking your reputation as an SMS sender. While your account is in the SMS sandbox, you can use all of the features of Amazon SNS. However, you can send SMS messages only to verified destination phone numbers. For more information, including how to move out of the sandbox to send messages without restrictions, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html">SMS sandbox</a> in the <i>Amazon SNS Developer Guide</i>.</p>
+    async fn get_sms_sandbox_account_status(
+        &self,
+        input: GetSMSSandboxAccountStatusInput,
+    ) -> Result<GetSMSSandboxAccountStatusResult, RusotoError<GetSMSSandboxAccountStatusError>>;
+
     /// <p>Returns all of the properties of a subscription.</p>
     async fn get_subscription_attributes(
         &self,
@@ -4970,6 +6009,12 @@ pub trait Sns {
         RusotoError<ListEndpointsByPlatformApplicationError>,
     >;
 
+    /// <p>Lists the calling AWS account's dedicated origination numbers and their metadata. For more information about origination numbers, see <a href="https://docs.aws.amazon.com/sns/latest/dg/channels-sms-originating-identities-origination-numbers.html">Origination numbers</a> in the <i>Amazon SNS Developer Guide</i>.</p>
+    async fn list_origination_numbers(
+        &self,
+        input: ListOriginationNumbersRequest,
+    ) -> Result<ListOriginationNumbersResult, RusotoError<ListOriginationNumbersError>>;
+
     /// <p>Returns a list of phone numbers that are opted out, meaning you cannot send SMS messages to them.</p> <p>The results for <code>ListPhoneNumbersOptedOut</code> are paginated, and each page returns up to 100 phone numbers. If additional phone numbers are available after the first page of results, then a <code>NextToken</code> string will be returned. To receive the next page, you call <code>ListPhoneNumbersOptedOut</code> again using the <code>NextToken</code> string received from the previous call. When there are no more records to return, <code>NextToken</code> will be null.</p>
     async fn list_phone_numbers_opted_out(
         &self,
@@ -4981,6 +6026,12 @@ pub trait Sns {
         &self,
         input: ListPlatformApplicationsInput,
     ) -> Result<ListPlatformApplicationsResponse, RusotoError<ListPlatformApplicationsError>>;
+
+    /// <p>Lists the calling AWS account's current verified and pending destination phone numbers in the SMS sandbox.</p> <p>When you start using Amazon SNS to send SMS messages, your AWS account is in the <i>SMS sandbox</i>. The SMS sandbox provides a safe environment for you to try Amazon SNS features without risking your reputation as an SMS sender. While your account is in the SMS sandbox, you can use all of the features of Amazon SNS. However, you can send SMS messages only to verified destination phone numbers. For more information, including how to move out of the sandbox to send messages without restrictions, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html">SMS sandbox</a> in the <i>Amazon SNS Developer Guide</i>.</p>
+    async fn list_sms_sandbox_phone_numbers(
+        &self,
+        input: ListSMSSandboxPhoneNumbersInput,
+    ) -> Result<ListSMSSandboxPhoneNumbersResult, RusotoError<ListSMSSandboxPhoneNumbersError>>;
 
     /// <p>Returns a list of the requester's subscriptions. Each call returns a limited list of subscriptions, up to 100. If there are more subscriptions, a <code>NextToken</code> is also returned. Use the <code>NextToken</code> parameter in a new <code>ListSubscriptions</code> call to get further results.</p> <p>This action is throttled at 30 transactions per second (TPS).</p>
     async fn list_subscriptions(
@@ -5036,7 +6087,7 @@ pub trait Sns {
         input: SetPlatformApplicationAttributesInput,
     ) -> Result<(), RusotoError<SetPlatformApplicationAttributesError>>;
 
-    /// <p>Use this request to set the default settings for sending SMS messages and receiving daily SMS usage reports.</p> <p>You can override some of these settings for a single message when you use the <code>Publish</code> action with the <code>MessageAttributes.entry.N</code> parameter. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sms_publish-to-phone.html">Publishing to a mobile phone</a> in the <i>Amazon SNS Developer Guide</i>.</p>
+    /// <p><p>Use this request to set the default settings for sending SMS messages and receiving daily SMS usage reports.</p> <p>You can override some of these settings for a single message when you use the <code>Publish</code> action with the <code>MessageAttributes.entry.N</code> parameter. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sms_publish-to-phone.html">Publishing to a mobile phone</a> in the <i>Amazon SNS Developer Guide</i>.</p> <note> <p>To use this operation, you must grant the Amazon SNS service principal (<code>sns.amazonaws.com</code>) permission to perform the <code>s3:ListBucket</code> action. </p> </note></p>
     async fn set_sms_attributes(
         &self,
         input: SetSMSAttributesInput,
@@ -5077,6 +6128,12 @@ pub trait Sns {
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+
+    /// <p>Verifies a destination phone number with a one-time password (OTP) for the calling AWS account.</p> <p>When you start using Amazon SNS to send SMS messages, your AWS account is in the <i>SMS sandbox</i>. The SMS sandbox provides a safe environment for you to try Amazon SNS features without risking your reputation as an SMS sender. While your account is in the SMS sandbox, you can use all of the features of Amazon SNS. However, you can send SMS messages only to verified destination phone numbers. For more information, including how to move out of the sandbox to send messages without restrictions, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html">SMS sandbox</a> in the <i>Amazon SNS Developer Guide</i>.</p>
+    async fn verify_sms_sandbox_phone_number(
+        &self,
+        input: VerifySMSSandboxPhoneNumberInput,
+    ) -> Result<VerifySMSSandboxPhoneNumberResult, RusotoError<VerifySMSSandboxPhoneNumberError>>;
 }
 /// A client for the Amazon SNS API.
 #[derive(Clone)]
@@ -5272,6 +6329,29 @@ impl Sns for SnsClient {
         Ok(result)
     }
 
+    /// <p>Adds a destination phone number to an AWS account in the SMS sandbox and sends a one-time password (OTP) to that phone number.</p> <p>When you start using Amazon SNS to send SMS messages, your AWS account is in the <i>SMS sandbox</i>. The SMS sandbox provides a safe environment for you to try Amazon SNS features without risking your reputation as an SMS sender. While your account is in the SMS sandbox, you can use all of the features of Amazon SNS. However, you can send SMS messages only to verified destination phone numbers. For more information, including how to move out of the sandbox to send messages without restrictions, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html">SMS sandbox</a> in the <i>Amazon SNS Developer Guide</i>.</p>
+    async fn create_sms_sandbox_phone_number(
+        &self,
+        input: CreateSMSSandboxPhoneNumberInput,
+    ) -> Result<CreateSMSSandboxPhoneNumberResult, RusotoError<CreateSMSSandboxPhoneNumberError>>
+    {
+        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+        let params = self.new_params("CreateSMSSandboxPhoneNumber");
+        let mut params = params;
+        CreateSMSSandboxPhoneNumberInputSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, CreateSMSSandboxPhoneNumberError::from_response)
+            .await?;
+
+        let result = CreateSMSSandboxPhoneNumberResult::default();
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Creates a topic to which notifications can be published. Users can create at most 100,000 standard topics (at most 1,000 FIFO topics). For more information, see <a href="http://aws.amazon.com/sns/">https://aws.amazon.com/sns</a>. This action is idempotent, so if the requester already owns a topic with the specified name, that topic's ARN is returned without creating a new topic.</p>
     async fn create_topic(
         &self,
@@ -5340,6 +6420,29 @@ impl Sns for SnsClient {
 
         std::mem::drop(response);
         Ok(())
+    }
+
+    /// <p>Deletes an AWS account's verified or pending phone number from the SMS sandbox.</p> <p>When you start using Amazon SNS to send SMS messages, your AWS account is in the <i>SMS sandbox</i>. The SMS sandbox provides a safe environment for you to try Amazon SNS features without risking your reputation as an SMS sender. While your account is in the SMS sandbox, you can use all of the features of Amazon SNS. However, you can send SMS messages only to verified destination phone numbers. For more information, including how to move out of the sandbox to send messages without restrictions, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html">SMS sandbox</a> in the <i>Amazon SNS Developer Guide</i>.</p>
+    async fn delete_sms_sandbox_phone_number(
+        &self,
+        input: DeleteSMSSandboxPhoneNumberInput,
+    ) -> Result<DeleteSMSSandboxPhoneNumberResult, RusotoError<DeleteSMSSandboxPhoneNumberError>>
+    {
+        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+        let params = self.new_params("DeleteSMSSandboxPhoneNumber");
+        let mut params = params;
+        DeleteSMSSandboxPhoneNumberInputSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, DeleteSMSSandboxPhoneNumberError::from_response)
+            .await?;
+
+        let result = DeleteSMSSandboxPhoneNumberResult::default();
+
+        drop(response); // parse non-payload
+        Ok(result)
     }
 
     /// <p>Deletes a topic and all its subscriptions. Deleting a topic might prevent some messages previously sent to the topic from being delivered to subscribers. This action is idempotent, so deleting a topic that does not exist does not result in an error.</p>
@@ -5465,6 +6568,40 @@ impl Sns for SnsClient {
         Ok(result)
     }
 
+    /// <p>Retrieves the SMS sandbox status for the calling AWS account in the target AWS Region.</p> <p>When you start using Amazon SNS to send SMS messages, your AWS account is in the <i>SMS sandbox</i>. The SMS sandbox provides a safe environment for you to try Amazon SNS features without risking your reputation as an SMS sender. While your account is in the SMS sandbox, you can use all of the features of Amazon SNS. However, you can send SMS messages only to verified destination phone numbers. For more information, including how to move out of the sandbox to send messages without restrictions, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html">SMS sandbox</a> in the <i>Amazon SNS Developer Guide</i>.</p>
+    async fn get_sms_sandbox_account_status(
+        &self,
+        input: GetSMSSandboxAccountStatusInput,
+    ) -> Result<GetSMSSandboxAccountStatusResult, RusotoError<GetSMSSandboxAccountStatusError>>
+    {
+        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+        let params = self.new_params("GetSMSSandboxAccountStatus");
+        let mut params = params;
+        GetSMSSandboxAccountStatusInputSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, GetSMSSandboxAccountStatusError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GetSMSSandboxAccountStatusResultDeserializer::deserialize(
+                "GetSMSSandboxAccountStatusResult",
+                stack,
+            )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Returns all of the properties of a subscription.</p>
     async fn get_subscription_attributes(
         &self,
@@ -5571,6 +6708,39 @@ impl Sns for SnsClient {
         Ok(result)
     }
 
+    /// <p>Lists the calling AWS account's dedicated origination numbers and their metadata. For more information about origination numbers, see <a href="https://docs.aws.amazon.com/sns/latest/dg/channels-sms-originating-identities-origination-numbers.html">Origination numbers</a> in the <i>Amazon SNS Developer Guide</i>.</p>
+    async fn list_origination_numbers(
+        &self,
+        input: ListOriginationNumbersRequest,
+    ) -> Result<ListOriginationNumbersResult, RusotoError<ListOriginationNumbersError>> {
+        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+        let params = self.new_params("ListOriginationNumbers");
+        let mut params = params;
+        ListOriginationNumbersRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, ListOriginationNumbersError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListOriginationNumbersResultDeserializer::deserialize(
+                "ListOriginationNumbersResult",
+                stack,
+            )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Returns a list of phone numbers that are opted out, meaning you cannot send SMS messages to them.</p> <p>The results for <code>ListPhoneNumbersOptedOut</code> are paginated, and each page returns up to 100 phone numbers. If additional phone numbers are available after the first page of results, then a <code>NextToken</code> string will be returned. To receive the next page, you call <code>ListPhoneNumbersOptedOut</code> again using the <code>NextToken</code> string received from the previous call. When there are no more records to return, <code>NextToken</code> will be null.</p>
     async fn list_phone_numbers_opted_out(
         &self,
@@ -5625,6 +6795,40 @@ impl Sns for SnsClient {
             xml_util::start_element(actual_tag_name, stack)?;
             let result = ListPlatformApplicationsResponseDeserializer::deserialize(
                 "ListPlatformApplicationsResult",
+                stack,
+            )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Lists the calling AWS account's current verified and pending destination phone numbers in the SMS sandbox.</p> <p>When you start using Amazon SNS to send SMS messages, your AWS account is in the <i>SMS sandbox</i>. The SMS sandbox provides a safe environment for you to try Amazon SNS features without risking your reputation as an SMS sender. While your account is in the SMS sandbox, you can use all of the features of Amazon SNS. However, you can send SMS messages only to verified destination phone numbers. For more information, including how to move out of the sandbox to send messages without restrictions, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html">SMS sandbox</a> in the <i>Amazon SNS Developer Guide</i>.</p>
+    async fn list_sms_sandbox_phone_numbers(
+        &self,
+        input: ListSMSSandboxPhoneNumbersInput,
+    ) -> Result<ListSMSSandboxPhoneNumbersResult, RusotoError<ListSMSSandboxPhoneNumbersError>>
+    {
+        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+        let params = self.new_params("ListSMSSandboxPhoneNumbers");
+        let mut params = params;
+        ListSMSSandboxPhoneNumbersInputSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, ListSMSSandboxPhoneNumbersError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ListSMSSandboxPhoneNumbersResultDeserializer::deserialize(
+                "ListSMSSandboxPhoneNumbersResult",
                 stack,
             )?;
             skip_tree(stack);
@@ -5881,7 +7085,7 @@ impl Sns for SnsClient {
         Ok(())
     }
 
-    /// <p>Use this request to set the default settings for sending SMS messages and receiving daily SMS usage reports.</p> <p>You can override some of these settings for a single message when you use the <code>Publish</code> action with the <code>MessageAttributes.entry.N</code> parameter. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sms_publish-to-phone.html">Publishing to a mobile phone</a> in the <i>Amazon SNS Developer Guide</i>.</p>
+    /// <p><p>Use this request to set the default settings for sending SMS messages and receiving daily SMS usage reports.</p> <p>You can override some of these settings for a single message when you use the <code>Publish</code> action with the <code>MessageAttributes.entry.N</code> parameter. For more information, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sms_publish-to-phone.html">Publishing to a mobile phone</a> in the <i>Amazon SNS Developer Guide</i>.</p> <note> <p>To use this operation, you must grant the Amazon SNS service principal (<code>sns.amazonaws.com</code>) permission to perform the <code>s3:ListBucket</code> action. </p> </note></p>
     async fn set_sms_attributes(
         &self,
         input: SetSMSAttributesInput,
@@ -6032,6 +7236,29 @@ impl Sns for SnsClient {
             .await?;
 
         let result = UntagResourceResponse::default();
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Verifies a destination phone number with a one-time password (OTP) for the calling AWS account.</p> <p>When you start using Amazon SNS to send SMS messages, your AWS account is in the <i>SMS sandbox</i>. The SMS sandbox provides a safe environment for you to try Amazon SNS features without risking your reputation as an SMS sender. While your account is in the SMS sandbox, you can use all of the features of Amazon SNS. However, you can send SMS messages only to verified destination phone numbers. For more information, including how to move out of the sandbox to send messages without restrictions, see <a href="https://docs.aws.amazon.com/sns/latest/dg/sns-sms-sandbox.html">SMS sandbox</a> in the <i>Amazon SNS Developer Guide</i>.</p>
+    async fn verify_sms_sandbox_phone_number(
+        &self,
+        input: VerifySMSSandboxPhoneNumberInput,
+    ) -> Result<VerifySMSSandboxPhoneNumberResult, RusotoError<VerifySMSSandboxPhoneNumberError>>
+    {
+        let mut request = SignedRequest::new("POST", "sns", &self.region, "/");
+        let params = self.new_params("VerifySMSSandboxPhoneNumber");
+        let mut params = params;
+        VerifySMSSandboxPhoneNumberInputSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, VerifySMSSandboxPhoneNumberError::from_response)
+            .await?;
+
+        let result = VerifySMSSandboxPhoneNumberResult::default();
 
         drop(response); // parse non-payload
         Ok(result)

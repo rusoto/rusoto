@@ -88,6 +88,28 @@ pub struct AggregateComplianceByConfigRule {
     pub config_rule_name: Option<String>,
 }
 
+/// <p>Provides aggregate compliance of the conformance pack. Indicates whether a conformance pack is compliant based on the name of the conformance pack, account ID, and region.</p> <p>A conformance pack is compliant if all of the rules in a conformance packs are compliant. It is noncompliant if any of the rules are not compliant. The compliance status of a conformance pack is INSUFFICIENT_DATA only if all rules within a conformance pack cannot be evaluated due to insufficient data. If some of the rules in a conformance pack are compliant but the compliance status of other rules in that same conformance pack is INSUFFICIENT_DATA, the conformance pack shows compliant.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AggregateComplianceByConformancePack {
+    /// <p>The 12-digit AWS account ID of the source account.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p>The source AWS Region from where the data is aggregated.</p>
+    #[serde(rename = "AwsRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_region: Option<String>,
+    /// <p>The compliance status of the conformance pack.</p>
+    #[serde(rename = "Compliance")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compliance: Option<AggregateConformancePackCompliance>,
+    /// <p>The name of the conformance pack.</p>
+    #[serde(rename = "ConformancePackName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conformance_pack_name: Option<String>,
+}
+
 /// <p>Returns the number of compliant and noncompliant rules for one or more accounts and regions in an aggregator.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -100,6 +122,92 @@ pub struct AggregateComplianceCount {
     #[serde(rename = "GroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_name: Option<String>,
+}
+
+/// <p>Provides the number of compliant and noncompliant rules within a conformance pack. Also provides the compliance status of the conformance pack and the total rule count which includes compliant rules, noncompliant rules, and rules that cannot be evaluated due to insufficient data.</p> <p>A conformance pack is compliant if all of the rules in a conformance packs are compliant. It is noncompliant if any of the rules are not compliant. The compliance status of a conformance pack is INSUFFICIENT_DATA only if all rules within a conformance pack cannot be evaluated due to insufficient data. If some of the rules in a conformance pack are compliant but the compliance status of other rules in that same conformance pack is INSUFFICIENT_DATA, the conformance pack shows compliant.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AggregateConformancePackCompliance {
+    /// <p>The compliance status of the conformance pack.</p>
+    #[serde(rename = "ComplianceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compliance_type: Option<String>,
+    /// <p>The number of compliant AWS Config Rules.</p>
+    #[serde(rename = "CompliantRuleCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compliant_rule_count: Option<i64>,
+    /// <p>The number of noncompliant AWS Config Rules.</p>
+    #[serde(rename = "NonCompliantRuleCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub non_compliant_rule_count: Option<i64>,
+    /// <p>Total number of compliant rules, noncompliant rules, and the rules that do not have any applicable resources to evaluate upon resulting in insufficient data.</p>
+    #[serde(rename = "TotalRuleCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_rule_count: Option<i64>,
+}
+
+/// <p>The number of conformance packs that are compliant and noncompliant.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AggregateConformancePackComplianceCount {
+    /// <p>Number of compliant conformance packs.</p>
+    #[serde(rename = "CompliantConformancePackCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compliant_conformance_pack_count: Option<i64>,
+    /// <p>Number of noncompliant conformance packs.</p>
+    #[serde(rename = "NonCompliantConformancePackCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub non_compliant_conformance_pack_count: Option<i64>,
+}
+
+/// <p>Filters the conformance packs based on an account ID, region, compliance type, and the name of the conformance pack.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AggregateConformancePackComplianceFilters {
+    /// <p>The 12-digit AWS account ID of the source account.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p>The source AWS Region from where the data is aggregated.</p>
+    #[serde(rename = "AwsRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_region: Option<String>,
+    /// <p>The compliance status of the conformance pack.</p>
+    #[serde(rename = "ComplianceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compliance_type: Option<String>,
+    /// <p>The name of the conformance pack.</p>
+    #[serde(rename = "ConformancePackName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conformance_pack_name: Option<String>,
+}
+
+/// <p>Provides a summary of compliance based on either account ID or region. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AggregateConformancePackComplianceSummary {
+    /// <p>Returns an <code>AggregateConformancePackComplianceCount</code> object. </p>
+    #[serde(rename = "ComplianceSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compliance_summary: Option<AggregateConformancePackComplianceCount>,
+    /// <p>Groups the result based on AWS Account ID or AWS Region.</p>
+    #[serde(rename = "GroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_name: Option<String>,
+}
+
+/// <p>Filters the results based on account ID and region. </p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AggregateConformancePackComplianceSummaryFilters {
+    /// <p>The 12-digit AWS account ID of the source account.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p>The source AWS Region from where the data is aggregated.</p>
+    #[serde(rename = "AwsRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_region: Option<String>,
 }
 
 /// <p>The details of an AWS Config evaluation for an account ID and region in an aggregator. Provides the AWS resource that was evaluated, the compliance of the resource, related time stamps, and supplementary information. </p>
@@ -649,7 +757,7 @@ pub struct ConfigurationItem {
     #[serde(rename = "accountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_id: Option<String>,
-    /// <p>accoun</p>
+    /// <p>Amazon Resource Name (ARN) associated with the resource.</p>
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
@@ -778,7 +886,7 @@ pub struct ConfigurationRecorderStatus {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConformancePackComplianceFilters {
-    /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>.</p>
+    /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>. <code>INSUFFICIENT_DATA</code> is not supported.</p>
     #[serde(rename = "ComplianceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_type: Option<String>,
@@ -792,7 +900,7 @@ pub struct ConformancePackComplianceFilters {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConformancePackComplianceSummary {
-    /// <p>The status of the conformance pack. The allowed values are COMPLIANT and NON_COMPLIANT. </p>
+    /// <p>The status of the conformance pack. The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code> and <code>INSUFFICIENT_DATA</code>.</p>
     #[serde(rename = "ConformancePackComplianceStatus")]
     pub conformance_pack_compliance_status: String,
     /// <p>The name of the conformance pack name.</p>
@@ -821,11 +929,11 @@ pub struct ConformancePackDetail {
     #[serde(rename = "CreatedBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_by: Option<String>,
-    /// <p>Conformance pack template that is used to create a pack. The delivery bucket name should start with awsconfigconforms. For example: "Resource": "arn:aws:s3:::your_bucket_name/*".</p>
+    /// <p><p>Amazon S3 bucket where AWS Config stores conformance pack templates. </p> <note> <p>This field is optional.</p> </note></p>
     #[serde(rename = "DeliveryS3Bucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delivery_s3_bucket: Option<String>,
-    /// <p>The prefix for the Amazon S3 bucket.</p>
+    /// <p><p>The prefix for the Amazon S3 bucket.</p> <note> <p>This field is optional.</p> </note></p>
     #[serde(rename = "DeliveryS3KeyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delivery_s3_key_prefix: Option<String>,
@@ -839,7 +947,7 @@ pub struct ConformancePackDetail {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ConformancePackEvaluationFilters {
-    /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>.</p>
+    /// <p>Filters the results by compliance.</p> <p>The allowed values are <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>. <code>INSUFFICIENT_DATA</code> is not supported.</p>
     #[serde(rename = "ComplianceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_type: Option<String>,
@@ -865,7 +973,7 @@ pub struct ConformancePackEvaluationResult {
     #[serde(rename = "Annotation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub annotation: Option<String>,
-    /// <p>The compliance type. The allowed values are <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>. </p>
+    /// <p>The compliance type. The allowed values are <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>. <code>INSUFFICIENT_DATA</code> is not supported.</p>
     #[serde(rename = "ComplianceType")]
     pub compliance_type: String,
     /// <p>The time when AWS Config rule evaluated AWS resource.</p>
@@ -893,7 +1001,7 @@ pub struct ConformancePackInputParameter {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ConformancePackRuleCompliance {
-    /// <p>Compliance of the AWS Config rule</p> <p>The allowed values are <code>COMPLIANT</code> and <code>NON_COMPLIANT</code>.</p>
+    /// <p>Compliance of the AWS Config rule.</p> <p>The allowed values are <code>COMPLIANT</code>, <code>NON_COMPLIANT</code>, and <code>INSUFFICIENT_DATA</code>.</p>
     #[serde(rename = "ComplianceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compliance_type: Option<String>,
@@ -901,6 +1009,10 @@ pub struct ConformancePackRuleCompliance {
     #[serde(rename = "ConfigRuleName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub config_rule_name: Option<String>,
+    /// <p>Controls for the conformance pack. A control is a process to prevent or detect problems while meeting objectives. A control can align with a specific compliance regime or map to internal controls defined by an organization.</p>
+    #[serde(rename = "Controls")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub controls: Option<Vec<String>>,
 }
 
 /// <p>Status details of a conformance pack.</p>
@@ -1135,6 +1247,10 @@ pub struct DeliveryChannel {
     #[serde(rename = "s3KeyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s_3_key_prefix: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the AWS Key Management Service (KMS) customer managed key (CMK) used to encrypt objects delivered by AWS Config. Must belong to the same Region as the destination S3 bucket.</p>
+    #[serde(rename = "s3KmsKeyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s_3_kms_key_arn: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the Amazon SNS topic to which AWS Config sends notifications about configuration changes.</p> <p>If you choose a topic from another account, the topic must have policies that grant access permissions to AWS Config. For more information, see <a href="https://docs.aws.amazon.com/config/latest/developerguide/sns-topic-policy.html">Permissions for the Amazon SNS Topic</a> in the AWS Config Developer Guide.</p>
     #[serde(rename = "snsTopicARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1190,6 +1306,40 @@ pub struct DescribeAggregateComplianceByConfigRulesResponse {
     #[serde(rename = "AggregateComplianceByConfigRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aggregate_compliance_by_config_rules: Option<Vec<AggregateComplianceByConfigRule>>,
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeAggregateComplianceByConformancePacksRequest {
+    /// <p>The name of the configuration aggregator.</p>
+    #[serde(rename = "ConfigurationAggregatorName")]
+    pub configuration_aggregator_name: String,
+    /// <p>Filters the result by <code>AggregateConformancePackComplianceFilters</code> object.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<AggregateConformancePackComplianceFilters>,
+    /// <p>The maximum number of conformance packs compliance details returned on each page. The default is maximum. If you specify 0, AWS Config uses the default. </p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeAggregateComplianceByConformancePacksResponse {
+    /// <p>Returns the <code>AggregateComplianceByConformancePack</code> object.</p>
+    #[serde(rename = "AggregateComplianceByConformancePacks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aggregate_compliance_by_conformance_packs:
+        Option<Vec<AggregateComplianceByConformancePack>>,
     /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1939,18 +2089,24 @@ pub struct ExecutionControls {
     pub ssm_controls: Option<SsmControls>,
 }
 
+/// <p>Identifies an AWS resource and indicates whether it complies with the AWS Config rule that it was evaluated against.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExternalEvaluation {
+    /// <p>Supplementary information about the reason of compliance. For example, this task was completed on a specific date.</p>
     #[serde(rename = "Annotation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub annotation: Option<String>,
+    /// <p>The evaluated compliance resource ID. AWS Config accepts only AWS account ID.</p>
     #[serde(rename = "ComplianceResourceId")]
     pub compliance_resource_id: String,
+    /// <p>The evaluated compliance resource type. AWS Config accepts <code>AWS::::Account</code> resource type.</p>
     #[serde(rename = "ComplianceResourceType")]
     pub compliance_resource_type: String,
+    /// <p>The compliance of the AWS resource. The valid values are <code>COMPLIANT, NON_COMPLIANT, </code> and <code>NOT_APPLICABLE</code>.</p>
     #[serde(rename = "ComplianceType")]
     pub compliance_type: String,
+    /// <p>The time when the compliance was recorded. </p>
     #[serde(rename = "OrderingTimestamp")]
     pub ordering_timestamp: f64,
 }
@@ -2081,6 +2237,48 @@ pub struct GetAggregateConfigRuleComplianceSummaryResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aggregate_compliance_counts: Option<Vec<AggregateComplianceCount>>,
     /// <p>Groups the result based on ACCOUNT_ID or AWS_REGION.</p>
+    #[serde(rename = "GroupByKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_by_key: Option<String>,
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetAggregateConformancePackComplianceSummaryRequest {
+    /// <p>The name of the configuration aggregator.</p>
+    #[serde(rename = "ConfigurationAggregatorName")]
+    pub configuration_aggregator_name: String,
+    /// <p>Filters the results based on the <code>AggregateConformancePackComplianceSummaryFilters</code> object.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<AggregateConformancePackComplianceSummaryFilters>,
+    /// <p>Groups the result based on AWS Account ID or AWS Region.</p>
+    #[serde(rename = "GroupByKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_by_key: Option<String>,
+    /// <p>The maximum number of results returned on each page. The default is maximum. If you specify 0, AWS Config uses the default.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetAggregateConformancePackComplianceSummaryResponse {
+    /// <p>Returns a list of <code>AggregateConformancePackComplianceSummary</code> object.</p>
+    #[serde(rename = "AggregateConformancePackComplianceSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aggregate_conformance_pack_compliance_summaries:
+        Option<Vec<AggregateConformancePackComplianceSummary>>,
+    /// <p>Groups the result based on AWS Account ID or AWS Region.</p>
     #[serde(rename = "GroupByKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_by_key: Option<String>,
@@ -2504,7 +2702,7 @@ pub struct ListAggregateDiscoveredResourcesRequest {
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<ResourceFilters>,
-    /// <p>The maximum number of resource identifiers returned on each page. The default is 100. You cannot specify a number greater than 100. If you specify 0, AWS Config uses the default.</p>
+    /// <p>The maximum number of resource identifiers returned on each page. You cannot specify a number greater than 100. If you specify 0, AWS Config uses the default.</p>
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
@@ -2731,11 +2929,11 @@ pub struct OrganizationConformancePack {
     #[serde(rename = "ConformancePackInputParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub conformance_pack_input_parameters: Option<Vec<ConformancePackInputParameter>>,
-    /// <p>Location of an Amazon S3 bucket where AWS Config can deliver evaluation results and conformance pack template that is used to create a pack. </p>
+    /// <p><p>Amazon S3 bucket where AWS Config stores conformance pack templates. </p> <note> <p>This field is optional.</p> </note></p>
     #[serde(rename = "DeliveryS3Bucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delivery_s3_bucket: Option<String>,
-    /// <p>Any folder structure you want to add to an Amazon S3 bucket.</p>
+    /// <p><p>Any folder structure you want to add to an Amazon S3 bucket.</p> <note> <p>This field is optional.</p> </note></p>
     #[serde(rename = "DeliveryS3KeyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delivery_s3_key_prefix: Option<String>,
@@ -2992,11 +3190,11 @@ pub struct PutConformancePackRequest {
     /// <p>Name of the conformance pack you want to create.</p>
     #[serde(rename = "ConformancePackName")]
     pub conformance_pack_name: String,
-    /// <p>AWS Config stores intermediate files while processing conformance pack template.</p>
+    /// <p><p>Amazon S3 bucket where AWS Config stores conformance pack templates.</p> <note> <p>This field is optional.</p> </note></p>
     #[serde(rename = "DeliveryS3Bucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delivery_s3_bucket: Option<String>,
-    /// <p>The prefix for the Amazon S3 bucket. </p>
+    /// <p><p>The prefix for the Amazon S3 bucket. </p> <note> <p>This field is optional.</p> </note></p>
     #[serde(rename = "DeliveryS3KeyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delivery_s3_key_prefix: Option<String>,
@@ -3058,8 +3256,10 @@ pub struct PutEvaluationsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutExternalEvaluationRequest {
+    /// <p>The name of the AWS Config rule.</p>
     #[serde(rename = "ConfigRuleName")]
     pub config_rule_name: String,
+    /// <p>An <code>ExternalEvaluation</code> object that provides details about compliance.</p>
     #[serde(rename = "ExternalEvaluation")]
     pub external_evaluation: ExternalEvaluation,
 }
@@ -3104,11 +3304,11 @@ pub struct PutOrganizationConformancePackRequest {
     #[serde(rename = "ConformancePackInputParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub conformance_pack_input_parameters: Option<Vec<ConformancePackInputParameter>>,
-    /// <p>Location of an Amazon S3 bucket where AWS Config can deliver evaluation results. AWS Config stores intermediate files while processing conformance pack template. </p> <p>The delivery bucket name should start with awsconfigconforms. For example: "Resource": "arn:aws:s3:::your_bucket_name/*". For more information, see <a href="https://docs.aws.amazon.com/config/latest/developerguide/conformance-pack-organization-apis.html">Permissions for cross account bucket access</a>.</p>
+    /// <p><p>Amazon S3 bucket where AWS Config stores conformance pack templates.</p> <note> <p>This field is optional. If used, it must be prefixed with <code>awsconfigconforms</code>.</p> </note></p>
     #[serde(rename = "DeliveryS3Bucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delivery_s3_bucket: Option<String>,
-    /// <p>The prefix for the Amazon S3 bucket.</p>
+    /// <p><p>The prefix for the Amazon S3 bucket.</p> <note> <p>This field is optional.</p> </note></p>
     #[serde(rename = "DeliveryS3KeyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delivery_s3_key_prefix: Option<String>,
@@ -3228,7 +3428,7 @@ pub struct PutRetentionConfigurationResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutStoredQueryRequest {
-    /// <p>A list of <code>StoredQuery</code> objects. The mandatory fields are <code>QueryName</code> and <code>Expression</code>.</p>
+    /// <p><p>A list of <code>StoredQuery</code> objects. The mandatory fields are <code>QueryName</code> and <code>Expression</code>.</p> <note> <p>When you are creating a query, you must provide a query name and an expression. When you are updating a query, you must provide a query name but updating the description is optional.</p> </note></p>
     #[serde(rename = "StoredQuery")]
     pub stored_query: StoredQuery,
     /// <p>A list of <code>Tags</code> object.</p>
@@ -3240,7 +3440,7 @@ pub struct PutStoredQueryRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutStoredQueryResponse {
-    /// <p>Amazon Resource Name (ARN) of the query. For example, arn:partition:service:region:account-id:resource-type/resource-id.</p>
+    /// <p>Amazon Resource Name (ARN) of the query. For example, arn:partition:service:region:account-id:resource-type/resource-name/resource-id.</p>
     #[serde(rename = "QueryArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub query_arn: Option<String>,
@@ -3267,7 +3467,7 @@ pub struct RecordingGroup {
     #[serde(rename = "includeGlobalResourceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_global_resource_types: Option<bool>,
-    /// <p>A comma-separated list that specifies the types of AWS resources for which AWS Config records configuration changes (for example, <code>AWS::EC2::Instance</code> or <code>AWS::CloudTrail::Trail</code>).</p> <p>Before you can set this option to <code>true</code>, you must set the <code>allSupported</code> option to <code>false</code>.</p> <p>If you set this option to <code>true</code>, when AWS Config adds support for a new type of resource, it will not record resources of that type unless you manually add that type to your recording group.</p> <p>For a list of valid <code>resourceTypes</code> values, see the <b>resourceType Value</b> column in <a href="https://docs.aws.amazon.com/config/latest/developerguide/resource-config-reference.html#supported-resources">Supported AWS Resource Types</a>.</p>
+    /// <p>A comma-separated list that specifies the types of AWS resources for which AWS Config records configuration changes (for example, <code>AWS::EC2::Instance</code> or <code>AWS::CloudTrail::Trail</code>).</p> <p>To record all configuration changes, you must set the <code>allSupported</code> option to <code>true</code>.</p> <p>If you set this option to <code>false</code>, when AWS Config adds support for a new type of resource, it will not record resources of that type unless you manually add that type to your recording group.</p> <p>For a list of valid <code>resourceTypes</code> values, see the <b>resourceType Value</b> column in <a href="https://docs.aws.amazon.com/config/latest/developerguide/resource-config-reference.html#supported-resources">Supported AWS Resource Types</a>.</p>
     #[serde(rename = "resourceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_types: Option<Vec<String>>,
@@ -3780,7 +3980,7 @@ pub struct StoredQuery {
     #[serde(rename = "Expression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expression: Option<String>,
-    /// <p>Amazon Resource Name (ARN) of the query. For example, arn:partition:service:region:account-id:resource-type/resource-id.</p>
+    /// <p>Amazon Resource Name (ARN) of the query. For example, arn:partition:service:region:account-id:resource-type/resource-name/resource-id.</p>
     #[serde(rename = "QueryArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub query_arn: Option<String>,
@@ -3801,7 +4001,7 @@ pub struct StoredQueryMetadata {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Amazon Resource Name (ARN) of the query. For example, arn:partition:service:region:account-id:resource-type/resource-id.</p>
+    /// <p>Amazon Resource Name (ARN) of the query. For example, arn:partition:service:region:account-id:resource-type/resource-name/resource-id.</p>
     #[serde(rename = "QueryArn")]
     pub query_arn: String,
     /// <p>The ID of the query. </p>
@@ -4188,7 +4388,7 @@ impl Error for DeleteEvaluationResultsError {}
 pub enum DeleteOrganizationConfigRuleError {
     /// <p>You specified one or more organization config rules that do not exist.</p>
     NoSuchOrganizationConfigRule(String),
-    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
+    /// <p>For <code>PutConfigurationAggregator</code> API, you can see this exception for the following reasons:</p> <ul> <li> <p>No permission to call <code>EnableAWSServiceAccess</code> API</p> </li> <li> <p>The configuration aggregator cannot be updated because your AWS Organization management account or the delegated administrator role changed. Delete this aggregator and create a new one with the current AWS Organization.</p> </li> <li> <p>The configuration aggregator is associated with a previous AWS Organization and AWS Config cannot aggregate data with current AWS Organization. Delete this aggregator and create a new one with the current AWS Organization.</p> </li> <li> <p>You are not a registered delegated administrator for AWS Config with permissions to call <code>ListDelegatedAdministrators</code> API. Ensure that the management account registers delagated administrator for AWS Config service principle name before the delegated administrator creates an aggregator.</p> </li> </ul> <p>For all <code>OrganizationConfigRule</code> and <code>OrganizationConformancePack</code> APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
     OrganizationAccessDenied(String),
     /// <p><p>You see this exception in the following cases: </p> <ul> <li> <p>For DeleteConfigRule, AWS Config is deleting this rule. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule, the rule is deleting your evaluation results. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule, a remediation action is associated with the rule and AWS Config cannot delete this rule. Delete the remediation action associated with the rule before deleting the rule and try your request again later.</p> </li> <li> <p>For PutConfigOrganizationRule, organization config rule deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteOrganizationConfigRule, organization config rule creation is in progress. Try your request again later.</p> </li> <li> <p>For PutConformancePack and PutOrganizationConformancePack, a conformance pack creation, update, and deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteConformancePack, a conformance pack creation, update, and deletion is in progress. Try your request again later.</p> </li> </ul></p>
     ResourceInUse(String),
@@ -4242,7 +4442,7 @@ impl Error for DeleteOrganizationConfigRuleError {}
 pub enum DeleteOrganizationConformancePackError {
     /// <p>AWS Config organization conformance pack that you passed in the filter does not exist.</p> <p>For DeleteOrganizationConformancePack, you tried to delete an organization conformance pack that does not exist.</p>
     NoSuchOrganizationConformancePack(String),
-    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
+    /// <p>For <code>PutConfigurationAggregator</code> API, you can see this exception for the following reasons:</p> <ul> <li> <p>No permission to call <code>EnableAWSServiceAccess</code> API</p> </li> <li> <p>The configuration aggregator cannot be updated because your AWS Organization management account or the delegated administrator role changed. Delete this aggregator and create a new one with the current AWS Organization.</p> </li> <li> <p>The configuration aggregator is associated with a previous AWS Organization and AWS Config cannot aggregate data with current AWS Organization. Delete this aggregator and create a new one with the current AWS Organization.</p> </li> <li> <p>You are not a registered delegated administrator for AWS Config with permissions to call <code>ListDelegatedAdministrators</code> API. Ensure that the management account registers delagated administrator for AWS Config service principle name before the delegated administrator creates an aggregator.</p> </li> </ul> <p>For all <code>OrganizationConfigRule</code> and <code>OrganizationConformancePack</code> APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
     OrganizationAccessDenied(String),
     /// <p><p>You see this exception in the following cases: </p> <ul> <li> <p>For DeleteConfigRule, AWS Config is deleting this rule. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule, the rule is deleting your evaluation results. Try your request again later.</p> </li> <li> <p>For DeleteConfigRule, a remediation action is associated with the rule and AWS Config cannot delete this rule. Delete the remediation action associated with the rule before deleting the rule and try your request again later.</p> </li> <li> <p>For PutConfigOrganizationRule, organization config rule deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteOrganizationConfigRule, organization config rule creation is in progress. Try your request again later.</p> </li> <li> <p>For PutConformancePack and PutOrganizationConformancePack, a conformance pack creation, update, and deletion is in progress. Try your request again later.</p> </li> <li> <p>For DeleteConformancePack, a conformance pack creation, update, and deletion is in progress. Try your request again later.</p> </li> </ul></p>
     ResourceInUse(String),
@@ -4336,6 +4536,8 @@ impl Error for DeletePendingAggregationRequestError {}
 pub enum DeleteRemediationConfigurationError {
     /// <p><p>Indicates one of the following errors:</p> <ul> <li> <p>For PutConfigRule, the rule cannot be created because the IAM role assigned to AWS Config lacks permissions to perform the config:Put* action.</p> </li> <li> <p>For PutConfigRule, the AWS Lambda function cannot be invoked. Check the function ARN, and check the function&#39;s permissions.</p> </li> <li> <p>For PutOrganizationConfigRule, organization config rule cannot be created because you do not have permissions to call IAM <code>GetRole</code> action or create a service linked role.</p> </li> <li> <p>For PutConformancePack and PutOrganizationConformancePack, a conformance pack cannot be created because you do not have permissions: </p> <ul> <li> <p>To call IAM <code>GetRole</code> action or create a service linked role.</p> </li> <li> <p>To read Amazon S3 bucket.</p> </li> </ul> </li> </ul></p>
     InsufficientPermissions(String),
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    InvalidParameterValue(String),
     /// <p>You specified an AWS Config rule without a remediation configuration.</p>
     NoSuchRemediationConfiguration(String),
     /// <p>Remediation action is in progress. You can either cancel execution in AWS Systems Manager or wait and try again later. </p>
@@ -4351,6 +4553,11 @@ impl DeleteRemediationConfigurationError {
                 "InsufficientPermissionsException" => {
                     return RusotoError::Service(
                         DeleteRemediationConfigurationError::InsufficientPermissions(err.msg),
+                    )
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        DeleteRemediationConfigurationError::InvalidParameterValue(err.msg),
                     )
                 }
                 "NoSuchRemediationConfigurationException" => {
@@ -4377,6 +4584,9 @@ impl fmt::Display for DeleteRemediationConfigurationError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DeleteRemediationConfigurationError::InsufficientPermissions(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteRemediationConfigurationError::InvalidParameterValue(ref cause) => {
                 write!(f, "{}", cause)
             }
             DeleteRemediationConfigurationError::NoSuchRemediationConfiguration(ref cause) => {
@@ -4643,6 +4853,50 @@ impl fmt::Display for DescribeAggregateComplianceByConfigRulesError {
     }
 }
 impl Error for DescribeAggregateComplianceByConfigRulesError {}
+/// Errors returned by DescribeAggregateComplianceByConformancePacks
+#[derive(Debug, PartialEq)]
+pub enum DescribeAggregateComplianceByConformancePacksError {
+    /// <p>The specified limit is outside the allowable range.</p>
+    InvalidLimit(String),
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+    /// <p>You have specified a configuration aggregator that does not exist.</p>
+    NoSuchConfigurationAggregator(String),
+}
+
+impl DescribeAggregateComplianceByConformancePacksError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeAggregateComplianceByConformancePacksError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                                "InvalidLimitException" => return RusotoError::Service(DescribeAggregateComplianceByConformancePacksError::InvalidLimit(err.msg)),
+"InvalidNextTokenException" => return RusotoError::Service(DescribeAggregateComplianceByConformancePacksError::InvalidNextToken(err.msg)),
+"NoSuchConfigurationAggregatorException" => return RusotoError::Service(DescribeAggregateComplianceByConformancePacksError::NoSuchConfigurationAggregator(err.msg)),
+"ValidationException" => return RusotoError::Validation(err.msg),
+_ => {}
+                            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeAggregateComplianceByConformancePacksError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeAggregateComplianceByConformancePacksError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAggregateComplianceByConformancePacksError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeAggregateComplianceByConformancePacksError::NoSuchConfigurationAggregator(
+                ref cause,
+            ) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeAggregateComplianceByConformancePacksError {}
 /// Errors returned by DescribeAggregationAuthorizations
 #[derive(Debug, PartialEq)]
 pub enum DescribeAggregationAuthorizationsError {
@@ -5360,7 +5614,7 @@ pub enum DescribeOrganizationConfigRuleStatusesError {
     InvalidNextToken(String),
     /// <p>You specified one or more organization config rules that do not exist.</p>
     NoSuchOrganizationConfigRule(String),
-    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
+    /// <p>For <code>PutConfigurationAggregator</code> API, you can see this exception for the following reasons:</p> <ul> <li> <p>No permission to call <code>EnableAWSServiceAccess</code> API</p> </li> <li> <p>The configuration aggregator cannot be updated because your AWS Organization management account or the delegated administrator role changed. Delete this aggregator and create a new one with the current AWS Organization.</p> </li> <li> <p>The configuration aggregator is associated with a previous AWS Organization and AWS Config cannot aggregate data with current AWS Organization. Delete this aggregator and create a new one with the current AWS Organization.</p> </li> <li> <p>You are not a registered delegated administrator for AWS Config with permissions to call <code>ListDelegatedAdministrators</code> API. Ensure that the management account registers delagated administrator for AWS Config service principle name before the delegated administrator creates an aggregator.</p> </li> </ul> <p>For all <code>OrganizationConfigRule</code> and <code>OrganizationConformancePack</code> APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
     OrganizationAccessDenied(String),
 }
 
@@ -5430,7 +5684,7 @@ pub enum DescribeOrganizationConfigRulesError {
     InvalidNextToken(String),
     /// <p>You specified one or more organization config rules that do not exist.</p>
     NoSuchOrganizationConfigRule(String),
-    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
+    /// <p>For <code>PutConfigurationAggregator</code> API, you can see this exception for the following reasons:</p> <ul> <li> <p>No permission to call <code>EnableAWSServiceAccess</code> API</p> </li> <li> <p>The configuration aggregator cannot be updated because your AWS Organization management account or the delegated administrator role changed. Delete this aggregator and create a new one with the current AWS Organization.</p> </li> <li> <p>The configuration aggregator is associated with a previous AWS Organization and AWS Config cannot aggregate data with current AWS Organization. Delete this aggregator and create a new one with the current AWS Organization.</p> </li> <li> <p>You are not a registered delegated administrator for AWS Config with permissions to call <code>ListDelegatedAdministrators</code> API. Ensure that the management account registers delagated administrator for AWS Config service principle name before the delegated administrator creates an aggregator.</p> </li> </ul> <p>For all <code>OrganizationConfigRule</code> and <code>OrganizationConformancePack</code> APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
     OrganizationAccessDenied(String),
 }
 
@@ -5494,7 +5748,7 @@ pub enum DescribeOrganizationConformancePackStatusesError {
     InvalidNextToken(String),
     /// <p>AWS Config organization conformance pack that you passed in the filter does not exist.</p> <p>For DeleteOrganizationConformancePack, you tried to delete an organization conformance pack that does not exist.</p>
     NoSuchOrganizationConformancePack(String),
-    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
+    /// <p>For <code>PutConfigurationAggregator</code> API, you can see this exception for the following reasons:</p> <ul> <li> <p>No permission to call <code>EnableAWSServiceAccess</code> API</p> </li> <li> <p>The configuration aggregator cannot be updated because your AWS Organization management account or the delegated administrator role changed. Delete this aggregator and create a new one with the current AWS Organization.</p> </li> <li> <p>The configuration aggregator is associated with a previous AWS Organization and AWS Config cannot aggregate data with current AWS Organization. Delete this aggregator and create a new one with the current AWS Organization.</p> </li> <li> <p>You are not a registered delegated administrator for AWS Config with permissions to call <code>ListDelegatedAdministrators</code> API. Ensure that the management account registers delagated administrator for AWS Config service principle name before the delegated administrator creates an aggregator.</p> </li> </ul> <p>For all <code>OrganizationConfigRule</code> and <code>OrganizationConformancePack</code> APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
     OrganizationAccessDenied(String),
 }
 
@@ -5544,7 +5798,7 @@ pub enum DescribeOrganizationConformancePacksError {
     InvalidNextToken(String),
     /// <p>AWS Config organization conformance pack that you passed in the filter does not exist.</p> <p>For DeleteOrganizationConformancePack, you tried to delete an organization conformance pack that does not exist.</p>
     NoSuchOrganizationConformancePack(String),
-    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
+    /// <p>For <code>PutConfigurationAggregator</code> API, you can see this exception for the following reasons:</p> <ul> <li> <p>No permission to call <code>EnableAWSServiceAccess</code> API</p> </li> <li> <p>The configuration aggregator cannot be updated because your AWS Organization management account or the delegated administrator role changed. Delete this aggregator and create a new one with the current AWS Organization.</p> </li> <li> <p>The configuration aggregator is associated with a previous AWS Organization and AWS Config cannot aggregate data with current AWS Organization. Delete this aggregator and create a new one with the current AWS Organization.</p> </li> <li> <p>You are not a registered delegated administrator for AWS Config with permissions to call <code>ListDelegatedAdministrators</code> API. Ensure that the management account registers delagated administrator for AWS Config service principle name before the delegated administrator creates an aggregator.</p> </li> </ul> <p>For all <code>OrganizationConfigRule</code> and <code>OrganizationConformancePack</code> APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
     OrganizationAccessDenied(String),
 }
 
@@ -5734,6 +5988,8 @@ impl Error for DescribeRemediationExceptionsError {}
 pub enum DescribeRemediationExecutionStatusError {
     /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
     InvalidNextToken(String),
+    /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
+    InvalidParameterValue(String),
     /// <p>You specified an AWS Config rule without a remediation configuration.</p>
     NoSuchRemediationConfiguration(String),
 }
@@ -5747,6 +6003,11 @@ impl DescribeRemediationExecutionStatusError {
                 "InvalidNextTokenException" => {
                     return RusotoError::Service(
                         DescribeRemediationExecutionStatusError::InvalidNextToken(err.msg),
+                    )
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        DescribeRemediationExecutionStatusError::InvalidParameterValue(err.msg),
                     )
                 }
                 "NoSuchRemediationConfigurationException" => {
@@ -5768,6 +6029,9 @@ impl fmt::Display for DescribeRemediationExecutionStatusError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             DescribeRemediationExecutionStatusError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeRemediationExecutionStatusError::InvalidParameterValue(ref cause) => {
                 write!(f, "{}", cause)
             }
             DescribeRemediationExecutionStatusError::NoSuchRemediationConfiguration(ref cause) => {
@@ -5947,6 +6211,50 @@ impl fmt::Display for GetAggregateConfigRuleComplianceSummaryError {
     }
 }
 impl Error for GetAggregateConfigRuleComplianceSummaryError {}
+/// Errors returned by GetAggregateConformancePackComplianceSummary
+#[derive(Debug, PartialEq)]
+pub enum GetAggregateConformancePackComplianceSummaryError {
+    /// <p>The specified limit is outside the allowable range.</p>
+    InvalidLimit(String),
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+    /// <p>You have specified a configuration aggregator that does not exist.</p>
+    NoSuchConfigurationAggregator(String),
+}
+
+impl GetAggregateConformancePackComplianceSummaryError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetAggregateConformancePackComplianceSummaryError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                                "InvalidLimitException" => return RusotoError::Service(GetAggregateConformancePackComplianceSummaryError::InvalidLimit(err.msg)),
+"InvalidNextTokenException" => return RusotoError::Service(GetAggregateConformancePackComplianceSummaryError::InvalidNextToken(err.msg)),
+"NoSuchConfigurationAggregatorException" => return RusotoError::Service(GetAggregateConformancePackComplianceSummaryError::NoSuchConfigurationAggregator(err.msg)),
+"ValidationException" => return RusotoError::Validation(err.msg),
+_ => {}
+                            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetAggregateConformancePackComplianceSummaryError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetAggregateConformancePackComplianceSummaryError::InvalidLimit(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAggregateConformancePackComplianceSummaryError::InvalidNextToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetAggregateConformancePackComplianceSummaryError::NoSuchConfigurationAggregator(
+                ref cause,
+            ) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetAggregateConformancePackComplianceSummaryError {}
 /// Errors returned by GetAggregateDiscoveredResourceCounts
 #[derive(Debug, PartialEq)]
 pub enum GetAggregateDiscoveredResourceCountsError {
@@ -6398,7 +6706,7 @@ pub enum GetOrganizationConfigRuleDetailedStatusError {
     InvalidNextToken(String),
     /// <p>You specified one or more organization config rules that do not exist.</p>
     NoSuchOrganizationConfigRule(String),
-    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
+    /// <p>For <code>PutConfigurationAggregator</code> API, you can see this exception for the following reasons:</p> <ul> <li> <p>No permission to call <code>EnableAWSServiceAccess</code> API</p> </li> <li> <p>The configuration aggregator cannot be updated because your AWS Organization management account or the delegated administrator role changed. Delete this aggregator and create a new one with the current AWS Organization.</p> </li> <li> <p>The configuration aggregator is associated with a previous AWS Organization and AWS Config cannot aggregate data with current AWS Organization. Delete this aggregator and create a new one with the current AWS Organization.</p> </li> <li> <p>You are not a registered delegated administrator for AWS Config with permissions to call <code>ListDelegatedAdministrators</code> API. Ensure that the management account registers delagated administrator for AWS Config service principle name before the delegated administrator creates an aggregator.</p> </li> </ul> <p>For all <code>OrganizationConfigRule</code> and <code>OrganizationConformancePack</code> APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
     OrganizationAccessDenied(String),
 }
 
@@ -6468,7 +6776,7 @@ pub enum GetOrganizationConformancePackDetailedStatusError {
     InvalidNextToken(String),
     /// <p>AWS Config organization conformance pack that you passed in the filter does not exist.</p> <p>For DeleteOrganizationConformancePack, you tried to delete an organization conformance pack that does not exist.</p>
     NoSuchOrganizationConformancePack(String),
-    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
+    /// <p>For <code>PutConfigurationAggregator</code> API, you can see this exception for the following reasons:</p> <ul> <li> <p>No permission to call <code>EnableAWSServiceAccess</code> API</p> </li> <li> <p>The configuration aggregator cannot be updated because your AWS Organization management account or the delegated administrator role changed. Delete this aggregator and create a new one with the current AWS Organization.</p> </li> <li> <p>The configuration aggregator is associated with a previous AWS Organization and AWS Config cannot aggregate data with current AWS Organization. Delete this aggregator and create a new one with the current AWS Organization.</p> </li> <li> <p>You are not a registered delegated administrator for AWS Config with permissions to call <code>ListDelegatedAdministrators</code> API. Ensure that the management account registers delagated administrator for AWS Config service principle name before the delegated administrator creates an aggregator.</p> </li> </ul> <p>For all <code>OrganizationConfigRule</code> and <code>OrganizationConformancePack</code> APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
     OrganizationAccessDenied(String),
 }
 
@@ -6892,7 +7200,7 @@ pub enum PutConfigurationAggregatorError {
     LimitExceeded(String),
     /// <p>Organization is no longer available.</p>
     NoAvailableOrganization(String),
-    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
+    /// <p>For <code>PutConfigurationAggregator</code> API, you can see this exception for the following reasons:</p> <ul> <li> <p>No permission to call <code>EnableAWSServiceAccess</code> API</p> </li> <li> <p>The configuration aggregator cannot be updated because your AWS Organization management account or the delegated administrator role changed. Delete this aggregator and create a new one with the current AWS Organization.</p> </li> <li> <p>The configuration aggregator is associated with a previous AWS Organization and AWS Config cannot aggregate data with current AWS Organization. Delete this aggregator and create a new one with the current AWS Organization.</p> </li> <li> <p>You are not a registered delegated administrator for AWS Config with permissions to call <code>ListDelegatedAdministrators</code> API. Ensure that the management account registers delagated administrator for AWS Config service principle name before the delegated administrator creates an aggregator.</p> </li> </ul> <p>For all <code>OrganizationConfigRule</code> and <code>OrganizationConformancePack</code> APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
     OrganizationAccessDenied(String),
     /// <p>AWS Config resource cannot be created because your organization does not have all features enabled.</p>
     OrganizationAllFeaturesNotEnabled(String),
@@ -7102,6 +7410,8 @@ pub enum PutDeliveryChannelError {
     InvalidDeliveryChannelName(String),
     /// <p>The specified Amazon S3 key prefix is not valid.</p>
     InvalidS3KeyPrefix(String),
+    /// <p>The specified Amazon KMS Key ARN is not valid.</p>
+    InvalidS3KmsKeyArn(String),
     /// <p>The specified Amazon SNS topic does not exist.</p>
     InvalidSNSTopicARN(String),
     /// <p>You have reached the limit of the number of delivery channels you can create.</p>
@@ -7128,6 +7438,11 @@ impl PutDeliveryChannelError {
                 }
                 "InvalidS3KeyPrefixException" => {
                     return RusotoError::Service(PutDeliveryChannelError::InvalidS3KeyPrefix(
+                        err.msg,
+                    ))
+                }
+                "InvalidS3KmsKeyArnException" => {
+                    return RusotoError::Service(PutDeliveryChannelError::InvalidS3KmsKeyArn(
                         err.msg,
                     ))
                 }
@@ -7167,6 +7482,7 @@ impl fmt::Display for PutDeliveryChannelError {
                 write!(f, "{}", cause)
             }
             PutDeliveryChannelError::InvalidS3KeyPrefix(ref cause) => write!(f, "{}", cause),
+            PutDeliveryChannelError::InvalidS3KmsKeyArn(ref cause) => write!(f, "{}", cause),
             PutDeliveryChannelError::InvalidSNSTopicARN(ref cause) => write!(f, "{}", cause),
             PutDeliveryChannelError::MaxNumberOfDeliveryChannelsExceeded(ref cause) => {
                 write!(f, "{}", cause)
@@ -7274,7 +7590,7 @@ pub enum PutOrganizationConfigRuleError {
     MaxNumberOfOrganizationConfigRulesExceeded(String),
     /// <p>Organization is no longer available.</p>
     NoAvailableOrganization(String),
-    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
+    /// <p>For <code>PutConfigurationAggregator</code> API, you can see this exception for the following reasons:</p> <ul> <li> <p>No permission to call <code>EnableAWSServiceAccess</code> API</p> </li> <li> <p>The configuration aggregator cannot be updated because your AWS Organization management account or the delegated administrator role changed. Delete this aggregator and create a new one with the current AWS Organization.</p> </li> <li> <p>The configuration aggregator is associated with a previous AWS Organization and AWS Config cannot aggregate data with current AWS Organization. Delete this aggregator and create a new one with the current AWS Organization.</p> </li> <li> <p>You are not a registered delegated administrator for AWS Config with permissions to call <code>ListDelegatedAdministrators</code> API. Ensure that the management account registers delagated administrator for AWS Config service principle name before the delegated administrator creates an aggregator.</p> </li> </ul> <p>For all <code>OrganizationConfigRule</code> and <code>OrganizationConformancePack</code> APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
     OrganizationAccessDenied(String),
     /// <p>AWS Config resource cannot be created because your organization does not have all features enabled.</p>
     OrganizationAllFeaturesNotEnabled(String),
@@ -7366,7 +7682,7 @@ pub enum PutOrganizationConformancePackError {
     MaxNumberOfOrganizationConformancePacksExceeded(String),
     /// <p>Organization is no longer available.</p>
     NoAvailableOrganization(String),
-    /// <p>For PutConfigAggregator API, no permission to call EnableAWSServiceAccess API.</p> <p>For all OrganizationConfigRule and OrganizationConformancePack APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
+    /// <p>For <code>PutConfigurationAggregator</code> API, you can see this exception for the following reasons:</p> <ul> <li> <p>No permission to call <code>EnableAWSServiceAccess</code> API</p> </li> <li> <p>The configuration aggregator cannot be updated because your AWS Organization management account or the delegated administrator role changed. Delete this aggregator and create a new one with the current AWS Organization.</p> </li> <li> <p>The configuration aggregator is associated with a previous AWS Organization and AWS Config cannot aggregate data with current AWS Organization. Delete this aggregator and create a new one with the current AWS Organization.</p> </li> <li> <p>You are not a registered delegated administrator for AWS Config with permissions to call <code>ListDelegatedAdministrators</code> API. Ensure that the management account registers delagated administrator for AWS Config service principle name before the delegated administrator creates an aggregator.</p> </li> </ul> <p>For all <code>OrganizationConfigRule</code> and <code>OrganizationConformancePack</code> APIs, AWS Config throws an exception if APIs are called from member accounts. All APIs must be called from organization master account.</p>
     OrganizationAccessDenied(String),
     /// <p>AWS Config resource cannot be created because your organization does not have all features enabled.</p>
     OrganizationAllFeaturesNotEnabled(String),
@@ -8112,7 +8428,7 @@ pub trait ConfigService {
         input: DeleteRetentionConfigurationRequest,
     ) -> Result<(), RusotoError<DeleteRetentionConfigurationError>>;
 
-    /// <p>Deletes the stored query for an AWS account in an AWS Region. </p>
+    /// <p>Deletes the stored query for a single AWS account and a single AWS Region.</p>
     async fn delete_stored_query(
         &self,
         input: DeleteStoredQueryRequest,
@@ -8131,6 +8447,15 @@ pub trait ConfigService {
     ) -> Result<
         DescribeAggregateComplianceByConfigRulesResponse,
         RusotoError<DescribeAggregateComplianceByConfigRulesError>,
+    >;
+
+    /// <p><p>Returns a list of the conformance packs and their associated compliance status with the count of compliant and noncompliant AWS Config rules within each conformance pack. Also returns the total rule count which includes compliant rules, noncompliant rules, and rules that cannot be evaluated due to insufficient data.</p> <note> <p>The results can return an empty result page, but if you have a <code>nextToken</code>, the results are displayed on the next page.</p> </note></p>
+    async fn describe_aggregate_compliance_by_conformance_packs(
+        &self,
+        input: DescribeAggregateComplianceByConformancePacksRequest,
+    ) -> Result<
+        DescribeAggregateComplianceByConformancePacksResponse,
+        RusotoError<DescribeAggregateComplianceByConformancePacksError>,
     >;
 
     /// <p>Returns a list of authorizations granted to various aggregator accounts and regions.</p>
@@ -8346,6 +8671,15 @@ pub trait ConfigService {
         RusotoError<GetAggregateConfigRuleComplianceSummaryError>,
     >;
 
+    /// <p><p>Returns the count of compliant and noncompliant conformance packs across all AWS Accounts and AWS Regions in an aggregator. You can filter based on AWS Account ID or AWS Region.</p> <note> <p>The results can return an empty result page, but if you have a nextToken, the results are displayed on the next page.</p> </note></p>
+    async fn get_aggregate_conformance_pack_compliance_summary(
+        &self,
+        input: GetAggregateConformancePackComplianceSummaryRequest,
+    ) -> Result<
+        GetAggregateConformancePackComplianceSummaryResponse,
+        RusotoError<GetAggregateConformancePackComplianceSummaryError>,
+    >;
+
     /// <p>Returns the resource counts across accounts and regions that are present in your AWS Config aggregator. You can request the resource counts by providing filters and GroupByKey.</p> <p>For example, if the input contains accountID 12345678910 and region us-east-1 in filters, the API returns the count of resources in account ID 12345678910 and region us-east-1. If the input contains ACCOUNT_ID as a GroupByKey, the API returns resource counts for all source accounts that are present in your aggregator.</p>
     async fn get_aggregate_discovered_resource_counts(
         &self,
@@ -8465,7 +8799,7 @@ pub trait ConfigService {
         input: ListDiscoveredResourcesRequest,
     ) -> Result<ListDiscoveredResourcesResponse, RusotoError<ListDiscoveredResourcesError>>;
 
-    /// <p>List the stored queries for an AWS account in an AWS Region. The default is 100. </p>
+    /// <p>Lists the stored queries for a single AWS account and a single AWS Region. The default is 100. </p>
     async fn list_stored_queries(
         &self,
         input: ListStoredQueriesRequest,
@@ -8489,7 +8823,7 @@ pub trait ConfigService {
         input: PutConfigRuleRequest,
     ) -> Result<(), RusotoError<PutConfigRuleError>>;
 
-    /// <p><p>Creates and updates the configuration aggregator with the selected source accounts and regions. The source account can be individual account(s) or an organization.</p> <note> <p>AWS Config should be enabled in source accounts and regions you want to aggregate.</p> <p>If your source type is an organization, you must be signed in to the master account and all features must be enabled in your organization. AWS Config calls <code>EnableAwsServiceAccess</code> API to enable integration between AWS Config and AWS Organizations. </p> </note></p>
+    /// <p><p>Creates and updates the configuration aggregator with the selected source accounts and regions. The source account can be individual account(s) or an organization.</p> <p> <code>accountIds</code> that are passed will be replaced with existing accounts. If you want to add additional accounts into the aggregator, call <code>DescribeAggregator</code> to get the previous accounts and then append new ones.</p> <note> <p>AWS Config should be enabled in source accounts and regions you want to aggregate.</p> <p>If your source type is an organization, you must be signed in to the management account or a registered delegated administrator and all the features must be enabled in your organization. If the caller is a management account, AWS Config calls <code>EnableAwsServiceAccess</code> API to enable integration between AWS Config and AWS Organizations. If the caller is a registered delegated administrator, AWS Config calls <code>ListDelegatedAdministrators</code> API to verify whether the caller is a valid delegated administrator.</p> <p>To register a delegated administrator, see <a href="https://docs.aws.amazon.com/config/latest/developerguide/set-up-aggregator-cli.html#register-a-delegated-administrator-cli">Register a Delegated Administrator</a> in the AWS Config developer guide. </p> </note></p>
     async fn put_configuration_aggregator(
         &self,
         input: PutConfigurationAggregatorRequest,
@@ -8519,6 +8853,7 @@ pub trait ConfigService {
         input: PutEvaluationsRequest,
     ) -> Result<PutEvaluationsResponse, RusotoError<PutEvaluationsError>>;
 
+    /// <p>Add or updates the evaluations for process checks. This API checks if the rule is a process check when the name of the AWS Config rule is provided.</p>
     async fn put_external_evaluation(
         &self,
         input: PutExternalEvaluationRequest,
@@ -8530,7 +8865,7 @@ pub trait ConfigService {
         input: PutOrganizationConfigRuleRequest,
     ) -> Result<PutOrganizationConfigRuleResponse, RusotoError<PutOrganizationConfigRuleError>>;
 
-    /// <p><p>Deploys conformance packs across member accounts in an AWS Organization.</p> <p>Only a master account and a delegated administrator can call this API. When calling this API with a delegated administrator, you must ensure AWS Organizations <code>ListDelegatedAdministrator</code> permissions are added.</p> <p>This API enables organization service access for <code>config-multiaccountsetup.amazonaws.com</code> through the <code>EnableAWSServiceAccess</code> action and creates a service linked role <code>AWSServiceRoleForConfigMultiAccountSetup</code> in the master or delegated administrator account of your organization. The service linked role is created only when the role does not exist in the caller account. To use this API with delegated administrator, register a delegated administrator by calling AWS Organization <code>register-delegate-admin</code> for <code>config-multiaccountsetup.amazonaws.com</code>.</p> <note> <p>Prerequisite: Ensure you call <code>EnableAllFeatures</code> API to enable all features in an organization.</p> <p>You must specify either the <code>TemplateS3Uri</code> or the <code>TemplateBody</code> parameter, but not both. If you provide both AWS Config uses the <code>TemplateS3Uri</code> parameter and ignores the <code>TemplateBody</code> parameter.</p> <p>AWS Config sets the state of a conformance pack to CREATE<em>IN</em>PROGRESS and UPDATE<em>IN</em>PROGRESS until the conformance pack is created or updated. You cannot update a conformance pack while it is in this state.</p> <p>You can create 6 conformance packs with 25 AWS Config rules in each pack and 3 delegated administrator per organization. </p> </note></p>
+    /// <p><p>Deploys conformance packs across member accounts in an AWS Organization.</p> <p>Only a master account and a delegated administrator can call this API. When calling this API with a delegated administrator, you must ensure AWS Organizations <code>ListDelegatedAdministrator</code> permissions are added.</p> <p>This API enables organization service access for <code>config-multiaccountsetup.amazonaws.com</code> through the <code>EnableAWSServiceAccess</code> action and creates a service linked role <code>AWSServiceRoleForConfigMultiAccountSetup</code> in the master or delegated administrator account of your organization. The service linked role is created only when the role does not exist in the caller account. To use this API with delegated administrator, register a delegated administrator by calling AWS Organization <code>register-delegate-admin</code> for <code>config-multiaccountsetup.amazonaws.com</code>.</p> <note> <p>Prerequisite: Ensure you call <code>EnableAllFeatures</code> API to enable all features in an organization.</p> <p>You must specify either the <code>TemplateS3Uri</code> or the <code>TemplateBody</code> parameter, but not both. If you provide both AWS Config uses the <code>TemplateS3Uri</code> parameter and ignores the <code>TemplateBody</code> parameter.</p> <p>AWS Config sets the state of a conformance pack to CREATE<em>IN</em>PROGRESS and UPDATE<em>IN</em>PROGRESS until the conformance pack is created or updated. You cannot update a conformance pack while it is in this state.</p> <p>You can create 50 conformance packs with 25 AWS Config rules in each pack and 3 delegated administrator per organization. </p> </note></p>
     async fn put_organization_conformance_pack(
         &self,
         input: PutOrganizationConformancePackRequest,
@@ -8545,7 +8880,7 @@ pub trait ConfigService {
         input: PutRemediationConfigurationsRequest,
     ) -> Result<PutRemediationConfigurationsResponse, RusotoError<PutRemediationConfigurationsError>>;
 
-    /// <p><p>A remediation exception is when a specific resource is no longer considered for auto-remediation. This API adds a new exception or updates an exisiting exception for a specific resource with a specific AWS Config rule. </p> <note> <p>AWS Config generates a remediation exception when a problem occurs executing a remediation action to a specific resource. Remediation exceptions blocks auto-remediation until the exception is cleared.</p> </note></p>
+    /// <p><p>A remediation exception is when a specific resource is no longer considered for auto-remediation. This API adds a new exception or updates an existing exception for a specific resource with a specific AWS Config rule. </p> <note> <p>AWS Config generates a remediation exception when a problem occurs executing a remediation action to a specific resource. Remediation exceptions blocks auto-remediation until the exception is cleared.</p> </note></p>
     async fn put_remediation_exceptions(
         &self,
         input: PutRemediationExceptionsRequest,
@@ -8563,7 +8898,7 @@ pub trait ConfigService {
         input: PutRetentionConfigurationRequest,
     ) -> Result<PutRetentionConfigurationResponse, RusotoError<PutRetentionConfigurationError>>;
 
-    /// <p>Saves a new query or updates an existing saved query. The <code>QueryName</code> must be unique for an AWS account in an AWS Region. You can create upto 300 queries in an AWS account in an AWS Region.</p>
+    /// <p>Saves a new query or updates an existing saved query. The <code>QueryName</code> must be unique for a single AWS account and a single AWS Region. You can create upto 300 queries in a single AWS account and a single AWS Region.</p>
     async fn put_stored_query(
         &self,
         input: PutStoredQueryRequest,
@@ -8985,7 +9320,7 @@ impl ConfigService for ConfigServiceClient {
         Ok(())
     }
 
-    /// <p>Deletes the stored query for an AWS account in an AWS Region. </p>
+    /// <p>Deletes the stored query for a single AWS account and a single AWS Region.</p>
     async fn delete_stored_query(
         &self,
         input: DeleteStoredQueryRequest,
@@ -9048,6 +9383,34 @@ impl ConfigService for ConfigServiceClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<DescribeAggregateComplianceByConfigRulesResponse, _>()
+    }
+
+    /// <p><p>Returns a list of the conformance packs and their associated compliance status with the count of compliant and noncompliant AWS Config rules within each conformance pack. Also returns the total rule count which includes compliant rules, noncompliant rules, and rules that cannot be evaluated due to insufficient data.</p> <note> <p>The results can return an empty result page, but if you have a <code>nextToken</code>, the results are displayed on the next page.</p> </note></p>
+    async fn describe_aggregate_compliance_by_conformance_packs(
+        &self,
+        input: DescribeAggregateComplianceByConformancePacksRequest,
+    ) -> Result<
+        DescribeAggregateComplianceByConformancePacksResponse,
+        RusotoError<DescribeAggregateComplianceByConformancePacksError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.DescribeAggregateComplianceByConformancePacks",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                DescribeAggregateComplianceByConformancePacksError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeAggregateComplianceByConformancePacksResponse, _>()
     }
 
     /// <p>Returns a list of authorizations granted to various aggregator accounts and regions.</p>
@@ -9702,6 +10065,34 @@ impl ConfigService for ConfigServiceClient {
             .deserialize::<GetAggregateConfigRuleComplianceSummaryResponse, _>()
     }
 
+    /// <p><p>Returns the count of compliant and noncompliant conformance packs across all AWS Accounts and AWS Regions in an aggregator. You can filter based on AWS Account ID or AWS Region.</p> <note> <p>The results can return an empty result page, but if you have a nextToken, the results are displayed on the next page.</p> </note></p>
+    async fn get_aggregate_conformance_pack_compliance_summary(
+        &self,
+        input: GetAggregateConformancePackComplianceSummaryRequest,
+    ) -> Result<
+        GetAggregateConformancePackComplianceSummaryResponse,
+        RusotoError<GetAggregateConformancePackComplianceSummaryError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.GetAggregateConformancePackComplianceSummary",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetAggregateConformancePackComplianceSummaryError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetAggregateConformancePackComplianceSummaryResponse, _>()
+    }
+
     /// <p>Returns the resource counts across accounts and regions that are present in your AWS Config aggregator. You can request the resource counts by providing filters and GroupByKey.</p> <p>For example, if the input contains accountID 12345678910 and region us-east-1 in filters, the API returns the count of resources in account ID 12345678910 and region us-east-1. If the input contains ACCOUNT_ID as a GroupByKey, the API returns resource counts for all source accounts that are present in your aggregator.</p>
     async fn get_aggregate_discovered_resource_counts(
         &self,
@@ -10085,7 +10476,7 @@ impl ConfigService for ConfigServiceClient {
             .deserialize::<ListDiscoveredResourcesResponse, _>()
     }
 
-    /// <p>List the stored queries for an AWS account in an AWS Region. The default is 100. </p>
+    /// <p>Lists the stored queries for a single AWS account and a single AWS Region. The default is 100. </p>
     async fn list_stored_queries(
         &self,
         input: ListStoredQueriesRequest,
@@ -10161,7 +10552,7 @@ impl ConfigService for ConfigServiceClient {
         Ok(())
     }
 
-    /// <p><p>Creates and updates the configuration aggregator with the selected source accounts and regions. The source account can be individual account(s) or an organization.</p> <note> <p>AWS Config should be enabled in source accounts and regions you want to aggregate.</p> <p>If your source type is an organization, you must be signed in to the master account and all features must be enabled in your organization. AWS Config calls <code>EnableAwsServiceAccess</code> API to enable integration between AWS Config and AWS Organizations. </p> </note></p>
+    /// <p><p>Creates and updates the configuration aggregator with the selected source accounts and regions. The source account can be individual account(s) or an organization.</p> <p> <code>accountIds</code> that are passed will be replaced with existing accounts. If you want to add additional accounts into the aggregator, call <code>DescribeAggregator</code> to get the previous accounts and then append new ones.</p> <note> <p>AWS Config should be enabled in source accounts and regions you want to aggregate.</p> <p>If your source type is an organization, you must be signed in to the management account or a registered delegated administrator and all the features must be enabled in your organization. If the caller is a management account, AWS Config calls <code>EnableAwsServiceAccess</code> API to enable integration between AWS Config and AWS Organizations. If the caller is a registered delegated administrator, AWS Config calls <code>ListDelegatedAdministrators</code> API to verify whether the caller is a valid delegated administrator.</p> <p>To register a delegated administrator, see <a href="https://docs.aws.amazon.com/config/latest/developerguide/set-up-aggregator-cli.html#register-a-delegated-administrator-cli">Register a Delegated Administrator</a> in the AWS Config developer guide. </p> </note></p>
     async fn put_configuration_aggregator(
         &self,
         input: PutConfigurationAggregatorRequest,
@@ -10257,6 +10648,7 @@ impl ConfigService for ConfigServiceClient {
         proto::json::ResponsePayload::new(&response).deserialize::<PutEvaluationsResponse, _>()
     }
 
+    /// <p>Add or updates the evaluations for process checks. This API checks if the rule is a process check when the name of the AWS Config rule is provided.</p>
     async fn put_external_evaluation(
         &self,
         input: PutExternalEvaluationRequest,
@@ -10298,7 +10690,7 @@ impl ConfigService for ConfigServiceClient {
             .deserialize::<PutOrganizationConfigRuleResponse, _>()
     }
 
-    /// <p><p>Deploys conformance packs across member accounts in an AWS Organization.</p> <p>Only a master account and a delegated administrator can call this API. When calling this API with a delegated administrator, you must ensure AWS Organizations <code>ListDelegatedAdministrator</code> permissions are added.</p> <p>This API enables organization service access for <code>config-multiaccountsetup.amazonaws.com</code> through the <code>EnableAWSServiceAccess</code> action and creates a service linked role <code>AWSServiceRoleForConfigMultiAccountSetup</code> in the master or delegated administrator account of your organization. The service linked role is created only when the role does not exist in the caller account. To use this API with delegated administrator, register a delegated administrator by calling AWS Organization <code>register-delegate-admin</code> for <code>config-multiaccountsetup.amazonaws.com</code>.</p> <note> <p>Prerequisite: Ensure you call <code>EnableAllFeatures</code> API to enable all features in an organization.</p> <p>You must specify either the <code>TemplateS3Uri</code> or the <code>TemplateBody</code> parameter, but not both. If you provide both AWS Config uses the <code>TemplateS3Uri</code> parameter and ignores the <code>TemplateBody</code> parameter.</p> <p>AWS Config sets the state of a conformance pack to CREATE<em>IN</em>PROGRESS and UPDATE<em>IN</em>PROGRESS until the conformance pack is created or updated. You cannot update a conformance pack while it is in this state.</p> <p>You can create 6 conformance packs with 25 AWS Config rules in each pack and 3 delegated administrator per organization. </p> </note></p>
+    /// <p><p>Deploys conformance packs across member accounts in an AWS Organization.</p> <p>Only a master account and a delegated administrator can call this API. When calling this API with a delegated administrator, you must ensure AWS Organizations <code>ListDelegatedAdministrator</code> permissions are added.</p> <p>This API enables organization service access for <code>config-multiaccountsetup.amazonaws.com</code> through the <code>EnableAWSServiceAccess</code> action and creates a service linked role <code>AWSServiceRoleForConfigMultiAccountSetup</code> in the master or delegated administrator account of your organization. The service linked role is created only when the role does not exist in the caller account. To use this API with delegated administrator, register a delegated administrator by calling AWS Organization <code>register-delegate-admin</code> for <code>config-multiaccountsetup.amazonaws.com</code>.</p> <note> <p>Prerequisite: Ensure you call <code>EnableAllFeatures</code> API to enable all features in an organization.</p> <p>You must specify either the <code>TemplateS3Uri</code> or the <code>TemplateBody</code> parameter, but not both. If you provide both AWS Config uses the <code>TemplateS3Uri</code> parameter and ignores the <code>TemplateBody</code> parameter.</p> <p>AWS Config sets the state of a conformance pack to CREATE<em>IN</em>PROGRESS and UPDATE<em>IN</em>PROGRESS until the conformance pack is created or updated. You cannot update a conformance pack while it is in this state.</p> <p>You can create 50 conformance packs with 25 AWS Config rules in each pack and 3 delegated administrator per organization. </p> </note></p>
     async fn put_organization_conformance_pack(
         &self,
         input: PutOrganizationConformancePackRequest,
@@ -10346,7 +10738,7 @@ impl ConfigService for ConfigServiceClient {
             .deserialize::<PutRemediationConfigurationsResponse, _>()
     }
 
-    /// <p><p>A remediation exception is when a specific resource is no longer considered for auto-remediation. This API adds a new exception or updates an exisiting exception for a specific resource with a specific AWS Config rule. </p> <note> <p>AWS Config generates a remediation exception when a problem occurs executing a remediation action to a specific resource. Remediation exceptions blocks auto-remediation until the exception is cleared.</p> </note></p>
+    /// <p><p>A remediation exception is when a specific resource is no longer considered for auto-remediation. This API adds a new exception or updates an existing exception for a specific resource with a specific AWS Config rule. </p> <note> <p>AWS Config generates a remediation exception when a problem occurs executing a remediation action to a specific resource. Remediation exceptions blocks auto-remediation until the exception is cleared.</p> </note></p>
     async fn put_remediation_exceptions(
         &self,
         input: PutRemediationExceptionsRequest,
@@ -10408,7 +10800,7 @@ impl ConfigService for ConfigServiceClient {
             .deserialize::<PutRetentionConfigurationResponse, _>()
     }
 
-    /// <p>Saves a new query or updates an existing saved query. The <code>QueryName</code> must be unique for an AWS account in an AWS Region. You can create upto 300 queries in an AWS account in an AWS Region.</p>
+    /// <p>Saves a new query or updates an existing saved query. The <code>QueryName</code> must be unique for a single AWS account and a single AWS Region. You can create upto 300 queries in a single AWS account and a single AWS Region.</p>
     async fn put_stored_query(
         &self,
         input: PutStoredQueryRequest,

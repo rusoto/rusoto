@@ -28,7 +28,7 @@ use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateApprovedOriginRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The domain to add to your allow list.</p>
@@ -38,8 +38,23 @@ pub struct AssociateApprovedOriginRequest {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AssociateBotRequest {
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    #[serde(rename = "LexBot")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lex_bot: Option<LexBot>,
+    /// <p>The Amazon Lex V2 bot to associate with the instance.</p>
+    #[serde(rename = "LexV2Bot")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lex_v2_bot: Option<LexV2Bot>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateInstanceStorageConfigRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>A valid resource type.</p>
@@ -65,7 +80,7 @@ pub struct AssociateLambdaFunctionRequest {
     /// <p>The Amazon Resource Name (ARN) for the Lambda function being associated. Maximum number of characters allowed is 140.</p>
     #[serde(rename = "FunctionArn")]
     pub function_arn: String,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
 }
@@ -73,18 +88,32 @@ pub struct AssociateLambdaFunctionRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateLexBotRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>The Amazon Lex box to associate with the instance.</p>
+    /// <p>The Amazon Lex bot to associate with the instance.</p>
     #[serde(rename = "LexBot")]
     pub lex_bot: LexBot,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AssociateQueueQuickConnectsRequest {
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    /// <p>The identifier for the queue.</p>
+    #[serde(rename = "QueueId")]
+    pub queue_id: String,
+    /// <p>The quick connects to associate with this queue.</p>
+    #[serde(rename = "QuickConnectIds")]
+    pub quick_connect_ids: Vec<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateRoutingProfileQueuesRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The queues to associate with this routing profile.</p>
@@ -98,7 +127,7 @@ pub struct AssociateRoutingProfileQueuesRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AssociateSecurityKeyRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>A valid security key in PEM format.</p>
@@ -136,7 +165,7 @@ pub struct ChatMessage {
     /// <p>The content of the chat message.</p>
     #[serde(rename = "Content")]
     pub content: String,
-    /// <p>The type of the content. Supported types are text/plain.</p>
+    /// <p>The type of the content. Supported types are text and plain.</p>
     #[serde(rename = "ContentType")]
     pub content_type: String,
 }
@@ -249,14 +278,14 @@ pub struct CreateInstanceRequest {
     /// <p>The type of identity management for your Amazon Connect users.</p>
     #[serde(rename = "IdentityManagementType")]
     pub identity_management_type: String,
-    /// <p>Whether your contact center handles incoming contacts.</p>
+    /// <p>Your contact center handles incoming contacts.</p>
     #[serde(rename = "InboundCallsEnabled")]
     pub inbound_calls_enabled: bool,
     /// <p>The name for your instance.</p>
     #[serde(rename = "InstanceAlias")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_alias: Option<String>,
-    /// <p>Whether your contact center allows outbound calls.</p>
+    /// <p>Your contact center allows outbound calls.</p>
     #[serde(rename = "OutboundCallsEnabled")]
     pub outbound_calls_enabled: bool,
 }
@@ -277,7 +306,7 @@ pub struct CreateInstanceResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateIntegrationAssociationRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The Amazon Resource Name (ARN) of the integration.</p>
@@ -295,6 +324,10 @@ pub struct CreateIntegrationAssociationRequest {
     /// <p>The type of the data source.</p>
     #[serde(rename = "SourceType")]
     pub source_type: String,
+    /// <p>One or more tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -312,12 +345,59 @@ pub struct CreateIntegrationAssociationResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateQueueRequest {
+    /// <p>The description of the queue.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The identifier for the hours of operation.</p>
+    #[serde(rename = "HoursOfOperationId")]
+    pub hours_of_operation_id: String,
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    /// <p>The maximum number of contacts that can be in the queue before it is considered full.</p>
+    #[serde(rename = "MaxContacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_contacts: Option<i64>,
+    /// <p>The name of the queue.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The outbound caller ID name, number, and outbound whisper flow.</p>
+    #[serde(rename = "OutboundCallerConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub outbound_caller_config: Option<OutboundCallerConfig>,
+    /// <p>The quick connects available to agents who are working the queue.</p>
+    #[serde(rename = "QuickConnectIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quick_connect_ids: Option<Vec<String>>,
+    /// <p>One or more tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateQueueResponse {
+    /// <p>The Amazon Resource Name (ARN) of the queue.</p>
+    #[serde(rename = "QueueArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub queue_arn: Option<String>,
+    /// <p>The identifier for the queue.</p>
+    #[serde(rename = "QueueId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub queue_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateQuickConnectRequest {
     /// <p>The description of the quick connect.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The name of the quick connect.</p>
@@ -339,7 +419,7 @@ pub struct CreateQuickConnectResponse {
     #[serde(rename = "QuickConnectARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quick_connect_arn: Option<String>,
-    /// <p>The identifier for the quick connect.</p>
+    /// <p>The identifier for the quick connect. </p>
     #[serde(rename = "QuickConnectId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quick_connect_id: Option<String>,
@@ -354,16 +434,16 @@ pub struct CreateRoutingProfileRequest {
     /// <p>Description of the routing profile. Must not be more than 250 characters.</p>
     #[serde(rename = "Description")]
     pub description: String,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>The channels agents can handle in the Contact Control Panel (CCP) for this routing profile.</p>
+    /// <p>The channels that agents can handle in the Contact Control Panel (CCP) for this routing profile.</p>
     #[serde(rename = "MediaConcurrencies")]
     pub media_concurrencies: Vec<MediaConcurrency>,
     /// <p>The name of the routing profile. Must not be more than 127 characters.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The inbound queues associated with the routing profile. If no queue is added, the agent can only make outbound calls.</p>
+    /// <p>The inbound queues associated with the routing profile. If no queue is added, the agent can make only outbound calls.</p>
     #[serde(rename = "QueueConfigs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub queue_configs: Option<Vec<RoutingProfileQueueConfig>>,
@@ -389,12 +469,16 @@ pub struct CreateRoutingProfileResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUseCaseRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The identifier for the AppIntegration association.</p>
     #[serde(rename = "IntegrationAssociationId")]
     pub integration_association_id: String,
+    /// <p>One or more tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The type of use case to associate to the AppIntegration association. Each AppIntegration association can have only one of each use case type.</p>
     #[serde(rename = "UseCaseType")]
     pub use_case_type: String,
@@ -416,7 +500,7 @@ pub struct CreateUseCaseResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateUserHierarchyGroupRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The name of the user hierarchy group. Must not be more than 100 characters.</p>
@@ -456,7 +540,7 @@ pub struct CreateUserRequest {
     #[serde(rename = "IdentityInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub identity_info: Option<UserIdentityInfo>,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The password for the user account. A password is required if you are using Amazon Connect for identity management. Otherwise, it is an error to include a password.</p>
@@ -560,7 +644,7 @@ pub struct CurrentMetricResult {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteInstanceRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
 }
@@ -568,7 +652,7 @@ pub struct DeleteInstanceRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteIntegrationAssociationRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The identifier for the AppIntegration association.</p>
@@ -579,7 +663,7 @@ pub struct DeleteIntegrationAssociationRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteQuickConnectRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The identifier for the quick connect.</p>
@@ -590,7 +674,7 @@ pub struct DeleteQuickConnectRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUseCaseRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The identifier for the AppIntegration association.</p>
@@ -607,7 +691,7 @@ pub struct DeleteUserHierarchyGroupRequest {
     /// <p>The identifier of the hierarchy group.</p>
     #[serde(rename = "HierarchyGroupId")]
     pub hierarchy_group_id: String,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
 }
@@ -615,7 +699,7 @@ pub struct DeleteUserHierarchyGroupRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteUserRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The identifier of the user.</p>
@@ -645,11 +729,31 @@ pub struct DescribeContactFlowResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeHoursOfOperationRequest {
+    /// <p>The identifier for the hours of operation.</p>
+    #[serde(rename = "HoursOfOperationId")]
+    pub hours_of_operation_id: String,
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeHoursOfOperationResponse {
+    /// <p>The hours of operation.</p>
+    #[serde(rename = "HoursOfOperation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hours_of_operation: Option<HoursOfOperation>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstanceAttributeRequest {
     /// <p>The type of attribute.</p>
     #[serde(rename = "AttributeType")]
     pub attribute_type: String,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
 }
@@ -666,7 +770,7 @@ pub struct DescribeInstanceAttributeResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeInstanceRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
 }
@@ -686,7 +790,7 @@ pub struct DescribeInstanceStorageConfigRequest {
     /// <p>The existing association identifier that uniquely identifies the resource type and storage config for the given instance ID.</p>
     #[serde(rename = "AssociationId")]
     pub association_id: String,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>A valid resource type.</p>
@@ -705,8 +809,28 @@ pub struct DescribeInstanceStorageConfigResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeQueueRequest {
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    /// <p>The identifier for the queue.</p>
+    #[serde(rename = "QueueId")]
+    pub queue_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeQueueResponse {
+    /// <p>The name of the queue.</p>
+    #[serde(rename = "Queue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub queue: Option<Queue>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeQuickConnectRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The identifier for the quick connect.</p>
@@ -726,7 +850,7 @@ pub struct DescribeQuickConnectResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeRoutingProfileRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The identifier of the routing profile.</p>
@@ -749,7 +873,7 @@ pub struct DescribeUserHierarchyGroupRequest {
     /// <p>The identifier of the hierarchy group.</p>
     #[serde(rename = "HierarchyGroupId")]
     pub hierarchy_group_id: String,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
 }
@@ -766,7 +890,7 @@ pub struct DescribeUserHierarchyGroupResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserHierarchyStructureRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
 }
@@ -783,7 +907,7 @@ pub struct DescribeUserHierarchyStructureResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeUserRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The identifier of the user account.</p>
@@ -817,7 +941,7 @@ pub struct Dimensions {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateApprovedOriginRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The domain URL of the integrated application.</p>
@@ -827,11 +951,26 @@ pub struct DisassociateApprovedOriginRequest {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DisassociateBotRequest {
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    #[serde(rename = "LexBot")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lex_bot: Option<LexBot>,
+    /// <p>The Amazon Lex V2 bot to disassociate from the instance.</p>
+    #[serde(rename = "LexV2Bot")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lex_v2_bot: Option<LexV2Bot>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateInstanceStorageConfigRequest {
     /// <p>The existing association identifier that uniquely identifies the resource type and storage config for the given instance ID.</p>
     #[serde(rename = "AssociationId")]
     pub association_id: String,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>A valid resource type.</p>
@@ -845,7 +984,7 @@ pub struct DisassociateLambdaFunctionRequest {
     /// <p>The Amazon Resource Name (ARN) of the Lambda function being disassociated.</p>
     #[serde(rename = "FunctionArn")]
     pub function_arn: String,
-    /// <p>The identifier of the Amazon Connect instance..</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance..</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
 }
@@ -856,7 +995,7 @@ pub struct DisassociateLexBotRequest {
     /// <p>The name of the Amazon Lex bot. Maximum character limit of 50.</p>
     #[serde(rename = "BotName")]
     pub bot_name: String,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The Region in which the Amazon Lex bot has been created.</p>
@@ -866,8 +1005,22 @@ pub struct DisassociateLexBotRequest {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DisassociateQueueQuickConnectsRequest {
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    /// <p>The identifier for the queue.</p>
+    #[serde(rename = "QueueId")]
+    pub queue_id: String,
+    /// <p>The quick connects to disassociate from the queue.</p>
+    #[serde(rename = "QuickConnectIds")]
+    pub quick_connect_ids: Vec<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DisassociateRoutingProfileQueuesRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The queues to disassociate from this routing profile.</p>
@@ -884,7 +1037,7 @@ pub struct DisassociateSecurityKeyRequest {
     /// <p>The existing association identifier that uniquely identifies the resource type and storage config for the given instance ID.</p>
     #[serde(rename = "AssociationId")]
     pub association_id: String,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
 }
@@ -947,10 +1100,10 @@ pub struct GetCurrentMetricDataRequest {
     #[serde(rename = "Groupings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub groupings: Option<Vec<String>>,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>The maximimum number of results to return per page.</p>
+    /// <p>The maximum number of results to return per page.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -980,7 +1133,7 @@ pub struct GetCurrentMetricDataResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetFederationTokenRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
 }
@@ -1000,20 +1153,20 @@ pub struct GetMetricDataRequest {
     /// <p>The timestamp, in UNIX Epoch time format, at which to end the reporting interval for the retrieval of historical metrics data. The time must be specified using an interval of 5 minutes, such as 11:00, 11:05, 11:10, and must be later than the start time timestamp.</p> <p>The time range between the start and end time must be less than 24 hours.</p>
     #[serde(rename = "EndTime")]
     pub end_time: f64,
-    /// <p>The queues, up to 100, or channels, to use to filter the metrics returned. Metric data is retrieved only for the resources associated with the queues or channels included in the filter. You can include both queue IDs and queue ARNs in the same request. VOICE, CHAT, and TASK channels are supported.</p>
+    /// <p><p>The queues, up to 100, or channels, to use to filter the metrics returned. Metric data is retrieved only for the resources associated with the queues or channels included in the filter. You can include both queue IDs and queue ARNs in the same request. VOICE, CHAT, and TASK channels are supported.</p> <note> <p>To filter by <code>Queues</code>, enter the queue ID/ARN, not the name of the queue.</p> </note></p>
     #[serde(rename = "Filters")]
     pub filters: Filters,
-    /// <p>The grouping applied to the metrics returned. For example, when results are grouped by queue, the metrics returned are grouped by queue. The values returned apply to the metrics for each queue rather than aggregated for all queues.</p> <p>The only supported grouping is <code>QUEUE</code>.</p> <p>If no grouping is specified, a summary of metrics for all queues is returned.</p>
+    /// <p>The grouping applied to the metrics returned. For example, when results are grouped by queue, the metrics returned are grouped by queue. The values returned apply to the metrics for each queue rather than aggregated for all queues.</p> <p>If no grouping is specified, a summary of metrics for all queues is returned.</p>
     #[serde(rename = "Groupings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub groupings: Option<Vec<String>>,
-    /// <p><p>The metrics to retrieve. Specify the name, unit, and statistic for each metric. The following historical metrics are available. For a description of each metric, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/historical-metrics-definitions.html">Historical Metrics Definitions</a> in the <i>Amazon Connect Administrator Guide</i>.</p> <dl> <dt>ABANDON<em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistic: AVG</p> </dd> <dt>AFTER</em>CONTACT<em>WORK</em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistic: AVG</p> </dd> <dt>API<em>CONTACTS</em>HANDLED</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CALLBACK<em>CONTACTS</em>HANDLED</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS<em>ABANDONED</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS</em>AGENT<em>HUNG</em>UP<em>FIRST</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS</em>CONSULTED</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS<em>HANDLED</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS</em>HANDLED<em>INCOMING</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS</em>HANDLED<em>OUTBOUND</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS</em>HOLD<em>ABANDONS</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS</em>MISSED</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS<em>QUEUED</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS</em>TRANSFERRED<em>IN</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS</em>TRANSFERRED<em>IN</em>FROM<em>QUEUE</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS</em>TRANSFERRED<em>OUT</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS</em>TRANSFERRED<em>OUT</em>FROM<em>QUEUE</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>HANDLE</em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistic: AVG</p> </dd> <dt>HOLD<em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistic: AVG</p> </dd> <dt>INTERACTION</em>AND<em>HOLD</em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistic: AVG</p> </dd> <dt>INTERACTION<em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistic: AVG</p> </dd> <dt>OCCUPANCY</dt> <dd> <p>Unit: PERCENT</p> <p>Statistic: AVG</p> </dd> <dt>QUEUE</em>ANSWER<em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistic: AVG</p> </dd> <dt>QUEUED</em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistic: MAX</p> </dd> <dt>SERVICE_LEVEL</dt> <dd> <p>Unit: PERCENT</p> <p>Statistic: AVG</p> <p>Threshold: Only &quot;Less than&quot; comparisons are supported, with the following service level thresholds: 15, 20, 25, 30, 45, 60, 90, 120, 180, 240, 300, 600</p> </dd> </dl></p>
+    /// <p><p>The metrics to retrieve. Specify the name, unit, and statistic for each metric. The following historical metrics are available. For a description of each metric, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/historical-metrics-definitions.html">Historical Metrics Definitions</a> in the <i>Amazon Connect Administrator Guide</i>.</p> <note> <p>This API does not support a contacts incoming metric (there&#39;s no CONTACTS<em>INCOMING metric missing from the documented list). </p> </note> <dl> <dt>ABANDON</em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistic: AVG</p> </dd> <dt>AFTER<em>CONTACT</em>WORK<em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistic: AVG</p> </dd> <dt>API</em>CONTACTS<em>HANDLED</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CALLBACK</em>CONTACTS<em>HANDLED</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS</em>ABANDONED</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS<em>AGENT</em>HUNG<em>UP</em>FIRST</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS<em>CONSULTED</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS</em>HANDLED</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS<em>HANDLED</em>INCOMING</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS<em>HANDLED</em>OUTBOUND</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS<em>HOLD</em>ABANDONS</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS<em>MISSED</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS</em>QUEUED</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS<em>TRANSFERRED</em>IN</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS<em>TRANSFERRED</em>IN<em>FROM</em>QUEUE</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS<em>TRANSFERRED</em>OUT</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS<em>TRANSFERRED</em>OUT<em>FROM</em>QUEUE</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>HANDLE<em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistic: AVG</p> </dd> <dt>HOLD</em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistic: AVG</p> </dd> <dt>INTERACTION<em>AND</em>HOLD<em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistic: AVG</p> </dd> <dt>INTERACTION</em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistic: AVG</p> </dd> <dt>OCCUPANCY</dt> <dd> <p>Unit: PERCENT</p> <p>Statistic: AVG</p> </dd> <dt>QUEUE<em>ANSWER</em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistic: AVG</p> </dd> <dt>QUEUED<em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistic: MAX</p> </dd> <dt>SERVICE</em>LEVEL</dt> <dd> <p>You can include up to 20 SERVICE_LEVEL metrics in a request.</p> <p>Unit: PERCENT</p> <p>Statistic: AVG</p> <p>Threshold: For <code>ThresholdValue</code>, enter any whole number from 1 to 604800 (inclusive), in seconds. For <code>Comparison</code>, you must enter <code>LT</code> (for &quot;Less than&quot;). </p> </dd> </dl></p>
     #[serde(rename = "HistoricalMetrics")]
     pub historical_metrics: Vec<HistoricalMetric>,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>The maximimum number of results to return per page.</p>
+    /// <p>The maximum number of results to return per page.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -1237,6 +1390,58 @@ pub struct HistoricalMetricResult {
     pub dimensions: Option<Dimensions>,
 }
 
+/// <p>Information about of the hours of operation.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct HoursOfOperation {
+    /// <p>Configuration information for the hours of operation.</p>
+    #[serde(rename = "Config")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub config: Option<Vec<HoursOfOperationConfig>>,
+    /// <p>The description for the hours of operation.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) for the hours of operation.</p>
+    #[serde(rename = "HoursOfOperationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hours_of_operation_arn: Option<String>,
+    /// <p>The identifier for the hours of operation.</p>
+    #[serde(rename = "HoursOfOperationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hours_of_operation_id: Option<String>,
+    /// <p>The name for the hours of operation.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>One or more tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The time zone for the hours of operation.</p>
+    #[serde(rename = "TimeZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub time_zone: Option<String>,
+}
+
+/// <p>Contains information about the hours of operation.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct HoursOfOperationConfig {
+    /// <p>The day that the hours of operation applies to.</p>
+    #[serde(rename = "Day")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub day: Option<String>,
+    /// <p>The end time that your contact center is closes.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<HoursOfOperationTimeSlice>,
+    /// <p>The start time that your contact center is open.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<HoursOfOperationTimeSlice>,
+}
+
 /// <p>Contains summary information about hours of operation for a contact center.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1255,6 +1460,20 @@ pub struct HoursOfOperationSummary {
     pub name: Option<String>,
 }
 
+/// <p>The start time or end time for an hours of operation.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct HoursOfOperationTimeSlice {
+    /// <p>The hours.</p>
+    #[serde(rename = "Hours")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hours: Option<i64>,
+    /// <p>The minutes.</p>
+    #[serde(rename = "Minutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub minutes: Option<i64>,
+}
+
 /// <p>The Amazon Connect instance.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -1267,7 +1486,7 @@ pub struct Instance {
     #[serde(rename = "CreatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_time: Option<f64>,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
@@ -1330,7 +1549,7 @@ pub struct InstanceStorageConfig {
     #[serde(rename = "KinesisVideoStreamConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_video_stream_config: Option<KinesisVideoStreamConfig>,
-    /// <p>The S3 configuration.</p>
+    /// <p>The S3 bucket configuration.</p>
     #[serde(rename = "S3Config")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_config: Option<S3Config>,
@@ -1385,7 +1604,7 @@ pub struct InstanceSummary {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IntegrationAssociationSummary {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
@@ -1419,7 +1638,7 @@ pub struct IntegrationAssociationSummary {
     pub source_type: Option<String>,
 }
 
-/// <p>Configuration information of a Kinesis Firehose delivery stream.</p>
+/// <p>Configuration information of a Kinesis Data Firehose delivery stream.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct KinesisFirehoseConfig {
     /// <p>The Amazon Resource Name (ARN) of the delivery stream.</p>
@@ -1452,7 +1671,7 @@ pub struct KinesisVideoStreamConfig {
 /// <p>Configuration information of an Amazon Lex bot.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct LexBot {
-    /// <p>The Region the Amazon Lex bot was created in.</p>
+    /// <p>The Region that the Amazon Lex bot was created in.</p>
     #[serde(rename = "LexRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lex_region: Option<String>,
@@ -1462,13 +1681,35 @@ pub struct LexBot {
     pub name: Option<String>,
 }
 
+/// <p>Configuration information of an Amazon Lex or Amazon Lex V2 bot.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct LexBotConfig {
+    #[serde(rename = "LexBot")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lex_bot: Option<LexBot>,
+    /// <p>Configuration information of an Amazon Lex V2 bot.</p>
+    #[serde(rename = "LexV2Bot")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lex_v2_bot: Option<LexV2Bot>,
+}
+
+/// <p>Configuration information of an Amazon Lex V2 bot.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct LexV2Bot {
+    /// <p>The Amazon Resource Name (ARN) of the Amazon Lex V2 bot.</p>
+    #[serde(rename = "AliasArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alias_arn: Option<String>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListApprovedOriginsRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>The maximimum number of results to return per page.</p>
+    /// <p>The maximum number of results to return per page.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -1493,15 +1734,47 @@ pub struct ListApprovedOriginsResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListBotsRequest {
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    /// <p>The version of Amazon Lex or Amazon Lex V2.</p>
+    #[serde(rename = "LexVersion")]
+    pub lex_version: String,
+    /// <p>The maximum number of results to return per page.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results. Use the value returned in the previous response in the next request to retrieve the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListBotsResponse {
+    /// <p>The names and Regions of the Amazon Lex or Amazon Lex V2 bots associated with the specified instance.</p>
+    #[serde(rename = "LexBots")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lex_bots: Option<Vec<LexBotConfig>>,
+    /// <p>If there are additional results, this is the token for the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListContactFlowsRequest {
     /// <p>The type of contact flow.</p>
     #[serde(rename = "ContactFlowTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub contact_flow_types: Option<Vec<String>>,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>The maximimum number of results to return per page.</p>
+    /// <p>The maximum number of results to return per page.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -1527,10 +1800,10 @@ pub struct ListContactFlowsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListHoursOfOperationsRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>The maximimum number of results to return per page.</p>
+    /// <p>The maximum number of results to return per page.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -1556,10 +1829,10 @@ pub struct ListHoursOfOperationsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInstanceAttributesRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>The maximimum number of results to return per page.</p>
+    /// <p>The maximum number of results to return per page.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -1585,10 +1858,10 @@ pub struct ListInstanceAttributesResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInstanceStorageConfigsRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>The maximimum number of results to return per page.</p>
+    /// <p>The maximum number of results to return per page.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -1617,7 +1890,7 @@ pub struct ListInstanceStorageConfigsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListInstancesRequest {
-    /// <p>The maximimum number of results to return per page.</p>
+    /// <p>The maximum number of results to return per page.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -1643,10 +1916,10 @@ pub struct ListInstancesResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListIntegrationAssociationsRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>The maximimum number of results to return per page.</p>
+    /// <p>The maximum number of results to return per page.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -1672,10 +1945,10 @@ pub struct ListIntegrationAssociationsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLambdaFunctionsRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>The maximimum number of results to return per page.</p>
+    /// <p>The maximum number of results to return per page.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -1701,10 +1974,10 @@ pub struct ListLambdaFunctionsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListLexBotsRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>The maximimum number of results to return per page.</p>
+    /// <p>The maximum number of results to return per page.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -1717,7 +1990,7 @@ pub struct ListLexBotsRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ListLexBotsResponse {
-    /// <p>The the names and regions of the Amazon Lex bots associated with the specified instance.</p>
+    /// <p>The names and Regions of the Amazon Lex bots associated with the specified instance.</p>
     #[serde(rename = "LexBots")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lex_bots: Option<Vec<LexBot>>,
@@ -1730,10 +2003,10 @@ pub struct ListLexBotsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPhoneNumbersRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>The maximimum number of results to return per page.</p>
+    /// <p>The maximum number of results to return per page.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -1795,11 +2068,43 @@ pub struct ListPromptsResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
-pub struct ListQueuesRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+pub struct ListQueueQuickConnectsRequest {
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>The maximimum number of results to return per page.</p>
+    /// <p>The maximum number of results to return per page.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results. Use the value returned in the previous response in the next request to retrieve the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The identifier for the queue.</p>
+    #[serde(rename = "QueueId")]
+    pub queue_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListQueueQuickConnectsResponse {
+    /// <p>If there are additional results, this is the token for the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Information about the quick connects.</p>
+    #[serde(rename = "QuickConnectSummaryList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quick_connect_summary_list: Option<Vec<QuickConnectSummary>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListQueuesRequest {
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    /// <p>The maximum number of results to return per page.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -1829,10 +2134,10 @@ pub struct ListQueuesResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListQuickConnectsRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>The maximimum number of results to return per page.</p>
+    /// <p>The maximum number of results to return per page.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -1862,10 +2167,10 @@ pub struct ListQuickConnectsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRoutingProfileQueuesRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>The maximimum number of results to return per page.</p>
+    /// <p>The maximum number of results to return per page.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -1894,10 +2199,10 @@ pub struct ListRoutingProfileQueuesResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListRoutingProfilesRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>The maximimum number of results to return per page.</p>
+    /// <p>The maximum number of results to return per page.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -1923,10 +2228,10 @@ pub struct ListRoutingProfilesResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSecurityKeysRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>The maximimum number of results to return per page.</p>
+    /// <p>The maximum number of results to return per page.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -1952,10 +2257,10 @@ pub struct ListSecurityKeysResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListSecurityProfilesRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>The maximimum number of results to return per page.</p>
+    /// <p>The maximum number of results to return per page.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -1999,13 +2304,13 @@ pub struct ListTagsForResourceResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUseCasesRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The identifier for the integration association.</p>
     #[serde(rename = "IntegrationAssociationId")]
     pub integration_association_id: String,
-    /// <p>The maximimum number of results to return per page.</p>
+    /// <p>The maximum number of results to return per page.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -2031,10 +2336,10 @@ pub struct ListUseCasesResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUserHierarchyGroupsRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>The maximimum number of results to return per page.</p>
+    /// <p>The maximum number of results to return per page.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -2060,10 +2365,10 @@ pub struct ListUserHierarchyGroupsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListUsersRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>The maximimum number of results to return per page.</p>
+    /// <p>The maximum number of results to return per page.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -2092,9 +2397,26 @@ pub struct MediaConcurrency {
     /// <p>The channels that agents can handle in the Contact Control Panel (CCP).</p>
     #[serde(rename = "Channel")]
     pub channel: String,
-    /// <p>The number of contacts an agent can have on a channel simultaneously.</p>
+    /// <p>The number of contacts an agent can have on a channel simultaneously.</p> <p>Valid Range for <code>VOICE</code>: Minimum value of 1. Maximum value of 1.</p> <p>Valid Range for <code>CHAT</code>: Minimum value of 1. Maximum value of 10.</p> <p>Valid Range for <code>TASK</code>: Minimum value of 1. Maximum value of 10.</p>
     #[serde(rename = "Concurrency")]
     pub concurrency: i64,
+}
+
+/// <p>The outbound caller ID name, number, and outbound whisper flow.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct OutboundCallerConfig {
+    /// <p>The caller ID name.</p>
+    #[serde(rename = "OutboundCallerIdName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub outbound_caller_id_name: Option<String>,
+    /// <p>The caller ID number.</p>
+    #[serde(rename = "OutboundCallerIdNumberId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub outbound_caller_id_number_id: Option<String>,
+    /// <p>The outbound whisper flow to be used during an outbound call.</p>
+    #[serde(rename = "OutboundFlowId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub outbound_flow_id: Option<String>,
 }
 
 /// <p>The customer's details.</p>
@@ -2165,13 +2487,55 @@ pub struct PromptSummary {
     pub name: Option<String>,
 }
 
+/// <p>Contains information about a queue.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Queue {
+    /// <p>The description of the queue.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The identifier for the hours of operation.</p>
+    #[serde(rename = "HoursOfOperationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hours_of_operation_id: Option<String>,
+    /// <p>The maximum number of contacts that can be in the queue before it is considered full.</p>
+    #[serde(rename = "MaxContacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_contacts: Option<i64>,
+    /// <p>The name of the queue.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The outbound caller ID name, number, and outbound whisper flow.</p>
+    #[serde(rename = "OutboundCallerConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub outbound_caller_config: Option<OutboundCallerConfig>,
+    /// <p>The Amazon Resource Name (ARN) for the queue.</p>
+    #[serde(rename = "QueueArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub queue_arn: Option<String>,
+    /// <p>The identifier for the queue.</p>
+    #[serde(rename = "QueueId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub queue_id: Option<String>,
+    /// <p>The status of the queue.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>One or more tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
 /// <p>Contains information about a queue for a quick connect. The contact flow must be of type Transfer to Queue.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct QueueQuickConnectConfig {
     /// <p>The identifier of the contact flow.</p>
     #[serde(rename = "ContactFlowId")]
     pub contact_flow_id: String,
-    /// <p>The identifier of the queue.</p>
+    /// <p>The identifier for the queue.</p>
     #[serde(rename = "QueueId")]
     pub queue_id: String,
 }
@@ -2266,7 +2630,7 @@ pub struct QuickConnectConfig {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct QuickConnectSummary {
-    /// <p>The Amazon Resource Name (ARN).</p>
+    /// <p>The Amazon Resource Name (ARN) of the quick connect.</p>
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
@@ -2274,7 +2638,7 @@ pub struct QuickConnectSummary {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The name.</p>
+    /// <p>The name of the quick connect.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -2291,7 +2655,7 @@ pub struct Reference {
     /// <p>A valid URL.</p>
     #[serde(rename = "Type")]
     pub type_: String,
-    /// <p>A formatted URL that will be shown to an agent in the Contact Control Panel (CCP)</p>
+    /// <p>A formatted URL that displays to an agent in the Contact Control Panel (CCP)</p>
     #[serde(rename = "Value")]
     pub value: String,
 }
@@ -2305,7 +2669,7 @@ pub struct ResumeContactRecordingRequest {
     /// <p>The identifier of the contact. This is the identifier of the contact associated with the first interaction with the contact center.</p>
     #[serde(rename = "InitialContactId")]
     pub initial_contact_id: String,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
 }
@@ -2326,7 +2690,7 @@ pub struct RoutingProfile {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
@@ -2383,7 +2747,7 @@ pub struct RoutingProfileQueueConfigSummary {
     /// <p>The Amazon Resource Name (ARN) of the queue.</p>
     #[serde(rename = "QueueArn")]
     pub queue_arn: String,
-    /// <p>The identifier of the queue.</p>
+    /// <p>The identifier for the queue.</p>
     #[serde(rename = "QueueId")]
     pub queue_id: String,
     /// <p>The name of the queue.</p>
@@ -2398,7 +2762,7 @@ pub struct RoutingProfileQueueReference {
     /// <p>The channels agents can handle in the Contact Control Panel (CCP) for this routing profile.</p>
     #[serde(rename = "Channel")]
     pub channel: String,
-    /// <p>The identifier of the queue.</p>
+    /// <p>The identifier for the queue.</p>
     #[serde(rename = "QueueId")]
     pub queue_id: String,
 }
@@ -2421,7 +2785,7 @@ pub struct RoutingProfileSummary {
     pub name: Option<String>,
 }
 
-/// <p>Information about the S3 storage type.</p>
+/// <p>Information about the Amazon Simple Storage Service (Amazon S3) storage type.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3Config {
     /// <p>The S3 bucket name.</p>
@@ -2430,7 +2794,7 @@ pub struct S3Config {
     /// <p>The S3 bucket prefix.</p>
     #[serde(rename = "BucketPrefix")]
     pub bucket_prefix: String,
-    /// <p>The S3 encryption configuration.</p>
+    /// <p>The Amazon S3 encryption configuration.</p>
     #[serde(rename = "EncryptionConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_config: Option<EncryptionConfig>,
@@ -2475,7 +2839,7 @@ pub struct SecurityProfileSummary {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StartChatContactRequest {
-    /// <p>A custom key-value pair using an attribute map. The attributes are standard Amazon Connect attributes, and can be accessed in contact flows just like any other contact attributes. </p> <p>There can be up to 32,768 UTF-8 bytes across all key-value pairs per contact. Attribute keys can include only alphanumeric, dash, and underscore characters.</p>
+    /// <p>A custom key-value pair using an attribute map. The attributes are standard Amazon Connect attributes. They can be accessed in contact flows just like any other contact attributes. </p> <p>There can be up to 32,768 UTF-8 bytes across all key-value pairs per contact. Attribute keys can include only alphanumeric, dash, and underscore characters.</p>
     #[serde(rename = "Attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes: Option<::std::collections::HashMap<String, String>>,
@@ -2490,7 +2854,7 @@ pub struct StartChatContactRequest {
     #[serde(rename = "InitialMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub initial_message: Option<ChatMessage>,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>Information identifying the participant.</p>
@@ -2524,10 +2888,10 @@ pub struct StartContactRecordingRequest {
     /// <p>The identifier of the contact. This is the identifier of the contact associated with the first interaction with the contact center.</p>
     #[serde(rename = "InitialContactId")]
     pub initial_contact_id: String,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>Who is being recorded.</p>
+    /// <p>The person being recorded.</p>
     #[serde(rename = "VoiceRecordingConfiguration")]
     pub voice_recording_configuration: VoiceRecordingConfiguration,
 }
@@ -2543,7 +2907,7 @@ pub struct StartOutboundVoiceContactRequest {
     #[serde(rename = "Attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes: Option<::std::collections::HashMap<String, String>>,
-    /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request. The token is valid for 7 days after creation. If a contact is already started, the contact ID is returned. If the contact is disconnected, a new contact is started.</p>
+    /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request. The token is valid for 7 days after creation. If a contact is already started, the contact ID is returned. </p>
     #[serde(rename = "ClientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_token: Option<String>,
@@ -2553,7 +2917,7 @@ pub struct StartOutboundVoiceContactRequest {
     /// <p>The phone number of the customer, in E.164 format.</p>
     #[serde(rename = "DestinationPhoneNumber")]
     pub destination_phone_number: String,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The queue for the call. If you specify a queue, the phone displayed for caller ID is the phone number specified in the queue. If you do not specify a queue, the queue defined in the contact flow is used. If you do not specify a queue, you must specify a source phone number.</p>
@@ -2593,7 +2957,7 @@ pub struct StartTaskContactRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The name of a task that is shown to an agent in the Contact Control Panel (CCP).</p>
@@ -2627,7 +2991,7 @@ pub struct StopContactRecordingRequest {
     /// <p>The identifier of the contact. This is the identifier of the contact associated with the first interaction with the contact center.</p>
     #[serde(rename = "InitialContactId")]
     pub initial_contact_id: String,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
 }
@@ -2642,7 +3006,7 @@ pub struct StopContactRequest {
     /// <p>The ID of the contact.</p>
     #[serde(rename = "ContactId")]
     pub contact_id: String,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
 }
@@ -2660,7 +3024,7 @@ pub struct SuspendContactRecordingRequest {
     /// <p>The identifier of the contact. This is the identifier of the contact associated with the first interaction with the contact center.</p>
     #[serde(rename = "InitialContactId")]
     pub initial_contact_id: String,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
 }
@@ -2713,7 +3077,7 @@ pub struct UpdateContactAttributesRequest {
     /// <p>The identifier of the contact. This is the identifier of the contact associated with the first interaction with the contact center.</p>
     #[serde(rename = "InitialContactId")]
     pub initial_contact_id: String,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
 }
@@ -2761,7 +3125,7 @@ pub struct UpdateInstanceAttributeRequest {
     /// <p>The type of attribute.</p>
     #[serde(rename = "AttributeType")]
     pub attribute_type: String,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The value for the attribute. Maximum character limit is 100. </p>
@@ -2775,7 +3139,7 @@ pub struct UpdateInstanceStorageConfigRequest {
     /// <p>The existing association identifier that uniquely identifies the resource type and storage config for the given instance ID.</p>
     #[serde(rename = "AssociationId")]
     pub association_id: String,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>A valid resource type.</p>
@@ -2787,8 +3151,84 @@ pub struct UpdateInstanceStorageConfigRequest {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateQueueHoursOfOperationRequest {
+    /// <p>The identifier for the hours of operation.</p>
+    #[serde(rename = "HoursOfOperationId")]
+    pub hours_of_operation_id: String,
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    /// <p>The identifier for the queue.</p>
+    #[serde(rename = "QueueId")]
+    pub queue_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateQueueMaxContactsRequest {
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    /// <p>The maximum number of contacts that can be in the queue before it is considered full.</p>
+    #[serde(rename = "MaxContacts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_contacts: Option<i64>,
+    /// <p>The identifier for the queue.</p>
+    #[serde(rename = "QueueId")]
+    pub queue_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateQueueNameRequest {
+    /// <p>The description of the queue.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    /// <p>The name of the queue.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The identifier for the queue.</p>
+    #[serde(rename = "QueueId")]
+    pub queue_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateQueueOutboundCallerConfigRequest {
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    /// <p>The outbound caller ID name, number, and outbound whisper flow.</p>
+    #[serde(rename = "OutboundCallerConfig")]
+    pub outbound_caller_config: OutboundCallerConfig,
+    /// <p>The identifier for the queue.</p>
+    #[serde(rename = "QueueId")]
+    pub queue_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateQueueStatusRequest {
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    /// <p>The identifier for the queue.</p>
+    #[serde(rename = "QueueId")]
+    pub queue_id: String,
+    /// <p>The status of the queue.</p>
+    #[serde(rename = "Status")]
+    pub status: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateQuickConnectConfigRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>Information about the configuration settings for the quick connect.</p>
@@ -2806,7 +3246,7 @@ pub struct UpdateQuickConnectNameRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The name of the quick connect.</p>
@@ -2821,10 +3261,10 @@ pub struct UpdateQuickConnectNameRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRoutingProfileConcurrencyRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
-    /// <p>The channels agents can handle in the Contact Control Panel (CCP).</p>
+    /// <p>The channels that agents can handle in the Contact Control Panel (CCP).</p>
     #[serde(rename = "MediaConcurrencies")]
     pub media_concurrencies: Vec<MediaConcurrency>,
     /// <p>The identifier of the routing profile.</p>
@@ -2838,7 +3278,7 @@ pub struct UpdateRoutingProfileDefaultOutboundQueueRequest {
     /// <p>The identifier for the default outbound queue.</p>
     #[serde(rename = "DefaultOutboundQueueId")]
     pub default_outbound_queue_id: String,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The identifier of the routing profile.</p>
@@ -2853,7 +3293,7 @@ pub struct UpdateRoutingProfileNameRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The name of the routing profile. Must not be more than 127 characters.</p>
@@ -2868,7 +3308,7 @@ pub struct UpdateRoutingProfileNameRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateRoutingProfileQueuesRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The queues to be updated for this routing profile. Queues must first be associated to the routing profile. You can do this using AssociateRoutingProfileQueues.</p>
@@ -2885,7 +3325,7 @@ pub struct UpdateUserHierarchyGroupNameRequest {
     /// <p>The identifier of the hierarchy group.</p>
     #[serde(rename = "HierarchyGroupId")]
     pub hierarchy_group_id: String,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The name of the hierarchy group. Must not be more than 100 characters.</p>
@@ -2900,7 +3340,7 @@ pub struct UpdateUserHierarchyRequest {
     #[serde(rename = "HierarchyGroupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hierarchy_group_id: Option<String>,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The identifier of the user account.</p>
@@ -2914,7 +3354,7 @@ pub struct UpdateUserHierarchyStructureRequest {
     /// <p>The hierarchy levels to update.</p>
     #[serde(rename = "HierarchyStructure")]
     pub hierarchy_structure: HierarchyStructureUpdate,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
 }
@@ -2925,7 +3365,7 @@ pub struct UpdateUserIdentityInfoRequest {
     /// <p>The identity information for the user.</p>
     #[serde(rename = "IdentityInfo")]
     pub identity_info: UserIdentityInfo,
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The identifier of the user account.</p>
@@ -2936,7 +3376,7 @@ pub struct UpdateUserIdentityInfoRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserPhoneConfigRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>Information about phone configuration settings for the user.</p>
@@ -2950,7 +3390,7 @@ pub struct UpdateUserPhoneConfigRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserRoutingProfileRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The identifier of the routing profile for the user.</p>
@@ -2964,7 +3404,7 @@ pub struct UpdateUserRoutingProfileRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateUserSecurityProfilesRequest {
-    /// <p>The identifier of the Amazon Connect instance.</p>
+    /// <p>The identifier of the Amazon Connect instance. You can find the instanceId in the ARN of the instance.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
     /// <p>The identifiers of the security profiles for the user.</p>
@@ -3118,7 +3558,7 @@ pub struct VoiceRecordingConfiguration {
 /// Errors returned by AssociateApprovedOrigin
 #[derive(Debug, PartialEq)]
 pub enum AssociateApprovedOriginError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -3193,10 +3633,76 @@ impl fmt::Display for AssociateApprovedOriginError {
     }
 }
 impl Error for AssociateApprovedOriginError {}
+/// Errors returned by AssociateBot
+#[derive(Debug, PartialEq)]
+pub enum AssociateBotError {
+    /// <p>Request processing failed because of an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The allowed limit for the resource has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>A resource already has that name.</p>
+    ResourceConflict(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The service quota has been exceeded.</p>
+    ServiceQuotaExceeded(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl AssociateBotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateBotError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(AssociateBotError::InternalService(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(AssociateBotError::InvalidRequest(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(AssociateBotError::LimitExceeded(err.msg))
+                }
+                "ResourceConflictException" => {
+                    return RusotoError::Service(AssociateBotError::ResourceConflict(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(AssociateBotError::ResourceNotFound(err.msg))
+                }
+                "ServiceQuotaExceededException" => {
+                    return RusotoError::Service(AssociateBotError::ServiceQuotaExceeded(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(AssociateBotError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for AssociateBotError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AssociateBotError::InternalService(ref cause) => write!(f, "{}", cause),
+            AssociateBotError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            AssociateBotError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AssociateBotError::ResourceConflict(ref cause) => write!(f, "{}", cause),
+            AssociateBotError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AssociateBotError::ServiceQuotaExceeded(ref cause) => write!(f, "{}", cause),
+            AssociateBotError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for AssociateBotError {}
 /// Errors returned by AssociateInstanceStorageConfig
 #[derive(Debug, PartialEq)]
 pub enum AssociateInstanceStorageConfigError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -3280,7 +3786,7 @@ impl Error for AssociateInstanceStorageConfigError {}
 /// Errors returned by AssociateLambdaFunction
 #[derive(Debug, PartialEq)]
 pub enum AssociateLambdaFunctionError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -3358,7 +3864,7 @@ impl Error for AssociateLambdaFunctionError {}
 /// Errors returned by AssociateLexBot
 #[derive(Debug, PartialEq)]
 pub enum AssociateLexBotError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -3423,10 +3929,84 @@ impl fmt::Display for AssociateLexBotError {
     }
 }
 impl Error for AssociateLexBotError {}
+/// Errors returned by AssociateQueueQuickConnects
+#[derive(Debug, PartialEq)]
+pub enum AssociateQueueQuickConnectsError {
+    /// <p>Request processing failed because of an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>One or more of the specified parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The allowed limit for the resource has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl AssociateQueueQuickConnectsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AssociateQueueQuickConnectsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(AssociateQueueQuickConnectsError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        AssociateQueueQuickConnectsError::InvalidParameter(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(AssociateQueueQuickConnectsError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(AssociateQueueQuickConnectsError::LimitExceeded(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        AssociateQueueQuickConnectsError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(AssociateQueueQuickConnectsError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for AssociateQueueQuickConnectsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AssociateQueueQuickConnectsError::InternalService(ref cause) => write!(f, "{}", cause),
+            AssociateQueueQuickConnectsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AssociateQueueQuickConnectsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            AssociateQueueQuickConnectsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            AssociateQueueQuickConnectsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AssociateQueueQuickConnectsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for AssociateQueueQuickConnectsError {}
 /// Errors returned by AssociateRoutingProfileQueues
 #[derive(Debug, PartialEq)]
 pub enum AssociateRoutingProfileQueuesError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -3498,7 +4078,7 @@ impl Error for AssociateRoutingProfileQueuesError {}
 /// Errors returned by AssociateSecurityKey
 #[derive(Debug, PartialEq)]
 pub enum AssociateSecurityKeyError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -3576,7 +4156,7 @@ impl Error for AssociateSecurityKeyError {}
 pub enum CreateContactFlowError {
     /// <p>A resource with the specified name already exists.</p>
     DuplicateResource(String),
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>The contact flow is not valid.</p>
     InvalidContactFlow(String),
@@ -3648,7 +4228,7 @@ impl Error for CreateContactFlowError {}
 /// Errors returned by CreateInstance
 #[derive(Debug, PartialEq)]
 pub enum CreateInstanceError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
@@ -3704,7 +4284,7 @@ impl Error for CreateInstanceError {}
 pub enum CreateIntegrationAssociationError {
     /// <p>A resource with the specified name already exists.</p>
     DuplicateResource(String),
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
@@ -3769,12 +4349,78 @@ impl fmt::Display for CreateIntegrationAssociationError {
     }
 }
 impl Error for CreateIntegrationAssociationError {}
+/// Errors returned by CreateQueue
+#[derive(Debug, PartialEq)]
+pub enum CreateQueueError {
+    /// <p>A resource with the specified name already exists.</p>
+    DuplicateResource(String),
+    /// <p>Request processing failed because of an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>One or more of the specified parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The allowed limit for the resource has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl CreateQueueError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateQueueError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "DuplicateResourceException" => {
+                    return RusotoError::Service(CreateQueueError::DuplicateResource(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(CreateQueueError::InternalService(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(CreateQueueError::InvalidParameter(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(CreateQueueError::InvalidRequest(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateQueueError::LimitExceeded(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateQueueError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateQueueError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateQueueError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateQueueError::DuplicateResource(ref cause) => write!(f, "{}", cause),
+            CreateQueueError::InternalService(ref cause) => write!(f, "{}", cause),
+            CreateQueueError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            CreateQueueError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateQueueError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateQueueError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateQueueError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateQueueError {}
 /// Errors returned by CreateQuickConnect
 #[derive(Debug, PartialEq)]
 pub enum CreateQuickConnectError {
     /// <p>A resource with the specified name already exists.</p>
     DuplicateResource(String),
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -3842,7 +4488,7 @@ impl Error for CreateQuickConnectError {}
 pub enum CreateRoutingProfileError {
     /// <p>A resource with the specified name already exists.</p>
     DuplicateResource(String),
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -3916,7 +4562,7 @@ impl Error for CreateRoutingProfileError {}
 pub enum CreateUseCaseError {
     /// <p>A resource with the specified name already exists.</p>
     DuplicateResource(String),
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
@@ -3970,7 +4616,7 @@ impl Error for CreateUseCaseError {}
 pub enum CreateUserError {
     /// <p>A resource with the specified name already exists.</p>
     DuplicateResource(String),
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -4036,7 +4682,7 @@ impl Error for CreateUserError {}
 pub enum CreateUserHierarchyGroupError {
     /// <p>A resource with the specified name already exists.</p>
     DuplicateResource(String),
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -4112,7 +4758,7 @@ impl Error for CreateUserHierarchyGroupError {}
 /// Errors returned by DeleteInstance
 #[derive(Debug, PartialEq)]
 pub enum DeleteInstanceError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
@@ -4154,7 +4800,7 @@ impl Error for DeleteInstanceError {}
 /// Errors returned by DeleteIntegrationAssociation
 #[derive(Debug, PartialEq)]
 pub enum DeleteIntegrationAssociationError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
@@ -4214,7 +4860,7 @@ impl Error for DeleteIntegrationAssociationError {}
 /// Errors returned by DeleteQuickConnect
 #[derive(Debug, PartialEq)]
 pub enum DeleteQuickConnectError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -4268,7 +4914,7 @@ impl Error for DeleteQuickConnectError {}
 /// Errors returned by DeleteUseCase
 #[derive(Debug, PartialEq)]
 pub enum DeleteUseCaseError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
@@ -4316,7 +4962,7 @@ impl Error for DeleteUseCaseError {}
 /// Errors returned by DeleteUser
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -4370,7 +5016,7 @@ impl Error for DeleteUserError {}
 /// Errors returned by DeleteUserHierarchyGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserHierarchyGroupError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -4442,7 +5088,7 @@ impl Error for DeleteUserHierarchyGroupError {}
 pub enum DescribeContactFlowError {
     /// <p>The contact flow has not been published.</p>
     ContactFlowNotPublished(String),
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -4503,10 +5149,72 @@ impl fmt::Display for DescribeContactFlowError {
     }
 }
 impl Error for DescribeContactFlowError {}
+/// Errors returned by DescribeHoursOfOperation
+#[derive(Debug, PartialEq)]
+pub enum DescribeHoursOfOperationError {
+    /// <p>Request processing failed because of an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>One or more of the specified parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl DescribeHoursOfOperationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeHoursOfOperationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(DescribeHoursOfOperationError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DescribeHoursOfOperationError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DescribeHoursOfOperationError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeHoursOfOperationError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeHoursOfOperationError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeHoursOfOperationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeHoursOfOperationError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeHoursOfOperationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeHoursOfOperationError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeHoursOfOperationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeHoursOfOperationError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeHoursOfOperationError {}
 /// Errors returned by DescribeInstance
 #[derive(Debug, PartialEq)]
 pub enum DescribeInstanceError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
@@ -4548,7 +5256,7 @@ impl Error for DescribeInstanceError {}
 /// Errors returned by DescribeInstanceAttribute
 #[derive(Debug, PartialEq)]
 pub enum DescribeInstanceAttributeError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -4612,7 +5320,7 @@ impl Error for DescribeInstanceAttributeError {}
 /// Errors returned by DescribeInstanceStorageConfig
 #[derive(Debug, PartialEq)]
 pub enum DescribeInstanceStorageConfigError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -4681,10 +5389,64 @@ impl fmt::Display for DescribeInstanceStorageConfigError {
     }
 }
 impl Error for DescribeInstanceStorageConfigError {}
+/// Errors returned by DescribeQueue
+#[derive(Debug, PartialEq)]
+pub enum DescribeQueueError {
+    /// <p>Request processing failed because of an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>One or more of the specified parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl DescribeQueueError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeQueueError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(DescribeQueueError::InternalService(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(DescribeQueueError::InvalidParameter(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DescribeQueueError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeQueueError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeQueueError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeQueueError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeQueueError::InternalService(ref cause) => write!(f, "{}", cause),
+            DescribeQueueError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            DescribeQueueError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeQueueError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeQueueError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeQueueError {}
 /// Errors returned by DescribeQuickConnect
 #[derive(Debug, PartialEq)]
 pub enum DescribeQuickConnectError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -4744,7 +5506,7 @@ impl Error for DescribeQuickConnectError {}
 /// Errors returned by DescribeRoutingProfile
 #[derive(Debug, PartialEq)]
 pub enum DescribeRoutingProfileError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -4806,7 +5568,7 @@ impl Error for DescribeRoutingProfileError {}
 /// Errors returned by DescribeUser
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -4860,7 +5622,7 @@ impl Error for DescribeUserError {}
 /// Errors returned by DescribeUserHierarchyGroup
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserHierarchyGroupError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -4926,7 +5688,7 @@ impl Error for DescribeUserHierarchyGroupError {}
 /// Errors returned by DescribeUserHierarchyStructure
 #[derive(Debug, PartialEq)]
 pub enum DescribeUserHierarchyStructureError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -5000,7 +5762,7 @@ impl Error for DescribeUserHierarchyStructureError {}
 /// Errors returned by DisassociateApprovedOrigin
 #[derive(Debug, PartialEq)]
 pub enum DisassociateApprovedOriginError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -5063,10 +5825,58 @@ impl fmt::Display for DisassociateApprovedOriginError {
     }
 }
 impl Error for DisassociateApprovedOriginError {}
+/// Errors returned by DisassociateBot
+#[derive(Debug, PartialEq)]
+pub enum DisassociateBotError {
+    /// <p>Request processing failed because of an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl DisassociateBotError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DisassociateBotError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(DisassociateBotError::InternalService(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DisassociateBotError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DisassociateBotError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DisassociateBotError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DisassociateBotError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DisassociateBotError::InternalService(ref cause) => write!(f, "{}", cause),
+            DisassociateBotError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DisassociateBotError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DisassociateBotError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DisassociateBotError {}
 /// Errors returned by DisassociateInstanceStorageConfig
 #[derive(Debug, PartialEq)]
 pub enum DisassociateInstanceStorageConfigError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -5140,7 +5950,7 @@ impl Error for DisassociateInstanceStorageConfigError {}
 /// Errors returned by DisassociateLambdaFunction
 #[derive(Debug, PartialEq)]
 pub enum DisassociateLambdaFunctionError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -5206,7 +6016,7 @@ impl Error for DisassociateLambdaFunctionError {}
 /// Errors returned by DisassociateLexBot
 #[derive(Debug, PartialEq)]
 pub enum DisassociateLexBotError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -5257,10 +6067,84 @@ impl fmt::Display for DisassociateLexBotError {
     }
 }
 impl Error for DisassociateLexBotError {}
+/// Errors returned by DisassociateQueueQuickConnects
+#[derive(Debug, PartialEq)]
+pub enum DisassociateQueueQuickConnectsError {
+    /// <p>Request processing failed because of an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>One or more of the specified parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl DisassociateQueueQuickConnectsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisassociateQueueQuickConnectsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(
+                        DisassociateQueueQuickConnectsError::InternalService(err.msg),
+                    )
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        DisassociateQueueQuickConnectsError::InvalidParameter(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        DisassociateQueueQuickConnectsError::InvalidRequest(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DisassociateQueueQuickConnectsError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DisassociateQueueQuickConnectsError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DisassociateQueueQuickConnectsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DisassociateQueueQuickConnectsError::InternalService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateQueueQuickConnectsError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateQueueQuickConnectsError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateQueueQuickConnectsError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateQueueQuickConnectsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DisassociateQueueQuickConnectsError {}
 /// Errors returned by DisassociateRoutingProfileQueues
 #[derive(Debug, PartialEq)]
 pub enum DisassociateRoutingProfileQueuesError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -5334,7 +6218,7 @@ impl Error for DisassociateRoutingProfileQueuesError {}
 /// Errors returned by DisassociateSecurityKey
 #[derive(Debug, PartialEq)]
 pub enum DisassociateSecurityKeyError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -5396,7 +6280,7 @@ impl Error for DisassociateSecurityKeyError {}
 /// Errors returned by GetContactAttributes
 #[derive(Debug, PartialEq)]
 pub enum GetContactAttributesError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
@@ -5442,7 +6326,7 @@ impl Error for GetContactAttributesError {}
 /// Errors returned by GetCurrentMetricData
 #[derive(Debug, PartialEq)]
 pub enum GetCurrentMetricDataError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -5504,7 +6388,7 @@ impl Error for GetCurrentMetricDataError {}
 pub enum GetFederationTokenError {
     /// <p>A resource with the specified name already exists.</p>
     DuplicateResource(String),
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -5564,7 +6448,7 @@ impl Error for GetFederationTokenError {}
 /// Errors returned by GetMetricData
 #[derive(Debug, PartialEq)]
 pub enum GetMetricDataError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -5618,7 +6502,7 @@ impl Error for GetMetricDataError {}
 /// Errors returned by ListApprovedOrigins
 #[derive(Debug, PartialEq)]
 pub enum ListApprovedOriginsError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -5673,10 +6557,58 @@ impl fmt::Display for ListApprovedOriginsError {
     }
 }
 impl Error for ListApprovedOriginsError {}
+/// Errors returned by ListBots
+#[derive(Debug, PartialEq)]
+pub enum ListBotsError {
+    /// <p>Request processing failed because of an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl ListBotsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListBotsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(ListBotsError::InternalService(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListBotsError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListBotsError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListBotsError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListBotsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListBotsError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListBotsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListBotsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListBotsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListBotsError {}
 /// Errors returned by ListContactFlows
 #[derive(Debug, PartialEq)]
 pub enum ListContactFlowsError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -5730,7 +6662,7 @@ impl Error for ListContactFlowsError {}
 /// Errors returned by ListHoursOfOperations
 #[derive(Debug, PartialEq)]
 pub enum ListHoursOfOperationsError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -5792,7 +6724,7 @@ impl Error for ListHoursOfOperationsError {}
 /// Errors returned by ListInstanceAttributes
 #[derive(Debug, PartialEq)]
 pub enum ListInstanceAttributesError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -5854,7 +6786,7 @@ impl Error for ListInstanceAttributesError {}
 /// Errors returned by ListInstanceStorageConfigs
 #[derive(Debug, PartialEq)]
 pub enum ListInstanceStorageConfigsError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -5920,7 +6852,7 @@ impl Error for ListInstanceStorageConfigsError {}
 /// Errors returned by ListInstances
 #[derive(Debug, PartialEq)]
 pub enum ListInstancesError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
@@ -5956,7 +6888,7 @@ impl Error for ListInstancesError {}
 /// Errors returned by ListIntegrationAssociations
 #[derive(Debug, PartialEq)]
 pub enum ListIntegrationAssociationsError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
@@ -6014,7 +6946,7 @@ impl Error for ListIntegrationAssociationsError {}
 /// Errors returned by ListLambdaFunctions
 #[derive(Debug, PartialEq)]
 pub enum ListLambdaFunctionsError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -6072,7 +7004,7 @@ impl Error for ListLambdaFunctionsError {}
 /// Errors returned by ListLexBots
 #[derive(Debug, PartialEq)]
 pub enum ListLexBotsError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -6126,7 +7058,7 @@ impl Error for ListLexBotsError {}
 /// Errors returned by ListPhoneNumbers
 #[derive(Debug, PartialEq)]
 pub enum ListPhoneNumbersError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -6180,7 +7112,7 @@ impl Error for ListPhoneNumbersError {}
 /// Errors returned by ListPrompts
 #[derive(Debug, PartialEq)]
 pub enum ListPromptsError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -6231,10 +7163,72 @@ impl fmt::Display for ListPromptsError {
     }
 }
 impl Error for ListPromptsError {}
+/// Errors returned by ListQueueQuickConnects
+#[derive(Debug, PartialEq)]
+pub enum ListQueueQuickConnectsError {
+    /// <p>Request processing failed because of an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>One or more of the specified parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl ListQueueQuickConnectsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListQueueQuickConnectsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(ListQueueQuickConnectsError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(ListQueueQuickConnectsError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListQueueQuickConnectsError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(ListQueueQuickConnectsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListQueueQuickConnectsError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListQueueQuickConnectsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListQueueQuickConnectsError::InternalService(ref cause) => write!(f, "{}", cause),
+            ListQueueQuickConnectsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListQueueQuickConnectsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListQueueQuickConnectsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListQueueQuickConnectsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListQueueQuickConnectsError {}
 /// Errors returned by ListQueues
 #[derive(Debug, PartialEq)]
 pub enum ListQueuesError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -6288,7 +7282,7 @@ impl Error for ListQueuesError {}
 /// Errors returned by ListQuickConnects
 #[derive(Debug, PartialEq)]
 pub enum ListQuickConnectsError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -6342,7 +7336,7 @@ impl Error for ListQuickConnectsError {}
 /// Errors returned by ListRoutingProfileQueues
 #[derive(Debug, PartialEq)]
 pub enum ListRoutingProfileQueuesError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -6404,7 +7398,7 @@ impl Error for ListRoutingProfileQueuesError {}
 /// Errors returned by ListRoutingProfiles
 #[derive(Debug, PartialEq)]
 pub enum ListRoutingProfilesError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -6462,7 +7456,7 @@ impl Error for ListRoutingProfilesError {}
 /// Errors returned by ListSecurityKeys
 #[derive(Debug, PartialEq)]
 pub enum ListSecurityKeysError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -6516,7 +7510,7 @@ impl Error for ListSecurityKeysError {}
 /// Errors returned by ListSecurityProfiles
 #[derive(Debug, PartialEq)]
 pub enum ListSecurityProfilesError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -6576,7 +7570,7 @@ impl Error for ListSecurityProfilesError {}
 /// Errors returned by ListTagsForResource
 #[derive(Debug, PartialEq)]
 pub enum ListTagsForResourceError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -6634,7 +7628,7 @@ impl Error for ListTagsForResourceError {}
 /// Errors returned by ListUseCases
 #[derive(Debug, PartialEq)]
 pub enum ListUseCasesError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
@@ -6682,7 +7676,7 @@ impl Error for ListUseCasesError {}
 /// Errors returned by ListUserHierarchyGroups
 #[derive(Debug, PartialEq)]
 pub enum ListUserHierarchyGroupsError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -6744,7 +7738,7 @@ impl Error for ListUserHierarchyGroupsError {}
 /// Errors returned by ListUsers
 #[derive(Debug, PartialEq)]
 pub enum ListUsersError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -6798,7 +7792,7 @@ impl Error for ListUsersError {}
 /// Errors returned by ResumeContactRecording
 #[derive(Debug, PartialEq)]
 pub enum ResumeContactRecordingError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
@@ -6846,7 +7840,7 @@ impl Error for ResumeContactRecordingError {}
 /// Errors returned by StartChatContact
 #[derive(Debug, PartialEq)]
 pub enum StartChatContactError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -6900,7 +7894,7 @@ impl Error for StartChatContactError {}
 /// Errors returned by StartContactRecording
 #[derive(Debug, PartialEq)]
 pub enum StartContactRecordingError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -6958,7 +7952,7 @@ impl Error for StartContactRecordingError {}
 pub enum StartOutboundVoiceContactError {
     /// <p>Outbound calls to the destination number are not allowed.</p>
     DestinationNotAllowed(String),
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -7040,7 +8034,7 @@ impl Error for StartOutboundVoiceContactError {}
 /// Errors returned by StartTaskContact
 #[derive(Debug, PartialEq)]
 pub enum StartTaskContactError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -7104,7 +8098,7 @@ impl Error for StartTaskContactError {}
 pub enum StopContactError {
     /// <p>The contact with the specified ID is not active or does not exist.</p>
     ContactNotFound(String),
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -7156,7 +8150,7 @@ impl Error for StopContactError {}
 /// Errors returned by StopContactRecording
 #[derive(Debug, PartialEq)]
 pub enum StopContactRecordingError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
@@ -7202,7 +8196,7 @@ impl Error for StopContactRecordingError {}
 /// Errors returned by SuspendContactRecording
 #[derive(Debug, PartialEq)]
 pub enum SuspendContactRecordingError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
@@ -7250,7 +8244,7 @@ impl Error for SuspendContactRecordingError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -7304,7 +8298,7 @@ impl Error for TagResourceError {}
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -7358,7 +8352,7 @@ impl Error for UntagResourceError {}
 /// Errors returned by UpdateContactAttributes
 #[derive(Debug, PartialEq)]
 pub enum UpdateContactAttributesError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -7414,7 +8408,7 @@ impl Error for UpdateContactAttributesError {}
 /// Errors returned by UpdateContactFlowContent
 #[derive(Debug, PartialEq)]
 pub enum UpdateContactFlowContentError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>The contact flow is not valid.</p>
     InvalidContactFlow(String),
@@ -7486,7 +8480,7 @@ impl Error for UpdateContactFlowContentError {}
 pub enum UpdateContactFlowNameError {
     /// <p>A resource with the specified name already exists.</p>
     DuplicateResource(String),
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -7554,7 +8548,7 @@ impl Error for UpdateContactFlowNameError {}
 /// Errors returned by UpdateInstanceAttribute
 #[derive(Debug, PartialEq)]
 pub enum UpdateInstanceAttributeError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -7616,7 +8610,7 @@ impl Error for UpdateInstanceAttributeError {}
 /// Errors returned by UpdateInstanceStorageConfig
 #[derive(Debug, PartialEq)]
 pub enum UpdateInstanceStorageConfigError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -7679,10 +8673,326 @@ impl fmt::Display for UpdateInstanceStorageConfigError {
     }
 }
 impl Error for UpdateInstanceStorageConfigError {}
+/// Errors returned by UpdateQueueHoursOfOperation
+#[derive(Debug, PartialEq)]
+pub enum UpdateQueueHoursOfOperationError {
+    /// <p>Request processing failed because of an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>One or more of the specified parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl UpdateQueueHoursOfOperationError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateQueueHoursOfOperationError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(UpdateQueueHoursOfOperationError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        UpdateQueueHoursOfOperationError::InvalidParameter(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateQueueHoursOfOperationError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        UpdateQueueHoursOfOperationError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateQueueHoursOfOperationError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateQueueHoursOfOperationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateQueueHoursOfOperationError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateQueueHoursOfOperationError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateQueueHoursOfOperationError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateQueueHoursOfOperationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateQueueHoursOfOperationError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateQueueHoursOfOperationError {}
+/// Errors returned by UpdateQueueMaxContacts
+#[derive(Debug, PartialEq)]
+pub enum UpdateQueueMaxContactsError {
+    /// <p>Request processing failed because of an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>One or more of the specified parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl UpdateQueueMaxContactsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateQueueMaxContactsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(UpdateQueueMaxContactsError::InternalService(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(UpdateQueueMaxContactsError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateQueueMaxContactsError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateQueueMaxContactsError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateQueueMaxContactsError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateQueueMaxContactsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateQueueMaxContactsError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateQueueMaxContactsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateQueueMaxContactsError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateQueueMaxContactsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateQueueMaxContactsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateQueueMaxContactsError {}
+/// Errors returned by UpdateQueueName
+#[derive(Debug, PartialEq)]
+pub enum UpdateQueueNameError {
+    /// <p>A resource with the specified name already exists.</p>
+    DuplicateResource(String),
+    /// <p>Request processing failed because of an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>One or more of the specified parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl UpdateQueueNameError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateQueueNameError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "DuplicateResourceException" => {
+                    return RusotoError::Service(UpdateQueueNameError::DuplicateResource(err.msg))
+                }
+                "InternalServiceException" => {
+                    return RusotoError::Service(UpdateQueueNameError::InternalService(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(UpdateQueueNameError::InvalidParameter(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateQueueNameError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateQueueNameError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateQueueNameError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateQueueNameError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateQueueNameError::DuplicateResource(ref cause) => write!(f, "{}", cause),
+            UpdateQueueNameError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateQueueNameError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateQueueNameError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateQueueNameError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateQueueNameError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateQueueNameError {}
+/// Errors returned by UpdateQueueOutboundCallerConfig
+#[derive(Debug, PartialEq)]
+pub enum UpdateQueueOutboundCallerConfigError {
+    /// <p>Request processing failed because of an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>One or more of the specified parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl UpdateQueueOutboundCallerConfigError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateQueueOutboundCallerConfigError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(
+                        UpdateQueueOutboundCallerConfigError::InternalService(err.msg),
+                    )
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        UpdateQueueOutboundCallerConfigError::InvalidParameter(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        UpdateQueueOutboundCallerConfigError::InvalidRequest(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        UpdateQueueOutboundCallerConfigError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateQueueOutboundCallerConfigError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateQueueOutboundCallerConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateQueueOutboundCallerConfigError::InternalService(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateQueueOutboundCallerConfigError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateQueueOutboundCallerConfigError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateQueueOutboundCallerConfigError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            UpdateQueueOutboundCallerConfigError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateQueueOutboundCallerConfigError {}
+/// Errors returned by UpdateQueueStatus
+#[derive(Debug, PartialEq)]
+pub enum UpdateQueueStatusError {
+    /// <p>Request processing failed because of an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>One or more of the specified parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+}
+
+impl UpdateQueueStatusError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateQueueStatusError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalServiceException" => {
+                    return RusotoError::Service(UpdateQueueStatusError::InternalService(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(UpdateQueueStatusError::InvalidParameter(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(UpdateQueueStatusError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateQueueStatusError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(UpdateQueueStatusError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateQueueStatusError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateQueueStatusError::InternalService(ref cause) => write!(f, "{}", cause),
+            UpdateQueueStatusError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateQueueStatusError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            UpdateQueueStatusError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateQueueStatusError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateQueueStatusError {}
 /// Errors returned by UpdateQuickConnectConfig
 #[derive(Debug, PartialEq)]
 pub enum UpdateQuickConnectConfigError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -7744,7 +9054,7 @@ impl Error for UpdateQuickConnectConfigError {}
 /// Errors returned by UpdateQuickConnectName
 #[derive(Debug, PartialEq)]
 pub enum UpdateQuickConnectNameError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -7806,7 +9116,7 @@ impl Error for UpdateQuickConnectNameError {}
 /// Errors returned by UpdateRoutingProfileConcurrency
 #[derive(Debug, PartialEq)]
 pub enum UpdateRoutingProfileConcurrencyError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -7880,7 +9190,7 @@ impl Error for UpdateRoutingProfileConcurrencyError {}
 /// Errors returned by UpdateRoutingProfileDefaultOutboundQueue
 #[derive(Debug, PartialEq)]
 pub enum UpdateRoutingProfileDefaultOutboundQueueError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -7958,7 +9268,7 @@ impl Error for UpdateRoutingProfileDefaultOutboundQueueError {}
 pub enum UpdateRoutingProfileNameError {
     /// <p>A resource with the specified name already exists.</p>
     DuplicateResource(String),
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -8026,7 +9336,7 @@ impl Error for UpdateRoutingProfileNameError {}
 /// Errors returned by UpdateRoutingProfileQueues
 #[derive(Debug, PartialEq)]
 pub enum UpdateRoutingProfileQueuesError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -8092,7 +9402,7 @@ impl Error for UpdateRoutingProfileQueuesError {}
 /// Errors returned by UpdateUserHierarchy
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserHierarchyError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -8152,7 +9462,7 @@ impl Error for UpdateUserHierarchyError {}
 pub enum UpdateUserHierarchyGroupNameError {
     /// <p>A resource with the specified name already exists.</p>
     DuplicateResource(String),
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -8230,7 +9540,7 @@ impl Error for UpdateUserHierarchyGroupNameError {}
 /// Errors returned by UpdateUserHierarchyStructure
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserHierarchyStructureError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -8308,7 +9618,7 @@ impl Error for UpdateUserHierarchyStructureError {}
 /// Errors returned by UpdateUserIdentityInfo
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserIdentityInfoError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -8370,7 +9680,7 @@ impl Error for UpdateUserIdentityInfoError {}
 /// Errors returned by UpdateUserPhoneConfig
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserPhoneConfigError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -8432,7 +9742,7 @@ impl Error for UpdateUserPhoneConfigError {}
 /// Errors returned by UpdateUserRoutingProfile
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserRoutingProfileError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -8494,7 +9804,7 @@ impl Error for UpdateUserRoutingProfileError {}
 /// Errors returned by UpdateUserSecurityProfiles
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserSecurityProfilesError {
-    /// <p>Request processing failed due to an error or failure with the service.</p>
+    /// <p>Request processing failed because of an error or failure with the service.</p>
     InternalService(String),
     /// <p>One or more of the specified parameters are not valid.</p>
     InvalidParameter(String),
@@ -8566,7 +9876,13 @@ pub trait Connect {
         input: AssociateApprovedOriginRequest,
     ) -> Result<(), RusotoError<AssociateApprovedOriginError>>;
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Associates a storage resource type for the first time. You can only associate one type of storage configuration in a single call. This means, for example, that you can't define an instance with multiple S3 buckets for storing chat transcripts.</p> <p>This API does not create a resource that doesn't exist. It only associates it to the instance. Ensure that the resource being specified in the storage configuration, like an Amazon S3 bucket, exists when being used for association.</p>
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Allows the specified Amazon Connect instance to access the specified Amazon Lex or Amazon Lex V2 bot.</p>
+    async fn associate_bot(
+        &self,
+        input: AssociateBotRequest,
+    ) -> Result<(), RusotoError<AssociateBotError>>;
+
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Associates a storage resource type for the first time. You can only associate one type of storage configuration in a single call. This means, for example, that you can't define an instance with multiple S3 buckets for storing chat transcripts.</p> <p>This API does not create a resource that doesn't exist. It only associates it to the instance. Ensure that the resource being specified in the storage configuration, like an S3 bucket, exists when being used for association.</p>
     async fn associate_instance_storage_config(
         &self,
         input: AssociateInstanceStorageConfigRequest,
@@ -8587,6 +9903,12 @@ pub trait Connect {
         input: AssociateLexBotRequest,
     ) -> Result<(), RusotoError<AssociateLexBotError>>;
 
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Associates a set of quick connects with a queue.</p>
+    async fn associate_queue_quick_connects(
+        &self,
+        input: AssociateQueueQuickConnectsRequest,
+    ) -> Result<(), RusotoError<AssociateQueueQuickConnectsError>>;
+
     /// <p>Associates a set of queues with a routing profile.</p>
     async fn associate_routing_profile_queues(
         &self,
@@ -8605,19 +9927,25 @@ pub trait Connect {
         input: CreateContactFlowRequest,
     ) -> Result<CreateContactFlowResponse, RusotoError<CreateContactFlowError>>;
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Initiates an Amazon Connect instance with all the supported channels enabled. It does not attach any storage (such as Amazon S3, or Kinesis) or allow for any configurations on features such as Contact Lens for Amazon Connect. </p>
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Initiates an Amazon Connect instance with all the supported channels enabled. It does not attach any storage, such as Amazon Simple Storage Service (Amazon S3) or Amazon Kinesis. It also does not allow for any configurations on features, such as Contact Lens for Amazon Connect. </p> <p>Amazon Connect enforces a limit on the total number of instances that you can create or delete in 30 days. If you exceed this limit, you will get an error message indicating there has been an excessive number of attempts at creating or deleting instances. You must wait 30 days before you can restart creating and deleting instances in your account.</p>
     async fn create_instance(
         &self,
         input: CreateInstanceRequest,
     ) -> Result<CreateInstanceResponse, RusotoError<CreateInstanceError>>;
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Create an AppIntegration association with an Amazon Connect instance.</p>
+    /// <p>Create an AppIntegration association with an Amazon Connect instance.</p>
     async fn create_integration_association(
         &self,
         input: CreateIntegrationAssociationRequest,
     ) -> Result<CreateIntegrationAssociationResponse, RusotoError<CreateIntegrationAssociationError>>;
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Creates a quick connect for the specified Amazon Connect instance.</p>
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Creates a new queue for the specified Amazon Connect instance.</p>
+    async fn create_queue(
+        &self,
+        input: CreateQueueRequest,
+    ) -> Result<CreateQueueResponse, RusotoError<CreateQueueError>>;
+
+    /// <p>Creates a quick connect for the specified Amazon Connect instance.</p>
     async fn create_quick_connect(
         &self,
         input: CreateQuickConnectRequest,
@@ -8629,7 +9957,7 @@ pub trait Connect {
         input: CreateRoutingProfileRequest,
     ) -> Result<CreateRoutingProfileResponse, RusotoError<CreateRoutingProfileError>>;
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Creates a use case for an AppIntegration association.</p>
+    /// <p>Creates a use case for an AppIntegration association.</p>
     async fn create_use_case(
         &self,
         input: CreateUseCaseRequest,
@@ -8647,25 +9975,25 @@ pub trait Connect {
         input: CreateUserHierarchyGroupRequest,
     ) -> Result<CreateUserHierarchyGroupResponse, RusotoError<CreateUserHierarchyGroupError>>;
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Deletes the Amazon Connect instance.</p>
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Deletes the Amazon Connect instance.</p> <p>Amazon Connect enforces a limit on the total number of instances that you can create or delete in 30 days. If you exceed this limit, you will get an error message indicating there has been an excessive number of attempts at creating or deleting instances. You must wait 30 days before you can restart creating and deleting instances in your account.</p>
     async fn delete_instance(
         &self,
         input: DeleteInstanceRequest,
     ) -> Result<(), RusotoError<DeleteInstanceError>>;
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Deletes an AppIntegration association from an Amazon Connect instance. The association must not have any use cases associated with it.</p>
+    /// <p>Deletes an AppIntegration association from an Amazon Connect instance. The association must not have any use cases associated with it.</p>
     async fn delete_integration_association(
         &self,
         input: DeleteIntegrationAssociationRequest,
     ) -> Result<(), RusotoError<DeleteIntegrationAssociationError>>;
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Deletes a quick connect.</p>
+    /// <p>Deletes a quick connect.</p>
     async fn delete_quick_connect(
         &self,
         input: DeleteQuickConnectRequest,
     ) -> Result<(), RusotoError<DeleteQuickConnectError>>;
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Deletes a use case from an AppIntegration association.</p>
+    /// <p>Deletes a use case from an AppIntegration association.</p>
     async fn delete_use_case(
         &self,
         input: DeleteUseCaseRequest,
@@ -8689,7 +10017,13 @@ pub trait Connect {
         input: DescribeContactFlowRequest,
     ) -> Result<DescribeContactFlowResponse, RusotoError<DescribeContactFlowError>>;
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Returns the current state of the specified instance identifier. It tracks the instance while it is being created and returns an error status if applicable. </p> <p>If an instance is not created successfully, the instance status reason field returns details relevant to the reason. The instance in a failed state is returned only for 24 hours after the CreateInstance API was invoked.</p>
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Describes the hours of operation.</p>
+    async fn describe_hours_of_operation(
+        &self,
+        input: DescribeHoursOfOperationRequest,
+    ) -> Result<DescribeHoursOfOperationResponse, RusotoError<DescribeHoursOfOperationError>>;
+
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Returns the current state of the specified instance identifier. It tracks the instance while it is being created and returns an error status, if applicable. </p> <p>If an instance is not created successfully, the instance status reason field returns details relevant to the reason. The instance in a failed state is returned only for 24 hours after the CreateInstance API was invoked.</p>
     async fn describe_instance(
         &self,
         input: DescribeInstanceRequest,
@@ -8710,7 +10044,13 @@ pub trait Connect {
         RusotoError<DescribeInstanceStorageConfigError>,
     >;
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Describes the quick connect.</p>
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Describes the specified queue.</p>
+    async fn describe_queue(
+        &self,
+        input: DescribeQueueRequest,
+    ) -> Result<DescribeQueueResponse, RusotoError<DescribeQueueError>>;
+
+    /// <p>Describes the quick connect.</p>
     async fn describe_quick_connect(
         &self,
         input: DescribeQuickConnectRequest,
@@ -8749,13 +10089,19 @@ pub trait Connect {
         input: DisassociateApprovedOriginRequest,
     ) -> Result<(), RusotoError<DisassociateApprovedOriginError>>;
 
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Revokes authorization from the specified instance to access the specified Amazon Lex or Amazon Lex V2 bot. </p>
+    async fn disassociate_bot(
+        &self,
+        input: DisassociateBotRequest,
+    ) -> Result<(), RusotoError<DisassociateBotError>>;
+
     /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Removes the storage type configurations for the specified resource type and association ID.</p>
     async fn disassociate_instance_storage_config(
         &self,
         input: DisassociateInstanceStorageConfigRequest,
     ) -> Result<(), RusotoError<DisassociateInstanceStorageConfigError>>;
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Remove the Lambda function from the drop-down options available in the relevant contact flow blocks.</p>
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Remove the Lambda function from the dropdown options available in the relevant contact flow blocks.</p>
     async fn disassociate_lambda_function(
         &self,
         input: DisassociateLambdaFunctionRequest,
@@ -8766,6 +10112,12 @@ pub trait Connect {
         &self,
         input: DisassociateLexBotRequest,
     ) -> Result<(), RusotoError<DisassociateLexBotError>>;
+
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Disassociates a set of quick connects from a queue.</p>
+    async fn disassociate_queue_quick_connects(
+        &self,
+        input: DisassociateQueueQuickConnectsRequest,
+    ) -> Result<(), RusotoError<DisassociateQueueQuickConnectsError>>;
 
     /// <p>Disassociates a set of queues from a routing profile.</p>
     async fn disassociate_routing_profile_queues(
@@ -8791,7 +10143,7 @@ pub trait Connect {
         input: GetCurrentMetricDataRequest,
     ) -> Result<GetCurrentMetricDataResponse, RusotoError<GetCurrentMetricDataError>>;
 
-    /// <p>Retrieves a token for federation.</p>
+    /// <p><p>Retrieves a token for federation.</p> <note> <p>This API doesn&#39;t support root users. If you try to invoke GetFederationToken with root credentials, an error message similar to the following one appears: </p> <p> <code>Provided identity: Principal: .... User: .... cannot be used for federation with Amazon Connect</code> </p> </note></p>
     async fn get_federation_token(
         &self,
         input: GetFederationTokenRequest,
@@ -8808,6 +10160,12 @@ pub trait Connect {
         &self,
         input: ListApprovedOriginsRequest,
     ) -> Result<ListApprovedOriginsResponse, RusotoError<ListApprovedOriginsError>>;
+
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>For the specified version of Amazon Lex, returns a paginated list of all the Amazon Lex bots currently associated with the instance. </p>
+    async fn list_bots(
+        &self,
+        input: ListBotsRequest,
+    ) -> Result<ListBotsResponse, RusotoError<ListBotsError>>;
 
     /// <p>Provides information about the contact flows for the specified Amazon Connect instance.</p> <p>You can also create and update contact flows using the <a href="https://docs.aws.amazon.com/connect/latest/adminguide/flow-language.html">Amazon Connect Flow language</a>.</p> <p>For more information about contact flows, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/concepts-contact-flows.html">Contact Flows</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     async fn list_contact_flows(
@@ -8839,13 +10197,13 @@ pub trait Connect {
         input: ListInstancesRequest,
     ) -> Result<ListInstancesResponse, RusotoError<ListInstancesError>>;
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Provides summary information about the AppIntegration associations for the specified Amazon Connect instance.</p>
+    /// <p>Provides summary information about the AppIntegration associations for the specified Amazon Connect instance.</p>
     async fn list_integration_associations(
         &self,
         input: ListIntegrationAssociationsRequest,
     ) -> Result<ListIntegrationAssociationsResponse, RusotoError<ListIntegrationAssociationsError>>;
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Returns a paginated list of all the Lambda functions that show up in the drop-down options in the relevant contact flow blocks.</p>
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Returns a paginated list of all Lambda functions that display in the dropdown options in the relevant contact flow blocks.</p>
     async fn list_lambda_functions(
         &self,
         input: ListLambdaFunctionsRequest,
@@ -8869,19 +10227,25 @@ pub trait Connect {
         input: ListPromptsRequest,
     ) -> Result<ListPromptsResponse, RusotoError<ListPromptsError>>;
 
-    /// <p>Provides information about the queues for the specified Amazon Connect instance.</p> <p>For more information about queues, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/concepts-queues-standard-and-agent.html">Queues: Standard and Agent</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Lists the quick connects associated with a queue.</p>
+    async fn list_queue_quick_connects(
+        &self,
+        input: ListQueueQuickConnectsRequest,
+    ) -> Result<ListQueueQuickConnectsResponse, RusotoError<ListQueueQuickConnectsError>>;
+
+    /// <p>Provides information about the queues for the specified Amazon Connect instance.</p> <p>If you do not specify a <code>QueueTypes</code> parameter, both standard and agent queues are returned. This might cause an unexpected truncation of results if you have more than 1000 agents and you limit the number of results of the API call in code.</p> <p>For more information about queues, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/concepts-queues-standard-and-agent.html">Queues: Standard and Agent</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     async fn list_queues(
         &self,
         input: ListQueuesRequest,
     ) -> Result<ListQueuesResponse, RusotoError<ListQueuesError>>;
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Provides information about the quick connects for the specified Amazon Connect instance. </p>
+    /// <p>Provides information about the quick connects for the specified Amazon Connect instance. </p>
     async fn list_quick_connects(
         &self,
         input: ListQuickConnectsRequest,
     ) -> Result<ListQuickConnectsResponse, RusotoError<ListQuickConnectsError>>;
 
-    /// <p>List the queues associated with a routing profile.</p>
+    /// <p>Lists the queues associated with a routing profile.</p>
     async fn list_routing_profile_queues(
         &self,
         input: ListRoutingProfileQueuesRequest,
@@ -8911,7 +10275,7 @@ pub trait Connect {
         input: ListTagsForResourceRequest,
     ) -> Result<ListTagsForResourceResponse, RusotoError<ListTagsForResourceError>>;
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>List the use cases. </p>
+    /// <p>Lists the use cases. </p>
     async fn list_use_cases(
         &self,
         input: ListUseCasesRequest,
@@ -8935,19 +10299,19 @@ pub trait Connect {
         input: ResumeContactRecordingRequest,
     ) -> Result<ResumeContactRecordingResponse, RusotoError<ResumeContactRecordingError>>;
 
-    /// <p>Initiates a contact flow to start a new chat for the customer. Response of this API provides a token required to obtain credentials from the <a href="https://docs.aws.amazon.com/connect-participant/latest/APIReference/API_CreateParticipantConnection.html">CreateParticipantConnection</a> API in the Amazon Connect Participant Service.</p> <p>When a new chat contact is successfully created, clients need to subscribe to the participant’s connection for the created chat within 5 minutes. This is achieved by invoking <a href="https://docs.aws.amazon.com/connect-participant/latest/APIReference/API_CreateParticipantConnection.html">CreateParticipantConnection</a> with WEBSOCKET and CONNECTION_CREDENTIALS. </p> <p>A 429 error occurs in two situations:</p> <ul> <li> <p>API rate limit is exceeded. API TPS throttling returns a <code>TooManyRequests</code> exception from the API Gateway.</p> </li> <li> <p>The <a href="https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html">quota for concurrent active chats</a> is exceeded. Active chat throttling returns a <code>LimitExceededException</code>.</p> </li> </ul> <p>For more information about how chat works, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/chat.html">Chat</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
+    /// <p>Initiates a contact flow to start a new chat for the customer. Response of this API provides a token required to obtain credentials from the <a href="https://docs.aws.amazon.com/connect-participant/latest/APIReference/API_CreateParticipantConnection.html">CreateParticipantConnection</a> API in the Amazon Connect Participant Service.</p> <p>When a new chat contact is successfully created, clients must subscribe to the participant’s connection for the created chat within 5 minutes. This is achieved by invoking <a href="https://docs.aws.amazon.com/connect-participant/latest/APIReference/API_CreateParticipantConnection.html">CreateParticipantConnection</a> with WEBSOCKET and CONNECTION_CREDENTIALS. </p> <p>A 429 error occurs in two situations:</p> <ul> <li> <p>API rate limit is exceeded. API TPS throttling returns a <code>TooManyRequests</code> exception.</p> </li> <li> <p>The <a href="https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html">quota for concurrent active chats</a> is exceeded. Active chat throttling returns a <code>LimitExceededException</code>.</p> </li> </ul> <p>For more information about chat, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/chat.html">Chat</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     async fn start_chat_contact(
         &self,
         input: StartChatContactRequest,
     ) -> Result<StartChatContactResponse, RusotoError<StartChatContactError>>;
 
-    /// <p>This API starts recording the contact when the agent joins the call. StartContactRecording is a one-time action. For example, if you use StopContactRecording to stop recording an ongoing call, you can't use StartContactRecording to restart it. For scenarios where the recording has started and you want to suspend and resume it, such as when collecting sensitive information (for example, a credit card number), use SuspendContactRecording and ResumeContactRecording.</p> <p>You can use this API to override the recording behavior configured in the <a href="https://docs.aws.amazon.com/connect/latest/adminguide/set-recording-behavior.html">Set recording behavior</a> block.</p> <p>Only voice recordings are supported at this time.</p>
+    /// <p>Starts recording the contact when the agent joins the call. StartContactRecording is a one-time action. For example, if you use StopContactRecording to stop recording an ongoing call, you can't use StartContactRecording to restart it. For scenarios where the recording has started and you want to suspend and resume it, such as when collecting sensitive information (for example, a credit card number), use SuspendContactRecording and ResumeContactRecording.</p> <p>You can use this API to override the recording behavior configured in the <a href="https://docs.aws.amazon.com/connect/latest/adminguide/set-recording-behavior.html">Set recording behavior</a> block.</p> <p>Only voice recordings are supported at this time.</p>
     async fn start_contact_recording(
         &self,
         input: StartContactRecordingRequest,
     ) -> Result<StartContactRecordingResponse, RusotoError<StartContactRecordingError>>;
 
-    /// <p><p>This API places an outbound call to a contact, and then initiates the contact flow. It performs the actions in the contact flow that&#39;s specified (in <code>ContactFlowId</code>).</p> <p>Agents are not involved in initiating the outbound API (that is, dialing the contact). If the contact flow places an outbound call to a contact, and then puts the contact in queue, that&#39;s when the call is routed to the agent, like any other inbound case.</p> <p>There is a 60 second dialing timeout for this operation. If the call is not connected after 60 seconds, it fails.</p> <note> <p>UK numbers with a 447 prefix are not allowed by default. Before you can dial these UK mobile numbers, you must submit a service quota increase request. For more information, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html">Amazon Connect Service Quotas</a> in the <i>Amazon Connect Administrator Guide</i>. </p> </note></p>
+    /// <p><p>Places an outbound call to a contact, and then initiates the contact flow. It performs the actions in the contact flow that&#39;s specified (in <code>ContactFlowId</code>).</p> <p>Agents do not initiate the outbound API, which means that they do not dial the contact. If the contact flow places an outbound call to a contact, and then puts the contact in queue, the call is then routed to the agent, like any other inbound case.</p> <p>There is a 60-second dialing timeout for this operation. If the call is not connected after 60 seconds, it fails.</p> <note> <p>UK numbers with a 447 prefix are not allowed by default. Before you can dial these UK mobile numbers, you must submit a service quota increase request. For more information, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html">Amazon Connect Service Quotas</a> in the <i>Amazon Connect Administrator Guide</i>. </p> </note></p>
     async fn start_outbound_voice_contact(
         &self,
         input: StartOutboundVoiceContactRequest,
@@ -8965,7 +10329,7 @@ pub trait Connect {
         input: StopContactRequest,
     ) -> Result<StopContactResponse, RusotoError<StopContactError>>;
 
-    /// <p>When a contact is being recorded, this API stops recording the call. StopContactRecording is a one-time action. If you use StopContactRecording to stop recording an ongoing call, you can't use StartContactRecording to restart it. For scenarios where the recording has started and you want to suspend it for sensitive information (for example, to collect a credit card number), and then restart it, use SuspendContactRecording and ResumeContactRecording.</p> <p>Only voice recordings are supported at this time.</p>
+    /// <p>Stops recording a call when a contact is being recorded. StopContactRecording is a one-time action. If you use StopContactRecording to stop recording an ongoing call, you can't use StartContactRecording to restart it. For scenarios where the recording has started and you want to suspend it for sensitive information (for example, to collect a credit card number), and then restart it, use SuspendContactRecording and ResumeContactRecording.</p> <p>Only voice recordings are supported at this time.</p>
     async fn stop_contact_recording(
         &self,
         input: StopContactRecordingRequest,
@@ -8977,7 +10341,7 @@ pub trait Connect {
         input: SuspendContactRecordingRequest,
     ) -> Result<SuspendContactRecordingResponse, RusotoError<SuspendContactRecordingError>>;
 
-    /// <p>Adds the specified tags to the specified resource.</p> <p>The supported resource types are users, routing profiles, quick connects, and contact flows.</p> <p>For sample policies that use tags, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/security_iam_id-based-policy-examples.html">Amazon Connect Identity-Based Policy Examples</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
+    /// <p>Adds the specified tags to the specified resource.</p> <p>The supported resource types are users, routing profiles, queues, quick connects, and contact flows.</p> <p>For sample policies that use tags, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/security_iam_id-based-policy-examples.html">Amazon Connect Identity-Based Policy Examples</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -8989,7 +10353,7 @@ pub trait Connect {
         input: UntagResourceRequest,
     ) -> Result<(), RusotoError<UntagResourceError>>;
 
-    /// <p>Creates or updates the contact attributes associated with the specified contact.</p> <p>You can add or update attributes for both ongoing and completed contacts. For example, you can update the customer's name or the reason the customer called while the call is active, or add notes about steps that the agent took during the call that are displayed to the next agent that takes the call. You can also update attributes for a contact using data from your CRM application and save the data with the contact in Amazon Connect. You could also flag calls for additional analysis, such as legal review or identifying abusive callers.</p> <p>Contact attributes are available in Amazon Connect for 24 months, and are then deleted.</p> <p> <b>Important:</b> You cannot use the operation to update attributes for contacts that occurred prior to the release of the API, September 12, 2018. You can update attributes only for contacts that started after the release of the API. If you attempt to update attributes for a contact that occurred prior to the release of the API, a 400 error is returned. This applies also to queued callbacks that were initiated prior to the release of the API but are still active in your instance.</p>
+    /// <p>Creates or updates user-defined contact attributes associated with the specified contact.</p> <p>You can create or update user-defined attributes for both ongoing and completed contacts. For example, while the call is active, you can update the customer's name or the reason the customer called. You can add notes about steps that the agent took during the call that display to the next agent that takes the call. You can also update attributes for a contact using data from your CRM application and save the data with the contact in Amazon Connect. You could also flag calls for additional analysis, such as legal review or to identify abusive callers.</p> <p>Contact attributes are available in Amazon Connect for 24 months, and are then deleted. For information about CTR retention and the maximum size of the CTR attributes section, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html#feature-limits">Feature specifications</a> in the <i>Amazon Connect Administrator Guide</i>. </p> <p> <b>Important:</b> You cannot use the operation to update attributes for contacts that occurred prior to the release of the API, which was September 12, 2018. You can update attributes only for contacts that started after the release of the API. If you attempt to update attributes for a contact that occurred prior to the release of the API, a 400 error is returned. This applies also to queued callbacks that were initiated prior to the release of the API but are still active in your instance.</p>
     async fn update_contact_attributes(
         &self,
         input: UpdateContactAttributesRequest,
@@ -9019,13 +10383,43 @@ pub trait Connect {
         input: UpdateInstanceStorageConfigRequest,
     ) -> Result<(), RusotoError<UpdateInstanceStorageConfigError>>;
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Updates the configuration settings for the specified quick connect.</p>
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Updates the hours of operation for the specified queue.</p>
+    async fn update_queue_hours_of_operation(
+        &self,
+        input: UpdateQueueHoursOfOperationRequest,
+    ) -> Result<(), RusotoError<UpdateQueueHoursOfOperationError>>;
+
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Updates the maximum number of contacts allowed in a queue before it is considered full.</p>
+    async fn update_queue_max_contacts(
+        &self,
+        input: UpdateQueueMaxContactsRequest,
+    ) -> Result<(), RusotoError<UpdateQueueMaxContactsError>>;
+
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Updates the name and description of a queue. At least <code>Name</code> or <code>Description</code> must be provided.</p>
+    async fn update_queue_name(
+        &self,
+        input: UpdateQueueNameRequest,
+    ) -> Result<(), RusotoError<UpdateQueueNameError>>;
+
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Updates the outbound caller ID name, number, and outbound whisper flow for a specified queue.</p>
+    async fn update_queue_outbound_caller_config(
+        &self,
+        input: UpdateQueueOutboundCallerConfigRequest,
+    ) -> Result<(), RusotoError<UpdateQueueOutboundCallerConfigError>>;
+
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Updates the status of the queue.</p>
+    async fn update_queue_status(
+        &self,
+        input: UpdateQueueStatusRequest,
+    ) -> Result<(), RusotoError<UpdateQueueStatusError>>;
+
+    /// <p>Updates the configuration settings for the specified quick connect.</p>
     async fn update_quick_connect_config(
         &self,
         input: UpdateQuickConnectConfigRequest,
     ) -> Result<(), RusotoError<UpdateQuickConnectConfigError>>;
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Updates the name and description of a quick connect. The request accepts the following data in JSON format. At least Name or Description must be provided.</p>
+    /// <p>Updates the name and description of a quick connect. The request accepts the following data in JSON format. At least <code>Name</code> or <code>Description</code> must be provided.</p>
     async fn update_quick_connect_name(
         &self,
         input: UpdateQuickConnectNameRequest,
@@ -9073,7 +10467,7 @@ pub trait Connect {
         input: UpdateUserHierarchyStructureRequest,
     ) -> Result<(), RusotoError<UpdateUserHierarchyStructureError>>;
 
-    /// <p><p>Updates the identity information for the specified user.</p> <important> <p>Someone with the ability to invoke <code>UpdateUserIndentityInfo</code> can change the login credentials of other users by changing their email address. This poses a security risk to your organization. They can change the email address of a user to the attacker&#39;s email address, and then reset the password through email. We strongly recommend limiting who has the ability to invoke <code>UpdateUserIndentityInfo</code>. For more information, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/security-profile-best-practices.html">Best Practices for Security Profiles</a> in the <i>Amazon Connect Administrator Guide</i>.</p> </important></p>
+    /// <p><p>Updates the identity information for the specified user.</p> <important> <p>We strongly recommend limiting who has the ability to invoke <code>UpdateUserIdentityInfo</code>. Someone with that ability can change the login credentials of other users by changing their email address. This poses a security risk to your organization. They can change the email address of a user to the attacker&#39;s email address, and then reset the password through email. For more information, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/security-profile-best-practices.html">Best Practices for Security Profiles</a> in the <i>Amazon Connect Administrator Guide</i>.</p> </important></p>
     async fn update_user_identity_info(
         &self,
         input: UpdateUserIdentityInfoRequest,
@@ -9170,7 +10564,40 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Associates a storage resource type for the first time. You can only associate one type of storage configuration in a single call. This means, for example, that you can't define an instance with multiple S3 buckets for storing chat transcripts.</p> <p>This API does not create a resource that doesn't exist. It only associates it to the instance. Ensure that the resource being specified in the storage configuration, like an Amazon S3 bucket, exists when being used for association.</p>
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Allows the specified Amazon Connect instance to access the specified Amazon Lex or Amazon Lex V2 bot.</p>
+    #[allow(unused_mut)]
+    async fn associate_bot(
+        &self,
+        input: AssociateBotRequest,
+    ) -> Result<(), RusotoError<AssociateBotError>> {
+        let request_uri = format!(
+            "/instance/{instance_id}/bot",
+            instance_id = input.instance_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateBotError::from_response(response))
+        }
+    }
+
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Associates a storage resource type for the first time. You can only associate one type of storage configuration in a single call. This means, for example, that you can't define an instance with multiple S3 buckets for storing chat transcripts.</p> <p>This API does not create a resource that doesn't exist. It only associates it to the instance. Ensure that the resource being specified in the storage configuration, like an S3 bucket, exists when being used for association.</p>
     #[allow(unused_mut)]
     async fn associate_instance_storage_config(
         &self,
@@ -9270,6 +10697,40 @@ impl Connect for ConnectClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(AssociateLexBotError::from_response(response))
+        }
+    }
+
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Associates a set of quick connects with a queue.</p>
+    #[allow(unused_mut)]
+    async fn associate_queue_quick_connects(
+        &self,
+        input: AssociateQueueQuickConnectsRequest,
+    ) -> Result<(), RusotoError<AssociateQueueQuickConnectsError>> {
+        let request_uri = format!(
+            "/queues/{instance_id}/{queue_id}/associate-quick-connects",
+            instance_id = input.instance_id,
+            queue_id = input.queue_id
+        );
+
+        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateQueueQuickConnectsError::from_response(response))
         }
     }
 
@@ -9375,7 +10836,7 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Initiates an Amazon Connect instance with all the supported channels enabled. It does not attach any storage (such as Amazon S3, or Kinesis) or allow for any configurations on features such as Contact Lens for Amazon Connect. </p>
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Initiates an Amazon Connect instance with all the supported channels enabled. It does not attach any storage, such as Amazon Simple Storage Service (Amazon S3) or Amazon Kinesis. It also does not allow for any configurations on features, such as Contact Lens for Amazon Connect. </p> <p>Amazon Connect enforces a limit on the total number of instances that you can create or delete in 30 days. If you exceed this limit, you will get an error message indicating there has been an excessive number of attempts at creating or deleting instances. You must wait 30 days before you can restart creating and deleting instances in your account.</p>
     #[allow(unused_mut)]
     async fn create_instance(
         &self,
@@ -9406,7 +10867,7 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Create an AppIntegration association with an Amazon Connect instance.</p>
+    /// <p>Create an AppIntegration association with an Amazon Connect instance.</p>
     #[allow(unused_mut)]
     async fn create_integration_association(
         &self,
@@ -9441,7 +10902,38 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Creates a quick connect for the specified Amazon Connect instance.</p>
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Creates a new queue for the specified Amazon Connect instance.</p>
+    #[allow(unused_mut)]
+    async fn create_queue(
+        &self,
+        input: CreateQueueRequest,
+    ) -> Result<CreateQueueResponse, RusotoError<CreateQueueError>> {
+        let request_uri = format!("/queues/{instance_id}", instance_id = input.instance_id);
+
+        let mut request = SignedRequest::new("PUT", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateQueueResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateQueueError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a quick connect for the specified Amazon Connect instance.</p>
     #[allow(unused_mut)]
     async fn create_quick_connect(
         &self,
@@ -9509,7 +11001,7 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Creates a use case for an AppIntegration association.</p>
+    /// <p>Creates a use case for an AppIntegration association.</p>
     #[allow(unused_mut)]
     async fn create_use_case(
         &self,
@@ -9605,7 +11097,7 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Deletes the Amazon Connect instance.</p>
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Deletes the Amazon Connect instance.</p> <p>Amazon Connect enforces a limit on the total number of instances that you can create or delete in 30 days. If you exceed this limit, you will get an error message indicating there has been an excessive number of attempts at creating or deleting instances. You must wait 30 days before you can restart creating and deleting instances in your account.</p>
     #[allow(unused_mut)]
     async fn delete_instance(
         &self,
@@ -9632,7 +11124,7 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Deletes an AppIntegration association from an Amazon Connect instance. The association must not have any use cases associated with it.</p>
+    /// <p>Deletes an AppIntegration association from an Amazon Connect instance. The association must not have any use cases associated with it.</p>
     #[allow(unused_mut)]
     async fn delete_integration_association(
         &self,
@@ -9663,7 +11155,7 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Deletes a quick connect.</p>
+    /// <p>Deletes a quick connect.</p>
     #[allow(unused_mut)]
     async fn delete_quick_connect(
         &self,
@@ -9694,7 +11186,7 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Deletes a use case from an AppIntegration association.</p>
+    /// <p>Deletes a use case from an AppIntegration association.</p>
     #[allow(unused_mut)]
     async fn delete_use_case(
         &self,
@@ -9815,7 +11307,39 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Returns the current state of the specified instance identifier. It tracks the instance while it is being created and returns an error status if applicable. </p> <p>If an instance is not created successfully, the instance status reason field returns details relevant to the reason. The instance in a failed state is returned only for 24 hours after the CreateInstance API was invoked.</p>
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Describes the hours of operation.</p>
+    #[allow(unused_mut)]
+    async fn describe_hours_of_operation(
+        &self,
+        input: DescribeHoursOfOperationRequest,
+    ) -> Result<DescribeHoursOfOperationResponse, RusotoError<DescribeHoursOfOperationError>> {
+        let request_uri = format!(
+            "/hours-of-operations/{instance_id}/{hours_of_operation_id}",
+            hours_of_operation_id = input.hours_of_operation_id,
+            instance_id = input.instance_id
+        );
+
+        let mut request = SignedRequest::new("GET", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeHoursOfOperationResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeHoursOfOperationError::from_response(response))
+        }
+    }
+
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Returns the current state of the specified instance identifier. It tracks the instance while it is being created and returns an error status, if applicable. </p> <p>If an instance is not created successfully, the instance status reason field returns details relevant to the reason. The instance in a failed state is returned only for 24 hours after the CreateInstance API was invoked.</p>
     #[allow(unused_mut)]
     async fn describe_instance(
         &self,
@@ -9915,7 +11439,39 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Describes the quick connect.</p>
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Describes the specified queue.</p>
+    #[allow(unused_mut)]
+    async fn describe_queue(
+        &self,
+        input: DescribeQueueRequest,
+    ) -> Result<DescribeQueueResponse, RusotoError<DescribeQueueError>> {
+        let request_uri = format!(
+            "/queues/{instance_id}/{queue_id}",
+            instance_id = input.instance_id,
+            queue_id = input.queue_id
+        );
+
+        let mut request = SignedRequest::new("GET", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeQueueResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeQueueError::from_response(response))
+        }
+    }
+
+    /// <p>Describes the quick connect.</p>
     #[allow(unused_mut)]
     async fn describe_quick_connect(
         &self,
@@ -10112,6 +11668,39 @@ impl Connect for ConnectClient {
         }
     }
 
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Revokes authorization from the specified instance to access the specified Amazon Lex or Amazon Lex V2 bot. </p>
+    #[allow(unused_mut)]
+    async fn disassociate_bot(
+        &self,
+        input: DisassociateBotRequest,
+    ) -> Result<(), RusotoError<DisassociateBotError>> {
+        let request_uri = format!(
+            "/instance/{instance_id}/bot",
+            instance_id = input.instance_id
+        );
+
+        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateBotError::from_response(response))
+        }
+    }
+
     /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Removes the storage type configurations for the specified resource type and association ID.</p>
     #[allow(unused_mut)]
     async fn disassociate_instance_storage_config(
@@ -10149,7 +11738,7 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Remove the Lambda function from the drop-down options available in the relevant contact flow blocks.</p>
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Remove the Lambda function from the dropdown options available in the relevant contact flow blocks.</p>
     #[allow(unused_mut)]
     async fn disassociate_lambda_function(
         &self,
@@ -10215,6 +11804,40 @@ impl Connect for ConnectClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DisassociateLexBotError::from_response(response))
+        }
+    }
+
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Disassociates a set of quick connects from a queue.</p>
+    #[allow(unused_mut)]
+    async fn disassociate_queue_quick_connects(
+        &self,
+        input: DisassociateQueueQuickConnectsRequest,
+    ) -> Result<(), RusotoError<DisassociateQueueQuickConnectsError>> {
+        let request_uri = format!(
+            "/queues/{instance_id}/{queue_id}/disassociate-quick-connects",
+            instance_id = input.instance_id,
+            queue_id = input.queue_id
+        );
+
+        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateQueueQuickConnectsError::from_response(response))
         }
     }
 
@@ -10351,7 +11974,7 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>Retrieves a token for federation.</p>
+    /// <p><p>Retrieves a token for federation.</p> <note> <p>This API doesn&#39;t support root users. If you try to invoke GetFederationToken with root credentials, an error message similar to the following one appears: </p> <p> <code>Provided identity: Principal: .... User: .... cannot be used for federation with Amazon Connect</code> </p> </note></p>
     #[allow(unused_mut)]
     async fn get_federation_token(
         &self,
@@ -10453,6 +12076,47 @@ impl Connect for ConnectClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ListApprovedOriginsError::from_response(response))
+        }
+    }
+
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>For the specified version of Amazon Lex, returns a paginated list of all the Amazon Lex bots currently associated with the instance. </p>
+    #[allow(unused_mut)]
+    async fn list_bots(
+        &self,
+        input: ListBotsRequest,
+    ) -> Result<ListBotsResponse, RusotoError<ListBotsError>> {
+        let request_uri = format!(
+            "/instance/{instance_id}/bots",
+            instance_id = input.instance_id
+        );
+
+        let mut request = SignedRequest::new("GET", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        params.put("lexVersion", &input.lex_version);
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListBotsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListBotsError::from_response(response))
         }
     }
 
@@ -10660,7 +12324,7 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Provides summary information about the AppIntegration associations for the specified Amazon Connect instance.</p>
+    /// <p>Provides summary information about the AppIntegration associations for the specified Amazon Connect instance.</p>
     #[allow(unused_mut)]
     async fn list_integration_associations(
         &self,
@@ -10701,7 +12365,7 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Returns a paginated list of all the Lambda functions that show up in the drop-down options in the relevant contact flow blocks.</p>
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Returns a paginated list of all Lambda functions that display in the dropdown options in the relevant contact flow blocks.</p>
     #[allow(unused_mut)]
     async fn list_lambda_functions(
         &self,
@@ -10871,7 +12535,48 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>Provides information about the queues for the specified Amazon Connect instance.</p> <p>For more information about queues, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/concepts-queues-standard-and-agent.html">Queues: Standard and Agent</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Lists the quick connects associated with a queue.</p>
+    #[allow(unused_mut)]
+    async fn list_queue_quick_connects(
+        &self,
+        input: ListQueueQuickConnectsRequest,
+    ) -> Result<ListQueueQuickConnectsResponse, RusotoError<ListQueueQuickConnectsError>> {
+        let request_uri = format!(
+            "/queues/{instance_id}/{queue_id}/quick-connects",
+            instance_id = input.instance_id,
+            queue_id = input.queue_id
+        );
+
+        let mut request = SignedRequest::new("GET", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListQueueQuickConnectsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListQueueQuickConnectsError::from_response(response))
+        }
+    }
+
+    /// <p>Provides information about the queues for the specified Amazon Connect instance.</p> <p>If you do not specify a <code>QueueTypes</code> parameter, both standard and agent queues are returned. This might cause an unexpected truncation of results if you have more than 1000 agents and you limit the number of results of the API call in code.</p> <p>For more information about queues, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/concepts-queues-standard-and-agent.html">Queues: Standard and Agent</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     #[allow(unused_mut)]
     async fn list_queues(
         &self,
@@ -10916,7 +12621,7 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Provides information about the quick connects for the specified Amazon Connect instance. </p>
+    /// <p>Provides information about the quick connects for the specified Amazon Connect instance. </p>
     #[allow(unused_mut)]
     async fn list_quick_connects(
         &self,
@@ -10961,7 +12666,7 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>List the queues associated with a routing profile.</p>
+    /// <p>Lists the queues associated with a routing profile.</p>
     #[allow(unused_mut)]
     async fn list_routing_profile_queues(
         &self,
@@ -11150,7 +12855,7 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>List the use cases. </p>
+    /// <p>Lists the use cases. </p>
     #[allow(unused_mut)]
     async fn list_use_cases(
         &self,
@@ -11298,7 +13003,7 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>Initiates a contact flow to start a new chat for the customer. Response of this API provides a token required to obtain credentials from the <a href="https://docs.aws.amazon.com/connect-participant/latest/APIReference/API_CreateParticipantConnection.html">CreateParticipantConnection</a> API in the Amazon Connect Participant Service.</p> <p>When a new chat contact is successfully created, clients need to subscribe to the participant’s connection for the created chat within 5 minutes. This is achieved by invoking <a href="https://docs.aws.amazon.com/connect-participant/latest/APIReference/API_CreateParticipantConnection.html">CreateParticipantConnection</a> with WEBSOCKET and CONNECTION_CREDENTIALS. </p> <p>A 429 error occurs in two situations:</p> <ul> <li> <p>API rate limit is exceeded. API TPS throttling returns a <code>TooManyRequests</code> exception from the API Gateway.</p> </li> <li> <p>The <a href="https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html">quota for concurrent active chats</a> is exceeded. Active chat throttling returns a <code>LimitExceededException</code>.</p> </li> </ul> <p>For more information about how chat works, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/chat.html">Chat</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
+    /// <p>Initiates a contact flow to start a new chat for the customer. Response of this API provides a token required to obtain credentials from the <a href="https://docs.aws.amazon.com/connect-participant/latest/APIReference/API_CreateParticipantConnection.html">CreateParticipantConnection</a> API in the Amazon Connect Participant Service.</p> <p>When a new chat contact is successfully created, clients must subscribe to the participant’s connection for the created chat within 5 minutes. This is achieved by invoking <a href="https://docs.aws.amazon.com/connect-participant/latest/APIReference/API_CreateParticipantConnection.html">CreateParticipantConnection</a> with WEBSOCKET and CONNECTION_CREDENTIALS. </p> <p>A 429 error occurs in two situations:</p> <ul> <li> <p>API rate limit is exceeded. API TPS throttling returns a <code>TooManyRequests</code> exception.</p> </li> <li> <p>The <a href="https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html">quota for concurrent active chats</a> is exceeded. Active chat throttling returns a <code>LimitExceededException</code>.</p> </li> </ul> <p>For more information about chat, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/chat.html">Chat</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     #[allow(unused_mut)]
     async fn start_chat_contact(
         &self,
@@ -11329,7 +13034,7 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>This API starts recording the contact when the agent joins the call. StartContactRecording is a one-time action. For example, if you use StopContactRecording to stop recording an ongoing call, you can't use StartContactRecording to restart it. For scenarios where the recording has started and you want to suspend and resume it, such as when collecting sensitive information (for example, a credit card number), use SuspendContactRecording and ResumeContactRecording.</p> <p>You can use this API to override the recording behavior configured in the <a href="https://docs.aws.amazon.com/connect/latest/adminguide/set-recording-behavior.html">Set recording behavior</a> block.</p> <p>Only voice recordings are supported at this time.</p>
+    /// <p>Starts recording the contact when the agent joins the call. StartContactRecording is a one-time action. For example, if you use StopContactRecording to stop recording an ongoing call, you can't use StartContactRecording to restart it. For scenarios where the recording has started and you want to suspend and resume it, such as when collecting sensitive information (for example, a credit card number), use SuspendContactRecording and ResumeContactRecording.</p> <p>You can use this API to override the recording behavior configured in the <a href="https://docs.aws.amazon.com/connect/latest/adminguide/set-recording-behavior.html">Set recording behavior</a> block.</p> <p>Only voice recordings are supported at this time.</p>
     #[allow(unused_mut)]
     async fn start_contact_recording(
         &self,
@@ -11360,7 +13065,7 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p><p>This API places an outbound call to a contact, and then initiates the contact flow. It performs the actions in the contact flow that&#39;s specified (in <code>ContactFlowId</code>).</p> <p>Agents are not involved in initiating the outbound API (that is, dialing the contact). If the contact flow places an outbound call to a contact, and then puts the contact in queue, that&#39;s when the call is routed to the agent, like any other inbound case.</p> <p>There is a 60 second dialing timeout for this operation. If the call is not connected after 60 seconds, it fails.</p> <note> <p>UK numbers with a 447 prefix are not allowed by default. Before you can dial these UK mobile numbers, you must submit a service quota increase request. For more information, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html">Amazon Connect Service Quotas</a> in the <i>Amazon Connect Administrator Guide</i>. </p> </note></p>
+    /// <p><p>Places an outbound call to a contact, and then initiates the contact flow. It performs the actions in the contact flow that&#39;s specified (in <code>ContactFlowId</code>).</p> <p>Agents do not initiate the outbound API, which means that they do not dial the contact. If the contact flow places an outbound call to a contact, and then puts the contact in queue, the call is then routed to the agent, like any other inbound case.</p> <p>There is a 60-second dialing timeout for this operation. If the call is not connected after 60 seconds, it fails.</p> <note> <p>UK numbers with a 447 prefix are not allowed by default. Before you can dial these UK mobile numbers, you must submit a service quota increase request. For more information, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html">Amazon Connect Service Quotas</a> in the <i>Amazon Connect Administrator Guide</i>. </p> </note></p>
     #[allow(unused_mut)]
     async fn start_outbound_voice_contact(
         &self,
@@ -11454,7 +13159,7 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>When a contact is being recorded, this API stops recording the call. StopContactRecording is a one-time action. If you use StopContactRecording to stop recording an ongoing call, you can't use StartContactRecording to restart it. For scenarios where the recording has started and you want to suspend it for sensitive information (for example, to collect a credit card number), and then restart it, use SuspendContactRecording and ResumeContactRecording.</p> <p>Only voice recordings are supported at this time.</p>
+    /// <p>Stops recording a call when a contact is being recorded. StopContactRecording is a one-time action. If you use StopContactRecording to stop recording an ongoing call, you can't use StartContactRecording to restart it. For scenarios where the recording has started and you want to suspend it for sensitive information (for example, to collect a credit card number), and then restart it, use SuspendContactRecording and ResumeContactRecording.</p> <p>Only voice recordings are supported at this time.</p>
     #[allow(unused_mut)]
     async fn stop_contact_recording(
         &self,
@@ -11516,7 +13221,7 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>Adds the specified tags to the specified resource.</p> <p>The supported resource types are users, routing profiles, quick connects, and contact flows.</p> <p>For sample policies that use tags, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/security_iam_id-based-policy-examples.html">Amazon Connect Identity-Based Policy Examples</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
+    /// <p>Adds the specified tags to the specified resource.</p> <p>The supported resource types are users, routing profiles, queues, quick connects, and contact flows.</p> <p>For sample policies that use tags, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/security_iam_id-based-policy-examples.html">Amazon Connect Identity-Based Policy Examples</a> in the <i>Amazon Connect Administrator Guide</i>.</p>
     #[allow(unused_mut)]
     async fn tag_resource(
         &self,
@@ -11579,7 +13284,7 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>Creates or updates the contact attributes associated with the specified contact.</p> <p>You can add or update attributes for both ongoing and completed contacts. For example, you can update the customer's name or the reason the customer called while the call is active, or add notes about steps that the agent took during the call that are displayed to the next agent that takes the call. You can also update attributes for a contact using data from your CRM application and save the data with the contact in Amazon Connect. You could also flag calls for additional analysis, such as legal review or identifying abusive callers.</p> <p>Contact attributes are available in Amazon Connect for 24 months, and are then deleted.</p> <p> <b>Important:</b> You cannot use the operation to update attributes for contacts that occurred prior to the release of the API, September 12, 2018. You can update attributes only for contacts that started after the release of the API. If you attempt to update attributes for a contact that occurred prior to the release of the API, a 400 error is returned. This applies also to queued callbacks that were initiated prior to the release of the API but are still active in your instance.</p>
+    /// <p>Creates or updates user-defined contact attributes associated with the specified contact.</p> <p>You can create or update user-defined attributes for both ongoing and completed contacts. For example, while the call is active, you can update the customer's name or the reason the customer called. You can add notes about steps that the agent took during the call that display to the next agent that takes the call. You can also update attributes for a contact using data from your CRM application and save the data with the contact in Amazon Connect. You could also flag calls for additional analysis, such as legal review or to identify abusive callers.</p> <p>Contact attributes are available in Amazon Connect for 24 months, and are then deleted. For information about CTR retention and the maximum size of the CTR attributes section, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/amazon-connect-service-limits.html#feature-limits">Feature specifications</a> in the <i>Amazon Connect Administrator Guide</i>. </p> <p> <b>Important:</b> You cannot use the operation to update attributes for contacts that occurred prior to the release of the API, which was September 12, 2018. You can update attributes only for contacts that started after the release of the API. If you attempt to update attributes for a contact that occurred prior to the release of the API, a 400 error is returned. This applies also to queued callbacks that were initiated prior to the release of the API but are still active in your instance.</p>
     #[allow(unused_mut)]
     async fn update_contact_attributes(
         &self,
@@ -11750,7 +13455,179 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Updates the configuration settings for the specified quick connect.</p>
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Updates the hours of operation for the specified queue.</p>
+    #[allow(unused_mut)]
+    async fn update_queue_hours_of_operation(
+        &self,
+        input: UpdateQueueHoursOfOperationRequest,
+    ) -> Result<(), RusotoError<UpdateQueueHoursOfOperationError>> {
+        let request_uri = format!(
+            "/queues/{instance_id}/{queue_id}/hours-of-operation",
+            instance_id = input.instance_id,
+            queue_id = input.queue_id
+        );
+
+        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateQueueHoursOfOperationError::from_response(response))
+        }
+    }
+
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Updates the maximum number of contacts allowed in a queue before it is considered full.</p>
+    #[allow(unused_mut)]
+    async fn update_queue_max_contacts(
+        &self,
+        input: UpdateQueueMaxContactsRequest,
+    ) -> Result<(), RusotoError<UpdateQueueMaxContactsError>> {
+        let request_uri = format!(
+            "/queues/{instance_id}/{queue_id}/max-contacts",
+            instance_id = input.instance_id,
+            queue_id = input.queue_id
+        );
+
+        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateQueueMaxContactsError::from_response(response))
+        }
+    }
+
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Updates the name and description of a queue. At least <code>Name</code> or <code>Description</code> must be provided.</p>
+    #[allow(unused_mut)]
+    async fn update_queue_name(
+        &self,
+        input: UpdateQueueNameRequest,
+    ) -> Result<(), RusotoError<UpdateQueueNameError>> {
+        let request_uri = format!(
+            "/queues/{instance_id}/{queue_id}/name",
+            instance_id = input.instance_id,
+            queue_id = input.queue_id
+        );
+
+        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateQueueNameError::from_response(response))
+        }
+    }
+
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Updates the outbound caller ID name, number, and outbound whisper flow for a specified queue.</p>
+    #[allow(unused_mut)]
+    async fn update_queue_outbound_caller_config(
+        &self,
+        input: UpdateQueueOutboundCallerConfigRequest,
+    ) -> Result<(), RusotoError<UpdateQueueOutboundCallerConfigError>> {
+        let request_uri = format!(
+            "/queues/{instance_id}/{queue_id}/outbound-caller-config",
+            instance_id = input.instance_id,
+            queue_id = input.queue_id
+        );
+
+        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateQueueOutboundCallerConfigError::from_response(
+                response,
+            ))
+        }
+    }
+
+    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Updates the status of the queue.</p>
+    #[allow(unused_mut)]
+    async fn update_queue_status(
+        &self,
+        input: UpdateQueueStatusRequest,
+    ) -> Result<(), RusotoError<UpdateQueueStatusError>> {
+        let request_uri = format!(
+            "/queues/{instance_id}/{queue_id}/status",
+            instance_id = input.instance_id,
+            queue_id = input.queue_id
+        );
+
+        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateQueueStatusError::from_response(response))
+        }
+    }
+
+    /// <p>Updates the configuration settings for the specified quick connect.</p>
     #[allow(unused_mut)]
     async fn update_quick_connect_config(
         &self,
@@ -11784,7 +13661,7 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p>This API is in preview release for Amazon Connect and is subject to change.</p> <p>Updates the name and description of a quick connect. The request accepts the following data in JSON format. At least Name or Description must be provided.</p>
+    /// <p>Updates the name and description of a quick connect. The request accepts the following data in JSON format. At least <code>Name</code> or <code>Description</code> must be provided.</p>
     #[allow(unused_mut)]
     async fn update_quick_connect_name(
         &self,
@@ -12057,7 +13934,7 @@ impl Connect for ConnectClient {
         }
     }
 
-    /// <p><p>Updates the identity information for the specified user.</p> <important> <p>Someone with the ability to invoke <code>UpdateUserIndentityInfo</code> can change the login credentials of other users by changing their email address. This poses a security risk to your organization. They can change the email address of a user to the attacker&#39;s email address, and then reset the password through email. We strongly recommend limiting who has the ability to invoke <code>UpdateUserIndentityInfo</code>. For more information, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/security-profile-best-practices.html">Best Practices for Security Profiles</a> in the <i>Amazon Connect Administrator Guide</i>.</p> </important></p>
+    /// <p><p>Updates the identity information for the specified user.</p> <important> <p>We strongly recommend limiting who has the ability to invoke <code>UpdateUserIdentityInfo</code>. Someone with that ability can change the login credentials of other users by changing their email address. This poses a security risk to your organization. They can change the email address of a user to the attacker&#39;s email address, and then reset the password through email. For more information, see <a href="https://docs.aws.amazon.com/connect/latest/adminguide/security-profile-best-practices.html">Best Practices for Security Profiles</a> in the <i>Amazon Connect Administrator Guide</i>.</p> </important></p>
     #[allow(unused_mut)]
     async fn update_user_identity_info(
         &self,

@@ -367,7 +367,7 @@ pub struct AttachPolicyRequest {
     /// <p>The name of the policy to attach.</p>
     #[serde(rename = "policyName")]
     pub policy_name: String,
-    /// <p>The <a href="https://docs.aws.amazon.com/iot/latest/developerguide/security-iam.html">identity</a> to which the policy is attached.</p>
+    /// <p>The <a href="https://docs.aws.amazon.com/iot/latest/developerguide/security-iam.html">identity</a> to which the policy is attached. For example, a thing group or a certificate.</p>
     #[serde(rename = "target")]
     pub target: String,
 }
@@ -1676,11 +1676,11 @@ pub struct CreateJobRequest {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p><p>The job document.</p> <note> <p>If the job document resides in an S3 bucket, you must use a placeholder link when specifying the document.</p> <p>The placeholder link is of the following form:</p> <p> <code>${aws:iot:s3-presigned-url:https://s3.amazonaws.com/<i>bucket</i>/<i>key</i>}</code> </p> <p>where <i>bucket</i> is your bucket name and <i>key</i> is the object in the bucket to which you are linking.</p> </note></p>
+    /// <p>The job document. Required if you don't specify a value for <code>documentSource</code>.</p>
     #[serde(rename = "document")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document: Option<String>,
-    /// <p>An S3 link to the job document.</p>
+    /// <p><p>An S3 link to the job document. Required if you don&#39;t specify a value for <code>document</code>.</p> <note> <p>If the job document resides in an S3 bucket, you must use a placeholder link when specifying the document.</p> <p>The placeholder link is of the following form:</p> <p> <code>${aws:iot:s3-presigned-url:https://s3.amazonaws.com/<i>bucket</i>/<i>key</i>}</code> </p> <p>where <i>bucket</i> is your bucket name and <i>key</i> is the object in the bucket to which you are linking.</p> </note></p>
     #[serde(rename = "documentSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_source: Option<String>,
@@ -1691,6 +1691,10 @@ pub struct CreateJobRequest {
     /// <p>A job identifier which must be unique for your AWS account. We recommend using a UUID. Alpha-numeric characters, "-" and "_" are valid for use here.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
+    /// <p>The ARN of the job template used to create the job.</p>
+    #[serde(rename = "jobTemplateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_template_arn: Option<String>,
     /// <p><p>The namespace used to indicate that a job is a customer-managed job.</p> <p>When you specify a value for this parameter, AWS IoT Core sends jobs notifications to MQTT topics that contain the value in the following format.</p> <p> <code>$aws/things/<i>THING<em>NAME</i>/jobs/<i>JOB</em>ID</i>/notify-namespace-<i>NAMESPACE_ID</i>/</code> </p> <note> <p>The <code>namespaceId</code> feature is in public preview.</p> </note></p>
     #[serde(rename = "namespaceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1731,6 +1735,58 @@ pub struct CreateJobResponse {
     #[serde(rename = "jobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_id: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateJobTemplateRequest {
+    #[serde(rename = "abortConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub abort_config: Option<AbortConfig>,
+    /// <p>A description of the job document.</p>
+    #[serde(rename = "description")]
+    pub description: String,
+    /// <p>The job document. Required if you don't specify a value for <code>documentSource</code>.</p>
+    #[serde(rename = "document")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document: Option<String>,
+    /// <p><p>An S3 link to the job document to use in the template. Required if you don&#39;t specify a value for <code>document</code>.</p> <note> <p>If the job document resides in an S3 bucket, you must use a placeholder link when specifying the document.</p> <p>The placeholder link is of the following form:</p> <p> <code>${aws:iot:s3-presigned-url:https://s3.amazonaws.com/<i>bucket</i>/<i>key</i>}</code> </p> <p>where <i>bucket</i> is your bucket name and <i>key</i> is the object in the bucket to which you are linking.</p> </note></p>
+    #[serde(rename = "documentSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_source: Option<String>,
+    /// <p>The ARN of the job to use as the basis for the job template.</p>
+    #[serde(rename = "jobArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_arn: Option<String>,
+    #[serde(rename = "jobExecutionsRolloutConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_executions_rollout_config: Option<JobExecutionsRolloutConfig>,
+    /// <p>A unique identifier for the job template. We recommend using a UUID. Alpha-numeric characters, "-", and "_" are valid for use here.</p>
+    #[serde(rename = "jobTemplateId")]
+    pub job_template_id: String,
+    #[serde(rename = "presignedUrlConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub presigned_url_config: Option<PresignedUrlConfig>,
+    /// <p>Metadata that can be used to manage the job template.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    #[serde(rename = "timeoutConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout_config: Option<TimeoutConfig>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateJobTemplateResponse {
+    /// <p>The ARN of the job template.</p>
+    #[serde(rename = "jobTemplateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_template_arn: Option<String>,
+    /// <p>The unique identifier of the job template.</p>
+    #[serde(rename = "jobTemplateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_template_id: Option<String>,
 }
 
 /// <p>The input for the CreateKeysAndCertificate operation.</p>
@@ -2551,6 +2607,14 @@ pub struct DeleteJobRequest {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteJobTemplateRequest {
+    /// <p>The unique identifier of the job template to delete.</p>
+    #[serde(rename = "jobTemplateId")]
+    pub job_template_id: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteMitigationActionRequest {
     /// <p>The name of the mitigation action that you want to delete.</p>
     #[serde(rename = "actionName")]
@@ -2564,11 +2628,11 @@ pub struct DeleteMitigationActionResponse {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteOTAUpdateRequest {
-    /// <p>Specifies if the stream associated with an OTA update should be deleted when the OTA update is deleted.</p>
+    /// <p>When true, the stream created by the OTAUpdate process is deleted when the OTA update is deleted. Ignored if the stream specified in the OTAUpdate is supplied by the user.</p>
     #[serde(rename = "deleteStream")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delete_stream: Option<bool>,
-    /// <p>Specifies if the AWS Job associated with the OTA update should be deleted when the OTA update is deleted.</p>
+    /// <p>When true, deletes the AWS job created by the OTAUpdate process even if it is "IN_PROGRESS". Otherwise, if the job is not in a terminal state ("COMPLETED" or "CANCELED") an exception will occur. The default is false.</p>
     #[serde(rename = "forceDeleteAWSJob")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub force_delete_aws_job: Option<bool>,
@@ -3314,6 +3378,55 @@ pub struct DescribeJobResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeJobTemplateRequest {
+    /// <p>The unique identifier of the job template.</p>
+    #[serde(rename = "jobTemplateId")]
+    pub job_template_id: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeJobTemplateResponse {
+    #[serde(rename = "abortConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub abort_config: Option<AbortConfig>,
+    /// <p>The time, in seconds since the epoch, when the job template was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>A description of the job template.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The job document.</p>
+    #[serde(rename = "document")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document: Option<String>,
+    /// <p>An S3 link to the job document.</p>
+    #[serde(rename = "documentSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_source: Option<String>,
+    #[serde(rename = "jobExecutionsRolloutConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_executions_rollout_config: Option<JobExecutionsRolloutConfig>,
+    /// <p>The ARN of the job template.</p>
+    #[serde(rename = "jobTemplateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_template_arn: Option<String>,
+    /// <p>The unique identifier of the job template.</p>
+    #[serde(rename = "jobTemplateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_template_id: Option<String>,
+    #[serde(rename = "presignedUrlConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub presigned_url_config: Option<PresignedUrlConfig>,
+    #[serde(rename = "timeoutConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout_config: Option<TimeoutConfig>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeMitigationActionRequest {
     /// <p>The friendly name that uniquely identifies the mitigation action.</p>
     #[serde(rename = "actionName")]
@@ -3954,7 +4067,7 @@ pub struct DisableTopicRuleRequest {
     pub rule_name: String,
 }
 
-/// <p><p>The summary of a domain configuration. A domain configuration specifies custom IoT-specific information about a domain. A domain configuration can be associated with an AWS-managed domain (for example, dbc123defghijk.iot.us-west-2.amazonaws.com), a customer managed domain, or a default endpoint.</p> <ul> <li> <p>Data</p> </li> <li> <p>Jobs</p> </li> <li> <p>CredentialProvider</p> </li> </ul> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
+/// <p><p>The summary of a domain configuration. A domain configuration specifies custom IoT-specific information about a domain. A domain configuration can be associated with an AWS-managed domain (for example, dbc123defghijk.iot.us-west-2.amazonaws.com), a customer managed domain, or a default endpoint.</p> <ul> <li> <p>Data</p> </li> <li> <p>Jobs</p> </li> <li> <p>CredentialProvider</p> </li> </ul></p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DomainConfigurationSummary {
@@ -4753,6 +4866,10 @@ pub struct Job {
     #[serde(rename = "jobProcessDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_process_details: Option<JobProcessDetails>,
+    /// <p>The ARN of the job template used to create the job.</p>
+    #[serde(rename = "jobTemplateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_template_arn: Option<String>,
     /// <p>The time, in seconds since the epoch, when the job was last updated.</p>
     #[serde(rename = "lastUpdatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4992,6 +5109,28 @@ pub struct JobSummary {
     #[serde(rename = "thingGroupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_group_id: Option<String>,
+}
+
+/// <p>An object that contains information about the job template.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct JobTemplateSummary {
+    /// <p>The time, in seconds since the epoch, when the job template was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>A description of the job template.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The ARN of the job template.</p>
+    #[serde(rename = "jobTemplateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_template_arn: Option<String>,
+    /// <p>The unique identifier of the job template.</p>
+    #[serde(rename = "jobTemplateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_template_id: Option<String>,
 }
 
 /// <p>Send messages to an Amazon Managed Streaming for Apache Kafka (Amazon MSK) or self-managed Apache Kafka cluster.</p>
@@ -5747,6 +5886,32 @@ pub struct ListJobExecutionsForThingResponse {
     #[serde(rename = "executionSummaries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_summaries: Option<Vec<JobExecutionSummaryForThing>>,
+    /// <p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListJobTemplatesRequest {
+    /// <p>The maximum number of results to return in the list.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token to use to return the next set of results in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListJobTemplatesResponse {
+    /// <p>A list of objects that contain information about the job templates.</p>
+    #[serde(rename = "jobTemplates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_templates: Option<Vec<JobTemplateSummary>>,
     /// <p>The token for the next set of results, or <b>null</b> if there are no additional results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6616,6 +6781,10 @@ pub struct ListThingsRequest {
     #[serde(rename = "thingTypeName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_type_name: Option<String>,
+    /// <p>When <code>true</code>, the action returns the thing resources with attribute values that start with the <code>attributeValue</code> provided.</p> <p>When <code>false</code>, or not present, the action returns only the thing resources with attribute values that match the entire <code>attributeValue</code> provided. </p>
+    #[serde(rename = "usePrefixAttributeValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub use_prefix_attribute_value: Option<bool>,
 }
 
 /// <p>The output from the ListThings operation.</p>
@@ -11418,6 +11587,66 @@ impl fmt::Display for CreateJobError {
     }
 }
 impl Error for CreateJobError {}
+/// Errors returned by CreateJobTemplate
+#[derive(Debug, PartialEq)]
+pub enum CreateJobTemplateError {
+    /// <p>A resource with the same name already exists.</p>
+    Conflict(String),
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>A limit has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl CreateJobTemplateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateJobTemplateError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ConflictException" => {
+                    return RusotoError::Service(CreateJobTemplateError::Conflict(err.msg))
+                }
+                "InternalFailureException" => {
+                    return RusotoError::Service(CreateJobTemplateError::InternalFailure(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(CreateJobTemplateError::InvalidRequest(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateJobTemplateError::LimitExceeded(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateJobTemplateError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(CreateJobTemplateError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateJobTemplateError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateJobTemplateError::Conflict(ref cause) => write!(f, "{}", cause),
+            CreateJobTemplateError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            CreateJobTemplateError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            CreateJobTemplateError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateJobTemplateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            CreateJobTemplateError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateJobTemplateError {}
 /// Errors returned by CreateKeysAndCertificate
 #[derive(Debug, PartialEq)]
 pub enum CreateKeysAndCertificateError {
@@ -13262,6 +13491,54 @@ impl fmt::Display for DeleteJobExecutionError {
     }
 }
 impl Error for DeleteJobExecutionError {}
+/// Errors returned by DeleteJobTemplate
+#[derive(Debug, PartialEq)]
+pub enum DeleteJobTemplateError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl DeleteJobTemplateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteJobTemplateError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(DeleteJobTemplateError::InternalFailure(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DeleteJobTemplateError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteJobTemplateError::ResourceNotFound(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DeleteJobTemplateError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteJobTemplateError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteJobTemplateError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DeleteJobTemplateError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DeleteJobTemplateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DeleteJobTemplateError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteJobTemplateError {}
 /// Errors returned by DeleteMitigationAction
 #[derive(Debug, PartialEq)]
 pub enum DeleteMitigationActionError {
@@ -15464,6 +15741,56 @@ impl fmt::Display for DescribeJobExecutionError {
     }
 }
 impl Error for DescribeJobExecutionError {}
+/// Errors returned by DescribeJobTemplate
+#[derive(Debug, PartialEq)]
+pub enum DescribeJobTemplateError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl DescribeJobTemplateError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeJobTemplateError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(DescribeJobTemplateError::InternalFailure(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(DescribeJobTemplateError::InvalidRequest(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeJobTemplateError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(DescribeJobTemplateError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeJobTemplateError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeJobTemplateError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            DescribeJobTemplateError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            DescribeJobTemplateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            DescribeJobTemplateError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeJobTemplateError {}
 /// Errors returned by DescribeMitigationAction
 #[derive(Debug, PartialEq)]
 pub enum DescribeMitigationActionError {
@@ -18452,6 +18779,48 @@ impl fmt::Display for ListJobExecutionsForThingError {
     }
 }
 impl Error for ListJobExecutionsForThingError {}
+/// Errors returned by ListJobTemplates
+#[derive(Debug, PartialEq)]
+pub enum ListJobTemplatesError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+}
+
+impl ListJobTemplatesError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListJobTemplatesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InternalFailureException" => {
+                    return RusotoError::Service(ListJobTemplatesError::InternalFailure(err.msg))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(ListJobTemplatesError::InvalidRequest(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ListJobTemplatesError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListJobTemplatesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListJobTemplatesError::InternalFailure(ref cause) => write!(f, "{}", cause),
+            ListJobTemplatesError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            ListJobTemplatesError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListJobTemplatesError {}
 /// Errors returned by ListJobs
 #[derive(Debug, PartialEq)]
 pub enum ListJobsError {
@@ -23426,7 +23795,7 @@ pub trait Iot {
         input: CreateDimensionRequest,
     ) -> Result<CreateDimensionResponse, RusotoError<CreateDimensionError>>;
 
-    /// <p><p>Creates a domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
+    /// <p>Creates a domain configuration.</p>
     async fn create_domain_configuration(
         &self,
         input: CreateDomainConfigurationRequest,
@@ -23443,6 +23812,12 @@ pub trait Iot {
         &self,
         input: CreateJobRequest,
     ) -> Result<CreateJobResponse, RusotoError<CreateJobError>>;
+
+    /// <p>Creates a job template.</p>
+    async fn create_job_template(
+        &self,
+        input: CreateJobTemplateRequest,
+    ) -> Result<CreateJobTemplateResponse, RusotoError<CreateJobTemplateError>>;
 
     /// <p>Creates a 2048-bit RSA key pair and issues an X.509 certificate using the issued public key. You can also call <code>CreateKeysAndCertificate</code> over MQTT from a device, for more information, see <a href="https://docs.aws.amazon.com/iot/latest/developerguide/provision-wo-cert.html#provision-mqtt-api">Provisioning MQTT API</a>.</p> <p> <b>Note</b> This is the only time AWS IoT issues the private key for this certificate, so it is important to keep it in a secure location.</p>
     async fn create_keys_and_certificate(
@@ -23600,7 +23975,7 @@ pub trait Iot {
         input: DeleteDimensionRequest,
     ) -> Result<DeleteDimensionResponse, RusotoError<DeleteDimensionError>>;
 
-    /// <p><p>Deletes the specified domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
+    /// <p>Deletes the specified domain configuration.</p>
     async fn delete_domain_configuration(
         &self,
         input: DeleteDomainConfigurationRequest,
@@ -23620,6 +23995,12 @@ pub trait Iot {
         &self,
         input: DeleteJobExecutionRequest,
     ) -> Result<(), RusotoError<DeleteJobExecutionError>>;
+
+    /// <p>Deletes the specified job template.</p>
+    async fn delete_job_template(
+        &self,
+        input: DeleteJobTemplateRequest,
+    ) -> Result<(), RusotoError<DeleteJobTemplateError>>;
 
     /// <p>Deletes a defined mitigation action from your AWS account.</p>
     async fn delete_mitigation_action(
@@ -23816,7 +24197,7 @@ pub trait Iot {
         input: DescribeDimensionRequest,
     ) -> Result<DescribeDimensionResponse, RusotoError<DescribeDimensionError>>;
 
-    /// <p><p>Gets summary information about a domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
+    /// <p>Gets summary information about a domain configuration.</p>
     async fn describe_domain_configuration(
         &self,
         input: DescribeDomainConfigurationRequest,
@@ -23850,6 +24231,12 @@ pub trait Iot {
         &self,
         input: DescribeJobExecutionRequest,
     ) -> Result<DescribeJobExecutionResponse, RusotoError<DescribeJobExecutionError>>;
+
+    /// <p>Returns information about a job template.</p>
+    async fn describe_job_template(
+        &self,
+        input: DescribeJobTemplateRequest,
+    ) -> Result<DescribeJobTemplateResponse, RusotoError<DescribeJobTemplateError>>;
 
     /// <p>Gets information about a mitigation action.</p>
     async fn describe_mitigation_action(
@@ -24156,7 +24543,7 @@ pub trait Iot {
         input: ListDimensionsRequest,
     ) -> Result<ListDimensionsResponse, RusotoError<ListDimensionsError>>;
 
-    /// <p><p>Gets a list of domain configurations for the user. This list is sorted alphabetically by domain configuration name.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
+    /// <p>Gets a list of domain configurations for the user. This list is sorted alphabetically by domain configuration name.</p>
     async fn list_domain_configurations(
         &self,
         input: ListDomainConfigurationsRequest,
@@ -24179,6 +24566,12 @@ pub trait Iot {
         &self,
         input: ListJobExecutionsForThingRequest,
     ) -> Result<ListJobExecutionsForThingResponse, RusotoError<ListJobExecutionsForThingError>>;
+
+    /// <p>Returns a list of job templates.</p>
+    async fn list_job_templates(
+        &self,
+        input: ListJobTemplatesRequest,
+    ) -> Result<ListJobTemplatesResponse, RusotoError<ListJobTemplatesError>>;
 
     /// <p>Lists jobs.</p>
     async fn list_jobs(
@@ -24585,7 +24978,7 @@ pub trait Iot {
         input: UpdateDimensionRequest,
     ) -> Result<UpdateDimensionResponse, RusotoError<UpdateDimensionError>>;
 
-    /// <p><p>Updates values stored in the domain configuration. Domain configurations for default endpoints can&#39;t be updated.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
+    /// <p>Updates values stored in the domain configuration. Domain configurations for default endpoints can't be updated.</p>
     async fn update_domain_configuration(
         &self,
         input: UpdateDomainConfigurationRequest,
@@ -25491,7 +25884,7 @@ impl Iot for IotClient {
         }
     }
 
-    /// <p><p>Creates a domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
+    /// <p>Creates a domain configuration.</p>
     #[allow(unused_mut)]
     async fn create_domain_configuration(
         &self,
@@ -25591,6 +25984,41 @@ impl Iot for IotClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(CreateJobError::from_response(response))
+        }
+    }
+
+    /// <p>Creates a job template.</p>
+    #[allow(unused_mut)]
+    async fn create_job_template(
+        &self,
+        input: CreateJobTemplateRequest,
+    ) -> Result<CreateJobTemplateResponse, RusotoError<CreateJobTemplateError>> {
+        let request_uri = format!(
+            "/job-templates/{job_template_id}",
+            job_template_id = input.job_template_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<CreateJobTemplateResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(CreateJobTemplateError::from_response(response))
         }
     }
 
@@ -26465,7 +26893,7 @@ impl Iot for IotClient {
         }
     }
 
-    /// <p><p>Deletes the specified domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
+    /// <p>Deletes the specified domain configuration.</p>
     #[allow(unused_mut)]
     async fn delete_domain_configuration(
         &self,
@@ -26613,6 +27041,38 @@ impl Iot for IotClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DeleteJobExecutionError::from_response(response))
+        }
+    }
+
+    /// <p>Deletes the specified job template.</p>
+    #[allow(unused_mut)]
+    async fn delete_job_template(
+        &self,
+        input: DeleteJobTemplateRequest,
+    ) -> Result<(), RusotoError<DeleteJobTemplateError>> {
+        let request_uri = format!(
+            "/job-templates/{job_template_id}",
+            job_template_id = input.job_template_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = ::std::mem::drop(response);
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DeleteJobTemplateError::from_response(response))
         }
     }
 
@@ -27654,7 +28114,7 @@ impl Iot for IotClient {
         }
     }
 
-    /// <p><p>Gets summary information about a domain configuration.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
+    /// <p>Gets summary information about a domain configuration.</p>
     #[allow(unused_mut)]
     async fn describe_domain_configuration(
         &self,
@@ -27851,6 +28311,39 @@ impl Iot for IotClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DescribeJobExecutionError::from_response(response))
+        }
+    }
+
+    /// <p>Returns information about a job template.</p>
+    #[allow(unused_mut)]
+    async fn describe_job_template(
+        &self,
+        input: DescribeJobTemplateRequest,
+    ) -> Result<DescribeJobTemplateResponse, RusotoError<DescribeJobTemplateError>> {
+        let request_uri = format!(
+            "/job-templates/{job_template_id}",
+            job_template_id = input.job_template_id
+        );
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeJobTemplateResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeJobTemplateError::from_response(response))
         }
     }
 
@@ -29610,7 +30103,7 @@ impl Iot for IotClient {
         }
     }
 
-    /// <p><p>Gets a list of domain configurations for the user. This list is sorted alphabetically by domain configuration name.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
+    /// <p>Gets a list of domain configurations for the user. This list is sorted alphabetically by domain configuration name.</p>
     #[allow(unused_mut)]
     async fn list_domain_configurations(
         &self,
@@ -29776,6 +30269,45 @@ impl Iot for IotClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(ListJobExecutionsForThingError::from_response(response))
+        }
+    }
+
+    /// <p>Returns a list of job templates.</p>
+    #[allow(unused_mut)]
+    async fn list_job_templates(
+        &self,
+        input: ListJobTemplatesRequest,
+    ) -> Result<ListJobTemplatesResponse, RusotoError<ListJobTemplatesError>> {
+        let request_uri = "/job-templates";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListJobTemplatesResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListJobTemplatesError::from_response(response))
         }
     }
 
@@ -30881,6 +31413,9 @@ impl Iot for IotClient {
         }
         if let Some(ref x) = input.thing_type_name {
             params.put("thingTypeName", x);
+        }
+        if let Some(ref x) = input.use_prefix_attribute_value {
+            params.put("usePrefixAttributeValue", x);
         }
         request.set_params(params);
 
@@ -32267,7 +32802,7 @@ impl Iot for IotClient {
         }
     }
 
-    /// <p><p>Updates values stored in the domain configuration. Domain configurations for default endpoints can&#39;t be updated.</p> <note> <p>The domain configuration feature is in public preview and is subject to change.</p> </note></p>
+    /// <p>Updates values stored in the domain configuration. Domain configurations for default endpoints can't be updated.</p>
     #[allow(unused_mut)]
     async fn update_domain_configuration(
         &self,

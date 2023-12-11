@@ -24,7 +24,7 @@ async fn send_ssh_public_key_correctly_errors_for_unknown_instance() {
         }
         Err(error) => match error {
             RusotoError::Service(e) => match e {
-                SendSSHPublicKeyError::InvalidArgs(error) => assert!(
+                SendSSHPublicKeyError::EC2InstanceNotFound(error) => assert!(
                     error.contains("Instance not found"),
                     "Missing error message"
                 ),

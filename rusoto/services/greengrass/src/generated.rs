@@ -648,8 +648,7 @@ pub struct CreateGroupRequest {
     pub initial_version: Option<GroupVersion>,
     /// <p>The name of the group.</p>
     #[serde(rename = "Name")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: String,
     /// <p>Tag(s) to add to the new resource.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]

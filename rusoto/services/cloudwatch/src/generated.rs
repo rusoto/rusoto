@@ -209,6 +209,14 @@ impl AlarmTypesSerializer {
     }
 }
 
+#[allow(dead_code)]
+struct AmazonResourceNameDeserializer;
+impl AmazonResourceNameDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
 /// <p>An anomaly detection model associated with a particular CloudWatch metric and statistic. You can use the model to display a band of expected normal values when the metric is graphed.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -1073,6 +1081,47 @@ impl DeleteInsightRulesOutputDeserializer {
                 Ok(())
             },
         )
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteMetricStreamInput {
+    /// <p>The name of the metric stream to delete.</p>
+    pub name: String,
+}
+
+/// Serialize `DeleteMetricStreamInput` contents to a `SignedRequest`.
+struct DeleteMetricStreamInputSerializer;
+impl DeleteMetricStreamInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteMetricStreamInput) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct DeleteMetricStreamOutput {}
+
+#[allow(dead_code)]
+struct DeleteMetricStreamOutputDeserializer;
+impl DeleteMetricStreamOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteMetricStreamOutput, XmlParseError> {
+        xml_util::start_element(tag_name, stack)?;
+
+        let obj = DeleteMetricStreamOutput::default();
+
+        xml_util::end_element(tag_name, stack)?;
+
+        Ok(obj)
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -2085,6 +2134,8 @@ impl GetInsightRuleReportOutputDeserializer {
 pub struct GetMetricDataInput {
     /// <p>The time stamp indicating the latest data to be returned.</p> <p>The value specified is exclusive; results include data points up to the specified time stamp.</p> <p>For better performance, specify <code>StartTime</code> and <code>EndTime</code> values that align with the value of the metric's <code>Period</code> and sync up with the beginning and end of an hour. For example, if the <code>Period</code> of a metric is 5 minutes, specifying 12:05 or 12:30 as <code>EndTime</code> can get a faster response from CloudWatch than setting 12:07 or 12:29 as the <code>EndTime</code>.</p>
     pub end_time: String,
+    /// <p>This structure includes the <code>Timezone</code> parameter, which you can use to specify your time zone so that the labels of returned data display the correct time for your time zone. </p>
+    pub label_options: Option<LabelOptions>,
     /// <p>The maximum number of data points the request should return before paginating. If you omit this, the default of 100,800 is used.</p>
     pub max_datapoints: Option<i64>,
     /// <p>The metric queries to be returned. A single <code>GetMetricData</code> call can include as many as 500 <code>MetricDataQuery</code> structures. Each of these structures can specify either a metric to retrieve, or a math expression to perform on retrieved data. </p>
@@ -2107,6 +2158,13 @@ impl GetMetricDataInputSerializer {
         }
 
         params.put(&format!("{}{}", prefix, "EndTime"), &obj.end_time);
+        if let Some(ref field_value) = obj.label_options {
+            LabelOptionsSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "LabelOptions"),
+                field_value,
+            );
+        }
         if let Some(ref field_value) = obj.max_datapoints {
             params.put(&format!("{}{}", prefix, "MaxDatapoints"), &field_value);
         }
@@ -2264,6 +2322,111 @@ impl GetMetricStatisticsOutputDeserializer {
                 Ok(())
             },
         )
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetMetricStreamInput {
+    /// <p>The name of the metric stream to retrieve information about.</p>
+    pub name: String,
+}
+
+/// Serialize `GetMetricStreamInput` contents to a `SignedRequest`.
+struct GetMetricStreamInputSerializer;
+impl GetMetricStreamInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &GetMetricStreamInput) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct GetMetricStreamOutput {
+    /// <p>The ARN of the metric stream.</p>
+    pub arn: Option<String>,
+    /// <p>The date that the metric stream was created.</p>
+    pub creation_date: Option<String>,
+    /// <p>If this array of metric namespaces is present, then these namespaces are the only metric namespaces that are not streamed by this metric stream. In this case, all other metric namespaces in the account are streamed by this metric stream.</p>
+    pub exclude_filters: Option<Vec<MetricStreamFilter>>,
+    /// <p>The ARN of the Amazon Kinesis Firehose delivery stream that is used by this metric stream.</p>
+    pub firehose_arn: Option<String>,
+    /// <p>If this array of metric namespaces is present, then these namespaces are the only metric namespaces that are streamed by this metric stream.</p>
+    pub include_filters: Option<Vec<MetricStreamFilter>>,
+    /// <p>The date of the most recent update to the metric stream's configuration.</p>
+    pub last_update_date: Option<String>,
+    /// <p>The name of the metric stream.</p>
+    pub name: Option<String>,
+    /// <p><p/></p>
+    pub output_format: Option<String>,
+    /// <p>The ARN of the IAM role that is used by this metric stream.</p>
+    pub role_arn: Option<String>,
+    /// <p>The state of the metric stream. The possible values are <code>running</code> and <code>stopped</code>.</p>
+    pub state: Option<String>,
+}
+
+#[allow(dead_code)]
+struct GetMetricStreamOutputDeserializer;
+impl GetMetricStreamOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetMetricStreamOutput, XmlParseError> {
+        deserialize_elements::<_, GetMetricStreamOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Arn" => {
+                    obj.arn = Some(AmazonResourceNameDeserializer::deserialize("Arn", stack)?);
+                }
+                "CreationDate" => {
+                    obj.creation_date =
+                        Some(TimestampDeserializer::deserialize("CreationDate", stack)?);
+                }
+                "ExcludeFilters" => {
+                    obj.exclude_filters.get_or_insert(vec![]).extend(
+                        MetricStreamFiltersDeserializer::deserialize("ExcludeFilters", stack)?,
+                    );
+                }
+                "FirehoseArn" => {
+                    obj.firehose_arn = Some(AmazonResourceNameDeserializer::deserialize(
+                        "FirehoseArn",
+                        stack,
+                    )?);
+                }
+                "IncludeFilters" => {
+                    obj.include_filters.get_or_insert(vec![]).extend(
+                        MetricStreamFiltersDeserializer::deserialize("IncludeFilters", stack)?,
+                    );
+                }
+                "LastUpdateDate" => {
+                    obj.last_update_date =
+                        Some(TimestampDeserializer::deserialize("LastUpdateDate", stack)?);
+                }
+                "Name" => {
+                    obj.name = Some(MetricStreamNameDeserializer::deserialize("Name", stack)?);
+                }
+                "OutputFormat" => {
+                    obj.output_format = Some(MetricStreamOutputFormatDeserializer::deserialize(
+                        "OutputFormat",
+                        stack,
+                    )?);
+                }
+                "RoleArn" => {
+                    obj.role_arn = Some(AmazonResourceNameDeserializer::deserialize(
+                        "RoleArn", stack,
+                    )?);
+                }
+                "State" => {
+                    obj.state = Some(MetricStreamStateDeserializer::deserialize("State", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -2778,6 +2941,29 @@ impl InsightRulesDeserializer {
         })
     }
 }
+/// <p>This structure includes the <code>Timezone</code> parameter, which you can use to specify your time zone so that the labels that are associated with returned metrics display the correct time for your time zone. </p> <p>The <code>Timezone</code> value affects a label only if you have a time-based dynamic expression in the label. For more information about dynamic expressions in labels, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html">Using Dynamic Labels</a>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct LabelOptions {
+    /// <p>The time zone to use for metric data return in this operation. The format is <code>+</code> or <code>-</code> followed by four digits. The first two digits indicate the number of hours ahead or behind of UTC, and the final two digits are the number of minutes. For example, +0130 indicates a time zone that is 1 hour and 30 minutes ahead of UTC. The default is +0000. </p>
+    pub timezone: Option<String>,
+}
+
+/// Serialize `LabelOptions` contents to a `SignedRequest`.
+struct LabelOptionsSerializer;
+impl LabelOptionsSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &LabelOptions) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.timezone {
+            params.put(&format!("{}{}", prefix, "Timezone"), &field_value);
+        }
+    }
+}
+
 #[allow(dead_code)]
 struct LastModifiedDeserializer;
 impl LastModifiedDeserializer {
@@ -2847,6 +3033,71 @@ impl ListDashboardsOutputDeserializer {
             }
             Ok(())
         })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListMetricStreamsInput {
+    /// <p>The maximum number of results to return in one operation.</p>
+    pub max_results: Option<i64>,
+    /// <p>Include this value, if it was returned by the previous call, to get the next set of metric streams.</p>
+    pub next_token: Option<String>,
+}
+
+/// Serialize `ListMetricStreamsInput` contents to a `SignedRequest`.
+struct ListMetricStreamsInputSerializer;
+impl ListMetricStreamsInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ListMetricStreamsInput) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.max_results {
+            params.put(&format!("{}{}", prefix, "MaxResults"), &field_value);
+        }
+        if let Some(ref field_value) = obj.next_token {
+            params.put(&format!("{}{}", prefix, "NextToken"), &field_value);
+        }
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct ListMetricStreamsOutput {
+    /// <p>The array of metric stream information.</p>
+    pub entries: Option<Vec<MetricStreamEntry>>,
+    /// <p>The token that marks the start of the next batch of returned results. You can use this token in a subsequent operation to get the next batch of results.</p>
+    pub next_token: Option<String>,
+}
+
+#[allow(dead_code)]
+struct ListMetricStreamsOutputDeserializer;
+impl ListMetricStreamsOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListMetricStreamsOutput, XmlParseError> {
+        deserialize_elements::<_, ListMetricStreamsOutput, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "Entries" => {
+                        obj.entries.get_or_insert(vec![]).extend(
+                            MetricStreamEntriesDeserializer::deserialize("Entries", stack)?,
+                        );
+                    }
+                    "NextToken" => {
+                        obj.next_token =
+                            Some(NextTokenDeserializer::deserialize("NextToken", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
     }
 }
 #[derive(Clone, Debug, Default, PartialEq)]
@@ -3377,7 +3628,7 @@ pub struct MetricDataQuery {
     pub expression: Option<String>,
     /// <p>A short name used to tie this object to the results in the response. This name must be unique within a single call to <code>GetMetricData</code>. If you are performing math expressions on this set of data, this name represents that data and can serve as a variable in the mathematical expression. The valid characters are letters, numbers, and underscore. The first character must be a lowercase letter.</p>
     pub id: String,
-    /// <p>A human-readable label for this metric or expression. This is especially useful if this is an expression, so that you know what the value represents. If the metric or expression is shown in a CloudWatch dashboard widget, the label is shown. If Label is omitted, CloudWatch generates a default.</p>
+    /// <p>A human-readable label for this metric or expression. This is especially useful if this is an expression, so that you know what the value represents. If the metric or expression is shown in a CloudWatch dashboard widget, the label is shown. If Label is omitted, CloudWatch generates a default.</p> <p>You can put dynamic expressions into a label, so that it is more descriptive. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/graph-dynamic-labels.html">Using Dynamic Labels</a>.</p>
     pub label: Option<String>,
     /// <p>The metric to be returned, along with statistics, period, and units. Use this parameter only if this object is retrieving a metric and not performing a math expression on returned data.</p> <p>Within one MetricDataQuery object, you must specify either <code>Expression</code> or <code>MetricStat</code> but not both.</p>
     pub metric_stat: Option<MetricStat>,
@@ -3717,6 +3968,201 @@ impl MetricStatSerializer {
     }
 }
 
+#[allow(dead_code)]
+struct MetricStreamEntriesDeserializer;
+impl MetricStreamEntriesDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<MetricStreamEntry>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(MetricStreamEntryDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>This structure contains the configuration information about one metric stream.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct MetricStreamEntry {
+    /// <p>The ARN of the metric stream.</p>
+    pub arn: Option<String>,
+    /// <p>The date that the metric stream was originally created.</p>
+    pub creation_date: Option<String>,
+    /// <p>The ARN of the Kinesis Firehose devlivery stream that is used for this metric stream.</p>
+    pub firehose_arn: Option<String>,
+    /// <p>The date that the configuration of this metric stream was most recently updated.</p>
+    pub last_update_date: Option<String>,
+    /// <p>The name of the metric stream.</p>
+    pub name: Option<String>,
+    /// <p>The output format of this metric stream. Valid values are <code>json</code> and <code>opentelemetry0.7</code>.</p>
+    pub output_format: Option<String>,
+    /// <p>The current state of this stream. Valid values are <code>running</code> and <code>stopped</code>.</p>
+    pub state: Option<String>,
+}
+
+#[allow(dead_code)]
+struct MetricStreamEntryDeserializer;
+impl MetricStreamEntryDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<MetricStreamEntry, XmlParseError> {
+        deserialize_elements::<_, MetricStreamEntry, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Arn" => {
+                    obj.arn = Some(AmazonResourceNameDeserializer::deserialize("Arn", stack)?);
+                }
+                "CreationDate" => {
+                    obj.creation_date =
+                        Some(TimestampDeserializer::deserialize("CreationDate", stack)?);
+                }
+                "FirehoseArn" => {
+                    obj.firehose_arn = Some(AmazonResourceNameDeserializer::deserialize(
+                        "FirehoseArn",
+                        stack,
+                    )?);
+                }
+                "LastUpdateDate" => {
+                    obj.last_update_date =
+                        Some(TimestampDeserializer::deserialize("LastUpdateDate", stack)?);
+                }
+                "Name" => {
+                    obj.name = Some(MetricStreamNameDeserializer::deserialize("Name", stack)?);
+                }
+                "OutputFormat" => {
+                    obj.output_format = Some(MetricStreamOutputFormatDeserializer::deserialize(
+                        "OutputFormat",
+                        stack,
+                    )?);
+                }
+                "State" => {
+                    obj.state = Some(MetricStreamStateDeserializer::deserialize("State", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>This structure contains the name of one of the metric namespaces that is listed in a filter of a metric stream.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct MetricStreamFilter {
+    /// <p>The name of the metric namespace in the filter.</p>
+    pub namespace: Option<String>,
+}
+
+#[allow(dead_code)]
+struct MetricStreamFilterDeserializer;
+impl MetricStreamFilterDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<MetricStreamFilter, XmlParseError> {
+        deserialize_elements::<_, MetricStreamFilter, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Namespace" => {
+                    obj.namespace = Some(NamespaceDeserializer::deserialize("Namespace", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+
+/// Serialize `MetricStreamFilter` contents to a `SignedRequest`.
+struct MetricStreamFilterSerializer;
+impl MetricStreamFilterSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &MetricStreamFilter) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.namespace {
+            params.put(&format!("{}{}", prefix, "Namespace"), &field_value);
+        }
+    }
+}
+
+#[allow(dead_code)]
+struct MetricStreamFiltersDeserializer;
+impl MetricStreamFiltersDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<MetricStreamFilter>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(MetricStreamFilterDeserializer::deserialize(
+                    "member", stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+
+/// Serialize `MetricStreamFilters` contents to a `SignedRequest`.
+struct MetricStreamFiltersSerializer;
+impl MetricStreamFiltersSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<MetricStreamFilter>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            MetricStreamFilterSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+#[allow(dead_code)]
+struct MetricStreamNameDeserializer;
+impl MetricStreamNameDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+
+/// Serialize `MetricStreamNames` contents to a `SignedRequest`.
+struct MetricStreamNamesSerializer;
+impl MetricStreamNamesSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
+#[allow(dead_code)]
+struct MetricStreamOutputFormatDeserializer;
+impl MetricStreamOutputFormatDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+#[allow(dead_code)]
+struct MetricStreamStateDeserializer;
+impl MetricStreamStateDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
 #[allow(dead_code)]
 struct MetricWidgetImageDeserializer;
 impl MetricWidgetImageDeserializer {
@@ -4100,7 +4546,7 @@ pub struct PutMetricAlarmInput {
     pub metrics: Option<Vec<MetricDataQuery>>,
     /// <p>The namespace for the metric associated specified in <code>MetricName</code>.</p>
     pub namespace: Option<String>,
-    /// <p>The actions to execute when this alarm transitions to an <code>OK</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p> <p>Valid Values: <code>arn:aws:automate:<i>region</i>:ec2:stop</code> | <code>arn:aws:automate:<i>region</i>:ec2:terminate</code> | <code>arn:aws:automate:<i>region</i>:ec2:recover</code> | <code>arn:aws:automate:<i>region</i>:ec2:reboot</code> | <code>arn:aws:sns:<i>region</i>:<i>account-id</i>:<i>sns-topic-name</i> </code> | <code>arn:aws:autoscaling:<i>region</i>:<i>account-id</i>:scalingPolicy:<i>policy-id</i>:autoScalingGroupName/<i>group-friendly-name</i>:policyName/<i>policy-friendly-name</i> </code> </p> <p>Valid Values (for use with IAM roles): <code>arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Stop/1.0</code> | <code>arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Terminate/1.0</code> | <code>arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Reboot/1.0</code> </p>
+    /// <p>The actions to execute when this alarm transitions to an <code>OK</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p> <p>Valid Values: <code>arn:aws:automate:<i>region</i>:ec2:stop</code> | <code>arn:aws:automate:<i>region</i>:ec2:terminate</code> | <code>arn:aws:automate:<i>region</i>:ec2:recover</code> | <code>arn:aws:automate:<i>region</i>:ec2:reboot</code> | <code>arn:aws:sns:<i>region</i>:<i>account-id</i>:<i>sns-topic-name</i> </code> | <code>arn:aws:autoscaling:<i>region</i>:<i>account-id</i>:scalingPolicy:<i>policy-id</i>:autoScalingGroupName/<i>group-friendly-name</i>:policyName/<i>policy-friendly-name</i> </code> </p> <p>Valid Values (for use with IAM roles): <code>arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Stop/1.0</code> | <code>arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Terminate/1.0</code> | <code>arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Reboot/1.0</code> | <code>arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Recover/1.0</code> </p>
     pub ok_actions: Option<Vec<String>>,
     /// <p>The length, in seconds, used each time the metric specified in <code>MetricName</code> is evaluated. Valid values are 10, 30, and any multiple of 60.</p> <p> <code>Period</code> is required for alarms based on static thresholds. If you are creating an alarm based on a metric math expression, you specify the period for each metric within the objects in the <code>Metrics</code> array.</p> <p>Be sure to specify 10 or 30 only for metrics that are stored by a <code>PutMetricData</code> call with a <code>StorageResolution</code> of 1. If you specify a period of 10 or 30 for a metric that does not have sub-minute resolution, the alarm still attempts to gather data at the period rate that you specify. In this case, it does not receive data for the attempts that do not correspond to a one-minute data resolution, and the alarm might often lapse into INSUFFICENT_DATA status. Specifying 10 or 30 also sets this alarm as a high-resolution alarm, which has a higher charge than other alarms. For more information about pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> <p>An alarm's total current evaluation period can be no longer than one day, so <code>Period</code> multiplied by <code>EvaluationPeriods</code> cannot be more than 86,400 seconds.</p>
     pub period: Option<i64>,
@@ -4246,6 +4692,84 @@ impl PutMetricDataInputSerializer {
     }
 }
 
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutMetricStreamInput {
+    /// <p>If you specify this parameter, the stream sends metrics from all metric namespaces except for the namespaces that you specify here.</p> <p>You cannot include <code>ExcludeFilters</code> and <code>IncludeFilters</code> in the same operation.</p>
+    pub exclude_filters: Option<Vec<MetricStreamFilter>>,
+    /// <p>The ARN of the Amazon Kinesis Firehose delivery stream to use for this metric stream. This Amazon Kinesis Firehose delivery stream must already exist and must be in the same account as the metric stream.</p>
+    pub firehose_arn: String,
+    /// <p>If you specify this parameter, the stream sends only the metrics from the metric namespaces that you specify here.</p> <p>You cannot include <code>IncludeFilters</code> and <code>ExcludeFilters</code> in the same operation.</p>
+    pub include_filters: Option<Vec<MetricStreamFilter>>,
+    /// <p>If you are creating a new metric stream, this is the name for the new stream. The name must be different than the names of other metric streams in this account and Region.</p> <p>If you are updating a metric stream, specify the name of that stream here.</p> <p>Valid characters are A-Z, a-z, 0-9, "-" and "_".</p>
+    pub name: String,
+    /// <p>The output format for the stream. Valid values are <code>json</code> and <code>opentelemetry0.7</code>. For more information about metric stream output formats, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-metric-streams-formats.html"> Metric streams output formats</a>.</p>
+    pub output_format: String,
+    /// <p><p>The ARN of an IAM role that this metric stream will use to access Amazon Kinesis Firehose resources. This IAM role must already exist and must be in the same account as the metric stream. This IAM role must include the following permissions:</p> <ul> <li> <p>firehose:PutRecord</p> </li> <li> <p>firehose:PutRecordBatch</p> </li> </ul></p>
+    pub role_arn: String,
+    /// <p>A list of key-value pairs to associate with the metric stream. You can associate as many as 50 tags with a metric stream.</p> <p>Tags can help you organize and categorize your resources. You can also use them to scope user permissions by granting a user permission to access or change only resources with certain tag values.</p>
+    pub tags: Option<Vec<Tag>>,
+}
+
+/// Serialize `PutMetricStreamInput` contents to a `SignedRequest`.
+struct PutMetricStreamInputSerializer;
+impl PutMetricStreamInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &PutMetricStreamInput) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.exclude_filters {
+            MetricStreamFiltersSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ExcludeFilters"),
+                field_value,
+            );
+        }
+        params.put(&format!("{}{}", prefix, "FirehoseArn"), &obj.firehose_arn);
+        if let Some(ref field_value) = obj.include_filters {
+            MetricStreamFiltersSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "IncludeFilters"),
+                field_value,
+            );
+        }
+        params.put(&format!("{}{}", prefix, "Name"), &obj.name);
+        params.put(&format!("{}{}", prefix, "OutputFormat"), &obj.output_format);
+        params.put(&format!("{}{}", prefix, "RoleArn"), &obj.role_arn);
+        if let Some(ref field_value) = obj.tags {
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+        }
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct PutMetricStreamOutput {
+    /// <p>The ARN of the metric stream.</p>
+    pub arn: Option<String>,
+}
+
+#[allow(dead_code)]
+struct PutMetricStreamOutputDeserializer;
+impl PutMetricStreamOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutMetricStreamOutput, XmlParseError> {
+        deserialize_elements::<_, PutMetricStreamOutput, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "Arn" => {
+                    obj.arn = Some(AmazonResourceNameDeserializer::deserialize("Arn", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
 /// <p>Specifies one range of days or times to exclude from use for training an anomaly detection model.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -4384,6 +4908,51 @@ impl StandardUnitDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
     }
 }
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StartMetricStreamsInput {
+    /// <p>The array of the names of metric streams to start streaming.</p> <p>This is an "all or nothing" operation. If you do not have permission to access all of the metric streams that you list here, then none of the streams that you list in the operation will start streaming.</p>
+    pub names: Vec<String>,
+}
+
+/// Serialize `StartMetricStreamsInput` contents to a `SignedRequest`.
+struct StartMetricStreamsInputSerializer;
+impl StartMetricStreamsInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &StartMetricStreamsInput) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        MetricStreamNamesSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "Names"),
+            &obj.names,
+        );
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct StartMetricStreamsOutput {}
+
+#[allow(dead_code)]
+struct StartMetricStreamsOutputDeserializer;
+impl StartMetricStreamsOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StartMetricStreamsOutput, XmlParseError> {
+        xml_util::start_element(tag_name, stack)?;
+
+        let obj = StartMetricStreamsOutput::default();
+
+        xml_util::end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 #[allow(dead_code)]
 struct StatDeserializer;
 impl StatDeserializer {
@@ -4471,6 +5040,51 @@ impl StatusCodeDeserializer {
     #[allow(dead_code, unused_variables)]
     fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
         xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct StopMetricStreamsInput {
+    /// <p>The array of the names of metric streams to stop streaming.</p> <p>This is an "all or nothing" operation. If you do not have permission to access all of the metric streams that you list here, then none of the streams that you list in the operation will stop streaming.</p>
+    pub names: Vec<String>,
+}
+
+/// Serialize `StopMetricStreamsInput` contents to a `SignedRequest`.
+struct StopMetricStreamsInputSerializer;
+impl StopMetricStreamsInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &StopMetricStreamsInput) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        MetricStreamNamesSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "Names"),
+            &obj.names,
+        );
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct StopMetricStreamsOutput {}
+
+#[allow(dead_code)]
+struct StopMetricStreamsOutputDeserializer;
+impl StopMetricStreamsOutputDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<StopMetricStreamsOutput, XmlParseError> {
+        xml_util::start_element(tag_name, stack)?;
+
+        let obj = StopMetricStreamsOutput::default();
+
+        xml_util::end_element(tag_name, stack)?;
+
+        Ok(obj)
     }
 }
 /// <p>A key-value pair associated with a CloudWatch resource.</p>
@@ -4946,6 +5560,66 @@ impl fmt::Display for DeleteInsightRulesError {
     }
 }
 impl Error for DeleteInsightRulesError {}
+/// Errors returned by DeleteMetricStream
+#[derive(Debug, PartialEq)]
+pub enum DeleteMetricStreamError {
+    /// <p>Request processing has failed due to some unknown error, exception, or failure.</p>
+    InternalServiceFault(String),
+    /// <p>The value of an input parameter is bad or out-of-range.</p>
+    InvalidParameterValue(String),
+    /// <p>An input parameter that is required is missing.</p>
+    MissingRequiredParameter(String),
+}
+
+impl DeleteMetricStreamError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteMetricStreamError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InternalServiceError" => {
+                        return RusotoError::Service(DeleteMetricStreamError::InternalServiceFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterValue" => {
+                        return RusotoError::Service(
+                            DeleteMetricStreamError::InvalidParameterValue(parsed_error.message),
+                        )
+                    }
+                    "MissingParameter" => {
+                        return RusotoError::Service(
+                            DeleteMetricStreamError::MissingRequiredParameter(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DeleteMetricStreamError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteMetricStreamError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            DeleteMetricStreamError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            DeleteMetricStreamError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteMetricStreamError {}
 /// Errors returned by DescribeAlarmHistory
 #[derive(Debug, PartialEq)]
 pub enum DescribeAlarmHistoryError {
@@ -5604,6 +6278,82 @@ impl fmt::Display for GetMetricStatisticsError {
     }
 }
 impl Error for GetMetricStatisticsError {}
+/// Errors returned by GetMetricStream
+#[derive(Debug, PartialEq)]
+pub enum GetMetricStreamError {
+    /// <p>Request processing has failed due to some unknown error, exception, or failure.</p>
+    InternalServiceFault(String),
+    /// <p>Parameters were used together that cannot be used together.</p>
+    InvalidParameterCombination(String),
+    /// <p>The value of an input parameter is bad or out-of-range.</p>
+    InvalidParameterValue(String),
+    /// <p>An input parameter that is required is missing.</p>
+    MissingRequiredParameter(String),
+    /// <p>The named resource does not exist.</p>
+    ResourceNotFound(String),
+}
+
+impl GetMetricStreamError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetMetricStreamError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InternalServiceError" => {
+                        return RusotoError::Service(GetMetricStreamError::InternalServiceFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterCombination" => {
+                        return RusotoError::Service(
+                            GetMetricStreamError::InvalidParameterCombination(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterValue" => {
+                        return RusotoError::Service(GetMetricStreamError::InvalidParameterValue(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MissingParameter" => {
+                        return RusotoError::Service(
+                            GetMetricStreamError::MissingRequiredParameter(parsed_error.message),
+                        )
+                    }
+                    "ResourceNotFoundException" => {
+                        return RusotoError::Service(GetMetricStreamError::ResourceNotFound(
+                            parsed_error.message,
+                        ))
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for GetMetricStreamError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetMetricStreamError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            GetMetricStreamError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+            GetMetricStreamError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            GetMetricStreamError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
+            GetMetricStreamError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetMetricStreamError {}
 /// Errors returned by GetMetricWidgetImage
 #[derive(Debug, PartialEq)]
 pub enum GetMetricWidgetImageError {}
@@ -5690,6 +6440,74 @@ impl fmt::Display for ListDashboardsError {
     }
 }
 impl Error for ListDashboardsError {}
+/// Errors returned by ListMetricStreams
+#[derive(Debug, PartialEq)]
+pub enum ListMetricStreamsError {
+    /// <p>Request processing has failed due to some unknown error, exception, or failure.</p>
+    InternalServiceFault(String),
+    /// <p>The next token specified is invalid.</p>
+    InvalidNextToken(String),
+    /// <p>The value of an input parameter is bad or out-of-range.</p>
+    InvalidParameterValue(String),
+    /// <p>An input parameter that is required is missing.</p>
+    MissingRequiredParameter(String),
+}
+
+impl ListMetricStreamsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListMetricStreamsError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InternalServiceError" => {
+                        return RusotoError::Service(ListMetricStreamsError::InternalServiceFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidNextToken" => {
+                        return RusotoError::Service(ListMetricStreamsError::InvalidNextToken(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterValue" => {
+                        return RusotoError::Service(ListMetricStreamsError::InvalidParameterValue(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MissingParameter" => {
+                        return RusotoError::Service(
+                            ListMetricStreamsError::MissingRequiredParameter(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ListMetricStreamsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListMetricStreamsError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            ListMetricStreamsError::InvalidNextToken(ref cause) => write!(f, "{}", cause),
+            ListMetricStreamsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            ListMetricStreamsError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListMetricStreamsError {}
 /// Errors returned by ListMetrics
 #[derive(Debug, PartialEq)]
 pub enum ListMetricsError {
@@ -6138,6 +6956,82 @@ impl fmt::Display for PutMetricDataError {
     }
 }
 impl Error for PutMetricDataError {}
+/// Errors returned by PutMetricStream
+#[derive(Debug, PartialEq)]
+pub enum PutMetricStreamError {
+    /// <p>More than one process tried to modify a resource at the same time.</p>
+    ConcurrentModification(String),
+    /// <p>Request processing has failed due to some unknown error, exception, or failure.</p>
+    InternalServiceFault(String),
+    /// <p>Parameters were used together that cannot be used together.</p>
+    InvalidParameterCombination(String),
+    /// <p>The value of an input parameter is bad or out-of-range.</p>
+    InvalidParameterValue(String),
+    /// <p>An input parameter that is required is missing.</p>
+    MissingRequiredParameter(String),
+}
+
+impl PutMetricStreamError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutMetricStreamError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ConcurrentModificationException" => {
+                        return RusotoError::Service(PutMetricStreamError::ConcurrentModification(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InternalServiceError" => {
+                        return RusotoError::Service(PutMetricStreamError::InternalServiceFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterCombination" => {
+                        return RusotoError::Service(
+                            PutMetricStreamError::InvalidParameterCombination(parsed_error.message),
+                        )
+                    }
+                    "InvalidParameterValue" => {
+                        return RusotoError::Service(PutMetricStreamError::InvalidParameterValue(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MissingParameter" => {
+                        return RusotoError::Service(
+                            PutMetricStreamError::MissingRequiredParameter(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for PutMetricStreamError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutMetricStreamError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            PutMetricStreamError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            PutMetricStreamError::InvalidParameterCombination(ref cause) => write!(f, "{}", cause),
+            PutMetricStreamError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            PutMetricStreamError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PutMetricStreamError {}
 /// Errors returned by SetAlarmState
 #[derive(Debug, PartialEq)]
 pub enum SetAlarmStateError {
@@ -6190,6 +7084,126 @@ impl fmt::Display for SetAlarmStateError {
     }
 }
 impl Error for SetAlarmStateError {}
+/// Errors returned by StartMetricStreams
+#[derive(Debug, PartialEq)]
+pub enum StartMetricStreamsError {
+    /// <p>Request processing has failed due to some unknown error, exception, or failure.</p>
+    InternalServiceFault(String),
+    /// <p>The value of an input parameter is bad or out-of-range.</p>
+    InvalidParameterValue(String),
+    /// <p>An input parameter that is required is missing.</p>
+    MissingRequiredParameter(String),
+}
+
+impl StartMetricStreamsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StartMetricStreamsError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InternalServiceError" => {
+                        return RusotoError::Service(StartMetricStreamsError::InternalServiceFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterValue" => {
+                        return RusotoError::Service(
+                            StartMetricStreamsError::InvalidParameterValue(parsed_error.message),
+                        )
+                    }
+                    "MissingParameter" => {
+                        return RusotoError::Service(
+                            StartMetricStreamsError::MissingRequiredParameter(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for StartMetricStreamsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StartMetricStreamsError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            StartMetricStreamsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            StartMetricStreamsError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StartMetricStreamsError {}
+/// Errors returned by StopMetricStreams
+#[derive(Debug, PartialEq)]
+pub enum StopMetricStreamsError {
+    /// <p>Request processing has failed due to some unknown error, exception, or failure.</p>
+    InternalServiceFault(String),
+    /// <p>The value of an input parameter is bad or out-of-range.</p>
+    InvalidParameterValue(String),
+    /// <p>An input parameter that is required is missing.</p>
+    MissingRequiredParameter(String),
+}
+
+impl StopMetricStreamsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<StopMetricStreamsError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InternalServiceError" => {
+                        return RusotoError::Service(StopMetricStreamsError::InternalServiceFault(
+                            parsed_error.message,
+                        ))
+                    }
+                    "InvalidParameterValue" => {
+                        return RusotoError::Service(StopMetricStreamsError::InvalidParameterValue(
+                            parsed_error.message,
+                        ))
+                    }
+                    "MissingParameter" => {
+                        return RusotoError::Service(
+                            StopMetricStreamsError::MissingRequiredParameter(parsed_error.message),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for StopMetricStreamsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            StopMetricStreamsError::InternalServiceFault(ref cause) => write!(f, "{}", cause),
+            StopMetricStreamsError::InvalidParameterValue(ref cause) => write!(f, "{}", cause),
+            StopMetricStreamsError::MissingRequiredParameter(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for StopMetricStreamsError {}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
@@ -6353,6 +7367,12 @@ pub trait CloudWatch {
         input: DeleteInsightRulesInput,
     ) -> Result<DeleteInsightRulesOutput, RusotoError<DeleteInsightRulesError>>;
 
+    /// <p>Permanently deletes the metric stream that you specify.</p>
+    async fn delete_metric_stream(
+        &self,
+        input: DeleteMetricStreamInput,
+    ) -> Result<DeleteMetricStreamOutput, RusotoError<DeleteMetricStreamError>>;
+
     /// <p>Retrieves the history for the specified alarm. You can filter the results by date range or item type. If an alarm name is not specified, the histories for either all metric alarms or all composite alarms are returned.</p> <p>CloudWatch retains the history of an alarm even if you delete the alarm.</p>
     async fn describe_alarm_history(
         &self,
@@ -6431,6 +7451,12 @@ pub trait CloudWatch {
         input: GetMetricStatisticsInput,
     ) -> Result<GetMetricStatisticsOutput, RusotoError<GetMetricStatisticsError>>;
 
+    /// <p>Returns information about the metric stream that you specify.</p>
+    async fn get_metric_stream(
+        &self,
+        input: GetMetricStreamInput,
+    ) -> Result<GetMetricStreamOutput, RusotoError<GetMetricStreamError>>;
+
     /// <p><p>You can use the <code>GetMetricWidgetImage</code> API to retrieve a snapshot graph of one or more Amazon CloudWatch metrics as a bitmap image. You can then embed this image into your services and products, such as wiki pages, reports, and documents. You could also retrieve images regularly, such as every minute, and create your own custom live dashboard.</p> <p>The graph you retrieve can include all CloudWatch metric graph features, including metric math and horizontal and vertical annotations.</p> <p>There is a limit of 20 transactions per second for this API. Each <code>GetMetricWidgetImage</code> action has the following limits:</p> <ul> <li> <p>As many as 100 metrics in the graph.</p> </li> <li> <p>Up to 100 KB uncompressed payload.</p> </li> </ul></p>
     async fn get_metric_widget_image(
         &self,
@@ -6442,6 +7468,12 @@ pub trait CloudWatch {
         &self,
         input: ListDashboardsInput,
     ) -> Result<ListDashboardsOutput, RusotoError<ListDashboardsError>>;
+
+    /// <p>Returns a list of metric streams in this account.</p>
+    async fn list_metric_streams(
+        &self,
+        input: ListMetricStreamsInput,
+    ) -> Result<ListMetricStreamsOutput, RusotoError<ListMetricStreamsError>>;
 
     /// <p>List the specified metrics. You can use the returned metrics with <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_GetMetricData.html">GetMetricData</a> or <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_GetMetricStatistics.html">GetMetricStatistics</a> to obtain statistical data.</p> <p>Up to 500 results are returned for any one call. To retrieve additional results, use the returned token with subsequent calls.</p> <p>After you create a metric, allow up to 15 minutes before the metric appears. You can see statistics about the metric sooner by using <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_GetMetricData.html">GetMetricData</a> or <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_GetMetricStatistics.html">GetMetricStatistics</a>.</p> <p> <code>ListMetrics</code> doesn't return information about metrics if those metrics haven't reported data in the past two weeks. To retrieve those metrics, use <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_GetMetricData.html">GetMetricData</a> or <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_GetMetricStatistics.html">GetMetricStatistics</a>.</p>
     async fn list_metrics(
@@ -6479,7 +7511,7 @@ pub trait CloudWatch {
         input: PutInsightRuleInput,
     ) -> Result<PutInsightRuleOutput, RusotoError<PutInsightRuleError>>;
 
-    /// <p>Creates or updates an alarm and associates it with the specified metric, metric math expression, or anomaly detection model.</p> <p>Alarms based on anomaly detection models cannot have Auto Scaling actions.</p> <p>When this operation creates an alarm, the alarm state is immediately set to <code>INSUFFICIENT_DATA</code>. The alarm is then evaluated and its state is set appropriately. Any actions associated with the new state are then executed.</p> <p>When you update an existing alarm, its state is left unchanged, but the update completely overwrites the previous configuration of the alarm.</p> <p>If you are an IAM user, you must have Amazon EC2 permissions for some alarm operations:</p> <ul> <li> <p>The <code>iam:CreateServiceLinkedRole</code> for all alarms with EC2 actions</p> </li> <li> <p>The <code>iam:CreateServiceLinkedRole</code> to create an alarm with Systems Manager OpsItem actions.</p> </li> </ul> <p>The first time you create an alarm in the AWS Management Console, the CLI, or by using the PutMetricAlarm API, CloudWatch creates the necessary service-linked rolea for you. The service-linked roles are called <code>AWSServiceRoleForCloudWatchEvents</code> and <code>AWSServiceRoleForCloudWatchAlarms_ActionSSM</code>. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html#iam-term-service-linked-role">AWS service-linked role</a>.</p>
+    /// <p>Creates or updates an alarm and associates it with the specified metric, metric math expression, or anomaly detection model.</p> <p>Alarms based on anomaly detection models cannot have Auto Scaling actions.</p> <p>When this operation creates an alarm, the alarm state is immediately set to <code>INSUFFICIENT_DATA</code>. The alarm is then evaluated and its state is set appropriately. Any actions associated with the new state are then executed.</p> <p>When you update an existing alarm, its state is left unchanged, but the update completely overwrites the previous configuration of the alarm.</p> <p>If you are an IAM user, you must have Amazon EC2 permissions for some alarm operations:</p> <ul> <li> <p>The <code>iam:CreateServiceLinkedRole</code> for all alarms with EC2 actions</p> </li> <li> <p>The <code>iam:CreateServiceLinkedRole</code> to create an alarm with Systems Manager OpsItem actions.</p> </li> </ul> <p>The first time you create an alarm in the AWS Management Console, the CLI, or by using the PutMetricAlarm API, CloudWatch creates the necessary service-linked role for you. The service-linked roles are called <code>AWSServiceRoleForCloudWatchEvents</code> and <code>AWSServiceRoleForCloudWatchAlarms_ActionSSM</code>. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html#iam-term-service-linked-role">AWS service-linked role</a>.</p>
     async fn put_metric_alarm(
         &self,
         input: PutMetricAlarmInput,
@@ -6491,11 +7523,29 @@ pub trait CloudWatch {
         input: PutMetricDataInput,
     ) -> Result<(), RusotoError<PutMetricDataError>>;
 
+    /// <p>Creates or updates a metric stream. Metric streams can automatically stream CloudWatch metrics to AWS destinations including Amazon S3 and to many third-party solutions.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Metric-Streams.html"> Using Metric Streams</a>.</p> <p>To create a metric stream, you must be logged on to an account that has the <code>iam:PassRole</code> permission and either the <code>CloudWatchFullAccess</code> policy or the <code>cloudwatch:PutMetricStream</code> permission.</p> <p>When you create or update a metric stream, you choose one of the following:</p> <ul> <li> <p>Stream metrics from all metric namespaces in the account.</p> </li> <li> <p>Stream metrics from all metric namespaces in the account, except for the namespaces that you list in <code>ExcludeFilters</code>.</p> </li> <li> <p>Stream metrics from only the metric namespaces that you list in <code>IncludeFilters</code>.</p> </li> </ul> <p>When you use <code>PutMetricStream</code> to create a new metric stream, the stream is created in the <code>running</code> state. If you use it to update an existing stream, the state of the stream is not changed.</p>
+    async fn put_metric_stream(
+        &self,
+        input: PutMetricStreamInput,
+    ) -> Result<PutMetricStreamOutput, RusotoError<PutMetricStreamError>>;
+
     /// <p>Temporarily sets the state of an alarm for testing purposes. When the updated state differs from the previous value, the action configured for the appropriate state is invoked. For example, if your alarm is configured to send an Amazon SNS message when an alarm is triggered, temporarily changing the alarm state to <code>ALARM</code> sends an SNS message.</p> <p>Metric alarms returns to their actual state quickly, often within seconds. Because the metric alarm state change happens quickly, it is typically only visible in the alarm's <b>History</b> tab in the Amazon CloudWatch console or through <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_DescribeAlarmHistory.html">DescribeAlarmHistory</a>.</p> <p>If you use <code>SetAlarmState</code> on a composite alarm, the composite alarm is not guaranteed to return to its actual state. It returns to its actual state only once any of its children alarms change state. It is also reevaluated if you update its configuration.</p> <p>If an alarm triggers EC2 Auto Scaling policies or application Auto Scaling policies, you must include information in the <code>StateReasonData</code> parameter to enable the policy to take the correct action.</p>
     async fn set_alarm_state(
         &self,
         input: SetAlarmStateInput,
     ) -> Result<(), RusotoError<SetAlarmStateError>>;
+
+    /// <p>Starts the streaming of metrics for one or more of your metric streams.</p>
+    async fn start_metric_streams(
+        &self,
+        input: StartMetricStreamsInput,
+    ) -> Result<StartMetricStreamsOutput, RusotoError<StartMetricStreamsError>>;
+
+    /// <p>Stops the streaming of metrics for one or more of your metric streams.</p>
+    async fn stop_metric_streams(
+        &self,
+        input: StopMetricStreamsInput,
+    ) -> Result<StopMetricStreamsOutput, RusotoError<StopMetricStreamsError>>;
 
     /// <p>Assigns one or more tags (key-value pairs) to the specified CloudWatch resource. Currently, the only CloudWatch resources that can be tagged are alarms and Contributor Insights rules.</p> <p>Tags can help you organize and categorize your resources. You can also use them to scope user permissions by granting a user permission to access or change only resources with certain tag values.</p> <p>Tags don't have any semantic meaning to AWS and are interpreted strictly as strings of characters.</p> <p>You can use the <code>TagResource</code> action with an alarm that already has tags. If you specify a new tag key for the alarm, this tag is appended to the list of tags associated with the alarm. If you specify a tag key that is already associated with the alarm, the new tag value that you specify replaces the previous value for that tag.</p> <p>You can associate as many as 50 tags with a CloudWatch resource.</p>
     async fn tag_resource(
@@ -6641,6 +7691,28 @@ impl CloudWatch for CloudWatchClient {
             Ok(result)
         })
         .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Permanently deletes the metric stream that you specify.</p>
+    async fn delete_metric_stream(
+        &self,
+        input: DeleteMetricStreamInput,
+    ) -> Result<DeleteMetricStreamOutput, RusotoError<DeleteMetricStreamError>> {
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+        let params = self.new_params("DeleteMetricStream");
+        let mut params = params;
+        DeleteMetricStreamInputSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, DeleteMetricStreamError::from_response)
+            .await?;
+
+        let result = DeleteMetricStreamOutput::default();
 
         drop(response); // parse non-payload
         Ok(result)
@@ -7042,6 +8114,37 @@ impl CloudWatch for CloudWatchClient {
         Ok(result)
     }
 
+    /// <p>Returns information about the metric stream that you specify.</p>
+    async fn get_metric_stream(
+        &self,
+        input: GetMetricStreamInput,
+    ) -> Result<GetMetricStreamOutput, RusotoError<GetMetricStreamError>> {
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+        let params = self.new_params("GetMetricStream");
+        let mut params = params;
+        GetMetricStreamInputSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, GetMetricStreamError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                GetMetricStreamOutputDeserializer::deserialize("GetMetricStreamResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
     /// <p><p>You can use the <code>GetMetricWidgetImage</code> API to retrieve a snapshot graph of one or more Amazon CloudWatch metrics as a bitmap image. You can then embed this image into your services and products, such as wiki pages, reports, and documents. You could also retrieve images regularly, such as every minute, and create your own custom live dashboard.</p> <p>The graph you retrieve can include all CloudWatch metric graph features, including metric math and horizontal and vertical annotations.</p> <p>There is a limit of 20 transactions per second for this API. Each <code>GetMetricWidgetImage</code> action has the following limits:</p> <ul> <li> <p>As many as 100 metrics in the graph.</p> </li> <li> <p>Up to 100 KB uncompressed payload.</p> </li> </ul></p>
     async fn get_metric_widget_image(
         &self,
@@ -7096,6 +8199,37 @@ impl CloudWatch for CloudWatchClient {
             xml_util::start_element(actual_tag_name, stack)?;
             let result =
                 ListDashboardsOutputDeserializer::deserialize("ListDashboardsResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Returns a list of metric streams in this account.</p>
+    async fn list_metric_streams(
+        &self,
+        input: ListMetricStreamsInput,
+    ) -> Result<ListMetricStreamsOutput, RusotoError<ListMetricStreamsError>> {
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+        let params = self.new_params("ListMetricStreams");
+        let mut params = params;
+        ListMetricStreamsInputSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, ListMetricStreamsError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                ListMetricStreamsOutputDeserializer::deserialize("ListMetricStreamsResult", stack)?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
             Ok(result)
@@ -7263,7 +8397,7 @@ impl CloudWatch for CloudWatchClient {
         Ok(result)
     }
 
-    /// <p>Creates or updates an alarm and associates it with the specified metric, metric math expression, or anomaly detection model.</p> <p>Alarms based on anomaly detection models cannot have Auto Scaling actions.</p> <p>When this operation creates an alarm, the alarm state is immediately set to <code>INSUFFICIENT_DATA</code>. The alarm is then evaluated and its state is set appropriately. Any actions associated with the new state are then executed.</p> <p>When you update an existing alarm, its state is left unchanged, but the update completely overwrites the previous configuration of the alarm.</p> <p>If you are an IAM user, you must have Amazon EC2 permissions for some alarm operations:</p> <ul> <li> <p>The <code>iam:CreateServiceLinkedRole</code> for all alarms with EC2 actions</p> </li> <li> <p>The <code>iam:CreateServiceLinkedRole</code> to create an alarm with Systems Manager OpsItem actions.</p> </li> </ul> <p>The first time you create an alarm in the AWS Management Console, the CLI, or by using the PutMetricAlarm API, CloudWatch creates the necessary service-linked rolea for you. The service-linked roles are called <code>AWSServiceRoleForCloudWatchEvents</code> and <code>AWSServiceRoleForCloudWatchAlarms_ActionSSM</code>. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html#iam-term-service-linked-role">AWS service-linked role</a>.</p>
+    /// <p>Creates or updates an alarm and associates it with the specified metric, metric math expression, or anomaly detection model.</p> <p>Alarms based on anomaly detection models cannot have Auto Scaling actions.</p> <p>When this operation creates an alarm, the alarm state is immediately set to <code>INSUFFICIENT_DATA</code>. The alarm is then evaluated and its state is set appropriately. Any actions associated with the new state are then executed.</p> <p>When you update an existing alarm, its state is left unchanged, but the update completely overwrites the previous configuration of the alarm.</p> <p>If you are an IAM user, you must have Amazon EC2 permissions for some alarm operations:</p> <ul> <li> <p>The <code>iam:CreateServiceLinkedRole</code> for all alarms with EC2 actions</p> </li> <li> <p>The <code>iam:CreateServiceLinkedRole</code> to create an alarm with Systems Manager OpsItem actions.</p> </li> </ul> <p>The first time you create an alarm in the AWS Management Console, the CLI, or by using the PutMetricAlarm API, CloudWatch creates the necessary service-linked role for you. The service-linked roles are called <code>AWSServiceRoleForCloudWatchEvents</code> and <code>AWSServiceRoleForCloudWatchAlarms_ActionSSM</code>. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html#iam-term-service-linked-role">AWS service-linked role</a>.</p>
     async fn put_metric_alarm(
         &self,
         input: PutMetricAlarmInput,
@@ -7303,6 +8437,37 @@ impl CloudWatch for CloudWatchClient {
         Ok(())
     }
 
+    /// <p>Creates or updates a metric stream. Metric streams can automatically stream CloudWatch metrics to AWS destinations including Amazon S3 and to many third-party solutions.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Metric-Streams.html"> Using Metric Streams</a>.</p> <p>To create a metric stream, you must be logged on to an account that has the <code>iam:PassRole</code> permission and either the <code>CloudWatchFullAccess</code> policy or the <code>cloudwatch:PutMetricStream</code> permission.</p> <p>When you create or update a metric stream, you choose one of the following:</p> <ul> <li> <p>Stream metrics from all metric namespaces in the account.</p> </li> <li> <p>Stream metrics from all metric namespaces in the account, except for the namespaces that you list in <code>ExcludeFilters</code>.</p> </li> <li> <p>Stream metrics from only the metric namespaces that you list in <code>IncludeFilters</code>.</p> </li> </ul> <p>When you use <code>PutMetricStream</code> to create a new metric stream, the stream is created in the <code>running</code> state. If you use it to update an existing stream, the state of the stream is not changed.</p>
+    async fn put_metric_stream(
+        &self,
+        input: PutMetricStreamInput,
+    ) -> Result<PutMetricStreamOutput, RusotoError<PutMetricStreamError>> {
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+        let params = self.new_params("PutMetricStream");
+        let mut params = params;
+        PutMetricStreamInputSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, PutMetricStreamError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result =
+                PutMetricStreamOutputDeserializer::deserialize("PutMetricStreamResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Temporarily sets the state of an alarm for testing purposes. When the updated state differs from the previous value, the action configured for the appropriate state is invoked. For example, if your alarm is configured to send an Amazon SNS message when an alarm is triggered, temporarily changing the alarm state to <code>ALARM</code> sends an SNS message.</p> <p>Metric alarms returns to their actual state quickly, often within seconds. Because the metric alarm state change happens quickly, it is typically only visible in the alarm's <b>History</b> tab in the Amazon CloudWatch console or through <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/APIReference/API_DescribeAlarmHistory.html">DescribeAlarmHistory</a>.</p> <p>If you use <code>SetAlarmState</code> on a composite alarm, the composite alarm is not guaranteed to return to its actual state. It returns to its actual state only once any of its children alarms change state. It is also reevaluated if you update its configuration.</p> <p>If an alarm triggers EC2 Auto Scaling policies or application Auto Scaling policies, you must include information in the <code>StateReasonData</code> parameter to enable the policy to take the correct action.</p>
     async fn set_alarm_state(
         &self,
@@ -7321,6 +8486,50 @@ impl CloudWatch for CloudWatchClient {
 
         std::mem::drop(response);
         Ok(())
+    }
+
+    /// <p>Starts the streaming of metrics for one or more of your metric streams.</p>
+    async fn start_metric_streams(
+        &self,
+        input: StartMetricStreamsInput,
+    ) -> Result<StartMetricStreamsOutput, RusotoError<StartMetricStreamsError>> {
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+        let params = self.new_params("StartMetricStreams");
+        let mut params = params;
+        StartMetricStreamsInputSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, StartMetricStreamsError::from_response)
+            .await?;
+
+        let result = StartMetricStreamsOutput::default();
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Stops the streaming of metrics for one or more of your metric streams.</p>
+    async fn stop_metric_streams(
+        &self,
+        input: StopMetricStreamsInput,
+    ) -> Result<StopMetricStreamsOutput, RusotoError<StopMetricStreamsError>> {
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+        let params = self.new_params("StopMetricStreams");
+        let mut params = params;
+        StopMetricStreamsInputSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, StopMetricStreamsError::from_response)
+            .await?;
+
+        let result = StopMetricStreamsOutput::default();
+
+        drop(response); // parse non-payload
+        Ok(result)
     }
 
     /// <p>Assigns one or more tags (key-value pairs) to the specified CloudWatch resource. Currently, the only CloudWatch resources that can be tagged are alarms and Contributor Insights rules.</p> <p>Tags can help you organize and categorize your resources. You can also use them to scope user permissions by granting a user permission to access or change only resources with certain tag values.</p> <p>Tags don't have any semantic meaning to AWS and are interpreted strictly as strings of characters.</p> <p>You can use the <code>TagResource</code> action with an alarm that already has tags. If you specify a new tag key for the alarm, this tag is appended to the list of tags associated with the alarm. If you specify a tag key that is already associated with the alarm, the new tag value that you specify replaces the previous value for that tag.</p> <p>You can associate as many as 50 tags with a CloudWatch resource.</p>

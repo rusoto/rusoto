@@ -1771,7 +1771,7 @@ pub struct LaunchConfig {
     #[serde(rename = "portForwardingConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub port_forwarding_config: Option<PortForwardingConfig>,
-    /// <p>Boolean indicating whether a streaming session will be configured for the application. If <code>True</code>, AWS RoboMaker will configure a connection so you can interact with your application as it is running in the simulation. You must configure and luanch the component. It must have a graphical user interface. </p>
+    /// <p>Boolean indicating whether a streaming session will be configured for the application. If <code>True</code>, AWS RoboMaker will configure a connection so you can interact with your application as it is running in the simulation. You must configure and launch the component. It must have a graphical user interface. </p>
     #[serde(rename = "streamUI")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_ui: Option<bool>,
@@ -2314,6 +2314,22 @@ pub struct RobotApplicationConfig {
     /// <p>The launch configuration for the robot application.</p>
     #[serde(rename = "launchConfig")]
     pub launch_config: LaunchConfig,
+    /// <p>Information about tools configured for the robot application.</p>
+    #[serde(rename = "tools")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tools: Option<Vec<Tool>>,
+    /// <p>The upload configurations for the robot application.</p>
+    #[serde(rename = "uploadConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub upload_configurations: Option<Vec<UploadConfiguration>>,
+    /// <p>A Boolean indicating whether to use default robot application tools. The default tools are rviz, rqt, terminal and rosbag record. The default is <code>False</code>. </p>
+    #[serde(rename = "useDefaultTools")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub use_default_tools: Option<bool>,
+    /// <p>A Boolean indicating whether to use default upload configurations. By default, <code>.ros</code> and <code>.gazebo</code> files are uploaded when the application terminates and all ROS topics will be recorded.</p> <p>If you set this value, you must specify an <code>outputLocation</code>. </p>
+    #[serde(rename = "useDefaultUploadConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub use_default_upload_configurations: Option<bool>,
 }
 
 /// <p>Summary information for a robot application.</p>
@@ -2431,6 +2447,22 @@ pub struct SimulationApplicationConfig {
     /// <p>The launch configuration for the simulation application.</p>
     #[serde(rename = "launchConfig")]
     pub launch_config: LaunchConfig,
+    /// <p>Information about tools configured for the simulation application.</p>
+    #[serde(rename = "tools")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tools: Option<Vec<Tool>>,
+    /// <p>Information about upload configurations for the simulation application.</p>
+    #[serde(rename = "uploadConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub upload_configurations: Option<Vec<UploadConfiguration>>,
+    /// <p>A Boolean indicating whether to use default simulation application tools. The default tools are rviz, rqt, terminal and rosbag record. The default is <code>False</code>. </p>
+    #[serde(rename = "useDefaultTools")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub use_default_tools: Option<bool>,
+    /// <p>A Boolean indicating whether to use default upload configurations. By default, <code>.ros</code> and <code>.gazebo</code> files are uploaded when the application terminates and all ROS topics will be recorded.</p> <p>If you set this value, you must specify an <code>outputLocation</code>. </p>
+    #[serde(rename = "useDefaultUploadConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub use_default_upload_configurations: Option<bool>,
     /// <p>A list of world configurations.</p>
     #[serde(rename = "worldConfigs")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2631,7 +2663,7 @@ pub struct SimulationJobRequest {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Boolean indicating whether to use default simulation tool applications.</p>
+    /// <p>A Boolean indicating whether to use default applications in the simulation job. Default applications include Gazebo, rqt, rviz and terminal access. </p>
     #[serde(rename = "useDefaultApplications")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub use_default_applications: Option<bool>,
@@ -2893,6 +2925,29 @@ pub struct TemplateSummary {
     pub name: Option<String>,
 }
 
+/// <p>Information about a tool. Tools are used in a simulation job.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Tool {
+    /// <p>Command-line arguments for the tool. It must include the tool executable name.</p>
+    #[serde(rename = "command")]
+    pub command: String,
+    /// <p>Exit behavior determines what happens when your tool quits running. <code>RESTART</code> will cause your tool to be restarted. <code>FAIL</code> will cause your job to exit. The default is <code>RESTART</code>. </p>
+    #[serde(rename = "exitBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exit_behavior: Option<String>,
+    /// <p>The name of the tool.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+    /// <p>Boolean indicating whether logs will be recorded in CloudWatch for the tool. The default is <code>False</code>. </p>
+    #[serde(rename = "streamOutputToCloudWatch")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_output_to_cloud_watch: Option<bool>,
+    /// <p>Boolean indicating whether a streaming session will be configured for the tool. If <code>True</code>, AWS RoboMaker will configure a connection so you can interact with the tool as it is running in the simulation. It must have a graphical user interface. The default is <code>False</code>. </p>
+    #[serde(rename = "streamUI")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_ui: Option<bool>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
@@ -3064,6 +3119,20 @@ pub struct UpdateWorldTemplateResponse {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+}
+
+/// <p>Provides upload configuration information. Files are uploaded from the simulation job to a location you specify. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct UploadConfiguration {
+    /// <p>A prefix that specifies where files will be uploaded in Amazon S3. It is appended to the simulation output location to determine the final path. </p> <p> For example, if your simulation output location is <code>s3://my-bucket</code> and your upload configuration name is <code>robot-test</code>, your files will be uploaded to <code>s3://my-bucket/&lt;simid&gt;/&lt;runid&gt;/robot-test</code>. </p>
+    #[serde(rename = "name")]
+    pub name: String,
+    /// <p> Specifies the path of the file(s) to upload. Standard Unix glob matching rules are accepted, with the addition of <code>**</code> as a <i>super asterisk</i>. For example, specifying <code>/var/log/**.log</code> causes all .log files in the <code>/var/log</code> directory tree to be collected. For more examples, see <a href="https://github.com/gobwas/glob">Glob Library</a>. </p>
+    #[serde(rename = "path")]
+    pub path: String,
+    /// <p><p>Specifies when to upload the files:</p> <dl> <dt>UPLOAD<em>ON</em>TERMINATE</dt> <dd> <p>Matching files are uploaded once the simulation enters the <code>TERMINATING</code> state. Matching files are not uploaded until all of your code (including tools) have stopped. </p> <p>If there is a problem uploading a file, the upload is retried. If problems persist, no further upload attempts will be made.</p> </dd> <dt>UPLOAD<em>ROLLING</em>AUTO_REMOVE</dt> <dd> <p>Matching files are uploaded as they are created. They are deleted after they are uploaded. The specified path is checked every 5 seconds. A final check is made when all of your code (including tools) have stopped. </p> </dd> </dl></p>
+    #[serde(rename = "uploadBehavior")]
+    pub upload_behavior: String,
 }
 
 /// <p>If your simulation job accesses resources in a VPC, you provide this parameter identifying the list of security group IDs and subnet IDs. These must belong to the same VPC. You must provide at least one security group and two subnet IDs.</p>

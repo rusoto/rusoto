@@ -60,6 +60,68 @@ impl DocdbClient {
     }
 }
 
+/// <p>Represents the input to <a>AddSourceIdentifierToSubscription</a>. </p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AddSourceIdentifierToSubscriptionMessage {
+    /// <p><p>The identifier of the event source to be added:</p> <ul> <li> <p>If the source type is an instance, a <code>DBInstanceIdentifier</code> must be provided.</p> </li> <li> <p>If the source type is a security group, a <code>DBSecurityGroupName</code> must be provided.</p> </li> <li> <p>If the source type is a parameter group, a <code>DBParameterGroupName</code> must be provided.</p> </li> <li> <p>If the source type is a snapshot, a <code>DBSnapshotIdentifier</code> must be provided.</p> </li> </ul></p>
+    pub source_identifier: String,
+    /// <p>The name of the Amazon DocumentDB event notification subscription that you want to add a source identifier to.</p>
+    pub subscription_name: String,
+}
+
+/// Serialize `AddSourceIdentifierToSubscriptionMessage` contents to a `SignedRequest`.
+struct AddSourceIdentifierToSubscriptionMessageSerializer;
+impl AddSourceIdentifierToSubscriptionMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &AddSourceIdentifierToSubscriptionMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "SourceIdentifier"),
+            &obj.source_identifier,
+        );
+        params.put(
+            &format!("{}{}", prefix, "SubscriptionName"),
+            &obj.subscription_name,
+        );
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct AddSourceIdentifierToSubscriptionResult {
+    pub event_subscription: Option<EventSubscription>,
+}
+
+#[allow(dead_code)]
+struct AddSourceIdentifierToSubscriptionResultDeserializer;
+impl AddSourceIdentifierToSubscriptionResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AddSourceIdentifierToSubscriptionResult, XmlParseError> {
+        deserialize_elements::<_, AddSourceIdentifierToSubscriptionResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "EventSubscription" => {
+                        obj.event_subscription = Some(EventSubscriptionDeserializer::deserialize(
+                            "EventSubscription",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Represents the input to <a>AddTagsToResource</a>. </p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -279,7 +341,7 @@ impl BooleanOptionalDeserializer {
         xml_util::deserialize_primitive(tag_name, stack, |s| Ok(bool::from_str(&s).unwrap()))
     }
 }
-/// <p>A certificate authority (CA) certificate for an AWS account.</p>
+/// <p>A certificate authority (CA) certificate for an account.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct Certificate {
@@ -357,7 +419,7 @@ impl CertificateListDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct CertificateMessage {
-    /// <p>A list of certificates for this AWS account.</p>
+    /// <p>A list of certificates for this account.</p>
     pub certificates: Option<Vec<Certificate>>,
     /// <p>An optional pagination token provided if the number of records retrieved is greater than <code>MaxRecords</code>. If this parameter is specified, the marker specifies the next record in the list. Including the value of <code>Marker</code> in the next call to <code>DescribeCertificates</code> results in the next page of certificates.</p>
     pub marker: Option<String>,
@@ -427,7 +489,7 @@ impl CloudwatchLogsExportConfigurationSerializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CopyDBClusterParameterGroupMessage {
-    /// <p><p>The identifier or Amazon Resource Name (ARN) for the source cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid cluster parameter group.</p> </li> <li> <p>If the source cluster parameter group is in the same AWS Region as the copy, specify a valid parameter group identifier; for example, <code>my-db-cluster-param-group</code>, or a valid ARN.</p> </li> <li> <p>If the source parameter group is in a different AWS Region than the copy, specify a valid cluster parameter group ARN; for example, <code>arn:aws:rds:us-east-1:123456789012:sample-cluster:sample-parameter-group</code>.</p> </li> </ul></p>
+    /// <p><p>The identifier or Amazon Resource Name (ARN) for the source cluster parameter group.</p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid cluster parameter group.</p> </li> <li> <p>If the source cluster parameter group is in the same Region as the copy, specify a valid parameter group identifier; for example, <code>my-db-cluster-param-group</code>, or a valid ARN.</p> </li> <li> <p>If the source parameter group is in a different Region than the copy, specify a valid cluster parameter group ARN; for example, <code>arn:aws:rds:us-east-1:123456789012:sample-cluster:sample-parameter-group</code>.</p> </li> </ul></p>
     pub source_db_cluster_parameter_group_identifier: String,
     /// <p>The tags that are to be assigned to the parameter group.</p>
     pub tags: Option<Vec<Tag>>,
@@ -503,11 +565,11 @@ impl CopyDBClusterParameterGroupResultDeserializer {
 pub struct CopyDBClusterSnapshotMessage {
     /// <p>Set to <code>true</code> to copy all tags from the source cluster snapshot to the target cluster snapshot, and otherwise <code>false</code>. The default is <code>false</code>.</p>
     pub copy_tags: Option<bool>,
-    /// <p>The AWS KMS key ID for an encrypted cluster snapshot. The AWS KMS key ID is the Amazon Resource Name (ARN), AWS KMS key identifier, or the AWS KMS key alias for the AWS KMS encryption key. </p> <p>If you copy an encrypted cluster snapshot from your AWS account, you can specify a value for <code>KmsKeyId</code> to encrypt the copy with a new AWS KMS encryption key. If you don't specify a value for <code>KmsKeyId</code>, then the copy of the cluster snapshot is encrypted with the same AWS KMS key as the source cluster snapshot. </p> <p>If you copy an encrypted cluster snapshot that is shared from another AWS account, then you must specify a value for <code>KmsKeyId</code>.</p> <p>To copy an encrypted cluster snapshot to another AWS Region, set <code>KmsKeyId</code> to the AWS KMS key ID that you want to use to encrypt the copy of the cluster snapshot in the destination Region. AWS KMS encryption keys are specific to the AWS Region that they are created in, and you can't use encryption keys from one AWS Region in another AWS Region.</p> <p>If you copy an unencrypted cluster snapshot and specify a value for the <code>KmsKeyId</code> parameter, an error is returned.</p>
+    /// <p>The KMS key ID for an encrypted cluster snapshot. The KMS key ID is the Amazon Resource Name (ARN), KMS key identifier, or the KMS key alias for the KMS encryption key. </p> <p>If you copy an encrypted cluster snapshot from your account, you can specify a value for <code>KmsKeyId</code> to encrypt the copy with a new KMS encryption key. If you don't specify a value for <code>KmsKeyId</code>, then the copy of the cluster snapshot is encrypted with the same KMS key as the source cluster snapshot.</p> <p>If you copy an encrypted cluster snapshot that is shared from another account, then you must specify a value for <code>KmsKeyId</code>.</p> <p>To copy an encrypted cluster snapshot to another Region, set <code>KmsKeyId</code> to the KMS key ID that you want to use to encrypt the copy of the cluster snapshot in the destination Region. KMS encryption keys are specific to the Region that they are created in, and you can't use encryption keys from one Region in another Region.</p> <p>If you copy an unencrypted cluster snapshot and specify a value for the <code>KmsKeyId</code> parameter, an error is returned.</p>
     pub kms_key_id: Option<String>,
-    /// <p><p>The URL that contains a Signature Version 4 signed request for the <code>CopyDBClusterSnapshot</code> API action in the AWS Region that contains the source cluster snapshot to copy. You must use the <code>PreSignedUrl</code> parameter when copying a cluster snapshot from another AWS Region.</p> <p>If you are using an AWS SDK tool or the AWS CLI, you can specify <code>SourceRegion</code> (or <code>--source-region</code> for the AWS CLI) instead of specifying <code>PreSignedUrl</code> manually. Specifying <code>SourceRegion</code> autogenerates a pre-signed URL that is a valid request for the operation that can be executed in the source AWS Region.</p> <p>The presigned URL must be a valid request for the <code>CopyDBClusterSnapshot</code> API action that can be executed in the source AWS Region that contains the cluster snapshot to be copied. The presigned URL request must contain the following parameter values:</p> <ul> <li> <p> <code>SourceRegion</code> - The ID of the region that contains the snapshot to be copied.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The identifier for the the encrypted cluster snapshot to be copied. This identifier must be in the Amazon Resource Name (ARN) format for the source AWS Region. For example, if you are copying an encrypted cluster snapshot from the us-east-1 AWS Region, then your <code>SourceDBClusterSnapshotIdentifier</code> looks something like the following: <code>arn:aws:rds:us-east-1:12345678012:sample-cluster:sample-cluster-snapshot</code>.</p> </li> <li> <p> <code>TargetDBClusterSnapshotIdentifier</code> - The identifier for the new cluster snapshot to be created. This parameter isn&#39;t case sensitive.</p> </li> </ul></p>
+    /// <p><p>The URL that contains a Signature Version 4 signed request for the<code>CopyDBClusterSnapshot</code> API action in the Region that contains the source cluster snapshot to copy. You must use the <code>PreSignedUrl</code> parameter when copying a cluster snapshot from another Region.</p> <p>If you are using an Amazon Web Services SDK tool or the CLI, you can specify <code>SourceRegion</code> (or <code>--source-region</code> for the CLI) instead of specifying <code>PreSignedUrl</code> manually. Specifying <code>SourceRegion</code> autogenerates a pre-signed URL that is a valid request for the operation that can be executed in the source Region.</p> <p>The presigned URL must be a valid request for the <code>CopyDBClusterSnapshot</code> API action that can be executed in the source Region that contains the cluster snapshot to be copied. The presigned URL request must contain the following parameter values:</p> <ul> <li> <p> <code>SourceRegion</code> - The ID of the region that contains the snapshot to be copied.</p> </li> <li> <p> <code>SourceDBClusterSnapshotIdentifier</code> - The identifier for the the encrypted cluster snapshot to be copied. This identifier must be in the Amazon Resource Name (ARN) format for the source Region. For example, if you are copying an encrypted cluster snapshot from the us-east-1 Region, then your <code>SourceDBClusterSnapshotIdentifier</code> looks something like the following: <code>arn:aws:rds:us-east-1:12345678012:sample-cluster:sample-cluster-snapshot</code>.</p> </li> <li> <p> <code>TargetDBClusterSnapshotIdentifier</code> - The identifier for the new cluster snapshot to be created. This parameter isn&#39;t case sensitive.</p> </li> </ul></p>
     pub pre_signed_url: Option<String>,
-    /// <p>The identifier of the cluster snapshot to copy. This parameter is not case sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid system snapshot in the <i>available</i> state.</p> </li> <li> <p>If the source snapshot is in the same AWS Region as the copy, specify a valid snapshot identifier.</p> </li> <li> <p>If the source snapshot is in a different AWS Region than the copy, specify a valid cluster snapshot ARN.</p> </li> </ul> <p>Example: <code>my-cluster-snapshot1</code> </p>
+    /// <p>The identifier of the cluster snapshot to copy. This parameter is not case sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must specify a valid system snapshot in the <i>available</i> state.</p> </li> <li> <p>If the source snapshot is in the same Region as the copy, specify a valid snapshot identifier.</p> </li> <li> <p>If the source snapshot is in a different Region than the copy, specify a valid cluster snapshot ARN.</p> </li> </ul> <p>Example: <code>my-cluster-snapshot1</code> </p>
     pub source_db_cluster_snapshot_identifier: String,
     /// <p>The tags to be assigned to the cluster snapshot.</p>
     pub tags: Option<Vec<Tag>>,
@@ -599,21 +661,23 @@ pub struct CreateDBClusterMessage {
     pub enable_cloudwatch_logs_exports: Option<Vec<String>>,
     /// <p>The name of the database engine to be used for this cluster.</p> <p>Valid values: <code>docdb</code> </p>
     pub engine: String,
-    /// <p>The version number of the database engine to use. The --engine-version will default to the latest major engine version. For production workloads, we recommend explicitly declaring this parameter with the intended major engine version.</p>
+    /// <p>The version number of the database engine to use. The <code>--engine-version</code> will default to the latest major engine version. For production workloads, we recommend explicitly declaring this parameter with the intended major engine version.</p>
     pub engine_version: Option<String>,
-    /// <p>The AWS KMS key identifier for an encrypted cluster.</p> <p>The AWS KMS key identifier is the Amazon Resource Name (ARN) for the AWS KMS encryption key. If you are creating a cluster using the same AWS account that owns the AWS KMS encryption key that is used to encrypt the new cluster, you can use the AWS KMS key alias instead of the ARN for the AWS KMS encryption key.</p> <p>If an encryption key is not specified in <code>KmsKeyId</code>: </p> <ul> <li> <p>If the <code>StorageEncrypted</code> parameter is <code>true</code>, Amazon DocumentDB uses your default encryption key. </p> </li> </ul> <p>AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
+    /// <p>The cluster identifier of the new global cluster.</p>
+    pub global_cluster_identifier: Option<String>,
+    /// <p>The KMS key identifier for an encrypted cluster.</p> <p>The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption key. If you are creating a cluster using the same account that owns the KMS encryption key that is used to encrypt the new cluster, you can use the KMS key alias instead of the ARN for the KMS encryption key.</p> <p>If an encryption key is not specified in <code>KmsKeyId</code>: </p> <ul> <li> <p>If the <code>StorageEncrypted</code> parameter is <code>true</code>, Amazon DocumentDB uses your default encryption key. </p> </li> </ul> <p>KMS creates the default encryption key for your account. Your account has a different default encryption key for each Regions.</p>
     pub kms_key_id: Option<String>,
     /// <p>The password for the master database user. This password can contain any printable ASCII character except forward slash (/), double quote ("), or the "at" symbol (@).</p> <p>Constraints: Must contain from 8 to 100 characters.</p>
-    pub master_user_password: String,
+    pub master_user_password: Option<String>,
     /// <p><p>The name of the master user for the cluster.</p> <p>Constraints:</p> <ul> <li> <p>Must be from 1 to 63 letters or numbers.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot be a reserved word for the chosen database engine. </p> </li> </ul></p>
-    pub master_username: String,
+    pub master_username: Option<String>,
     /// <p>The port number on which the instances in the cluster accept connections.</p>
     pub port: Option<i64>,
     /// <p>Not currently supported. </p>
     pub pre_signed_url: Option<String>,
-    /// <p><p>The daily time range during which automated backups are created if automated backups are enabled using the <code>BackupRetentionPeriod</code> parameter. </p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region. </p> <p>Constraints:</p> <ul> <li> <p>Must be in the format <code>hh24:mi-hh24:mi</code>.</p> </li> <li> <p>Must be in Universal Coordinated Time (UTC).</p> </li> <li> <p>Must not conflict with the preferred maintenance window. </p> </li> <li> <p>Must be at least 30 minutes.</p> </li> </ul></p>
+    /// <p><p>The daily time range during which automated backups are created if automated backups are enabled using the <code>BackupRetentionPeriod</code> parameter. </p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each Region. </p> <p>Constraints:</p> <ul> <li> <p>Must be in the format <code>hh24:mi-hh24:mi</code>.</p> </li> <li> <p>Must be in Universal Coordinated Time (UTC).</p> </li> <li> <p>Must not conflict with the preferred maintenance window. </p> </li> <li> <p>Must be at least 30 minutes.</p> </li> </ul></p>
     pub preferred_backup_window: Option<String>,
-    /// <p>The weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).</p> <p>Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region, occurring on a random day of the week.</p> <p>Valid days: Mon, Tue, Wed, Thu, Fri, Sat, Sun</p> <p>Constraints: Minimum 30-minute window.</p>
+    /// <p>The weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).</p> <p>Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each Region, occurring on a random day of the week.</p> <p>Valid days: Mon, Tue, Wed, Thu, Fri, Sat, Sun</p> <p>Constraints: Minimum 30-minute window.</p>
     pub preferred_maintenance_window: Option<String>,
     /// <p>Specifies whether the cluster is encrypted.</p>
     pub storage_encrypted: Option<bool>,
@@ -672,17 +736,21 @@ impl CreateDBClusterMessageSerializer {
         if let Some(ref field_value) = obj.engine_version {
             params.put(&format!("{}{}", prefix, "EngineVersion"), &field_value);
         }
+        if let Some(ref field_value) = obj.global_cluster_identifier {
+            params.put(
+                &format!("{}{}", prefix, "GlobalClusterIdentifier"),
+                &field_value,
+            );
+        }
         if let Some(ref field_value) = obj.kms_key_id {
             params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
         }
-        params.put(
-            &format!("{}{}", prefix, "MasterUserPassword"),
-            &obj.master_user_password,
-        );
-        params.put(
-            &format!("{}{}", prefix, "MasterUsername"),
-            &obj.master_username,
-        );
+        if let Some(ref field_value) = obj.master_user_password {
+            params.put(&format!("{}{}", prefix, "MasterUserPassword"), &field_value);
+        }
+        if let Some(ref field_value) = obj.master_username {
+            params.put(&format!("{}{}", prefix, "MasterUsername"), &field_value);
+        }
         if let Some(ref field_value) = obj.port {
             params.put(&format!("{}{}", prefix, "Port"), &field_value);
         }
@@ -884,9 +952,9 @@ impl CreateDBClusterSnapshotResultDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateDBInstanceMessage {
-    /// <p>Indicates that minor engine upgrades are applied automatically to the instance during the maintenance window.</p> <p>Default: <code>true</code> </p>
+    /// <p>This parameter does not apply to Amazon DocumentDB. Amazon DocumentDB does not perform minor version upgrades regardless of the value set.</p> <p>Default: <code>false</code> </p>
     pub auto_minor_version_upgrade: Option<bool>,
-    /// <p>The Amazon EC2 Availability Zone that the instance is created in. </p> <p>Default: A random, system-chosen Availability Zone in the endpoint's AWS Region.</p> <p>Example: <code>us-east-1d</code> </p>
+    /// <p>The Amazon EC2 Availability Zone that the instance is created in. </p> <p>Default: A random, system-chosen Availability Zone in the endpoint's Region.</p> <p>Example: <code>us-east-1d</code> </p>
     pub availability_zone: Option<String>,
     /// <p>The identifier of the cluster that the instance will belong to.</p>
     pub db_cluster_identifier: String,
@@ -896,7 +964,7 @@ pub struct CreateDBInstanceMessage {
     pub db_instance_identifier: String,
     /// <p>The name of the database engine to be used for this instance.</p> <p>Valid value: <code>docdb</code> </p>
     pub engine: String,
-    /// <p>The time range each week during which system maintenance can occur, in Universal Coordinated Time (UTC).</p> <p> Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region, occurring on a random day of the week. </p> <p>Valid days: Mon, Tue, Wed, Thu, Fri, Sat, Sun</p> <p>Constraints: Minimum 30-minute window.</p>
+    /// <p>The time range each week during which system maintenance can occur, in Universal Coordinated Time (UTC).</p> <p> Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each Region, occurring on a random day of the week. </p> <p>Valid days: Mon, Tue, Wed, Thu, Fri, Sat, Sun</p> <p>Constraints: Minimum 30-minute window.</p>
     pub preferred_maintenance_window: Option<String>,
     /// <p>A value that specifies the order in which an Amazon DocumentDB replica is promoted to the primary instance after a failure of the existing primary instance.</p> <p>Default: 1</p> <p>Valid values: 0-15</p>
     pub promotion_tier: Option<i64>,
@@ -1050,11 +1118,192 @@ impl CreateDBSubnetGroupResultDeserializer {
         )
     }
 }
+/// <p>Represents the input to <a>CreateEventSubscription</a>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateEventSubscriptionMessage {
+    /// <p> A Boolean value; set to <code>true</code> to activate the subscription, set to <code>false</code> to create the subscription but not active it. </p>
+    pub enabled: Option<bool>,
+    /// <p> A list of event categories for a <code>SourceType</code> that you want to subscribe to. </p>
+    pub event_categories: Option<Vec<String>>,
+    /// <p>The Amazon Resource Name (ARN) of the SNS topic created for event notification. Amazon SNS creates the ARN when you create a topic and subscribe to it.</p>
+    pub sns_topic_arn: String,
+    /// <p><p>The list of identifiers of the event sources for which events are returned. If not specified, then all sources are included in the response. An identifier must begin with a letter and must contain only ASCII letters, digits, and hyphens; it can&#39;t end with a hyphen or contain two consecutive hyphens.</p> <p>Constraints:</p> <ul> <li> <p>If <code>SourceIds</code> are provided, <code>SourceType</code> must also be provided.</p> </li> <li> <p>If the source type is an instance, a <code>DBInstanceIdentifier</code> must be provided.</p> </li> <li> <p>If the source type is a security group, a <code>DBSecurityGroupName</code> must be provided.</p> </li> <li> <p>If the source type is a parameter group, a <code>DBParameterGroupName</code> must be provided.</p> </li> <li> <p>If the source type is a snapshot, a <code>DBSnapshotIdentifier</code> must be provided.</p> </li> </ul></p>
+    pub source_ids: Option<Vec<String>>,
+    /// <p>The type of source that is generating the events. For example, if you want to be notified of events generated by an instance, you would set this parameter to <code>db-instance</code>. If this value is not specified, all events are returned.</p> <p>Valid values: <code>db-instance</code>, <code>db-cluster</code>, <code>db-parameter-group</code>, <code>db-security-group</code>, <code>db-cluster-snapshot</code> </p>
+    pub source_type: Option<String>,
+    /// <p>The name of the subscription.</p> <p>Constraints: The name must be fewer than 255 characters.</p>
+    pub subscription_name: String,
+    /// <p>The tags to be assigned to the event subscription.</p>
+    pub tags: Option<Vec<Tag>>,
+}
+
+/// Serialize `CreateEventSubscriptionMessage` contents to a `SignedRequest`.
+struct CreateEventSubscriptionMessageSerializer;
+impl CreateEventSubscriptionMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateEventSubscriptionMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.enabled {
+            params.put(&format!("{}{}", prefix, "Enabled"), &field_value);
+        }
+        if let Some(ref field_value) = obj.event_categories {
+            EventCategoriesListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "EventCategory"),
+                field_value,
+            );
+        }
+        params.put(&format!("{}{}", prefix, "SnsTopicArn"), &obj.sns_topic_arn);
+        if let Some(ref field_value) = obj.source_ids {
+            SourceIdsListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "SourceId"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.source_type {
+            params.put(&format!("{}{}", prefix, "SourceType"), &field_value);
+        }
+        params.put(
+            &format!("{}{}", prefix, "SubscriptionName"),
+            &obj.subscription_name,
+        );
+        if let Some(ref field_value) = obj.tags {
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
+        }
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct CreateEventSubscriptionResult {
+    pub event_subscription: Option<EventSubscription>,
+}
+
+#[allow(dead_code)]
+struct CreateEventSubscriptionResultDeserializer;
+impl CreateEventSubscriptionResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateEventSubscriptionResult, XmlParseError> {
+        deserialize_elements::<_, CreateEventSubscriptionResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "EventSubscription" => {
+                        obj.event_subscription = Some(EventSubscriptionDeserializer::deserialize(
+                            "EventSubscription",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p>Represents the input to <a>CreateGlobalCluster</a>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateGlobalClusterMessage {
+    /// <p>The name for your database of up to 64 alpha-numeric characters. If you do not provide a name, Amazon DocumentDB will not create a database in the global cluster you are creating.</p>
+    pub database_name: Option<String>,
+    /// <p>The deletion protection setting for the new global cluster. The global cluster can't be deleted when deletion protection is enabled. </p>
+    pub deletion_protection: Option<bool>,
+    /// <p>The name of the database engine to be used for this cluster.</p>
+    pub engine: Option<String>,
+    /// <p>The engine version of the global cluster.</p>
+    pub engine_version: Option<String>,
+    /// <p>The cluster identifier of the new global cluster.</p>
+    pub global_cluster_identifier: String,
+    /// <p>The Amazon Resource Name (ARN) to use as the primary cluster of the global cluster. This parameter is optional.</p>
+    pub source_db_cluster_identifier: Option<String>,
+    /// <p>The storage encryption setting for the new global cluster. </p>
+    pub storage_encrypted: Option<bool>,
+}
+
+/// Serialize `CreateGlobalClusterMessage` contents to a `SignedRequest`.
+struct CreateGlobalClusterMessageSerializer;
+impl CreateGlobalClusterMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateGlobalClusterMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.database_name {
+            params.put(&format!("{}{}", prefix, "DatabaseName"), &field_value);
+        }
+        if let Some(ref field_value) = obj.deletion_protection {
+            params.put(&format!("{}{}", prefix, "DeletionProtection"), &field_value);
+        }
+        if let Some(ref field_value) = obj.engine {
+            params.put(&format!("{}{}", prefix, "Engine"), &field_value);
+        }
+        if let Some(ref field_value) = obj.engine_version {
+            params.put(&format!("{}{}", prefix, "EngineVersion"), &field_value);
+        }
+        params.put(
+            &format!("{}{}", prefix, "GlobalClusterIdentifier"),
+            &obj.global_cluster_identifier,
+        );
+        if let Some(ref field_value) = obj.source_db_cluster_identifier {
+            params.put(
+                &format!("{}{}", prefix, "SourceDBClusterIdentifier"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.storage_encrypted {
+            params.put(&format!("{}{}", prefix, "StorageEncrypted"), &field_value);
+        }
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct CreateGlobalClusterResult {
+    pub global_cluster: Option<GlobalCluster>,
+}
+
+#[allow(dead_code)]
+struct CreateGlobalClusterResultDeserializer;
+impl CreateGlobalClusterResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CreateGlobalClusterResult, XmlParseError> {
+        deserialize_elements::<_, CreateGlobalClusterResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "GlobalCluster" => {
+                        obj.global_cluster = Some(GlobalClusterDeserializer::deserialize(
+                            "GlobalCluster",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Detailed information about a cluster. </p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBCluster {
-    /// <p>Provides a list of the AWS Identity and Access Management (IAM) roles that are associated with the cluster. IAM roles that are associated with a cluster grant permission for the cluster to access other AWS services on your behalf.</p>
+    /// <p>Provides a list of the Identity and Access Management (IAM) roles that are associated with the cluster. (IAM) roles that are associated with a cluster grant permission for the cluster to access other Amazon Web Services services on your behalf.</p>
     pub associated_roles: Option<Vec<DBClusterRole>>,
     /// <p>Provides the list of Amazon EC2 Availability Zones that instances in the cluster can be created in.</p>
     pub availability_zones: Option<Vec<String>>,
@@ -1072,7 +1321,7 @@ pub struct DBCluster {
     pub db_cluster_parameter_group: Option<String>,
     /// <p>Specifies information on the subnet group that is associated with the cluster, including the name, description, and subnets in the subnet group.</p>
     pub db_subnet_group: Option<String>,
-    /// <p>The AWS Region-unique, immutable identifier for the cluster. This identifier is found in AWS CloudTrail log entries whenever the AWS KMS key for the cluster is accessed.</p>
+    /// <p>The Region-unique, immutable identifier for the cluster. This identifier is found in CloudTrail log entries whenever the KMS key for the cluster is accessed.</p>
     pub db_cluster_resource_id: Option<String>,
     /// <p>Specifies whether this cluster can be deleted. If <code>DeletionProtection</code> is enabled, the cluster cannot be deleted unless it is modified and <code>DeletionProtection</code> is disabled. <code>DeletionProtection</code> protects clusters from being accidentally deleted.</p>
     pub deletion_protection: Option<bool>,
@@ -1088,7 +1337,7 @@ pub struct DBCluster {
     pub engine_version: Option<String>,
     /// <p>Specifies the ID that Amazon Route 53 assigns when you create a hosted zone.</p>
     pub hosted_zone_id: Option<String>,
-    /// <p>If <code>StorageEncrypted</code> is <code>true</code>, the AWS KMS key identifier for the encrypted cluster.</p>
+    /// <p>If <code>StorageEncrypted</code> is <code>true</code>, the KMS key identifier for the encrypted cluster.</p>
     pub kms_key_id: Option<String>,
     /// <p>Specifies the latest time to which a database can be restored with point-in-time restore.</p>
     pub latest_restorable_time: Option<String>,
@@ -1104,8 +1353,12 @@ pub struct DBCluster {
     pub preferred_backup_window: Option<String>,
     /// <p>Specifies the weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).</p>
     pub preferred_maintenance_window: Option<String>,
+    /// <p>Contains one or more identifiers of the secondary clusters that are associated with this cluster.</p>
+    pub read_replica_identifiers: Option<Vec<String>>,
     /// <p>The reader endpoint for the cluster. The reader endpoint for a cluster load balances connections across the Amazon DocumentDB replicas that are available in a cluster. As clients request new connections to the reader endpoint, Amazon DocumentDB distributes the connection requests among the Amazon DocumentDB replicas in the cluster. This functionality can help balance your read workload across multiple Amazon DocumentDB replicas in your cluster. </p> <p>If a failover occurs, and the Amazon DocumentDB replica that you are connected to is promoted to be the primary instance, your connection is dropped. To continue sending your read workload to other Amazon DocumentDB replicas in the cluster, you can then reconnect to the reader endpoint.</p>
     pub reader_endpoint: Option<String>,
+    /// <p>Contains the identifier of the source cluster if this cluster is a secondary cluster.</p>
+    pub replication_source_identifier: Option<String>,
     /// <p>Specifies the current state of this cluster.</p>
     pub status: Option<String>,
     /// <p>Specifies whether the cluster is encrypted.</p>
@@ -1244,9 +1497,23 @@ impl DBClusterDeserializer {
                         stack,
                     )?);
                 }
+                "ReadReplicaIdentifiers" => {
+                    obj.read_replica_identifiers.get_or_insert(vec![]).extend(
+                        ReadReplicaIdentifierListDeserializer::deserialize(
+                            "ReadReplicaIdentifiers",
+                            stack,
+                        )?,
+                    );
+                }
                 "ReaderEndpoint" => {
                     obj.reader_endpoint =
                         Some(StringDeserializer::deserialize("ReaderEndpoint", stack)?);
+                }
+                "ReplicationSourceIdentifier" => {
+                    obj.replication_source_identifier = Some(StringDeserializer::deserialize(
+                        "ReplicationSourceIdentifier",
+                        stack,
+                    )?);
                 }
                 "Status" => {
                     obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
@@ -1582,13 +1849,13 @@ impl DBClusterParameterGroupsMessageDeserializer {
         )
     }
 }
-/// <p>Describes an AWS Identity and Access Management (IAM) role that is associated with a cluster.</p>
+/// <p>Describes an Identity and Access Management (IAM) role that is associated with a cluster.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterRole {
-    /// <p>The Amazon Resource Name (ARN) of the IAM role that is associated with the DB cluster.</p>
+    /// <p>The Amazon Resource Name (ARN) of the IAMrole that is associated with the DB cluster.</p>
     pub role_arn: Option<String>,
-    /// <p><p>Describes the state of association between the IAM role and the cluster. The <code>Status</code> property returns one of the following values:</p> <ul> <li> <p> <code>ACTIVE</code> - The IAM role ARN is associated with the cluster and can be used to access other AWS services on your behalf.</p> </li> <li> <p> <code>PENDING</code> - The IAM role ARN is being associated with the DB cluster.</p> </li> <li> <p> <code>INVALID</code> - The IAM role ARN is associated with the cluster, but the cluster cannot assume the IAM role to access other AWS services on your behalf.</p> </li> </ul></p>
+    /// <p><p>Describes the state of association between the IAMrole and the cluster. The <code>Status</code> property returns one of the following values:</p> <ul> <li> <p> <code>ACTIVE</code> - The IAMrole ARN is associated with the cluster and can be used to access other Amazon Web Services services on your behalf.</p> </li> <li> <p> <code>PENDING</code> - The IAMrole ARN is being associated with the cluster.</p> </li> <li> <p> <code>INVALID</code> - The IAMrole ARN is associated with the cluster, but the cluster cannot assume the IAMrole to access other Amazon Web Services services on your behalf.</p> </li> </ul></p>
     pub status: Option<String>,
 }
 
@@ -1653,7 +1920,7 @@ pub struct DBClusterSnapshot {
     pub engine: Option<String>,
     /// <p>Provides the version of the database engine for this cluster snapshot.</p>
     pub engine_version: Option<String>,
-    /// <p>If <code>StorageEncrypted</code> is <code>true</code>, the AWS KMS key identifier for the encrypted cluster snapshot.</p>
+    /// <p>If <code>StorageEncrypted</code> is <code>true</code>, the KMS key identifier for the encrypted cluster snapshot.</p>
     pub kms_key_id: Option<String>,
     /// <p>Provides the master user name for the cluster snapshot.</p>
     pub master_username: Option<String>,
@@ -1765,13 +2032,13 @@ impl DBClusterSnapshotDeserializer {
         })
     }
 }
-/// <p>Contains the name and values of a manual cluster snapshot attribute.</p> <p>Manual cluster snapshot attributes are used to authorize other AWS accounts to restore a manual cluster snapshot.</p>
+/// <p>Contains the name and values of a manual cluster snapshot attribute.</p> <p>Manual cluster snapshot attributes are used to authorize other accounts to restore a manual cluster snapshot.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBClusterSnapshotAttribute {
-    /// <p>The name of the manual cluster snapshot attribute.</p> <p>The attribute named <code>restore</code> refers to the list of AWS accounts that have permission to copy or restore the manual cluster snapshot.</p>
+    /// <p>The name of the manual cluster snapshot attribute.</p> <p>The attribute named <code>restore</code> refers to the list of accounts that have permission to copy or restore the manual cluster snapshot.</p>
     pub attribute_name: Option<String>,
-    /// <p>The values for the manual cluster snapshot attribute.</p> <p>If the <code>AttributeName</code> field is set to <code>restore</code>, then this element returns a list of IDs of the AWS accounts that are authorized to copy or restore the manual cluster snapshot. If a value of <code>all</code> is in the list, then the manual cluster snapshot is public and available for any AWS account to copy or restore.</p>
+    /// <p>The values for the manual cluster snapshot attribute.</p> <p>If the <code>AttributeName</code> field is set to <code>restore</code>, then this element returns a list of IDs of the accounts that are authorized to copy or restore the manual cluster snapshot. If a value of <code>all</code> is in the list, then the manual cluster snapshot is public and available for any account to copy or restore.</p>
     pub attribute_values: Option<Vec<String>>,
 }
 
@@ -2073,7 +2340,7 @@ impl DBEngineVersionMessageDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 pub struct DBInstance {
-    /// <p>Indicates that minor version patches are applied automatically.</p>
+    /// <p>Does not apply. This parameter does not apply to Amazon DocumentDB. Amazon DocumentDB does not perform minor version upgrades regardless of the value set.</p>
     pub auto_minor_version_upgrade: Option<bool>,
     /// <p>Specifies the name of the Availability Zone that the instance is located in.</p>
     pub availability_zone: Option<String>,
@@ -2093,9 +2360,9 @@ pub struct DBInstance {
     pub db_instance_status: Option<String>,
     /// <p>Specifies information on the subnet group that is associated with the instance, including the name, description, and subnets in the subnet group.</p>
     pub db_subnet_group: Option<DBSubnetGroup>,
-    /// <p>The AWS Region-unique, immutable identifier for the instance. This identifier is found in AWS CloudTrail log entries whenever the AWS KMS key for the instance is accessed.</p>
+    /// <p>The Region-unique, immutable identifier for the instance. This identifier is found in CloudTrail log entries whenever the KMS key for the instance is accessed.</p>
     pub dbi_resource_id: Option<String>,
-    /// <p>A list of log types that this instance is configured to export to Amazon CloudWatch Logs.</p>
+    /// <p>A list of log types that this instance is configured to export to CloudWatch Logs.</p>
     pub enabled_cloudwatch_logs_exports: Option<Vec<String>>,
     /// <p>Specifies the connection endpoint.</p>
     pub endpoint: Option<Endpoint>,
@@ -2105,7 +2372,7 @@ pub struct DBInstance {
     pub engine_version: Option<String>,
     /// <p>Provides the date and time that the instance was created.</p>
     pub instance_create_time: Option<String>,
-    /// <p> If <code>StorageEncrypted</code> is <code>true</code>, the AWS KMS key identifier for the encrypted instance. </p>
+    /// <p> If <code>StorageEncrypted</code> is <code>true</code>, the KMS key identifier for the encrypted instance. </p>
     pub kms_key_id: Option<String>,
     /// <p>Specifies the latest time to which a database can be restored with point-in-time restore.</p>
     pub latest_restorable_time: Option<String>,
@@ -2726,6 +2993,118 @@ impl DeleteDBSubnetGroupMessageSerializer {
     }
 }
 
+/// <p>Represents the input to <a>DeleteEventSubscription</a>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteEventSubscriptionMessage {
+    /// <p>The name of the Amazon DocumentDB event notification subscription that you want to delete.</p>
+    pub subscription_name: String,
+}
+
+/// Serialize `DeleteEventSubscriptionMessage` contents to a `SignedRequest`.
+struct DeleteEventSubscriptionMessageSerializer;
+impl DeleteEventSubscriptionMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteEventSubscriptionMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "SubscriptionName"),
+            &obj.subscription_name,
+        );
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct DeleteEventSubscriptionResult {
+    pub event_subscription: Option<EventSubscription>,
+}
+
+#[allow(dead_code)]
+struct DeleteEventSubscriptionResultDeserializer;
+impl DeleteEventSubscriptionResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteEventSubscriptionResult, XmlParseError> {
+        deserialize_elements::<_, DeleteEventSubscriptionResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "EventSubscription" => {
+                        obj.event_subscription = Some(EventSubscriptionDeserializer::deserialize(
+                            "EventSubscription",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p>Represents the input to <a>DeleteGlobalCluster</a>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteGlobalClusterMessage {
+    /// <p>The cluster identifier of the global cluster being deleted.</p>
+    pub global_cluster_identifier: String,
+}
+
+/// Serialize `DeleteGlobalClusterMessage` contents to a `SignedRequest`.
+struct DeleteGlobalClusterMessageSerializer;
+impl DeleteGlobalClusterMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteGlobalClusterMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "GlobalClusterIdentifier"),
+            &obj.global_cluster_identifier,
+        );
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct DeleteGlobalClusterResult {
+    pub global_cluster: Option<GlobalCluster>,
+}
+
+#[allow(dead_code)]
+struct DeleteGlobalClusterResultDeserializer;
+impl DeleteGlobalClusterResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteGlobalClusterResult, XmlParseError> {
+        deserialize_elements::<_, DeleteGlobalClusterResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "GlobalCluster" => {
+                        obj.global_cluster = Some(GlobalClusterDeserializer::deserialize(
+                            "GlobalCluster",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCertificatesMessage {
@@ -2934,15 +3313,15 @@ pub struct DescribeDBClusterSnapshotsMessage {
     pub db_cluster_snapshot_identifier: Option<String>,
     /// <p>This parameter is not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
-    /// <p>Set to <code>true</code> to include manual cluster snapshots that are public and can be copied or restored by any AWS account, and otherwise <code>false</code>. The default is <code>false</code>.</p>
+    /// <p>Set to <code>true</code> to include manual cluster snapshots that are public and can be copied or restored by any account, and otherwise <code>false</code>. The default is <code>false</code>.</p>
     pub include_public: Option<bool>,
-    /// <p>Set to <code>true</code> to include shared manual cluster snapshots from other AWS accounts that this AWS account has been given permission to copy or restore, and otherwise <code>false</code>. The default is <code>false</code>.</p>
+    /// <p>Set to <code>true</code> to include shared manual cluster snapshots from other accounts that this account has been given permission to copy or restore, and otherwise <code>false</code>. The default is <code>false</code>.</p>
     pub include_shared: Option<bool>,
     /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
     pub marker: Option<String>,
     /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token (marker) is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
     pub max_records: Option<i64>,
-    /// <p>The type of cluster snapshots to be returned. You can specify one of the following values:</p> <ul> <li> <p> <code>automated</code> - Return all cluster snapshots that Amazon DocumentDB has automatically created for your AWS account.</p> </li> <li> <p> <code>manual</code> - Return all cluster snapshots that you have manually created for your AWS account.</p> </li> <li> <p> <code>shared</code> - Return all manual cluster snapshots that have been shared to your AWS account.</p> </li> <li> <p> <code>public</code> - Return all cluster snapshots that have been marked as public.</p> </li> </ul> <p>If you don't specify a <code>SnapshotType</code> value, then both automated and manual cluster snapshots are returned. You can include shared cluster snapshots with these results by setting the <code>IncludeShared</code> parameter to <code>true</code>. You can include public cluster snapshots with these results by setting the <code>IncludePublic</code> parameter to <code>true</code>.</p> <p>The <code>IncludeShared</code> and <code>IncludePublic</code> parameters don't apply for <code>SnapshotType</code> values of <code>manual</code> or <code>automated</code>. The <code>IncludePublic</code> parameter doesn't apply when <code>SnapshotType</code> is set to <code>shared</code>. The <code>IncludeShared</code> parameter doesn't apply when <code>SnapshotType</code> is set to <code>public</code>.</p>
+    /// <p>The type of cluster snapshots to be returned. You can specify one of the following values:</p> <ul> <li> <p> <code>automated</code> - Return all cluster snapshots that Amazon DocumentDB has automatically created for your account.</p> </li> <li> <p> <code>manual</code> - Return all cluster snapshots that you have manually created for your account.</p> </li> <li> <p> <code>shared</code> - Return all manual cluster snapshots that have been shared to your account.</p> </li> <li> <p> <code>public</code> - Return all cluster snapshots that have been marked as public.</p> </li> </ul> <p>If you don't specify a <code>SnapshotType</code> value, then both automated and manual cluster snapshots are returned. You can include shared cluster snapshots with these results by setting the <code>IncludeShared</code> parameter to <code>true</code>. You can include public cluster snapshots with these results by setting the<code>IncludePublic</code> parameter to <code>true</code>.</p> <p>The <code>IncludeShared</code> and <code>IncludePublic</code> parameters don't apply for <code>SnapshotType</code> values of <code>manual</code> or <code>automated</code>. The <code>IncludePublic</code> parameter doesn't apply when <code>SnapshotType</code> is set to <code>shared</code>. The <code>IncludeShared</code> parameter doesn't apply when <code>SnapshotType</code> is set to <code>public</code>.</p>
     pub snapshot_type: Option<String>,
 }
 
@@ -3285,7 +3664,7 @@ impl DescribeEngineDefaultClusterParametersResultDeserializer {
 pub struct DescribeEventCategoriesMessage {
     /// <p>This parameter is not currently supported.</p>
     pub filters: Option<Vec<Filter>>,
-    /// <p>The type of source that is generating the events.</p> <p>Valid values: <code>db-instance</code>, <code>db-parameter-group</code>, <code>db-security-group</code>, <code>db-snapshot</code> </p>
+    /// <p>The type of source that is generating the events.</p> <p>Valid values: <code>db-instance</code>, <code>db-parameter-group</code>, <code>db-security-group</code> </p>
     pub source_type: Option<String>,
 }
 
@@ -3307,6 +3686,48 @@ impl DescribeEventCategoriesMessageSerializer {
         }
         if let Some(ref field_value) = obj.source_type {
             params.put(&format!("{}{}", prefix, "SourceType"), &field_value);
+        }
+    }
+}
+
+/// <p>Represents the input to <a>DescribeEventSubscriptions</a>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeEventSubscriptionsMessage {
+    /// <p>This parameter is not currently supported.</p>
+    pub filters: Option<Vec<Filter>>,
+    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
+    pub marker: Option<String>,
+    /// <p> The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token (marker) is included in the response so that the remaining results can be retrieved.</p> <p>Default: 100</p> <p>Constraints: Minimum 20, maximum 100.</p>
+    pub max_records: Option<i64>,
+    /// <p>The name of the Amazon DocumentDB event notification subscription that you want to describe.</p>
+    pub subscription_name: Option<String>,
+}
+
+/// Serialize `DescribeEventSubscriptionsMessage` contents to a `SignedRequest`.
+struct DescribeEventSubscriptionsMessageSerializer;
+impl DescribeEventSubscriptionsMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeEventSubscriptionsMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.filters {
+            FilterListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Filter"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.marker {
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_records {
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
+        }
+        if let Some(ref field_value) = obj.subscription_name {
+            params.put(&format!("{}{}", prefix, "SubscriptionName"), &field_value);
         }
     }
 }
@@ -3378,6 +3799,50 @@ impl DescribeEventsMessageSerializer {
         }
         if let Some(ref field_value) = obj.start_time {
             params.put(&format!("{}{}", prefix, "StartTime"), &field_value);
+        }
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeGlobalClustersMessage {
+    /// <p>A filter that specifies one or more global DB clusters to describe.</p> <p>Supported filters: <code>db-cluster-id</code> accepts cluster identifiers and cluster Amazon Resource Names (ARNs). The results list will only include information about the clusters identified by these ARNs.</p>
+    pub filters: Option<Vec<Filter>>,
+    /// <p>The user-supplied cluster identifier. If this parameter is specified, information from only the specific cluster is returned. This parameter isn't case-sensitive.</p>
+    pub global_cluster_identifier: Option<String>,
+    /// <p>An optional pagination token provided by a previous <code>DescribeGlobalClusters</code> request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
+    pub marker: Option<String>,
+    /// <p>The maximum number of records to include in the response. If more records exist than the specified <code>MaxRecords</code> value, a pagination token called a marker is included in the response so that you can retrieve the remaining results. </p>
+    pub max_records: Option<i64>,
+}
+
+/// Serialize `DescribeGlobalClustersMessage` contents to a `SignedRequest`.
+struct DescribeGlobalClustersMessageSerializer;
+impl DescribeGlobalClustersMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeGlobalClustersMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.filters {
+            FilterListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Filter"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.global_cluster_identifier {
+            params.put(
+                &format!("{}{}", prefix, "GlobalClusterIdentifier"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.marker {
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_records {
+            params.put(&format!("{}{}", prefix, "MaxRecords"), &field_value);
         }
     }
 }
@@ -3752,6 +4217,155 @@ impl EventListDeserializer {
         })
     }
 }
+/// <p>Detailed information about an event to which you have subscribed.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct EventSubscription {
+    /// <p>The Amazon DocumentDB event notification subscription ID.</p>
+    pub cust_subscription_id: Option<String>,
+    /// <p>The Amazon Web Services customer account that is associated with the Amazon DocumentDB event notification subscription.</p>
+    pub customer_aws_id: Option<String>,
+    /// <p>A Boolean value indicating whether the subscription is enabled. A value of <code>true</code> indicates that the subscription is enabled.</p>
+    pub enabled: Option<bool>,
+    /// <p>A list of event categories for the Amazon DocumentDB event notification subscription.</p>
+    pub event_categories_list: Option<Vec<String>>,
+    /// <p>The Amazon Resource Name (ARN) for the event subscription.</p>
+    pub event_subscription_arn: Option<String>,
+    /// <p>The topic ARN of the Amazon DocumentDB event notification subscription.</p>
+    pub sns_topic_arn: Option<String>,
+    /// <p>A list of source IDs for the Amazon DocumentDB event notification subscription.</p>
+    pub source_ids_list: Option<Vec<String>>,
+    /// <p>The source type for the Amazon DocumentDB event notification subscription.</p>
+    pub source_type: Option<String>,
+    /// <p>The status of the Amazon DocumentDB event notification subscription.</p> <p>Constraints:</p> <p>Can be one of the following: <code>creating</code>, <code>modifying</code>, <code>deleting</code>, <code>active</code>, <code>no-permission</code>, <code>topic-not-exist</code> </p> <p>The <code>no-permission</code> status indicates that Amazon DocumentDB no longer has permission to post to the SNS topic. The <code>topic-not-exist</code> status indicates that the topic was deleted after the subscription was created.</p>
+    pub status: Option<String>,
+    /// <p>The time at which the Amazon DocumentDB event notification subscription was created.</p>
+    pub subscription_creation_time: Option<String>,
+}
+
+#[allow(dead_code)]
+struct EventSubscriptionDeserializer;
+impl EventSubscriptionDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EventSubscription, XmlParseError> {
+        deserialize_elements::<_, EventSubscription, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "CustSubscriptionId" => {
+                    obj.cust_subscription_id = Some(StringDeserializer::deserialize(
+                        "CustSubscriptionId",
+                        stack,
+                    )?);
+                }
+                "CustomerAwsId" => {
+                    obj.customer_aws_id =
+                        Some(StringDeserializer::deserialize("CustomerAwsId", stack)?);
+                }
+                "Enabled" => {
+                    obj.enabled = Some(BooleanDeserializer::deserialize("Enabled", stack)?);
+                }
+                "EventCategoriesList" => {
+                    obj.event_categories_list.get_or_insert(vec![]).extend(
+                        EventCategoriesListDeserializer::deserialize("EventCategoriesList", stack)?,
+                    );
+                }
+                "EventSubscriptionArn" => {
+                    obj.event_subscription_arn = Some(StringDeserializer::deserialize(
+                        "EventSubscriptionArn",
+                        stack,
+                    )?);
+                }
+                "SnsTopicArn" => {
+                    obj.sns_topic_arn =
+                        Some(StringDeserializer::deserialize("SnsTopicArn", stack)?);
+                }
+                "SourceIdsList" => {
+                    obj.source_ids_list.get_or_insert(vec![]).extend(
+                        SourceIdsListDeserializer::deserialize("SourceIdsList", stack)?,
+                    );
+                }
+                "SourceType" => {
+                    obj.source_type = Some(StringDeserializer::deserialize("SourceType", stack)?);
+                }
+                "Status" => {
+                    obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
+                }
+                "SubscriptionCreationTime" => {
+                    obj.subscription_creation_time = Some(StringDeserializer::deserialize(
+                        "SubscriptionCreationTime",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct EventSubscriptionsListDeserializer;
+impl EventSubscriptionsListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<EventSubscription>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "EventSubscription" {
+                obj.push(EventSubscriptionDeserializer::deserialize(
+                    "EventSubscription",
+                    stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>Represents the output of <a>DescribeEventSubscriptions</a>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct EventSubscriptionsMessage {
+    /// <p>A list of event subscriptions.</p>
+    pub event_subscriptions_list: Option<Vec<EventSubscription>>,
+    /// <p>An optional pagination token provided by a previous request. If this parameter is specified, the response includes only records beyond the marker, up to the value specified by <code>MaxRecords</code>.</p>
+    pub marker: Option<String>,
+}
+
+#[allow(dead_code)]
+struct EventSubscriptionsMessageDeserializer;
+impl EventSubscriptionsMessageDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EventSubscriptionsMessage, XmlParseError> {
+        deserialize_elements::<_, EventSubscriptionsMessage, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "EventSubscriptionsList" => {
+                        obj.event_subscriptions_list.get_or_insert(vec![]).extend(
+                            EventSubscriptionsListDeserializer::deserialize(
+                                "EventSubscriptionsList",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
 /// <p>Represents the output of <a>DescribeEvents</a>.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
@@ -3900,6 +4514,222 @@ impl FilterValueListSerializer {
     }
 }
 
+/// <p>A data type representing an Amazon DocumentDB global cluster.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct GlobalCluster {
+    /// <p>The default database name within the new global cluster.</p>
+    pub database_name: Option<String>,
+    /// <p>The deletion protection setting for the new global cluster.</p>
+    pub deletion_protection: Option<bool>,
+    /// <p>The Amazon DocumentDB database engine used by the global cluster. </p>
+    pub engine: Option<String>,
+    /// <p>Indicates the database engine version.</p>
+    pub engine_version: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) for the global cluster.</p>
+    pub global_cluster_arn: Option<String>,
+    /// <p>Contains a user-supplied global cluster identifier. This identifier is the unique key that identifies a global cluster. </p>
+    pub global_cluster_identifier: Option<String>,
+    /// <p>The list of cluster IDs for secondary clusters within the global cluster. Currently limited to one item. </p>
+    pub global_cluster_members: Option<Vec<GlobalClusterMember>>,
+    /// <p>The Region-unique, immutable identifier for the global database cluster. This identifier is found in AWS CloudTrail log entries whenever the AWS KMS customer master key (CMK) for the cluster is accessed. </p>
+    pub global_cluster_resource_id: Option<String>,
+    /// <p>Specifies the current state of this global cluster.</p>
+    pub status: Option<String>,
+    /// <p>The storage encryption setting for the global cluster.</p>
+    pub storage_encrypted: Option<bool>,
+}
+
+#[allow(dead_code)]
+struct GlobalClusterDeserializer;
+impl GlobalClusterDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GlobalCluster, XmlParseError> {
+        deserialize_elements::<_, GlobalCluster, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "DatabaseName" => {
+                    obj.database_name =
+                        Some(StringDeserializer::deserialize("DatabaseName", stack)?);
+                }
+                "DeletionProtection" => {
+                    obj.deletion_protection = Some(BooleanOptionalDeserializer::deserialize(
+                        "DeletionProtection",
+                        stack,
+                    )?);
+                }
+                "Engine" => {
+                    obj.engine = Some(StringDeserializer::deserialize("Engine", stack)?);
+                }
+                "EngineVersion" => {
+                    obj.engine_version =
+                        Some(StringDeserializer::deserialize("EngineVersion", stack)?);
+                }
+                "GlobalClusterArn" => {
+                    obj.global_cluster_arn =
+                        Some(StringDeserializer::deserialize("GlobalClusterArn", stack)?);
+                }
+                "GlobalClusterIdentifier" => {
+                    obj.global_cluster_identifier =
+                        Some(GlobalClusterIdentifierDeserializer::deserialize(
+                            "GlobalClusterIdentifier",
+                            stack,
+                        )?);
+                }
+                "GlobalClusterMembers" => {
+                    obj.global_cluster_members.get_or_insert(vec![]).extend(
+                        GlobalClusterMemberListDeserializer::deserialize(
+                            "GlobalClusterMembers",
+                            stack,
+                        )?,
+                    );
+                }
+                "GlobalClusterResourceId" => {
+                    obj.global_cluster_resource_id = Some(StringDeserializer::deserialize(
+                        "GlobalClusterResourceId",
+                        stack,
+                    )?);
+                }
+                "Status" => {
+                    obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
+                }
+                "StorageEncrypted" => {
+                    obj.storage_encrypted = Some(BooleanOptionalDeserializer::deserialize(
+                        "StorageEncrypted",
+                        stack,
+                    )?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct GlobalClusterIdentifierDeserializer;
+impl GlobalClusterIdentifierDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(tag_name: &str, stack: &mut T) -> Result<String, XmlParseError> {
+        xml_util::deserialize_primitive(tag_name, stack, Ok)
+    }
+}
+#[allow(dead_code)]
+struct GlobalClusterListDeserializer;
+impl GlobalClusterListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<GlobalCluster>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "GlobalClusterMember" {
+                obj.push(GlobalClusterDeserializer::deserialize(
+                    "GlobalClusterMember",
+                    stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+/// <p>A data structure with information about any primary and secondary clusters associated with an Amazon DocumentDB global clusters. </p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct GlobalClusterMember {
+    /// <p>The Amazon Resource Name (ARN) for each Amazon DocumentDB cluster.</p>
+    pub db_cluster_arn: Option<String>,
+    /// <p> Specifies whether the Amazon DocumentDB cluster is the primary cluster (that is, has read-write capability) for the Amazon DocumentDB global cluster with which it is associated. </p>
+    pub is_writer: Option<bool>,
+    /// <p>The Amazon Resource Name (ARN) for each read-only secondary cluster associated with the Aurora global cluster.</p>
+    pub readers: Option<Vec<String>>,
+}
+
+#[allow(dead_code)]
+struct GlobalClusterMemberDeserializer;
+impl GlobalClusterMemberDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GlobalClusterMember, XmlParseError> {
+        deserialize_elements::<_, GlobalClusterMember, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "DBClusterArn" => {
+                    obj.db_cluster_arn =
+                        Some(StringDeserializer::deserialize("DBClusterArn", stack)?);
+                }
+                "IsWriter" => {
+                    obj.is_writer = Some(BooleanDeserializer::deserialize("IsWriter", stack)?);
+                }
+                "Readers" => {
+                    obj.readers
+                        .get_or_insert(vec![])
+                        .extend(ReadersArnListDeserializer::deserialize("Readers", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct GlobalClusterMemberListDeserializer;
+impl GlobalClusterMemberListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<GlobalClusterMember>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "GlobalClusterMember" {
+                obj.push(GlobalClusterMemberDeserializer::deserialize(
+                    "GlobalClusterMember",
+                    stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct GlobalClustersMessage {
+    /// <p><p/></p>
+    pub global_clusters: Option<Vec<GlobalCluster>>,
+    /// <p><p/></p>
+    pub marker: Option<String>,
+}
+
+#[allow(dead_code)]
+struct GlobalClustersMessageDeserializer;
+impl GlobalClustersMessageDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GlobalClustersMessage, XmlParseError> {
+        deserialize_elements::<_, GlobalClustersMessage, _>(tag_name, stack, |name, stack, obj| {
+            match name {
+                "GlobalClusters" => {
+                    obj.global_clusters.get_or_insert(vec![]).extend(
+                        GlobalClusterListDeserializer::deserialize("GlobalClusters", stack)?,
+                    );
+                }
+                "Marker" => {
+                    obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                }
+                _ => skip_tree(stack),
+            }
+            Ok(())
+        })
+    }
+}
 #[allow(dead_code)]
 struct IntegerDeserializer;
 impl IntegerDeserializer {
@@ -4004,7 +4834,7 @@ pub struct ModifyDBClusterMessage {
     pub db_cluster_parameter_group_name: Option<String>,
     /// <p>Specifies whether this cluster can be deleted. If <code>DeletionProtection</code> is enabled, the cluster cannot be deleted unless it is modified and <code>DeletionProtection</code> is disabled. <code>DeletionProtection</code> protects clusters from being accidentally deleted.</p>
     pub deletion_protection: Option<bool>,
-    /// <p>The version number of the database engine to which you want to upgrade. Changing this parameter results in an outage. The change is applied during the next maintenance window unless the <code>ApplyImmediately</code> parameter is set to <code>true</code>.</p>
+    /// <p>The version number of the database engine to which you want to upgrade. Modifying engine version is not supported on Amazon DocumentDB.</p>
     pub engine_version: Option<String>,
     /// <p>The password for the master database user. This password can contain any printable ASCII character except forward slash (/), double quote ("), or the "at" symbol (@).</p> <p>Constraints: Must contain from 8 to 100 characters.</p>
     pub master_user_password: Option<String>,
@@ -4012,9 +4842,9 @@ pub struct ModifyDBClusterMessage {
     pub new_db_cluster_identifier: Option<String>,
     /// <p>The port number on which the cluster accepts connections.</p> <p>Constraints: Must be a value from <code>1150</code> to <code>65535</code>. </p> <p>Default: The same port as the original cluster.</p>
     pub port: Option<i64>,
-    /// <p><p>The daily time range during which automated backups are created if automated backups are enabled, using the <code>BackupRetentionPeriod</code> parameter. </p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region. </p> <p>Constraints:</p> <ul> <li> <p>Must be in the format <code>hh24:mi-hh24:mi</code>.</p> </li> <li> <p>Must be in Universal Coordinated Time (UTC).</p> </li> <li> <p>Must not conflict with the preferred maintenance window.</p> </li> <li> <p>Must be at least 30 minutes.</p> </li> </ul></p>
+    /// <p><p>The daily time range during which automated backups are created if automated backups are enabled, using the <code>BackupRetentionPeriod</code> parameter. </p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each Region. </p> <p>Constraints:</p> <ul> <li> <p>Must be in the format <code>hh24:mi-hh24:mi</code>.</p> </li> <li> <p>Must be in Universal Coordinated Time (UTC).</p> </li> <li> <p>Must not conflict with the preferred maintenance window.</p> </li> <li> <p>Must be at least 30 minutes.</p> </li> </ul></p>
     pub preferred_backup_window: Option<String>,
-    /// <p>The weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).</p> <p>Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region, occurring on a random day of the week. </p> <p>Valid days: Mon, Tue, Wed, Thu, Fri, Sat, Sun</p> <p>Constraints: Minimum 30-minute window.</p>
+    /// <p>The weekly time range during which system maintenance can occur, in Universal Coordinated Time (UTC).</p> <p>Format: <code>ddd:hh24:mi-ddd:hh24:mi</code> </p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each Region, occurring on a random day of the week. </p> <p>Valid days: Mon, Tue, Wed, Thu, Fri, Sat, Sun</p> <p>Constraints: Minimum 30-minute window.</p>
     pub preferred_maintenance_window: Option<String>,
     /// <p>A list of virtual private cloud (VPC) security groups that the cluster will belong to.</p>
     pub vpc_security_group_ids: Option<Vec<String>>,
@@ -4155,13 +4985,13 @@ impl ModifyDBClusterResultDeserializer {
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ModifyDBClusterSnapshotAttributeMessage {
-    /// <p>The name of the cluster snapshot attribute to modify.</p> <p>To manage authorization for other AWS accounts to copy or restore a manual cluster snapshot, set this value to <code>restore</code>.</p>
+    /// <p>The name of the cluster snapshot attribute to modify.</p> <p>To manage authorization for other accounts to copy or restore a manual cluster snapshot, set this value to <code>restore</code>.</p>
     pub attribute_name: String,
     /// <p>The identifier for the cluster snapshot to modify the attributes for.</p>
     pub db_cluster_snapshot_identifier: String,
-    /// <p>A list of cluster snapshot attributes to add to the attribute specified by <code>AttributeName</code>.</p> <p>To authorize other AWS accounts to copy or restore a manual cluster snapshot, set this list to include one or more AWS account IDs. To make the manual cluster snapshot restorable by any AWS account, set it to <code>all</code>. Do not add the <code>all</code> value for any manual cluster snapshots that contain private information that you don't want to be available to all AWS accounts.</p>
+    /// <p>A list of cluster snapshot attributes to add to the attribute specified by <code>AttributeName</code>.</p> <p>To authorize other accounts to copy or restore a manual cluster snapshot, set this list to include one or more account IDs. To make the manual cluster snapshot restorable by any account, set it to <code>all</code>. Do not add the <code>all</code> value for any manual cluster snapshots that contain private information that you don't want to be available to all accounts.</p>
     pub values_to_add: Option<Vec<String>>,
-    /// <p>A list of cluster snapshot attributes to remove from the attribute specified by <code>AttributeName</code>.</p> <p>To remove authorization for other AWS accounts to copy or restore a manual cluster snapshot, set this list to include one or more AWS account identifiers. To remove authorization for any AWS account to copy or restore the cluster snapshot, set it to <code>all</code> . If you specify <code>all</code>, an AWS account whose account ID is explicitly added to the <code>restore</code> attribute can still copy or restore a manual cluster snapshot.</p>
+    /// <p>A list of cluster snapshot attributes to remove from the attribute specified by <code>AttributeName</code>.</p> <p>To remove authorization for other accounts to copy or restore a manual cluster snapshot, set this list to include one or more account identifiers. To remove authorization for any account to copy or restore the cluster snapshot, set it to <code>all</code> . If you specify <code>all</code>, an account whose account ID is explicitly added to the <code>restore</code> attribute can still copy or restore a manual cluster snapshot.</p>
     pub values_to_remove: Option<Vec<String>>,
 }
 
@@ -4238,11 +5068,11 @@ impl ModifyDBClusterSnapshotAttributeResultDeserializer {
 pub struct ModifyDBInstanceMessage {
     /// <p>Specifies whether the modifications in this request and any pending modifications are asynchronously applied as soon as possible, regardless of the <code>PreferredMaintenanceWindow</code> setting for the instance. </p> <p> If this parameter is set to <code>false</code>, changes to the instance are applied during the next maintenance window. Some parameter changes can cause an outage and are applied on the next reboot.</p> <p>Default: <code>false</code> </p>
     pub apply_immediately: Option<bool>,
-    /// <p>Indicates that minor version upgrades are applied automatically to the instance during the maintenance window. Changing this parameter doesn't result in an outage except in the following case, and the change is asynchronously applied as soon as possible. An outage results if this parameter is set to <code>true</code> during the maintenance window, and a newer minor version is available, and Amazon DocumentDB has enabled automatic patching for that engine version. </p>
+    /// <p>This parameter does not apply to Amazon DocumentDB. Amazon DocumentDB does not perform minor version upgrades regardless of the value set.</p>
     pub auto_minor_version_upgrade: Option<bool>,
     /// <p>Indicates the certificate that needs to be associated with the instance.</p>
     pub ca_certificate_identifier: Option<String>,
-    /// <p>The new compute and memory capacity of the instance; for example, <code>db.r5.large</code>. Not all instance classes are available in all AWS Regions. </p> <p>If you modify the instance class, an outage occurs during the change. The change is applied during the next maintenance window, unless <code>ApplyImmediately</code> is specified as <code>true</code> for this request. </p> <p>Default: Uses existing setting.</p>
+    /// <p>The new compute and memory capacity of the instance; for example, <code>db.r5.large</code>. Not all instance classes are available in all Regions. </p> <p>If you modify the instance class, an outage occurs during the change. The change is applied during the next maintenance window, unless <code>ApplyImmediately</code> is specified as <code>true</code> for this request. </p> <p>Default: Uses existing setting.</p>
     pub db_instance_class: Option<String>,
     /// <p><p>The instance identifier. This value is stored as a lowercase string.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing <code>DBInstance</code>.</p> </li> </ul></p>
     pub db_instance_identifier: String,
@@ -4390,6 +5220,155 @@ impl ModifyDBSubnetGroupResultDeserializer {
                     "DBSubnetGroup" => {
                         obj.db_subnet_group = Some(DBSubnetGroupDeserializer::deserialize(
                             "DBSubnetGroup",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p>Represents the input to <a>ModifyEventSubscription</a>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ModifyEventSubscriptionMessage {
+    /// <p> A Boolean value; set to <code>true</code> to activate the subscription. </p>
+    pub enabled: Option<bool>,
+    /// <p> A list of event categories for a <code>SourceType</code> that you want to subscribe to.</p>
+    pub event_categories: Option<Vec<String>>,
+    /// <p>The Amazon Resource Name (ARN) of the SNS topic created for event notification. The ARN is created by Amazon SNS when you create a topic and subscribe to it.</p>
+    pub sns_topic_arn: Option<String>,
+    /// <p>The type of source that is generating the events. For example, if you want to be notified of events generated by an instance, set this parameter to <code>db-instance</code>. If this value is not specified, all events are returned.</p> <p>Valid values: <code>db-instance</code>, <code>db-parameter-group</code>, <code>db-security-group</code> </p>
+    pub source_type: Option<String>,
+    /// <p>The name of the Amazon DocumentDB event notification subscription.</p>
+    pub subscription_name: String,
+}
+
+/// Serialize `ModifyEventSubscriptionMessage` contents to a `SignedRequest`.
+struct ModifyEventSubscriptionMessageSerializer;
+impl ModifyEventSubscriptionMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyEventSubscriptionMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.enabled {
+            params.put(&format!("{}{}", prefix, "Enabled"), &field_value);
+        }
+        if let Some(ref field_value) = obj.event_categories {
+            EventCategoriesListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "EventCategory"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.sns_topic_arn {
+            params.put(&format!("{}{}", prefix, "SnsTopicArn"), &field_value);
+        }
+        if let Some(ref field_value) = obj.source_type {
+            params.put(&format!("{}{}", prefix, "SourceType"), &field_value);
+        }
+        params.put(
+            &format!("{}{}", prefix, "SubscriptionName"),
+            &obj.subscription_name,
+        );
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct ModifyEventSubscriptionResult {
+    pub event_subscription: Option<EventSubscription>,
+}
+
+#[allow(dead_code)]
+struct ModifyEventSubscriptionResultDeserializer;
+impl ModifyEventSubscriptionResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyEventSubscriptionResult, XmlParseError> {
+        deserialize_elements::<_, ModifyEventSubscriptionResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "EventSubscription" => {
+                        obj.event_subscription = Some(EventSubscriptionDeserializer::deserialize(
+                            "EventSubscription",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p>Represents the input to <a>ModifyGlobalCluster</a>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ModifyGlobalClusterMessage {
+    /// <p>Indicates if the global cluster has deletion protection enabled. The global cluster can't be deleted when deletion protection is enabled. </p>
+    pub deletion_protection: Option<bool>,
+    /// <p><p>The identifier for the global cluster being modified. This parameter isn&#39;t case-sensitive.</p> <p>Constraints:</p> <ul> <li> <p>Must match the identifier of an existing global cluster.</p> </li> </ul></p>
+    pub global_cluster_identifier: String,
+    /// <p>The new identifier for a global cluster when you modify a global cluster. This value is stored as a lowercase string.</p> <ul> <li> <p>Must contain from 1 to 63 letters, numbers, or hyphens</p> <p>The first character must be a letter</p> <p>Can't end with a hyphen or contain two consecutive hyphens</p> </li> </ul> <p>Example: <code>my-cluster2</code> </p>
+    pub new_global_cluster_identifier: Option<String>,
+}
+
+/// Serialize `ModifyGlobalClusterMessage` contents to a `SignedRequest`.
+struct ModifyGlobalClusterMessageSerializer;
+impl ModifyGlobalClusterMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyGlobalClusterMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.deletion_protection {
+            params.put(&format!("{}{}", prefix, "DeletionProtection"), &field_value);
+        }
+        params.put(
+            &format!("{}{}", prefix, "GlobalClusterIdentifier"),
+            &obj.global_cluster_identifier,
+        );
+        if let Some(ref field_value) = obj.new_global_cluster_identifier {
+            params.put(
+                &format!("{}{}", prefix, "NewGlobalClusterIdentifier"),
+                &field_value,
+            );
+        }
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct ModifyGlobalClusterResult {
+    pub global_cluster: Option<GlobalCluster>,
+}
+
+#[allow(dead_code)]
+struct ModifyGlobalClusterResultDeserializer;
+impl ModifyGlobalClusterResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyGlobalClusterResult, XmlParseError> {
+        deserialize_elements::<_, ModifyGlobalClusterResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "GlobalCluster" => {
+                        obj.global_cluster = Some(GlobalClusterDeserializer::deserialize(
+                            "GlobalCluster",
                             stack,
                         )?);
                     }
@@ -4985,6 +5964,45 @@ impl PendingModifiedValuesDeserializer {
         })
     }
 }
+#[allow(dead_code)]
+struct ReadReplicaIdentifierListDeserializer;
+impl ReadReplicaIdentifierListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "ReadReplicaIdentifier" {
+                obj.push(StringDeserializer::deserialize(
+                    "ReadReplicaIdentifier",
+                    stack,
+                )?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+#[allow(dead_code)]
+struct ReadersArnListDeserializer;
+impl ReadersArnListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "member" {
+                obj.push(StringDeserializer::deserialize("member", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
 /// <p>Represents the input to <a>RebootDBInstance</a>.</p>
 #[derive(Clone, Debug, Default, PartialEq)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -5038,6 +6056,134 @@ impl RebootDBInstanceResultDeserializer {
             }
             Ok(())
         })
+    }
+}
+/// <p>Represents the input to <a>RemoveFromGlobalCluster</a>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RemoveFromGlobalClusterMessage {
+    /// <p>The Amazon Resource Name (ARN) identifying the cluster that was detached from the Amazon DocumentDB global cluster. </p>
+    pub db_cluster_identifier: String,
+    /// <p>The cluster identifier to detach from the Amazon DocumentDB global cluster. </p>
+    pub global_cluster_identifier: String,
+}
+
+/// Serialize `RemoveFromGlobalClusterMessage` contents to a `SignedRequest`.
+struct RemoveFromGlobalClusterMessageSerializer;
+impl RemoveFromGlobalClusterMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &RemoveFromGlobalClusterMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "DbClusterIdentifier"),
+            &obj.db_cluster_identifier,
+        );
+        params.put(
+            &format!("{}{}", prefix, "GlobalClusterIdentifier"),
+            &obj.global_cluster_identifier,
+        );
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct RemoveFromGlobalClusterResult {
+    pub global_cluster: Option<GlobalCluster>,
+}
+
+#[allow(dead_code)]
+struct RemoveFromGlobalClusterResultDeserializer;
+impl RemoveFromGlobalClusterResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RemoveFromGlobalClusterResult, XmlParseError> {
+        deserialize_elements::<_, RemoveFromGlobalClusterResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "GlobalCluster" => {
+                        obj.global_cluster = Some(GlobalClusterDeserializer::deserialize(
+                            "GlobalCluster",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
+    }
+}
+/// <p>Represents the input to <a>RemoveSourceIdentifierFromSubscription</a>.</p>
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct RemoveSourceIdentifierFromSubscriptionMessage {
+    /// <p> The source identifier to be removed from the subscription, such as the instance identifier for an instance, or the name of a security group. </p>
+    pub source_identifier: String,
+    /// <p>The name of the Amazon DocumentDB event notification subscription that you want to remove a source identifier from.</p>
+    pub subscription_name: String,
+}
+
+/// Serialize `RemoveSourceIdentifierFromSubscriptionMessage` contents to a `SignedRequest`.
+struct RemoveSourceIdentifierFromSubscriptionMessageSerializer;
+impl RemoveSourceIdentifierFromSubscriptionMessageSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &RemoveSourceIdentifierFromSubscriptionMessage,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "SourceIdentifier"),
+            &obj.source_identifier,
+        );
+        params.put(
+            &format!("{}{}", prefix, "SubscriptionName"),
+            &obj.subscription_name,
+        );
+    }
+}
+
+#[derive(Clone, Debug, Default, PartialEq)]
+#[cfg_attr(feature = "serialize_structs", derive(Serialize))]
+pub struct RemoveSourceIdentifierFromSubscriptionResult {
+    pub event_subscription: Option<EventSubscription>,
+}
+
+#[allow(dead_code)]
+struct RemoveSourceIdentifierFromSubscriptionResultDeserializer;
+impl RemoveSourceIdentifierFromSubscriptionResultDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<RemoveSourceIdentifierFromSubscriptionResult, XmlParseError> {
+        deserialize_elements::<_, RemoveSourceIdentifierFromSubscriptionResult, _>(
+            tag_name,
+            stack,
+            |name, stack, obj| {
+                match name {
+                    "EventSubscription" => {
+                        obj.event_subscription = Some(EventSubscriptionDeserializer::deserialize(
+                            "EventSubscription",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                }
+                Ok(())
+            },
+        )
     }
 }
 /// <p>Represents the input to <a>RemoveTagsFromResource</a>.</p>
@@ -5164,7 +6310,7 @@ pub struct RestoreDBClusterFromSnapshotMessage {
     pub engine: String,
     /// <p>The version of the database engine to use for the new cluster.</p>
     pub engine_version: Option<String>,
-    /// <p><p>The AWS KMS key identifier to use when restoring an encrypted cluster from a DB snapshot or cluster snapshot.</p> <p>The AWS KMS key identifier is the Amazon Resource Name (ARN) for the AWS KMS encryption key. If you are restoring a cluster with the same AWS account that owns the AWS KMS encryption key used to encrypt the new cluster, then you can use the AWS KMS key alias instead of the ARN for the AWS KMS encryption key.</p> <p>If you do not specify a value for the <code>KmsKeyId</code> parameter, then the following occurs:</p> <ul> <li> <p>If the snapshot or cluster snapshot in <code>SnapshotIdentifier</code> is encrypted, then the restored cluster is encrypted using the AWS KMS key that was used to encrypt the snapshot or the cluster snapshot.</p> </li> <li> <p>If the snapshot or the cluster snapshot in <code>SnapshotIdentifier</code> is not encrypted, then the restored DB cluster is not encrypted.</p> </li> </ul></p>
+    /// <p><p>The KMS key identifier to use when restoring an encrypted cluster from a DB snapshot or cluster snapshot.</p> <p>The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption key. If you are restoring a cluster with the same account that owns the KMS encryption key used to encrypt the new cluster, then you can use the KMS key alias instead of the ARN for the KMS encryption key.</p> <p>If you do not specify a value for the <code>KmsKeyId</code> parameter, then the following occurs:</p> <ul> <li> <p>If the snapshot or cluster snapshot in <code>SnapshotIdentifier</code> is encrypted, then the restored cluster is encrypted using the KMS key that was used to encrypt the snapshot or the cluster snapshot.</p> </li> <li> <p>If the snapshot or the cluster snapshot in <code>SnapshotIdentifier</code> is not encrypted, then the restored DB cluster is not encrypted.</p> </li> </ul></p>
     pub kms_key_id: Option<String>,
     /// <p>The port number on which the new cluster accepts connections.</p> <p>Constraints: Must be a value from <code>1150</code> to <code>65535</code>.</p> <p>Default: The same port as the original cluster.</p>
     pub port: Option<i64>,
@@ -5278,7 +6424,7 @@ pub struct RestoreDBClusterToPointInTimeMessage {
     pub deletion_protection: Option<bool>,
     /// <p>A list of log types that must be enabled for exporting to Amazon CloudWatch Logs.</p>
     pub enable_cloudwatch_logs_exports: Option<Vec<String>>,
-    /// <p>The AWS KMS key identifier to use when restoring an encrypted cluster from an encrypted cluster.</p> <p>The AWS KMS key identifier is the Amazon Resource Name (ARN) for the AWS KMS encryption key. If you are restoring a cluster with the same AWS account that owns the AWS KMS encryption key used to encrypt the new cluster, then you can use the AWS KMS key alias instead of the ARN for the AWS KMS encryption key.</p> <p>You can restore to a new cluster and encrypt the new cluster with an AWS KMS key that is different from the AWS KMS key used to encrypt the source cluster. The new DB cluster is encrypted with the AWS KMS key identified by the <code>KmsKeyId</code> parameter.</p> <p>If you do not specify a value for the <code>KmsKeyId</code> parameter, then the following occurs:</p> <ul> <li> <p>If the cluster is encrypted, then the restored cluster is encrypted using the AWS KMS key that was used to encrypt the source cluster.</p> </li> <li> <p>If the cluster is not encrypted, then the restored cluster is not encrypted.</p> </li> </ul> <p>If <code>DBClusterIdentifier</code> refers to a cluster that is not encrypted, then the restore request is rejected.</p>
+    /// <p>The KMS key identifier to use when restoring an encrypted cluster from an encrypted cluster.</p> <p>The KMS key identifier is the Amazon Resource Name (ARN) for the KMS encryption key. If you are restoring a cluster with the same account that owns the KMS encryption key used to encrypt the new cluster, then you can use the KMS key alias instead of the ARN for the KMS encryption key.</p> <p>You can restore to a new cluster and encrypt the new cluster with an KMS key that is different from the KMS key used to encrypt the source cluster. The new DB cluster is encrypted with the KMS key identified by the <code>KmsKeyId</code> parameter.</p> <p>If you do not specify a value for the <code>KmsKeyId</code> parameter, then the following occurs:</p> <ul> <li> <p>If the cluster is encrypted, then the restored cluster is encrypted using the KMS key that was used to encrypt the source cluster.</p> </li> <li> <p>If the cluster is not encrypted, then the restored cluster is not encrypted.</p> </li> </ul> <p>If <code>DBClusterIdentifier</code> refers to a cluster that is not encrypted, then the restore request is rejected.</p>
     pub kms_key_id: Option<String>,
     /// <p>The port number on which the new cluster accepts connections.</p> <p>Constraints: Must be a value from <code>1150</code> to <code>65535</code>. </p> <p>Default: The default port for the engine.</p>
     pub port: Option<i64>,
@@ -5382,6 +6528,36 @@ impl RestoreDBClusterToPointInTimeResultDeserializer {
         )
     }
 }
+#[allow(dead_code)]
+struct SourceIdsListDeserializer;
+impl SourceIdsListDeserializer {
+    #[allow(dead_code, unused_variables)]
+    fn deserialize<T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        deserialize_elements::<_, Vec<_>, _>(tag_name, stack, |name, stack, obj| {
+            if name == "SourceId" {
+                obj.push(StringDeserializer::deserialize("SourceId", stack)?);
+            } else {
+                skip_tree(stack);
+            }
+            Ok(())
+        })
+    }
+}
+
+/// Serialize `SourceIdsList` contents to a `SignedRequest`.
+struct SourceIdsListSerializer;
+impl SourceIdsListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
 #[allow(dead_code)]
 struct SourceTypeDeserializer;
 impl SourceTypeDeserializer {
@@ -5576,9 +6752,9 @@ impl TStampDeserializer {
 #[cfg_attr(feature = "serialize_structs", derive(Serialize))]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Tag {
-    /// <p>The required name of the tag. The string value can be from 1 to 128 Unicode characters in length and can't be prefixed with "aws:" or "rds:". The string can contain only the set of Unicode letters, digits, white space, '_', '.', '/', '=', '+', '-' (Java regex: "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-]*)$").</p>
+    /// <p>The required name of the tag. The string value can be from 1 to 128 Unicode characters in length and can't be prefixed with "<code>aws:</code>" or "<code>rds:</code>". The string can contain only the set of Unicode letters, digits, white space, '_', '.', '/', '=', '+', '-' (Java regex: "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-]*)$").</p>
     pub key: Option<String>,
-    /// <p>The optional value of the tag. The string value can be from 1 to 256 Unicode characters in length and can't be prefixed with "aws:" or "rds:". The string can contain only the set of Unicode letters, digits, white space, '_', '.', '/', '=', '+', '-' (Java regex: "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-]*)$").</p>
+    /// <p>The optional value of the tag. The string value can be from 1 to 256 Unicode characters in length and can't be prefixed with "<code>aws:</code>" or "<code>rds:</code>". The string can contain only the set of Unicode letters, digits, white space, '_', '.', '/', '=', '+', '-' (Java regex: "^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-]*)$").</p>
     pub value: Option<String>,
 }
 
@@ -5824,6 +7000,68 @@ impl VpcSecurityGroupMembershipListDeserializer {
         })
     }
 }
+/// Errors returned by AddSourceIdentifierToSubscription
+#[derive(Debug, PartialEq)]
+pub enum AddSourceIdentifierToSubscriptionError {
+    /// <p>The requested source could not be found. </p>
+    SourceNotFoundFault(String),
+    /// <p>The subscription name does not exist. </p>
+    SubscriptionNotFoundFault(String),
+}
+
+impl AddSourceIdentifierToSubscriptionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AddSourceIdentifierToSubscriptionError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "SourceNotFound" => {
+                        return RusotoError::Service(
+                            AddSourceIdentifierToSubscriptionError::SourceNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "SubscriptionNotFound" => {
+                        return RusotoError::Service(
+                            AddSourceIdentifierToSubscriptionError::SubscriptionNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for AddSourceIdentifierToSubscriptionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AddSourceIdentifierToSubscriptionError::SourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AddSourceIdentifierToSubscriptionError::SubscriptionNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for AddSourceIdentifierToSubscriptionError {}
 /// Errors returned by AddTagsToResource
 #[derive(Debug, PartialEq)]
 pub enum AddTagsToResourceError {
@@ -6043,7 +7281,7 @@ pub enum CopyDBClusterSnapshotError {
     InvalidDBClusterSnapshotStateFault(String),
     /// <p>The cluster isn't in a valid state.</p>
     InvalidDBClusterStateFault(String),
-    /// <p>An error occurred when accessing an AWS KMS key.</p>
+    /// <p>An error occurred when accessing an KMS key.</p>
     KMSKeyNotAccessibleFault(String),
     /// <p>The request would cause you to exceed the allowed number of snapshots.</p>
     SnapshotQuotaExceededFault(String),
@@ -6157,6 +7395,8 @@ pub enum CreateDBClusterError {
     DBSubnetGroupDoesNotCoverEnoughAZs(String),
     /// <p> <code>DBSubnetGroupName</code> doesn't refer to an existing subnet group. </p>
     DBSubnetGroupNotFoundFault(String),
+    /// <p>The <code>GlobalClusterIdentifier</code> doesn't refer to an existing global cluster.</p>
+    GlobalClusterNotFoundFault(String),
     /// <p>There is not enough storage available for the current action. You might be able to resolve this error by updating your subnet group to use different Availability Zones that have more storage available. </p>
     InsufficientStorageClusterCapacityFault(String),
     /// <p>The cluster isn't in a valid state.</p>
@@ -6165,11 +7405,13 @@ pub enum CreateDBClusterError {
     InvalidDBInstanceStateFault(String),
     /// <p>The subnet group can't be deleted because it's in use.</p>
     InvalidDBSubnetGroupStateFault(String),
+    /// <p>The requested operation can't be performed while the cluster is in this state.</p>
+    InvalidGlobalClusterStateFault(String),
     /// <p>The requested subnet is not valid, or multiple subnets were requested that are not all in a common virtual private cloud (VPC).</p>
     InvalidSubnet(String),
     /// <p>The subnet group doesn't cover all Availability Zones after it is created because of changes that were made.</p>
     InvalidVPCNetworkStateFault(String),
-    /// <p>An error occurred when accessing an AWS KMS key.</p>
+    /// <p>An error occurred when accessing an KMS key.</p>
     KMSKeyNotAccessibleFault(String),
     /// <p>The request would cause you to exceed the allowed amount of storage available across all instances.</p>
     StorageQuotaExceededFault(String),
@@ -6222,6 +7464,11 @@ impl CreateDBClusterError {
                             CreateDBClusterError::DBSubnetGroupNotFoundFault(parsed_error.message),
                         )
                     }
+                    "GlobalClusterNotFoundFault" => {
+                        return RusotoError::Service(
+                            CreateDBClusterError::GlobalClusterNotFoundFault(parsed_error.message),
+                        )
+                    }
                     "InsufficientStorageClusterCapacity" => {
                         return RusotoError::Service(
                             CreateDBClusterError::InsufficientStorageClusterCapacityFault(
@@ -6242,6 +7489,13 @@ impl CreateDBClusterError {
                     "InvalidDBSubnetGroupStateFault" => {
                         return RusotoError::Service(
                             CreateDBClusterError::InvalidDBSubnetGroupStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidGlobalClusterStateFault" => {
+                        return RusotoError::Service(
+                            CreateDBClusterError::InvalidGlobalClusterStateFault(
                                 parsed_error.message,
                             ),
                         )
@@ -6296,12 +7550,16 @@ impl fmt::Display for CreateDBClusterError {
                 write!(f, "{}", cause)
             }
             CreateDBClusterError::DBSubnetGroupNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateDBClusterError::GlobalClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
             CreateDBClusterError::InsufficientStorageClusterCapacityFault(ref cause) => {
                 write!(f, "{}", cause)
             }
             CreateDBClusterError::InvalidDBClusterStateFault(ref cause) => write!(f, "{}", cause),
             CreateDBClusterError::InvalidDBInstanceStateFault(ref cause) => write!(f, "{}", cause),
             CreateDBClusterError::InvalidDBSubnetGroupStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateDBClusterError::InvalidGlobalClusterStateFault(ref cause) => {
                 write!(f, "{}", cause)
             }
             CreateDBClusterError::InvalidSubnet(ref cause) => write!(f, "{}", cause),
@@ -6497,7 +7755,7 @@ pub enum CreateDBInstanceError {
     InvalidSubnet(String),
     /// <p>The subnet group doesn't cover all Availability Zones after it is created because of changes that were made.</p>
     InvalidVPCNetworkStateFault(String),
-    /// <p>An error occurred when accessing an AWS KMS key.</p>
+    /// <p>An error occurred when accessing an KMS key.</p>
     KMSKeyNotAccessibleFault(String),
     /// <p>The request would cause you to exceed the allowed amount of storage available across all instances.</p>
     StorageQuotaExceededFault(String),
@@ -6744,6 +8002,200 @@ impl fmt::Display for CreateDBSubnetGroupError {
     }
 }
 impl Error for CreateDBSubnetGroupError {}
+/// Errors returned by CreateEventSubscription
+#[derive(Debug, PartialEq)]
+pub enum CreateEventSubscriptionError {
+    /// <p>You have reached the maximum number of event subscriptions. </p>
+    EventSubscriptionQuotaExceededFault(String),
+    /// <p>Amazon SNS has responded that there is a problem with the specified topic. </p>
+    SNSInvalidTopicFault(String),
+    /// <p>You do not have permission to publish to the SNS topic Amazon Resource Name (ARN). </p>
+    SNSNoAuthorizationFault(String),
+    /// <p>The SNS topic Amazon Resource Name (ARN) does not exist. </p>
+    SNSTopicArnNotFoundFault(String),
+    /// <p>The requested source could not be found. </p>
+    SourceNotFoundFault(String),
+    /// <p>The provided subscription name already exists. </p>
+    SubscriptionAlreadyExistFault(String),
+    /// <p>The provided category does not exist. </p>
+    SubscriptionCategoryNotFoundFault(String),
+}
+
+impl CreateEventSubscriptionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateEventSubscriptionError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "EventSubscriptionQuotaExceeded" => {
+                        return RusotoError::Service(
+                            CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "SNSInvalidTopic" => {
+                        return RusotoError::Service(
+                            CreateEventSubscriptionError::SNSInvalidTopicFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "SNSNoAuthorization" => {
+                        return RusotoError::Service(
+                            CreateEventSubscriptionError::SNSNoAuthorizationFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "SNSTopicArnNotFound" => {
+                        return RusotoError::Service(
+                            CreateEventSubscriptionError::SNSTopicArnNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "SourceNotFound" => {
+                        return RusotoError::Service(
+                            CreateEventSubscriptionError::SourceNotFoundFault(parsed_error.message),
+                        )
+                    }
+                    "SubscriptionAlreadyExist" => {
+                        return RusotoError::Service(
+                            CreateEventSubscriptionError::SubscriptionAlreadyExistFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "SubscriptionCategoryNotFound" => {
+                        return RusotoError::Service(
+                            CreateEventSubscriptionError::SubscriptionCategoryNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for CreateEventSubscriptionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateEventSubscriptionError::EventSubscriptionQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateEventSubscriptionError::SNSInvalidTopicFault(ref cause) => write!(f, "{}", cause),
+            CreateEventSubscriptionError::SNSNoAuthorizationFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateEventSubscriptionError::SNSTopicArnNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateEventSubscriptionError::SourceNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateEventSubscriptionError::SubscriptionAlreadyExistFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateEventSubscriptionError::SubscriptionCategoryNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateEventSubscriptionError {}
+/// Errors returned by CreateGlobalCluster
+#[derive(Debug, PartialEq)]
+pub enum CreateGlobalClusterError {
+    /// <p> <code>DBClusterIdentifier</code> doesn't refer to an existing cluster. </p>
+    DBClusterNotFoundFault(String),
+    /// <p>The <code>GlobalClusterIdentifier</code> already exists. Choose a new global cluster identifier (unique name) to create a new global cluster. </p>
+    GlobalClusterAlreadyExistsFault(String),
+    /// <p>The number of global clusters for this account is already at the maximum allowed.</p>
+    GlobalClusterQuotaExceededFault(String),
+    /// <p>The cluster isn't in a valid state.</p>
+    InvalidDBClusterStateFault(String),
+}
+
+impl CreateGlobalClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateGlobalClusterError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DBClusterNotFoundFault" => {
+                        return RusotoError::Service(
+                            CreateGlobalClusterError::DBClusterNotFoundFault(parsed_error.message),
+                        )
+                    }
+                    "GlobalClusterAlreadyExistsFault" => {
+                        return RusotoError::Service(
+                            CreateGlobalClusterError::GlobalClusterAlreadyExistsFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "GlobalClusterQuotaExceededFault" => {
+                        return RusotoError::Service(
+                            CreateGlobalClusterError::GlobalClusterQuotaExceededFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidDBClusterStateFault" => {
+                        return RusotoError::Service(
+                            CreateGlobalClusterError::InvalidDBClusterStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for CreateGlobalClusterError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateGlobalClusterError::DBClusterNotFoundFault(ref cause) => write!(f, "{}", cause),
+            CreateGlobalClusterError::GlobalClusterAlreadyExistsFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateGlobalClusterError::GlobalClusterQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            CreateGlobalClusterError::InvalidDBClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for CreateGlobalClusterError {}
 /// Errors returned by DeleteDBCluster
 #[derive(Debug, PartialEq)]
 pub enum DeleteDBClusterError {
@@ -7104,6 +8556,126 @@ impl fmt::Display for DeleteDBSubnetGroupError {
     }
 }
 impl Error for DeleteDBSubnetGroupError {}
+/// Errors returned by DeleteEventSubscription
+#[derive(Debug, PartialEq)]
+pub enum DeleteEventSubscriptionError {
+    /// <p>Someone else might be modifying a subscription. Wait a few seconds, and try again.</p>
+    InvalidEventSubscriptionStateFault(String),
+    /// <p>The subscription name does not exist. </p>
+    SubscriptionNotFoundFault(String),
+}
+
+impl DeleteEventSubscriptionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteEventSubscriptionError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidEventSubscriptionState" => {
+                        return RusotoError::Service(
+                            DeleteEventSubscriptionError::InvalidEventSubscriptionStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "SubscriptionNotFound" => {
+                        return RusotoError::Service(
+                            DeleteEventSubscriptionError::SubscriptionNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DeleteEventSubscriptionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteEventSubscriptionError::InvalidEventSubscriptionStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteEventSubscriptionError::SubscriptionNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteEventSubscriptionError {}
+/// Errors returned by DeleteGlobalCluster
+#[derive(Debug, PartialEq)]
+pub enum DeleteGlobalClusterError {
+    /// <p>The <code>GlobalClusterIdentifier</code> doesn't refer to an existing global cluster.</p>
+    GlobalClusterNotFoundFault(String),
+    /// <p>The requested operation can't be performed while the cluster is in this state.</p>
+    InvalidGlobalClusterStateFault(String),
+}
+
+impl DeleteGlobalClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteGlobalClusterError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "GlobalClusterNotFoundFault" => {
+                        return RusotoError::Service(
+                            DeleteGlobalClusterError::GlobalClusterNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidGlobalClusterStateFault" => {
+                        return RusotoError::Service(
+                            DeleteGlobalClusterError::InvalidGlobalClusterStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DeleteGlobalClusterError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteGlobalClusterError::GlobalClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DeleteGlobalClusterError::InvalidGlobalClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DeleteGlobalClusterError {}
 /// Errors returned by DescribeCertificates
 #[derive(Debug, PartialEq)]
 pub enum DescribeCertificatesError {
@@ -7590,6 +9162,56 @@ impl fmt::Display for DescribeEventCategoriesError {
     }
 }
 impl Error for DescribeEventCategoriesError {}
+/// Errors returned by DescribeEventSubscriptions
+#[derive(Debug, PartialEq)]
+pub enum DescribeEventSubscriptionsError {
+    /// <p>The subscription name does not exist. </p>
+    SubscriptionNotFoundFault(String),
+}
+
+impl DescribeEventSubscriptionsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeEventSubscriptionsError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "SubscriptionNotFound" => {
+                        return RusotoError::Service(
+                            DescribeEventSubscriptionsError::SubscriptionNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DescribeEventSubscriptionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeEventSubscriptionsError::SubscriptionNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeEventSubscriptionsError {}
 /// Errors returned by DescribeEvents
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventsError {}
@@ -7624,6 +9246,54 @@ impl fmt::Display for DescribeEventsError {
     }
 }
 impl Error for DescribeEventsError {}
+/// Errors returned by DescribeGlobalClusters
+#[derive(Debug, PartialEq)]
+pub enum DescribeGlobalClustersError {
+    /// <p>The <code>GlobalClusterIdentifier</code> doesn't refer to an existing global cluster.</p>
+    GlobalClusterNotFoundFault(String),
+}
+
+impl DescribeGlobalClustersError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeGlobalClustersError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "GlobalClusterNotFoundFault" => {
+                        return RusotoError::Service(
+                            DescribeGlobalClustersError::GlobalClusterNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for DescribeGlobalClustersError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeGlobalClustersError::GlobalClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeGlobalClustersError {}
 /// Errors returned by DescribeOrderableDBInstanceOptions
 #[derive(Debug, PartialEq)]
 pub enum DescribeOrderableDBInstanceOptionsError {}
@@ -8366,6 +10036,172 @@ impl fmt::Display for ModifyDBSubnetGroupError {
     }
 }
 impl Error for ModifyDBSubnetGroupError {}
+/// Errors returned by ModifyEventSubscription
+#[derive(Debug, PartialEq)]
+pub enum ModifyEventSubscriptionError {
+    /// <p>You have reached the maximum number of event subscriptions. </p>
+    EventSubscriptionQuotaExceededFault(String),
+    /// <p>Amazon SNS has responded that there is a problem with the specified topic. </p>
+    SNSInvalidTopicFault(String),
+    /// <p>You do not have permission to publish to the SNS topic Amazon Resource Name (ARN). </p>
+    SNSNoAuthorizationFault(String),
+    /// <p>The SNS topic Amazon Resource Name (ARN) does not exist. </p>
+    SNSTopicArnNotFoundFault(String),
+    /// <p>The provided category does not exist. </p>
+    SubscriptionCategoryNotFoundFault(String),
+    /// <p>The subscription name does not exist. </p>
+    SubscriptionNotFoundFault(String),
+}
+
+impl ModifyEventSubscriptionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyEventSubscriptionError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "EventSubscriptionQuotaExceeded" => {
+                        return RusotoError::Service(
+                            ModifyEventSubscriptionError::EventSubscriptionQuotaExceededFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "SNSInvalidTopic" => {
+                        return RusotoError::Service(
+                            ModifyEventSubscriptionError::SNSInvalidTopicFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "SNSNoAuthorization" => {
+                        return RusotoError::Service(
+                            ModifyEventSubscriptionError::SNSNoAuthorizationFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "SNSTopicArnNotFound" => {
+                        return RusotoError::Service(
+                            ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "SubscriptionCategoryNotFound" => {
+                        return RusotoError::Service(
+                            ModifyEventSubscriptionError::SubscriptionCategoryNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "SubscriptionNotFound" => {
+                        return RusotoError::Service(
+                            ModifyEventSubscriptionError::SubscriptionNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ModifyEventSubscriptionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ModifyEventSubscriptionError::EventSubscriptionQuotaExceededFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyEventSubscriptionError::SNSInvalidTopicFault(ref cause) => write!(f, "{}", cause),
+            ModifyEventSubscriptionError::SNSNoAuthorizationFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyEventSubscriptionError::SNSTopicArnNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyEventSubscriptionError::SubscriptionCategoryNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyEventSubscriptionError::SubscriptionNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ModifyEventSubscriptionError {}
+/// Errors returned by ModifyGlobalCluster
+#[derive(Debug, PartialEq)]
+pub enum ModifyGlobalClusterError {
+    /// <p>The <code>GlobalClusterIdentifier</code> doesn't refer to an existing global cluster.</p>
+    GlobalClusterNotFoundFault(String),
+    /// <p>The requested operation can't be performed while the cluster is in this state.</p>
+    InvalidGlobalClusterStateFault(String),
+}
+
+impl ModifyGlobalClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ModifyGlobalClusterError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "GlobalClusterNotFoundFault" => {
+                        return RusotoError::Service(
+                            ModifyGlobalClusterError::GlobalClusterNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidGlobalClusterStateFault" => {
+                        return RusotoError::Service(
+                            ModifyGlobalClusterError::InvalidGlobalClusterStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for ModifyGlobalClusterError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ModifyGlobalClusterError::GlobalClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ModifyGlobalClusterError::InvalidGlobalClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ModifyGlobalClusterError {}
 /// Errors returned by RebootDBInstance
 #[derive(Debug, PartialEq)]
 pub enum RebootDBInstanceError {
@@ -8420,6 +10256,140 @@ impl fmt::Display for RebootDBInstanceError {
     }
 }
 impl Error for RebootDBInstanceError {}
+/// Errors returned by RemoveFromGlobalCluster
+#[derive(Debug, PartialEq)]
+pub enum RemoveFromGlobalClusterError {
+    /// <p> <code>DBClusterIdentifier</code> doesn't refer to an existing cluster. </p>
+    DBClusterNotFoundFault(String),
+    /// <p>The <code>GlobalClusterIdentifier</code> doesn't refer to an existing global cluster.</p>
+    GlobalClusterNotFoundFault(String),
+    /// <p>The requested operation can't be performed while the cluster is in this state.</p>
+    InvalidGlobalClusterStateFault(String),
+}
+
+impl RemoveFromGlobalClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<RemoveFromGlobalClusterError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "DBClusterNotFoundFault" => {
+                        return RusotoError::Service(
+                            RemoveFromGlobalClusterError::DBClusterNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "GlobalClusterNotFoundFault" => {
+                        return RusotoError::Service(
+                            RemoveFromGlobalClusterError::GlobalClusterNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "InvalidGlobalClusterStateFault" => {
+                        return RusotoError::Service(
+                            RemoveFromGlobalClusterError::InvalidGlobalClusterStateFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for RemoveFromGlobalClusterError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            RemoveFromGlobalClusterError::DBClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveFromGlobalClusterError::GlobalClusterNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveFromGlobalClusterError::InvalidGlobalClusterStateFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for RemoveFromGlobalClusterError {}
+/// Errors returned by RemoveSourceIdentifierFromSubscription
+#[derive(Debug, PartialEq)]
+pub enum RemoveSourceIdentifierFromSubscriptionError {
+    /// <p>The requested source could not be found. </p>
+    SourceNotFoundFault(String),
+    /// <p>The subscription name does not exist. </p>
+    SubscriptionNotFoundFault(String),
+}
+
+impl RemoveSourceIdentifierFromSubscriptionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<RemoveSourceIdentifierFromSubscriptionError> {
+        {
+            let reader = EventReader::new(res.body.as_ref());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "SourceNotFound" => {
+                        return RusotoError::Service(
+                            RemoveSourceIdentifierFromSubscriptionError::SourceNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    "SubscriptionNotFound" => {
+                        return RusotoError::Service(
+                            RemoveSourceIdentifierFromSubscriptionError::SubscriptionNotFoundFault(
+                                parsed_error.message,
+                            ),
+                        )
+                    }
+                    _ => {}
+                }
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        xml_util::start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+impl fmt::Display for RemoveSourceIdentifierFromSubscriptionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            RemoveSourceIdentifierFromSubscriptionError::SourceNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            RemoveSourceIdentifierFromSubscriptionError::SubscriptionNotFoundFault(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for RemoveSourceIdentifierFromSubscriptionError {}
 /// Errors returned by RemoveTagsFromResource
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsFromResourceError {
@@ -8581,7 +10551,7 @@ pub enum RestoreDBClusterFromSnapshotError {
     InvalidSubnet(String),
     /// <p>The subnet group doesn't cover all Availability Zones after it is created because of changes that were made.</p>
     InvalidVPCNetworkStateFault(String),
-    /// <p>An error occurred when accessing an AWS KMS key.</p>
+    /// <p>An error occurred when accessing an KMS key.</p>
     KMSKeyNotAccessibleFault(String),
     /// <p>The request would cause you to exceed the allowed amount of storage available across all instances.</p>
     StorageQuotaExceededFault(String),
@@ -8783,7 +10753,7 @@ pub enum RestoreDBClusterToPointInTimeError {
     InvalidSubnet(String),
     /// <p>The subnet group doesn't cover all Availability Zones after it is created because of changes that were made.</p>
     InvalidVPCNetworkStateFault(String),
-    /// <p>An error occurred when accessing an AWS KMS key.</p>
+    /// <p>An error occurred when accessing an KMS key.</p>
     KMSKeyNotAccessibleFault(String),
     /// <p>The request would cause you to exceed the allowed amount of storage available across all instances.</p>
     StorageQuotaExceededFault(String),
@@ -9089,7 +11059,16 @@ impl Error for StopDBClusterError {}
 /// Trait representing the capabilities of the Amazon DocDB API. Amazon DocDB clients implement this trait.
 #[async_trait]
 pub trait Docdb {
-    /// <p>Adds metadata tags to an Amazon DocumentDB resource. You can use these tags with cost allocation reporting to track costs that are associated with Amazon DocumentDB resources. or in a <code>Condition</code> statement in an AWS Identity and Access Management (IAM) policy for Amazon DocumentDB.</p>
+    /// <p>Adds a source identifier to an existing event notification subscription.</p>
+    async fn add_source_identifier_to_subscription(
+        &self,
+        input: AddSourceIdentifierToSubscriptionMessage,
+    ) -> Result<
+        AddSourceIdentifierToSubscriptionResult,
+        RusotoError<AddSourceIdentifierToSubscriptionError>,
+    >;
+
+    /// <p>Adds metadata tags to an Amazon DocumentDB resource. You can use these tags with cost allocation reporting to track costs that are associated with Amazon DocumentDB resources or in a <code>Condition</code> statement in an Identity and Access Management (IAM) policy for Amazon DocumentDB.</p>
     async fn add_tags_to_resource(
         &self,
         input: AddTagsToResourceMessage,
@@ -9107,7 +11086,7 @@ pub trait Docdb {
         input: CopyDBClusterParameterGroupMessage,
     ) -> Result<CopyDBClusterParameterGroupResult, RusotoError<CopyDBClusterParameterGroupError>>;
 
-    /// <p>Copies a snapshot of a cluster.</p> <p>To copy a cluster snapshot from a shared manual cluster snapshot, <code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared cluster snapshot. You can only copy a shared DB cluster snapshot, whether encrypted or not, in the same AWS Region.</p> <p>To cancel the copy operation after it is in progress, delete the target cluster snapshot identified by <code>TargetDBClusterSnapshotIdentifier</code> while that cluster snapshot is in the <i>copying</i> status.</p>
+    /// <p>Copies a snapshot of a cluster.</p> <p>To copy a cluster snapshot from a shared manual cluster snapshot, <code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared cluster snapshot. You can only copy a shared DB cluster snapshot, whether encrypted or not, in the same Region.</p> <p>To cancel the copy operation after it is in progress, delete the target cluster snapshot identified by <code>TargetDBClusterSnapshotIdentifier</code> while that cluster snapshot is in the <i>copying</i> status.</p>
     async fn copy_db_cluster_snapshot(
         &self,
         input: CopyDBClusterSnapshotMessage,
@@ -9137,11 +11116,23 @@ pub trait Docdb {
         input: CreateDBInstanceMessage,
     ) -> Result<CreateDBInstanceResult, RusotoError<CreateDBInstanceError>>;
 
-    /// <p>Creates a new subnet group. subnet groups must contain at least one subnet in at least two Availability Zones in the AWS Region.</p>
+    /// <p>Creates a new subnet group. subnet groups must contain at least one subnet in at least two Availability Zones in the Region.</p>
     async fn create_db_subnet_group(
         &self,
         input: CreateDBSubnetGroupMessage,
     ) -> Result<CreateDBSubnetGroupResult, RusotoError<CreateDBSubnetGroupError>>;
+
+    /// <p>Creates an Amazon DocumentDB event notification subscription. This action requires a topic Amazon Resource Name (ARN) created by using the Amazon DocumentDB console, the Amazon SNS console, or the Amazon SNS API. To obtain an ARN with Amazon SNS, you must create a topic in Amazon SNS and subscribe to the topic. The ARN is displayed in the Amazon SNS console.</p> <p>You can specify the type of source (<code>SourceType</code>) that you want to be notified of. You can also provide a list of Amazon DocumentDB sources (<code>SourceIds</code>) that trigger the events, and you can provide a list of event categories (<code>EventCategories</code>) for events that you want to be notified of. For example, you can specify <code>SourceType = db-instance</code>, <code>SourceIds = mydbinstance1, mydbinstance2</code> and <code>EventCategories = Availability, Backup</code>.</p> <p>If you specify both the <code>SourceType</code> and <code>SourceIds</code> (such as <code>SourceType = db-instance</code> and <code>SourceIdentifier = myDBInstance1</code>), you are notified of all the <code>db-instance</code> events for the specified source. If you specify a <code>SourceType</code> but do not specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your Amazon DocumentDB sources. If you do not specify either the <code>SourceType</code> or the <code>SourceIdentifier</code>, you are notified of events generated from all Amazon DocumentDB sources belonging to your customer account.</p>
+    async fn create_event_subscription(
+        &self,
+        input: CreateEventSubscriptionMessage,
+    ) -> Result<CreateEventSubscriptionResult, RusotoError<CreateEventSubscriptionError>>;
+
+    /// <p><p>Creates an Amazon DocumentDB global cluster that can span multiple multiple Regions. The global cluster contains one primary cluster with read-write capability, and up-to give read-only secondary clusters. Global clusters uses storage-based fast replication across regions with latencies less than one second, using dedicated infrastructure with no impact to your workload’s performance.</p> <p/> <p>You can create a global cluster that is initially empty, and then add a primary and a secondary to it. Or you can specify an existing cluster during the create operation, and this cluster becomes the primary of the global cluster. </p> <note> <p>This action only applies to Amazon DocumentDB clusters.</p> </note></p>
+    async fn create_global_cluster(
+        &self,
+        input: CreateGlobalClusterMessage,
+    ) -> Result<CreateGlobalClusterResult, RusotoError<CreateGlobalClusterError>>;
 
     /// <p><p>Deletes a previously provisioned cluster. When you delete a cluster, all automated backups for that cluster are deleted and can&#39;t be recovered. Manual DB cluster snapshots of the specified cluster are not deleted.</p> <p/></p>
     async fn delete_db_cluster(
@@ -9161,7 +11152,7 @@ pub trait Docdb {
         input: DeleteDBClusterSnapshotMessage,
     ) -> Result<DeleteDBClusterSnapshotResult, RusotoError<DeleteDBClusterSnapshotError>>;
 
-    /// <p>Deletes a previously provisioned instance. </p>
+    /// <p>Deletes a previously provisioned instance.</p>
     async fn delete_db_instance(
         &self,
         input: DeleteDBInstanceMessage,
@@ -9173,7 +11164,19 @@ pub trait Docdb {
         input: DeleteDBSubnetGroupMessage,
     ) -> Result<(), RusotoError<DeleteDBSubnetGroupError>>;
 
-    /// <p>Returns a list of certificate authority (CA) certificates provided by Amazon DocumentDB for this AWS account.</p>
+    /// <p>Deletes an Amazon DocumentDB event notification subscription.</p>
+    async fn delete_event_subscription(
+        &self,
+        input: DeleteEventSubscriptionMessage,
+    ) -> Result<DeleteEventSubscriptionResult, RusotoError<DeleteEventSubscriptionError>>;
+
+    /// <p><p>Deletes a global cluster. The primary and secondary clusters must already be detached or deleted before attempting to delete a global cluster.</p> <note> <p>This action only applies to Amazon DocumentDB clusters.</p> </note></p>
+    async fn delete_global_cluster(
+        &self,
+        input: DeleteGlobalClusterMessage,
+    ) -> Result<DeleteGlobalClusterResult, RusotoError<DeleteGlobalClusterError>>;
+
+    /// <p>Returns a list of certificate authority (CA) certificates provided by Amazon DocumentDB for this account.</p>
     async fn describe_certificates(
         &self,
         input: DescribeCertificatesMessage,
@@ -9191,7 +11194,7 @@ pub trait Docdb {
         input: DescribeDBClusterParametersMessage,
     ) -> Result<DBClusterParameterGroupDetails, RusotoError<DescribeDBClusterParametersError>>;
 
-    /// <p>Returns a list of cluster snapshot attribute names and values for a manual DB cluster snapshot.</p> <p>When you share snapshots with other AWS accounts, <code>DescribeDBClusterSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the AWS accounts that are authorized to copy or restore the manual cluster snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual cluster snapshot is public and can be copied or restored by all AWS accounts.</p>
+    /// <p>Returns a list of cluster snapshot attribute names and values for a manual DB cluster snapshot.</p> <p>When you share snapshots with other accounts, <code>DescribeDBClusterSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the accounts that are authorized to copy or restore the manual cluster snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual cluster snapshot is public and can be copied or restored by all accounts.</p>
     async fn describe_db_cluster_snapshot_attributes(
         &self,
         input: DescribeDBClusterSnapshotAttributesMessage,
@@ -9245,11 +11248,23 @@ pub trait Docdb {
         input: DescribeEventCategoriesMessage,
     ) -> Result<EventCategoriesMessage, RusotoError<DescribeEventCategoriesError>>;
 
+    /// <p>Lists all the subscription descriptions for a customer account. The description for a subscription includes <code>SubscriptionName</code>, <code>SNSTopicARN</code>, <code>CustomerID</code>, <code>SourceType</code>, <code>SourceID</code>, <code>CreationTime</code>, and <code>Status</code>.</p> <p>If you specify a <code>SubscriptionName</code>, lists the description for that subscription.</p>
+    async fn describe_event_subscriptions(
+        &self,
+        input: DescribeEventSubscriptionsMessage,
+    ) -> Result<EventSubscriptionsMessage, RusotoError<DescribeEventSubscriptionsError>>;
+
     /// <p>Returns events related to instances, security groups, snapshots, and DB parameter groups for the past 14 days. You can obtain events specific to a particular DB instance, security group, snapshot, or parameter group by providing the name as a parameter. By default, the events of the past hour are returned.</p>
     async fn describe_events(
         &self,
         input: DescribeEventsMessage,
     ) -> Result<EventsMessage, RusotoError<DescribeEventsError>>;
+
+    /// <p><p>Returns information about Amazon DocumentDB global clusters. This API supports pagination.</p> <note> <p>This action only applies to Amazon DocumentDB clusters.</p> </note></p>
+    async fn describe_global_clusters(
+        &self,
+        input: DescribeGlobalClustersMessage,
+    ) -> Result<GlobalClustersMessage, RusotoError<DescribeGlobalClustersError>>;
 
     /// <p>Returns a list of orderable instance options for the specified engine.</p>
     async fn describe_orderable_db_instance_options(
@@ -9290,7 +11305,7 @@ pub trait Docdb {
         input: ModifyDBClusterParameterGroupMessage,
     ) -> Result<DBClusterParameterGroupNameMessage, RusotoError<ModifyDBClusterParameterGroupError>>;
 
-    /// <p>Adds an attribute and values to, or removes an attribute and values from, a manual DB cluster snapshot.</p> <p>To share a manual cluster snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code>, and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual cluster snapshot. Use the value <code>all</code> to make the manual cluster snapshot public, which means that it can be copied or restored by all AWS accounts. Do not add the <code>all</code> value for any manual DB cluster snapshots that contain private information that you don't want available to all AWS accounts. If a manual cluster snapshot is encrypted, it can be shared, but only by specifying a list of authorized AWS account IDs for the <code>ValuesToAdd</code> parameter. You can't use <code>all</code> as a value for that parameter in this case.</p>
+    /// <p>Adds an attribute and values to, or removes an attribute and values from, a manual cluster snapshot.</p> <p>To share a manual cluster snapshot with other accounts, specify <code>restore</code> as the <code>AttributeName</code>, and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the accounts that are authorized to restore the manual cluster snapshot. Use the value <code>all</code> to make the manual cluster snapshot public, which means that it can be copied or restored by all accounts. Do not add the <code>all</code> value for any manual cluster snapshots that contain private information that you don't want available to all accounts. If a manual cluster snapshot is encrypted, it can be shared, but only by specifying a list of authorized account IDs for the <code>ValuesToAdd</code> parameter. You can't use <code>all</code> as a value for that parameter in this case.</p>
     async fn modify_db_cluster_snapshot_attribute(
         &self,
         input: ModifyDBClusterSnapshotAttributeMessage,
@@ -9305,17 +11320,44 @@ pub trait Docdb {
         input: ModifyDBInstanceMessage,
     ) -> Result<ModifyDBInstanceResult, RusotoError<ModifyDBInstanceError>>;
 
-    /// <p>Modifies an existing subnet group. subnet groups must contain at least one subnet in at least two Availability Zones in the AWS Region.</p>
+    /// <p>Modifies an existing subnet group. subnet groups must contain at least one subnet in at least two Availability Zones in the Region.</p>
     async fn modify_db_subnet_group(
         &self,
         input: ModifyDBSubnetGroupMessage,
     ) -> Result<ModifyDBSubnetGroupResult, RusotoError<ModifyDBSubnetGroupError>>;
+
+    /// <p>Modifies an existing Amazon DocumentDB event notification subscription.</p>
+    async fn modify_event_subscription(
+        &self,
+        input: ModifyEventSubscriptionMessage,
+    ) -> Result<ModifyEventSubscriptionResult, RusotoError<ModifyEventSubscriptionError>>;
+
+    /// <p><p>Modify a setting for an Amazon DocumentDB global cluster. You can change one or more configuration parameters (for example: deletion protection), or the global cluster identifier by specifying these parameters and the new values in the request.</p> <note> <p>This action only applies to Amazon DocumentDB clusters.</p> </note></p>
+    async fn modify_global_cluster(
+        &self,
+        input: ModifyGlobalClusterMessage,
+    ) -> Result<ModifyGlobalClusterResult, RusotoError<ModifyGlobalClusterError>>;
 
     /// <p>You might need to reboot your instance, usually for maintenance reasons. For example, if you make certain changes, or if you change the cluster parameter group that is associated with the instance, you must reboot the instance for the changes to take effect. </p> <p>Rebooting an instance restarts the database engine service. Rebooting an instance results in a momentary outage, during which the instance status is set to <i>rebooting</i>. </p>
     async fn reboot_db_instance(
         &self,
         input: RebootDBInstanceMessage,
     ) -> Result<RebootDBInstanceResult, RusotoError<RebootDBInstanceError>>;
+
+    /// <p><p>Detaches an Amazon DocumentDB secondary cluster from a global cluster. The cluster becomes a standalone cluster with read-write capability instead of being read-only and receiving data from a primary in a different region. </p> <note> <p>This action only applies to Amazon DocumentDB clusters.</p> </note></p>
+    async fn remove_from_global_cluster(
+        &self,
+        input: RemoveFromGlobalClusterMessage,
+    ) -> Result<RemoveFromGlobalClusterResult, RusotoError<RemoveFromGlobalClusterError>>;
+
+    /// <p>Removes a source identifier from an existing Amazon DocumentDB event notification subscription.</p>
+    async fn remove_source_identifier_from_subscription(
+        &self,
+        input: RemoveSourceIdentifierFromSubscriptionMessage,
+    ) -> Result<
+        RemoveSourceIdentifierFromSubscriptionResult,
+        RusotoError<RemoveSourceIdentifierFromSubscriptionError>,
+    >;
 
     /// <p>Removes metadata tags from an Amazon DocumentDB resource.</p>
     async fn remove_tags_from_resource(
@@ -9393,7 +11435,46 @@ impl DocdbClient {
 
 #[async_trait]
 impl Docdb for DocdbClient {
-    /// <p>Adds metadata tags to an Amazon DocumentDB resource. You can use these tags with cost allocation reporting to track costs that are associated with Amazon DocumentDB resources. or in a <code>Condition</code> statement in an AWS Identity and Access Management (IAM) policy for Amazon DocumentDB.</p>
+    /// <p>Adds a source identifier to an existing event notification subscription.</p>
+    async fn add_source_identifier_to_subscription(
+        &self,
+        input: AddSourceIdentifierToSubscriptionMessage,
+    ) -> Result<
+        AddSourceIdentifierToSubscriptionResult,
+        RusotoError<AddSourceIdentifierToSubscriptionError>,
+    > {
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+        let params = self.new_params("AddSourceIdentifierToSubscription");
+        let mut params = params;
+        AddSourceIdentifierToSubscriptionMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                AddSourceIdentifierToSubscriptionError::from_response,
+            )
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = AddSourceIdentifierToSubscriptionResultDeserializer::deserialize(
+                "AddSourceIdentifierToSubscriptionResult",
+                stack,
+            )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Adds metadata tags to an Amazon DocumentDB resource. You can use these tags with cost allocation reporting to track costs that are associated with Amazon DocumentDB resources or in a <code>Condition</code> statement in an Identity and Access Management (IAM) policy for Amazon DocumentDB.</p>
     async fn add_tags_to_resource(
         &self,
         input: AddTagsToResourceMessage,
@@ -9481,7 +11562,7 @@ impl Docdb for DocdbClient {
         Ok(result)
     }
 
-    /// <p>Copies a snapshot of a cluster.</p> <p>To copy a cluster snapshot from a shared manual cluster snapshot, <code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared cluster snapshot. You can only copy a shared DB cluster snapshot, whether encrypted or not, in the same AWS Region.</p> <p>To cancel the copy operation after it is in progress, delete the target cluster snapshot identified by <code>TargetDBClusterSnapshotIdentifier</code> while that cluster snapshot is in the <i>copying</i> status.</p>
+    /// <p>Copies a snapshot of a cluster.</p> <p>To copy a cluster snapshot from a shared manual cluster snapshot, <code>SourceDBClusterSnapshotIdentifier</code> must be the Amazon Resource Name (ARN) of the shared cluster snapshot. You can only copy a shared DB cluster snapshot, whether encrypted or not, in the same Region.</p> <p>To cancel the copy operation after it is in progress, delete the target cluster snapshot identified by <code>TargetDBClusterSnapshotIdentifier</code> while that cluster snapshot is in the <i>copying</i> status.</p>
     async fn copy_db_cluster_snapshot(
         &self,
         input: CopyDBClusterSnapshotMessage,
@@ -9643,7 +11724,7 @@ impl Docdb for DocdbClient {
         Ok(result)
     }
 
-    /// <p>Creates a new subnet group. subnet groups must contain at least one subnet in at least two Availability Zones in the AWS Region.</p>
+    /// <p>Creates a new subnet group. subnet groups must contain at least one subnet in at least two Availability Zones in the Region.</p>
     async fn create_db_subnet_group(
         &self,
         input: CreateDBSubnetGroupMessage,
@@ -9664,6 +11745,72 @@ impl Docdb for DocdbClient {
             xml_util::start_element(actual_tag_name, stack)?;
             let result = CreateDBSubnetGroupResultDeserializer::deserialize(
                 "CreateDBSubnetGroupResult",
+                stack,
+            )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Creates an Amazon DocumentDB event notification subscription. This action requires a topic Amazon Resource Name (ARN) created by using the Amazon DocumentDB console, the Amazon SNS console, or the Amazon SNS API. To obtain an ARN with Amazon SNS, you must create a topic in Amazon SNS and subscribe to the topic. The ARN is displayed in the Amazon SNS console.</p> <p>You can specify the type of source (<code>SourceType</code>) that you want to be notified of. You can also provide a list of Amazon DocumentDB sources (<code>SourceIds</code>) that trigger the events, and you can provide a list of event categories (<code>EventCategories</code>) for events that you want to be notified of. For example, you can specify <code>SourceType = db-instance</code>, <code>SourceIds = mydbinstance1, mydbinstance2</code> and <code>EventCategories = Availability, Backup</code>.</p> <p>If you specify both the <code>SourceType</code> and <code>SourceIds</code> (such as <code>SourceType = db-instance</code> and <code>SourceIdentifier = myDBInstance1</code>), you are notified of all the <code>db-instance</code> events for the specified source. If you specify a <code>SourceType</code> but do not specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your Amazon DocumentDB sources. If you do not specify either the <code>SourceType</code> or the <code>SourceIdentifier</code>, you are notified of events generated from all Amazon DocumentDB sources belonging to your customer account.</p>
+    async fn create_event_subscription(
+        &self,
+        input: CreateEventSubscriptionMessage,
+    ) -> Result<CreateEventSubscriptionResult, RusotoError<CreateEventSubscriptionError>> {
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+        let params = self.new_params("CreateEventSubscription");
+        let mut params = params;
+        CreateEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, CreateEventSubscriptionError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateEventSubscriptionResultDeserializer::deserialize(
+                "CreateEventSubscriptionResult",
+                stack,
+            )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p><p>Creates an Amazon DocumentDB global cluster that can span multiple multiple Regions. The global cluster contains one primary cluster with read-write capability, and up-to give read-only secondary clusters. Global clusters uses storage-based fast replication across regions with latencies less than one second, using dedicated infrastructure with no impact to your workload’s performance.</p> <p/> <p>You can create a global cluster that is initially empty, and then add a primary and a secondary to it. Or you can specify an existing cluster during the create operation, and this cluster becomes the primary of the global cluster. </p> <note> <p>This action only applies to Amazon DocumentDB clusters.</p> </note></p>
+    async fn create_global_cluster(
+        &self,
+        input: CreateGlobalClusterMessage,
+    ) -> Result<CreateGlobalClusterResult, RusotoError<CreateGlobalClusterError>> {
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+        let params = self.new_params("CreateGlobalCluster");
+        let mut params = params;
+        CreateGlobalClusterMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, CreateGlobalClusterError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = CreateGlobalClusterResultDeserializer::deserialize(
+                "CreateGlobalClusterResult",
                 stack,
             )?;
             skip_tree(stack);
@@ -9760,7 +11907,7 @@ impl Docdb for DocdbClient {
         Ok(result)
     }
 
-    /// <p>Deletes a previously provisioned instance. </p>
+    /// <p>Deletes a previously provisioned instance.</p>
     async fn delete_db_instance(
         &self,
         input: DeleteDBInstanceMessage,
@@ -9811,7 +11958,73 @@ impl Docdb for DocdbClient {
         Ok(())
     }
 
-    /// <p>Returns a list of certificate authority (CA) certificates provided by Amazon DocumentDB for this AWS account.</p>
+    /// <p>Deletes an Amazon DocumentDB event notification subscription.</p>
+    async fn delete_event_subscription(
+        &self,
+        input: DeleteEventSubscriptionMessage,
+    ) -> Result<DeleteEventSubscriptionResult, RusotoError<DeleteEventSubscriptionError>> {
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+        let params = self.new_params("DeleteEventSubscription");
+        let mut params = params;
+        DeleteEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, DeleteEventSubscriptionError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DeleteEventSubscriptionResultDeserializer::deserialize(
+                "DeleteEventSubscriptionResult",
+                stack,
+            )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p><p>Deletes a global cluster. The primary and secondary clusters must already be detached or deleted before attempting to delete a global cluster.</p> <note> <p>This action only applies to Amazon DocumentDB clusters.</p> </note></p>
+    async fn delete_global_cluster(
+        &self,
+        input: DeleteGlobalClusterMessage,
+    ) -> Result<DeleteGlobalClusterResult, RusotoError<DeleteGlobalClusterError>> {
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+        let params = self.new_params("DeleteGlobalCluster");
+        let mut params = params;
+        DeleteGlobalClusterMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, DeleteGlobalClusterError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = DeleteGlobalClusterResultDeserializer::deserialize(
+                "DeleteGlobalClusterResult",
+                stack,
+            )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Returns a list of certificate authority (CA) certificates provided by Amazon DocumentDB for this account.</p>
     async fn describe_certificates(
         &self,
         input: DescribeCertificatesMessage,
@@ -9912,7 +12125,7 @@ impl Docdb for DocdbClient {
         Ok(result)
     }
 
-    /// <p>Returns a list of cluster snapshot attribute names and values for a manual DB cluster snapshot.</p> <p>When you share snapshots with other AWS accounts, <code>DescribeDBClusterSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the AWS accounts that are authorized to copy or restore the manual cluster snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual cluster snapshot is public and can be copied or restored by all AWS accounts.</p>
+    /// <p>Returns a list of cluster snapshot attribute names and values for a manual DB cluster snapshot.</p> <p>When you share snapshots with other accounts, <code>DescribeDBClusterSnapshotAttributes</code> returns the <code>restore</code> attribute and a list of IDs for the accounts that are authorized to copy or restore the manual cluster snapshot. If <code>all</code> is included in the list of values for the <code>restore</code> attribute, then the manual cluster snapshot is public and can be copied or restored by all accounts.</p>
     async fn describe_db_cluster_snapshot_attributes(
         &self,
         input: DescribeDBClusterSnapshotAttributesMessage,
@@ -10184,6 +12397,39 @@ impl Docdb for DocdbClient {
         Ok(result)
     }
 
+    /// <p>Lists all the subscription descriptions for a customer account. The description for a subscription includes <code>SubscriptionName</code>, <code>SNSTopicARN</code>, <code>CustomerID</code>, <code>SourceType</code>, <code>SourceID</code>, <code>CreationTime</code>, and <code>Status</code>.</p> <p>If you specify a <code>SubscriptionName</code>, lists the description for that subscription.</p>
+    async fn describe_event_subscriptions(
+        &self,
+        input: DescribeEventSubscriptionsMessage,
+    ) -> Result<EventSubscriptionsMessage, RusotoError<DescribeEventSubscriptionsError>> {
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+        let params = self.new_params("DescribeEventSubscriptions");
+        let mut params = params;
+        DescribeEventSubscriptionsMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, DescribeEventSubscriptionsError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = EventSubscriptionsMessageDeserializer::deserialize(
+                "DescribeEventSubscriptionsResult",
+                stack,
+            )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
     /// <p>Returns events related to instances, security groups, snapshots, and DB parameter groups for the past 14 days. You can obtain events specific to a particular DB instance, security group, snapshot, or parameter group by providing the name as a parameter. By default, the events of the past hour are returned.</p>
     async fn describe_events(
         &self,
@@ -10204,6 +12450,39 @@ impl Docdb for DocdbClient {
         let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
             xml_util::start_element(actual_tag_name, stack)?;
             let result = EventsMessageDeserializer::deserialize("DescribeEventsResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p><p>Returns information about Amazon DocumentDB global clusters. This API supports pagination.</p> <note> <p>This action only applies to Amazon DocumentDB clusters.</p> </note></p>
+    async fn describe_global_clusters(
+        &self,
+        input: DescribeGlobalClustersMessage,
+    ) -> Result<GlobalClustersMessage, RusotoError<DescribeGlobalClustersError>> {
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+        let params = self.new_params("DescribeGlobalClusters");
+        let mut params = params;
+        DescribeGlobalClustersMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, DescribeGlobalClustersError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = GlobalClustersMessageDeserializer::deserialize(
+                "DescribeGlobalClustersResult",
+                stack,
+            )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
             Ok(result)
@@ -10417,7 +12696,7 @@ impl Docdb for DocdbClient {
         Ok(result)
     }
 
-    /// <p>Adds an attribute and values to, or removes an attribute and values from, a manual DB cluster snapshot.</p> <p>To share a manual cluster snapshot with other AWS accounts, specify <code>restore</code> as the <code>AttributeName</code>, and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the AWS accounts that are authorized to restore the manual cluster snapshot. Use the value <code>all</code> to make the manual cluster snapshot public, which means that it can be copied or restored by all AWS accounts. Do not add the <code>all</code> value for any manual DB cluster snapshots that contain private information that you don't want available to all AWS accounts. If a manual cluster snapshot is encrypted, it can be shared, but only by specifying a list of authorized AWS account IDs for the <code>ValuesToAdd</code> parameter. You can't use <code>all</code> as a value for that parameter in this case.</p>
+    /// <p>Adds an attribute and values to, or removes an attribute and values from, a manual cluster snapshot.</p> <p>To share a manual cluster snapshot with other accounts, specify <code>restore</code> as the <code>AttributeName</code>, and use the <code>ValuesToAdd</code> parameter to add a list of IDs of the accounts that are authorized to restore the manual cluster snapshot. Use the value <code>all</code> to make the manual cluster snapshot public, which means that it can be copied or restored by all accounts. Do not add the <code>all</code> value for any manual cluster snapshots that contain private information that you don't want available to all accounts. If a manual cluster snapshot is encrypted, it can be shared, but only by specifying a list of authorized account IDs for the <code>ValuesToAdd</code> parameter. You can't use <code>all</code> as a value for that parameter in this case.</p>
     async fn modify_db_cluster_snapshot_attribute(
         &self,
         input: ModifyDBClusterSnapshotAttributeMessage,
@@ -10487,7 +12766,7 @@ impl Docdb for DocdbClient {
         Ok(result)
     }
 
-    /// <p>Modifies an existing subnet group. subnet groups must contain at least one subnet in at least two Availability Zones in the AWS Region.</p>
+    /// <p>Modifies an existing subnet group. subnet groups must contain at least one subnet in at least two Availability Zones in the Region.</p>
     async fn modify_db_subnet_group(
         &self,
         input: ModifyDBSubnetGroupMessage,
@@ -10508,6 +12787,72 @@ impl Docdb for DocdbClient {
             xml_util::start_element(actual_tag_name, stack)?;
             let result = ModifyDBSubnetGroupResultDeserializer::deserialize(
                 "ModifyDBSubnetGroupResult",
+                stack,
+            )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Modifies an existing Amazon DocumentDB event notification subscription.</p>
+    async fn modify_event_subscription(
+        &self,
+        input: ModifyEventSubscriptionMessage,
+    ) -> Result<ModifyEventSubscriptionResult, RusotoError<ModifyEventSubscriptionError>> {
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+        let params = self.new_params("ModifyEventSubscription");
+        let mut params = params;
+        ModifyEventSubscriptionMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, ModifyEventSubscriptionError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ModifyEventSubscriptionResultDeserializer::deserialize(
+                "ModifyEventSubscriptionResult",
+                stack,
+            )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p><p>Modify a setting for an Amazon DocumentDB global cluster. You can change one or more configuration parameters (for example: deletion protection), or the global cluster identifier by specifying these parameters and the new values in the request.</p> <note> <p>This action only applies to Amazon DocumentDB clusters.</p> </note></p>
+    async fn modify_global_cluster(
+        &self,
+        input: ModifyGlobalClusterMessage,
+    ) -> Result<ModifyGlobalClusterResult, RusotoError<ModifyGlobalClusterError>> {
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+        let params = self.new_params("ModifyGlobalCluster");
+        let mut params = params;
+        ModifyGlobalClusterMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, ModifyGlobalClusterError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = ModifyGlobalClusterResultDeserializer::deserialize(
+                "ModifyGlobalClusterResult",
                 stack,
             )?;
             skip_tree(stack);
@@ -10541,6 +12886,78 @@ impl Docdb for DocdbClient {
             xml_util::start_element(actual_tag_name, stack)?;
             let result =
                 RebootDBInstanceResultDeserializer::deserialize("RebootDBInstanceResult", stack)?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p><p>Detaches an Amazon DocumentDB secondary cluster from a global cluster. The cluster becomes a standalone cluster with read-write capability instead of being read-only and receiving data from a primary in a different region. </p> <note> <p>This action only applies to Amazon DocumentDB clusters.</p> </note></p>
+    async fn remove_from_global_cluster(
+        &self,
+        input: RemoveFromGlobalClusterMessage,
+    ) -> Result<RemoveFromGlobalClusterResult, RusotoError<RemoveFromGlobalClusterError>> {
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+        let params = self.new_params("RemoveFromGlobalCluster");
+        let mut params = params;
+        RemoveFromGlobalClusterMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(request, RemoveFromGlobalClusterError::from_response)
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = RemoveFromGlobalClusterResultDeserializer::deserialize(
+                "RemoveFromGlobalClusterResult",
+                stack,
+            )?;
+            skip_tree(stack);
+            xml_util::end_element(actual_tag_name, stack)?;
+            Ok(result)
+        })
+        .await?;
+
+        drop(response); // parse non-payload
+        Ok(result)
+    }
+
+    /// <p>Removes a source identifier from an existing Amazon DocumentDB event notification subscription.</p>
+    async fn remove_source_identifier_from_subscription(
+        &self,
+        input: RemoveSourceIdentifierFromSubscriptionMessage,
+    ) -> Result<
+        RemoveSourceIdentifierFromSubscriptionResult,
+        RusotoError<RemoveSourceIdentifierFromSubscriptionError>,
+    > {
+        let mut request = SignedRequest::new("POST", "rds", &self.region, "/");
+        let params = self.new_params("RemoveSourceIdentifierFromSubscription");
+        let mut params = params;
+        RemoveSourceIdentifierFromSubscriptionMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(serde_urlencoded::to_string(&params).unwrap()));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                RemoveSourceIdentifierFromSubscriptionError::from_response,
+            )
+            .await?;
+
+        let mut response = response;
+        let result = xml_util::parse_response(&mut response, |actual_tag_name, stack| {
+            xml_util::start_element(actual_tag_name, stack)?;
+            let result = RemoveSourceIdentifierFromSubscriptionResultDeserializer::deserialize(
+                "RemoveSourceIdentifierFromSubscriptionResult",
+                stack,
+            )?;
             skip_tree(stack);
             xml_util::end_element(actual_tag_name, stack)?;
             Ok(result)

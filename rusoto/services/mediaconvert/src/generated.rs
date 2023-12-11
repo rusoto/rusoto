@@ -85,10 +85,18 @@ pub struct Ac3Settings {
     #[serde(rename = "Dialnorm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dialnorm: Option<i64>,
-    /// <p>If set to FILM_STANDARD, adds dynamic range compression signaling to the output bitstream as defined in the Dolby Digital specification.</p>
+    /// <p>Choose the Dolby Digital dynamic range control (DRC) profile that MediaConvert uses when encoding the metadata in the Dolby Digital stream for the line operating mode. Related setting: When you use this setting, MediaConvert ignores any value you provide for Dynamic range compression profile (DynamicRangeCompressionProfile). For information about the Dolby Digital DRC operating modes and profiles, see the Dynamic Range Control chapter of the Dolby Metadata Guide at https://developer.dolby.com/globalassets/professional/documents/dolby-metadata-guide.pdf.</p>
+    #[serde(rename = "DynamicRangeCompressionLine")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dynamic_range_compression_line: Option<String>,
+    /// <p>When you want to add Dolby dynamic range compression (DRC) signaling to your output stream, we recommend that you use the mode-specific settings instead of Dynamic range compression profile (DynamicRangeCompressionProfile). The mode-specific settings are Dynamic range compression profile, line mode (dynamicRangeCompressionLine) and Dynamic range compression profile, RF mode (dynamicRangeCompressionRf). Note that when you specify values for all three settings, MediaConvert ignores the value of this setting in favor of the mode-specific settings. If you do use this setting instead of the mode-specific settings, choose None (NONE) to leave out DRC signaling. Keep the default Film standard (FILM_STANDARD) to set the profile to Dolby&#39;s film standard profile for all operating modes.</p>
     #[serde(rename = "DynamicRangeCompressionProfile")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamic_range_compression_profile: Option<String>,
+    /// <p>Choose the Dolby Digital dynamic range control (DRC) profile that MediaConvert uses when encoding the metadata in the Dolby Digital stream for the RF operating mode. Related setting: When you use this setting, MediaConvert ignores any value you provide for Dynamic range compression profile (DynamicRangeCompressionProfile). For information about the Dolby Digital DRC operating modes and profiles, see the Dynamic Range Control chapter of the Dolby Metadata Guide at https://developer.dolby.com/globalassets/professional/documents/dolby-metadata-guide.pdf.</p>
+    #[serde(rename = "DynamicRangeCompressionRf")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dynamic_range_compression_rf: Option<String>,
     /// <p>Applies a 120Hz lowpass filter to the LFE channel prior to encoding. Only valid with 3<em>2</em>LFE coding mode.</p>
     #[serde(rename = "LfeFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -166,7 +174,7 @@ pub struct AudioChannelTaggingSettings {
     pub channel_tag: Option<String>,
 }
 
-/// <p>Audio codec settings (CodecSettings) under (AudioDescriptions) contains the group of settings related to audio encoding. The settings in this group vary depending on the value that you choose for Audio codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * AAC, AacSettings * MP2, Mp2Settings * MP3, Mp3Settings * WAV, WavSettings * AIFF, AiffSettings * AC3, Ac3Settings * EAC3, Eac3Settings * EAC3_ATMOS, Eac3AtmosSettings * VORBIS, VorbisSettings * OPUS, OpusSettings</p>
+/// <p>Settings related to audio encoding. The settings in this group vary depending on the value that you choose for your audio codec.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AudioCodecSettings {
     /// <p>Required when you set (Codec) under (AudioDescriptions)&gt;(CodecSettings) to the value AAC. The service accepts one of two mutually exclusive groups of AAC settings--VBR and CBR. To select one of these modes, set the value of Bitrate control mode (rateControlMode) to &quot;VBR&quot; or &quot;CBR&quot;.  In VBR mode, you control the audio quality with the setting VBR quality (vbrQuality). In CBR mode, you use the setting Bitrate (bitrate). Defaults and valid values depend on the rate control mode.</p>
@@ -181,7 +189,7 @@ pub struct AudioCodecSettings {
     #[serde(rename = "AiffSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aiff_settings: Option<AiffSettings>,
-    /// <p>Type of Audio codec.</p>
+    /// <p>Choose the audio codec for this output. Note that the option Dolby Digital passthrough (PASSTHROUGH) applies only to Dolby Digital and Dolby Digital Plus audio inputs. Make sure that you choose a codec that&#39;s supported with your output container: https://docs.aws.amazon.com/mediaconvert/latest/ug/reference-codecs-containers.html#reference-codecs-containers-output-audio For audio-only outputs, make sure that both your input audio codec and your output audio codec are supported for audio-only workflows. For more information, see: https://docs.aws.amazon.com/mediaconvert/latest/ug/reference-codecs-containers-input.html#reference-codecs-containers-input-audio-only and https://docs.aws.amazon.com/mediaconvert/latest/ug/reference-codecs-containers.html#audio-only-output</p>
     #[serde(rename = "Codec")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub codec: Option<String>,
@@ -215,7 +223,7 @@ pub struct AudioCodecSettings {
     pub wav_settings: Option<WavSettings>,
 }
 
-/// <p>Description of audio output</p>
+/// <p>Settings related to one audio tab on the MediaConvert console. In your job JSON, an instance of AudioDescription is equivalent to one audio tab in the console. Usually, one audio tab corresponds to one output audio track. Depending on how you set up your input audio selectors and whether you use audio selector groups, one audio tab can correspond to a group of output audio tracks.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AudioDescription {
     /// <p>When you mimic a multi-channel audio layout with multiple mono-channel tracks, you can tag each channel layout manually. For example, you would tag the tracks that contain your left, right, and center audio with Left (L), Right (R), and Center (C), respectively. When you don&#39;t specify a value, MediaConvert labels your track as Center (C) by default. To use audio layout tagging, your output must be in a QuickTime (.mov) container; your audio codec must be AAC, WAV, or AIFF; and you must set up your audio track to have only one channel.</p>
@@ -238,7 +246,7 @@ pub struct AudioDescription {
     #[serde(rename = "AudioTypeControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_type_control: Option<String>,
-    /// <p>Audio codec settings (CodecSettings) under (AudioDescriptions) contains the group of settings related to audio encoding. The settings in this group vary depending on the value that you choose for Audio codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * AAC, AacSettings * MP2, Mp2Settings * MP3, Mp3Settings * WAV, WavSettings * AIFF, AiffSettings * AC3, Ac3Settings * EAC3, Eac3Settings * EAC3_ATMOS, Eac3AtmosSettings * VORBIS, VorbisSettings * OPUS, OpusSettings</p>
+    /// <p>Settings related to audio encoding. The settings in this group vary depending on the value that you choose for your audio codec.</p>
     #[serde(rename = "CodecSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub codec_settings: Option<AudioCodecSettings>,
@@ -293,7 +301,7 @@ pub struct AudioNormalizationSettings {
     pub target_lkfs: Option<f64>,
 }
 
-/// <p>Selector for Audio</p>
+/// <p>Use Audio selectors (AudioSelectors) to specify a track or set of tracks from the input that you will use in your outputs. You can use multiple Audio selectors per input.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AudioSelector {
     /// <p>Selects a specific language code from within an audio source, using the ISO 639-2 or ISO 639-3 three-letter language code</p>
@@ -308,6 +316,10 @@ pub struct AudioSelector {
     #[serde(rename = "ExternalAudioFileInput")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub external_audio_file_input: Option<String>,
+    /// <p>Settings specific to audio sources in an HLS alternate rendition group. Specify the properties (renditionGroupId, renditionName or renditionLanguageCode) to identify the unique audio track among the alternative rendition groups present in the HLS manifest. If no unique track is found, or multiple tracks match the properties provided, the job fails. If no properties in hlsRenditionGroupSettings are specified, the default audio track within the video segment is chosen. If there is no audio within video segment, the alternative audio with DEFAULT=YES is chosen instead.</p>
+    #[serde(rename = "HlsRenditionGroupSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hls_rendition_group_settings: Option<HlsRenditionGroupSettings>,
     /// <p>Selects a specific language code from within an audio source.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -338,7 +350,7 @@ pub struct AudioSelector {
     pub tracks: Option<Vec<i64>>,
 }
 
-/// <p>Group of Audio Selectors</p>
+/// <p>Use audio selector groups to combine multiple sidecar audio inputs so that you can assign them to a single output audio tab (AudioDescription). Note that, if you&#39;re working with embedded audio, it&#39;s simpler to assign multiple input tracks into a single audio selector rather than use an audio selector group.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AudioSelectorGroup {
     /// <p>Name of an Audio Selector within the same input to include in the group.  Audio selector names are standardized, based on their order within the input (e.g., &quot;Audio Selector 1&quot;). The audio selector name parameter can be repeated to add any number of audio selectors to the group.</p>
@@ -417,7 +429,7 @@ pub struct Av1Settings {
     #[serde(rename = "MaxBitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_bitrate: Option<i64>,
-    /// <p>Specify the number of B-frames. With AV1, MediaConvert supports only 7 or 15.</p>
+    /// <p>Specify from the number of B-frames, in the range of 0-15. For AV1 encoding, we recommend using 7 or 15. Choose a larger number for a lower bitrate and smaller file size; choose a smaller number for better video quality.</p>
     #[serde(rename = "NumberBFramesBetweenReferenceFrames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_b_frames_between_reference_frames: Option<i64>,
@@ -439,7 +451,7 @@ pub struct Av1Settings {
     pub spatial_adaptive_quantization: Option<String>,
 }
 
-/// <p>Settings for Avail Blanking</p>
+/// <p>Use ad avail blanking settings to specify your output content during SCTE-35 triggered ad avails. You can blank your video or overlay it with an image. MediaConvert also removes any audio and embedded captions during the ad avail. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/ad-avail-blanking.html.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AvailBlanking {
     /// <p>Blanking image to be used. Leave empty for solid black. Only bmp and png images are supported.</p>
@@ -448,13 +460,17 @@ pub struct AvailBlanking {
     pub avail_blanking_image: Option<String>,
 }
 
-/// <p>Required when you set your output video codec to AVC-Intra. For more information about the AVC-I settings, see the relevant specification. For detailed information about SD and HD in AVC-I, see https://ieeexplore.ieee.org/document/7290936.</p>
+/// <p>Required when you choose AVC-Intra for your output video codec. For more information about the AVC-Intra settings, see the relevant specification. For detailed information about SD and HD in AVC-Intra, see https://ieeexplore.ieee.org/document/7290936. For information about 4K/2K in AVC-Intra, see https://pro-av.panasonic.net/en/avc-ultra/AVC-ULTRAoverview.pdf.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct AvcIntraSettings {
-    /// <p>Specify the AVC-Intra class of your output. The AVC-Intra class selection determines the output video bit rate depending on the frame rate of the output. Outputs with higher class values have higher bitrates and improved image quality.</p>
+    /// <p>Specify the AVC-Intra class of your output. The AVC-Intra class selection determines the output video bit rate depending on the frame rate of the output. Outputs with higher class values have higher bitrates and improved image quality. Note that for Class 4K/2K, MediaConvert supports only 4:2:2 chroma subsampling.</p>
     #[serde(rename = "AvcIntraClass")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub avc_intra_class: Option<String>,
+    /// <p>Optional when you set AVC-Intra class (avcIntraClass) to Class 4K/2K (CLASS<em>4K</em>2K). When you set AVC-Intra class to a different value, this object isn&#39;t allowed.</p>
+    #[serde(rename = "AvcIntraUhdSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub avc_intra_uhd_settings: Option<AvcIntraUhdSettings>,
     /// <p>If you are using the console, use the Framerate setting to specify the frame rate for this output. If you want to keep the same frame rate as the input video, choose Follow source. If you want to do frame rate conversion, choose a frame rate from the dropdown list or choose Custom. The framerates shown in the dropdown list are decimal approximations of fractions. If you choose Custom, specify your frame rate as a fraction. If you are creating your transcoding job specification as a JSON file without the console, use FramerateControl to specify which value the service uses for the frame rate for this output. Choose INITIALIZE<em>FROM</em>SOURCE if you want the service to use the frame rate from the input. Choose SPECIFIED if you want the service to use the frame rate you specify in the settings FramerateNumerator and FramerateDenominator.</p>
     #[serde(rename = "FramerateControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -475,6 +491,10 @@ pub struct AvcIntraSettings {
     #[serde(rename = "InterlaceMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub interlace_mode: Option<String>,
+    /// <p>Use this setting for interlaced outputs, when your output frame rate is half of your input frame rate. In this situation, choose Optimized interlacing (INTERLACED_OPTIMIZE) to create a better quality interlaced output. In this case, each progressive frame from the input corresponds to an interlaced field in the output. Keep the default value, Basic interlacing (INTERLACED), for all other output frame rates. With basic interlacing, MediaConvert performs any frame rate conversion first and then interlaces the frames. When you choose Optimized interlacing and you set your output frame rate to a value that isn&#39;t suitable for optimized interlacing, MediaConvert automatically falls back to basic interlacing. Required settings: To use optimized interlacing, you must set Telecine (telecine) to None (NONE) or Soft (SOFT). You can&#39;t use optimized interlacing for hard telecine outputs. You must also set Interlace mode (interlaceMode) to a value other than Progressive (PROGRESSIVE).</p>
+    #[serde(rename = "ScanTypeConversionMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scan_type_conversion_mode: Option<String>,
     /// <p>Ignore this setting unless your input frame rate is 23.976 or 24 frames per second (fps). Enable slow PAL to create a 25 fps output. When you enable slow PAL, MediaConvert relabels the video frames to 25 fps and resamples your audio to keep it synchronized with the video. Note that enabling this setting will slightly reduce the duration of your video. Required settings: You must also set Framerate to 25. In your JSON job specification, set (framerateControl) to (SPECIFIED), (framerateNumerator) to 25 and (framerateDenominator) to 1.</p>
     #[serde(rename = "SlowPal")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -485,7 +505,16 @@ pub struct AvcIntraSettings {
     pub telecine: Option<String>,
 }
 
-/// <p>Burn-In Destination Settings.</p>
+/// <p>Optional when you set AVC-Intra class (avcIntraClass) to Class 4K/2K (CLASS<em>4K</em>2K). When you set AVC-Intra class to a different value, this object isn&#39;t allowed.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct AvcIntraUhdSettings {
+    /// <p>Optional. Use Quality tuning level (qualityTuningLevel) to choose how many transcoding passes MediaConvert does with your video. When you choose Multi-pass (MULTI<em>PASS), your video quality is better and your output bitrate is more accurate. That is, the actual bitrate of your output is closer to the target bitrate defined in the specification. When you choose Single-pass (SINGLE</em>PASS), your encoding time is faster. The default behavior is Single-pass (SINGLE_PASS).</p>
+    #[serde(rename = "QualityTuningLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quality_tuning_level: Option<String>,
+}
+
+/// <p>Settings related to burn-in captions. Set up burn-in captions in the same output as your video. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/burn-in-output-captions.html. When you work directly in your JSON job specification, include this object and any required children when you set destinationType to BURN_IN.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct BurninDestinationSettings {
     /// <p>If no explicit x<em>position or y</em>position is provided, setting alignment to centered will place the captions at the bottom center of the output. Similarly, setting a left alignment will align captions to the bottom left of the output. If x and y positions are given in conjunction with the alignment parameter, the font will be justified (either left or centered) relative to those coordinates. This option is not valid for source captions that are STL, 608/embedded or teletext. These source settings are already pre-defined by the caption stream. All burn-in and DVB-Sub font settings must match.</p>
@@ -574,7 +603,7 @@ pub struct CancelJobRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelJobResponse {}
 
-/// <p>Description of Caption output</p>
+/// <p>This object holds groups of settings related to captions for one output. For each output that has captions, include one instance of CaptionDescriptions.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CaptionDescription {
     /// <p>Specifies which &quot;Caption Selector&quot;:#inputs-caption_selector to use from each input when generating captions. The name should be of the format &quot;Caption Selector <N>&quot;, which denotes that the Nth Caption Selector will be used from each input.</p>
@@ -585,7 +614,7 @@ pub struct CaptionDescription {
     #[serde(rename = "CustomLanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_language_code: Option<String>,
-    /// <p>Specific settings required by destination type. Note that burnin<em>destination</em>settings are not available if the source of the caption data is Embedded or Teletext.</p>
+    /// <p>Settings related to one captions tab on the MediaConvert console. In your job JSON, an instance of captions DestinationSettings is equivalent to one captions tab in the console. Usually, one captions tab corresponds to one output captions track. Depending on your output captions format, one tab might correspond to a set of output captions tracks. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/including-captions.html.</p>
     #[serde(rename = "DestinationSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_settings: Option<CaptionDestinationSettings>,
@@ -606,7 +635,7 @@ pub struct CaptionDescriptionPreset {
     #[serde(rename = "CustomLanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_language_code: Option<String>,
-    /// <p>Specific settings required by destination type. Note that burnin<em>destination</em>settings are not available if the source of the caption data is Embedded or Teletext.</p>
+    /// <p>Settings related to one captions tab on the MediaConvert console. In your job JSON, an instance of captions DestinationSettings is equivalent to one captions tab in the console. Usually, one captions tab corresponds to one output captions track. Depending on your output captions format, one tab might correspond to a set of output captions tracks. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/including-captions.html.</p>
     #[serde(rename = "DestinationSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_settings: Option<CaptionDestinationSettings>,
@@ -620,44 +649,48 @@ pub struct CaptionDescriptionPreset {
     pub language_description: Option<String>,
 }
 
-/// <p>Specific settings required by destination type. Note that burnin<em>destination</em>settings are not available if the source of the caption data is Embedded or Teletext.</p>
+/// <p>Settings related to one captions tab on the MediaConvert console. In your job JSON, an instance of captions DestinationSettings is equivalent to one captions tab in the console. Usually, one captions tab corresponds to one output captions track. Depending on your output captions format, one tab might correspond to a set of output captions tracks. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/including-captions.html.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CaptionDestinationSettings {
-    /// <p>Burn-In Destination Settings.</p>
+    /// <p>Settings related to burn-in captions. Set up burn-in captions in the same output as your video. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/burn-in-output-captions.html. When you work directly in your JSON job specification, include this object and any required children when you set destinationType to BURN_IN.</p>
     #[serde(rename = "BurninDestinationSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub burnin_destination_settings: Option<BurninDestinationSettings>,
-    /// <p>Specify the format for this set of captions on this output. The default format is embedded without SCTE-20. Other options are embedded with SCTE-20, burn-in, DVB-sub, IMSC, SCC, SRT, teletext, TTML, and web-VTT. If you are using SCTE-20, choose SCTE-20 plus embedded (SCTE20<em>PLUS</em>EMBEDDED) to create an output that complies with the SCTE-43 spec. To create a non-compliant output where the embedded captions come first, choose Embedded plus SCTE-20 (EMBEDDED<em>PLUS</em>SCTE20).</p>
+    /// <p>Specify the format for this set of captions on this output. The default format is embedded without SCTE-20. Note that your choice of video output container constrains your choice of output captions format. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/captions-support-tables.html. If you are using SCTE-20 and you want to create an output that complies with the SCTE-43 spec, choose SCTE-20 plus embedded (SCTE20<em>PLUS</em>EMBEDDED). To create a non-compliant output where the embedded captions come first, choose Embedded plus SCTE-20 (EMBEDDED<em>PLUS</em>SCTE20).</p>
     #[serde(rename = "DestinationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_type: Option<String>,
-    /// <p>DVB-Sub Destination Settings</p>
+    /// <p>Settings related to DVB-Sub captions. Set up DVB-Sub captions in the same output as your video. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/dvb-sub-output-captions.html. When you work directly in your JSON job specification, include this object and any required children when you set destinationType to DVB_SUB.</p>
     #[serde(rename = "DvbSubDestinationSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dvb_sub_destination_settings: Option<DvbSubDestinationSettings>,
-    /// <p>Settings specific to embedded/ancillary caption outputs, including 608/708 Channel destination number.</p>
+    /// <p>Settings related to CEA/EIA-608 and CEA/EIA-708 (also called embedded or ancillary) captions. Set up embedded captions in the same output as your video. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/embedded-output-captions.html. When you work directly in your JSON job specification, include this object and any required children when you set destinationType to EMBEDDED, EMBEDDED<em>PLUS</em>SCTE20, or SCTE20<em>PLUS</em>EMBEDDED.</p>
     #[serde(rename = "EmbeddedDestinationSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub embedded_destination_settings: Option<EmbeddedDestinationSettings>,
-    /// <p>Settings specific to IMSC caption outputs.</p>
+    /// <p>Settings related to IMSC captions. IMSC is a sidecar format that holds captions in a file that is separate from the video container. Set up sidecar captions in the same output group, but different output from your video. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/ttml-and-webvtt-output-captions.html. When you work directly in your JSON job specification, include this object and any required children when you set destinationType to IMSC.</p>
     #[serde(rename = "ImscDestinationSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub imsc_destination_settings: Option<ImscDestinationSettings>,
-    /// <p>Settings for SCC caption output.</p>
+    /// <p>Settings related to SCC captions. SCC is a sidecar format that holds captions in a file that is separate from the video container. Set up sidecar captions in the same output group, but different output from your video. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/scc-srt-output-captions.html. When you work directly in your JSON job specification, include this object and any required children when you set destinationType to SCC.</p>
     #[serde(rename = "SccDestinationSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scc_destination_settings: Option<SccDestinationSettings>,
-    /// <p>Settings for Teletext caption output</p>
+    /// <p>Settings related to teletext captions. Set up teletext captions in the same output as your video. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/teletext-output-captions.html. When you work directly in your JSON job specification, include this object and any required children when you set destinationType to TELETEXT.</p>
     #[serde(rename = "TeletextDestinationSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub teletext_destination_settings: Option<TeletextDestinationSettings>,
-    /// <p>Settings specific to TTML caption outputs, including Pass style information (TtmlStylePassthrough).</p>
+    /// <p>Settings related to TTML captions. TTML is a sidecar format that holds captions in a file that is separate from the video container. Set up sidecar captions in the same output group, but different output from your video. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/ttml-and-webvtt-output-captions.html. When you work directly in your JSON job specification, include this object and any required children when you set destinationType to TTML.</p>
     #[serde(rename = "TtmlDestinationSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ttml_destination_settings: Option<TtmlDestinationSettings>,
+    /// <p>WEBVTT Destination Settings</p>
+    #[serde(rename = "WebvttDestinationSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub webvtt_destination_settings: Option<WebvttDestinationSettings>,
 }
 
-/// <p>Set up captions in your outputs by first selecting them from your input here.</p>
+/// <p>Use captions selectors to specify the captions data from your input that you use in your outputs. You can use up to 20 captions selectors per input.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CaptionSelector {
     /// <p>The specific language to extract from source, using the ISO 639-2 or ISO 639-3 three-letter language code. If input is SCTE-27, complete this field and/or PID to select the caption language to extract. If input is DVB-Sub and output is Burn-in or SMPTE-TT, complete this field and/or PID to select the caption language to extract. If input is DVB-Sub that is being passed through, omit this field (and PID field); there is no way to extract a specific language with pass-through captions.</p>
@@ -702,7 +735,7 @@ pub struct CaptionSourceSettings {
     #[serde(rename = "EmbeddedSourceSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub embedded_source_settings: Option<EmbeddedSourceSettings>,
-    /// <p>If your input captions are SCC, SMI, SRT, STL, TTML, or IMSC 1.1 in an xml file, specify the URI of the input caption source file. If your caption source is IMSC in an IMF package, use TrackSourceSettings instead of FileSoureSettings.</p>
+    /// <p>If your input captions are SCC, SMI, SRT, STL, TTML, WebVTT, or IMSC 1.1 in an xml file, specify the URI of the input caption source file. If your caption source is IMSC in an IMF package, use TrackSourceSettings instead of FileSoureSettings.</p>
     #[serde(rename = "FileSourceSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_source_settings: Option<FileSourceSettings>,
@@ -718,12 +751,16 @@ pub struct CaptionSourceSettings {
     #[serde(rename = "TrackSourceSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub track_source_settings: Option<TrackSourceSettings>,
+    /// <p>Settings specific to WebVTT sources in HLS alternative rendition group. Specify the properties (renditionGroupId, renditionName or renditionLanguageCode) to identify the unique subtitle track among the alternative rendition groups present in the HLS manifest. If no unique track is found, or multiple tracks match the specified properties, the job fails. If there is only one subtitle track in the rendition group, the settings can be left empty and the default subtitle track will be chosen. If your caption source is a sidecar file, use FileSourceSettings instead of WebvttHlsSourceSettings.</p>
+    #[serde(rename = "WebvttHlsSourceSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub webvtt_hls_source_settings: Option<WebvttHlsSourceSettings>,
 }
 
-/// <p>Channel mapping (ChannelMapping) contains the group of fields that hold the remixing value for each channel. Units are in dB. Acceptable values are within the range from -60 (mute) through 6. A setting of 0 passes the input channel unchanged to the output channel (no attenuation or amplification).</p>
+/// <p>Channel mapping (ChannelMapping) contains the group of fields that hold the remixing value for each channel, in dB. Specify remix values to indicate how much of the content from your input audio channel you want in your output audio channels. Each instance of the InputChannels or InputChannelsFineTune array specifies these values for one output channel. Use one instance of this array for each output channel. In the console, each array corresponds to a column in the graphical depiction of the mapping matrix. The rows of the graphical matrix correspond to input channels. Valid values are within the range from -60 (mute) through 6. A setting of 0 passes the input channel unchanged to the output channel (no attenuation or amplification). Use InputChannels or InputChannelsFineTune to specify your remix values. Don&#39;t use both.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ChannelMapping {
-    /// <p>List of output channels</p>
+    /// <p>In your JSON job specification, include one child of OutputChannels for each audio channel that you want in your output. Each child should contain one instance of InputChannels or InputChannelsFineTune.</p>
     #[serde(rename = "OutputChannels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_channels: Option<Vec<OutputChannelMapping>>,
@@ -771,7 +808,7 @@ pub struct CmafEncryptionSettings {
     pub type_: Option<String>,
 }
 
-/// <p>Required when you set (Type) under (OutputGroups)&gt;(OutputGroupSettings) to CMAF<em>GROUP</em>SETTINGS. Each output in a CMAF Output Group may only contain a single video, audio, or caption output.</p>
+/// <p>Settings related to your CMAF output package. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/outputs-file-ABR.html. When you work directly in your JSON job specification, include this object and any required children when you set Type, under OutputGroupSettings, to CMAF<em>GROUP</em>SETTINGS.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CmafGroupSettings {
     /// <p>By default, the service creates one top-level .m3u8 HLS manifest and one top -level .mpd DASH manifest for each CMAF output group in your job. These default manifests reference every output in the output group. To create additional top-level manifests that reference a subset of the outputs in the output group, specify a list of them here. For each additional manifest that you specify, the service creates one HLS manifest and one DASH manifest.</p>
@@ -806,6 +843,10 @@ pub struct CmafGroupSettings {
     #[serde(rename = "FragmentLength")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fragment_length: Option<i64>,
+    /// <p>Specify whether MediaConvert generates images for trick play. Keep the default value, None (NONE), to not generate any images. Choose Thumbnail (THUMBNAIL) to generate tiled thumbnails. Choose Thumbnail and full frame (THUMBNAIL<em>AND</em>FULLFRAME) to generate tiled thumbnails and full-resolution images of single frames. When you enable Write HLS manifest (WriteHlsManifest), MediaConvert creates a child manifest for each set of images that you generate and adds corresponding entries to the parent manifest. When you enable Write DASH manifest (WriteDashManifest), MediaConvert adds an entry in the .mpd manifest for each set of images that you generate. A common application for these images is Roku trick mode. The thumbnails and full-frame images that MediaConvert creates with this feature are compatible with this Roku specification: https://developer.roku.com/docs/developer-program/media-playback/trick-mode/hls-and-dash.md</p>
+    #[serde(rename = "ImageBasedTrickPlay")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_based_trick_play: Option<String>,
     /// <p>When set to GZIP, compresses HLS playlist.</p>
     #[serde(rename = "ManifestCompression")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -826,6 +867,10 @@ pub struct CmafGroupSettings {
     #[serde(rename = "MpdProfile")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mpd_profile: Option<String>,
+    /// <p>Use this setting only when your output video stream has B-frames, which causes the initial presentation time stamp (PTS) to be offset from the initial decode time stamp (DTS). Specify how MediaConvert handles PTS when writing time stamps in output DASH manifests. Choose Match initial PTS (MATCH<em>INITIAL</em>PTS) when you want MediaConvert to use the initial PTS as the first time stamp in the manifest. Choose Zero-based (ZERO_BASED) to have MediaConvert ignore the initial PTS in the video stream and instead write the initial time stamp as zero in the manifest. For outputs that don&#39;t have B-frames, the time stamps in your DASH manifests start at zero regardless of your choice here.</p>
+    #[serde(rename = "PtsOffsetHandlingForBFrames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pts_offset_handling_for_b_frames: Option<String>,
     /// <p>When set to SINGLE<em>FILE, a single output file is generated, which is internally segmented using the Fragment Length and Segment Length. When set to SEGMENTED</em>FILES, separate segment files will be created.</p>
     #[serde(rename = "SegmentControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -852,13 +897,33 @@ pub struct CmafGroupSettings {
     pub write_segment_timeline_in_representation: Option<String>,
 }
 
-/// <p>Settings for MP4 segments in CMAF</p>
+/// <p>These settings relate to the fragmented MP4 container for the segments in your CMAF outputs.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct CmfcSettings {
     /// <p>Specify this setting only when your output will be consumed by a downstream repackaging workflow that is sensitive to very small duration differences between video and audio. For this situation, choose Match video duration (MATCH<em>VIDEO</em>DURATION). In all other cases, keep the default value, Default codec duration (DEFAULT<em>CODEC</em>DURATION). When you choose Match video duration, MediaConvert pads the output audio streams with silence or trims them to ensure that the total duration of each audio stream is at least as long as the total duration of the video stream. After padding or trimming, the audio stream duration is no more than one frame longer than the video stream. MediaConvert applies audio padding or trimming only to the end of the last segment of the output. For unsegmented outputs, MediaConvert adds padding only to the end of the file. When you keep the default value, any minor discrepancies between audio and video duration will depend on your output audio codec.</p>
     #[serde(rename = "AudioDuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_duration: Option<String>,
+    /// <p>Specify the audio rendition group for this audio rendition. Specify up to one value for each audio output in your output group. This value appears in your HLS parent manifest in the EXT-X-MEDIA tag of TYPE=AUDIO, as the value for the GROUP-ID attribute. For example, if you specify &quot;audio<em>aac</em>1&quot; for Audio group ID, it appears in your manifest like this: #EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID=&quot;audio<em>aac</em>1&quot;. Related setting: To associate the rendition group that this audio track belongs to with a video rendition, include the same value that you provide here for that video output&#39;s setting Audio rendition sets (audioRenditionSets).</p>
+    #[serde(rename = "AudioGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audio_group_id: Option<String>,
+    /// <p>List the audio rendition groups that you want included with this video rendition. Use a comma-separated list. For example, say you want to include the audio rendition groups that have the audio group IDs &quot;audio<em>aac</em>1&quot; and &quot;audio<em>dolby&quot;. Then you would specify this value: &quot;audio</em>aac<em>1, audio</em>dolby&quot;. Related setting: The rendition groups that you include in your comma-separated list should all match values that you specify in the setting Audio group ID (AudioGroupId) for audio renditions in the same output group as this video rendition. Default behavior: If you don&#39;t specify anything here and for Audio group ID, MediaConvert puts each audio variant in its own audio rendition group and associates it with every video variant. Each value in your list appears in your HLS parent manifest in the EXT-X-STREAM-INF tag as the value for the AUDIO attribute. To continue the previous example, say that the file name for the child manifest for your video rendition is &quot;amazing<em>video</em>1.m3u8&quot;. Then, in your parent manifest, each value will appear on separate lines, like this: #EXT-X-STREAM-INF:AUDIO=&quot;audio<em>aac</em>1&quot;... amazing<em>video</em>1.m3u8 #EXT-X-STREAM-INF:AUDIO=&quot;audio<em>dolby&quot;... amazing</em>video_1.m3u8</p>
+    #[serde(rename = "AudioRenditionSets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audio_rendition_sets: Option<String>,
+    /// <p>Use this setting to control the values that MediaConvert puts in your HLS parent playlist to control how the client player selects which audio track to play. The other options for this setting determine the values that MediaConvert writes for the DEFAULT and AUTOSELECT attributes of the EXT-X-MEDIA entry for the audio variant. For more information about these attributes, see the Apple documentation article https://developer.apple.com/documentation/http<em>live</em>streaming/example<em>playlists</em>for<em>http</em>live<em>streaming/adding</em>alternate<em>media</em>to<em>a</em>playlist. Choose Alternate audio, auto select, default (ALTERNATE<em>AUDIO</em>AUTO<em>SELECT</em>DEFAULT) to set DEFAULT=YES and AUTOSELECT=YES. Choose this value for only one variant in your output group. Choose Alternate audio, auto select, not default (ALTERNATE<em>AUDIO</em>AUTO_SELECT) to set DEFAULT=NO and AUTOSELECT=YES. Choose Alternate Audio, Not Auto Select to set DEFAULT=NO and AUTOSELECT=NO. When you don&#39;t specify a value for this setting, MediaConvert defaults to Alternate audio, auto select, default. When there is more than one variant in your output group, you must explicitly choose a value for this setting.</p>
+    #[serde(rename = "AudioTrackType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audio_track_type: Option<String>,
+    /// <p>Specify whether to flag this audio track as descriptive video service (DVS) in your HLS parent manifest. When you choose Flag (FLAG), MediaConvert includes the parameter CHARACTERISTICS=&quot;public.accessibility.describes-video&quot; in the EXT-X-MEDIA entry for this track. When you keep the default choice, Don&#39;t flag (DONT_FLAG), MediaConvert leaves this parameter out. The DVS flag can help with accessibility on Apple devices. For more information, see the Apple documentation.</p>
+    #[serde(rename = "DescriptiveVideoServiceFlag")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub descriptive_video_service_flag: Option<String>,
+    /// <p>Choose Include (INCLUDE) to have MediaConvert generate an HLS child manifest that lists only the I-frames for this rendition, in addition to your regular manifest for this rendition. You might use this manifest as part of a workflow that creates preview functions for your video. MediaConvert adds both the I-frame only child manifest and the regular child manifest to the parent manifest. When you don&#39;t need the I-frame only child manifest, keep the default value Exclude (EXCLUDE).</p>
+    #[serde(rename = "IFrameOnlyManifest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub i_frame_only_manifest: Option<String>,
     /// <p>Use this setting only when you specify SCTE-35 markers from ESAM. Choose INSERT to put SCTE-35 markers in this output at the insertion points that you specify in an ESAM XML document. Provide the document in the setting SCC XML (sccXml).</p>
     #[serde(rename = "Scte35Esam")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -892,6 +957,10 @@ pub struct ColorCorrector {
     #[serde(rename = "Hue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hue: Option<i64>,
+    /// <p>Specify the video color sample range for this output. To create a full range output, you must start with a full range YUV input and keep the default value, None (NONE). To create a limited range output from a full range input, choose Limited range (LIMITED<em>RANGE</em>SQUEEZE). With RGB inputs, your output is always limited range, regardless of your choice here. When you create a limited range output from a full range input, MediaConvert limits the active pixel values in a way that depends on the output&#39;s bit depth: 8-bit outputs contain only values from 16 through 235 and 10-bit outputs contain only values from 64 through 940. With this conversion, MediaConvert also changes the output metadata to note the limited range.</p>
+    #[serde(rename = "SampleRangeConversion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sample_range_conversion: Option<String>,
     /// <p>Saturation level.</p>
     #[serde(rename = "Saturation")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -901,7 +970,7 @@ pub struct ColorCorrector {
 /// <p>Container specific settings.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ContainerSettings {
-    /// <p>Settings for MP4 segments in CMAF</p>
+    /// <p>These settings relate to the fragmented MP4 container for the segments in your CMAF outputs.</p>
     #[serde(rename = "CmfcSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cmfc_settings: Option<CmfcSettings>,
@@ -917,23 +986,23 @@ pub struct ContainerSettings {
     #[serde(rename = "M2tsSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_2ts_settings: Option<M2tsSettings>,
-    /// <p>Settings for TS segments in HLS</p>
+    /// <p>These settings relate to the MPEG-2 transport stream (MPEG2-TS) container for the MPEG2-TS segments in your HLS outputs.</p>
     #[serde(rename = "M3u8Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub m_3u_8_settings: Option<M3u8Settings>,
-    /// <p>Settings for MOV Container.</p>
+    /// <p>These settings relate to your QuickTime MOV output container.</p>
     #[serde(rename = "MovSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mov_settings: Option<MovSettings>,
-    /// <p>Settings for MP4 container. You can create audio-only AAC outputs with this container.</p>
+    /// <p>These settings relate to your MP4 output container. You can create audio only outputs with this container. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/supported-codecs-containers-audio-only.html#output-codecs-and-containers-supported-for-audio-only.</p>
     #[serde(rename = "Mp4Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mp_4_settings: Option<Mp4Settings>,
-    /// <p>Settings for MP4 segments in DASH</p>
+    /// <p>These settings relate to the fragmented MP4 container for the segments in your DASH outputs.</p>
     #[serde(rename = "MpdSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mpd_settings: Option<MpdSettings>,
-    /// <p>MXF settings</p>
+    /// <p>These settings relate to your MXF output container.</p>
     #[serde(rename = "MxfSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mxf_settings: Option<MxfSettings>,
@@ -1150,13 +1219,17 @@ pub struct DashIsoEncryptionSettings {
     pub speke_key_provider: Option<SpekeKeyProvider>,
 }
 
-/// <p>Required when you set (Type) under (OutputGroups)&gt;(OutputGroupSettings) to DASH<em>ISO</em>GROUP_SETTINGS.</p>
+/// <p>Settings related to your DASH output package. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/outputs-file-ABR.html. When you work directly in your JSON job specification, include this object and any required children when you set Type, under OutputGroupSettings, to DASH<em>ISO</em>GROUP_SETTINGS.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DashIsoGroupSettings {
     /// <p>By default, the service creates one .mpd DASH manifest for each DASH ISO output group in your job. This default manifest references every output in the output group. To create additional DASH manifests that reference a subset of the outputs in the output group, specify a list of them here.</p>
     #[serde(rename = "AdditionalManifests")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_manifests: Option<Vec<DashAdditionalManifest>>,
+    /// <p>Use this setting only when your audio codec is a Dolby one (AC3, EAC3, or Atmos) and your downstream workflow requires that your DASH manifest use the Dolby channel configuration tag, rather than the MPEG one. For example, you might need to use this to make dynamic ad insertion work. Specify which audio channel configuration scheme ID URI MediaConvert writes in your DASH manifest. Keep the default value, MPEG channel configuration (MPEG<em>CHANNEL</em>CONFIGURATION), to have MediaConvert write this: urn:mpeg:mpegB:cicp:ChannelConfiguration. Choose Dolby channel configuration (DOLBY<em>CHANNEL</em>CONFIGURATION) to have MediaConvert write this instead: tag:dolby.com,2014:dash:audio<em>channel</em>configuration:2011.</p>
+    #[serde(rename = "AudioChannelConfigSchemeIdUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audio_channel_config_scheme_id_uri: Option<String>,
     /// <p>A partial URI prefix that will be put in the manifest (.mpd) file at the top level BaseURL element. Can be used if streams are delivered from a different URL than the manifest file.</p>
     #[serde(rename = "BaseUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1181,6 +1254,10 @@ pub struct DashIsoGroupSettings {
     #[serde(rename = "HbbtvCompliance")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hbbtv_compliance: Option<String>,
+    /// <p>Specify whether MediaConvert generates images for trick play. Keep the default value, None (NONE), to not generate any images. Choose Thumbnail (THUMBNAIL) to generate tiled thumbnails. Choose Thumbnail and full frame (THUMBNAIL<em>AND</em>FULLFRAME) to generate tiled thumbnails and full-resolution images of single frames. MediaConvert adds an entry in the .mpd manifest for each set of images that you generate. A common application for these images is Roku trick mode. The thumbnails and full-frame images that MediaConvert creates with this feature are compatible with this Roku specification: https://developer.roku.com/docs/developer-program/media-playback/trick-mode/hls-and-dash.md</p>
+    #[serde(rename = "ImageBasedTrickPlay")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_based_trick_play: Option<String>,
     /// <p>Minimum time of initially buffered media that is needed to ensure smooth playout.</p>
     #[serde(rename = "MinBufferTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1193,6 +1270,10 @@ pub struct DashIsoGroupSettings {
     #[serde(rename = "MpdProfile")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mpd_profile: Option<String>,
+    /// <p>Use this setting only when your output video stream has B-frames, which causes the initial presentation time stamp (PTS) to be offset from the initial decode time stamp (DTS). Specify how MediaConvert handles PTS when writing time stamps in output DASH manifests. Choose Match initial PTS (MATCH<em>INITIAL</em>PTS) when you want MediaConvert to use the initial PTS as the first time stamp in the manifest. Choose Zero-based (ZERO_BASED) to have MediaConvert ignore the initial PTS in the video stream and instead write the initial time stamp as zero in the manifest. For outputs that don&#39;t have B-frames, the time stamps in your DASH manifests start at zero regardless of your choice here.</p>
+    #[serde(rename = "PtsOffsetHandlingForBFrames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pts_offset_handling_for_b_frames: Option<String>,
     /// <p>When set to SINGLE<em>FILE, a single output file is generated, which is internally segmented using the Fragment Length and Segment Length. When set to SEGMENTED</em>FILES, separate segment files will be created.</p>
     #[serde(rename = "SegmentControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1314,7 +1395,7 @@ pub struct DisassociateCertificateRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DisassociateCertificateResponse {}
 
-/// <p>Settings for Dolby Vision</p>
+/// <p>With AWS Elemental MediaConvert, you can create profile 5 Dolby Vision outputs from MXF and IMF sources that contain mastering information as frame-interleaved Dolby Vision metadata.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DolbyVision {
     /// <p>Use these settings when you set DolbyVisionLevel6Mode to SPECIFY to override the MaxCLL and MaxFALL values in your input with new values.</p>
@@ -1344,7 +1425,7 @@ pub struct DolbyVisionLevel6Metadata {
     pub max_fall: Option<i64>,
 }
 
-/// <p>Inserts DVB Network Information Table (NIT) at the specified table repetition interval.</p>
+/// <p>Use these settings to insert a DVB Network Information Table (NIT) in the transport stream of this output. When you work directly in your JSON job specification, include this object only when your job has a transport stream output and the container settings contain the object M2tsSettings.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DvbNitSettings {
     /// <p>The numeric value placed in the Network Information Table (NIT).</p>
@@ -1361,7 +1442,7 @@ pub struct DvbNitSettings {
     pub nit_interval: Option<i64>,
 }
 
-/// <p>Inserts DVB Service Description Table (NIT) at the specified table repetition interval.</p>
+/// <p>Use these settings to insert a DVB Service Description Table (SDT) in the transport stream of this output. When you work directly in your JSON job specification, include this object only when your job has a transport stream output and the container settings contain the object M2tsSettings.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DvbSdtSettings {
     /// <p>Selects method of inserting SDT information into output stream.  &quot;Follow input SDT&quot; copies SDT information from input stream to  output stream. &quot;Follow input SDT if present&quot; copies SDT information from  input stream to output stream if SDT information is present in the input, otherwise it will fall back on the user-defined values. Enter &quot;SDT  Manually&quot; means user will enter the SDT information. &quot;No SDT&quot; means output  stream will not contain SDT information.</p>
@@ -1382,7 +1463,7 @@ pub struct DvbSdtSettings {
     pub service_provider_name: Option<String>,
 }
 
-/// <p>DVB-Sub Destination Settings</p>
+/// <p>Settings related to DVB-Sub captions. Set up DVB-Sub captions in the same output as your video. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/dvb-sub-output-captions.html. When you work directly in your JSON job specification, include this object and any required children when you set destinationType to DVB_SUB.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DvbSubDestinationSettings {
     /// <p>If no explicit x<em>position or y</em>position is provided, setting alignment to centered will place the captions at the bottom center of the output. Similarly, setting a left alignment will align captions to the bottom left of the output. If x and y positions are given in conjunction with the alignment parameter, the font will be justified (either left or centered) relative to those coordinates. This option is not valid for source captions that are STL, 608/embedded or teletext. These source settings are already pre-defined by the caption stream. All burn-in and DVB-Sub font settings must match.</p>
@@ -1398,6 +1479,18 @@ pub struct DvbSubDestinationSettings {
     #[serde(rename = "BackgroundOpacity")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub background_opacity: Option<i64>,
+    /// <p>Specify how MediaConvert handles the display definition segment (DDS). Keep the default, None (NONE), to exclude the DDS from this set of captions. Choose No display window (NO<em>DISPLAY</em>WINDOW) to have MediaConvert include the DDS but not include display window data. In this case, MediaConvert writes that information to the page composition segment (PCS) instead. Choose Specify (SPECIFIED) to have MediaConvert set up the display window based on the values that you specify in related job settings. For video resolutions that are 576 pixels or smaller in height, MediaConvert doesn&#39;t include the DDS, regardless of the value you choose for DDS handling (ddsHandling). In this case, it doesn&#39;t write the display window data to the PCS either. Related settings: Use the settings DDS x-coordinate (ddsXCoordinate) and DDS y-coordinate (ddsYCoordinate) to specify the offset between the top left corner of the display window and the top left corner of the video frame. All burn-in and DVB-Sub font settings must match.</p>
+    #[serde(rename = "DdsHandling")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dds_handling: Option<String>,
+    /// <p>Use this setting, along with DDS y-coordinate (ddsYCoordinate), to specify the upper left corner of the display definition segment (DDS) display window. With this setting, specify the distance, in pixels, between the left side of the frame and the left side of the DDS display window. Keep the default value, 0, to have MediaConvert automatically choose this offset. Related setting: When you use this setting, you must set DDS handling (ddsHandling) to a value other than None (NONE). MediaConvert uses these values to determine whether to write page position data to the DDS or to the page composition segment (PCS). All burn-in and DVB-Sub font settings must match.</p>
+    #[serde(rename = "DdsXCoordinate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dds_x_coordinate: Option<i64>,
+    /// <p>Use this setting, along with DDS x-coordinate (ddsXCoordinate), to specify the upper left corner of the display definition segment (DDS) display window. With this setting, specify the distance, in pixels, between the top of the frame and the top of the DDS display window. Keep the default value, 0, to have MediaConvert automatically choose this offset. Related setting: When you use this setting, you must set DDS handling (ddsHandling) to a value other than None (NONE). MediaConvert uses these values to determine whether to write page position data to the DDS or to the page composition segment (PCS). All burn-in and DVB-Sub font settings must match.</p>
+    #[serde(rename = "DdsYCoordinate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dds_y_coordinate: Option<i64>,
     /// <p>Specifies the color of the burned-in captions. This option is not valid for source captions that are STL, 608/embedded or teletext. These source settings are already pre-defined by the caption stream. All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "FontColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1420,6 +1513,10 @@ pub struct DvbSubDestinationSettings {
     #[serde(rename = "FontSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub font_size: Option<i64>,
+    /// <p>Specify the height, in pixels, of this set of DVB-Sub captions. The default value is 576 pixels. Related setting: When you use this setting, you must set DDS handling (ddsHandling) to a value other than None (NONE). All burn-in and DVB-Sub font settings must match.</p>
+    #[serde(rename = "Height")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub height: Option<i64>,
     /// <p>Specifies font outline color. This option is not valid for source captions that are either 608/embedded or teletext. These source settings are already pre-defined by the caption stream. All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "OutlineColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1453,6 +1550,10 @@ pub struct DvbSubDestinationSettings {
     #[serde(rename = "TeletextSpacing")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub teletext_spacing: Option<String>,
+    /// <p>Specify the width, in pixels, of this set of DVB-Sub captions. The default value is 720 pixels. Related setting: When you use this setting, you must set DDS handling (ddsHandling) to a value other than None (NONE). All burn-in and DVB-Sub font settings must match.</p>
+    #[serde(rename = "Width")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub width: Option<i64>,
     /// <p>Specifies the horizontal position of the caption relative to the left side of the output in pixels. A value of 10 would result in the captions starting 10 pixels from the left of the output. If no explicit x_position is provided, the horizontal caption position will be determined by the alignment parameter. This option is not valid for source captions that are STL, 608/embedded or teletext. These source settings are already pre-defined by the caption stream. All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "XPosition")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1472,7 +1573,7 @@ pub struct DvbSubSourceSettings {
     pub pid: Option<i64>,
 }
 
-/// <p>Inserts DVB Time and Date Table (TDT) at the specified table repetition interval.</p>
+/// <p>Use these settings to insert a DVB Time and Date Table (TDT) in the transport stream of this output. When you work directly in your JSON job specification, include this object only when your job has a transport stream output and the container settings contain the object M2tsSettings.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct DvbTdtSettings {
     /// <p>The number of milliseconds between instances of this table in the output transport stream.</p>
@@ -1484,8 +1585,7 @@ pub struct DvbTdtSettings {
 /// <p>Required when you set (Codec) under (AudioDescriptions)&gt;(CodecSettings) to the value EAC3_ATMOS.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Eac3AtmosSettings {
-    /// <p>Specify the average bitrate in bits per second.
-    /// Valid values: 384k, 448k, 640k, 768k</p>
+    /// <p>Specify the average bitrate for this output in bits per second. Valid values: 384k, 448k, 576k, 640k, 768k, 1024k Default value: 448k Note that MediaConvert supports 384k only with channel-based immersive (CBI) 7.1.4 and 5.1.4 inputs. For CBI 9.1.6 and other input types, MediaConvert automatically increases your output bitrate to 448k.</p>
     #[serde(rename = "Bitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bitrate: Option<i64>,
@@ -1493,7 +1593,7 @@ pub struct Eac3AtmosSettings {
     #[serde(rename = "BitstreamMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bitstream_mode: Option<String>,
-    /// <p>The coding mode for Dolby Digital Plus JOC (Atmos) is always 9.1.6 (CODING<em>MODE</em>9<em>1</em>6).</p>
+    /// <p>The coding mode for Dolby Digital Plus JOC (Atmos).</p>
     #[serde(rename = "CodingMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub coding_mode: Option<String>,
@@ -1501,30 +1601,35 @@ pub struct Eac3AtmosSettings {
     #[serde(rename = "DialogueIntelligence")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dialogue_intelligence: Option<String>,
-    /// <p>Specify the absolute peak level for a signal with dynamic range compression.</p>
+    /// <p>Specify whether MediaConvert should use any downmix metadata from your input file. Keep the default value, Custom (SPECIFIED) to provide downmix values in your job settings. Choose Follow source (INITIALIZE<em>FROM</em>SOURCE) to use the metadata from your input. Related settings--Use these settings to specify your downmix values: Left only/Right only surround (LoRoSurroundMixLevel), Left total/Right total surround (LtRtSurroundMixLevel), Left total/Right total center (LtRtCenterMixLevel), Left only/Right only center (LoRoCenterMixLevel),  and Stereo downmix (StereoDownmix). When you keep Custom (SPECIFIED) for Downmix control (DownmixControl) and you don&#39;t specify values for the related settings, MediaConvert uses default values for those settings.</p>
+    #[serde(rename = "DownmixControl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub downmix_control: Option<String>,
+    /// <p>Choose the Dolby dynamic range control (DRC) profile that MediaConvert uses when encoding the metadata in the Dolby stream for the line operating mode. Default value: Film light (ATMOS<em>STORAGE</em>DDP<em>COMPR</em>FILM_LIGHT) Related setting: To have MediaConvert use the value you specify here, keep the default value, Custom (SPECIFIED) for the setting Dynamic range control (DynamicRangeControl). Otherwise, MediaConvert ignores Dynamic range compression line (DynamicRangeCompressionLine). For information about the Dolby DRC operating modes and profiles, see the Dynamic Range Control chapter of the Dolby Metadata Guide at https://developer.dolby.com/globalassets/professional/documents/dolby-metadata-guide.pdf.</p>
     #[serde(rename = "DynamicRangeCompressionLine")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamic_range_compression_line: Option<String>,
-    /// <p>Specify how the service limits the audio dynamic range when compressing the audio.</p>
+    /// <p>Choose the Dolby dynamic range control (DRC) profile that MediaConvert uses when encoding the metadata in the Dolby stream for the RF operating mode. Default value: Film light (ATMOS<em>STORAGE</em>DDP<em>COMPR</em>FILM_LIGHT) Related setting: To have MediaConvert use the value you specify here, keep the default value, Custom (SPECIFIED) for the setting Dynamic range control (DynamicRangeControl). Otherwise, MediaConvert ignores Dynamic range compression RF (DynamicRangeCompressionRf). For information about the Dolby DRC operating modes and profiles, see the Dynamic Range Control chapter of the Dolby Metadata Guide at https://developer.dolby.com/globalassets/professional/documents/dolby-metadata-guide.pdf.</p>
     #[serde(rename = "DynamicRangeCompressionRf")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamic_range_compression_rf: Option<String>,
-    /// <p>Specify a value for the following Dolby Atmos setting: Left only/Right only center mix
-    /// (Lo/Ro center). MediaConvert uses this value for downmixing. How the service uses this
-    /// value depends on the value that you choose for Stereo downmix (Eac3AtmosStereoDownmix).
-    /// Valid values: 3.0, 1.5, 0.0, -1.5, -3.0, -4.5, and -6.0.</p>
+    /// <p>Specify whether MediaConvert should use any dynamic range control metadata from your input file. Keep the default value, Custom (SPECIFIED), to provide dynamic range control values in your job settings. Choose Follow source (INITIALIZE<em>FROM</em>SOURCE) to use the metadata from your input. Related settings--Use these settings to specify your dynamic range control values: Dynamic range compression line (DynamicRangeCompressionLine) and Dynamic range compression RF (DynamicRangeCompressionRf). When you keep the value Custom (SPECIFIED) for Dynamic range control (DynamicRangeControl) and you don&#39;t specify values for the related settings, MediaConvert uses default values for those settings.</p>
+    #[serde(rename = "DynamicRangeControl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dynamic_range_control: Option<String>,
+    /// <p>Specify a value for the following Dolby Atmos setting: Left only/Right only center mix (Lo/Ro center). MediaConvert uses this value for downmixing. Default value: -3 dB (ATMOS<em>STORAGE</em>DDP<em>MIXLEV</em>MINUS<em>3</em>DB). Valid values: 3.0, 1.5, 0.0, -1.5, -3.0, -4.5, and -6.0. Related setting: How the service uses this value depends on the value that you choose for Stereo downmix (Eac3AtmosStereoDownmix). Related setting: To have MediaConvert use this value, keep the default value, Custom (SPECIFIED) for the setting Downmix control (DownmixControl). Otherwise, MediaConvert ignores Left only/Right only center (LoRoCenterMixLevel).</p>
     #[serde(rename = "LoRoCenterMixLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lo_ro_center_mix_level: Option<f64>,
-    /// <p>Specify a value for the following Dolby Atmos setting: Left only/Right only (Lo/Ro surround). MediaConvert uses this value for downmixing. How the service uses this value depends on the value that you choose for Stereo downmix (Eac3AtmosStereoDownmix). Valid values: -1.5, -3.0, -4.5, -6.0, and -60. The value -60 mutes the channel.</p>
+    /// <p>Specify a value for the following Dolby Atmos setting: Left only/Right only (Lo/Ro surround). MediaConvert uses this value for downmixing. Default value: -3 dB (ATMOS<em>STORAGE</em>DDP<em>MIXLEV</em>MINUS<em>3</em>DB). Valid values: -1.5, -3.0, -4.5, -6.0, and -60. The value -60 mutes the channel. Related setting: How the service uses this value depends on the value that you choose for Stereo downmix (Eac3AtmosStereoDownmix). Related setting: To have MediaConvert use this value, keep the default value, Custom (SPECIFIED) for the setting Downmix control (DownmixControl). Otherwise, MediaConvert ignores Left only/Right only surround (LoRoSurroundMixLevel).</p>
     #[serde(rename = "LoRoSurroundMixLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lo_ro_surround_mix_level: Option<f64>,
-    /// <p>Specify a value for the following Dolby Atmos setting: Left total/Right total center mix (Lt/Rt center). MediaConvert uses this value for downmixing. How the service uses this value depends on the value that you choose for Stereo downmix (Eac3AtmosStereoDownmix). Valid values: 3.0, 1.5, 0.0, -1.5, -3.0, -4.5, and -6.0.</p>
+    /// <p>Specify a value for the following Dolby Atmos setting: Left total/Right total center mix (Lt/Rt center). MediaConvert uses this value for downmixing. Default value: -3 dB (ATMOS<em>STORAGE</em>DDP<em>MIXLEV</em>MINUS<em>3</em>DB) Valid values: 3.0, 1.5, 0.0, -1.5, -3.0, -4.5, and -6.0. Related setting: How the service uses this value depends on the value that you choose for Stereo downmix (Eac3AtmosStereoDownmix). Related setting: To have MediaConvert use this value, keep the default value, Custom (SPECIFIED) for the setting Downmix control (DownmixControl). Otherwise, MediaConvert ignores Left total/Right total center (LtRtCenterMixLevel).</p>
     #[serde(rename = "LtRtCenterMixLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lt_rt_center_mix_level: Option<f64>,
-    /// <p>Specify a value for the following Dolby Atmos setting: Left total/Right total surround mix (Lt/Rt surround). MediaConvert uses this value for downmixing. How the service uses this value depends on the value that you choose for Stereo downmix (Eac3AtmosStereoDownmix). Valid values: -1.5, -3.0, -4.5, -6.0, and -60. The value -60 mutes the channel.</p>
+    /// <p>Specify a value for the following Dolby Atmos setting: Left total/Right total surround mix (Lt/Rt surround). MediaConvert uses this value for downmixing. Default value: -3 dB (ATMOS<em>STORAGE</em>DDP<em>MIXLEV</em>MINUS<em>3</em>DB) Valid values: -1.5, -3.0, -4.5, -6.0, and -60. The value -60 mutes the channel. Related setting: How the service uses this value depends on the value that you choose for Stereo downmix (Eac3AtmosStereoDownmix). Related setting: To have MediaConvert use this value, keep the default value, Custom (SPECIFIED) for the setting Downmix control (DownmixControl). Otherwise, the service ignores Left total/Right total surround (LtRtSurroundMixLevel).</p>
     #[serde(rename = "LtRtSurroundMixLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lt_rt_surround_mix_level: Option<f64>,
@@ -1536,11 +1641,11 @@ pub struct Eac3AtmosSettings {
     #[serde(rename = "SampleRate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sample_rate: Option<i64>,
-    /// <p>Specify the percentage of audio content that must be speech before the encoder uses the measured speech loudness as the overall program loudness.</p>
+    /// <p>Specify the percentage of audio content, from 0% to 100%, that must be speech in order for the encoder to use the measured speech loudness as the overall program loudness. Default value: 15%</p>
     #[serde(rename = "SpeechThreshold")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub speech_threshold: Option<i64>,
-    /// <p>Choose how the service does stereo downmixing.</p>
+    /// <p>Choose how the service does stereo downmixing. Default value: Not indicated (ATMOS<em>STORAGE</em>DDP<em>DMIXMOD</em>NOT_INDICATED) Related setting: To have MediaConvert use this value, keep the default value, Custom (SPECIFIED) for the setting Downmix control (DownmixControl). Otherwise, MediaConvert ignores Stereo downmix (StereoDownmix).</p>
     #[serde(rename = "StereoDownmix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stereo_downmix: Option<String>,
@@ -1577,11 +1682,11 @@ pub struct Eac3Settings {
     #[serde(rename = "Dialnorm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dialnorm: Option<i64>,
-    /// <p>Specify the absolute peak level for a signal with dynamic range compression.</p>
+    /// <p>Choose the Dolby Digital dynamic range control (DRC) profile that MediaConvert uses when encoding the metadata in the Dolby Digital stream for the line operating mode. Related setting: When you use this setting, MediaConvert ignores any value you provide for Dynamic range compression profile (DynamicRangeCompressionProfile). For information about the Dolby Digital DRC operating modes and profiles, see the Dynamic Range Control chapter of the Dolby Metadata Guide at https://developer.dolby.com/globalassets/professional/documents/dolby-metadata-guide.pdf.</p>
     #[serde(rename = "DynamicRangeCompressionLine")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamic_range_compression_line: Option<String>,
-    /// <p>Specify how the service limits the audio dynamic range when compressing the audio.</p>
+    /// <p>Choose the Dolby Digital dynamic range control (DRC) profile that MediaConvert uses when encoding the metadata in the Dolby Digital stream for the RF operating mode. Related setting: When you use this setting, MediaConvert ignores any value you provide for Dynamic range compression profile (DynamicRangeCompressionProfile). For information about the Dolby Digital DRC operating modes and profiles, see the Dynamic Range Control chapter of the Dolby Metadata Guide at https://developer.dolby.com/globalassets/professional/documents/dolby-metadata-guide.pdf.</p>
     #[serde(rename = "DynamicRangeCompressionRf")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamic_range_compression_rf: Option<String>,
@@ -1639,7 +1744,7 @@ pub struct Eac3Settings {
     pub surround_mode: Option<String>,
 }
 
-/// <p>Settings specific to embedded/ancillary caption outputs, including 608/708 Channel destination number.</p>
+/// <p>Settings related to CEA/EIA-608 and CEA/EIA-708 (also called embedded or ancillary) captions. Set up embedded captions in the same output as your video. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/embedded-output-captions.html. When you work directly in your JSON job specification, include this object and any required children when you set destinationType to EMBEDDED, EMBEDDED<em>PLUS</em>SCTE20, or SCTE20<em>PLUS</em>EMBEDDED.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EmbeddedDestinationSettings {
     /// <p>Ignore this setting unless your input captions are SCC format and your output captions are embedded in the video stream. Specify a CC number for each captions channel in this output. If you have two channels, choose CC numbers that aren&#39;t in the same field. For example, choose 1 and 3. For more information, see https://docs.aws.amazon.com/console/mediaconvert/dual-scc-to-embedded.</p>
@@ -1727,7 +1832,7 @@ pub struct F4vSettings {
     pub moov_placement: Option<String>,
 }
 
-/// <p>Required when you set (Type) under (OutputGroups)&gt;(OutputGroupSettings) to FILE<em>GROUP</em>SETTINGS.</p>
+/// <p>Settings related to your File output group. MediaConvert uses this group of settings to generate a single standalone file, rather than a streaming package. When you work directly in your JSON job specification, include this object and any required children when you set Type, under OutputGroupSettings, to FILE<em>GROUP</em>SETTINGS.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FileGroupSettings {
     /// <p>Use Destination (Destination) to specify the S3 output location and the output filename base. Destination accepts format identifiers. If you do not specify the base filename in the URI, the service will use the filename of the input file. If your job has multiple inputs, the service uses the filename of the first input file.</p>
@@ -1740,7 +1845,7 @@ pub struct FileGroupSettings {
     pub destination_settings: Option<DestinationSettings>,
 }
 
-/// <p>If your input captions are SCC, SMI, SRT, STL, TTML, or IMSC 1.1 in an xml file, specify the URI of the input caption source file. If your caption source is IMSC in an IMF package, use TrackSourceSettings instead of FileSoureSettings.</p>
+/// <p>If your input captions are SCC, SMI, SRT, STL, TTML, WebVTT, or IMSC 1.1 in an xml file, specify the URI of the input caption source file. If your caption source is IMSC in an IMF package, use TrackSourceSettings instead of FileSoureSettings.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct FileSourceSettings {
     /// <p>Specify whether this set of input captions appears in your outputs in both 608 and 708 format. If you choose Upconvert (UPCONVERT), MediaConvert includes the captions data in two ways: it passes the 608 data through using the 608 compatibility bytes fields of the 708 wrapper, and it also translates the 608 data into 708.</p>
@@ -1751,7 +1856,7 @@ pub struct FileSourceSettings {
     #[serde(rename = "Framerate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate: Option<CaptionSourceFramerate>,
-    /// <p>External caption file used for loading captions. Accepted file extensions are &#39;scc&#39;, &#39;ttml&#39;, &#39;dfxp&#39;, &#39;stl&#39;, &#39;srt&#39;, &#39;xml&#39;, and &#39;smi&#39;.</p>
+    /// <p>External caption file used for loading captions. Accepted file extensions are &#39;scc&#39;, &#39;ttml&#39;, &#39;dfxp&#39;, &#39;stl&#39;, &#39;srt&#39;, &#39;xml&#39;, &#39;smi&#39;, &#39;webvtt&#39;, and &#39;vtt&#39;.</p>
     #[serde(rename = "SourceFile")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_file: Option<String>,
@@ -1990,6 +2095,10 @@ pub struct H264Settings {
     #[serde(rename = "RepeatPps")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub repeat_pps: Option<String>,
+    /// <p>Use this setting for interlaced outputs, when your output frame rate is half of your input frame rate. In this situation, choose Optimized interlacing (INTERLACED_OPTIMIZE) to create a better quality interlaced output. In this case, each progressive frame from the input corresponds to an interlaced field in the output. Keep the default value, Basic interlacing (INTERLACED), for all other output frame rates. With basic interlacing, MediaConvert performs any frame rate conversion first and then interlaces the frames. When you choose Optimized interlacing and you set your output frame rate to a value that isn&#39;t suitable for optimized interlacing, MediaConvert automatically falls back to basic interlacing. Required settings: To use optimized interlacing, you must set Telecine (telecine) to None (NONE) or Soft (SOFT). You can&#39;t use optimized interlacing for hard telecine outputs. You must also set Interlace mode (interlaceMode) to a value other than Progressive (PROGRESSIVE).</p>
+    #[serde(rename = "ScanTypeConversionMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scan_type_conversion_mode: Option<String>,
     /// <p>Enable this setting to insert I-frames at scene changes that the service automatically detects. This improves video quality and is enabled by default. If this output uses QVBR, choose Transition detection (TRANSITION_DETECTION) for further video quality improvement. For more information about QVBR, see https://docs.aws.amazon.com/console/mediaconvert/cbr-vbr-qvbr.</p>
     #[serde(rename = "SceneChangeDetect")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2164,6 +2273,10 @@ pub struct H265Settings {
     #[serde(rename = "SampleAdaptiveOffsetFilterMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sample_adaptive_offset_filter_mode: Option<String>,
+    /// <p>Use this setting for interlaced outputs, when your output frame rate is half of your input frame rate. In this situation, choose Optimized interlacing (INTERLACED_OPTIMIZE) to create a better quality interlaced output. In this case, each progressive frame from the input corresponds to an interlaced field in the output. Keep the default value, Basic interlacing (INTERLACED), for all other output frame rates. With basic interlacing, MediaConvert performs any frame rate conversion first and then interlaces the frames. When you choose Optimized interlacing and you set your output frame rate to a value that isn&#39;t suitable for optimized interlacing, MediaConvert automatically falls back to basic interlacing. Required settings: To use optimized interlacing, you must set Telecine (telecine) to None (NONE) or Soft (SOFT). You can&#39;t use optimized interlacing for hard telecine outputs. You must also set Interlace mode (interlaceMode) to a value other than Progressive (PROGRESSIVE).</p>
+    #[serde(rename = "ScanTypeConversionMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scan_type_conversion_mode: Option<String>,
     /// <p>Enable this setting to insert I-frames at scene changes that the service automatically detects. This improves video quality and is enabled by default. If this output uses QVBR, choose Transition detection (TRANSITION_DETECTION) for further video quality improvement. For more information about QVBR, see https://docs.aws.amazon.com/console/mediaconvert/cbr-vbr-qvbr.</p>
     #[serde(rename = "SceneChangeDetect")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2259,6 +2372,19 @@ pub struct Hdr10Metadata {
     pub white_point_y: Option<i64>,
 }
 
+/// <p>Setting for HDR10+ metadata insertion</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Hdr10Plus {
+    /// <p>Specify the HDR10+ mastering display normalized peak luminance, in nits. This is the normalized actual peak luminance of the mastering display, as defined by ST 2094-40.</p>
+    #[serde(rename = "MasteringMonitorNits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mastering_monitor_nits: Option<i64>,
+    /// <p>Specify the HDR10+ target display nominal peak luminance, in nits. This is the nominal maximum luminance of the target display as defined by ST 2094-40.</p>
+    #[serde(rename = "TargetMonitorNits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_monitor_nits: Option<i64>,
+}
+
 /// <p>Specify the details for each additional HLS manifest that you want the service to generate for this output group. Each manifest can reference a different subset of outputs in the group.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsAdditionalManifest {
@@ -2326,7 +2452,7 @@ pub struct HlsEncryptionSettings {
     pub type_: Option<String>,
 }
 
-/// <p>Required when you set (Type) under (OutputGroups)&gt;(OutputGroupSettings) to HLS<em>GROUP</em>SETTINGS.</p>
+/// <p>Settings related to your HLS output package. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/outputs-file-ABR.html. When you work directly in your JSON job specification, include this object and any required children when you set Type, under OutputGroupSettings, to HLS<em>GROUP</em>SETTINGS.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsGroupSettings {
     /// <p>Choose one or more ad marker types to decorate your Apple HLS manifest. This setting does not determine whether SCTE-35 markers appear in the outputs themselves.</p>
@@ -2377,6 +2503,10 @@ pub struct HlsGroupSettings {
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption: Option<HlsEncryptionSettings>,
+    /// <p>Specify whether MediaConvert generates images for trick play. Keep the default value, None (NONE), to not generate any images. Choose Thumbnail (THUMBNAIL) to generate tiled thumbnails. Choose Thumbnail and full frame (THUMBNAIL<em>AND</em>FULLFRAME) to generate tiled thumbnails and full-resolution images of single frames. MediaConvert creates a child manifest for each set of images that you generate and adds corresponding entries to the parent manifest. A common application for these images is Roku trick mode. The thumbnails and full-frame images that MediaConvert creates with this feature are compatible with this Roku specification: https://developer.roku.com/docs/developer-program/media-playback/trick-mode/hls-and-dash.md</p>
+    #[serde(rename = "ImageBasedTrickPlay")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_based_trick_play: Option<String>,
     /// <p>When set to GZIP, compresses HLS playlist.</p>
     #[serde(rename = "ManifestCompression")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2435,10 +2565,27 @@ pub struct HlsGroupSettings {
     pub timestamp_delta_milliseconds: Option<i64>,
 }
 
+/// <p>Settings specific to audio sources in an HLS alternate rendition group. Specify the properties (renditionGroupId, renditionName or renditionLanguageCode) to identify the unique audio track among the alternative rendition groups present in the HLS manifest. If no unique track is found, or multiple tracks match the properties provided, the job fails. If no properties in hlsRenditionGroupSettings are specified, the default audio track within the video segment is chosen. If there is no audio within video segment, the alternative audio with DEFAULT=YES is chosen instead.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct HlsRenditionGroupSettings {
+    /// <p>Optional. Specify alternative group ID</p>
+    #[serde(rename = "RenditionGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rendition_group_id: Option<String>,
+    /// <p>Optional. Specify ISO 639-2 or ISO 639-3 code in the language property</p>
+    #[serde(rename = "RenditionLanguageCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rendition_language_code: Option<String>,
+    /// <p>Optional. Specify media name</p>
+    #[serde(rename = "RenditionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rendition_name: Option<String>,
+}
+
 /// <p>Settings for HLS output groups</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HlsSettings {
-    /// <p>Specifies the group to which the audio Rendition belongs.</p>
+    /// <p>Specifies the group to which the audio rendition belongs.</p>
     #[serde(rename = "AudioGroupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_group_id: Option<String>,
@@ -2454,7 +2601,11 @@ pub struct HlsSettings {
     #[serde(rename = "AudioTrackType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_track_type: Option<String>,
-    /// <p>When set to INCLUDE, writes I-Frame Only Manifest in addition to the HLS manifest</p>
+    /// <p>Specify whether to flag this audio track as descriptive video service (DVS) in your HLS parent manifest. When you choose Flag (FLAG), MediaConvert includes the parameter CHARACTERISTICS=&quot;public.accessibility.describes-video&quot; in the EXT-X-MEDIA entry for this track. When you keep the default choice, Don&#39;t flag (DONT_FLAG), MediaConvert leaves this parameter out. The DVS flag can help with accessibility on Apple devices. For more information, see the Apple documentation.</p>
+    #[serde(rename = "DescriptiveVideoServiceFlag")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub descriptive_video_service_flag: Option<String>,
+    /// <p>Choose Include (INCLUDE) to have MediaConvert generate a child manifest that lists only the I-frames for this rendition, in addition to your regular manifest for this rendition. You might use this manifest as part of a workflow that creates preview functions for your video. MediaConvert adds both the I-frame only child manifest and the regular child manifest to the parent manifest. When you don&#39;t need the I-frame only child manifest, keep the default value Exclude (EXCLUDE).</p>
     #[serde(rename = "IFrameOnlyManifest")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub i_frame_only_manifest: Option<String>,
@@ -2494,7 +2645,7 @@ pub struct Id3Insertion {
     pub timecode: Option<String>,
 }
 
-/// <p>Enable the image inserter feature to include a graphic overlay on your video. Enable or disable this feature for each input or output individually. This setting is disabled by default.</p>
+/// <p>Use the image inserter feature to include a graphic overlay on your video. Enable or disable this feature for each input or output individually. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/graphic-overlay.html. This setting is disabled by default.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ImageInserter {
     /// <p>Specify the images that you want to overlay on your video. The images must be PNG or TGA files.</p>
@@ -2503,7 +2654,7 @@ pub struct ImageInserter {
     pub insertable_images: Option<Vec<InsertableImage>>,
 }
 
-/// <p>Settings specific to IMSC caption outputs.</p>
+/// <p>Settings related to IMSC captions. IMSC is a sidecar format that holds captions in a file that is separate from the video container. Set up sidecar captions in the same output group, but different output from your video. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/ttml-and-webvtt-output-captions.html. When you work directly in your JSON job specification, include this object and any required children when you set destinationType to IMSC.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ImscDestinationSettings {
     /// <p>Keep this setting enabled to have MediaConvert use the font style and position information from the captions source in the output. This option is available only when your input captions are IMSC, SMPTE-TT, or TTML. Disable this setting for simplified output captions.</p>
@@ -2512,10 +2663,10 @@ pub struct ImscDestinationSettings {
     pub style_passthrough: Option<String>,
 }
 
-/// <p>Specifies media input</p>
+/// <p>Use inputs to define the source files used in your transcoding job. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/specify-input-settings.html. You can use multiple video inputs to do input stitching. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/assembling-multiple-inputs-and-input-clips.html</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Input {
-    /// <p>Specifies set of audio selectors within an input to combine. An input may have multiple audio selector groups. See &quot;Audio Selector Group&quot;:#inputs-audio<em>selector</em>group for more information.</p>
+    /// <p>Use audio selector groups to combine multiple sidecar audio inputs so that you can assign them to a single output audio tab (AudioDescription). Note that, if you&#39;re working with embedded audio, it&#39;s simpler to assign multiple input tracks into a single audio selector rather than use an audio selector group.</p>
     #[serde(rename = "AudioSelectorGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_selector_groups: Option<::std::collections::HashMap<String, AudioSelectorGroup>>,
@@ -2591,13 +2742,13 @@ pub struct Input {
     #[serde(rename = "TimecodeStart")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timecode_start: Option<String>,
-    /// <p>Selector for video.</p>
+    /// <p>Input video selectors contain the video settings for the input. Each of your inputs can have up to one video selector.</p>
     #[serde(rename = "VideoSelector")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub video_selector: Option<VideoSelector>,
 }
 
-/// <p>To transcode only portions of your input (clips), include one Input clipping (one instance of InputClipping in the JSON job file) for each input clip. All input clips you specify will be included in every output of the job.</p>
+/// <p>To transcode only portions of your input, include one input clip for each part of your input that you want in your output. All input clips that you specify will be included in every output of the job. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/assembling-multiple-inputs-and-input-clips.html.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputClipping {
     /// <p>Set End timecode (EndTimecode) to the end of the portion of the input you are clipping. The frame corresponding to the End timecode value is included in the clip. Start timecode or End timecode may be left blank, but not both. Use the format HH:MM:SS:FF or HH:MM:SS;FF, where HH is the hour, MM is the minute, SS is the second, and FF is the frame number. When choosing this value, take into account your setting for timecode source under input settings (InputTimecodeSource). For example, if you have embedded timecodes that start at 01:00:00:00 and you want your clip to end six minutes into the video, use 01:06:00:00.</p>
@@ -2634,7 +2785,7 @@ pub struct InputDecryptionSettings {
 /// <p>Specified video input in a template.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputTemplate {
-    /// <p>Specifies set of audio selectors within an input to combine. An input may have multiple audio selector groups. See &quot;Audio Selector Group&quot;:#inputs-audio<em>selector</em>group for more information.</p>
+    /// <p>Use audio selector groups to combine multiple sidecar audio inputs so that you can assign them to a single output audio tab (AudioDescription). Note that, if you&#39;re working with embedded audio, it&#39;s simpler to assign multiple input tracks into a single audio selector rather than use an audio selector group.</p>
     #[serde(rename = "AudioSelectorGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_selector_groups: Option<::std::collections::HashMap<String, AudioSelectorGroup>>,
@@ -2698,13 +2849,13 @@ pub struct InputTemplate {
     #[serde(rename = "TimecodeStart")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timecode_start: Option<String>,
-    /// <p>Selector for video.</p>
+    /// <p>Input video selectors contain the video settings for the input. Each of your inputs can have up to one video selector.</p>
     #[serde(rename = "VideoSelector")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub video_selector: Option<VideoSelector>,
 }
 
-/// <p>Settings that specify how your still graphic overlay appears.</p>
+/// <p>These settings apply to a specific graphic overlay. You can include multiple overlays in your job.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InsertableImage {
     /// <p>Specify the time, in milliseconds, for the image to remain on the output video. This duration includes fade-in time but not fade-out time.</p>
@@ -2882,7 +3033,7 @@ pub struct JobSettings {
     #[serde(rename = "AvailBlanking")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub avail_blanking: Option<AvailBlanking>,
-    /// <p>Settings for Event Signaling And Messaging (ESAM).</p>
+    /// <p>Settings for Event Signaling And Messaging (ESAM). If you don&#39;t do ad insertion, you can ignore these settings.</p>
     #[serde(rename = "Esam")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub esam: Option<EsamSettings>,
@@ -2890,7 +3041,11 @@ pub struct JobSettings {
     #[serde(rename = "Inputs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inputs: Option<Vec<Input>>,
-    /// <p>Overlay motion graphics on top of your video. The motion graphics that you specify here appear on all outputs in all output groups.</p>
+    /// <p>Use these settings only when you use Kantar watermarking. Specify the values that MediaConvert uses to generate and place Kantar watermarks in your output audio. These settings apply to every output in your job. In addition to specifying these values, you also need to store your Kantar credentials in AWS Secrets Manager. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/kantar-watermarking.html.</p>
+    #[serde(rename = "KantarWatermark")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kantar_watermark: Option<KantarWatermarkSettings>,
+    /// <p>Overlay motion graphics on top of your video. The motion graphics that you specify here appear on all outputs in all output groups. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/motion-graphic-overlay.html.</p>
     #[serde(rename = "MotionImageInserter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub motion_image_inserter: Option<MotionImageInserter>,
@@ -2906,7 +3061,7 @@ pub struct JobSettings {
     #[serde(rename = "OutputGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_groups: Option<Vec<OutputGroup>>,
-    /// <p>Contains settings used to acquire and adjust timecode information from inputs.</p>
+    /// <p>These settings control how the service handles timecodes throughout the job. These settings don&#39;t affect input clipping.</p>
     #[serde(rename = "TimecodeConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timecode_config: Option<TimecodeConfig>,
@@ -2983,7 +3138,7 @@ pub struct JobTemplateSettings {
     #[serde(rename = "AvailBlanking")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub avail_blanking: Option<AvailBlanking>,
-    /// <p>Settings for Event Signaling And Messaging (ESAM).</p>
+    /// <p>Settings for Event Signaling And Messaging (ESAM). If you don&#39;t do ad insertion, you can ignore these settings.</p>
     #[serde(rename = "Esam")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub esam: Option<EsamSettings>,
@@ -2991,7 +3146,11 @@ pub struct JobTemplateSettings {
     #[serde(rename = "Inputs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inputs: Option<Vec<InputTemplate>>,
-    /// <p>Overlay motion graphics on top of your video. The motion graphics that you specify here appear on all outputs in all output groups.</p>
+    /// <p>Use these settings only when you use Kantar watermarking. Specify the values that MediaConvert uses to generate and place Kantar watermarks in your output audio. These settings apply to every output in your job. In addition to specifying these values, you also need to store your Kantar credentials in AWS Secrets Manager. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/kantar-watermarking.html.</p>
+    #[serde(rename = "KantarWatermark")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kantar_watermark: Option<KantarWatermarkSettings>,
+    /// <p>Overlay motion graphics on top of your video. The motion graphics that you specify here appear on all outputs in all output groups. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/motion-graphic-overlay.html.</p>
     #[serde(rename = "MotionImageInserter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub motion_image_inserter: Option<MotionImageInserter>,
@@ -3007,7 +3166,7 @@ pub struct JobTemplateSettings {
     #[serde(rename = "OutputGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_groups: Option<Vec<OutputGroup>>,
-    /// <p>Contains settings used to acquire and adjust timecode information from inputs.</p>
+    /// <p>These settings control how the service handles timecodes throughout the job. These settings don&#39;t affect input clipping.</p>
     #[serde(rename = "TimecodeConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timecode_config: Option<TimecodeConfig>,
@@ -3015,6 +3174,63 @@ pub struct JobTemplateSettings {
     #[serde(rename = "TimedMetadataInsertion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timed_metadata_insertion: Option<TimedMetadataInsertion>,
+}
+
+/// <p>Use these settings only when you use Kantar watermarking. Specify the values that MediaConvert uses to generate and place Kantar watermarks in your output audio. These settings apply to every output in your job. In addition to specifying these values, you also need to store your Kantar credentials in AWS Secrets Manager. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/kantar-watermarking.html.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct KantarWatermarkSettings {
+    /// <p>Provide an audio channel name from your Kantar audio license.</p>
+    #[serde(rename = "ChannelName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_name: Option<String>,
+    /// <p>Specify a unique identifier for Kantar to use for this piece of content.</p>
+    #[serde(rename = "ContentReference")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_reference: Option<String>,
+    /// <p>Provide the name of the AWS Secrets Manager secret where your Kantar credentials are stored. Note that your MediaConvert service role must provide access to this secret. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/granting-permissions-for-mediaconvert-to-access-secrets-manager-secret.html. For instructions on creating a secret, see https://docs.aws.amazon.com/secretsmanager/latest/userguide/tutorials_basic.html, in the AWS Secrets Manager User Guide.</p>
+    #[serde(rename = "CredentialsSecretName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub credentials_secret_name: Option<String>,
+    /// <p>Optional. Specify an offset, in whole seconds, from the start of your output and the beginning of the watermarking. When you don&#39;t specify an offset, Kantar defaults to zero.</p>
+    #[serde(rename = "FileOffset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_offset: Option<f64>,
+    /// <p>Provide your Kantar license ID number. You should get this number from Kantar.</p>
+    #[serde(rename = "KantarLicenseId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kantar_license_id: Option<i64>,
+    /// <p>Provide the HTTPS endpoint to the Kantar server. You should get this endpoint from Kantar.</p>
+    #[serde(rename = "KantarServerUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kantar_server_url: Option<String>,
+    /// <p>Optional. Specify the Amazon S3 bucket where you want MediaConvert to store your Kantar watermark XML logs. When you don&#39;t specify a bucket, MediaConvert doesn&#39;t save these logs. Note that your MediaConvert service role must provide access to this location. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/iam-role.html</p>
+    #[serde(rename = "LogDestination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_destination: Option<String>,
+    /// <p>You can optionally use this field to specify the first timestamp that Kantar embeds during watermarking. Kantar suggests that you be very cautious when using this Kantar feature, and that you use it only on channels that are managed specifically for use with this feature by your Audience Measurement Operator. For more information about this feature, contact Kantar technical support.</p>
+    #[serde(rename = "Metadata3")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_3: Option<String>,
+    /// <p>Additional metadata that MediaConvert sends to Kantar. Maximum length is 50 characters.</p>
+    #[serde(rename = "Metadata4")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_4: Option<String>,
+    /// <p>Additional metadata that MediaConvert sends to Kantar. Maximum length is 50 characters.</p>
+    #[serde(rename = "Metadata5")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_5: Option<String>,
+    /// <p>Additional metadata that MediaConvert sends to Kantar. Maximum length is 50 characters.</p>
+    #[serde(rename = "Metadata6")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_6: Option<String>,
+    /// <p>Additional metadata that MediaConvert sends to Kantar. Maximum length is 50 characters.</p>
+    #[serde(rename = "Metadata7")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_7: Option<String>,
+    /// <p>Additional metadata that MediaConvert sends to Kantar. Maximum length is 50 characters.</p>
+    #[serde(rename = "Metadata8")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metadata_8: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3218,11 +3434,11 @@ pub struct M2tsSettings {
     #[serde(rename = "BufferModel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub buffer_model: Option<String>,
-    /// <p>Inserts DVB Network Information Table (NIT) at the specified table repetition interval.</p>
+    /// <p>Use these settings to insert a DVB Network Information Table (NIT) in the transport stream of this output. When you work directly in your JSON job specification, include this object only when your job has a transport stream output and the container settings contain the object M2tsSettings.</p>
     #[serde(rename = "DvbNitSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dvb_nit_settings: Option<DvbNitSettings>,
-    /// <p>Inserts DVB Service Description Table (NIT) at the specified table repetition interval.</p>
+    /// <p>Use these settings to insert a DVB Service Description Table (SDT) in the transport stream of this output. When you work directly in your JSON job specification, include this object only when your job has a transport stream output and the container settings contain the object M2tsSettings.</p>
     #[serde(rename = "DvbSdtSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dvb_sdt_settings: Option<DvbSdtSettings>,
@@ -3230,7 +3446,7 @@ pub struct M2tsSettings {
     #[serde(rename = "DvbSubPids")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dvb_sub_pids: Option<Vec<i64>>,
-    /// <p>Inserts DVB Time and Date Table (TDT) at the specified table repetition interval.</p>
+    /// <p>Use these settings to insert a DVB Time and Date Table (TDT) in the transport stream of this output. When you work directly in your JSON job specification, include this object only when your job has a transport stream output and the container settings contain the object M2tsSettings.</p>
     #[serde(rename = "DvbTdtSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dvb_tdt_settings: Option<DvbTdtSettings>,
@@ -3344,7 +3560,7 @@ pub struct M2tsSettings {
     pub video_pid: Option<i64>,
 }
 
-/// <p>Settings for TS segments in HLS</p>
+/// <p>These settings relate to the MPEG-2 transport stream (MPEG2-TS) container for the MPEG2-TS segments in your HLS outputs.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct M3u8Settings {
     /// <p>Specify this setting only when your output will be consumed by a downstream repackaging workflow that is sensitive to very small duration differences between video and audio. For this situation, choose Match video duration (MATCH<em>VIDEO</em>DURATION). In all other cases, keep the default value, Default codec duration (DEFAULT<em>CODEC</em>DURATION). When you choose Match video duration, MediaConvert pads the output audio streams with silence or trims them to ensure that the total duration of each audio stream is at least as long as the total duration of the video stream. After padding or trimming, the audio stream duration is no more than one frame longer than the video stream. MediaConvert applies audio padding or trimming only to the end of the last segment of the output. For unsegmented outputs, MediaConvert adds padding only to the end of the file. When you keep the default value, any minor discrepancies between audio and video duration will depend on your output audio codec.</p>
@@ -3359,6 +3575,10 @@ pub struct M3u8Settings {
     #[serde(rename = "AudioPids")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_pids: Option<Vec<i64>>,
+    /// <p>Specify the maximum time, in milliseconds, between Program Clock References (PCRs) inserted into the transport stream.</p>
+    #[serde(rename = "MaxPcrInterval")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_pcr_interval: Option<i64>,
     /// <p>If INSERT, Nielsen inaudible tones for media tracking will be detected in the input audio and an equivalent ID3 tag will be inserted in the output.</p>
     #[serde(rename = "NielsenId3")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3417,7 +3637,7 @@ pub struct M3u8Settings {
     pub video_pid: Option<i64>,
 }
 
-/// <p>Overlay motion graphics on top of your video at the time that you specify.</p>
+/// <p>Overlay motion graphics on top of your video. The motion graphics that you specify here appear on all outputs in all output groups. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/motion-graphic-overlay.html.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MotionImageInserter {
     /// <p>If your motion graphic asset is a .mov file, keep this setting unspecified. If your motion graphic asset is a series of .png files, specify the frame rate of the overlay in frames per second, as a fraction. For example, specify 24 fps as 24/1. Make sure that the number of images in your series matches the frame rate and your intended overlay duration. For example, if you want a 30-second overlay at 30 fps, you should have 900 .png images. This overlay frame rate doesn&#39;t need to match the frame rate of the underlying video.</p>
@@ -3472,7 +3692,7 @@ pub struct MotionImageInsertionOffset {
     pub image_y: Option<i64>,
 }
 
-/// <p>Settings for MOV Container.</p>
+/// <p>These settings relate to your QuickTime MOV output container.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MovSettings {
     /// <p>When enabled, include &#39;clap&#39; atom if appropriate for the video output settings.</p>
@@ -3539,7 +3759,7 @@ pub struct Mp3Settings {
     pub vbr_quality: Option<i64>,
 }
 
-/// <p>Settings for MP4 container. You can create audio-only AAC outputs with this container.</p>
+/// <p>These settings relate to your MP4 output container. You can create audio only outputs with this container. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/supported-codecs-containers-audio-only.html#output-codecs-and-containers-supported-for-audio-only.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Mp4Settings {
     /// <p>Specify this setting only when your output will be consumed by a downstream repackaging workflow that is sensitive to very small duration differences between video and audio. For this situation, choose Match video duration (MATCH<em>VIDEO</em>DURATION). In all other cases, keep the default value, Default codec duration (DEFAULT<em>CODEC</em>DURATION). When you choose Match video duration, MediaConvert pads the output audio streams with silence or trims them to ensure that the total duration of each audio stream is at least as long as the total duration of the video stream. After padding or trimming, the audio stream duration is no more than one frame longer than the video stream. MediaConvert applies audio padding or trimming only to the end of the last segment of the output. For unsegmented outputs, MediaConvert adds padding only to the end of the file. When you keep the default value, any minor discrepancies between audio and video duration will depend on your output audio codec.</p>
@@ -3568,7 +3788,7 @@ pub struct Mp4Settings {
     pub mp_4_major_brand: Option<String>,
 }
 
-/// <p>Settings for MP4 segments in DASH</p>
+/// <p>These settings relate to the fragmented MP4 container for the segments in your DASH outputs.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MpdSettings {
     /// <p>Optional. Choose Include (INCLUDE) to have MediaConvert mark up your DASH manifest with <Accessibility> elements for embedded 608 captions. This markup isn&#39;t generally required, but some video players require it to discover and play embedded 608 captions. Keep the default value, Exclude (EXCLUDE), to leave these elements out. When you enable this setting, this is the markup that MediaConvert includes in your manifest: <Accessibility schemeIdUri="urn:scte:dash:cc:cea-608:2015" value="CC1=eng"/></p>
@@ -3688,10 +3908,14 @@ pub struct Mpeg2Settings {
     #[serde(rename = "QualityTuningLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quality_tuning_level: Option<String>,
-    /// <p>Use Rate control mode (Mpeg2RateControlMode) to specifiy whether the bitrate is variable (vbr) or constant (cbr).</p>
+    /// <p>Use Rate control mode (Mpeg2RateControlMode) to specify whether the bitrate is variable (vbr) or constant (cbr).</p>
     #[serde(rename = "RateControlMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rate_control_mode: Option<String>,
+    /// <p>Use this setting for interlaced outputs, when your output frame rate is half of your input frame rate. In this situation, choose Optimized interlacing (INTERLACED_OPTIMIZE) to create a better quality interlaced output. In this case, each progressive frame from the input corresponds to an interlaced field in the output. Keep the default value, Basic interlacing (INTERLACED), for all other output frame rates. With basic interlacing, MediaConvert performs any frame rate conversion first and then interlaces the frames. When you choose Optimized interlacing and you set your output frame rate to a value that isn&#39;t suitable for optimized interlacing, MediaConvert automatically falls back to basic interlacing. Required settings: To use optimized interlacing, you must set Telecine (telecine) to None (NONE) or Soft (SOFT). You can&#39;t use optimized interlacing for hard telecine outputs. You must also set Interlace mode (interlaceMode) to a value other than Progressive (PROGRESSIVE).</p>
+    #[serde(rename = "ScanTypeConversionMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scan_type_conversion_mode: Option<String>,
     /// <p>Enable this setting to insert I-frames at scene changes that the service automatically detects. This improves video quality and is enabled by default.</p>
     #[serde(rename = "SceneChangeDetect")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3744,7 +3968,7 @@ pub struct MsSmoothEncryptionSettings {
     pub speke_key_provider: Option<SpekeKeyProvider>,
 }
 
-/// <p>Required when you set (Type) under (OutputGroups)&gt;(OutputGroupSettings) to MS<em>SMOOTH</em>GROUP_SETTINGS.</p>
+/// <p>Settings related to your Microsoft Smooth Streaming output package. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/outputs-file-ABR.html. When you work directly in your JSON job specification, include this object and any required children when you set Type, under OutputGroupSettings, to MS<em>SMOOTH</em>GROUP_SETTINGS.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MsSmoothGroupSettings {
     /// <p>By default, the service creates one .ism Microsoft Smooth Streaming manifest for each Microsoft Smooth Streaming output group in your job. This default manifest references every output in the output group. To create additional manifests that reference a subset of the outputs in the output group, specify a list of them here.</p>
@@ -3777,7 +4001,7 @@ pub struct MsSmoothGroupSettings {
     pub manifest_encoding: Option<String>,
 }
 
-/// <p>MXF settings</p>
+/// <p>These settings relate to your MXF output container.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct MxfSettings {
     /// <p>Optional. When you have AFD signaling set up in your output video stream, use this setting to choose whether to also include it in the MXF wrapper. Choose Don&#39;t copy (NO<em>COPY) to exclude AFD signaling from the MXF wrapper. Choose Copy from video stream (COPY</em>FROM_VIDEO) to copy the AFD values from the video stream for this output to the MXF wrapper. Regardless of which option you choose, the AFD values remain in the video stream. Related settings: To set up your output to include or exclude AFD values, see AfdSignaling, under VideoDescription. On the console, find AFD signaling under the output&#39;s video encoding settings.</p>
@@ -3788,6 +4012,23 @@ pub struct MxfSettings {
     #[serde(rename = "Profile")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub profile: Option<String>,
+    /// <p>Specify the XAVC profile settings for MXF outputs when you set your MXF profile to XAVC.</p>
+    #[serde(rename = "XavcProfileSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub xavc_profile_settings: Option<MxfXavcProfileSettings>,
+}
+
+/// <p>Specify the XAVC profile settings for MXF outputs when you set your MXF profile to XAVC.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct MxfXavcProfileSettings {
+    /// <p>To create an output that complies with the XAVC file format guidelines for interoperability, keep the default value, Drop frames for compliance (DROP<em>FRAMES</em>FOR<em>COMPLIANCE). To include all frames from your input in this output, keep the default setting, Allow any duration (ALLOW</em>ANY_DURATION). The number of frames that MediaConvert excludes when you set this to Drop frames for compliance depends on the output frame rate and duration.</p>
+    #[serde(rename = "DurationMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub duration_mode: Option<String>,
+    /// <p>Specify a value for this setting only for outputs that you set up with one of these two XAVC profiles: XAVC HD Intra CBG (XAVC<em>HD</em>INTRA<em>CBG) or XAVC 4K Intra CBG (XAVC</em>4K<em>INTRA</em>CBG). Specify the amount of space in each frame that the service reserves for ancillary data, such as teletext captions. The default value for this setting is 1492 bytes per frame. This should be sufficient to prevent overflow unless you have multiple pages of teletext captions data. If you have a large amount of teletext data, specify a larger number.</p>
+    #[serde(rename = "MaxAncDataSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_anc_data_size: Option<i64>,
 }
 
 /// <p>For forensic video watermarking, MediaConvert supports Nagra NexGuard File Marker watermarking. MediaConvert supports both PreRelease Content (NGPR/G2) and OTT Streaming workflows.</p>
@@ -3958,7 +4199,7 @@ pub struct OpusSettings {
     pub sample_rate: Option<i64>,
 }
 
-/// <p>An output object describes the settings for a single output file or stream in an output group.</p>
+/// <p>Each output in your job is a collection of settings that describes how you want MediaConvert to encode a single output file or stream. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/create-outputs.html.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Output {
     /// <p>(AudioDescriptions) contains groups of audio encoding settings organized by audio codec. Include one instance of (AudioDescriptions) per output. (AudioDescriptions) can contain multiple groups of encoding settings.</p>
@@ -3985,11 +4226,11 @@ pub struct Output {
     #[serde(rename = "OutputSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_settings: Option<OutputSettings>,
-    /// <p>Use Preset (Preset) to specifiy a preset for your transcoding settings. Provide the system or custom preset name. You can specify either Preset (Preset) or Container settings (ContainerSettings), but not both.</p>
+    /// <p>Use Preset (Preset) to specify a preset for your transcoding settings. Provide the system or custom preset name. You can specify either Preset (Preset) or Container settings (ContainerSettings), but not both.</p>
     #[serde(rename = "Preset")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub preset: Option<String>,
-    /// <p>(VideoDescription) contains a group of video encoding settings. The specific video settings depend on the video codec that you choose when you specify a value for Video codec (codec). Include one instance of (VideoDescription) per output.</p>
+    /// <p>VideoDescription contains a group of video encoding settings. The specific video settings depend on the video codec that you choose for the property codec. Include one instance of VideoDescription per output.</p>
     #[serde(rename = "VideoDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub video_description: Option<VideoDescription>,
@@ -3998,10 +4239,14 @@ pub struct Output {
 /// <p>OutputChannel mapping settings.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OutputChannelMapping {
-    /// <p>List of input channels</p>
+    /// <p>Use this setting to specify your remix values when they are integers, such as -10, 0, or 4.</p>
     #[serde(rename = "InputChannels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_channels: Option<Vec<i64>>,
+    /// <p>Use this setting to specify your remix values when they have a decimal component, such as -10.312, 0.08, or 4.9. MediaConvert rounds your remixing values to the nearest thousandth.</p>
+    #[serde(rename = "InputChannelsFineTune")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_channels_fine_tune: Option<Vec<f64>>,
 }
 
 /// <p>Details regarding output</p>
@@ -4056,23 +4301,23 @@ pub struct OutputGroupDetail {
 /// <p>Output Group settings, including type</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct OutputGroupSettings {
-    /// <p>Required when you set (Type) under (OutputGroups)&gt;(OutputGroupSettings) to CMAF<em>GROUP</em>SETTINGS. Each output in a CMAF Output Group may only contain a single video, audio, or caption output.</p>
+    /// <p>Settings related to your CMAF output package. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/outputs-file-ABR.html. When you work directly in your JSON job specification, include this object and any required children when you set Type, under OutputGroupSettings, to CMAF<em>GROUP</em>SETTINGS.</p>
     #[serde(rename = "CmafGroupSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cmaf_group_settings: Option<CmafGroupSettings>,
-    /// <p>Required when you set (Type) under (OutputGroups)&gt;(OutputGroupSettings) to DASH<em>ISO</em>GROUP_SETTINGS.</p>
+    /// <p>Settings related to your DASH output package. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/outputs-file-ABR.html. When you work directly in your JSON job specification, include this object and any required children when you set Type, under OutputGroupSettings, to DASH<em>ISO</em>GROUP_SETTINGS.</p>
     #[serde(rename = "DashIsoGroupSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dash_iso_group_settings: Option<DashIsoGroupSettings>,
-    /// <p>Required when you set (Type) under (OutputGroups)&gt;(OutputGroupSettings) to FILE<em>GROUP</em>SETTINGS.</p>
+    /// <p>Settings related to your File output group. MediaConvert uses this group of settings to generate a single standalone file, rather than a streaming package. When you work directly in your JSON job specification, include this object and any required children when you set Type, under OutputGroupSettings, to FILE<em>GROUP</em>SETTINGS.</p>
     #[serde(rename = "FileGroupSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_group_settings: Option<FileGroupSettings>,
-    /// <p>Required when you set (Type) under (OutputGroups)&gt;(OutputGroupSettings) to HLS<em>GROUP</em>SETTINGS.</p>
+    /// <p>Settings related to your HLS output package. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/outputs-file-ABR.html. When you work directly in your JSON job specification, include this object and any required children when you set Type, under OutputGroupSettings, to HLS<em>GROUP</em>SETTINGS.</p>
     #[serde(rename = "HlsGroupSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hls_group_settings: Option<HlsGroupSettings>,
-    /// <p>Required when you set (Type) under (OutputGroups)&gt;(OutputGroupSettings) to MS<em>SMOOTH</em>GROUP_SETTINGS.</p>
+    /// <p>Settings related to your Microsoft Smooth Streaming output package. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/outputs-file-ABR.html. When you work directly in your JSON job specification, include this object and any required children when you set Type, under OutputGroupSettings, to MS<em>SMOOTH</em>GROUP_SETTINGS.</p>
     #[serde(rename = "MsSmoothGroupSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ms_smooth_group_settings: Option<MsSmoothGroupSettings>,
@@ -4143,7 +4388,7 @@ pub struct PresetSettings {
     #[serde(rename = "AudioDescriptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_descriptions: Option<Vec<AudioDescription>>,
-    /// <p>Caption settings for this preset. There can be multiple caption settings in a single output.</p>
+    /// <p>This object holds groups of settings related to captions for one output. For each output that has captions, include one instance of CaptionDescriptions.</p>
     #[serde(rename = "CaptionDescriptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub caption_descriptions: Option<Vec<CaptionDescriptionPreset>>,
@@ -4151,7 +4396,7 @@ pub struct PresetSettings {
     #[serde(rename = "ContainerSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub container_settings: Option<ContainerSettings>,
-    /// <p>(VideoDescription) contains a group of video encoding settings. The specific video settings depend on the video codec that you choose when you specify a value for Video codec (codec). Include one instance of (VideoDescription) per output.</p>
+    /// <p>VideoDescription contains a group of video encoding settings. The specific video settings depend on the video codec that you choose for the property codec. Include one instance of VideoDescription per output.</p>
     #[serde(rename = "VideoDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub video_description: Option<VideoDescription>,
@@ -4160,7 +4405,11 @@ pub struct PresetSettings {
 /// <p>Required when you set (Codec) under (VideoDescription)&gt;(CodecSettings) to the value PRORES.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ProresSettings {
-    /// <p>Use Profile (ProResCodecProfile) to specifiy the type of Apple ProRes codec to use for this output.</p>
+    /// <p>This setting applies only to ProRes 4444 and ProRes 4444 XQ outputs that you create from inputs that use 4:4:4 chroma sampling. Set Preserve 4:4:4 sampling (PRESERVE<em>444</em>SAMPLING) to allow outputs to also use 4:4:4 chroma sampling. You must specify a value for this setting when your output codec profile supports 4:4:4 chroma sampling. Related Settings: When you set Chroma sampling to Preserve 4:4:4 sampling (PRESERVE<em>444</em>SAMPLING), you must choose an output codec profile that supports 4:4:4 chroma sampling. These values for Profile (CodecProfile) support 4:4:4 chroma sampling: Apple ProRes 4444 (APPLE<em>PRORES</em>4444) or Apple ProRes 4444 XQ (APPLE<em>PRORES</em>4444<em>XQ). When you set Chroma sampling to Preserve 4:4:4 sampling, you must disable all video preprocessors except for Nexguard file marker (PartnerWatermarking). When you set Chroma sampling to Preserve 4:4:4 sampling and use framerate conversion, you must set Frame rate conversion algorithm (FramerateConversionAlgorithm) to Drop duplicate (DUPLICATE</em>DROP).</p>
+    #[serde(rename = "ChromaSampling")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chroma_sampling: Option<String>,
+    /// <p>Use Profile (ProResCodecProfile) to specify the type of Apple ProRes codec to use for this output.</p>
     #[serde(rename = "CodecProfile")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub codec_profile: Option<String>,
@@ -4196,6 +4445,10 @@ pub struct ProresSettings {
     #[serde(rename = "ParNumerator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub par_numerator: Option<i64>,
+    /// <p>Use this setting for interlaced outputs, when your output frame rate is half of your input frame rate. In this situation, choose Optimized interlacing (INTERLACED_OPTIMIZE) to create a better quality interlaced output. In this case, each progressive frame from the input corresponds to an interlaced field in the output. Keep the default value, Basic interlacing (INTERLACED), for all other output frame rates. With basic interlacing, MediaConvert performs any frame rate conversion first and then interlaces the frames. When you choose Optimized interlacing and you set your output frame rate to a value that isn&#39;t suitable for optimized interlacing, MediaConvert automatically falls back to basic interlacing. Required settings: To use optimized interlacing, you must set Telecine (telecine) to None (NONE) or Soft (SOFT). You can&#39;t use optimized interlacing for hard telecine outputs. You must also set Interlace mode (interlaceMode) to a value other than Progressive (PROGRESSIVE).</p>
+    #[serde(rename = "ScanTypeConversionMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scan_type_conversion_mode: Option<String>,
     /// <p>Ignore this setting unless your input frame rate is 23.976 or 24 frames per second (fps). Enable slow PAL to create a 25 fps output. When you enable slow PAL, MediaConvert relabels the video frames to 25 fps and resamples your audio to keep it synchronized with the video. Note that enabling this setting will slightly reduce the duration of your video. Required settings: You must also set Framerate to 25. In your JSON job specification, set (framerateControl) to (SPECIFIED), (framerateNumerator) to 25 and (framerateDenominator) to 1.</p>
     #[serde(rename = "SlowPal")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4297,15 +4550,15 @@ pub struct Rectangle {
 /// <p>Use Manual audio remixing (RemixSettings) to adjust audio levels for each audio channel in each output of your job. With audio remixing, you can output more or fewer audio channels than your input audio source provides.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RemixSettings {
-    /// <p>Channel mapping (ChannelMapping) contains the group of fields that hold the remixing value for each channel. Units are in dB. Acceptable values are within the range from -60 (mute) through 6. A setting of 0 passes the input channel unchanged to the output channel (no attenuation or amplification).</p>
+    /// <p>Channel mapping (ChannelMapping) contains the group of fields that hold the remixing value for each channel, in dB. Specify remix values to indicate how much of the content from your input audio channel you want in your output audio channels. Each instance of the InputChannels or InputChannelsFineTune array specifies these values for one output channel. Use one instance of this array for each output channel. In the console, each array corresponds to a column in the graphical depiction of the mapping matrix. The rows of the graphical matrix correspond to input channels. Valid values are within the range from -60 (mute) through 6. A setting of 0 passes the input channel unchanged to the output channel (no attenuation or amplification). Use InputChannels or InputChannelsFineTune to specify your remix values. Don&#39;t use both.</p>
     #[serde(rename = "ChannelMapping")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_mapping: Option<ChannelMapping>,
-    /// <p>Specify the number of audio channels from your input that you want to use in your output. With remixing, you might combine or split the data in these channels, so the number of channels in your final output might be different.</p>
+    /// <p>Specify the number of audio channels from your input that you want to use in your output. With remixing, you might combine or split the data in these channels, so the number of channels in your final output might be different. If you are doing both input channel mapping and output channel mapping, the number of output channels in your input mapping must be the same as the number of input channels in your output mapping.</p>
     #[serde(rename = "ChannelsIn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channels_in: Option<i64>,
-    /// <p>Specify the number of channels in this output after remixing. Valid values: 1, 2, 4, 6, 8... 64. (1 and even numbers to 64.)</p>
+    /// <p>Specify the number of channels in this output after remixing. Valid values: 1, 2, 4, 6, 8... 64. (1 and even numbers to 64.) If you are doing both input channel mapping and output channel mapping, the number of output channels in your input mapping must be the same as the number of input channels in your output mapping.</p>
     #[serde(rename = "ChannelsOut")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channels_out: Option<i64>,
@@ -4405,7 +4658,7 @@ pub struct S3EncryptionSettings {
     pub kms_key_arn: Option<String>,
 }
 
-/// <p>Settings for SCC caption output.</p>
+/// <p>Settings related to SCC captions. SCC is a sidecar format that holds captions in a file that is separate from the video container. Set up sidecar captions in the same output group, but different output from your video. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/scc-srt-output-captions.html. When you work directly in your JSON job specification, include this object and any required children when you set destinationType to SCC.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SccDestinationSettings {
     /// <p>Set Framerate (SccDestinationFramerate) to make sure that the captions and the video are synchronized in the output. Specify a frame rate that matches the frame rate of the associated video. If the video frame rate is 29.97, choose 29.97 dropframe (FRAMERATE<em>29</em>97<em>DROPFRAME) only if the video has video</em>insertion=true and drop<em>frame</em>timecode=true; otherwise, choose 29.97 non-dropframe (FRAMERATE<em>29</em>97<em>NON</em>DROPFRAME).</p>
@@ -4497,7 +4750,7 @@ pub struct TagResourceRequest {
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
 
-/// <p>Settings for Teletext caption output</p>
+/// <p>Settings related to teletext captions. Set up teletext captions in the same output as your video. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/teletext-output-captions.html. When you work directly in your JSON job specification, include this object and any required children when you set destinationType to TELETEXT.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TeletextDestinationSettings {
     /// <p>Set pageNumber to the Teletext page number for the destination captions for this output. This value must be a three-digit hexadecimal string; strings ending in -FF are invalid. If you are passing through the entire set of Teletext data, do not use this field.</p>
@@ -4519,7 +4772,7 @@ pub struct TeletextSourceSettings {
     pub page_number: Option<String>,
 }
 
-/// <p>Timecode burn-in (TimecodeBurnIn)--Burns the output timecode and specified prefix into the output.</p>
+/// <p>Settings for burning the output timecode and specified prefix into the output.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TimecodeBurnin {
     /// <p>Use Font Size (FontSize) to set the font size of any burned-in timecode. Valid values are 10, 16, 32, 48.</p>
@@ -4593,10 +4846,10 @@ pub struct TrackSourceSettings {
     pub track_number: Option<i64>,
 }
 
-/// <p>Settings specific to TTML caption outputs, including Pass style information (TtmlStylePassthrough).</p>
+/// <p>Settings related to TTML captions. TTML is a sidecar format that holds captions in a file that is separate from the video container. Set up sidecar captions in the same output group, but different output from your video. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/ttml-and-webvtt-output-captions.html. When you work directly in your JSON job specification, include this object and any required children when you set destinationType to TTML.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct TtmlDestinationSettings {
-    /// <p>Pass through style and position information from a TTML-like input source (TTML, SMPTE-TT) to the TTML output.</p>
+    /// <p>Pass through style and position information from a TTML-like input source (TTML, IMSC, SMPTE-TT) to the TTML output.</p>
     #[serde(rename = "StylePassthrough")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub style_passthrough: Option<String>,
@@ -4748,6 +5001,10 @@ pub struct Vc3Settings {
     #[serde(rename = "InterlaceMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub interlace_mode: Option<String>,
+    /// <p>Use this setting for interlaced outputs, when your output frame rate is half of your input frame rate. In this situation, choose Optimized interlacing (INTERLACED_OPTIMIZE) to create a better quality interlaced output. In this case, each progressive frame from the input corresponds to an interlaced field in the output. Keep the default value, Basic interlacing (INTERLACED), for all other output frame rates. With basic interlacing, MediaConvert performs any frame rate conversion first and then interlaces the frames. When you choose Optimized interlacing and you set your output frame rate to a value that isn&#39;t suitable for optimized interlacing, MediaConvert automatically falls back to basic interlacing. Required settings: To use optimized interlacing, you must set Telecine (telecine) to None (NONE) or Soft (SOFT). You can&#39;t use optimized interlacing for hard telecine outputs. You must also set Interlace mode (interlaceMode) to a value other than Progressive (PROGRESSIVE).</p>
+    #[serde(rename = "ScanTypeConversionMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scan_type_conversion_mode: Option<String>,
     /// <p>Ignore this setting unless your input frame rate is 23.976 or 24 frames per second (fps). Enable slow PAL to create a 25 fps output by relabeling the video frames and resampling your audio. Note that enabling this setting will slightly reduce the duration of your video. Related settings: You must also set Framerate to 25. In your JSON job specification, set (framerateControl) to (SPECIFIED), (framerateNumerator) to 25 and (framerateDenominator) to 1.</p>
     #[serde(rename = "SlowPal")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4762,14 +5019,14 @@ pub struct Vc3Settings {
     pub vc_3_class: Option<String>,
 }
 
-/// <p>Video codec settings, (CodecSettings) under (VideoDescription), contains the group of settings related to video encoding. The settings in this group vary depending on the value that you choose for Video codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * AV1, Av1Settings * AVC<em>INTRA, AvcIntraSettings * FRAME</em>CAPTURE, FrameCaptureSettings * H<em>264, H264Settings * H</em>265, H265Settings * MPEG2, Mpeg2Settings * PRORES, ProresSettings * VC3, Vc3Settings * VP8, Vp8Settings * VP9, Vp9Settings</p>
+/// <p>Video codec settings, (CodecSettings) under (VideoDescription), contains the group of settings related to video encoding. The settings in this group vary depending on the value that you choose for Video codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * AV1, Av1Settings * AVC<em>INTRA, AvcIntraSettings * FRAME</em>CAPTURE, FrameCaptureSettings * H<em>264, H264Settings * H</em>265, H265Settings * MPEG2, Mpeg2Settings * PRORES, ProresSettings * VC3, Vc3Settings * VP8, Vp8Settings * VP9, Vp9Settings * XAVC, XavcSettings</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VideoCodecSettings {
     /// <p>Required when you set Codec, under VideoDescription&gt;CodecSettings to the value AV1.</p>
     #[serde(rename = "Av1Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub av_1_settings: Option<Av1Settings>,
-    /// <p>Required when you set your output video codec to AVC-Intra. For more information about the AVC-I settings, see the relevant specification. For detailed information about SD and HD in AVC-I, see https://ieeexplore.ieee.org/document/7290936.</p>
+    /// <p>Required when you choose AVC-Intra for your output video codec. For more information about the AVC-Intra settings, see the relevant specification. For detailed information about SD and HD in AVC-Intra, see https://ieeexplore.ieee.org/document/7290936. For information about 4K/2K in AVC-Intra, see https://pro-av.panasonic.net/en/avc-ultra/AVC-ULTRAoverview.pdf.</p>
     #[serde(rename = "AvcIntraSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub avc_intra_settings: Option<AvcIntraSettings>,
@@ -4809,9 +5066,13 @@ pub struct VideoCodecSettings {
     #[serde(rename = "Vp9Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vp_9_settings: Option<Vp9Settings>,
+    /// <p>Required when you set (Codec) under (VideoDescription)&gt;(CodecSettings) to the value XAVC.</p>
+    #[serde(rename = "XavcSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub xavc_settings: Option<XavcSettings>,
 }
 
-/// <p>Settings for video outputs</p>
+/// <p>Settings related to video encoding of your output. The specific video settings depend on the video codec that you choose. When you work directly in your JSON job specification, include one instance of Video description (VideoDescription) per output.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VideoDescription {
     /// <p>This setting only applies to H.264, H.265, and MPEG2 outputs. Use Insert AFD signaling (AfdSignaling) to specify whether the service includes AFD values in the output video data and what those values are. * Choose None to remove all AFD values from this output. * Choose Fixed to ignore input AFD values and instead encode the value specified in the job. * Choose Auto to calculate output AFD values based on the input AFD scaler data.</p>
@@ -4822,7 +5083,7 @@ pub struct VideoDescription {
     #[serde(rename = "AntiAlias")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub anti_alias: Option<String>,
-    /// <p>Video codec settings, (CodecSettings) under (VideoDescription), contains the group of settings related to video encoding. The settings in this group vary depending on the value that you choose for Video codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * AV1, Av1Settings * AVC<em>INTRA, AvcIntraSettings * FRAME</em>CAPTURE, FrameCaptureSettings * H<em>264, H264Settings * H</em>265, H265Settings * MPEG2, Mpeg2Settings * PRORES, ProresSettings * VC3, Vc3Settings * VP8, Vp8Settings * VP9, Vp9Settings</p>
+    /// <p>Video codec settings, (CodecSettings) under (VideoDescription), contains the group of settings related to video encoding. The settings in this group vary depending on the value that you choose for Video codec (Codec). For each codec enum that you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * AV1, Av1Settings * AVC<em>INTRA, AvcIntraSettings * FRAME</em>CAPTURE, FrameCaptureSettings * H<em>264, H264Settings * H</em>265, H265Settings * MPEG2, Mpeg2Settings * PRORES, ProresSettings * VC3, Vc3Settings * VP8, Vp8Settings * VP9, Vp9Settings * XAVC, XavcSettings</p>
     #[serde(rename = "CodecSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub codec_settings: Option<VideoCodecSettings>,
@@ -4893,11 +5154,11 @@ pub struct VideoDetail {
 /// <p>Find additional transcoding features under Preprocessors (VideoPreprocessors). Enable the features at each output individually. These features are disabled by default.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VideoPreprocessor {
-    /// <p>Enable the Color corrector (ColorCorrector) feature if necessary. Enable or disable this feature for each output individually. This setting is disabled by default.</p>
+    /// <p>Use these settings to convert the color space or to modify properties such as hue and contrast for this output. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/converting-the-color-space.html.</p>
     #[serde(rename = "ColorCorrector")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub color_corrector: Option<ColorCorrector>,
-    /// <p>Use Deinterlacer (Deinterlacer) to produce smoother motion and a clearer picture.</p>
+    /// <p>Use the deinterlacer to produce smoother motion and a clearer picture. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/working-with-scan-type.html.</p>
     #[serde(rename = "Deinterlacer")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deinterlacer: Option<Deinterlacer>,
@@ -4905,6 +5166,10 @@ pub struct VideoPreprocessor {
     #[serde(rename = "DolbyVision")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dolby_vision: Option<DolbyVision>,
+    /// <p>Enable HDR10+ analyis and metadata injection. Compatible with HEVC only.</p>
+    #[serde(rename = "Hdr10Plus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hdr_10_plus: Option<Hdr10Plus>,
     /// <p>Enable the Image inserter (ImageInserter) feature to include a graphic overlay on your video. Enable or disable this feature for each output individually. This setting is disabled by default.</p>
     #[serde(rename = "ImageInserter")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4917,13 +5182,13 @@ pub struct VideoPreprocessor {
     #[serde(rename = "PartnerWatermarking")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub partner_watermarking: Option<PartnerWatermarking>,
-    /// <p>Timecode burn-in (TimecodeBurnIn)--Burns the output timecode and specified prefix into the output.</p>
+    /// <p>Settings for burning the output timecode and specified prefix into the output.</p>
     #[serde(rename = "TimecodeBurnin")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timecode_burnin: Option<TimecodeBurnin>,
 }
 
-/// <p>Selector for video.</p>
+/// <p>Input video selectors contain the video settings for the input. Each of your inputs can have up to one video selector.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct VideoSelector {
     /// <p>Ignore this setting unless this input is a QuickTime animation with an alpha channel. Use this setting to create separate Key and Fill outputs. In each output, specify which part of the input MediaConvert uses. Leave this setting at the default value DISCARD to delete the alpha channel and preserve the video. Set it to REMAP<em>TO</em>LUMA to delete the video and map the alpha channel to the luma channel of your outputs.</p>
@@ -4954,6 +5219,10 @@ pub struct VideoSelector {
     #[serde(rename = "Rotate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rotate: Option<String>,
+    /// <p>Use this setting when your input video codec is AVC-Intra. Ignore this setting for all other inputs. If the sample range metadata in your input video is accurate, or if you don&#39;t know about sample range, keep the default value, Follow (FOLLOW), for this setting. When you do, the service automatically detects your input sample range. If your input video has metadata indicating the wrong sample range, specify the accurate sample range here. When you do, MediaConvert ignores any sample range information in the input metadata. Regardless of whether MediaConvert uses the input sample range or the sample range that you specify, MediaConvert uses the sample range for transcoding and also writes it to the output metadata.</p>
+    #[serde(rename = "SampleRange")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sample_range: Option<String>,
 }
 
 /// <p>Required when you set Codec, under AudioDescriptions&gt;CodecSettings, to the value Vorbis.</p>
@@ -5106,6 +5375,206 @@ pub struct WavSettings {
     #[serde(rename = "SampleRate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sample_rate: Option<i64>,
+}
+
+/// <p>WEBVTT Destination Settings</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct WebvttDestinationSettings {
+    /// <p>Choose Enabled (ENABLED) to have MediaConvert use the font style, color, and position information from the captions source in the input. Keep the default value, Disabled (DISABLED), for simplified output captions.</p>
+    #[serde(rename = "StylePassthrough")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub style_passthrough: Option<String>,
+}
+
+/// <p>Settings specific to WebVTT sources in HLS alternative rendition group. Specify the properties (renditionGroupId, renditionName or renditionLanguageCode) to identify the unique subtitle track among the alternative rendition groups present in the HLS manifest. If no unique track is found, or multiple tracks match the specified properties, the job fails. If there is only one subtitle track in the rendition group, the settings can be left empty and the default subtitle track will be chosen. If your caption source is a sidecar file, use FileSourceSettings instead of WebvttHlsSourceSettings.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct WebvttHlsSourceSettings {
+    /// <p>Optional. Specify alternative group ID</p>
+    #[serde(rename = "RenditionGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rendition_group_id: Option<String>,
+    /// <p>Optional. Specify ISO 639-2 or ISO 639-3 code in the language property</p>
+    #[serde(rename = "RenditionLanguageCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rendition_language_code: Option<String>,
+    /// <p>Optional. Specify media name</p>
+    #[serde(rename = "RenditionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rendition_name: Option<String>,
+}
+
+/// <p>Required when you set (Profile) under (VideoDescription)&gt;(CodecSettings)&gt;(XavcSettings) to the value XAVC<em>4K</em>INTRA_CBG.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Xavc4kIntraCbgProfileSettings {
+    /// <p>Specify the XAVC Intra 4k (CBG) Class to set the bitrate of your output. Outputs of the same class have similar image quality over the operating points that are valid for that class.</p>
+    #[serde(rename = "XavcClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub xavc_class: Option<String>,
+}
+
+/// <p>Required when you set (Profile) under (VideoDescription)&gt;(CodecSettings)&gt;(XavcSettings) to the value XAVC<em>4K</em>INTRA_VBR.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Xavc4kIntraVbrProfileSettings {
+    /// <p>Specify the XAVC Intra 4k (VBR) Class to set the bitrate of your output. Outputs of the same class have similar image quality over the operating points that are valid for that class.</p>
+    #[serde(rename = "XavcClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub xavc_class: Option<String>,
+}
+
+/// <p>Required when you set (Profile) under (VideoDescription)&gt;(CodecSettings)&gt;(XavcSettings) to the value XAVC_4K.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Xavc4kProfileSettings {
+    /// <p>Specify the XAVC 4k (Long GOP) Bitrate Class to set the bitrate of your output. Outputs of the same class have similar image quality over the operating points that are valid for that class.</p>
+    #[serde(rename = "BitrateClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bitrate_class: Option<String>,
+    /// <p>Specify the codec profile for this output. Choose High, 8-bit, 4:2:0 (HIGH) or High, 10-bit, 4:2:2 (HIGH_422). These profiles are specified in ITU-T H.264.</p>
+    #[serde(rename = "CodecProfile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub codec_profile: Option<String>,
+    /// <p>The best way to set up adaptive quantization is to keep the default value, Auto (AUTO), for the setting Adaptive quantization (XavcAdaptiveQuantization). When you do so, MediaConvert automatically applies the best types of quantization for your video content. Include this setting in your JSON job specification only when you choose to change the default value for Adaptive quantization. Enable this setting to have the encoder reduce I-frame pop. I-frame pop appears as a visual flicker that can arise when the encoder saves bits by copying some macroblocks many times from frame to frame, and then refreshes them at the I-frame. When you enable this setting, the encoder updates these macroblocks slightly more often to smooth out the flicker. This setting is disabled by default. Related setting: In addition to enabling this setting, you must also set Adaptive quantization (adaptiveQuantization) to a value other than Off (OFF) or Auto (AUTO). Use Adaptive quantization to adjust the degree of smoothing that Flicker adaptive quantization provides.</p>
+    #[serde(rename = "FlickerAdaptiveQuantization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub flicker_adaptive_quantization: Option<String>,
+    /// <p>Specify whether the encoder uses B-frames as reference frames for other pictures in the same GOP. Choose Allow (ENABLED) to allow the encoder to use B-frames as reference frames. Choose Don&#39;t allow (DISABLED) to prevent the encoder from using B-frames as reference frames.</p>
+    #[serde(rename = "GopBReference")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gop_b_reference: Option<String>,
+    /// <p>Frequency of closed GOPs. In streaming applications, it is recommended that this be set to 1 so a decoder joining mid-stream will receive an IDR frame as quickly as possible. Setting this value to 0 will break output segmenting.</p>
+    #[serde(rename = "GopClosedCadence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gop_closed_cadence: Option<i64>,
+    /// <p>Specify the size of the buffer that MediaConvert uses in the HRD buffer model for this output. Specify this value in bits; for example, enter five megabits as 5000000. When you don&#39;t set this value, or you set it to zero, MediaConvert calculates the default by doubling the bitrate of this output point.</p>
+    #[serde(rename = "HrdBufferSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hrd_buffer_size: Option<i64>,
+    /// <p>Optional. Use Quality tuning level (qualityTuningLevel) to choose how you want to trade off encoding speed for output video quality. The default behavior is faster, lower quality, single-pass encoding.</p>
+    #[serde(rename = "QualityTuningLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quality_tuning_level: Option<String>,
+    /// <p>Number of slices per picture. Must be less than or equal to the number of macroblock rows for progressive pictures, and less than or equal to half the number of macroblock rows for interlaced pictures.</p>
+    #[serde(rename = "Slices")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub slices: Option<i64>,
+}
+
+/// <p>Required when you set (Profile) under (VideoDescription)&gt;(CodecSettings)&gt;(XavcSettings) to the value XAVC<em>HD</em>INTRA_CBG.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct XavcHdIntraCbgProfileSettings {
+    /// <p>Specify the XAVC Intra HD (CBG) Class to set the bitrate of your output. Outputs of the same class have similar image quality over the operating points that are valid for that class.</p>
+    #[serde(rename = "XavcClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub xavc_class: Option<String>,
+}
+
+/// <p>Required when you set (Profile) under (VideoDescription)&gt;(CodecSettings)&gt;(XavcSettings) to the value XAVC_HD.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct XavcHdProfileSettings {
+    /// <p>Specify the XAVC HD (Long GOP) Bitrate Class to set the bitrate of your output. Outputs of the same class have similar image quality over the operating points that are valid for that class.</p>
+    #[serde(rename = "BitrateClass")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bitrate_class: Option<String>,
+    /// <p>The best way to set up adaptive quantization is to keep the default value, Auto (AUTO), for the setting Adaptive quantization (XavcAdaptiveQuantization). When you do so, MediaConvert automatically applies the best types of quantization for your video content. Include this setting in your JSON job specification only when you choose to change the default value for Adaptive quantization. Enable this setting to have the encoder reduce I-frame pop. I-frame pop appears as a visual flicker that can arise when the encoder saves bits by copying some macroblocks many times from frame to frame, and then refreshes them at the I-frame. When you enable this setting, the encoder updates these macroblocks slightly more often to smooth out the flicker. This setting is disabled by default. Related setting: In addition to enabling this setting, you must also set Adaptive quantization (adaptiveQuantization) to a value other than Off (OFF) or Auto (AUTO). Use Adaptive quantization to adjust the degree of smoothing that Flicker adaptive quantization provides.</p>
+    #[serde(rename = "FlickerAdaptiveQuantization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub flicker_adaptive_quantization: Option<String>,
+    /// <p>Specify whether the encoder uses B-frames as reference frames for other pictures in the same GOP. Choose Allow (ENABLED) to allow the encoder to use B-frames as reference frames. Choose Don&#39;t allow (DISABLED) to prevent the encoder from using B-frames as reference frames.</p>
+    #[serde(rename = "GopBReference")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gop_b_reference: Option<String>,
+    /// <p>Frequency of closed GOPs. In streaming applications, it is recommended that this be set to 1 so a decoder joining mid-stream will receive an IDR frame as quickly as possible. Setting this value to 0 will break output segmenting.</p>
+    #[serde(rename = "GopClosedCadence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gop_closed_cadence: Option<i64>,
+    /// <p>Specify the size of the buffer that MediaConvert uses in the HRD buffer model for this output. Specify this value in bits; for example, enter five megabits as 5000000. When you don&#39;t set this value, or you set it to zero, MediaConvert calculates the default by doubling the bitrate of this output point.</p>
+    #[serde(rename = "HrdBufferSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hrd_buffer_size: Option<i64>,
+    /// <p>Choose the scan line type for the output. Keep the default value, Progressive (PROGRESSIVE) to create a progressive output, regardless of the scan type of your input. Use Top field first (TOP<em>FIELD) or Bottom field first (BOTTOM</em>FIELD) to create an output that&#39;s interlaced with the same field polarity throughout. Use Follow, default top (FOLLOW<em>TOP</em>FIELD) or Follow, default bottom (FOLLOW<em>BOTTOM</em>FIELD) to produce outputs with the same field polarity as the source. For jobs that have multiple inputs, the output field polarity might change over the course of the output. Follow behavior depends on the input scan type. If the source is interlaced, the output will be interlaced with the same polarity as the source. If the source is progressive, the output will be interlaced with top field bottom field first, depending on which of the Follow options you choose.</p>
+    #[serde(rename = "InterlaceMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interlace_mode: Option<String>,
+    /// <p>Optional. Use Quality tuning level (qualityTuningLevel) to choose how you want to trade off encoding speed for output video quality. The default behavior is faster, lower quality, single-pass encoding.</p>
+    #[serde(rename = "QualityTuningLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub quality_tuning_level: Option<String>,
+    /// <p>Number of slices per picture. Must be less than or equal to the number of macroblock rows for progressive pictures, and less than or equal to half the number of macroblock rows for interlaced pictures.</p>
+    #[serde(rename = "Slices")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub slices: Option<i64>,
+    /// <p>Ignore this setting unless you set Frame rate (framerateNumerator divided by framerateDenominator) to 29.970. If your input framerate is 23.976, choose Hard (HARD). Otherwise, keep the default value None (NONE). For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/working-with-telecine-and-inverse-telecine.html.</p>
+    #[serde(rename = "Telecine")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub telecine: Option<String>,
+}
+
+/// <p>Required when you set (Codec) under (VideoDescription)&gt;(CodecSettings) to the value XAVC.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct XavcSettings {
+    /// <p>Keep the default value, Auto (AUTO), for this setting to have MediaConvert automatically apply the best types of quantization for your video content. When you want to apply your quantization settings manually, you must set Adaptive quantization (adaptiveQuantization) to a value other than Auto (AUTO). Use this setting to specify the strength of any adaptive quantization filters that you enable. If you don&#39;t want MediaConvert to do any adaptive quantization in this transcode, set Adaptive quantization to Off (OFF). Related settings: The value that you choose here applies to the following settings: Flicker adaptive quantization (flickerAdaptiveQuantization), Spatial adaptive quantization (spatialAdaptiveQuantization), and Temporal adaptive quantization (temporalAdaptiveQuantization).</p>
+    #[serde(rename = "AdaptiveQuantization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub adaptive_quantization: Option<String>,
+    /// <p>Optional. Choose a specific entropy encoding mode only when you want to override XAVC recommendations. If you choose the value auto, MediaConvert uses the mode that the XAVC file format specifies given this output&#39;s operating point.</p>
+    #[serde(rename = "EntropyEncoding")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entropy_encoding: Option<String>,
+    /// <p>If you are using the console, use the Frame rate setting to specify the frame rate for this output. If you want to keep the same frame rate as the input video, choose Follow source. If you want to do frame rate conversion, choose a frame rate from the dropdown list. The framerates shown in the dropdown list are decimal approximations of fractions. If you are creating your transcoding job specification as a JSON file without the console, use FramerateControl to specify which value the service uses for the frame rate for this output. Choose INITIALIZE<em>FROM</em>SOURCE if you want the service to use the frame rate from the input. Choose SPECIFIED if you want the service to use the frame rate that you specify in the settings FramerateNumerator and FramerateDenominator.</p>
+    #[serde(rename = "FramerateControl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_control: Option<String>,
+    /// <p>Choose the method that you want MediaConvert to use when increasing or decreasing the frame rate. We recommend using drop duplicate (DUPLICATE_DROP) for numerically simple conversions, such as 60 fps to 30 fps. For numerically complex conversions, you can use interpolate (INTERPOLATE) to avoid stutter. This results in a smooth picture, but might introduce undesirable video artifacts. For complex frame rate conversions, especially if your source video has already been converted from its original cadence, use FrameFormer (FRAMEFORMER) to do motion-compensated interpolation. FrameFormer chooses the best conversion method frame by frame. Note that using FrameFormer increases the transcoding time and incurs a significant add-on cost.</p>
+    #[serde(rename = "FramerateConversionAlgorithm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_conversion_algorithm: Option<String>,
+    /// <p>When you use the API for transcode jobs that use frame rate conversion, specify the frame rate as a fraction. For example, 24000 / 1001 = 23.976 fps. Use FramerateDenominator to specify the denominator of this fraction. In this example, use 1001 for the value of FramerateDenominator. When you use the console for transcode jobs that use frame rate conversion, provide the value as a decimal number for Frame rate. In this example, specify 23.976.</p>
+    #[serde(rename = "FramerateDenominator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_denominator: Option<i64>,
+    /// <p>When you use the API for transcode jobs that use frame rate conversion, specify the frame rate as a fraction. For example, 24000 / 1001 = 23.976 fps. Use FramerateNumerator to specify the numerator of this fraction. In this example, use 24000 for the value of FramerateNumerator. When you use the console for transcode jobs that use frame rate conversion, provide the value as a decimal number for Framerate. In this example, specify 23.976.</p>
+    #[serde(rename = "FramerateNumerator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_numerator: Option<i64>,
+    /// <p>Specify the XAVC profile for this output. For more information, see the Sony documentation at https://www.xavc-info.org/. Note that MediaConvert doesn&#39;t support the interlaced video XAVC operating points for XAVC<em>HD</em>INTRA<em>CBG. To create an interlaced XAVC output, choose the profile XAVC</em>HD.</p>
+    #[serde(rename = "Profile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub profile: Option<String>,
+    /// <p>Ignore this setting unless your input frame rate is 23.976 or 24 frames per second (fps). Enable slow PAL to create a 25 fps output by relabeling the video frames and resampling your audio. Note that enabling this setting will slightly reduce the duration of your video. Related settings: You must also set Frame rate to 25. In your JSON job specification, set (framerateControl) to (SPECIFIED), (framerateNumerator) to 25 and (framerateDenominator) to 1.</p>
+    #[serde(rename = "SlowPal")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub slow_pal: Option<String>,
+    /// <p>Ignore this setting unless your downstream workflow requires that you specify it explicitly. Otherwise, we recommend that you adjust the softness of your output by using a lower value for the setting Sharpness (sharpness) or by enabling a noise reducer filter (noiseReducerFilter). The Softness (softness) setting specifies the quantization matrices that the encoder uses. Keep the default value, 0, for flat quantization. Choose the value 1 or 16 to use the default JVT softening quantization matricies from the H.264 specification. Choose a value from 17 to 128 to use planar interpolation. Increasing values from 17 to 128 result in increasing reduction of high-frequency data. The value 128 results in the softest video.</p>
+    #[serde(rename = "Softness")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub softness: Option<i64>,
+    /// <p>The best way to set up adaptive quantization is to keep the default value, Auto (AUTO), for the setting Adaptive quantization (adaptiveQuantization). When you do so, MediaConvert automatically applies the best types of quantization for your video content. Include this setting in your JSON job specification only when you choose to change the default value for Adaptive quantization. For this setting, keep the default value, Enabled (ENABLED), to adjust quantization within each frame based on spatial variation of content complexity. When you enable this feature, the encoder uses fewer bits on areas that can sustain more distortion with no noticeable visual degradation and uses more bits on areas where any small distortion will be noticeable. For example, complex textured blocks are encoded with fewer bits and smooth textured blocks are encoded with more bits. Enabling this feature will almost always improve your video quality. Note, though, that this feature doesn&#39;t take into account where the viewer&#39;s attention is likely to be. If viewers are likely to be focusing their attention on a part of the screen with a lot of complex texture, you might choose to disable this feature. Related setting: When you enable spatial adaptive quantization, set the value for Adaptive quantization (adaptiveQuantization) depending on your content. For homogeneous content, such as cartoons and video games, set it to Low. For content with a wider variety of textures, set it to High or Higher.</p>
+    #[serde(rename = "SpatialAdaptiveQuantization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub spatial_adaptive_quantization: Option<String>,
+    /// <p>The best way to set up adaptive quantization is to keep the default value, Auto (AUTO), for the setting Adaptive quantization (adaptiveQuantization). When you do so, MediaConvert automatically applies the best types of quantization for your video content. Include this setting in your JSON job specification only when you choose to change the default value for Adaptive quantization. For this setting, keep the default value, Enabled (ENABLED), to adjust quantization within each frame based on temporal variation of content complexity. When you enable this feature, the encoder uses fewer bits on areas of the frame that aren&#39;t moving and uses more bits on complex objects with sharp edges that move a lot. For example, this feature improves the readability of text tickers on newscasts and scoreboards on sports matches. Enabling this feature will almost always improve your video quality. Note, though, that this feature doesn&#39;t take into account where the viewer&#39;s attention is likely to be. If viewers are likely to be focusing their attention on a part of the screen that doesn&#39;t have moving objects with sharp edges, such as sports athletes&#39; faces, you might choose to disable this feature. Related setting: When you enable temporal adaptive quantization, adjust the strength of the filter with the setting Adaptive quantization (adaptiveQuantization).</p>
+    #[serde(rename = "TemporalAdaptiveQuantization")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub temporal_adaptive_quantization: Option<String>,
+    /// <p>Required when you set (Profile) under (VideoDescription)&gt;(CodecSettings)&gt;(XavcSettings) to the value XAVC<em>4K</em>INTRA_CBG.</p>
+    #[serde(rename = "Xavc4kIntraCbgProfileSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub xavc_4k_intra_cbg_profile_settings: Option<Xavc4kIntraCbgProfileSettings>,
+    /// <p>Required when you set (Profile) under (VideoDescription)&gt;(CodecSettings)&gt;(XavcSettings) to the value XAVC<em>4K</em>INTRA_VBR.</p>
+    #[serde(rename = "Xavc4kIntraVbrProfileSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub xavc_4k_intra_vbr_profile_settings: Option<Xavc4kIntraVbrProfileSettings>,
+    /// <p>Required when you set (Profile) under (VideoDescription)&gt;(CodecSettings)&gt;(XavcSettings) to the value XAVC_4K.</p>
+    #[serde(rename = "Xavc4kProfileSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub xavc_4k_profile_settings: Option<Xavc4kProfileSettings>,
+    /// <p>Required when you set (Profile) under (VideoDescription)&gt;(CodecSettings)&gt;(XavcSettings) to the value XAVC<em>HD</em>INTRA_CBG.</p>
+    #[serde(rename = "XavcHdIntraCbgProfileSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub xavc_hd_intra_cbg_profile_settings: Option<XavcHdIntraCbgProfileSettings>,
+    /// <p>Required when you set (Profile) under (VideoDescription)&gt;(CodecSettings)&gt;(XavcSettings) to the value XAVC_HD.</p>
+    #[serde(rename = "XavcHdProfileSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub xavc_hd_profile_settings: Option<XavcHdProfileSettings>,
 }
 
 /// Errors returned by AssociateCertificate

@@ -2331,10 +2331,34 @@ pub struct OrganizationNode {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ParameterConstraints {
+    /// <p>A regular expression that represents the patterns that allow for <code>String</code> types. The pattern must match the entire parameter value provided.</p>
+    #[serde(rename = "AllowedPattern")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allowed_pattern: Option<String>,
     /// <p>The values that the administrator has allowed for the parameter.</p>
     #[serde(rename = "AllowedValues")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_values: Option<Vec<String>>,
+    /// <p>A string that explains a constraint when the constraint is violated. For example, without a constraint description, a parameter that has an allowed pattern of <code>[A-Za-z0-9]+</code> displays the following error message when the user specifies an invalid value:</p> <p> <code>Malformed input-Parameter MyParameter must match pattern [A-Za-z0-9]+</code> </p> <p>By adding a constraint description, such as must only contain letters (uppercase and lowercase) and numbers, you can display the following customized error message:</p> <p> <code>Malformed input-Parameter MyParameter must only contain uppercase and lowercase letters and numbers.</code> </p>
+    #[serde(rename = "ConstraintDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub constraint_description: Option<String>,
+    /// <p>An integer value that determines the largest number of characters you want to allow for <code>String</code> types. </p>
+    #[serde(rename = "MaxLength")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_length: Option<String>,
+    /// <p>A numeric value that determines the largest numeric value you want to allow for <code>Number</code> types.</p>
+    #[serde(rename = "MaxValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_value: Option<String>,
+    /// <p>An integer value that determines the smallest number of characters you want to allow for <code>String</code> types.</p>
+    #[serde(rename = "MinLength")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min_length: Option<String>,
+    /// <p>A numeric value that determines the smallest numeric value you want to allow for <code>Number</code> types. </p>
+    #[serde(rename = "MinValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min_value: Option<String>,
 }
 
 /// <p>Information about a portfolio.</p>

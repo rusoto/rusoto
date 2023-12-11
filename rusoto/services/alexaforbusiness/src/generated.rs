@@ -450,6 +450,10 @@ pub struct CreateAddressBookRequest {
     /// <p>The name of the address book.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>The tags to be added to the specified resource. Do not provide system tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -529,6 +533,10 @@ pub struct CreateConferenceProviderRequest {
     #[serde(rename = "PSTNDialIn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pstn_dial_in: Option<PSTNDialIn>,
+    /// <p>The tags to be added to the specified resource. Do not provide system tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -570,6 +578,10 @@ pub struct CreateContactRequest {
     #[serde(rename = "SipAddresses")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sip_addresses: Option<Vec<SipAddress>>,
+    /// <p>The tags to be added to the specified resource. Do not provide system tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -609,6 +621,10 @@ pub struct CreateGatewayGroupRequest {
     /// <p>The name of the gateway group.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>The tags to be added to the specified resource. Do not provide system tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -687,6 +703,10 @@ pub struct CreateNetworkProfileRequest {
     /// <p>The SSID of the Wi-Fi network.</p>
     #[serde(rename = "Ssid")]
     pub ssid: String,
+    /// <p>The tags to be added to the specified resource. Do not provide system tags. </p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The root certificates of your authentication server that is installed on your devices and used to trust your authentication server during EAP negotiation. </p>
     #[serde(rename = "TrustAnchors")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -712,6 +732,10 @@ pub struct CreateProfileRequest {
     #[serde(rename = "ClientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
+    /// <p>Whether data retention of the profile is enabled.</p>
+    #[serde(rename = "DataRetentionOptIn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_retention_opt_in: Option<bool>,
     /// <p>The distance unit to be used by devices in the profile.</p>
     #[serde(rename = "DistanceUnit")]
     pub distance_unit: String,
@@ -2161,6 +2185,10 @@ pub struct Profile {
     #[serde(rename = "AddressBookArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub address_book_arn: Option<String>,
+    /// <p>Whether data retention of the profile is enabled.</p>
+    #[serde(rename = "DataRetentionOptIn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_retention_opt_in: Option<bool>,
     /// <p>The distance unit of a room profile.</p>
     #[serde(rename = "DistanceUnit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2339,10 +2367,14 @@ pub struct RegisterAVSDeviceRequest {
     /// <p>The product ID used to identify your AVS device during authorization.</p>
     #[serde(rename = "ProductId")]
     pub product_id: String,
-    /// <p>The ARN of the room with which to associate your AVS device.</p>
+    /// <p>The Amazon Resource Name (ARN) of the room with which to associate your AVS device.</p>
     #[serde(rename = "RoomArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub room_arn: Option<String>,
+    /// <p>The tags to be added to the specified resource. Do not provide system tags.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The code that is obtained after your AVS device has made a POST request to LWA as a part of the Device Authorization Request component of the OAuth code-based linking specification.</p>
     #[serde(rename = "UserCode")]
     pub user_code: String,
@@ -3391,6 +3423,10 @@ pub struct UpdateProfileRequest {
     #[serde(rename = "Address")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub address: Option<String>,
+    /// <p>Whether data retention of the profile is enabled.</p>
+    #[serde(rename = "DataRetentionOptIn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_retention_opt_in: Option<bool>,
     /// <p>The updated distance unit for the room profile.</p>
     #[serde(rename = "DistanceUnit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -7210,7 +7246,7 @@ pub trait AlexaForBusiness {
         input: RejectSkillRequest,
     ) -> Result<RejectSkillResponse, RusotoError<RejectSkillError>>;
 
-    /// <p>Determines the details for the room from which a skill request was invoked. This operation is used by skill developers.</p>
+    /// <p>Determines the details for the room from which a skill request was invoked. This operation is used by skill developers.</p> <p>To query ResolveRoom from an Alexa skill, the skill ID needs to be authorized. When the skill is using an AWS Lambda function, the skill is automatically authorized when you publish your skill as a private skill to your AWS account. Skills that are hosted using a custom web service must be manually authorized. To get your skill authorized, contact AWS Support with your AWS account ID that queries the ResolveRoom API and skill ID. </p>
     async fn resolve_room(
         &self,
         input: ResolveRoomRequest,
@@ -8713,7 +8749,7 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         proto::json::ResponsePayload::new(&response).deserialize::<RejectSkillResponse, _>()
     }
 
-    /// <p>Determines the details for the room from which a skill request was invoked. This operation is used by skill developers.</p>
+    /// <p>Determines the details for the room from which a skill request was invoked. This operation is used by skill developers.</p> <p>To query ResolveRoom from an Alexa skill, the skill ID needs to be authorized. When the skill is using an AWS Lambda function, the skill is automatically authorized when you publish your skill as a private skill to your AWS account. Skills that are hosted using a custom web service must be manually authorized. To get your skill authorized, contact AWS Support with your AWS account ID that queries the ResolveRoom API and skill ID. </p>
     async fn resolve_room(
         &self,
         input: ResolveRoomRequest,

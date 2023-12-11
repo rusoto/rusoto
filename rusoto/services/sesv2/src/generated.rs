@@ -428,6 +428,10 @@ pub struct CreateEmailIdentityPolicyResponse {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateEmailIdentityRequest {
+    /// <p>The configuration set to use by default when sending from this identity. Note that any configuration set defined in the email sending request takes precedence. </p>
+    #[serde(rename = "ConfigurationSetName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration_set_name: Option<String>,
     /// <p>If your request includes this object, Amazon SES configures the identity to use Bring Your Own DKIM (BYODKIM) for DKIM authentication purposes, as opposed to the default method, <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Easy DKIM</a>.</p> <p>You can only specify this object if the email identity is a domain, as opposed to an address.</p>
     #[serde(rename = "DkimSigningAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1464,6 +1468,10 @@ pub struct GetEmailIdentityRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct GetEmailIdentityResponse {
+    /// <p>The configuration set used by default when sending from this identity.</p>
+    #[serde(rename = "ConfigurationSetName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration_set_name: Option<String>,
     /// <p>An object that contains information about the DKIM attributes for the identity.</p>
     #[serde(rename = "DkimAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2374,6 +2382,24 @@ pub struct PutDeliverabilityDashboardOptionRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct PutDeliverabilityDashboardOptionResponse {}
+
+/// <p>A request to associate a configuration set with an email identity.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutEmailIdentityConfigurationSetAttributesRequest {
+    /// <p>The configuration set that you want to associate with an email identity.</p>
+    #[serde(rename = "ConfigurationSetName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration_set_name: Option<String>,
+    /// <p>The email address or domain that you want to associate with a configuration set.</p>
+    #[serde(rename = "EmailIdentity")]
+    pub email_identity: String,
+}
+
+/// <p>If the action is successful, the service sends back an HTTP 200 response with an empty HTTP body.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct PutEmailIdentityConfigurationSetAttributesResponse {}
 
 /// <p>A request to enable or disable DKIM signing of email that you send from an email identity.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -3561,6 +3587,8 @@ pub enum CreateEmailIdentityError {
     ConcurrentModification(String),
     /// <p>There are too many instances of the specified resource type.</p>
     LimitExceeded(String),
+    /// <p>The resource you attempted to access doesn't exist.</p>
+    NotFound(String),
     /// <p>Too many requests have been made to the operation.</p>
     TooManyRequests(String),
 }
@@ -3583,6 +3611,9 @@ impl CreateEmailIdentityError {
                 "LimitExceededException" => {
                     return RusotoError::Service(CreateEmailIdentityError::LimitExceeded(err.msg))
                 }
+                "NotFoundException" => {
+                    return RusotoError::Service(CreateEmailIdentityError::NotFound(err.msg))
+                }
                 "TooManyRequestsException" => {
                     return RusotoError::Service(CreateEmailIdentityError::TooManyRequests(err.msg))
                 }
@@ -3601,6 +3632,7 @@ impl fmt::Display for CreateEmailIdentityError {
             CreateEmailIdentityError::BadRequest(ref cause) => write!(f, "{}", cause),
             CreateEmailIdentityError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
             CreateEmailIdentityError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateEmailIdentityError::NotFound(ref cause) => write!(f, "{}", cause),
             CreateEmailIdentityError::TooManyRequests(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -6188,6 +6220,62 @@ impl fmt::Display for PutDeliverabilityDashboardOptionError {
     }
 }
 impl Error for PutDeliverabilityDashboardOptionError {}
+/// Errors returned by PutEmailIdentityConfigurationSetAttributes
+#[derive(Debug, PartialEq)]
+pub enum PutEmailIdentityConfigurationSetAttributesError {
+    /// <p>The input you provided is invalid.</p>
+    BadRequest(String),
+    /// <p>The resource you attempted to access doesn't exist.</p>
+    NotFound(String),
+    /// <p>Too many requests have been made to the operation.</p>
+    TooManyRequests(String),
+}
+
+impl PutEmailIdentityConfigurationSetAttributesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<PutEmailIdentityConfigurationSetAttributesError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "BadRequestException" => {
+                    return RusotoError::Service(
+                        PutEmailIdentityConfigurationSetAttributesError::BadRequest(err.msg),
+                    )
+                }
+                "NotFoundException" => {
+                    return RusotoError::Service(
+                        PutEmailIdentityConfigurationSetAttributesError::NotFound(err.msg),
+                    )
+                }
+                "TooManyRequestsException" => {
+                    return RusotoError::Service(
+                        PutEmailIdentityConfigurationSetAttributesError::TooManyRequests(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutEmailIdentityConfigurationSetAttributesError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutEmailIdentityConfigurationSetAttributesError::BadRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutEmailIdentityConfigurationSetAttributesError::NotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            PutEmailIdentityConfigurationSetAttributesError::TooManyRequests(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for PutEmailIdentityConfigurationSetAttributesError {}
 /// Errors returned by PutEmailIdentityDkimAttributes
 #[derive(Debug, PartialEq)]
 pub enum PutEmailIdentityDkimAttributesError {
@@ -7168,7 +7256,7 @@ pub trait SesV2 {
         RusotoError<CreateDeliverabilityTestReportError>,
     >;
 
-    /// <p>Starts the process of verifying an email identity. An <i>identity</i> is an email address or domain that you use when you send email. Before you can use an identity to send email, you first have to verify it. By verifying an identity, you demonstrate that you're the owner of the identity, and that you've given Amazon SES API v2 permission to send email from the identity.</p> <p>When you verify an email address, Amazon SES sends an email to the address. Your email address is verified as soon as you follow the link in the verification email. </p> <p>When you verify a domain without specifying the <code>DkimSigningAttributes</code> object, this operation provides a set of DKIM tokens. You can convert these tokens into CNAME records, which you then add to the DNS configuration for your domain. Your domain is verified when Amazon SES detects these records in the DNS configuration for your domain. This verification method is known as <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Easy DKIM</a>.</p> <p>Alternatively, you can perform the verification process by providing your own public-private key pair. This verification method is known as Bring Your Own DKIM (BYODKIM). To use BYODKIM, your call to the <code>CreateEmailIdentity</code> operation has to include the <code>DkimSigningAttributes</code> object. When you specify this object, you provide a selector (a component of the DNS record name that identifies the public key that you want to use for DKIM authentication) and a private key.</p>
+    /// <p>Starts the process of verifying an email identity. An <i>identity</i> is an email address or domain that you use when you send email. Before you can use an identity to send email, you first have to verify it. By verifying an identity, you demonstrate that you're the owner of the identity, and that you've given Amazon SES API v2 permission to send email from the identity.</p> <p>When you verify an email address, Amazon SES sends an email to the address. Your email address is verified as soon as you follow the link in the verification email. </p> <p>When you verify a domain without specifying the <code>DkimSigningAttributes</code> object, this operation provides a set of DKIM tokens. You can convert these tokens into CNAME records, which you then add to the DNS configuration for your domain. Your domain is verified when Amazon SES detects these records in the DNS configuration for your domain. This verification method is known as <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Easy DKIM</a>.</p> <p>Alternatively, you can perform the verification process by providing your own public-private key pair. This verification method is known as Bring Your Own DKIM (BYODKIM). To use BYODKIM, your call to the <code>CreateEmailIdentity</code> operation has to include the <code>DkimSigningAttributes</code> object. When you specify this object, you provide a selector (a component of the DNS record name that identifies the public key that you want to use for DKIM authentication) and a private key.</p> <p>When you verify a domain, this operation provides a set of DKIM tokens, which you can convert into CNAME tokens. You add these CNAME tokens to the DNS configuration for your domain. Your domain is verified when Amazon SES detects these records in the DNS configuration for your domain. For some DNS providers, it can take 72 hours or more to complete the domain verification process.</p> <p>Additionally, you can associate an existing configuration set with the email identity that you're verifying.</p>
     async fn create_email_identity(
         &self,
         input: CreateEmailIdentityRequest,
@@ -7552,6 +7640,15 @@ pub trait SesV2 {
     ) -> Result<
         PutDeliverabilityDashboardOptionResponse,
         RusotoError<PutDeliverabilityDashboardOptionError>,
+    >;
+
+    /// <p>Used to associate a configuration set with an email identity.</p>
+    async fn put_email_identity_configuration_set_attributes(
+        &self,
+        input: PutEmailIdentityConfigurationSetAttributesRequest,
+    ) -> Result<
+        PutEmailIdentityConfigurationSetAttributesResponse,
+        RusotoError<PutEmailIdentityConfigurationSetAttributesError>,
     >;
 
     /// <p>Used to enable or disable DKIM authentication for an email identity.</p>
@@ -7957,7 +8054,7 @@ impl SesV2 for SesV2Client {
         }
     }
 
-    /// <p>Starts the process of verifying an email identity. An <i>identity</i> is an email address or domain that you use when you send email. Before you can use an identity to send email, you first have to verify it. By verifying an identity, you demonstrate that you're the owner of the identity, and that you've given Amazon SES API v2 permission to send email from the identity.</p> <p>When you verify an email address, Amazon SES sends an email to the address. Your email address is verified as soon as you follow the link in the verification email. </p> <p>When you verify a domain without specifying the <code>DkimSigningAttributes</code> object, this operation provides a set of DKIM tokens. You can convert these tokens into CNAME records, which you then add to the DNS configuration for your domain. Your domain is verified when Amazon SES detects these records in the DNS configuration for your domain. This verification method is known as <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Easy DKIM</a>.</p> <p>Alternatively, you can perform the verification process by providing your own public-private key pair. This verification method is known as Bring Your Own DKIM (BYODKIM). To use BYODKIM, your call to the <code>CreateEmailIdentity</code> operation has to include the <code>DkimSigningAttributes</code> object. When you specify this object, you provide a selector (a component of the DNS record name that identifies the public key that you want to use for DKIM authentication) and a private key.</p>
+    /// <p>Starts the process of verifying an email identity. An <i>identity</i> is an email address or domain that you use when you send email. Before you can use an identity to send email, you first have to verify it. By verifying an identity, you demonstrate that you're the owner of the identity, and that you've given Amazon SES API v2 permission to send email from the identity.</p> <p>When you verify an email address, Amazon SES sends an email to the address. Your email address is verified as soon as you follow the link in the verification email. </p> <p>When you verify a domain without specifying the <code>DkimSigningAttributes</code> object, this operation provides a set of DKIM tokens. You can convert these tokens into CNAME records, which you then add to the DNS configuration for your domain. Your domain is verified when Amazon SES detects these records in the DNS configuration for your domain. This verification method is known as <a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html">Easy DKIM</a>.</p> <p>Alternatively, you can perform the verification process by providing your own public-private key pair. This verification method is known as Bring Your Own DKIM (BYODKIM). To use BYODKIM, your call to the <code>CreateEmailIdentity</code> operation has to include the <code>DkimSigningAttributes</code> object. When you specify this object, you provide a selector (a component of the DNS record name that identifies the public key that you want to use for DKIM authentication) and a private key.</p> <p>When you verify a domain, this operation provides a set of DKIM tokens, which you can convert into CNAME tokens. You add these CNAME tokens to the DNS configuration for your domain. Your domain is verified when Amazon SES detects these records in the DNS configuration for your domain. For some DNS providers, it can take 72 hours or more to complete the domain verification process.</p> <p>Additionally, you can associate an existing configuration set with the email identity that you're verifying.</p>
     #[allow(unused_mut)]
     async fn create_email_identity(
         &self,
@@ -9989,6 +10086,44 @@ impl SesV2 for SesV2Client {
             Err(PutDeliverabilityDashboardOptionError::from_response(
                 response,
             ))
+        }
+    }
+
+    /// <p>Used to associate a configuration set with an email identity.</p>
+    #[allow(unused_mut)]
+    async fn put_email_identity_configuration_set_attributes(
+        &self,
+        input: PutEmailIdentityConfigurationSetAttributesRequest,
+    ) -> Result<
+        PutEmailIdentityConfigurationSetAttributesResponse,
+        RusotoError<PutEmailIdentityConfigurationSetAttributesError>,
+    > {
+        let request_uri = format!(
+            "/v2/email/identities/{email_identity}/configuration-set",
+            email_identity = input.email_identity
+        );
+
+        let mut request = SignedRequest::new("PUT", "ses", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("email".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<PutEmailIdentityConfigurationSetAttributesResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(PutEmailIdentityConfigurationSetAttributesError::from_response(response))
         }
     }
 

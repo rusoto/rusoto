@@ -65,7 +65,7 @@ pub struct Addon {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>The metadata that you apply to the cluster to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define. Cluster tags do not propagate to any other resources associated with the cluster. </p>
+    /// <p>The metadata that you apply to the add-on to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define. Add-on tags do not propagate to any other resources associated with the cluster. </p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -133,6 +133,60 @@ pub struct AddonVersionInfo {
     #[serde(rename = "compatibilities")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compatibilities: Option<Vec<Compatibility>>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AssociateEncryptionConfigRequest {
+    /// <p>The client request token you are using with the encryption configuration.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The name of the cluster that you are associating with encryption configuration.</p>
+    #[serde(rename = "clusterName")]
+    pub cluster_name: String,
+    /// <p>The configuration you are using for encryption.</p>
+    #[serde(rename = "encryptionConfig")]
+    pub encryption_config: Vec<EncryptionConfig>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AssociateEncryptionConfigResponse {
+    #[serde(rename = "update")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update: Option<Update>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct AssociateIdentityProviderConfigRequest {
+    /// <p>Unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The name of the cluster to associate the configuration to.</p>
+    #[serde(rename = "clusterName")]
+    pub cluster_name: String,
+    /// <p>An object that represents an OpenID Connect (OIDC) identity provider configuration.</p>
+    #[serde(rename = "oidc")]
+    pub oidc: OidcIdentityProviderConfigRequest,
+    /// <p>The metadata to apply to the configuration to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct AssociateIdentityProviderConfigResponse {
+    /// <p>The tags for the resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    #[serde(rename = "update")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update: Option<Update>,
 }
 
 /// <p>An Auto Scaling group that is associated with an Amazon EKS managed node group.</p>
@@ -390,7 +444,7 @@ pub struct CreateNodegroupRequest {
     #[serde(rename = "diskSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disk_size: Option<i64>,
-    /// <p>Specify the instance types for a node group. If you specify a GPU instance type, be sure to specify <code>AL2_x86_64_GPU</code> with the <code>amiType</code> parameter. If you specify <code>launchTemplate</code>, then you can specify zero or one instance type in your launch template <i>or</i> you can specify 0-20 instance types for <code>instanceTypes</code>. If however, you specify an instance type in your launch template <i>and</i> specify any <code>instanceTypes</code>, the node group deployment will fail. If you don't specify an instance type in a launch template or for <code>instanceTypes</code>, then <code>t3.medium</code> is used, by default. If you specify <code>Spot</code> for <code>capacityType</code>, then we recommend specifying multiple values for <code>instanceTypes</code>. For more information, see <a href="https://docs.aws.amazon.com/managed-node-groups.html#managed-node-group-capacity-types">Managed node group capacity types</a> and <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html">Launch template support</a> in the <i>Amazon EKS User Guide</i>.</p>
+    /// <p>Specify the instance types for a node group. If you specify a GPU instance type, be sure to specify <code>AL2_x86_64_GPU</code> with the <code>amiType</code> parameter. If you specify <code>launchTemplate</code>, then you can specify zero or one instance type in your launch template <i>or</i> you can specify 0-20 instance types for <code>instanceTypes</code>. If however, you specify an instance type in your launch template <i>and</i> specify any <code>instanceTypes</code>, the node group deployment will fail. If you don't specify an instance type in a launch template or for <code>instanceTypes</code>, then <code>t3.medium</code> is used, by default. If you specify <code>Spot</code> for <code>capacityType</code>, then we recommend specifying multiple values for <code>instanceTypes</code>. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html#managed-node-group-capacity-types">Managed node group capacity types</a> and <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html">Launch template support</a> in the <i>Amazon EKS User Guide</i>.</p>
     #[serde(rename = "instanceTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_types: Option<Vec<String>>,
@@ -402,7 +456,7 @@ pub struct CreateNodegroupRequest {
     #[serde(rename = "launchTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub launch_template: Option<LaunchTemplateSpecification>,
-    /// <p>The Amazon Resource Name (ARN) of the IAM role to associate with your node group. The Amazon EKS worker node <code>kubelet</code> daemon makes calls to AWS APIs on your behalf. Worker nodes receive permissions for these API calls through an IAM instance profile and associated policies. Before you can launch worker nodes and register them into a cluster, you must create an IAM role for those worker nodes to use when they are launched. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/worker_node_IAM_role.html">Amazon EKS Worker Node IAM Role</a> in the <i> <i>Amazon EKS User Guide</i> </i>. If you specify <code>launchTemplate</code>, then don't specify <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_IamInstanceProfile.html"> <code>IamInstanceProfile</code> </a> in your launch template, or the node group deployment will fail. For more information about using launch templates with Amazon EKS, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html">Launch template support</a> in the Amazon EKS User Guide.</p>
+    /// <p>The Amazon Resource Name (ARN) of the IAM role to associate with your node group. The Amazon EKS worker node <code>kubelet</code> daemon makes calls to AWS APIs on your behalf. Nodes receive permissions for these API calls through an IAM instance profile and associated policies. Before you can launch nodes and register them into a cluster, you must create an IAM role for those nodes to use when they are launched. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/worker_node_IAM_role.html">Amazon EKS node IAM role</a> in the <i> <i>Amazon EKS User Guide</i> </i>. If you specify <code>launchTemplate</code>, then don't specify <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_IamInstanceProfile.html"> <code>IamInstanceProfile</code> </a> in your launch template, or the node group deployment will fail. For more information about using launch templates with Amazon EKS, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html">Launch template support</a> in the Amazon EKS User Guide.</p>
     #[serde(rename = "nodeRole")]
     pub node_role: String,
     /// <p>The unique name to give your node group.</p>
@@ -420,13 +474,20 @@ pub struct CreateNodegroupRequest {
     #[serde(rename = "scalingConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scaling_config: Option<NodegroupScalingConfig>,
-    /// <p>The subnets to use for the Auto Scaling group that is created for your node group. These subnets must have the tag key <code>kubernetes.io/cluster/CLUSTER_NAME</code> with a value of <code>shared</code>, where <code>CLUSTER_NAME</code> is replaced with the name of your cluster. If you specify <code>launchTemplate</code>, then don't specify <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateNetworkInterface.html"> <code>SubnetId</code> </a> in your launch template, or the node group deployment will fail. For more information about using launch templates with Amazon EKS, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html">Launch template support</a> in the Amazon EKS User Guide.</p>
+    /// <p>The subnets to use for the Auto Scaling group that is created for your node group. If you specify <code>launchTemplate</code>, then don't specify <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateNetworkInterface.html"> <code>SubnetId</code> </a> in your launch template, or the node group deployment will fail. For more information about using launch templates with Amazon EKS, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html">Launch template support</a> in the Amazon EKS User Guide.</p>
     #[serde(rename = "subnets")]
     pub subnets: Vec<String>,
     /// <p>The metadata to apply to the node group to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you define. Node group tags do not propagate to any other resources associated with the node group, such as the Amazon EC2 instances or subnets.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The Kubernetes taints to be applied to the nodes in the node group.</p>
+    #[serde(rename = "taints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub taints: Option<Vec<Taint>>,
+    #[serde(rename = "updateConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update_config: Option<NodegroupUpdateConfig>,
     /// <p>The Kubernetes version to use for your managed nodes. By default, the Kubernetes version of the cluster is used, and this is the only accepted specified value. If you specify <code>launchTemplate</code>, and your launch template uses a custom AMI, then don't specify <code>version</code>, or the node group deployment will fail. For more information about using launch templates with Amazon EKS, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html">Launch template support</a> in the Amazon EKS User Guide.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -610,6 +671,26 @@ pub struct DescribeFargateProfileResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeIdentityProviderConfigRequest {
+    /// <p>The cluster name that the identity provider configuration is associated to.</p>
+    #[serde(rename = "clusterName")]
+    pub cluster_name: String,
+    /// <p>An object that represents an identity provider configuration.</p>
+    #[serde(rename = "identityProviderConfig")]
+    pub identity_provider_config: IdentityProviderConfig,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeIdentityProviderConfigResponse {
+    /// <p>The object that represents an OpenID Connect (OIDC) identity provider configuration.</p>
+    #[serde(rename = "identityProviderConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_provider_config: Option<IdentityProviderConfigResponse>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeNodegroupRequest {
     /// <p>The name of the Amazon EKS cluster associated with the node group.</p>
     #[serde(rename = "clusterName")]
@@ -656,10 +737,33 @@ pub struct DescribeUpdateResponse {
     pub update: Option<Update>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DisassociateIdentityProviderConfigRequest {
+    /// <p>A unique, case-sensitive identifier that you provide to ensure the idempotency of the request.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The name of the cluster to disassociate an identity provider from.</p>
+    #[serde(rename = "clusterName")]
+    pub cluster_name: String,
+    /// <p>An object that represents an identity provider configuration.</p>
+    #[serde(rename = "identityProviderConfig")]
+    pub identity_provider_config: IdentityProviderConfig,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DisassociateIdentityProviderConfigResponse {
+    #[serde(rename = "update")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update: Option<Update>,
+}
+
 /// <p>The encryption configuration for the cluster.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EncryptionConfig {
-    /// <p>AWS Key Management Service (AWS KMS) customer master key (CMK). Either the ARN or the alias can be used.</p>
+    /// <p>AWS Key Management Service (AWS KMS) key. Either the ARN or the alias can be used.</p>
     #[serde(rename = "provider")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider: Option<Provider>,
@@ -742,21 +846,42 @@ pub struct FargateProfileSelector {
     pub namespace: Option<String>,
 }
 
-/// <p>An object representing an identity provider for authentication credentials.</p>
+/// <p>An object representing an identity provider.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Identity {
-    /// <p>The <a href="https://openid.net/connect/">OpenID Connect</a> identity provider information for the cluster.</p>
+    /// <p>An object representing the <a href="https://openid.net/connect/">OpenID Connect</a> identity provider information.</p>
     #[serde(rename = "oidc")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub oidc: Option<OIDC>,
+}
+
+/// <p>An object representing an identity provider configuration.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct IdentityProviderConfig {
+    /// <p>The name of the identity provider configuration.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+    /// <p>The type of the identity provider configuration.</p>
+    #[serde(rename = "type")]
+    pub type_: String,
+}
+
+/// <p>An object that represents an identity configuration.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct IdentityProviderConfigResponse {
+    /// <p>An object that represents an OpenID Connect (OIDC) identity provider configuration.</p>
+    #[serde(rename = "oidc")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub oidc: Option<OidcIdentityProviderConfig>,
 }
 
 /// <p>An object representing an issue with an Amazon EKS resource.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct Issue {
-    /// <p><p>A brief description of the error.</p> <ul> <li> <p> <b>AccessDenied</b>: Amazon EKS or one or more of your managed nodes is failing to authenticate or authorize with your Kubernetes cluster API server.</p> </li> <li> <p> <b>AsgInstanceLaunchFailures</b>: Your Auto Scaling group is experiencing failures while attempting to launch instances.</p> </li> <li> <p> <b>AutoScalingGroupNotFound</b>: We couldn&#39;t find the Auto Scaling group associated with the managed node group. You may be able to recreate an Auto Scaling group with the same settings to recover.</p> </li> <li> <p> <b>ClusterUnreachable</b>: Amazon EKS or one or more of your managed nodes is unable to to communicate with your Kubernetes cluster API server. This can happen if there are network disruptions or if API servers are timing out processing requests. </p> </li> <li> <p> <b>Ec2LaunchTemplateNotFound</b>: We couldn&#39;t find the Amazon EC2 launch template for your managed node group. You may be able to recreate a launch template with the same settings to recover.</p> </li> <li> <p> <b>Ec2LaunchTemplateVersionMismatch</b>: The Amazon EC2 launch template version for your managed node group does not match the version that Amazon EKS created. You may be able to revert to the version that Amazon EKS created to recover.</p> </li> <li> <p> <b>Ec2SecurityGroupDeletionFailure</b>: We could not delete the remote access security group for your managed node group. Remove any dependencies from the security group.</p> </li> <li> <p> <b>Ec2SecurityGroupNotFound</b>: We couldn&#39;t find the cluster security group for the cluster. You must recreate your cluster.</p> </li> <li> <p> <b>Ec2SubnetInvalidConfiguration</b>: One or more Amazon EC2 subnets specified for a node group do not automatically assign public IP addresses to instances launched into it. If you want your instances to be assigned a public IP address, then you need to enable the <code>auto-assign public IP address</code> setting for the subnet. See <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-ip-addressing.html#subnet-public-ip">Modifying the public IPv4 addressing attribute for your subnet</a> in the Amazon VPC User Guide.</p> </li> <li> <p> <b>IamInstanceProfileNotFound</b>: We couldn&#39;t find the IAM instance profile for your managed node group. You may be able to recreate an instance profile with the same settings to recover.</p> </li> <li> <p> <b>IamNodeRoleNotFound</b>: We couldn&#39;t find the IAM role for your managed node group. You may be able to recreate an IAM role with the same settings to recover.</p> </li> <li> <p> <b>InstanceLimitExceeded</b>: Your AWS account is unable to launch any more instances of the specified instance type. You may be able to request an Amazon EC2 instance limit increase to recover.</p> </li> <li> <p> <b>InsufficientFreeAddresses</b>: One or more of the subnets associated with your managed node group does not have enough available IP addresses for new nodes.</p> </li> <li> <p> <b>InternalFailure</b>: These errors are usually caused by an Amazon EKS server-side issue.</p> </li> <li> <p> <b>NodeCreationFailure</b>: Your launched instances are unable to register with your Amazon EKS cluster. Common causes of this failure are insufficient <a href="https://docs.aws.amazon.com/eks/latest/userguide/worker_node_IAM_role.html">worker node IAM role</a> permissions or lack of outbound internet access for the nodes. </p> </li> </ul></p>
+    /// <p><p>A brief description of the error.</p> <ul> <li> <p> <b>AccessDenied</b>: Amazon EKS or one or more of your managed nodes is failing to authenticate or authorize with your Kubernetes cluster API server.</p> </li> <li> <p> <b>AsgInstanceLaunchFailures</b>: Your Auto Scaling group is experiencing failures while attempting to launch instances.</p> </li> <li> <p> <b>AutoScalingGroupNotFound</b>: We couldn&#39;t find the Auto Scaling group associated with the managed node group. You may be able to recreate an Auto Scaling group with the same settings to recover.</p> </li> <li> <p> <b>ClusterUnreachable</b>: Amazon EKS or one or more of your managed nodes is unable to to communicate with your Kubernetes cluster API server. This can happen if there are network disruptions or if API servers are timing out processing requests. </p> </li> <li> <p> <b>Ec2LaunchTemplateNotFound</b>: We couldn&#39;t find the Amazon EC2 launch template for your managed node group. You may be able to recreate a launch template with the same settings to recover.</p> </li> <li> <p> <b>Ec2LaunchTemplateVersionMismatch</b>: The Amazon EC2 launch template version for your managed node group does not match the version that Amazon EKS created. You may be able to revert to the version that Amazon EKS created to recover.</p> </li> <li> <p> <b>Ec2SecurityGroupDeletionFailure</b>: We could not delete the remote access security group for your managed node group. Remove any dependencies from the security group.</p> </li> <li> <p> <b>Ec2SecurityGroupNotFound</b>: We couldn&#39;t find the cluster security group for the cluster. You must recreate your cluster.</p> </li> <li> <p> <b>Ec2SubnetInvalidConfiguration</b>: One or more Amazon EC2 subnets specified for a node group do not automatically assign public IP addresses to instances launched into it. If you want your instances to be assigned a public IP address, then you need to enable the <code>auto-assign public IP address</code> setting for the subnet. See <a href="https://docs.aws.amazon.com/vpc/latest/userguide/vpc-ip-addressing.html#subnet-public-ip">Modifying the public IPv4 addressing attribute for your subnet</a> in the Amazon VPC User Guide.</p> </li> <li> <p> <b>IamInstanceProfileNotFound</b>: We couldn&#39;t find the IAM instance profile for your managed node group. You may be able to recreate an instance profile with the same settings to recover.</p> </li> <li> <p> <b>IamNodeRoleNotFound</b>: We couldn&#39;t find the IAM role for your managed node group. You may be able to recreate an IAM role with the same settings to recover.</p> </li> <li> <p> <b>InstanceLimitExceeded</b>: Your AWS account is unable to launch any more instances of the specified instance type. You may be able to request an Amazon EC2 instance limit increase to recover.</p> </li> <li> <p> <b>InsufficientFreeAddresses</b>: One or more of the subnets associated with your managed node group does not have enough available IP addresses for new nodes.</p> </li> <li> <p> <b>InternalFailure</b>: These errors are usually caused by an Amazon EKS server-side issue.</p> </li> <li> <p> <b>NodeCreationFailure</b>: Your launched instances are unable to register with your Amazon EKS cluster. Common causes of this failure are insufficient <a href="https://docs.aws.amazon.com/eks/latest/userguide/worker_node_IAM_role.html">node IAM role</a> permissions or lack of outbound internet access for the nodes. </p> </li> </ul></p>
     #[serde(rename = "code")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
@@ -886,6 +1011,35 @@ pub struct ListFargateProfilesResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fargate_profile_names: Option<Vec<String>>,
     /// <p>The <code>nextToken</code> value to include in a future <code>ListFargateProfiles</code> request. When the results of a <code>ListFargateProfiles</code> request exceed <code>maxResults</code>, you can use this value to retrieve the next page of results. This value is <code>null</code> when there are no more results to return.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListIdentityProviderConfigsRequest {
+    /// <p>The cluster name that you want to list identity provider configurations for.</p>
+    #[serde(rename = "clusterName")]
+    pub cluster_name: String,
+    /// <p>The maximum number of identity provider configurations returned by <code>ListIdentityProviderConfigs</code> in paginated output. When you use this parameter, <code>ListIdentityProviderConfigs</code> returns only <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. You can see the remaining results of the initial request by sending another <code>ListIdentityProviderConfigs</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If you don't use this parameter, <code>ListIdentityProviderConfigs</code> returns up to 100 results and a <code>nextToken</code> value, if applicable.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>IdentityProviderConfigsRequest</code> where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListIdentityProviderConfigsResponse {
+    /// <p>The identity provider configurations for the cluster.</p>
+    #[serde(rename = "identityProviderConfigs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_provider_configs: Option<Vec<IdentityProviderConfig>>,
+    /// <p>The <code>nextToken</code> value returned from a previous paginated <code>ListIdentityProviderConfigsResponse</code> where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1040,7 +1194,7 @@ pub struct Nodegroup {
     #[serde(rename = "modifiedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub modified_at: Option<f64>,
-    /// <p>The IAM role associated with your node group. The Amazon EKS worker node <code>kubelet</code> daemon makes calls to AWS APIs on your behalf. Worker nodes receive permissions for these API calls through an IAM instance profile and associated policies.</p>
+    /// <p>The IAM role associated with your node group. The Amazon EKS node <code>kubelet</code> daemon makes calls to AWS APIs on your behalf. Nodes receive permissions for these API calls through an IAM instance profile and associated policies.</p>
     #[serde(rename = "nodeRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub node_role: Option<String>,
@@ -1080,6 +1234,13 @@ pub struct Nodegroup {
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The Kubernetes taints to be applied to the nodes in the node group when they are created. Effect is one of <code>NoSchedule</code>, <code>PreferNoSchedule</code>, or <code>NoExecute</code>. Kubernetes taints can be used together with tolerations to control how workloads are scheduled to your nodes.</p>
+    #[serde(rename = "taints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub taints: Option<Vec<Taint>>,
+    #[serde(rename = "updateConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update_config: Option<NodegroupUpdateConfig>,
     /// <p>The Kubernetes version of the managed node group.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1104,43 +1265,142 @@ pub struct NodegroupResources {
     #[serde(rename = "autoScalingGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_scaling_groups: Option<Vec<AutoScalingGroup>>,
-    /// <p>The remote access security group associated with the node group. This security group controls SSH access to the worker nodes.</p>
+    /// <p>The remote access security group associated with the node group. This security group controls SSH access to the nodes.</p>
     #[serde(rename = "remoteAccessSecurityGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remote_access_security_group: Option<String>,
 }
 
-/// <p>An object representing the scaling configuration details for the Auto Scaling group that is associated with your node group. If you specify a value for any property, then you must specify values for all of the properties.</p>
+/// <p>An object representing the scaling configuration details for the Auto Scaling group that is associated with your node group. When creating a node group, you must specify all or none of the properties. When updating a node group, you can specify any or none of the properties.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct NodegroupScalingConfig {
-    /// <p>The current number of worker nodes that the managed node group should maintain.</p>
+    /// <p>The current number of nodes that the managed node group should maintain.</p>
     #[serde(rename = "desiredSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub desired_size: Option<i64>,
-    /// <p>The maximum number of worker nodes that the managed node group can scale out to. Managed node groups can support up to 100 nodes by default.</p>
+    /// <p>The maximum number of nodes that the managed node group can scale out to. For information about the maximum number that you can specify, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/service-quotas.html">Amazon EKS service quotas</a> in the <i>Amazon EKS User Guide</i>.</p>
     #[serde(rename = "maxSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_size: Option<i64>,
-    /// <p>The minimum number of worker nodes that the managed node group can scale in to. This number must be greater than zero.</p>
+    /// <p>The minimum number of nodes that the managed node group can scale in to. This number must be greater than zero.</p>
     #[serde(rename = "minSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub min_size: Option<i64>,
 }
 
-/// <p>An object representing the <a href="https://openid.net/connect/">OpenID Connect</a> identity provider information for the cluster.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct NodegroupUpdateConfig {
+    #[serde(rename = "maxUnavailable")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_unavailable: Option<i64>,
+    #[serde(rename = "maxUnavailablePercentage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_unavailable_percentage: Option<i64>,
+}
+
+/// <p>An object representing the <a href="https://openid.net/connect/">OpenID Connect</a> (OIDC) identity provider information for the cluster.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct OIDC {
-    /// <p>The issuer URL for the OpenID Connect identity provider.</p>
+    /// <p>The issuer URL for the OIDC identity provider.</p>
     #[serde(rename = "issuer")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub issuer: Option<String>,
 }
 
-/// <p>Identifies the AWS Key Management Service (AWS KMS) customer master key (CMK) used to encrypt the secrets.</p>
+/// <p>An object that represents the configuration for an OpenID Connect (OIDC) identity provider. </p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct OidcIdentityProviderConfig {
+    /// <p>This is also known as <i>audience</i>. The ID of the client application that makes authentication requests to the OIDC identity provider.</p>
+    #[serde(rename = "clientId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_id: Option<String>,
+    /// <p>The cluster that the configuration is associated to.</p>
+    #[serde(rename = "clusterName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_name: Option<String>,
+    /// <p>The JSON web token (JWT) claim that the provider uses to return your groups.</p>
+    #[serde(rename = "groupsClaim")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub groups_claim: Option<String>,
+    /// <p>The prefix that is prepended to group claims to prevent clashes with existing names (such as <code>system:</code> groups). For example, the value<code> oidc:</code> creates group names like <code>oidc:engineering</code> and <code>oidc:infra</code>. The prefix can't contain <code>system:</code> </p>
+    #[serde(rename = "groupsPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub groups_prefix: Option<String>,
+    /// <p>The ARN of the configuration.</p>
+    #[serde(rename = "identityProviderConfigArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_provider_config_arn: Option<String>,
+    /// <p>The name of the configuration.</p>
+    #[serde(rename = "identityProviderConfigName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identity_provider_config_name: Option<String>,
+    /// <p>The URL of the OIDC identity provider that allows the API server to discover public signing keys for verifying tokens.</p>
+    #[serde(rename = "issuerUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub issuer_url: Option<String>,
+    /// <p>The key-value pairs that describe required claims in the identity token. If set, each claim is verified to be present in the token with a matching value.</p>
+    #[serde(rename = "requiredClaims")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub required_claims: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The status of the OIDC identity provider.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The metadata to apply to the provider configuration to assist with categorization and organization. Each tag consists of a key and an optional value, both of which you defined.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The JSON Web token (JWT) claim that is used as the username.</p>
+    #[serde(rename = "usernameClaim")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub username_claim: Option<String>,
+    /// <p>The prefix that is prepended to username claims to prevent clashes with existing names. The prefix can't contain <code>system:</code> </p>
+    #[serde(rename = "usernamePrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub username_prefix: Option<String>,
+}
+
+/// <p>An object representing an OpenID Connect (OIDC) configuration. Before associating an OIDC identity provider to your cluster, review the considerations in <a href="https://docs.aws.amazon.com/eks/latest/userguide/authenticate-oidc-identity-provider.html">Authenticating users for your cluster from an OpenID Connect identity provider</a> in the <i>Amazon EKS User Guide</i>.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct OidcIdentityProviderConfigRequest {
+    /// <p>This is also known as <i>audience</i>. The ID for the client application that makes authentication requests to the OpenID identity provider.</p>
+    #[serde(rename = "clientId")]
+    pub client_id: String,
+    /// <p>The JWT claim that the provider uses to return your groups.</p>
+    #[serde(rename = "groupsClaim")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub groups_claim: Option<String>,
+    /// <p>The prefix that is prepended to group claims to prevent clashes with existing names (such as <code>system:</code> groups). For example, the value<code> oidc:</code> will create group names like <code>oidc:engineering</code> and <code>oidc:infra</code>.</p>
+    #[serde(rename = "groupsPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub groups_prefix: Option<String>,
+    /// <p>The name of the OIDC provider configuration.</p>
+    #[serde(rename = "identityProviderConfigName")]
+    pub identity_provider_config_name: String,
+    /// <p>The URL of the OpenID identity provider that allows the API server to discover public signing keys for verifying tokens. The URL must begin with <code>https://</code> and should correspond to the <code>iss</code> claim in the provider's OIDC ID tokens. Per the OIDC standard, path components are allowed but query parameters are not. Typically the URL consists of only a hostname, like <code>https://server.example.org</code> or <code>https://example.com</code>. This URL should point to the level below <code>.well-known/openid-configuration</code> and must be publicly accessible over the internet.</p>
+    #[serde(rename = "issuerUrl")]
+    pub issuer_url: String,
+    /// <p>The key value pairs that describe required claims in the identity token. If set, each claim is verified to be present in the token with a matching value. For the maximum number of claims that you can require, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/service-quotas.html">Amazon EKS service quotas</a> in the <i>Amazon EKS User Guide</i>.</p>
+    #[serde(rename = "requiredClaims")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub required_claims: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The JSON Web Token (JWT) claim to use as the username. The default is <code>sub</code>, which is expected to be a unique identifier of the end user. You can choose other claims, such as <code>email</code> or <code>name</code>, depending on the OpenID identity provider. Claims other than <code>email</code> are prefixed with the issuer URL to prevent naming clashes with other plug-ins.</p>
+    #[serde(rename = "usernameClaim")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub username_claim: Option<String>,
+    /// <p>The prefix that is prepended to username claims to prevent clashes with existing names. If you do not provide this field, and <code>username</code> is a value other than <code>email</code>, the prefix defaults to <code>issuerurl#</code>. You can use the value <code>-</code> to disable all prefixing.</p>
+    #[serde(rename = "usernamePrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub username_prefix: Option<String>,
+}
+
+/// <p>Identifies the AWS Key Management Service (AWS KMS) key used to encrypt the secrets.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Provider {
-    /// <p>Amazon Resource Name (ARN) or alias of the customer master key (CMK). The CMK must be symmetric, created in the same region as the cluster, and if the CMK was created in a different account, the user must have access to the CMK. For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-modifying-external-accounts.html">Allowing Users in Other Accounts to Use a CMK</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>Amazon Resource Name (ARN) or alias of the KMS key. The KMS key must be symmetric, created in the same region as the cluster, and if the KMS key was created in a different account, the user must have access to the KMS key. For more information, see <a href="https://docs.aws.amazon.com/kms/latest/developerguide/key-policy-modifying-external-accounts.html">Allowing Users in Other Accounts to Use a KMS key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     #[serde(rename = "keyArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_arn: Option<String>,
@@ -1149,11 +1409,11 @@ pub struct Provider {
 /// <p>An object representing the remote access configuration for the managed node group.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct RemoteAccessConfig {
-    /// <p>The Amazon EC2 SSH key that provides access for SSH communication with the worker nodes in the managed node group. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">Amazon EC2 Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide for Linux Instances</i>.</p>
+    /// <p>The Amazon EC2 SSH key that provides access for SSH communication with the nodes in the managed node group. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">Amazon EC2 Key Pairs</a> in the <i>Amazon Elastic Compute Cloud User Guide for Linux Instances</i>.</p>
     #[serde(rename = "ec2SshKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_ssh_key: Option<String>,
-    /// <p>The security groups that are allowed SSH access (port 22) to the worker nodes. If you specify an Amazon EC2 SSH key but do not specify a source security group when you create a managed node group, then port 22 on the worker nodes is opened to the internet (0.0.0.0/0). For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
+    /// <p>The security groups that are allowed SSH access (port 22) to the nodes. If you specify an Amazon EC2 SSH key but do not specify a source security group when you create a managed node group, then port 22 on the nodes is opened to the internet (0.0.0.0/0). For more information, see <a href="https://docs.aws.amazon.com/vpc/latest/userguide/VPC_SecurityGroups.html">Security Groups for Your VPC</a> in the <i>Amazon Virtual Private Cloud User Guide</i>.</p>
     #[serde(rename = "sourceSecurityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_security_groups: Option<Vec<String>>,
@@ -1173,6 +1433,23 @@ pub struct TagResourceRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TagResourceResponse {}
+
+/// <p>A property that allows a node to repel a set of pods.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct Taint {
+    /// <p>The effect of the taint.</p>
+    #[serde(rename = "effect")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub effect: Option<String>,
+    /// <p>The key of the taint.</p>
+    #[serde(rename = "key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// <p>The value of the taint.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1340,6 +1617,13 @@ pub struct UpdateNodegroupConfigRequest {
     #[serde(rename = "scalingConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scaling_config: Option<NodegroupScalingConfig>,
+    /// <p>The Kubernetes taints to be applied to the nodes in the node group after the update.</p>
+    #[serde(rename = "taints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub taints: Option<UpdateTaintsPayload>,
+    #[serde(rename = "updateConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update_config: Option<NodegroupUpdateConfig>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1403,11 +1687,25 @@ pub struct UpdateParam {
     pub value: Option<String>,
 }
 
+/// <p>An object representing the details of an update to a taints payload.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateTaintsPayload {
+    /// <p>Kubernetes taints to be added or updated.</p>
+    #[serde(rename = "addOrUpdateTaints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub add_or_update_taints: Option<Vec<Taint>>,
+    /// <p>Kubernetes taints to be removed.</p>
+    #[serde(rename = "removeTaints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remove_taints: Option<Vec<Taint>>,
+}
+
 /// <p>An object representing the VPC configuration to use for an Amazon EKS cluster.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct VpcConfigRequest {
-    /// <p>Set this value to <code>true</code> to enable private access for your cluster's Kubernetes API server endpoint. If you enable private access, Kubernetes API requests from within your cluster's VPC use the private VPC endpoint. The default value for this parameter is <code>false</code>, which disables private access for your Kubernetes API server. If you disable private access and you have worker nodes or AWS Fargate pods in the cluster, then ensure that <code>publicAccessCidrs</code> includes the necessary CIDR blocks for communication with the worker nodes or Fargate pods. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html">Amazon EKS Cluster Endpoint Access Control</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p>
+    /// <p>Set this value to <code>true</code> to enable private access for your cluster's Kubernetes API server endpoint. If you enable private access, Kubernetes API requests from within your cluster's VPC use the private VPC endpoint. The default value for this parameter is <code>false</code>, which disables private access for your Kubernetes API server. If you disable private access and you have nodes or AWS Fargate pods in the cluster, then ensure that <code>publicAccessCidrs</code> includes the necessary CIDR blocks for communication with the nodes or Fargate pods. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html">Amazon EKS Cluster Endpoint Access Control</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p>
     #[serde(rename = "endpointPrivateAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_private_access: Option<bool>,
@@ -1415,15 +1713,15 @@ pub struct VpcConfigRequest {
     #[serde(rename = "endpointPublicAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_public_access: Option<bool>,
-    /// <p>The CIDR blocks that are allowed access to your cluster's public Kubernetes API server endpoint. Communication to the endpoint from addresses outside of the CIDR blocks that you specify is denied. The default value is <code>0.0.0.0/0</code>. If you've disabled private endpoint access and you have worker nodes or AWS Fargate pods in the cluster, then ensure that you specify the necessary CIDR blocks. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html">Amazon EKS Cluster Endpoint Access Control</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p>
+    /// <p>The CIDR blocks that are allowed access to your cluster's public Kubernetes API server endpoint. Communication to the endpoint from addresses outside of the CIDR blocks that you specify is denied. The default value is <code>0.0.0.0/0</code>. If you've disabled private endpoint access and you have nodes or AWS Fargate pods in the cluster, then ensure that you specify the necessary CIDR blocks. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html">Amazon EKS Cluster Endpoint Access Control</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p>
     #[serde(rename = "publicAccessCidrs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub public_access_cidrs: Option<Vec<String>>,
-    /// <p>Specify one or more security groups for the cross-account elastic network interfaces that Amazon EKS creates to use to allow communication between your worker nodes and the Kubernetes control plane. If you don't specify any security groups, then familiarize yourself with the difference between Amazon EKS defaults for clusters deployed with Kubernetes:</p> <ul> <li> <p>1.14 Amazon EKS platform version <code>eks.2</code> and earlier</p> </li> <li> <p>1.14 Amazon EKS platform version <code>eks.3</code> and later </p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/sec-group-reqs.html">Amazon EKS security group considerations</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p>
+    /// <p>Specify one or more security groups for the cross-account elastic network interfaces that Amazon EKS creates to use to allow communication between your nodes and the Kubernetes control plane. If you don't specify any security groups, then familiarize yourself with the difference between Amazon EKS defaults for clusters deployed with Kubernetes:</p> <ul> <li> <p>1.14 Amazon EKS platform version <code>eks.2</code> and earlier</p> </li> <li> <p>1.14 Amazon EKS platform version <code>eks.3</code> and later </p> </li> </ul> <p>For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/sec-group-reqs.html">Amazon EKS security group considerations</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p>
     #[serde(rename = "securityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
-    /// <p>Specify subnets for your Amazon EKS worker nodes. Amazon EKS creates cross-account elastic network interfaces in these subnets to allow communication between your worker nodes and the Kubernetes control plane.</p>
+    /// <p>Specify subnets for your Amazon EKS nodes. Amazon EKS creates cross-account elastic network interfaces in these subnets to allow communication between your nodes and the Kubernetes control plane.</p>
     #[serde(rename = "subnetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_ids: Option<Vec<String>>,
@@ -1437,7 +1735,7 @@ pub struct VpcConfigResponse {
     #[serde(rename = "clusterSecurityGroupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cluster_security_group_id: Option<String>,
-    /// <p>This parameter indicates whether the Amazon EKS private API server endpoint is enabled. If the Amazon EKS private API server endpoint is enabled, Kubernetes API requests that originate from within your cluster's VPC use the private VPC endpoint instead of traversing the internet. If this value is disabled and you have worker nodes or AWS Fargate pods in the cluster, then ensure that <code>publicAccessCidrs</code> includes the necessary CIDR blocks for communication with the worker nodes or Fargate pods. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html">Amazon EKS Cluster Endpoint Access Control</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p>
+    /// <p>This parameter indicates whether the Amazon EKS private API server endpoint is enabled. If the Amazon EKS private API server endpoint is enabled, Kubernetes API requests that originate from within your cluster's VPC use the private VPC endpoint instead of traversing the internet. If this value is disabled and you have nodes or AWS Fargate pods in the cluster, then ensure that <code>publicAccessCidrs</code> includes the necessary CIDR blocks for communication with the nodes or Fargate pods. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html">Amazon EKS Cluster Endpoint Access Control</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p>
     #[serde(rename = "endpointPrivateAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_private_access: Option<bool>,
@@ -1445,11 +1743,11 @@ pub struct VpcConfigResponse {
     #[serde(rename = "endpointPublicAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_public_access: Option<bool>,
-    /// <p>The CIDR blocks that are allowed access to your cluster's public Kubernetes API server endpoint. Communication to the endpoint from addresses outside of the listed CIDR blocks is denied. The default value is <code>0.0.0.0/0</code>. If you've disabled private endpoint access and you have worker nodes or AWS Fargate pods in the cluster, then ensure that the necessary CIDR blocks are listed. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html">Amazon EKS Cluster Endpoint Access Control</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p>
+    /// <p>The CIDR blocks that are allowed access to your cluster's public Kubernetes API server endpoint. Communication to the endpoint from addresses outside of the listed CIDR blocks is denied. The default value is <code>0.0.0.0/0</code>. If you've disabled private endpoint access and you have nodes or AWS Fargate pods in the cluster, then ensure that the necessary CIDR blocks are listed. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html">Amazon EKS Cluster Endpoint Access Control</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p>
     #[serde(rename = "publicAccessCidrs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub public_access_cidrs: Option<Vec<String>>,
-    /// <p>The security groups associated with the cross-account elastic network interfaces that are used to allow communication between your worker nodes and the Kubernetes control plane.</p>
+    /// <p>The security groups associated with the cross-account elastic network interfaces that are used to allow communication between your nodes and the Kubernetes control plane.</p>
     #[serde(rename = "securityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_group_ids: Option<Vec<String>>,
@@ -1463,6 +1761,156 @@ pub struct VpcConfigResponse {
     pub vpc_id: Option<String>,
 }
 
+/// Errors returned by AssociateEncryptionConfig
+#[derive(Debug, PartialEq)]
+pub enum AssociateEncryptionConfigError {
+    /// <p>These errors are usually caused by a client action. Actions can include using an action or resource on behalf of a user that doesn't have permissions to use the action or resource or specifying an identifier that is not valid.</p>
+    Client(String),
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>The request is invalid given the state of the cluster. Check the state of the cluster and the associated operations.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource is in use.</p>
+    ResourceInUse(String),
+    /// <p>The specified resource could not be found. You can view your available clusters with <a>ListClusters</a>. You can view your available managed node groups with <a>ListNodegroups</a>. Amazon EKS clusters and node groups are Region-specific.</p>
+    ResourceNotFound(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+}
+
+impl AssociateEncryptionConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<AssociateEncryptionConfigError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ClientException" => {
+                    return RusotoError::Service(AssociateEncryptionConfigError::Client(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(AssociateEncryptionConfigError::InvalidParameter(
+                        err.msg,
+                    ))
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(AssociateEncryptionConfigError::InvalidRequest(
+                        err.msg,
+                    ))
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(AssociateEncryptionConfigError::ResourceInUse(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(AssociateEncryptionConfigError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ServerException" => {
+                    return RusotoError::Service(AssociateEncryptionConfigError::Server(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for AssociateEncryptionConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AssociateEncryptionConfigError::Client(ref cause) => write!(f, "{}", cause),
+            AssociateEncryptionConfigError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            AssociateEncryptionConfigError::InvalidRequest(ref cause) => write!(f, "{}", cause),
+            AssociateEncryptionConfigError::ResourceInUse(ref cause) => write!(f, "{}", cause),
+            AssociateEncryptionConfigError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            AssociateEncryptionConfigError::Server(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for AssociateEncryptionConfigError {}
+/// Errors returned by AssociateIdentityProviderConfig
+#[derive(Debug, PartialEq)]
+pub enum AssociateIdentityProviderConfigError {
+    /// <p>These errors are usually caused by a client action. Actions can include using an action or resource on behalf of a user that doesn't have permissions to use the action or resource or specifying an identifier that is not valid.</p>
+    Client(String),
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>The request is invalid given the state of the cluster. Check the state of the cluster and the associated operations.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource is in use.</p>
+    ResourceInUse(String),
+    /// <p>The specified resource could not be found. You can view your available clusters with <a>ListClusters</a>. You can view your available managed node groups with <a>ListNodegroups</a>. Amazon EKS clusters and node groups are Region-specific.</p>
+    ResourceNotFound(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+}
+
+impl AssociateIdentityProviderConfigError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<AssociateIdentityProviderConfigError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ClientException" => {
+                    return RusotoError::Service(AssociateIdentityProviderConfigError::Client(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        AssociateIdentityProviderConfigError::InvalidParameter(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        AssociateIdentityProviderConfigError::InvalidRequest(err.msg),
+                    )
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(
+                        AssociateIdentityProviderConfigError::ResourceInUse(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        AssociateIdentityProviderConfigError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ServerException" => {
+                    return RusotoError::Service(AssociateIdentityProviderConfigError::Server(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for AssociateIdentityProviderConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            AssociateIdentityProviderConfigError::Client(ref cause) => write!(f, "{}", cause),
+            AssociateIdentityProviderConfigError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateIdentityProviderConfigError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateIdentityProviderConfigError::ResourceInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateIdentityProviderConfigError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            AssociateIdentityProviderConfigError::Server(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for AssociateIdentityProviderConfigError {}
 /// Errors returned by CreateAddon
 #[derive(Debug, PartialEq)]
 pub enum CreateAddonError {
@@ -2147,6 +2595,78 @@ impl fmt::Display for DescribeFargateProfileError {
     }
 }
 impl Error for DescribeFargateProfileError {}
+/// Errors returned by DescribeIdentityProviderConfig
+#[derive(Debug, PartialEq)]
+pub enum DescribeIdentityProviderConfigError {
+    /// <p>These errors are usually caused by a client action. Actions can include using an action or resource on behalf of a user that doesn't have permissions to use the action or resource or specifying an identifier that is not valid.</p>
+    Client(String),
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource could not be found. You can view your available clusters with <a>ListClusters</a>. You can view your available managed node groups with <a>ListNodegroups</a>. Amazon EKS clusters and node groups are Region-specific.</p>
+    ResourceNotFound(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+    /// <p>The service is unavailable. Back off and retry the operation.</p>
+    ServiceUnavailable(String),
+}
+
+impl DescribeIdentityProviderConfigError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DescribeIdentityProviderConfigError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ClientException" => {
+                    return RusotoError::Service(DescribeIdentityProviderConfigError::Client(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        DescribeIdentityProviderConfigError::InvalidParameter(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DescribeIdentityProviderConfigError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ServerException" => {
+                    return RusotoError::Service(DescribeIdentityProviderConfigError::Server(
+                        err.msg,
+                    ))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        DescribeIdentityProviderConfigError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeIdentityProviderConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeIdentityProviderConfigError::Client(ref cause) => write!(f, "{}", cause),
+            DescribeIdentityProviderConfigError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeIdentityProviderConfigError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DescribeIdentityProviderConfigError::Server(ref cause) => write!(f, "{}", cause),
+            DescribeIdentityProviderConfigError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for DescribeIdentityProviderConfigError {}
 /// Errors returned by DescribeNodegroup
 #[derive(Debug, PartialEq)]
 pub enum DescribeNodegroupError {
@@ -2251,6 +2771,88 @@ impl fmt::Display for DescribeUpdateError {
     }
 }
 impl Error for DescribeUpdateError {}
+/// Errors returned by DisassociateIdentityProviderConfig
+#[derive(Debug, PartialEq)]
+pub enum DisassociateIdentityProviderConfigError {
+    /// <p>These errors are usually caused by a client action. Actions can include using an action or resource on behalf of a user that doesn't have permissions to use the action or resource or specifying an identifier that is not valid.</p>
+    Client(String),
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>The request is invalid given the state of the cluster. Check the state of the cluster and the associated operations.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource is in use.</p>
+    ResourceInUse(String),
+    /// <p>The specified resource could not be found. You can view your available clusters with <a>ListClusters</a>. You can view your available managed node groups with <a>ListNodegroups</a>. Amazon EKS clusters and node groups are Region-specific.</p>
+    ResourceNotFound(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+}
+
+impl DisassociateIdentityProviderConfigError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<DisassociateIdentityProviderConfigError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ClientException" => {
+                    return RusotoError::Service(DisassociateIdentityProviderConfigError::Client(
+                        err.msg,
+                    ))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        DisassociateIdentityProviderConfigError::InvalidParameter(err.msg),
+                    )
+                }
+                "InvalidRequestException" => {
+                    return RusotoError::Service(
+                        DisassociateIdentityProviderConfigError::InvalidRequest(err.msg),
+                    )
+                }
+                "ResourceInUseException" => {
+                    return RusotoError::Service(
+                        DisassociateIdentityProviderConfigError::ResourceInUse(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        DisassociateIdentityProviderConfigError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ServerException" => {
+                    return RusotoError::Service(DisassociateIdentityProviderConfigError::Server(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DisassociateIdentityProviderConfigError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DisassociateIdentityProviderConfigError::Client(ref cause) => write!(f, "{}", cause),
+            DisassociateIdentityProviderConfigError::InvalidParameter(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateIdentityProviderConfigError::InvalidRequest(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateIdentityProviderConfigError::ResourceInUse(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateIdentityProviderConfigError::ResourceNotFound(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            DisassociateIdentityProviderConfigError::Server(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DisassociateIdentityProviderConfigError {}
 /// Errors returned by ListAddons
 #[derive(Debug, PartialEq)]
 pub enum ListAddonsError {
@@ -2401,6 +3003,70 @@ impl fmt::Display for ListFargateProfilesError {
     }
 }
 impl Error for ListFargateProfilesError {}
+/// Errors returned by ListIdentityProviderConfigs
+#[derive(Debug, PartialEq)]
+pub enum ListIdentityProviderConfigsError {
+    /// <p>These errors are usually caused by a client action. Actions can include using an action or resource on behalf of a user that doesn't have permissions to use the action or resource or specifying an identifier that is not valid.</p>
+    Client(String),
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource could not be found. You can view your available clusters with <a>ListClusters</a>. You can view your available managed node groups with <a>ListNodegroups</a>. Amazon EKS clusters and node groups are Region-specific.</p>
+    ResourceNotFound(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+    /// <p>The service is unavailable. Back off and retry the operation.</p>
+    ServiceUnavailable(String),
+}
+
+impl ListIdentityProviderConfigsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ListIdentityProviderConfigsError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "ClientException" => {
+                    return RusotoError::Service(ListIdentityProviderConfigsError::Client(err.msg))
+                }
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        ListIdentityProviderConfigsError::InvalidParameter(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        ListIdentityProviderConfigsError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ServerException" => {
+                    return RusotoError::Service(ListIdentityProviderConfigsError::Server(err.msg))
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        ListIdentityProviderConfigsError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListIdentityProviderConfigsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListIdentityProviderConfigsError::Client(ref cause) => write!(f, "{}", cause),
+            ListIdentityProviderConfigsError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            ListIdentityProviderConfigsError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+            ListIdentityProviderConfigsError::Server(ref cause) => write!(f, "{}", cause),
+            ListIdentityProviderConfigsError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ListIdentityProviderConfigsError {}
 /// Errors returned by ListNodegroups
 #[derive(Debug, PartialEq)]
 pub enum ListNodegroupsError {
@@ -2936,13 +3602,28 @@ impl Error for UpdateNodegroupVersionError {}
 /// Trait representing the capabilities of the Amazon EKS API. Amazon EKS clients implement this trait.
 #[async_trait]
 pub trait Eks {
+    /// <p>Associate encryption configuration to an existing cluster.</p> <p>You can use this API to enable encryption on existing clusters which do not have encryption already enabled. This allows you to implement a defense-in-depth security strategy without migrating applications to new EKS clusters.</p>
+    async fn associate_encryption_config(
+        &self,
+        input: AssociateEncryptionConfigRequest,
+    ) -> Result<AssociateEncryptionConfigResponse, RusotoError<AssociateEncryptionConfigError>>;
+
+    /// <p>Associate an identity provider configuration to a cluster.</p> <p>If you want to authenticate identities using an identity provider, you can create an identity provider configuration and associate it to your cluster. After configuring authentication to your cluster you can create Kubernetes <code>roles</code> and <code>clusterroles</code> to assign permissions to the roles, and then bind the roles to the identities using Kubernetes <code>rolebindings</code> and <code>clusterrolebindings</code>. For more information see <a href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/">Using RBAC Authorization</a> in the Kubernetes documentation.</p>
+    async fn associate_identity_provider_config(
+        &self,
+        input: AssociateIdentityProviderConfigRequest,
+    ) -> Result<
+        AssociateIdentityProviderConfigResponse,
+        RusotoError<AssociateIdentityProviderConfigError>,
+    >;
+
     /// <p>Creates an Amazon EKS add-on.</p> <p>Amazon EKS add-ons help to automate the provisioning and lifecycle management of common operational software for Amazon EKS clusters. Amazon EKS add-ons can only be used with Amazon EKS clusters running version 1.18 with platform version <code>eks.3</code> or later because add-ons rely on the Server-side Apply Kubernetes feature, which is only available in Kubernetes 1.18 and later.</p>
     async fn create_addon(
         &self,
         input: CreateAddonRequest,
     ) -> Result<CreateAddonResponse, RusotoError<CreateAddonError>>;
 
-    /// <p>Creates an Amazon EKS control plane. </p> <p>The Amazon EKS control plane consists of control plane instances that run the Kubernetes software, such as <code>etcd</code> and the API server. The control plane runs in an account managed by AWS, and the Kubernetes API is exposed via the Amazon EKS API server endpoint. Each Amazon EKS cluster control plane is single-tenant and unique and runs on its own set of Amazon EC2 instances.</p> <p>The cluster control plane is provisioned across multiple Availability Zones and fronted by an Elastic Load Balancing Network Load Balancer. Amazon EKS also provisions elastic network interfaces in your VPC subnets to provide connectivity from the control plane instances to the worker nodes (for example, to support <code>kubectl exec</code>, <code>logs</code>, and <code>proxy</code> data flows).</p> <p>Amazon EKS worker nodes run in your AWS account and connect to your cluster's control plane via the Kubernetes API server endpoint and a certificate file that is created for your cluster.</p> <p>You can use the <code>endpointPublicAccess</code> and <code>endpointPrivateAccess</code> parameters to enable or disable public and private access to your cluster's Kubernetes API server endpoint. By default, public access is enabled, and private access is disabled. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html">Amazon EKS Cluster Endpoint Access Control</a> in the <i> <i>Amazon EKS User Guide</i> </i>. </p> <p>You can use the <code>logging</code> parameter to enable or disable exporting the Kubernetes control plane logs for your cluster to CloudWatch Logs. By default, cluster control plane logs aren't exported to CloudWatch Logs. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html">Amazon EKS Cluster Control Plane Logs</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p> <note> <p>CloudWatch Logs ingestion, archive storage, and data scanning rates apply to exported control plane logs. For more information, see <a href="http://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> </note> <p>Cluster creation typically takes between 10 and 15 minutes. After you create an Amazon EKS cluster, you must configure your Kubernetes tooling to communicate with the API server and launch worker nodes into your cluster. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/managing-auth.html">Managing Cluster Authentication</a> and <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-workers.html">Launching Amazon EKS Worker Nodes</a> in the <i>Amazon EKS User Guide</i>.</p>
+    /// <p>Creates an Amazon EKS control plane. </p> <p>The Amazon EKS control plane consists of control plane instances that run the Kubernetes software, such as <code>etcd</code> and the API server. The control plane runs in an account managed by AWS, and the Kubernetes API is exposed via the Amazon EKS API server endpoint. Each Amazon EKS cluster control plane is single-tenant and unique and runs on its own set of Amazon EC2 instances.</p> <p>The cluster control plane is provisioned across multiple Availability Zones and fronted by an Elastic Load Balancing Network Load Balancer. Amazon EKS also provisions elastic network interfaces in your VPC subnets to provide connectivity from the control plane instances to the nodes (for example, to support <code>kubectl exec</code>, <code>logs</code>, and <code>proxy</code> data flows).</p> <p>Amazon EKS nodes run in your AWS account and connect to your cluster's control plane via the Kubernetes API server endpoint and a certificate file that is created for your cluster.</p> <p>Cluster creation typically takes several minutes. After you create an Amazon EKS cluster, you must configure your Kubernetes tooling to communicate with the API server and launch nodes into your cluster. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/managing-auth.html">Managing Cluster Authentication</a> and <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-workers.html">Launching Amazon EKS nodes</a> in the <i>Amazon EKS User Guide</i>.</p>
     async fn create_cluster(
         &self,
         input: CreateClusterRequest,
@@ -2954,7 +3635,7 @@ pub trait Eks {
         input: CreateFargateProfileRequest,
     ) -> Result<CreateFargateProfileResponse, RusotoError<CreateFargateProfileError>>;
 
-    /// <p>Creates a managed worker node group for an Amazon EKS cluster. You can only create a node group for your cluster that is equal to the current Kubernetes version for the cluster. All node groups are created with the latest AMI release version for the respective minor Kubernetes version of the cluster, unless you deploy a custom AMI using a launch template. For more information about using launch templates, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html">Launch template support</a>.</p> <p>An Amazon EKS managed node group is an Amazon EC2 Auto Scaling group and associated Amazon EC2 instances that are managed by AWS for an Amazon EKS cluster. Each node group uses a version of the Amazon EKS optimized Amazon Linux 2 AMI. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html">Managed Node Groups</a> in the <i>Amazon EKS User Guide</i>. </p>
+    /// <p>Creates a managed node group for an Amazon EKS cluster. You can only create a node group for your cluster that is equal to the current Kubernetes version for the cluster. All node groups are created with the latest AMI release version for the respective minor Kubernetes version of the cluster, unless you deploy a custom AMI using a launch template. For more information about using launch templates, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html">Launch template support</a>.</p> <p>An Amazon EKS managed node group is an Amazon EC2 Auto Scaling group and associated Amazon EC2 instances that are managed by AWS for an Amazon EKS cluster. Each node group uses a version of the Amazon EKS optimized Amazon Linux 2 AMI. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html">Managed Node Groups</a> in the <i>Amazon EKS User Guide</i>. </p>
     async fn create_nodegroup(
         &self,
         input: CreateNodegroupRequest,
@@ -3008,6 +3689,15 @@ pub trait Eks {
         input: DescribeFargateProfileRequest,
     ) -> Result<DescribeFargateProfileResponse, RusotoError<DescribeFargateProfileError>>;
 
+    /// <p>Returns descriptive information about an identity provider configuration.</p>
+    async fn describe_identity_provider_config(
+        &self,
+        input: DescribeIdentityProviderConfigRequest,
+    ) -> Result<
+        DescribeIdentityProviderConfigResponse,
+        RusotoError<DescribeIdentityProviderConfigError>,
+    >;
+
     /// <p>Returns descriptive information about an Amazon EKS node group.</p>
     async fn describe_nodegroup(
         &self,
@@ -3019,6 +3709,15 @@ pub trait Eks {
         &self,
         input: DescribeUpdateRequest,
     ) -> Result<DescribeUpdateResponse, RusotoError<DescribeUpdateError>>;
+
+    /// <p>Disassociates an identity provider configuration from a cluster. If you disassociate an identity provider from your cluster, users included in the provider can no longer access the cluster. However, you can still access the cluster with AWS IAM users.</p>
+    async fn disassociate_identity_provider_config(
+        &self,
+        input: DisassociateIdentityProviderConfigRequest,
+    ) -> Result<
+        DisassociateIdentityProviderConfigResponse,
+        RusotoError<DisassociateIdentityProviderConfigError>,
+    >;
 
     /// <p>Lists the available add-ons.</p>
     async fn list_addons(
@@ -3038,6 +3737,12 @@ pub trait Eks {
         input: ListFargateProfilesRequest,
     ) -> Result<ListFargateProfilesResponse, RusotoError<ListFargateProfilesError>>;
 
+    /// <p>A list of identity provider configurations.</p>
+    async fn list_identity_provider_configs(
+        &self,
+        input: ListIdentityProviderConfigsRequest,
+    ) -> Result<ListIdentityProviderConfigsResponse, RusotoError<ListIdentityProviderConfigsError>>;
+
     /// <p>Lists the Amazon EKS managed node groups associated with the specified cluster in your AWS account in the specified Region. Self-managed node groups are not listed.</p>
     async fn list_nodegroups(
         &self,
@@ -3056,7 +3761,7 @@ pub trait Eks {
         input: ListUpdatesRequest,
     ) -> Result<ListUpdatesResponse, RusotoError<ListUpdatesError>>;
 
-    /// <p>Associates the specified tags to a resource with the specified <code>resourceArn</code>. If existing tags on a resource are not specified in the request parameters, they are not changed. When a resource is deleted, the tags associated with that resource are deleted as well. Tags that you create for Amazon EKS resources do not propagate to any other resources associated with the cluster. For example, if you tag a cluster with this operation, that tag does not automatically propagate to the subnets and worker nodes associated with the cluster.</p>
+    /// <p>Associates the specified tags to a resource with the specified <code>resourceArn</code>. If existing tags on a resource are not specified in the request parameters, they are not changed. When a resource is deleted, the tags associated with that resource are deleted as well. Tags that you create for Amazon EKS resources do not propagate to any other resources associated with the cluster. For example, if you tag a cluster with this operation, that tag does not automatically propagate to the subnets and nodes associated with the cluster.</p>
     async fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -3074,7 +3779,7 @@ pub trait Eks {
         input: UpdateAddonRequest,
     ) -> Result<UpdateAddonResponse, RusotoError<UpdateAddonError>>;
 
-    /// <p>Updates an Amazon EKS cluster configuration. Your cluster continues to function during the update. The response output includes an update ID that you can use to track the status of your cluster update with the <a>DescribeUpdate</a> API operation.</p> <p>You can use this API operation to enable or disable exporting the Kubernetes control plane logs for your cluster to CloudWatch Logs. By default, cluster control plane logs aren't exported to CloudWatch Logs. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html">Amazon EKS Cluster Control Plane Logs</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p> <note> <p>CloudWatch Logs ingestion, archive storage, and data scanning rates apply to exported control plane logs. For more information, see <a href="http://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> </note> <p>You can also use this API operation to enable or disable public and private access to your cluster's Kubernetes API server endpoint. By default, public access is enabled, and private access is disabled. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html">Amazon EKS Cluster Endpoint Access Control</a> in the <i> <i>Amazon EKS User Guide</i> </i>. </p> <important> <p>At this time, you can not update the subnets or security group IDs for an existing cluster.</p> </important> <p>Cluster updates are asynchronous, and they should finish within a few minutes. During an update, the cluster status moves to <code>UPDATING</code> (this status transition is eventually consistent). When the update is complete (either <code>Failed</code> or <code>Successful</code>), the cluster status moves to <code>Active</code>.</p>
+    /// <p>Updates an Amazon EKS cluster configuration. Your cluster continues to function during the update. The response output includes an update ID that you can use to track the status of your cluster update with the <a>DescribeUpdate</a> API operation.</p> <p>You can use this API operation to enable or disable exporting the Kubernetes control plane logs for your cluster to CloudWatch Logs. By default, cluster control plane logs aren't exported to CloudWatch Logs. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html">Amazon EKS Cluster Control Plane Logs</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p> <note> <p>CloudWatch Logs ingestion, archive storage, and data scanning rates apply to exported control plane logs. For more information, see <a href="http://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> </note> <p>You can also use this API operation to enable or disable public and private access to your cluster's Kubernetes API server endpoint. By default, public access is enabled, and private access is disabled. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html">Amazon EKS Cluster Endpoint Access Control</a> in the <i> <i>Amazon EKS User Guide</i> </i>. </p> <important> <p>You can't update the subnets or security group IDs for an existing cluster.</p> </important> <p>Cluster updates are asynchronous, and they should finish within a few minutes. During an update, the cluster status moves to <code>UPDATING</code> (this status transition is eventually consistent). When the update is complete (either <code>Failed</code> or <code>Successful</code>), the cluster status moves to <code>Active</code>.</p>
     async fn update_cluster_config(
         &self,
         input: UpdateClusterConfigRequest,
@@ -3138,6 +3843,80 @@ impl EksClient {
 
 #[async_trait]
 impl Eks for EksClient {
+    /// <p>Associate encryption configuration to an existing cluster.</p> <p>You can use this API to enable encryption on existing clusters which do not have encryption already enabled. This allows you to implement a defense-in-depth security strategy without migrating applications to new EKS clusters.</p>
+    #[allow(unused_mut)]
+    async fn associate_encryption_config(
+        &self,
+        input: AssociateEncryptionConfigRequest,
+    ) -> Result<AssociateEncryptionConfigResponse, RusotoError<AssociateEncryptionConfigError>>
+    {
+        let request_uri = format!(
+            "/clusters/{name}/encryption-config/associate",
+            name = input.cluster_name
+        );
+
+        let mut request = SignedRequest::new("POST", "eks", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateEncryptionConfigResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateEncryptionConfigError::from_response(response))
+        }
+    }
+
+    /// <p>Associate an identity provider configuration to a cluster.</p> <p>If you want to authenticate identities using an identity provider, you can create an identity provider configuration and associate it to your cluster. After configuring authentication to your cluster you can create Kubernetes <code>roles</code> and <code>clusterroles</code> to assign permissions to the roles, and then bind the roles to the identities using Kubernetes <code>rolebindings</code> and <code>clusterrolebindings</code>. For more information see <a href="https://kubernetes.io/docs/reference/access-authn-authz/rbac/">Using RBAC Authorization</a> in the Kubernetes documentation.</p>
+    #[allow(unused_mut)]
+    async fn associate_identity_provider_config(
+        &self,
+        input: AssociateIdentityProviderConfigRequest,
+    ) -> Result<
+        AssociateIdentityProviderConfigResponse,
+        RusotoError<AssociateIdentityProviderConfigError>,
+    > {
+        let request_uri = format!(
+            "/clusters/{name}/identity-provider-configs/associate",
+            name = input.cluster_name
+        );
+
+        let mut request = SignedRequest::new("POST", "eks", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<AssociateIdentityProviderConfigResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(AssociateIdentityProviderConfigError::from_response(
+                response,
+            ))
+        }
+    }
+
     /// <p>Creates an Amazon EKS add-on.</p> <p>Amazon EKS add-ons help to automate the provisioning and lifecycle management of common operational software for Amazon EKS clusters. Amazon EKS add-ons can only be used with Amazon EKS clusters running version 1.18 with platform version <code>eks.3</code> or later because add-ons rely on the Server-side Apply Kubernetes feature, which is only available in Kubernetes 1.18 and later.</p>
     #[allow(unused_mut)]
     async fn create_addon(
@@ -3169,7 +3948,7 @@ impl Eks for EksClient {
         }
     }
 
-    /// <p>Creates an Amazon EKS control plane. </p> <p>The Amazon EKS control plane consists of control plane instances that run the Kubernetes software, such as <code>etcd</code> and the API server. The control plane runs in an account managed by AWS, and the Kubernetes API is exposed via the Amazon EKS API server endpoint. Each Amazon EKS cluster control plane is single-tenant and unique and runs on its own set of Amazon EC2 instances.</p> <p>The cluster control plane is provisioned across multiple Availability Zones and fronted by an Elastic Load Balancing Network Load Balancer. Amazon EKS also provisions elastic network interfaces in your VPC subnets to provide connectivity from the control plane instances to the worker nodes (for example, to support <code>kubectl exec</code>, <code>logs</code>, and <code>proxy</code> data flows).</p> <p>Amazon EKS worker nodes run in your AWS account and connect to your cluster's control plane via the Kubernetes API server endpoint and a certificate file that is created for your cluster.</p> <p>You can use the <code>endpointPublicAccess</code> and <code>endpointPrivateAccess</code> parameters to enable or disable public and private access to your cluster's Kubernetes API server endpoint. By default, public access is enabled, and private access is disabled. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html">Amazon EKS Cluster Endpoint Access Control</a> in the <i> <i>Amazon EKS User Guide</i> </i>. </p> <p>You can use the <code>logging</code> parameter to enable or disable exporting the Kubernetes control plane logs for your cluster to CloudWatch Logs. By default, cluster control plane logs aren't exported to CloudWatch Logs. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html">Amazon EKS Cluster Control Plane Logs</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p> <note> <p>CloudWatch Logs ingestion, archive storage, and data scanning rates apply to exported control plane logs. For more information, see <a href="http://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> </note> <p>Cluster creation typically takes between 10 and 15 minutes. After you create an Amazon EKS cluster, you must configure your Kubernetes tooling to communicate with the API server and launch worker nodes into your cluster. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/managing-auth.html">Managing Cluster Authentication</a> and <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-workers.html">Launching Amazon EKS Worker Nodes</a> in the <i>Amazon EKS User Guide</i>.</p>
+    /// <p>Creates an Amazon EKS control plane. </p> <p>The Amazon EKS control plane consists of control plane instances that run the Kubernetes software, such as <code>etcd</code> and the API server. The control plane runs in an account managed by AWS, and the Kubernetes API is exposed via the Amazon EKS API server endpoint. Each Amazon EKS cluster control plane is single-tenant and unique and runs on its own set of Amazon EC2 instances.</p> <p>The cluster control plane is provisioned across multiple Availability Zones and fronted by an Elastic Load Balancing Network Load Balancer. Amazon EKS also provisions elastic network interfaces in your VPC subnets to provide connectivity from the control plane instances to the nodes (for example, to support <code>kubectl exec</code>, <code>logs</code>, and <code>proxy</code> data flows).</p> <p>Amazon EKS nodes run in your AWS account and connect to your cluster's control plane via the Kubernetes API server endpoint and a certificate file that is created for your cluster.</p> <p>Cluster creation typically takes several minutes. After you create an Amazon EKS cluster, you must configure your Kubernetes tooling to communicate with the API server and launch nodes into your cluster. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/managing-auth.html">Managing Cluster Authentication</a> and <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-workers.html">Launching Amazon EKS nodes</a> in the <i>Amazon EKS User Guide</i>.</p>
     #[allow(unused_mut)]
     async fn create_cluster(
         &self,
@@ -3234,7 +4013,7 @@ impl Eks for EksClient {
         }
     }
 
-    /// <p>Creates a managed worker node group for an Amazon EKS cluster. You can only create a node group for your cluster that is equal to the current Kubernetes version for the cluster. All node groups are created with the latest AMI release version for the respective minor Kubernetes version of the cluster, unless you deploy a custom AMI using a launch template. For more information about using launch templates, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html">Launch template support</a>.</p> <p>An Amazon EKS managed node group is an Amazon EC2 Auto Scaling group and associated Amazon EC2 instances that are managed by AWS for an Amazon EKS cluster. Each node group uses a version of the Amazon EKS optimized Amazon Linux 2 AMI. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html">Managed Node Groups</a> in the <i>Amazon EKS User Guide</i>. </p>
+    /// <p>Creates a managed node group for an Amazon EKS cluster. You can only create a node group for your cluster that is equal to the current Kubernetes version for the cluster. All node groups are created with the latest AMI release version for the respective minor Kubernetes version of the cluster, unless you deploy a custom AMI using a launch template. For more information about using launch templates, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/launch-templates.html">Launch template support</a>.</p> <p>An Amazon EKS managed node group is an Amazon EC2 Auto Scaling group and associated Amazon EC2 instances that are managed by AWS for an Amazon EKS cluster. Each node group uses a version of the Amazon EKS optimized Amazon Linux 2 AMI. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/managed-node-groups.html">Managed Node Groups</a> in the <i>Amazon EKS User Guide</i>. </p>
     #[allow(unused_mut)]
     async fn create_nodegroup(
         &self,
@@ -3524,6 +4303,43 @@ impl Eks for EksClient {
         }
     }
 
+    /// <p>Returns descriptive information about an identity provider configuration.</p>
+    #[allow(unused_mut)]
+    async fn describe_identity_provider_config(
+        &self,
+        input: DescribeIdentityProviderConfigRequest,
+    ) -> Result<
+        DescribeIdentityProviderConfigResponse,
+        RusotoError<DescribeIdentityProviderConfigError>,
+    > {
+        let request_uri = format!(
+            "/clusters/{name}/identity-provider-configs/describe",
+            name = input.cluster_name
+        );
+
+        let mut request = SignedRequest::new("POST", "eks", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DescribeIdentityProviderConfigResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DescribeIdentityProviderConfigError::from_response(response))
+        }
+    }
+
     /// <p>Returns descriptive information about an Amazon EKS node group.</p>
     #[allow(unused_mut)]
     async fn describe_nodegroup(
@@ -3594,6 +4410,45 @@ impl Eks for EksClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(DescribeUpdateError::from_response(response))
+        }
+    }
+
+    /// <p>Disassociates an identity provider configuration from a cluster. If you disassociate an identity provider from your cluster, users included in the provider can no longer access the cluster. However, you can still access the cluster with AWS IAM users.</p>
+    #[allow(unused_mut)]
+    async fn disassociate_identity_provider_config(
+        &self,
+        input: DisassociateIdentityProviderConfigRequest,
+    ) -> Result<
+        DisassociateIdentityProviderConfigResponse,
+        RusotoError<DisassociateIdentityProviderConfigError>,
+    > {
+        let request_uri = format!(
+            "/clusters/{name}/identity-provider-configs/disassociate",
+            name = input.cluster_name
+        );
+
+        let mut request = SignedRequest::new("POST", "eks", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<DisassociateIdentityProviderConfigResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(DisassociateIdentityProviderConfigError::from_response(
+                response,
+            ))
         }
     }
 
@@ -3711,6 +4566,47 @@ impl Eks for EksClient {
         }
     }
 
+    /// <p>A list of identity provider configurations.</p>
+    #[allow(unused_mut)]
+    async fn list_identity_provider_configs(
+        &self,
+        input: ListIdentityProviderConfigsRequest,
+    ) -> Result<ListIdentityProviderConfigsResponse, RusotoError<ListIdentityProviderConfigsError>>
+    {
+        let request_uri = format!(
+            "/clusters/{name}/identity-provider-configs",
+            name = input.cluster_name
+        );
+
+        let mut request = SignedRequest::new("GET", "eks", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<ListIdentityProviderConfigsResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(ListIdentityProviderConfigsError::from_response(response))
+        }
+    }
+
     /// <p>Lists the Amazon EKS managed node groups associated with the specified cluster in your AWS account in the specified Region. Self-managed node groups are not listed.</p>
     #[allow(unused_mut)]
     async fn list_nodegroups(
@@ -3819,7 +4715,7 @@ impl Eks for EksClient {
         }
     }
 
-    /// <p>Associates the specified tags to a resource with the specified <code>resourceArn</code>. If existing tags on a resource are not specified in the request parameters, they are not changed. When a resource is deleted, the tags associated with that resource are deleted as well. Tags that you create for Amazon EKS resources do not propagate to any other resources associated with the cluster. For example, if you tag a cluster with this operation, that tag does not automatically propagate to the subnets and worker nodes associated with the cluster.</p>
+    /// <p>Associates the specified tags to a resource with the specified <code>resourceArn</code>. If existing tags on a resource are not specified in the request parameters, they are not changed. When a resource is deleted, the tags associated with that resource are deleted as well. Tags that you create for Amazon EKS resources do not propagate to any other resources associated with the cluster. For example, if you tag a cluster with this operation, that tag does not automatically propagate to the subnets and nodes associated with the cluster.</p>
     #[allow(unused_mut)]
     async fn tag_resource(
         &self,
@@ -3919,7 +4815,7 @@ impl Eks for EksClient {
         }
     }
 
-    /// <p>Updates an Amazon EKS cluster configuration. Your cluster continues to function during the update. The response output includes an update ID that you can use to track the status of your cluster update with the <a>DescribeUpdate</a> API operation.</p> <p>You can use this API operation to enable or disable exporting the Kubernetes control plane logs for your cluster to CloudWatch Logs. By default, cluster control plane logs aren't exported to CloudWatch Logs. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html">Amazon EKS Cluster Control Plane Logs</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p> <note> <p>CloudWatch Logs ingestion, archive storage, and data scanning rates apply to exported control plane logs. For more information, see <a href="http://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> </note> <p>You can also use this API operation to enable or disable public and private access to your cluster's Kubernetes API server endpoint. By default, public access is enabled, and private access is disabled. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html">Amazon EKS Cluster Endpoint Access Control</a> in the <i> <i>Amazon EKS User Guide</i> </i>. </p> <important> <p>At this time, you can not update the subnets or security group IDs for an existing cluster.</p> </important> <p>Cluster updates are asynchronous, and they should finish within a few minutes. During an update, the cluster status moves to <code>UPDATING</code> (this status transition is eventually consistent). When the update is complete (either <code>Failed</code> or <code>Successful</code>), the cluster status moves to <code>Active</code>.</p>
+    /// <p>Updates an Amazon EKS cluster configuration. Your cluster continues to function during the update. The response output includes an update ID that you can use to track the status of your cluster update with the <a>DescribeUpdate</a> API operation.</p> <p>You can use this API operation to enable or disable exporting the Kubernetes control plane logs for your cluster to CloudWatch Logs. By default, cluster control plane logs aren't exported to CloudWatch Logs. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/control-plane-logs.html">Amazon EKS Cluster Control Plane Logs</a> in the <i> <i>Amazon EKS User Guide</i> </i>.</p> <note> <p>CloudWatch Logs ingestion, archive storage, and data scanning rates apply to exported control plane logs. For more information, see <a href="http://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> </note> <p>You can also use this API operation to enable or disable public and private access to your cluster's Kubernetes API server endpoint. By default, public access is enabled, and private access is disabled. For more information, see <a href="https://docs.aws.amazon.com/eks/latest/userguide/cluster-endpoint.html">Amazon EKS Cluster Endpoint Access Control</a> in the <i> <i>Amazon EKS User Guide</i> </i>. </p> <important> <p>You can't update the subnets or security group IDs for an existing cluster.</p> </important> <p>Cluster updates are asynchronous, and they should finish within a few minutes. During an update, the cluster status moves to <code>UPDATING</code> (this status transition is eventually consistent). When the update is complete (either <code>Failed</code> or <code>Successful</code>), the cluster status moves to <code>Active</code>.</p>
     #[allow(unused_mut)]
     async fn update_cluster_config(
         &self,

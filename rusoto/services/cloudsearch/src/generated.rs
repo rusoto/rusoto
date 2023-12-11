@@ -4157,6 +4157,10 @@ pub enum CreateDomainError {
     Internal(String),
     /// <p>The request was rejected because a resource limit has already been met.</p>
     LimitExceeded(String),
+    /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The request was rejected because it has invalid parameters.</p>
+    Validation(String),
 }
 
 impl CreateDomainError {
@@ -4177,6 +4181,16 @@ impl CreateDomainError {
                     }
                     "LimitExceeded" => {
                         return RusotoError::Service(CreateDomainError::LimitExceeded(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ResourceAlreadyExists" => {
+                        return RusotoError::Service(CreateDomainError::ResourceAlreadyExists(
+                            parsed_error.message,
+                        ))
+                    }
+                    "ValidationException" => {
+                        return RusotoError::Service(CreateDomainError::Validation(
                             parsed_error.message,
                         ))
                     }
@@ -4202,6 +4216,8 @@ impl fmt::Display for CreateDomainError {
             CreateDomainError::Base(ref cause) => write!(f, "{}", cause),
             CreateDomainError::Internal(ref cause) => write!(f, "{}", cause),
             CreateDomainError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateDomainError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateDomainError::Validation(ref cause) => write!(f, "{}", cause),
         }
     }
 }

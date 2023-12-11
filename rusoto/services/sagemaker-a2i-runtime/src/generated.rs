@@ -51,7 +51,7 @@ pub struct DescribeHumanLoopResponse {
     /// <p>The creation time when Amazon Augmented AI created the human loop.</p>
     #[serde(rename = "CreationTime")]
     pub creation_time: f64,
-    /// <p>A failure code that identifies the type of failure.</p>
+    /// <p>A failure code that identifies the type of failure.</p> <p>Possible values: <code>ValidationError</code>, <code>Expired</code>, <code>InternalError</code> </p>
     #[serde(rename = "FailureCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failure_code: Option<String>,
@@ -214,7 +214,7 @@ pub struct StopHumanLoopResponse {}
 pub enum DeleteHumanLoopError {
     /// <p>We couldn't process your request because of an issue with the server. Try again later.</p>
     InternalServer(String),
-    /// <p>We couldn't find the requested resource.</p>
+    /// <p>We couldn't find the requested resource. Check that your resources exists and were created in the same AWS Region as your request, and try your request again. </p>
     ResourceNotFound(String),
     /// <p>You exceeded the maximum number of requests.</p>
     Throttling(String),
@@ -256,7 +256,7 @@ impl Error for DeleteHumanLoopError {}
 pub enum DescribeHumanLoopError {
     /// <p>We couldn't process your request because of an issue with the server. Try again later.</p>
     InternalServer(String),
-    /// <p>We couldn't find the requested resource.</p>
+    /// <p>We couldn't find the requested resource. Check that your resources exists and were created in the same AWS Region as your request, and try your request again. </p>
     ResourceNotFound(String),
     /// <p>You exceeded the maximum number of requests.</p>
     Throttling(String),
@@ -298,7 +298,7 @@ impl Error for DescribeHumanLoopError {}
 pub enum ListHumanLoopsError {
     /// <p>We couldn't process your request because of an issue with the server. Try again later.</p>
     InternalServer(String),
-    /// <p>We couldn't find the requested resource.</p>
+    /// <p>We couldn't find the requested resource. Check that your resources exists and were created in the same AWS Region as your request, and try your request again. </p>
     ResourceNotFound(String),
     /// <p>You exceeded the maximum number of requests.</p>
     Throttling(String),
@@ -342,7 +342,7 @@ pub enum StartHumanLoopError {
     Conflict(String),
     /// <p>We couldn't process your request because of an issue with the server. Try again later.</p>
     InternalServer(String),
-    /// <p>You exceeded your service quota. Delete some resources or request an increase in your service quota.</p>
+    /// <p>You exceeded your service quota. Service quotas, also referred to as limits, are the maximum number of service resources or operations for your AWS account. For a list of Amazon A2I service quotes, see <a href="https://docs.aws.amazon.com/general/latest/gr/a2i.html">Amazon Augmented AI Service Quotes</a>. Delete some resources or request an increase in your service quota. You can request a quota increase using Service Quotas or the AWS Support Center. To request an increase, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html">AWS Service Quotas</a> in the <i>AWS General Reference</i>.</p>
     ServiceQuotaExceeded(String),
     /// <p>You exceeded the maximum number of requests.</p>
     Throttling(String),
@@ -388,7 +388,7 @@ impl Error for StartHumanLoopError {}
 pub enum StopHumanLoopError {
     /// <p>We couldn't process your request because of an issue with the server. Try again later.</p>
     InternalServer(String),
-    /// <p>We couldn't find the requested resource.</p>
+    /// <p>We couldn't find the requested resource. Check that your resources exists and were created in the same AWS Region as your request, and try your request again. </p>
     ResourceNotFound(String),
     /// <p>You exceeded the maximum number of requests.</p>
     Throttling(String),
@@ -428,13 +428,13 @@ impl Error for StopHumanLoopError {}
 /// Trait representing the capabilities of the Amazon Augmented AI Runtime API. Amazon Augmented AI Runtime clients implement this trait.
 #[async_trait]
 pub trait SagemakerA2iRuntime {
-    /// <p>Deletes the specified human loop for a flow definition.</p>
+    /// <p>Deletes the specified human loop for a flow definition.</p> <p>If the human loop was deleted, this operation will return a <code>ResourceNotFoundException</code>. </p>
     async fn delete_human_loop(
         &self,
         input: DeleteHumanLoopRequest,
     ) -> Result<DeleteHumanLoopResponse, RusotoError<DeleteHumanLoopError>>;
 
-    /// <p>Returns information about the specified human loop.</p>
+    /// <p>Returns information about the specified human loop. If the human loop was deleted, this operation will return a <code>ResourceNotFoundException</code> error. </p>
     async fn describe_human_loop(
         &self,
         input: DescribeHumanLoopRequest,
@@ -498,7 +498,7 @@ impl SagemakerA2iRuntimeClient {
 
 #[async_trait]
 impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
-    /// <p>Deletes the specified human loop for a flow definition.</p>
+    /// <p>Deletes the specified human loop for a flow definition.</p> <p>If the human loop was deleted, this operation will return a <code>ResourceNotFoundException</code>. </p>
     #[allow(unused_mut)]
     async fn delete_human_loop(
         &self,
@@ -531,7 +531,7 @@ impl SagemakerA2iRuntime for SagemakerA2iRuntimeClient {
         }
     }
 
-    /// <p>Returns information about the specified human loop.</p>
+    /// <p>Returns information about the specified human loop. If the human loop was deleted, this operation will return a <code>ResourceNotFoundException</code> error. </p>
     #[allow(unused_mut)]
     async fn describe_human_loop(
         &self,

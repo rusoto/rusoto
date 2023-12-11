@@ -53,7 +53,7 @@ use serde_json;
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct AddTagsToCertificateRequest {
-    /// <p>String that contains the ARN of the ACM certificate to which the tag is to be applied. This must be of the form:</p> <p> <code>arn:aws:acm:region:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>. </p>
+    /// <p>String that contains the ARN of the ACM certificate to which the tag is to be applied. This must be of the form:</p> <p> <code>arn:aws:acm:region:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs)</a>.</p>
     #[serde(rename = "CertificateArn")]
     pub certificate_arn: String,
     /// <p>The key-value pair that defines the tag. The tag value is optional.</p>
@@ -65,7 +65,7 @@ pub struct AddTagsToCertificateRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CertificateDetail {
-    /// <p>The Amazon Resource Name (ARN) of the certificate. For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
+    /// <p>The Amazon Resource Name (ARN) of the certificate. For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs)</a> in the <i>AWS General Reference</i>.</p>
     #[serde(rename = "CertificateArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_arn: Option<String>,
@@ -73,7 +73,7 @@ pub struct CertificateDetail {
     #[serde(rename = "CertificateAuthorityArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_authority_arn: Option<String>,
-    /// <p>The time at which the certificate was requested. This value exists only when the certificate type is <code>AMAZON_ISSUED</code>. </p>
+    /// <p>The time at which the certificate was requested.</p>
     #[serde(rename = "CreatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<f64>,
@@ -184,7 +184,7 @@ pub struct CertificateOptions {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CertificateSummary {
-    /// <p>Amazon Resource Name (ARN) of the certificate. This is of the form:</p> <p> <code>arn:aws:acm:region:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>. </p>
+    /// <p>Amazon Resource Name (ARN) of the certificate. This is of the form:</p> <p> <code>arn:aws:acm:region:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs)</a>.</p>
     #[serde(rename = "CertificateArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_arn: Option<String>,
@@ -197,7 +197,7 @@ pub struct CertificateSummary {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteCertificateRequest {
-    /// <p>String that contains the ARN of the ACM certificate to be deleted. This must be of the form:</p> <p> <code>arn:aws:acm:region:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>
+    /// <p>String that contains the ARN of the ACM certificate to be deleted. This must be of the form:</p> <p> <code>arn:aws:acm:region:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs)</a>.</p>
     #[serde(rename = "CertificateArn")]
     pub certificate_arn: String,
 }
@@ -205,7 +205,7 @@ pub struct DeleteCertificateRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeCertificateRequest {
-    /// <p>The Amazon Resource Name (ARN) of the ACM certificate. The ARN must have the following form:</p> <p> <code>arn:aws:acm:region:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>
+    /// <p>The Amazon Resource Name (ARN) of the ACM certificate. The ARN must have the following form:</p> <p> <code>arn:aws:acm:region:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs)</a>.</p>
     #[serde(rename = "CertificateArn")]
     pub certificate_arn: String,
 }
@@ -258,6 +258,15 @@ pub struct DomainValidationOption {
     /// <p><p>The domain name that you want ACM to use to send you validation emails. This domain name is the suffix of the email addresses that you want ACM to use. This must be the same as the <code>DomainName</code> value or a superdomain of the <code>DomainName</code> value. For example, if you request a certificate for <code>testing.example.com</code>, you can specify <code>example.com</code> for this value. In that case, ACM sends domain validation emails to the following five addresses:</p> <ul> <li> <p>admin@example.com</p> </li> <li> <p>administrator@example.com</p> </li> <li> <p>hostmaster@example.com</p> </li> <li> <p>postmaster@example.com</p> </li> <li> <p>webmaster@example.com</p> </li> </ul></p>
     #[serde(rename = "ValidationDomain")]
     pub validation_domain: String,
+}
+
+/// <p>Object containing expiration events options associated with an AWS account.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ExpiryEventsConfiguration {
+    /// <p>Specifies the number of days prior to certificate expiration when ACM starts generating <code>EventBridge</code> events. ACM sends one event per day per certificate until the certificate expires. By default, accounts receive events starting 45 days before certificate expiration.</p>
+    #[serde(rename = "DaysBeforeExpiry")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub days_before_expiry: Option<i64>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -315,7 +324,7 @@ pub struct Filters {
     #[serde(rename = "extendedKeyUsage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extended_key_usage: Option<Vec<String>>,
-    /// <p>Specify one or more algorithms that can be used to generate key pairs.</p> <p>Default filtering returns only <code>RSA_2048</code> certificates. To return other certificate types, provide the desired type signatures in a comma-separated list. For example, <code>"keyTypes": ["RSA_2048,RSA_4096"]</code> returns both <code>RSA_2048</code> and <code>RSA_4096</code> certificates.</p>
+    /// <p>Specify one or more algorithms that can be used to generate key pairs.</p> <p>Default filtering returns only <code>RSA_1024</code> and <code>RSA_2048</code> certificates that have at least one domain. To return other certificate types, provide the desired type signatures in a comma-separated list. For example, <code>"keyTypes": ["RSA_2048,RSA_4096"]</code> returns both <code>RSA_2048</code> and <code>RSA_4096</code> certificates.</p>
     #[serde(rename = "keyTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_types: Option<Vec<String>>,
@@ -325,10 +334,19 @@ pub struct Filters {
     pub key_usage: Option<Vec<String>>,
 }
 
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetAccountConfigurationResponse {
+    /// <p>Expiration events configuration options associated with the AWS account.</p>
+    #[serde(rename = "ExpiryEvents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiry_events: Option<ExpiryEventsConfiguration>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetCertificateRequest {
-    /// <p>String that contains a certificate ARN in the following format:</p> <p> <code>arn:aws:acm:region:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>
+    /// <p>String that contains a certificate ARN in the following format:</p> <p> <code>arn:aws:acm:region:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs)</a>.</p>
     #[serde(rename = "CertificateArn")]
     pub certificate_arn: String,
 }
@@ -440,7 +458,7 @@ pub struct ListCertificatesResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForCertificateRequest {
-    /// <p>String that contains the ARN of the ACM certificate for which you want to list the tags. This must have the following form:</p> <p> <code>arn:aws:acm:region:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>. </p>
+    /// <p>String that contains the ARN of the ACM certificate for which you want to list the tags. This must have the following form:</p> <p> <code>arn:aws:acm:region:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs)</a>.</p>
     #[serde(rename = "CertificateArn")]
     pub certificate_arn: String,
 }
@@ -456,8 +474,20 @@ pub struct ListTagsForCertificateResponse {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct PutAccountConfigurationRequest {
+    /// <p>Specifies expiration events associated with an account.</p>
+    #[serde(rename = "ExpiryEvents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiry_events: Option<ExpiryEventsConfiguration>,
+    /// <p>Customer-chosen string used to distinguish between calls to <code>PutAccountConfiguration</code>. Idempotency tokens time out after one hour. If you call <code>PutAccountConfiguration</code> multiple times with the same unexpired idempotency token, ACM treats it as the same request and returns the original result. If you change the idempotency token for each call, ACM treats each call as a new request.</p>
+    #[serde(rename = "IdempotencyToken")]
+    pub idempotency_token: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RemoveTagsFromCertificateRequest {
-    /// <p>String that contains the ARN of the ACM Certificate with one or more tags that you want to remove. This must be of the form:</p> <p> <code>arn:aws:acm:region:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>. </p>
+    /// <p>String that contains the ARN of the ACM Certificate with one or more tags that you want to remove. This must be of the form:</p> <p> <code>arn:aws:acm:region:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs)</a>.</p>
     #[serde(rename = "CertificateArn")]
     pub certificate_arn: String,
     /// <p>The key-value pair that defines the tag to remove.</p>
@@ -468,7 +498,7 @@ pub struct RemoveTagsFromCertificateRequest {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct RenewCertificateRequest {
-    /// <p>String that contains the ARN of the ACM certificate to be renewed. This must be of the form:</p> <p> <code>arn:aws:acm:region:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>
+    /// <p>String that contains the ARN of the ACM certificate to be renewed. This must be of the form:</p> <p> <code>arn:aws:acm:region:123456789012:certificate/12345678-1234-1234-1234-123456789012</code> </p> <p>For more information about ARNs, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs)</a>.</p>
     #[serde(rename = "CertificateArn")]
     pub certificate_arn: String,
 }
@@ -602,6 +632,8 @@ pub enum AddTagsToCertificateError {
     ResourceNotFound(String),
     /// <p>A specified tag did not comply with an existing tag policy and was rejected.</p>
     TagPolicy(String),
+    /// <p>The request was denied because it exceeded a quota.</p>
+    Throttling(String),
     /// <p>The request contains too many tags. Try the request again with fewer tags.</p>
     TooManyTags(String),
 }
@@ -629,6 +661,9 @@ impl AddTagsToCertificateError {
                 "TagPolicyException" => {
                     return RusotoError::Service(AddTagsToCertificateError::TagPolicy(err.msg))
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(AddTagsToCertificateError::Throttling(err.msg))
+                }
                 "TooManyTagsException" => {
                     return RusotoError::Service(AddTagsToCertificateError::TooManyTags(err.msg))
                 }
@@ -648,6 +683,7 @@ impl fmt::Display for AddTagsToCertificateError {
             AddTagsToCertificateError::InvalidTag(ref cause) => write!(f, "{}", cause),
             AddTagsToCertificateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             AddTagsToCertificateError::TagPolicy(ref cause) => write!(f, "{}", cause),
+            AddTagsToCertificateError::Throttling(ref cause) => write!(f, "{}", cause),
             AddTagsToCertificateError::TooManyTags(ref cause) => write!(f, "{}", cause),
         }
     }
@@ -775,6 +811,44 @@ impl fmt::Display for ExportCertificateError {
     }
 }
 impl Error for ExportCertificateError {}
+/// Errors returned by GetAccountConfiguration
+#[derive(Debug, PartialEq)]
+pub enum GetAccountConfigurationError {
+    /// <p>You do not have access required to perform this action.</p>
+    AccessDenied(String),
+    /// <p>The request was denied because it exceeded a quota.</p>
+    Throttling(String),
+}
+
+impl GetAccountConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetAccountConfigurationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(GetAccountConfigurationError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(GetAccountConfigurationError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetAccountConfigurationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetAccountConfigurationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            GetAccountConfigurationError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetAccountConfigurationError {}
 /// Errors returned by GetCertificate
 #[derive(Debug, PartialEq)]
 pub enum GetCertificateError {
@@ -820,6 +894,8 @@ impl Error for GetCertificateError {}
 /// Errors returned by ImportCertificate
 #[derive(Debug, PartialEq)]
 pub enum ImportCertificateError {
+    /// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
+    InvalidArn(String),
     /// <p>An input parameter was invalid.</p>
     InvalidParameter(String),
     /// <p>One or both of the values that make up the key-value pair is not valid. For example, you cannot specify a tag value that begins with <code>aws:</code>.</p>
@@ -838,6 +914,9 @@ impl ImportCertificateError {
     pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ImportCertificateError> {
         if let Some(err) = proto::json::Error::parse(&res) {
             match err.typ.as_str() {
+                "InvalidArnException" => {
+                    return RusotoError::Service(ImportCertificateError::InvalidArn(err.msg))
+                }
                 "InvalidParameterException" => {
                     return RusotoError::Service(ImportCertificateError::InvalidParameter(err.msg))
                 }
@@ -867,6 +946,7 @@ impl fmt::Display for ImportCertificateError {
     #[allow(unused_variables)]
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
+            ImportCertificateError::InvalidArn(ref cause) => write!(f, "{}", cause),
             ImportCertificateError::InvalidParameter(ref cause) => write!(f, "{}", cause),
             ImportCertificateError::InvalidTag(ref cause) => write!(f, "{}", cause),
             ImportCertificateError::LimitExceeded(ref cause) => write!(f, "{}", cause),
@@ -945,6 +1025,50 @@ impl fmt::Display for ListTagsForCertificateError {
     }
 }
 impl Error for ListTagsForCertificateError {}
+/// Errors returned by PutAccountConfiguration
+#[derive(Debug, PartialEq)]
+pub enum PutAccountConfigurationError {
+    /// <p>You do not have access required to perform this action.</p>
+    AccessDenied(String),
+    /// <p>You are trying to update a resource or configuration that is already being created or updated. Wait for the previous operation to finish and try again.</p>
+    Conflict(String),
+    /// <p>The request was denied because it exceeded a quota.</p>
+    Throttling(String),
+}
+
+impl PutAccountConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<PutAccountConfigurationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(PutAccountConfigurationError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "ConflictException" => {
+                    return RusotoError::Service(PutAccountConfigurationError::Conflict(err.msg))
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(PutAccountConfigurationError::Throttling(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for PutAccountConfigurationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            PutAccountConfigurationError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            PutAccountConfigurationError::Conflict(ref cause) => write!(f, "{}", cause),
+            PutAccountConfigurationError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for PutAccountConfigurationError {}
 /// Errors returned by RemoveTagsFromCertificate
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsFromCertificateError {
@@ -958,6 +1082,8 @@ pub enum RemoveTagsFromCertificateError {
     ResourceNotFound(String),
     /// <p>A specified tag did not comply with an existing tag policy and was rejected.</p>
     TagPolicy(String),
+    /// <p>The request was denied because it exceeded a quota.</p>
+    Throttling(String),
 }
 
 impl RemoveTagsFromCertificateError {
@@ -987,6 +1113,11 @@ impl RemoveTagsFromCertificateError {
                 "TagPolicyException" => {
                     return RusotoError::Service(RemoveTagsFromCertificateError::TagPolicy(err.msg))
                 }
+                "ThrottlingException" => {
+                    return RusotoError::Service(RemoveTagsFromCertificateError::Throttling(
+                        err.msg,
+                    ))
+                }
                 "ValidationException" => return RusotoError::Validation(err.msg),
                 _ => {}
             }
@@ -1003,6 +1134,7 @@ impl fmt::Display for RemoveTagsFromCertificateError {
             RemoveTagsFromCertificateError::InvalidTag(ref cause) => write!(f, "{}", cause),
             RemoveTagsFromCertificateError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
             RemoveTagsFromCertificateError::TagPolicy(ref cause) => write!(f, "{}", cause),
+            RemoveTagsFromCertificateError::Throttling(ref cause) => write!(f, "{}", cause),
         }
     }
 }
@@ -1248,13 +1380,18 @@ pub trait Acm {
         input: ExportCertificateRequest,
     ) -> Result<ExportCertificateResponse, RusotoError<ExportCertificateError>>;
 
+    /// <p>Returns the account configuration options associated with an AWS account.</p>
+    async fn get_account_configuration(
+        &self,
+    ) -> Result<GetAccountConfigurationResponse, RusotoError<GetAccountConfigurationError>>;
+
     /// <p>Retrieves an Amazon-issued certificate and its certificate chain. The chain consists of the certificate of the issuing CA and the intermediate certificates of any other subordinate CAs. All of the certificates are base64 encoded. You can use <a href="https://wiki.openssl.org/index.php/Command_Line_Utilities">OpenSSL</a> to decode the certificates and inspect individual fields.</p>
     async fn get_certificate(
         &self,
         input: GetCertificateRequest,
     ) -> Result<GetCertificateResponse, RusotoError<GetCertificateError>>;
 
-    /// <p>Imports a certificate into AWS Certificate Manager (ACM) to use with services that are integrated with ACM. Note that <a href="https://docs.aws.amazon.com/acm/latest/userguide/acm-services.html">integrated services</a> allow only certificate types and keys they support to be associated with their resources. Further, their support differs depending on whether the certificate is imported into IAM or into ACM. For more information, see the documentation for each service. For more information about importing certificates into ACM, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html">Importing Certificates</a> in the <i>AWS Certificate Manager User Guide</i>. </p> <note> <p>ACM does not provide <a href="https://docs.aws.amazon.com/acm/latest/userguide/acm-renewal.html">managed renewal</a> for certificates that you import.</p> </note> <p>Note the following guidelines when importing third party certificates:</p> <ul> <li> <p>You must enter the private key that matches the certificate you are importing.</p> </li> <li> <p>The private key must be unencrypted. You cannot import a private key that is protected by a password or a passphrase.</p> </li> <li> <p>If the certificate you are importing is not self-signed, you must enter its certificate chain.</p> </li> <li> <p>If a certificate chain is included, the issuer must be the subject of one of the certificates in the chain.</p> </li> <li> <p>The certificate, private key, and certificate chain must be PEM-encoded.</p> </li> <li> <p>The current time must be between the <code>Not Before</code> and <code>Not After</code> certificate fields.</p> </li> <li> <p>The <code>Issuer</code> field must not be empty.</p> </li> <li> <p>The OCSP authority URL, if present, must not exceed 1000 characters.</p> </li> <li> <p>To import a new certificate, omit the <code>CertificateArn</code> argument. Include this argument only when you want to replace a previously imported certifica</p> </li> <li> <p>When you import a certificate by using the CLI, you must specify the certificate, the certificate chain, and the private key by their file names preceded by <code>file://</code>. For example, you can specify a certificate saved in the <code>C:\temp</code> folder as <code>file://C:\temp\certificate_to_import.pem</code>. If you are making an HTTP or HTTPS Query request, include these arguments as BLOBs. </p> </li> <li> <p>When you import a certificate by using an SDK, you must specify the certificate, the certificate chain, and the private key files in the manner required by the programming language you're using. </p> </li> <li> <p>The cryptographic algorithm of an imported certificate must match the algorithm of the signing CA. For example, if the signing CA key type is RSA, then the certificate key type must also be RSA.</p> </li> </ul> <p>This operation returns the <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Name (ARN)</a> of the imported certificate.</p>
+    /// <p>Imports a certificate into AWS Certificate Manager (ACM) to use with services that are integrated with ACM. Note that <a href="https://docs.aws.amazon.com/acm/latest/userguide/acm-services.html">integrated services</a> allow only certificate types and keys they support to be associated with their resources. Further, their support differs depending on whether the certificate is imported into IAM or into ACM. For more information, see the documentation for each service. For more information about importing certificates into ACM, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html">Importing Certificates</a> in the <i>AWS Certificate Manager User Guide</i>. </p> <note> <p>ACM does not provide <a href="https://docs.aws.amazon.com/acm/latest/userguide/acm-renewal.html">managed renewal</a> for certificates that you import.</p> </note> <p>Note the following guidelines when importing third party certificates:</p> <ul> <li> <p>You must enter the private key that matches the certificate you are importing.</p> </li> <li> <p>The private key must be unencrypted. You cannot import a private key that is protected by a password or a passphrase.</p> </li> <li> <p>The private key must be no larger than 5 KB (5,120 bytes).</p> </li> <li> <p>If the certificate you are importing is not self-signed, you must enter its certificate chain.</p> </li> <li> <p>If a certificate chain is included, the issuer must be the subject of one of the certificates in the chain.</p> </li> <li> <p>The certificate, private key, and certificate chain must be PEM-encoded.</p> </li> <li> <p>The current time must be between the <code>Not Before</code> and <code>Not After</code> certificate fields.</p> </li> <li> <p>The <code>Issuer</code> field must not be empty.</p> </li> <li> <p>The OCSP authority URL, if present, must not exceed 1000 characters.</p> </li> <li> <p>To import a new certificate, omit the <code>CertificateArn</code> argument. Include this argument only when you want to replace a previously imported certificate.</p> </li> <li> <p>When you import a certificate by using the CLI, you must specify the certificate, the certificate chain, and the private key by their file names preceded by <code>fileb://</code>. For example, you can specify a certificate saved in the <code>C:\temp</code> folder as <code>fileb://C:\temp\certificate_to_import.pem</code>. If you are making an HTTP or HTTPS Query request, include these arguments as BLOBs. </p> </li> <li> <p>When you import a certificate by using an SDK, you must specify the certificate, the certificate chain, and the private key files in the manner required by the programming language you're using. </p> </li> <li> <p>The cryptographic algorithm of an imported certificate must match the algorithm of the signing CA. For example, if the signing CA key type is RSA, then the certificate key type must also be RSA.</p> </li> </ul> <p>This operation returns the <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Name (ARN)</a> of the imported certificate.</p>
     async fn import_certificate(
         &self,
         input: ImportCertificateRequest,
@@ -1272,13 +1409,19 @@ pub trait Acm {
         input: ListTagsForCertificateRequest,
     ) -> Result<ListTagsForCertificateResponse, RusotoError<ListTagsForCertificateError>>;
 
+    /// <p>Adds or modifies account-level configurations in ACM. </p> <p>The supported configuration option is <code>DaysBeforeExpiry</code>. This option specifies the number of days prior to certificate expiration when ACM starts generating <code>EventBridge</code> events. ACM sends one event per day per certificate until the certificate expires. By default, accounts receive events starting 45 days before certificate expiration.</p>
+    async fn put_account_configuration(
+        &self,
+        input: PutAccountConfigurationRequest,
+    ) -> Result<(), RusotoError<PutAccountConfigurationError>>;
+
     /// <p>Remove one or more tags from an ACM certificate. A tag consists of a key-value pair. If you do not specify the value portion of the tag when calling this function, the tag will be removed regardless of value. If you specify a value, the tag is removed only if it is associated with the specified value. </p> <p>To add tags to a certificate, use the <a>AddTagsToCertificate</a> action. To view all of the tags that have been applied to a specific ACM certificate, use the <a>ListTagsForCertificate</a> action. </p>
     async fn remove_tags_from_certificate(
         &self,
         input: RemoveTagsFromCertificateRequest,
     ) -> Result<(), RusotoError<RemoveTagsFromCertificateError>>;
 
-    /// <p>Renews an eligable ACM certificate. At this time, only exported private certificates can be renewed with this operation. In order to renew your ACM PCA certificates with ACM, you must first <a href="https://docs.aws.amazon.com/acm-pca/latest/userguide/PcaPermissions.html">grant the ACM service principal permission to do so</a>. For more information, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/manual-renewal.html">Testing Managed Renewal</a> in the ACM User Guide.</p>
+    /// <p>Renews an eligible ACM certificate. At this time, only exported private certificates can be renewed with this operation. In order to renew your ACM PCA certificates with ACM, you must first <a href="https://docs.aws.amazon.com/acm-pca/latest/userguide/PcaPermissions.html">grant the ACM service principal permission to do so</a>. For more information, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/manual-renewal.html">Testing Managed Renewal</a> in the ACM User Guide.</p>
     async fn renew_certificate(
         &self,
         input: RenewCertificateRequest,
@@ -1412,6 +1555,23 @@ impl Acm for AcmClient {
         proto::json::ResponsePayload::new(&response).deserialize::<ExportCertificateResponse, _>()
     }
 
+    /// <p>Returns the account configuration options associated with an AWS account.</p>
+    async fn get_account_configuration(
+        &self,
+    ) -> Result<GetAccountConfigurationResponse, RusotoError<GetAccountConfigurationError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "CertificateManager.GetAccountConfiguration");
+        request.set_payload(Some(bytes::Bytes::from_static(b"{}")));
+
+        let response = self
+            .sign_and_dispatch(request, GetAccountConfigurationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetAccountConfigurationResponse, _>()
+    }
+
     /// <p>Retrieves an Amazon-issued certificate and its certificate chain. The chain consists of the certificate of the issuing CA and the intermediate certificates of any other subordinate CAs. All of the certificates are base64 encoded. You can use <a href="https://wiki.openssl.org/index.php/Command_Line_Utilities">OpenSSL</a> to decode the certificates and inspect individual fields.</p>
     async fn get_certificate(
         &self,
@@ -1430,7 +1590,7 @@ impl Acm for AcmClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetCertificateResponse, _>()
     }
 
-    /// <p>Imports a certificate into AWS Certificate Manager (ACM) to use with services that are integrated with ACM. Note that <a href="https://docs.aws.amazon.com/acm/latest/userguide/acm-services.html">integrated services</a> allow only certificate types and keys they support to be associated with their resources. Further, their support differs depending on whether the certificate is imported into IAM or into ACM. For more information, see the documentation for each service. For more information about importing certificates into ACM, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html">Importing Certificates</a> in the <i>AWS Certificate Manager User Guide</i>. </p> <note> <p>ACM does not provide <a href="https://docs.aws.amazon.com/acm/latest/userguide/acm-renewal.html">managed renewal</a> for certificates that you import.</p> </note> <p>Note the following guidelines when importing third party certificates:</p> <ul> <li> <p>You must enter the private key that matches the certificate you are importing.</p> </li> <li> <p>The private key must be unencrypted. You cannot import a private key that is protected by a password or a passphrase.</p> </li> <li> <p>If the certificate you are importing is not self-signed, you must enter its certificate chain.</p> </li> <li> <p>If a certificate chain is included, the issuer must be the subject of one of the certificates in the chain.</p> </li> <li> <p>The certificate, private key, and certificate chain must be PEM-encoded.</p> </li> <li> <p>The current time must be between the <code>Not Before</code> and <code>Not After</code> certificate fields.</p> </li> <li> <p>The <code>Issuer</code> field must not be empty.</p> </li> <li> <p>The OCSP authority URL, if present, must not exceed 1000 characters.</p> </li> <li> <p>To import a new certificate, omit the <code>CertificateArn</code> argument. Include this argument only when you want to replace a previously imported certifica</p> </li> <li> <p>When you import a certificate by using the CLI, you must specify the certificate, the certificate chain, and the private key by their file names preceded by <code>file://</code>. For example, you can specify a certificate saved in the <code>C:\temp</code> folder as <code>file://C:\temp\certificate_to_import.pem</code>. If you are making an HTTP or HTTPS Query request, include these arguments as BLOBs. </p> </li> <li> <p>When you import a certificate by using an SDK, you must specify the certificate, the certificate chain, and the private key files in the manner required by the programming language you're using. </p> </li> <li> <p>The cryptographic algorithm of an imported certificate must match the algorithm of the signing CA. For example, if the signing CA key type is RSA, then the certificate key type must also be RSA.</p> </li> </ul> <p>This operation returns the <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Name (ARN)</a> of the imported certificate.</p>
+    /// <p>Imports a certificate into AWS Certificate Manager (ACM) to use with services that are integrated with ACM. Note that <a href="https://docs.aws.amazon.com/acm/latest/userguide/acm-services.html">integrated services</a> allow only certificate types and keys they support to be associated with their resources. Further, their support differs depending on whether the certificate is imported into IAM or into ACM. For more information, see the documentation for each service. For more information about importing certificates into ACM, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/import-certificate.html">Importing Certificates</a> in the <i>AWS Certificate Manager User Guide</i>. </p> <note> <p>ACM does not provide <a href="https://docs.aws.amazon.com/acm/latest/userguide/acm-renewal.html">managed renewal</a> for certificates that you import.</p> </note> <p>Note the following guidelines when importing third party certificates:</p> <ul> <li> <p>You must enter the private key that matches the certificate you are importing.</p> </li> <li> <p>The private key must be unencrypted. You cannot import a private key that is protected by a password or a passphrase.</p> </li> <li> <p>The private key must be no larger than 5 KB (5,120 bytes).</p> </li> <li> <p>If the certificate you are importing is not self-signed, you must enter its certificate chain.</p> </li> <li> <p>If a certificate chain is included, the issuer must be the subject of one of the certificates in the chain.</p> </li> <li> <p>The certificate, private key, and certificate chain must be PEM-encoded.</p> </li> <li> <p>The current time must be between the <code>Not Before</code> and <code>Not After</code> certificate fields.</p> </li> <li> <p>The <code>Issuer</code> field must not be empty.</p> </li> <li> <p>The OCSP authority URL, if present, must not exceed 1000 characters.</p> </li> <li> <p>To import a new certificate, omit the <code>CertificateArn</code> argument. Include this argument only when you want to replace a previously imported certificate.</p> </li> <li> <p>When you import a certificate by using the CLI, you must specify the certificate, the certificate chain, and the private key by their file names preceded by <code>fileb://</code>. For example, you can specify a certificate saved in the <code>C:\temp</code> folder as <code>fileb://C:\temp\certificate_to_import.pem</code>. If you are making an HTTP or HTTPS Query request, include these arguments as BLOBs. </p> </li> <li> <p>When you import a certificate by using an SDK, you must specify the certificate, the certificate chain, and the private key files in the manner required by the programming language you're using. </p> </li> <li> <p>The cryptographic algorithm of an imported certificate must match the algorithm of the signing CA. For example, if the signing CA key type is RSA, then the certificate key type must also be RSA.</p> </li> </ul> <p>This operation returns the <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Name (ARN)</a> of the imported certificate.</p>
     async fn import_certificate(
         &self,
         input: ImportCertificateRequest,
@@ -1485,6 +1645,23 @@ impl Acm for AcmClient {
             .deserialize::<ListTagsForCertificateResponse, _>()
     }
 
+    /// <p>Adds or modifies account-level configurations in ACM. </p> <p>The supported configuration option is <code>DaysBeforeExpiry</code>. This option specifies the number of days prior to certificate expiration when ACM starts generating <code>EventBridge</code> events. ACM sends one event per day per certificate until the certificate expires. By default, accounts receive events starting 45 days before certificate expiration.</p>
+    async fn put_account_configuration(
+        &self,
+        input: PutAccountConfigurationRequest,
+    ) -> Result<(), RusotoError<PutAccountConfigurationError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "CertificateManager.PutAccountConfiguration");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, PutAccountConfigurationError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
+    }
+
     /// <p>Remove one or more tags from an ACM certificate. A tag consists of a key-value pair. If you do not specify the value portion of the tag when calling this function, the tag will be removed regardless of value. If you specify a value, the tag is removed only if it is associated with the specified value. </p> <p>To add tags to a certificate, use the <a>AddTagsToCertificate</a> action. To view all of the tags that have been applied to a specific ACM certificate, use the <a>ListTagsForCertificate</a> action. </p>
     async fn remove_tags_from_certificate(
         &self,
@@ -1505,7 +1682,7 @@ impl Acm for AcmClient {
         Ok(())
     }
 
-    /// <p>Renews an eligable ACM certificate. At this time, only exported private certificates can be renewed with this operation. In order to renew your ACM PCA certificates with ACM, you must first <a href="https://docs.aws.amazon.com/acm-pca/latest/userguide/PcaPermissions.html">grant the ACM service principal permission to do so</a>. For more information, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/manual-renewal.html">Testing Managed Renewal</a> in the ACM User Guide.</p>
+    /// <p>Renews an eligible ACM certificate. At this time, only exported private certificates can be renewed with this operation. In order to renew your ACM PCA certificates with ACM, you must first <a href="https://docs.aws.amazon.com/acm-pca/latest/userguide/PcaPermissions.html">grant the ACM service principal permission to do so</a>. For more information, see <a href="https://docs.aws.amazon.com/acm/latest/userguide/manual-renewal.html">Testing Managed Renewal</a> in the ACM User Guide.</p>
     async fn renew_certificate(
         &self,
         input: RenewCertificateRequest,

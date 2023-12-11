@@ -58,6 +58,48 @@ pub struct ActivateEventSourceRequest {
     pub name: String,
 }
 
+/// <p>Contains details about an API destination.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ApiDestination {
+    /// <p>The ARN of the API destination.</p>
+    #[serde(rename = "ApiDestinationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_destination_arn: Option<String>,
+    /// <p>The state of the API destination.</p>
+    #[serde(rename = "ApiDestinationState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_destination_state: Option<String>,
+    /// <p>The ARN of the connection specified for the API destination.</p>
+    #[serde(rename = "ConnectionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_arn: Option<String>,
+    /// <p>A time stamp for the time that the API destination was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The method to use to connect to the HTTP endpoint.</p>
+    #[serde(rename = "HttpMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_method: Option<String>,
+    /// <p>The URL to the endpoint for the API destination.</p>
+    #[serde(rename = "InvocationEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invocation_endpoint: Option<String>,
+    /// <p>The maximum number of invocations per second to send to the HTTP endpoint.</p>
+    #[serde(rename = "InvocationRateLimitPerSecond")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invocation_rate_limit_per_second: Option<i64>,
+    /// <p>A time stamp for the time that the API destination was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The name of the API destination.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
 /// <p>An <code>Archive</code> object that contains details about an archive.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -174,6 +216,22 @@ pub struct CancelReplayResponse {
     pub state_reason: Option<String>,
 }
 
+/// <p>The details of a capacity provider strategy. To learn more, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_CapacityProviderStrategyItem.html">CapacityProviderStrategyItem</a> in the Amazon ECS API Reference.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct CapacityProviderStrategyItem {
+    /// <p>The base value designates how many tasks, at a minimum, to run on the specified capacity provider. Only one capacity provider in a capacity provider strategy can have a base defined. If no value is specified, the default value of 0 is used. </p>
+    #[serde(rename = "base")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub base: Option<i64>,
+    /// <p>The short name of the capacity provider.</p>
+    #[serde(rename = "capacityProvider")]
+    pub capacity_provider: String,
+    /// <p>The weight value designates the relative percentage of the total number of tasks launched that should use the specified capacity provider. The weight value is taken into consideration after the base value, if defined, is satisfied.</p>
+    #[serde(rename = "weight")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub weight: Option<i64>,
+}
+
 /// <p>A JSON string which you can use to limit the event bus permissions you are granting to only accounts that fulfill the condition. Currently, the only supported condition is membership in a certain AWS organization. The string must contain <code>Type</code>, <code>Key</code>, and <code>Value</code> fields. The <code>Value</code> field specifies the ID of the AWS organization. Following is an example value for <code>Condition</code>:</p> <p> <code>'{"Type" : "StringEquals", "Key": "aws:PrincipalOrgID", "Value": "o-1234567890"}'</code> </p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -187,6 +245,232 @@ pub struct Condition {
     /// <p>Specifies the value for the key. Currently, this must be the ID of the organization.</p>
     #[serde(rename = "Value")]
     pub value: String,
+}
+
+/// <p>Contains information about a connection.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct Connection {
+    /// <p>The authorization type specified for the connection.</p>
+    #[serde(rename = "AuthorizationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_type: Option<String>,
+    /// <p>The ARN of the connection.</p>
+    #[serde(rename = "ConnectionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_arn: Option<String>,
+    /// <p>The state of the connection.</p>
+    #[serde(rename = "ConnectionState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_state: Option<String>,
+    /// <p>A time stamp for the time that the connection was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>A time stamp for the time that the connection was last authorized.</p>
+    #[serde(rename = "LastAuthorizedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_authorized_time: Option<f64>,
+    /// <p>A time stamp for the time that the connection was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The name of the connection.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The reason that the connection is in the connection state.</p>
+    #[serde(rename = "StateReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state_reason: Option<String>,
+}
+
+/// <p>Contains the authorization parameters for the connection if API Key is specified as the authorization type.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ConnectionApiKeyAuthResponseParameters {
+    /// <p>The name of the header to use for the <code>APIKeyValue</code> used for authorization.</p>
+    #[serde(rename = "ApiKeyName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_name: Option<String>,
+}
+
+/// <p>Contains the authorization parameters to use for the connection.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ConnectionAuthResponseParameters {
+    /// <p>The API Key parameters to use for authorization.</p>
+    #[serde(rename = "ApiKeyAuthParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_auth_parameters: Option<ConnectionApiKeyAuthResponseParameters>,
+    /// <p>The authorization parameters for Basic authorization.</p>
+    #[serde(rename = "BasicAuthParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub basic_auth_parameters: Option<ConnectionBasicAuthResponseParameters>,
+    /// <p>Additional parameters for the connection that are passed through with every invocation to the HTTP endpoint.</p>
+    #[serde(rename = "InvocationHttpParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invocation_http_parameters: Option<ConnectionHttpParameters>,
+    /// <p>The OAuth parameters to use for authorization.</p>
+    #[serde(rename = "OAuthParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub o_auth_parameters: Option<ConnectionOAuthResponseParameters>,
+}
+
+/// <p>Contains the authorization parameters for the connection if Basic is specified as the authorization type.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ConnectionBasicAuthResponseParameters {
+    /// <p>The user name to use for Basic authorization.</p>
+    #[serde(rename = "Username")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub username: Option<String>,
+}
+
+/// <p>Additional parameter included in the body. You can include up to 100 additional body parameters per request. An event payload cannot exceed 64 KB.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ConnectionBodyParameter {
+    /// <p>Specified whether the value is secret.</p>
+    #[serde(rename = "IsValueSecret")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_value_secret: Option<bool>,
+    /// <p>The key for the parameter.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// <p>The value associated with the key.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
+/// <p>Additional parameter included in the header. You can include up to 100 additional header parameters per request. An event payload cannot exceed 64 KB.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ConnectionHeaderParameter {
+    /// <p>Specified whether the value is a secret.</p>
+    #[serde(rename = "IsValueSecret")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_value_secret: Option<bool>,
+    /// <p>The key for the parameter.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// <p>The value associated with the key.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
+/// <p>Contains additional parameters for the connection.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ConnectionHttpParameters {
+    /// <p>Contains additional body string parameters for the connection.</p>
+    #[serde(rename = "BodyParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub body_parameters: Option<Vec<ConnectionBodyParameter>>,
+    /// <p>Contains additional header parameters for the connection.</p>
+    #[serde(rename = "HeaderParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub header_parameters: Option<Vec<ConnectionHeaderParameter>>,
+    /// <p>Contains additional query string parameters for the connection.</p>
+    #[serde(rename = "QueryStringParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_string_parameters: Option<Vec<ConnectionQueryStringParameter>>,
+}
+
+/// <p>Contains the client response parameters for the connection when OAuth is specified as the authorization type.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ConnectionOAuthClientResponseParameters {
+    /// <p>The client ID associated with the response to the connection request.</p>
+    #[serde(rename = "ClientID")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_id: Option<String>,
+}
+
+/// <p>Contains the response parameters when OAuth is specified as the authorization type.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ConnectionOAuthResponseParameters {
+    /// <p>The URL to the HTTP endpoint that authorized the request.</p>
+    #[serde(rename = "AuthorizationEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_endpoint: Option<String>,
+    /// <p>A <code>ConnectionOAuthClientResponseParameters</code> object that contains details about the client parameters returned when OAuth is specified as the authorization type.</p>
+    #[serde(rename = "ClientParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_parameters: Option<ConnectionOAuthClientResponseParameters>,
+    /// <p>The method used to connect to the HTTP endpoint.</p>
+    #[serde(rename = "HttpMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_method: Option<String>,
+    /// <p>The additional HTTP parameters used for the OAuth authorization request.</p>
+    #[serde(rename = "OAuthHttpParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub o_auth_http_parameters: Option<ConnectionHttpParameters>,
+}
+
+/// <p>Additional query string parameter for the connection. You can include up to 100 additional query string parameters per request. Each additional parameter counts towards the event payload size, which cannot exceed 64 KB.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ConnectionQueryStringParameter {
+    /// <p>Specifies whether the value is secret.</p>
+    #[serde(rename = "IsValueSecret")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_value_secret: Option<bool>,
+    /// <p>The key for a query string parameter.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// <p>The value associated with the key for the query string parameter.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateApiDestinationRequest {
+    /// <p>The ARN of the connection to use for the API destination. The destination endpoint must support the authorization type specified for the connection.</p>
+    #[serde(rename = "ConnectionArn")]
+    pub connection_arn: String,
+    /// <p>A description for the API destination to create.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The method to use for the request to the HTTP invocation endpoint.</p>
+    #[serde(rename = "HttpMethod")]
+    pub http_method: String,
+    /// <p>The URL to the HTTP invocation endpoint for the API destination.</p>
+    #[serde(rename = "InvocationEndpoint")]
+    pub invocation_endpoint: String,
+    /// <p>The maximum number of requests per second to send to the HTTP invocation endpoint.</p>
+    #[serde(rename = "InvocationRateLimitPerSecond")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invocation_rate_limit_per_second: Option<i64>,
+    /// <p>The name for the API destination to create.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateApiDestinationResponse {
+    /// <p>The ARN of the API destination that was created by the request.</p>
+    #[serde(rename = "ApiDestinationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_destination_arn: Option<String>,
+    /// <p>The state of the API destination that was created by the request.</p>
+    #[serde(rename = "ApiDestinationState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_destination_state: Option<String>,
+    /// <p>A time stamp indicating the time that the API destination was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>A time stamp indicating the time that the API destination was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -231,6 +515,122 @@ pub struct CreateArchiveResponse {
     #[serde(rename = "StateReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state_reason: Option<String>,
+}
+
+/// <p>Contains the API key authorization parameters for the connection.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateConnectionApiKeyAuthRequestParameters {
+    /// <p>The name of the API key to use for authorization.</p>
+    #[serde(rename = "ApiKeyName")]
+    pub api_key_name: String,
+    /// <p>The value for the API key to use for authorization.</p>
+    #[serde(rename = "ApiKeyValue")]
+    pub api_key_value: String,
+}
+
+/// <p>Contains the authorization parameters for the connection.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateConnectionAuthRequestParameters {
+    /// <p>A <code>CreateConnectionApiKeyAuthRequestParameters</code> object that contains the API key authorization parameters to use for the connection.</p>
+    #[serde(rename = "ApiKeyAuthParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_auth_parameters: Option<CreateConnectionApiKeyAuthRequestParameters>,
+    /// <p>A <code>CreateConnectionBasicAuthRequestParameters</code> object that contains the Basic authorization parameters to use for the connection.</p>
+    #[serde(rename = "BasicAuthParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub basic_auth_parameters: Option<CreateConnectionBasicAuthRequestParameters>,
+    /// <p>A <code>ConnectionHttpParameters</code> object that contains the API key authorization parameters to use for the connection. Note that if you include additional parameters for the target of a rule via <code>HttpParameters</code>, including query strings, the parameters added for the connection take precedence.</p>
+    #[serde(rename = "InvocationHttpParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invocation_http_parameters: Option<ConnectionHttpParameters>,
+    /// <p>A <code>CreateConnectionOAuthRequestParameters</code> object that contains the OAuth authorization parameters to use for the connection.</p>
+    #[serde(rename = "OAuthParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub o_auth_parameters: Option<CreateConnectionOAuthRequestParameters>,
+}
+
+/// <p>Contains the Basic authorization parameters to use for the connection.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateConnectionBasicAuthRequestParameters {
+    /// <p>The password associated with the user name to use for Basic authorization.</p>
+    #[serde(rename = "Password")]
+    pub password: String,
+    /// <p>The user name to use for Basic authorization.</p>
+    #[serde(rename = "Username")]
+    pub username: String,
+}
+
+/// <p>Contains the Basic authorization parameters to use for the connection.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateConnectionOAuthClientRequestParameters {
+    /// <p>The client ID to use for OAuth authorization for the connection.</p>
+    #[serde(rename = "ClientID")]
+    pub client_id: String,
+    /// <p>The client secret associated with the client ID to use for OAuth authorization for the connection.</p>
+    #[serde(rename = "ClientSecret")]
+    pub client_secret: String,
+}
+
+/// <p>Contains the OAuth authorization parameters to use for the connection.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateConnectionOAuthRequestParameters {
+    /// <p>The URL to the authorization endpoint when OAuth is specified as the authorization type.</p>
+    #[serde(rename = "AuthorizationEndpoint")]
+    pub authorization_endpoint: String,
+    /// <p>A <code>CreateConnectionOAuthClientRequestParameters</code> object that contains the client parameters for OAuth authorization.</p>
+    #[serde(rename = "ClientParameters")]
+    pub client_parameters: CreateConnectionOAuthClientRequestParameters,
+    /// <p>The method to use for the authorization request.</p>
+    #[serde(rename = "HttpMethod")]
+    pub http_method: String,
+    /// <p>A <code>ConnectionHttpParameters</code> object that contains details about the additional parameters to use for the connection.</p>
+    #[serde(rename = "OAuthHttpParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub o_auth_http_parameters: Option<ConnectionHttpParameters>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct CreateConnectionRequest {
+    /// <p>A <code>CreateConnectionAuthRequestParameters</code> object that contains the authorization parameters to use to authorize with the endpoint. </p>
+    #[serde(rename = "AuthParameters")]
+    pub auth_parameters: CreateConnectionAuthRequestParameters,
+    /// <p>The type of authorization to use for the connection.</p>
+    #[serde(rename = "AuthorizationType")]
+    pub authorization_type: String,
+    /// <p>A description for the connection to create.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name for the connection to create.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct CreateConnectionResponse {
+    /// <p>The ARN of the connection that was created by the request.</p>
+    #[serde(rename = "ConnectionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_arn: Option<String>,
+    /// <p>The state of the connection that was created by the request.</p>
+    #[serde(rename = "ConnectionState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_state: Option<String>,
+    /// <p>A time stamp for the time that the connection was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>A time stamp for the time that the connection was last updated.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -297,6 +697,51 @@ pub struct DeadLetterConfig {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeauthorizeConnectionRequest {
+    /// <p>The name of the connection to remove authorization from.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeauthorizeConnectionResponse {
+    /// <p>The ARN of the connection that authorization was removed from.</p>
+    #[serde(rename = "ConnectionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_arn: Option<String>,
+    /// <p>The state of the connection.</p>
+    #[serde(rename = "ConnectionState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_state: Option<String>,
+    /// <p>A time stamp for the time that the connection was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>A time stamp for the time that the connection was last authorized.</p>
+    #[serde(rename = "LastAuthorizedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_authorized_time: Option<f64>,
+    /// <p>A time stamp for the time that the connection was last updated.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteApiDestinationRequest {
+    /// <p>The name of the destination to delete.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteApiDestinationResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DeleteArchiveRequest {
     /// <p>The name of the archive to delete.</p>
     #[serde(rename = "ArchiveName")]
@@ -306,6 +751,39 @@ pub struct DeleteArchiveRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct DeleteArchiveResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DeleteConnectionRequest {
+    /// <p>The name of the connection to delete.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DeleteConnectionResponse {
+    /// <p>The ARN of the connection that was deleted.</p>
+    #[serde(rename = "ConnectionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_arn: Option<String>,
+    /// <p>The state of the connection before it was deleted.</p>
+    #[serde(rename = "ConnectionState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_state: Option<String>,
+    /// <p>A time stamp for the time that the connection was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>A time stamp for the time that the connection was last authorized before it wa deleted.</p>
+    #[serde(rename = "LastAuthorizedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_authorized_time: Option<f64>,
+    /// <p>A time stamp for the time that the connection was last modified before it was deleted.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -340,6 +818,59 @@ pub struct DeleteRuleRequest {
     /// <p>The name of the rule.</p>
     #[serde(rename = "Name")]
     pub name: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeApiDestinationRequest {
+    /// <p>The name of the API destination to retrieve.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeApiDestinationResponse {
+    /// <p>The ARN of the API destination retrieved.</p>
+    #[serde(rename = "ApiDestinationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_destination_arn: Option<String>,
+    /// <p>The state of the API destination retrieved.</p>
+    #[serde(rename = "ApiDestinationState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_destination_state: Option<String>,
+    /// <p>The ARN of the connection specified for the API destination retrieved.</p>
+    #[serde(rename = "ConnectionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_arn: Option<String>,
+    /// <p>A time stamp for the time that the API destination was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The description for the API destination retrieved.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The method to use to connect to the HTTP endpoint.</p>
+    #[serde(rename = "HttpMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_method: Option<String>,
+    /// <p>The URL to use to connect to the HTTP endpoint.</p>
+    #[serde(rename = "InvocationEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invocation_endpoint: Option<String>,
+    /// <p>The maximum number of invocations per second to specified for the API destination. Note that if you set the invocation rate maximum to a value lower the rate necessary to send all events received on to the destination HTTP endpoint, some events may not be delivered within the 24-hour retry window. If you plan to set the rate lower than the rate necessary to deliver all events, consider using a dead-letter queue to catch events that are not delivered within 24 hours.</p>
+    #[serde(rename = "InvocationRateLimitPerSecond")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invocation_rate_limit_per_second: Option<i64>,
+    /// <p>A time stamp for the time that the API destination was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The name of the API destination retrieved.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -394,6 +925,63 @@ pub struct DescribeArchiveResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
     /// <p>The reason that the archive is in the state.</p>
+    #[serde(rename = "StateReason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state_reason: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct DescribeConnectionRequest {
+    /// <p>The name of the connection to retrieve.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct DescribeConnectionResponse {
+    /// <p>The parameters to use for authorization for the connection.</p>
+    #[serde(rename = "AuthParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auth_parameters: Option<ConnectionAuthResponseParameters>,
+    /// <p>The type of authorization specified for the connection.</p>
+    #[serde(rename = "AuthorizationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_type: Option<String>,
+    /// <p>The ARN of the connection retrieved.</p>
+    #[serde(rename = "ConnectionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_arn: Option<String>,
+    /// <p>The state of the connection retrieved.</p>
+    #[serde(rename = "ConnectionState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_state: Option<String>,
+    /// <p>A time stamp for the time that the connection was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The description for the connection retrieved.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>A time stamp for the time that the connection was last authorized.</p>
+    #[serde(rename = "LastAuthorizedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_authorized_time: Option<f64>,
+    /// <p>A time stamp for the time that the connection was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+    /// <p>The name of the connection retrieved.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The ARN of the secret created from the authorization parameters specified for the connection.</p>
+    #[serde(rename = "SecretArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secret_arn: Option<String>,
+    /// <p>The reason that the connection is in the current connection state.</p>
     #[serde(rename = "StateReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state_reason: Option<String>,
@@ -616,6 +1204,18 @@ pub struct DisableRuleRequest {
 /// <p>The custom parameters to be used when the target is an Amazon ECS task.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct EcsParameters {
+    /// <p>The capacity provider strategy to use for the task.</p> <p>If a <code>capacityProviderStrategy</code> is specified, the <code>launchType</code> parameter must be omitted. If no <code>capacityProviderStrategy</code> or launchType is specified, the <code>defaultCapacityProviderStrategy</code> for the cluster is used. </p>
+    #[serde(rename = "CapacityProviderStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capacity_provider_strategy: Option<Vec<CapacityProviderStrategyItem>>,
+    /// <p>Specifies whether to enable Amazon ECS managed tags for the task. For more information, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-using-tags.html">Tagging Your Amazon ECS Resources</a> in the Amazon Elastic Container Service Developer Guide. </p>
+    #[serde(rename = "EnableECSManagedTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_ecs_managed_tags: Option<bool>,
+    /// <p>Whether or not to enable the execute command functionality for the containers in this task. If true, this enables execute command functionality on all containers in the task.</p>
+    #[serde(rename = "EnableExecuteCommand")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_execute_command: Option<bool>,
     /// <p>Specifies an ECS task group for the task. The maximum length is 255 characters.</p>
     #[serde(rename = "Group")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -628,10 +1228,30 @@ pub struct EcsParameters {
     #[serde(rename = "NetworkConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub network_configuration: Option<NetworkConfiguration>,
+    /// <p>An array of placement constraint objects to use for the task. You can specify up to 10 constraints per task (including constraints in the task definition and those specified at runtime).</p>
+    #[serde(rename = "PlacementConstraints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub placement_constraints: Option<Vec<PlacementConstraint>>,
+    /// <p>The placement strategy objects to use for the task. You can specify a maximum of five strategy rules per task. </p>
+    #[serde(rename = "PlacementStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub placement_strategy: Option<Vec<PlacementStrategy>>,
     /// <p>Specifies the platform version for the task. Specify only the numeric portion of the platform version, such as <code>1.1.0</code>.</p> <p>This structure is used only if <code>LaunchType</code> is <code>FARGATE</code>. For more information about valid platform versions, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html">AWS Fargate Platform Versions</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
     #[serde(rename = "PlatformVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub platform_version: Option<String>,
+    /// <p>Specifies whether to propagate the tags from the task definition to the task. If no value is specified, the tags are not propagated. Tags can only be propagated to the task during task creation. To add tags to a task after task creation, use the TagResource API action. </p>
+    #[serde(rename = "PropagateTags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub propagate_tags: Option<String>,
+    /// <p>The reference ID to use for the task.</p>
+    #[serde(rename = "ReferenceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reference_id: Option<String>,
+    /// <p>The metadata that you apply to the task to help you categorize and organize them. Each tag consists of a key and an optional value, both of which you define. To learn more, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_RunTask.html#ECS-RunTask-request-tags">RunTask</a> in the Amazon ECS API Reference.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The number of tasks to create based on <code>TaskDefinition</code>. The default is 1.</p>
     #[serde(rename = "TaskCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -653,7 +1273,7 @@ pub struct EnableRuleRequest {
     pub name: String,
 }
 
-/// <p>An event bus receives events from a source and routes them to rules associated with that event bus. Your account's default event bus receives rules from AWS services. A custom event bus can receive rules from AWS services as well as your custom applications and services. A partner event bus receives events from an event source created by an SaaS partner. These events come from the partners services or applications.</p>
+/// <p>An event bus receives events from a source and routes them to rules associated with that event bus. Your account's default event bus receives events from AWS services. A custom event bus can receive events from your custom applications and services. A partner event bus receives events from an event source created by an SaaS partner. These events come from the partners services or applications.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct EventBus {
@@ -701,18 +1321,18 @@ pub struct EventSource {
     pub state: Option<String>,
 }
 
-/// <p>These are custom parameter to be used when the target is an API Gateway REST APIs.</p>
+/// <p>These are custom parameter to be used when the target is an API Gateway REST APIs or EventBridge ApiDestinations. In the latter case, these are merged with any InvocationParameters specified on the Connection, with any values from the Connection taking precedence.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct HttpParameters {
-    /// <p>The headers that need to be sent as part of request invoking the API Gateway REST API.</p>
+    /// <p>The headers that need to be sent as part of request invoking the API Gateway REST API or EventBridge ApiDestination.</p>
     #[serde(rename = "HeaderParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub header_parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The path parameter values to be used to populate API Gateway REST API path wildcards ("*").</p>
+    /// <p>The path parameter values to be used to populate API Gateway REST API or EventBridge ApiDestination path wildcards ("*").</p>
     #[serde(rename = "PathParameterValues")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path_parameter_values: Option<Vec<String>>,
-    /// <p>The query string keys/values that need to be sent as part of request invoking the API Gateway REST API.</p>
+    /// <p>The query string keys/values that need to be sent as part of request invoking the API Gateway REST API or EventBridge ApiDestination.</p>
     #[serde(rename = "QueryStringParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub query_string_parameters: Option<::std::collections::HashMap<String, String>>,
@@ -721,11 +1341,11 @@ pub struct HttpParameters {
 /// <p>Contains the parameters needed for you to provide custom input to a target based on one or more pieces of data extracted from the event.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct InputTransformer {
-    /// <p>Map of JSON paths to be extracted from the event. You can then insert these in the template in <code>InputTemplate</code> to produce the output you want to be sent to the target.</p> <p> <code>InputPathsMap</code> is an array key-value pairs, where each value is a valid JSON path. You can have as many as 10 key-value pairs. You must use JSON dot notation, not bracket notation.</p> <p>The keys cannot start with "AWS." </p>
+    /// <p>Map of JSON paths to be extracted from the event. You can then insert these in the template in <code>InputTemplate</code> to produce the output you want to be sent to the target.</p> <p> <code>InputPathsMap</code> is an array key-value pairs, where each value is a valid JSON path. You can have as many as 100 key-value pairs. You must use JSON dot notation, not bracket notation.</p> <p>The keys cannot start with "AWS." </p>
     #[serde(rename = "InputPathsMap")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_paths_map: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Input template where you specify placeholders that will be filled with the values of the keys from <code>InputPathsMap</code> to customize the data sent to the target. Enclose each <code>InputPathsMaps</code> value in brackets: &lt;<i>value</i>&gt; The InputTemplate must be valid JSON.</p> <p>If <code>InputTemplate</code> is a JSON object (surrounded by curly braces), the following restrictions apply:</p> <ul> <li> <p>The placeholder cannot be used as an object key.</p> </li> <li> <p>Object values cannot include quote marks.</p> </li> </ul> <p>The following example shows the syntax for using <code>InputPathsMap</code> and <code>InputTemplate</code>.</p> <p> <code> "InputTransformer":</code> </p> <p> <code>{</code> </p> <p> <code>"InputPathsMap": {"instance": "$.detail.instance","status": "$.detail.status"},</code> </p> <p> <code>"InputTemplate": "&lt;instance&gt; is in state &lt;status&gt;"</code> </p> <p> <code>}</code> </p> <p>To have the <code>InputTemplate</code> include quote marks within a JSON string, escape each quote marks with a slash, as in the following example:</p> <p> <code> "InputTransformer":</code> </p> <p> <code>{</code> </p> <p> <code>"InputPathsMap": {"instance": "$.detail.instance","status": "$.detail.status"},</code> </p> <p> <code>"InputTemplate": "&lt;instance&gt; is in state \"&lt;status&gt;\""</code> </p> <p> <code>}</code> </p>
+    /// <p>Input template where you specify placeholders that will be filled with the values of the keys from <code>InputPathsMap</code> to customize the data sent to the target. Enclose each <code>InputPathsMaps</code> value in brackets: &lt;<i>value</i>&gt; The InputTemplate must be valid JSON.</p> <p>If <code>InputTemplate</code> is a JSON object (surrounded by curly braces), the following restrictions apply:</p> <ul> <li> <p>The placeholder cannot be used as an object key.</p> </li> </ul> <p>The following example shows the syntax for using <code>InputPathsMap</code> and <code>InputTemplate</code>.</p> <p> <code> "InputTransformer":</code> </p> <p> <code>{</code> </p> <p> <code>"InputPathsMap": {"instance": "$.detail.instance","status": "$.detail.status"},</code> </p> <p> <code>"InputTemplate": "&lt;instance&gt; is in state &lt;status&gt;"</code> </p> <p> <code>}</code> </p> <p>To have the <code>InputTemplate</code> include quote marks within a JSON string, escape each quote marks with a slash, as in the following example:</p> <p> <code> "InputTransformer":</code> </p> <p> <code>{</code> </p> <p> <code>"InputPathsMap": {"instance": "$.detail.instance","status": "$.detail.status"},</code> </p> <p> <code>"InputTemplate": "&lt;instance&gt; is in state \"&lt;status&gt;\""</code> </p> <p> <code>}</code> </p> <p>The <code>InputTemplate</code> can also be valid JSON with varibles in quotes or out, as in the following example:</p> <p> <code> "InputTransformer":</code> </p> <p> <code>{</code> </p> <p> <code>"InputPathsMap": {"instance": "$.detail.instance","status": "$.detail.status"},</code> </p> <p> <code>"InputTemplate": '{"myInstance": &lt;instance&gt;,"myStatus": "&lt;instance&gt; is in state \"&lt;status&gt;\""}'</code> </p> <p> <code>}</code> </p>
     #[serde(rename = "InputTemplate")]
     pub input_template: String,
 }
@@ -736,6 +1356,40 @@ pub struct KinesisParameters {
     /// <p>The JSON path to be extracted from the event and used as the partition key. For more information, see <a href="https://docs.aws.amazon.com/streams/latest/dev/key-concepts.html#partition-key">Amazon Kinesis Streams Key Concepts</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p>
     #[serde(rename = "PartitionKeyPath")]
     pub partition_key_path: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListApiDestinationsRequest {
+    /// <p>The ARN of the connection specified for the API destination.</p>
+    #[serde(rename = "ConnectionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_arn: Option<String>,
+    /// <p>The maximum number of API destinations to include in the response.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>A name prefix to filter results returned. Only API destinations with a name that starts with the prefix are returned.</p>
+    #[serde(rename = "NamePrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name_prefix: Option<String>,
+    /// <p>The token returned by a previous call to retrieve the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListApiDestinationsResponse {
+    /// <p>An array of <code>ApiDestination</code> objects that include information about an API destination.</p>
+    #[serde(rename = "ApiDestinations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_destinations: Option<Vec<ApiDestination>>,
+    /// <p>A token you can use in a subsequent request to retrieve the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -771,6 +1425,40 @@ pub struct ListArchivesResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub archives: Option<Vec<Archive>>,
     /// <p>The token returned by a previous call to retrieve the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ListConnectionsRequest {
+    /// <p>The state of the connection.</p>
+    #[serde(rename = "ConnectionState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_state: Option<String>,
+    /// <p>The maximum number of connections to return.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>A name prefix to filter results returned. Only connections with a name that starts with the prefix are returned.</p>
+    #[serde(rename = "NamePrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name_prefix: Option<String>,
+    /// <p>The token returned by a previous call to retrieve the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ListConnectionsResponse {
+    /// <p>An array of connections objects that include details about the connections.</p>
+    #[serde(rename = "Connections")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connections: Option<Vec<Connection>>,
+    /// <p>A token you can use in a subsequent request to retrieve the next set of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1094,6 +1782,32 @@ pub struct PartnerEventSourceAccount {
     pub state: Option<String>,
 }
 
+/// <p>An object representing a constraint on task placement. To learn more, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-placement-constraints.html">Task Placement Constraints</a> in the Amazon Elastic Container Service Developer Guide.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct PlacementConstraint {
+    /// <p>A cluster query language expression to apply to the constraint. You cannot specify an expression if the constraint type is <code>distinctInstance</code>. To learn more, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/cluster-query-language.html">Cluster Query Language</a> in the Amazon Elastic Container Service Developer Guide. </p>
+    #[serde(rename = "expression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expression: Option<String>,
+    /// <p>The type of constraint. Use distinctInstance to ensure that each task in a particular group is running on a different container instance. Use memberOf to restrict the selection to a group of valid candidates. </p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>The task placement strategy for a task or service. To learn more, see <a href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-placement-strategies.html">Task Placement Strategies</a> in the Amazon Elastic Container Service Developer Guide.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct PlacementStrategy {
+    /// <p>The field to apply the placement strategy against. For the spread placement strategy, valid values are instanceId (or host, which has the same effect), or any platform or custom attribute that is applied to a container instance, such as attribute:ecs.availability-zone. For the binpack placement strategy, valid values are cpu and memory. For the random placement strategy, this field is not used. </p>
+    #[serde(rename = "field")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub field: Option<String>,
+    /// <p>The type of placement strategy. The random placement strategy randomly places tasks on available candidates. The spread placement strategy spreads placement across available candidates evenly based on the field parameter. The binpack strategy places tasks on available candidates that have the least available amount of the resource that is specified with the field parameter. For example, if you binpack on memory, a task is placed on the instance with the least amount of remaining memory (but still enough to run the task). </p>
+    #[serde(rename = "type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct PutEventsRequest {
@@ -1130,6 +1844,10 @@ pub struct PutEventsRequestEntry {
     #[serde(rename = "Time")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub time: Option<f64>,
+    /// <p>An AWS X-Ray trade header, which is an http header (X-Amzn-Trace-Id) that contains the trace-id associated with the event.</p> <p>To learn more about X-Ray trace headers, see <a href="https://docs.aws.amazon.com/xray/latest/devguide/xray-concepts.html#xray-concepts-tracingheader">Tracing header</a> in the AWS X-Ray Developer Guide.</p>
+    #[serde(rename = "TraceHeader")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trace_header: Option<String>,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
@@ -1570,6 +2288,26 @@ pub struct RunCommandTarget {
     pub values: Vec<String>,
 }
 
+/// <p>Name/Value pair of a parameter to start execution of a SageMaker Model Building Pipeline.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct SageMakerPipelineParameter {
+    /// <p>Name of parameter to start execution of a SageMaker Model Building Pipeline.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>Value of parameter to start execution of a SageMaker Model Building Pipeline.</p>
+    #[serde(rename = "Value")]
+    pub value: String,
+}
+
+/// <p>These are custom parameters to use when the target is a SageMaker Model Building Pipeline that starts based on EventBridge events.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct SageMakerPipelineParameters {
+    /// <p>List of Parameter names and values for SageMaker Model Building Pipeline execution.</p>
+    #[serde(rename = "PipelineParameterList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_parameter_list: Option<Vec<SageMakerPipelineParameter>>,
+}
+
 /// <p>This structure includes the custom parameter to be used when the target is an SQS FIFO queue.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct SqsParameters {
@@ -1668,7 +2406,7 @@ pub struct Target {
     #[serde(rename = "EcsParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ecs_parameters: Option<EcsParameters>,
-    /// <p>Contains the HTTP parameters to use when the target is a API Gateway REST endpoint.</p> <p>If you specify an API Gateway REST API as a target, you can use this parameter to specify headers, path parameter, query string keys/values as part of your target invoking request.</p>
+    /// <p>Contains the HTTP parameters to use when the target is a API Gateway REST endpoint or EventBridge ApiDestination.</p> <p>If you specify an API Gateway REST API or EventBridge ApiDestination as a target, you can use this parameter to specify headers, path parameters, and query string keys/values as part of your target invoking request. If you're using ApiDestinations, the corresponding Connection can also have these values configured. In case of any conflicting keys, values from the Connection take precedence.</p>
     #[serde(rename = "HttpParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub http_parameters: Option<HttpParameters>,
@@ -1707,6 +2445,10 @@ pub struct Target {
     #[serde(rename = "RunCommandParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub run_command_parameters: Option<RunCommandParameters>,
+    /// <p>Contains the SageMaker Model Building Pipeline parameters to start execution of a SageMaker Model Building Pipeline.</p> <p>If you specify a SageMaker Model Building Pipeline as a target, you can use this to specify parameters to start a pipeline execution based on EventBridge events.</p>
+    #[serde(rename = "SageMakerPipelineParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sage_maker_pipeline_parameters: Option<SageMakerPipelineParameters>,
     /// <p>Contains the message group ID to use when the target is a FIFO queue.</p> <p>If you specify an SQS FIFO queue as a target, the queue must have content-based deduplication enabled.</p>
     #[serde(rename = "SqsParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1716,7 +2458,7 @@ pub struct Target {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct TestEventPatternRequest {
-    /// <p>The event, in JSON format, to test against the event pattern.</p>
+    /// <p><p>The event, in JSON format, to test against the event pattern. The JSON must follow the format specified in <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/aws-events.html">AWS Events</a>, and the following fields are mandatory:</p> <ul> <li> <p> <code>id</code> </p> </li> <li> <p> <code>account</code> </p> </li> <li> <p> <code>source</code> </p> </li> <li> <p> <code>time</code> </p> </li> <li> <p> <code>region</code> </p> </li> <li> <p> <code>resources</code> </p> </li> <li> <p> <code>detail-type</code> </p> </li> </ul></p>
     #[serde(rename = "Event")]
     pub event: String,
     /// <p>The event pattern. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-and-event-patterns.html">Events and Event Patterns</a> in the <i>Amazon EventBridge User Guide</i>.</p>
@@ -1747,6 +2489,55 @@ pub struct UntagResourceRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceResponse {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateApiDestinationRequest {
+    /// <p>The ARN of the connection to use for the API destination.</p>
+    #[serde(rename = "ConnectionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_arn: Option<String>,
+    /// <p>The name of the API destination to update.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The method to use for the API destination.</p>
+    #[serde(rename = "HttpMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_method: Option<String>,
+    /// <p>The URL to the endpoint to use for the API destination.</p>
+    #[serde(rename = "InvocationEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invocation_endpoint: Option<String>,
+    /// <p>The maximum number of invocations per second to send to the API destination.</p>
+    #[serde(rename = "InvocationRateLimitPerSecond")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invocation_rate_limit_per_second: Option<i64>,
+    /// <p>The name of the API destination to update.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateApiDestinationResponse {
+    /// <p>The ARN of the API destination that was updated.</p>
+    #[serde(rename = "ApiDestinationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_destination_arn: Option<String>,
+    /// <p>The state of the API destination that was updated.</p>
+    #[serde(rename = "ApiDestinationState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_destination_state: Option<String>,
+    /// <p>A time stamp for the time that the API destination was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>A time stamp for the time that the API destination was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
+}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -1787,6 +2578,137 @@ pub struct UpdateArchiveResponse {
     #[serde(rename = "StateReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state_reason: Option<String>,
+}
+
+/// <p>Contains the API key authorization parameters to use to update the connection.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateConnectionApiKeyAuthRequestParameters {
+    /// <p>The name of the API key to use for authorization.</p>
+    #[serde(rename = "ApiKeyName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_name: Option<String>,
+    /// <p>The value associated with teh API key to use for authorization.</p>
+    #[serde(rename = "ApiKeyValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_value: Option<String>,
+}
+
+/// <p>Contains the additional parameters to use for the connection.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateConnectionAuthRequestParameters {
+    /// <p>A <code>UpdateConnectionApiKeyAuthRequestParameters</code> object that contains the authorization parameters for API key authorization.</p>
+    #[serde(rename = "ApiKeyAuthParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub api_key_auth_parameters: Option<UpdateConnectionApiKeyAuthRequestParameters>,
+    /// <p>A <code>UpdateConnectionBasicAuthRequestParameters</code> object that contains the authorization parameters for Basic authorization.</p>
+    #[serde(rename = "BasicAuthParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub basic_auth_parameters: Option<UpdateConnectionBasicAuthRequestParameters>,
+    /// <p>A <code>ConnectionHttpParameters</code> object that contains the additional parameters to use for the connection.</p>
+    #[serde(rename = "InvocationHttpParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invocation_http_parameters: Option<ConnectionHttpParameters>,
+    /// <p>A <code>UpdateConnectionOAuthRequestParameters</code> object that contains the authorization parameters for OAuth authorization.</p>
+    #[serde(rename = "OAuthParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub o_auth_parameters: Option<UpdateConnectionOAuthRequestParameters>,
+}
+
+/// <p>Contains the Basic authorization parameters for the connection.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateConnectionBasicAuthRequestParameters {
+    /// <p>The password associated with the user name to use for Basic authorization.</p>
+    #[serde(rename = "Password")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub password: Option<String>,
+    /// <p>The user name to use for Basic authorization.</p>
+    #[serde(rename = "Username")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub username: Option<String>,
+}
+
+/// <p>Contains the OAuth authorization parameters to use for the connection.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateConnectionOAuthClientRequestParameters {
+    /// <p>The client ID to use for OAuth authorization.</p>
+    #[serde(rename = "ClientID")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_id: Option<String>,
+    /// <p>The client secret assciated with the client ID to use for OAuth authorization.</p>
+    #[serde(rename = "ClientSecret")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_secret: Option<String>,
+}
+
+/// <p>Contains the OAuth request parameters to use for the connection.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateConnectionOAuthRequestParameters {
+    /// <p>The URL to the authorization endpoint when OAuth is specified as the authorization type.</p>
+    #[serde(rename = "AuthorizationEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_endpoint: Option<String>,
+    /// <p>A <code>UpdateConnectionOAuthClientRequestParameters</code> object that contains the client parameters to use for the connection when OAuth is specified as the authorization type.</p>
+    #[serde(rename = "ClientParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_parameters: Option<UpdateConnectionOAuthClientRequestParameters>,
+    /// <p>The method used to connect to the HTTP endpoint.</p>
+    #[serde(rename = "HttpMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_method: Option<String>,
+    /// <p>The additional HTTP parameters used for the OAuth authorization request.</p>
+    #[serde(rename = "OAuthHttpParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub o_auth_http_parameters: Option<ConnectionHttpParameters>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateConnectionRequest {
+    /// <p>The authorization parameters to use for the connection.</p>
+    #[serde(rename = "AuthParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auth_parameters: Option<UpdateConnectionAuthRequestParameters>,
+    /// <p>The type of authorization to use for the connection.</p>
+    #[serde(rename = "AuthorizationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_type: Option<String>,
+    /// <p>A description for the connection.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the connection to update.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateConnectionResponse {
+    /// <p>The ARN of the connection that was updated.</p>
+    #[serde(rename = "ConnectionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_arn: Option<String>,
+    /// <p>The state of the connection that was updated.</p>
+    #[serde(rename = "ConnectionState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_state: Option<String>,
+    /// <p>A time stamp for the time that the connection was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>A time stamp for the time that the connection was last authorized.</p>
+    #[serde(rename = "LastAuthorizedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_authorized_time: Option<f64>,
+    /// <p>A time stamp for the time that the connection was last modified.</p>
+    #[serde(rename = "LastModifiedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_modified_time: Option<f64>,
 }
 
 /// Errors returned by ActivateEventSource
@@ -1897,6 +2819,58 @@ impl fmt::Display for CancelReplayError {
     }
 }
 impl Error for CancelReplayError {}
+/// Errors returned by CreateApiDestination
+#[derive(Debug, PartialEq)]
+pub enum CreateApiDestinationError {
+    /// <p>This exception occurs due to unexpected causes.</p>
+    Internal(String),
+    /// <p>The request failed because it attempted to create resource beyond the allowed service quota.</p>
+    LimitExceeded(String),
+    /// <p>The resource you are trying to create already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>An entity that you specified does not exist.</p>
+    ResourceNotFound(String),
+}
+
+impl CreateApiDestinationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateApiDestinationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalException" => {
+                    return RusotoError::Service(CreateApiDestinationError::Internal(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateApiDestinationError::LimitExceeded(err.msg))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(CreateApiDestinationError::ResourceAlreadyExists(
+                        err.msg,
+                    ))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(CreateApiDestinationError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateApiDestinationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateApiDestinationError::Internal(ref cause) => write!(f, "{}", cause),
+            CreateApiDestinationError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateApiDestinationError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+            CreateApiDestinationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateApiDestinationError {}
 /// Errors returned by CreateArchive
 #[derive(Debug, PartialEq)]
 pub enum CreateArchiveError {
@@ -1959,6 +2933,50 @@ impl fmt::Display for CreateArchiveError {
     }
 }
 impl Error for CreateArchiveError {}
+/// Errors returned by CreateConnection
+#[derive(Debug, PartialEq)]
+pub enum CreateConnectionError {
+    /// <p>This exception occurs due to unexpected causes.</p>
+    Internal(String),
+    /// <p>The request failed because it attempted to create resource beyond the allowed service quota.</p>
+    LimitExceeded(String),
+    /// <p>The resource you are trying to create already exists.</p>
+    ResourceAlreadyExists(String),
+}
+
+impl CreateConnectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<CreateConnectionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalException" => {
+                    return RusotoError::Service(CreateConnectionError::Internal(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(CreateConnectionError::LimitExceeded(err.msg))
+                }
+                "ResourceAlreadyExistsException" => {
+                    return RusotoError::Service(CreateConnectionError::ResourceAlreadyExists(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for CreateConnectionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            CreateConnectionError::Internal(ref cause) => write!(f, "{}", cause),
+            CreateConnectionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            CreateConnectionError::ResourceAlreadyExists(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for CreateConnectionError {}
 /// Errors returned by CreateEventBus
 #[derive(Debug, PartialEq)]
 pub enum CreateEventBusError {
@@ -2155,6 +3173,98 @@ impl fmt::Display for DeactivateEventSourceError {
     }
 }
 impl Error for DeactivateEventSourceError {}
+/// Errors returned by DeauthorizeConnection
+#[derive(Debug, PartialEq)]
+pub enum DeauthorizeConnectionError {
+    /// <p>There is concurrent modification on a rule, target, archive, or replay.</p>
+    ConcurrentModification(String),
+    /// <p>This exception occurs due to unexpected causes.</p>
+    Internal(String),
+    /// <p>An entity that you specified does not exist.</p>
+    ResourceNotFound(String),
+}
+
+impl DeauthorizeConnectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeauthorizeConnectionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(
+                        DeauthorizeConnectionError::ConcurrentModification(err.msg),
+                    )
+                }
+                "InternalException" => {
+                    return RusotoError::Service(DeauthorizeConnectionError::Internal(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeauthorizeConnectionError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeauthorizeConnectionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeauthorizeConnectionError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeauthorizeConnectionError::Internal(ref cause) => write!(f, "{}", cause),
+            DeauthorizeConnectionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeauthorizeConnectionError {}
+/// Errors returned by DeleteApiDestination
+#[derive(Debug, PartialEq)]
+pub enum DeleteApiDestinationError {
+    /// <p>There is concurrent modification on a rule, target, archive, or replay.</p>
+    ConcurrentModification(String),
+    /// <p>This exception occurs due to unexpected causes.</p>
+    Internal(String),
+    /// <p>An entity that you specified does not exist.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteApiDestinationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteApiDestinationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(DeleteApiDestinationError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "InternalException" => {
+                    return RusotoError::Service(DeleteApiDestinationError::Internal(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteApiDestinationError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteApiDestinationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteApiDestinationError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteApiDestinationError::Internal(ref cause) => write!(f, "{}", cause),
+            DeleteApiDestinationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteApiDestinationError {}
 /// Errors returned by DeleteArchive
 #[derive(Debug, PartialEq)]
 pub enum DeleteArchiveError {
@@ -2199,6 +3309,50 @@ impl fmt::Display for DeleteArchiveError {
     }
 }
 impl Error for DeleteArchiveError {}
+/// Errors returned by DeleteConnection
+#[derive(Debug, PartialEq)]
+pub enum DeleteConnectionError {
+    /// <p>There is concurrent modification on a rule, target, archive, or replay.</p>
+    ConcurrentModification(String),
+    /// <p>This exception occurs due to unexpected causes.</p>
+    Internal(String),
+    /// <p>An entity that you specified does not exist.</p>
+    ResourceNotFound(String),
+}
+
+impl DeleteConnectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DeleteConnectionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(DeleteConnectionError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "InternalException" => {
+                    return RusotoError::Service(DeleteConnectionError::Internal(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DeleteConnectionError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DeleteConnectionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DeleteConnectionError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            DeleteConnectionError::Internal(ref cause) => write!(f, "{}", cause),
+            DeleteConnectionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DeleteConnectionError {}
 /// Errors returned by DeleteEventBus
 #[derive(Debug, PartialEq)]
 pub enum DeleteEventBusError {
@@ -2333,6 +3487,44 @@ impl fmt::Display for DeleteRuleError {
     }
 }
 impl Error for DeleteRuleError {}
+/// Errors returned by DescribeApiDestination
+#[derive(Debug, PartialEq)]
+pub enum DescribeApiDestinationError {
+    /// <p>This exception occurs due to unexpected causes.</p>
+    Internal(String),
+    /// <p>An entity that you specified does not exist.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeApiDestinationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeApiDestinationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalException" => {
+                    return RusotoError::Service(DescribeApiDestinationError::Internal(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeApiDestinationError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeApiDestinationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeApiDestinationError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribeApiDestinationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeApiDestinationError {}
 /// Errors returned by DescribeArchive
 #[derive(Debug, PartialEq)]
 pub enum DescribeArchiveError {
@@ -2377,6 +3569,42 @@ impl fmt::Display for DescribeArchiveError {
     }
 }
 impl Error for DescribeArchiveError {}
+/// Errors returned by DescribeConnection
+#[derive(Debug, PartialEq)]
+pub enum DescribeConnectionError {
+    /// <p>This exception occurs due to unexpected causes.</p>
+    Internal(String),
+    /// <p>An entity that you specified does not exist.</p>
+    ResourceNotFound(String),
+}
+
+impl DescribeConnectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<DescribeConnectionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalException" => {
+                    return RusotoError::Service(DescribeConnectionError::Internal(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(DescribeConnectionError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for DescribeConnectionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            DescribeConnectionError::Internal(ref cause) => write!(f, "{}", cause),
+            DescribeConnectionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for DescribeConnectionError {}
 /// Errors returned by DescribeEventBus
 #[derive(Debug, PartialEq)]
 pub enum DescribeEventBusError {
@@ -2675,6 +3903,36 @@ impl fmt::Display for EnableRuleError {
     }
 }
 impl Error for EnableRuleError {}
+/// Errors returned by ListApiDestinations
+#[derive(Debug, PartialEq)]
+pub enum ListApiDestinationsError {
+    /// <p>This exception occurs due to unexpected causes.</p>
+    Internal(String),
+}
+
+impl ListApiDestinationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListApiDestinationsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalException" => {
+                    return RusotoError::Service(ListApiDestinationsError::Internal(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListApiDestinationsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListApiDestinationsError::Internal(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListApiDestinationsError {}
 /// Errors returned by ListArchives
 #[derive(Debug, PartialEq)]
 pub enum ListArchivesError {
@@ -2711,6 +3969,36 @@ impl fmt::Display for ListArchivesError {
     }
 }
 impl Error for ListArchivesError {}
+/// Errors returned by ListConnections
+#[derive(Debug, PartialEq)]
+pub enum ListConnectionsError {
+    /// <p>This exception occurs due to unexpected causes.</p>
+    Internal(String),
+}
+
+impl ListConnectionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<ListConnectionsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "InternalException" => {
+                    return RusotoError::Service(ListConnectionsError::Internal(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ListConnectionsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ListConnectionsError::Internal(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ListConnectionsError {}
 /// Errors returned by ListEventBuses
 #[derive(Debug, PartialEq)]
 pub enum ListEventBusesError {
@@ -3573,6 +4861,58 @@ impl fmt::Display for UntagResourceError {
     }
 }
 impl Error for UntagResourceError {}
+/// Errors returned by UpdateApiDestination
+#[derive(Debug, PartialEq)]
+pub enum UpdateApiDestinationError {
+    /// <p>There is concurrent modification on a rule, target, archive, or replay.</p>
+    ConcurrentModification(String),
+    /// <p>This exception occurs due to unexpected causes.</p>
+    Internal(String),
+    /// <p>The request failed because it attempted to create resource beyond the allowed service quota.</p>
+    LimitExceeded(String),
+    /// <p>An entity that you specified does not exist.</p>
+    ResourceNotFound(String),
+}
+
+impl UpdateApiDestinationError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateApiDestinationError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(UpdateApiDestinationError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "InternalException" => {
+                    return RusotoError::Service(UpdateApiDestinationError::Internal(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(UpdateApiDestinationError::LimitExceeded(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateApiDestinationError::ResourceNotFound(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateApiDestinationError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateApiDestinationError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateApiDestinationError::Internal(ref cause) => write!(f, "{}", cause),
+            UpdateApiDestinationError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateApiDestinationError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateApiDestinationError {}
 /// Errors returned by UpdateArchive
 #[derive(Debug, PartialEq)]
 pub enum UpdateArchiveError {
@@ -3629,6 +4969,56 @@ impl fmt::Display for UpdateArchiveError {
     }
 }
 impl Error for UpdateArchiveError {}
+/// Errors returned by UpdateConnection
+#[derive(Debug, PartialEq)]
+pub enum UpdateConnectionError {
+    /// <p>There is concurrent modification on a rule, target, archive, or replay.</p>
+    ConcurrentModification(String),
+    /// <p>This exception occurs due to unexpected causes.</p>
+    Internal(String),
+    /// <p>The request failed because it attempted to create resource beyond the allowed service quota.</p>
+    LimitExceeded(String),
+    /// <p>An entity that you specified does not exist.</p>
+    ResourceNotFound(String),
+}
+
+impl UpdateConnectionError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateConnectionError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ConcurrentModificationException" => {
+                    return RusotoError::Service(UpdateConnectionError::ConcurrentModification(
+                        err.msg,
+                    ))
+                }
+                "InternalException" => {
+                    return RusotoError::Service(UpdateConnectionError::Internal(err.msg))
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(UpdateConnectionError::LimitExceeded(err.msg))
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(UpdateConnectionError::ResourceNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateConnectionError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateConnectionError::ConcurrentModification(ref cause) => write!(f, "{}", cause),
+            UpdateConnectionError::Internal(ref cause) => write!(f, "{}", cause),
+            UpdateConnectionError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            UpdateConnectionError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateConnectionError {}
 /// Trait representing the capabilities of the Amazon EventBridge API. Amazon EventBridge clients implement this trait.
 #[async_trait]
 pub trait EventBridge {
@@ -3644,11 +5034,23 @@ pub trait EventBridge {
         input: CancelReplayRequest,
     ) -> Result<CancelReplayResponse, RusotoError<CancelReplayError>>;
 
+    /// <p>Creates an API destination, which is an HTTP invocation endpoint configured as a target for events.</p>
+    async fn create_api_destination(
+        &self,
+        input: CreateApiDestinationRequest,
+    ) -> Result<CreateApiDestinationResponse, RusotoError<CreateApiDestinationError>>;
+
     /// <p>Creates an archive of events with the specified settings. When you create an archive, incoming events might not immediately start being sent to the archive. Allow a short period of time for changes to take effect. If you do not specify a pattern to filter events sent to the archive, all events are sent to the archive except replayed events. Replayed events are not sent to an archive.</p>
     async fn create_archive(
         &self,
         input: CreateArchiveRequest,
     ) -> Result<CreateArchiveResponse, RusotoError<CreateArchiveError>>;
+
+    /// <p>Creates a connection. A connection defines the authorization type and credentials to use for authorization with an API destination HTTP endpoint.</p>
+    async fn create_connection(
+        &self,
+        input: CreateConnectionRequest,
+    ) -> Result<CreateConnectionResponse, RusotoError<CreateConnectionError>>;
 
     /// <p>Creates a new event bus within your account. This can be a custom event bus which you can use to receive events from your custom applications and services, or it can be a partner event bus which can be matched to a partner event source.</p>
     async fn create_event_bus(
@@ -3668,11 +5070,29 @@ pub trait EventBridge {
         input: DeactivateEventSourceRequest,
     ) -> Result<(), RusotoError<DeactivateEventSourceError>>;
 
+    /// <p>Removes all authorization parameters from the connection. This lets you remove the secret from the connection so you can reuse it without having to create a new connection.</p>
+    async fn deauthorize_connection(
+        &self,
+        input: DeauthorizeConnectionRequest,
+    ) -> Result<DeauthorizeConnectionResponse, RusotoError<DeauthorizeConnectionError>>;
+
+    /// <p>Deletes the specified API destination.</p>
+    async fn delete_api_destination(
+        &self,
+        input: DeleteApiDestinationRequest,
+    ) -> Result<DeleteApiDestinationResponse, RusotoError<DeleteApiDestinationError>>;
+
     /// <p>Deletes the specified archive.</p>
     async fn delete_archive(
         &self,
         input: DeleteArchiveRequest,
     ) -> Result<DeleteArchiveResponse, RusotoError<DeleteArchiveError>>;
+
+    /// <p>Deletes a connection.</p>
+    async fn delete_connection(
+        &self,
+        input: DeleteConnectionRequest,
+    ) -> Result<DeleteConnectionResponse, RusotoError<DeleteConnectionError>>;
 
     /// <p>Deletes the specified custom event bus or partner event bus. All rules associated with this event bus need to be deleted. You can't delete your account's default event bus.</p>
     async fn delete_event_bus(
@@ -3686,17 +5106,29 @@ pub trait EventBridge {
         input: DeletePartnerEventSourceRequest,
     ) -> Result<(), RusotoError<DeletePartnerEventSourceError>>;
 
-    /// <p>Deletes the specified rule.</p> <p>Before you can delete the rule, you must remove all targets, using <a>RemoveTargets</a>.</p> <p>When you delete a rule, incoming events might continue to match to the deleted rule. Allow a short period of time for changes to take effect.</p> <p>Managed rules are rules created and managed by another AWS service on your behalf. These rules are created by those other AWS services to support functionality in those services. You can delete these rules using the <code>Force</code> option, but you should do so only if you are sure the other service is not still using that rule.</p>
+    /// <p>Deletes the specified rule.</p> <p>Before you can delete the rule, you must remove all targets, using <a>RemoveTargets</a>.</p> <p>When you delete a rule, incoming events might continue to match to the deleted rule. Allow a short period of time for changes to take effect.</p> <p>If you call delete rule multiple times for the same rule, all calls will succeed. When you call delete rule for a non-existent custom eventbus, <code>ResourceNotFoundException</code> is returned.</p> <p>Managed rules are rules created and managed by another AWS service on your behalf. These rules are created by those other AWS services to support functionality in those services. You can delete these rules using the <code>Force</code> option, but you should do so only if you are sure the other service is not still using that rule.</p>
     async fn delete_rule(
         &self,
         input: DeleteRuleRequest,
     ) -> Result<(), RusotoError<DeleteRuleError>>;
+
+    /// <p>Retrieves details about an API destination.</p>
+    async fn describe_api_destination(
+        &self,
+        input: DescribeApiDestinationRequest,
+    ) -> Result<DescribeApiDestinationResponse, RusotoError<DescribeApiDestinationError>>;
 
     /// <p>Retrieves details about an archive.</p>
     async fn describe_archive(
         &self,
         input: DescribeArchiveRequest,
     ) -> Result<DescribeArchiveResponse, RusotoError<DescribeArchiveError>>;
+
+    /// <p>Retrieves details about a connection.</p>
+    async fn describe_connection(
+        &self,
+        input: DescribeConnectionRequest,
+    ) -> Result<DescribeConnectionResponse, RusotoError<DescribeConnectionError>>;
 
     /// <p>Displays details about an event bus in your account. This can include the external AWS accounts that are permitted to write events to your default event bus, and the associated policy. For custom event buses and partner event buses, it displays the name, ARN, policy, state, and creation time.</p> <p> To enable your account to receive events from other accounts on its default event bus, use <a>PutPermission</a>.</p> <p>For more information about partner event buses, see <a>CreateEventBus</a>.</p>
     async fn describe_event_bus(
@@ -3740,11 +5172,23 @@ pub trait EventBridge {
         input: EnableRuleRequest,
     ) -> Result<(), RusotoError<EnableRuleError>>;
 
+    /// <p>Retrieves a list of API destination in the account in the current Region.</p>
+    async fn list_api_destinations(
+        &self,
+        input: ListApiDestinationsRequest,
+    ) -> Result<ListApiDestinationsResponse, RusotoError<ListApiDestinationsError>>;
+
     /// <p>Lists your archives. You can either list all the archives or you can provide a prefix to match to the archive names. Filter parameters are exclusive.</p>
     async fn list_archives(
         &self,
         input: ListArchivesRequest,
     ) -> Result<ListArchivesResponse, RusotoError<ListArchivesError>>;
+
+    /// <p>Retrieves a list of connections from the account.</p>
+    async fn list_connections(
+        &self,
+        input: ListConnectionsRequest,
+    ) -> Result<ListConnectionsResponse, RusotoError<ListConnectionsError>>;
 
     /// <p>Lists all the event buses in your account, including the default event bus, custom event buses, and partner event buses.</p>
     async fn list_event_buses(
@@ -3827,7 +5271,7 @@ pub trait EventBridge {
         input: PutRuleRequest,
     ) -> Result<PutRuleResponse, RusotoError<PutRuleError>>;
 
-    /// <p>Adds the specified targets to the specified rule, or updates the targets if they are already associated with the rule.</p> <p>Targets are the resources that are invoked when a rule is triggered.</p> <p>You can configure the following as targets for Events:</p> <ul> <li> <p>EC2 instances</p> </li> <li> <p>SSM Run Command</p> </li> <li> <p>SSM Automation</p> </li> <li> <p>AWS Lambda functions</p> </li> <li> <p>Data streams in Amazon Kinesis Data Streams</p> </li> <li> <p>Data delivery streams in Amazon Kinesis Data Firehose</p> </li> <li> <p>Amazon ECS tasks</p> </li> <li> <p>AWS Step Functions state machines</p> </li> <li> <p>AWS Batch jobs</p> </li> <li> <p>AWS CodeBuild projects</p> </li> <li> <p>Pipelines in AWS CodePipeline</p> </li> <li> <p>Amazon Inspector assessment templates</p> </li> <li> <p>Amazon SNS topics</p> </li> <li> <p>Amazon SQS queues, including FIFO queues</p> </li> <li> <p>The default event bus of another AWS account</p> </li> <li> <p>Amazon API Gateway REST APIs</p> </li> <li> <p>Redshift Clusters to invoke Data API ExecuteStatement on</p> </li> </ul> <p>Creating rules with built-in targets is supported only in the AWS Management Console. The built-in targets are <code>EC2 CreateSnapshot API call</code>, <code>EC2 RebootInstances API call</code>, <code>EC2 StopInstances API call</code>, and <code>EC2 TerminateInstances API call</code>. </p> <p>For some target types, <code>PutTargets</code> provides target-specific parameters. If the target is a Kinesis data stream, you can optionally specify which shard the event goes to by using the <code>KinesisParameters</code> argument. To invoke a command on multiple EC2 instances with one rule, you can use the <code>RunCommandParameters</code> field.</p> <p>To be able to make API calls against the resources that you own, Amazon EventBridge (CloudWatch Events) needs the appropriate permissions. For AWS Lambda and Amazon SNS resources, EventBridge relies on resource-based policies. For EC2 instances, Kinesis data streams, AWS Step Functions state machines and API Gateway REST APIs, EventBridge relies on IAM roles that you specify in the <code>RoleARN</code> argument in <code>PutTargets</code>. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/auth-and-access-control-eventbridge.html">Authentication and Access Control</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>If another AWS account is in the same region and has granted you permission (using <code>PutPermission</code>), you can send events to that account. Set that account's event bus as a target of the rules in your account. To send the matched events to the other account, specify that account's event bus as the <code>Arn</code> value when you run <code>PutTargets</code>. If your account sends events to another account, your account is charged for each sent event. Each event sent to another account is charged as a custom event. The account receiving the event is not charged. For more information, see <a href="https://aws.amazon.com/eventbridge/pricing/">Amazon EventBridge (CloudWatch Events) Pricing</a>.</p> <note> <p> <code>Input</code>, <code>InputPath</code>, and <code>InputTransformer</code> are not available with <code>PutTarget</code> if the target is an event bus of a different AWS account.</p> </note> <p>If you are setting the event bus of another account as the target, and that account granted permission to your account through an organization instead of directly by the account ID, then you must specify a <code>RoleArn</code> with proper permissions in the <code>Target</code> structure. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html">Sending and Receiving Events Between AWS Accounts</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>For more information about enabling cross-account events, see <a>PutPermission</a>.</p> <p> <b>Input</b>, <b>InputPath</b>, and <b>InputTransformer</b> are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event:</p> <ul> <li> <p>If none of the following arguments are specified for a target, then the entire event is passed to the target in JSON format (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target).</p> </li> <li> <p>If <b>Input</b> is specified in the form of valid JSON, then the matched event is overridden with this constant.</p> </li> <li> <p>If <b>InputPath</b> is specified in the form of JSONPath (for example, <code>$.detail</code>), then only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed).</p> </li> <li> <p>If <b>InputTransformer</b> is specified, then one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target.</p> </li> </ul> <p>When you specify <code>InputPath</code> or <code>InputTransformer</code>, you must use JSON dot notation, not bracket notation.</p> <p>When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>
+    /// <p>Adds the specified targets to the specified rule, or updates the targets if they are already associated with the rule.</p> <p>Targets are the resources that are invoked when a rule is triggered.</p> <p>You can configure the following as targets for Events:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-api-destinations.html">API destination</a> </p> </li> <li> <p>Amazon API Gateway REST API endpoints</p> </li> <li> <p>API Gateway</p> </li> <li> <p>AWS Batch job queue</p> </li> <li> <p>CloudWatch Logs group</p> </li> <li> <p>CodeBuild project</p> </li> <li> <p>CodePineline</p> </li> <li> <p>Amazon EC2 <code>CreateSnapshot</code> API call</p> </li> <li> <p>Amazon EC2 <code>RebootInstances</code> API call</p> </li> <li> <p>Amazon EC2 <code>StopInstances</code> API call</p> </li> <li> <p>Amazon EC2 <code>TerminateInstances</code> API call</p> </li> <li> <p>Amazon ECS tasks</p> </li> <li> <p>Event bus in a different AWS account or Region.</p> <p>You can use an event bus in the US East (N. Virginia) us-east-1, US West (Oregon) us-west-2, or Europe (Ireland) eu-west-1 Regions as a target for a rule.</p> </li> <li> <p>Firehose delivery stream (Kinesis Data Firehose)</p> </li> <li> <p>Inspector assessment template (Amazon Inspector)</p> </li> <li> <p>Kinesis stream (Kinesis Data Stream)</p> </li> <li> <p>AWS Lambda function</p> </li> <li> <p>Redshift clusters (Data API statement execution)</p> </li> <li> <p>Amazon SNS topic</p> </li> <li> <p>Amazon SQS queues (includes FIFO queues</p> </li> <li> <p>SSM Automation</p> </li> <li> <p>SSM OpsItem</p> </li> <li> <p>SSM Run Command</p> </li> <li> <p>Step Functions state machines</p> </li> </ul> <p>Creating rules with built-in targets is supported only in the AWS Management Console. The built-in targets are <code>EC2 CreateSnapshot API call</code>, <code>EC2 RebootInstances API call</code>, <code>EC2 StopInstances API call</code>, and <code>EC2 TerminateInstances API call</code>. </p> <p>For some target types, <code>PutTargets</code> provides target-specific parameters. If the target is a Kinesis data stream, you can optionally specify which shard the event goes to by using the <code>KinesisParameters</code> argument. To invoke a command on multiple EC2 instances with one rule, you can use the <code>RunCommandParameters</code> field.</p> <p>To be able to make API calls against the resources that you own, Amazon EventBridge (CloudWatch Events) needs the appropriate permissions. For AWS Lambda and Amazon SNS resources, EventBridge relies on resource-based policies. For EC2 instances, Kinesis data streams, AWS Step Functions state machines and API Gateway REST APIs, EventBridge relies on IAM roles that you specify in the <code>RoleARN</code> argument in <code>PutTargets</code>. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/auth-and-access-control-eventbridge.html">Authentication and Access Control</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>If another AWS account is in the same region and has granted you permission (using <code>PutPermission</code>), you can send events to that account. Set that account's event bus as a target of the rules in your account. To send the matched events to the other account, specify that account's event bus as the <code>Arn</code> value when you run <code>PutTargets</code>. If your account sends events to another account, your account is charged for each sent event. Each event sent to another account is charged as a custom event. The account receiving the event is not charged. For more information, see <a href="https://aws.amazon.com/eventbridge/pricing/">Amazon EventBridge (CloudWatch Events) Pricing</a>.</p> <note> <p> <code>Input</code>, <code>InputPath</code>, and <code>InputTransformer</code> are not available with <code>PutTarget</code> if the target is an event bus of a different AWS account.</p> </note> <p>If you are setting the event bus of another account as the target, and that account granted permission to your account through an organization instead of directly by the account ID, then you must specify a <code>RoleArn</code> with proper permissions in the <code>Target</code> structure. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html">Sending and Receiving Events Between AWS Accounts</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>For more information about enabling cross-account events, see <a>PutPermission</a>.</p> <p> <b>Input</b>, <b>InputPath</b>, and <b>InputTransformer</b> are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event:</p> <ul> <li> <p>If none of the following arguments are specified for a target, then the entire event is passed to the target in JSON format (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target).</p> </li> <li> <p>If <b>Input</b> is specified in the form of valid JSON, then the matched event is overridden with this constant.</p> </li> <li> <p>If <b>InputPath</b> is specified in the form of JSONPath (for example, <code>$.detail</code>), then only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed).</p> </li> <li> <p>If <b>InputTransformer</b> is specified, then one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target.</p> </li> </ul> <p>When you specify <code>InputPath</code> or <code>InputTransformer</code>, you must use JSON dot notation, not bracket notation.</p> <p>When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>
     async fn put_targets(
         &self,
         input: PutTargetsRequest,
@@ -3863,17 +5307,29 @@ pub trait EventBridge {
         input: TestEventPatternRequest,
     ) -> Result<TestEventPatternResponse, RusotoError<TestEventPatternError>>;
 
-    /// <p>Removes one or more tags from the specified EventBridge resource. In Amazon EventBridge (CloudWatch Events, rules and event buses can be tagged.</p>
+    /// <p>Removes one or more tags from the specified EventBridge resource. In Amazon EventBridge (CloudWatch Events), rules and event buses can be tagged.</p>
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
     ) -> Result<UntagResourceResponse, RusotoError<UntagResourceError>>;
+
+    /// <p>Updates an API destination.</p>
+    async fn update_api_destination(
+        &self,
+        input: UpdateApiDestinationRequest,
+    ) -> Result<UpdateApiDestinationResponse, RusotoError<UpdateApiDestinationError>>;
 
     /// <p>Updates the specified archive.</p>
     async fn update_archive(
         &self,
         input: UpdateArchiveRequest,
     ) -> Result<UpdateArchiveResponse, RusotoError<UpdateArchiveError>>;
+
+    /// <p>Updates settings for a connection.</p>
+    async fn update_connection(
+        &self,
+        input: UpdateConnectionRequest,
+    ) -> Result<UpdateConnectionResponse, RusotoError<UpdateConnectionError>>;
 }
 /// A client for the Amazon EventBridge API.
 #[derive(Clone)]
@@ -3950,6 +5406,25 @@ impl EventBridge for EventBridgeClient {
         proto::json::ResponsePayload::new(&response).deserialize::<CancelReplayResponse, _>()
     }
 
+    /// <p>Creates an API destination, which is an HTTP invocation endpoint configured as a target for events.</p>
+    async fn create_api_destination(
+        &self,
+        input: CreateApiDestinationRequest,
+    ) -> Result<CreateApiDestinationResponse, RusotoError<CreateApiDestinationError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSEvents.CreateApiDestination");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateApiDestinationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<CreateApiDestinationResponse, _>()
+    }
+
     /// <p>Creates an archive of events with the specified settings. When you create an archive, incoming events might not immediately start being sent to the archive. Allow a short period of time for changes to take effect. If you do not specify a pattern to filter events sent to the archive, all events are sent to the archive except replayed events. Replayed events are not sent to an archive.</p>
     async fn create_archive(
         &self,
@@ -3966,6 +5441,24 @@ impl EventBridge for EventBridgeClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<CreateArchiveResponse, _>()
+    }
+
+    /// <p>Creates a connection. A connection defines the authorization type and credentials to use for authorization with an API destination HTTP endpoint.</p>
+    async fn create_connection(
+        &self,
+        input: CreateConnectionRequest,
+    ) -> Result<CreateConnectionResponse, RusotoError<CreateConnectionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSEvents.CreateConnection");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, CreateConnectionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<CreateConnectionResponse, _>()
     }
 
     /// <p>Creates a new event bus within your account. This can be a custom event bus which you can use to receive events from your custom applications and services, or it can be a partner event bus which can be matched to a partner event source.</p>
@@ -4022,6 +5515,44 @@ impl EventBridge for EventBridgeClient {
         Ok(())
     }
 
+    /// <p>Removes all authorization parameters from the connection. This lets you remove the secret from the connection so you can reuse it without having to create a new connection.</p>
+    async fn deauthorize_connection(
+        &self,
+        input: DeauthorizeConnectionRequest,
+    ) -> Result<DeauthorizeConnectionResponse, RusotoError<DeauthorizeConnectionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSEvents.DeauthorizeConnection");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeauthorizeConnectionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeauthorizeConnectionResponse, _>()
+    }
+
+    /// <p>Deletes the specified API destination.</p>
+    async fn delete_api_destination(
+        &self,
+        input: DeleteApiDestinationRequest,
+    ) -> Result<DeleteApiDestinationResponse, RusotoError<DeleteApiDestinationError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSEvents.DeleteApiDestination");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteApiDestinationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DeleteApiDestinationResponse, _>()
+    }
+
     /// <p>Deletes the specified archive.</p>
     async fn delete_archive(
         &self,
@@ -4038,6 +5569,24 @@ impl EventBridge for EventBridgeClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DeleteArchiveResponse, _>()
+    }
+
+    /// <p>Deletes a connection.</p>
+    async fn delete_connection(
+        &self,
+        input: DeleteConnectionRequest,
+    ) -> Result<DeleteConnectionResponse, RusotoError<DeleteConnectionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSEvents.DeleteConnection");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DeleteConnectionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DeleteConnectionResponse, _>()
     }
 
     /// <p>Deletes the specified custom event bus or partner event bus. All rules associated with this event bus need to be deleted. You can't delete your account's default event bus.</p>
@@ -4074,7 +5623,7 @@ impl EventBridge for EventBridgeClient {
         Ok(())
     }
 
-    /// <p>Deletes the specified rule.</p> <p>Before you can delete the rule, you must remove all targets, using <a>RemoveTargets</a>.</p> <p>When you delete a rule, incoming events might continue to match to the deleted rule. Allow a short period of time for changes to take effect.</p> <p>Managed rules are rules created and managed by another AWS service on your behalf. These rules are created by those other AWS services to support functionality in those services. You can delete these rules using the <code>Force</code> option, but you should do so only if you are sure the other service is not still using that rule.</p>
+    /// <p>Deletes the specified rule.</p> <p>Before you can delete the rule, you must remove all targets, using <a>RemoveTargets</a>.</p> <p>When you delete a rule, incoming events might continue to match to the deleted rule. Allow a short period of time for changes to take effect.</p> <p>If you call delete rule multiple times for the same rule, all calls will succeed. When you call delete rule for a non-existent custom eventbus, <code>ResourceNotFoundException</code> is returned.</p> <p>Managed rules are rules created and managed by another AWS service on your behalf. These rules are created by those other AWS services to support functionality in those services. You can delete these rules using the <code>Force</code> option, but you should do so only if you are sure the other service is not still using that rule.</p>
     async fn delete_rule(
         &self,
         input: DeleteRuleRequest,
@@ -4089,6 +5638,25 @@ impl EventBridge for EventBridgeClient {
             .await?;
         std::mem::drop(response);
         Ok(())
+    }
+
+    /// <p>Retrieves details about an API destination.</p>
+    async fn describe_api_destination(
+        &self,
+        input: DescribeApiDestinationRequest,
+    ) -> Result<DescribeApiDestinationResponse, RusotoError<DescribeApiDestinationError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSEvents.DescribeApiDestination");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeApiDestinationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<DescribeApiDestinationResponse, _>()
     }
 
     /// <p>Retrieves details about an archive.</p>
@@ -4107,6 +5675,24 @@ impl EventBridge for EventBridgeClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<DescribeArchiveResponse, _>()
+    }
+
+    /// <p>Retrieves details about a connection.</p>
+    async fn describe_connection(
+        &self,
+        input: DescribeConnectionRequest,
+    ) -> Result<DescribeConnectionResponse, RusotoError<DescribeConnectionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSEvents.DescribeConnection");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, DescribeConnectionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<DescribeConnectionResponse, _>()
     }
 
     /// <p>Displays details about an event bus in your account. This can include the external AWS accounts that are permitted to write events to your default event bus, and the associated policy. For custom event buses and partner event buses, it displays the name, ARN, policy, state, and creation time.</p> <p> To enable your account to receive events from other accounts on its default event bus, use <a>PutPermission</a>.</p> <p>For more information about partner event buses, see <a>CreateEventBus</a>.</p>
@@ -4235,6 +5821,24 @@ impl EventBridge for EventBridgeClient {
         Ok(())
     }
 
+    /// <p>Retrieves a list of API destination in the account in the current Region.</p>
+    async fn list_api_destinations(
+        &self,
+        input: ListApiDestinationsRequest,
+    ) -> Result<ListApiDestinationsResponse, RusotoError<ListApiDestinationsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSEvents.ListApiDestinations");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListApiDestinationsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListApiDestinationsResponse, _>()
+    }
+
     /// <p>Lists your archives. You can either list all the archives or you can provide a prefix to match to the archive names. Filter parameters are exclusive.</p>
     async fn list_archives(
         &self,
@@ -4251,6 +5855,24 @@ impl EventBridge for EventBridgeClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<ListArchivesResponse, _>()
+    }
+
+    /// <p>Retrieves a list of connections from the account.</p>
+    async fn list_connections(
+        &self,
+        input: ListConnectionsRequest,
+    ) -> Result<ListConnectionsResponse, RusotoError<ListConnectionsError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSEvents.ListConnections");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ListConnectionsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<ListConnectionsResponse, _>()
     }
 
     /// <p>Lists all the event buses in your account, including the default event bus, custom event buses, and partner event buses.</p>
@@ -4492,7 +6114,7 @@ impl EventBridge for EventBridgeClient {
         proto::json::ResponsePayload::new(&response).deserialize::<PutRuleResponse, _>()
     }
 
-    /// <p>Adds the specified targets to the specified rule, or updates the targets if they are already associated with the rule.</p> <p>Targets are the resources that are invoked when a rule is triggered.</p> <p>You can configure the following as targets for Events:</p> <ul> <li> <p>EC2 instances</p> </li> <li> <p>SSM Run Command</p> </li> <li> <p>SSM Automation</p> </li> <li> <p>AWS Lambda functions</p> </li> <li> <p>Data streams in Amazon Kinesis Data Streams</p> </li> <li> <p>Data delivery streams in Amazon Kinesis Data Firehose</p> </li> <li> <p>Amazon ECS tasks</p> </li> <li> <p>AWS Step Functions state machines</p> </li> <li> <p>AWS Batch jobs</p> </li> <li> <p>AWS CodeBuild projects</p> </li> <li> <p>Pipelines in AWS CodePipeline</p> </li> <li> <p>Amazon Inspector assessment templates</p> </li> <li> <p>Amazon SNS topics</p> </li> <li> <p>Amazon SQS queues, including FIFO queues</p> </li> <li> <p>The default event bus of another AWS account</p> </li> <li> <p>Amazon API Gateway REST APIs</p> </li> <li> <p>Redshift Clusters to invoke Data API ExecuteStatement on</p> </li> </ul> <p>Creating rules with built-in targets is supported only in the AWS Management Console. The built-in targets are <code>EC2 CreateSnapshot API call</code>, <code>EC2 RebootInstances API call</code>, <code>EC2 StopInstances API call</code>, and <code>EC2 TerminateInstances API call</code>. </p> <p>For some target types, <code>PutTargets</code> provides target-specific parameters. If the target is a Kinesis data stream, you can optionally specify which shard the event goes to by using the <code>KinesisParameters</code> argument. To invoke a command on multiple EC2 instances with one rule, you can use the <code>RunCommandParameters</code> field.</p> <p>To be able to make API calls against the resources that you own, Amazon EventBridge (CloudWatch Events) needs the appropriate permissions. For AWS Lambda and Amazon SNS resources, EventBridge relies on resource-based policies. For EC2 instances, Kinesis data streams, AWS Step Functions state machines and API Gateway REST APIs, EventBridge relies on IAM roles that you specify in the <code>RoleARN</code> argument in <code>PutTargets</code>. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/auth-and-access-control-eventbridge.html">Authentication and Access Control</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>If another AWS account is in the same region and has granted you permission (using <code>PutPermission</code>), you can send events to that account. Set that account's event bus as a target of the rules in your account. To send the matched events to the other account, specify that account's event bus as the <code>Arn</code> value when you run <code>PutTargets</code>. If your account sends events to another account, your account is charged for each sent event. Each event sent to another account is charged as a custom event. The account receiving the event is not charged. For more information, see <a href="https://aws.amazon.com/eventbridge/pricing/">Amazon EventBridge (CloudWatch Events) Pricing</a>.</p> <note> <p> <code>Input</code>, <code>InputPath</code>, and <code>InputTransformer</code> are not available with <code>PutTarget</code> if the target is an event bus of a different AWS account.</p> </note> <p>If you are setting the event bus of another account as the target, and that account granted permission to your account through an organization instead of directly by the account ID, then you must specify a <code>RoleArn</code> with proper permissions in the <code>Target</code> structure. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html">Sending and Receiving Events Between AWS Accounts</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>For more information about enabling cross-account events, see <a>PutPermission</a>.</p> <p> <b>Input</b>, <b>InputPath</b>, and <b>InputTransformer</b> are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event:</p> <ul> <li> <p>If none of the following arguments are specified for a target, then the entire event is passed to the target in JSON format (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target).</p> </li> <li> <p>If <b>Input</b> is specified in the form of valid JSON, then the matched event is overridden with this constant.</p> </li> <li> <p>If <b>InputPath</b> is specified in the form of JSONPath (for example, <code>$.detail</code>), then only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed).</p> </li> <li> <p>If <b>InputTransformer</b> is specified, then one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target.</p> </li> </ul> <p>When you specify <code>InputPath</code> or <code>InputTransformer</code>, you must use JSON dot notation, not bracket notation.</p> <p>When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>
+    /// <p>Adds the specified targets to the specified rule, or updates the targets if they are already associated with the rule.</p> <p>Targets are the resources that are invoked when a rule is triggered.</p> <p>You can configure the following as targets for Events:</p> <ul> <li> <p> <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-api-destinations.html">API destination</a> </p> </li> <li> <p>Amazon API Gateway REST API endpoints</p> </li> <li> <p>API Gateway</p> </li> <li> <p>AWS Batch job queue</p> </li> <li> <p>CloudWatch Logs group</p> </li> <li> <p>CodeBuild project</p> </li> <li> <p>CodePineline</p> </li> <li> <p>Amazon EC2 <code>CreateSnapshot</code> API call</p> </li> <li> <p>Amazon EC2 <code>RebootInstances</code> API call</p> </li> <li> <p>Amazon EC2 <code>StopInstances</code> API call</p> </li> <li> <p>Amazon EC2 <code>TerminateInstances</code> API call</p> </li> <li> <p>Amazon ECS tasks</p> </li> <li> <p>Event bus in a different AWS account or Region.</p> <p>You can use an event bus in the US East (N. Virginia) us-east-1, US West (Oregon) us-west-2, or Europe (Ireland) eu-west-1 Regions as a target for a rule.</p> </li> <li> <p>Firehose delivery stream (Kinesis Data Firehose)</p> </li> <li> <p>Inspector assessment template (Amazon Inspector)</p> </li> <li> <p>Kinesis stream (Kinesis Data Stream)</p> </li> <li> <p>AWS Lambda function</p> </li> <li> <p>Redshift clusters (Data API statement execution)</p> </li> <li> <p>Amazon SNS topic</p> </li> <li> <p>Amazon SQS queues (includes FIFO queues</p> </li> <li> <p>SSM Automation</p> </li> <li> <p>SSM OpsItem</p> </li> <li> <p>SSM Run Command</p> </li> <li> <p>Step Functions state machines</p> </li> </ul> <p>Creating rules with built-in targets is supported only in the AWS Management Console. The built-in targets are <code>EC2 CreateSnapshot API call</code>, <code>EC2 RebootInstances API call</code>, <code>EC2 StopInstances API call</code>, and <code>EC2 TerminateInstances API call</code>. </p> <p>For some target types, <code>PutTargets</code> provides target-specific parameters. If the target is a Kinesis data stream, you can optionally specify which shard the event goes to by using the <code>KinesisParameters</code> argument. To invoke a command on multiple EC2 instances with one rule, you can use the <code>RunCommandParameters</code> field.</p> <p>To be able to make API calls against the resources that you own, Amazon EventBridge (CloudWatch Events) needs the appropriate permissions. For AWS Lambda and Amazon SNS resources, EventBridge relies on resource-based policies. For EC2 instances, Kinesis data streams, AWS Step Functions state machines and API Gateway REST APIs, EventBridge relies on IAM roles that you specify in the <code>RoleARN</code> argument in <code>PutTargets</code>. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/auth-and-access-control-eventbridge.html">Authentication and Access Control</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>If another AWS account is in the same region and has granted you permission (using <code>PutPermission</code>), you can send events to that account. Set that account's event bus as a target of the rules in your account. To send the matched events to the other account, specify that account's event bus as the <code>Arn</code> value when you run <code>PutTargets</code>. If your account sends events to another account, your account is charged for each sent event. Each event sent to another account is charged as a custom event. The account receiving the event is not charged. For more information, see <a href="https://aws.amazon.com/eventbridge/pricing/">Amazon EventBridge (CloudWatch Events) Pricing</a>.</p> <note> <p> <code>Input</code>, <code>InputPath</code>, and <code>InputTransformer</code> are not available with <code>PutTarget</code> if the target is an event bus of a different AWS account.</p> </note> <p>If you are setting the event bus of another account as the target, and that account granted permission to your account through an organization instead of directly by the account ID, then you must specify a <code>RoleArn</code> with proper permissions in the <code>Target</code> structure. For more information, see <a href="https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html">Sending and Receiving Events Between AWS Accounts</a> in the <i>Amazon EventBridge User Guide</i>.</p> <p>For more information about enabling cross-account events, see <a>PutPermission</a>.</p> <p> <b>Input</b>, <b>InputPath</b>, and <b>InputTransformer</b> are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event:</p> <ul> <li> <p>If none of the following arguments are specified for a target, then the entire event is passed to the target in JSON format (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target).</p> </li> <li> <p>If <b>Input</b> is specified in the form of valid JSON, then the matched event is overridden with this constant.</p> </li> <li> <p>If <b>InputPath</b> is specified in the form of JSONPath (for example, <code>$.detail</code>), then only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed).</p> </li> <li> <p>If <b>InputTransformer</b> is specified, then one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target.</p> </li> </ul> <p>When you specify <code>InputPath</code> or <code>InputTransformer</code>, you must use JSON dot notation, not bracket notation.</p> <p>When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>
     async fn put_targets(
         &self,
         input: PutTargetsRequest,
@@ -4599,7 +6221,7 @@ impl EventBridge for EventBridgeClient {
         proto::json::ResponsePayload::new(&response).deserialize::<TestEventPatternResponse, _>()
     }
 
-    /// <p>Removes one or more tags from the specified EventBridge resource. In Amazon EventBridge (CloudWatch Events, rules and event buses can be tagged.</p>
+    /// <p>Removes one or more tags from the specified EventBridge resource. In Amazon EventBridge (CloudWatch Events), rules and event buses can be tagged.</p>
     async fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -4615,6 +6237,25 @@ impl EventBridge for EventBridgeClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceResponse, _>()
+    }
+
+    /// <p>Updates an API destination.</p>
+    async fn update_api_destination(
+        &self,
+        input: UpdateApiDestinationRequest,
+    ) -> Result<UpdateApiDestinationResponse, RusotoError<UpdateApiDestinationError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSEvents.UpdateApiDestination");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateApiDestinationError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<UpdateApiDestinationResponse, _>()
     }
 
     /// <p>Updates the specified archive.</p>
@@ -4633,5 +6274,23 @@ impl EventBridge for EventBridgeClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UpdateArchiveResponse, _>()
+    }
+
+    /// <p>Updates settings for a connection.</p>
+    async fn update_connection(
+        &self,
+        input: UpdateConnectionRequest,
+    ) -> Result<UpdateConnectionResponse, RusotoError<UpdateConnectionError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "AWSEvents.UpdateConnection");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateConnectionError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<UpdateConnectionResponse, _>()
     }
 }

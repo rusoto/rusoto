@@ -93,7 +93,7 @@ pub struct AutoScalingGroupRecommendation {
     #[serde(rename = "currentConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub current_configuration: Option<AutoScalingGroupConfiguration>,
-    /// <p><p>The finding classification for the Auto Scaling group.</p> <p>Findings for Auto Scaling groups include:</p> <ul> <li> <p> <b> <code>NotOptimized</code> </b>—An Auto Scaling group is considered not optimized when AWS Compute Optimizer identifies a recommendation that can provide better performance for your workload.</p> </li> <li> <p> <b> <code>Optimized</code> </b>—An Auto Scaling group is considered optimized when Compute Optimizer determines that the group is correctly provisioned to run your workload based on the chosen instance type. For optimized resources, Compute Optimizer might recommend a new generation instance type.</p> </li> </ul></p>
+    /// <p><p>The finding classification of the Auto Scaling group.</p> <p>Findings for Auto Scaling groups include:</p> <ul> <li> <p> <b> <code>NotOptimized</code> </b>—An Auto Scaling group is considered not optimized when AWS Compute Optimizer identifies a recommendation that can provide better performance for your workload.</p> </li> <li> <p> <b> <code>Optimized</code> </b>—An Auto Scaling group is considered optimized when Compute Optimizer determines that the group is correctly provisioned to run your workload based on the chosen instance type. For optimized resources, Compute Optimizer might recommend a new generation instance type.</p> </li> </ul></p>
     #[serde(rename = "finding")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub finding: Option<String>,
@@ -123,7 +123,7 @@ pub struct AutoScalingGroupRecommendationOption {
     #[serde(rename = "configuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<AutoScalingGroupConfiguration>,
-    /// <p>The performance risk of the Auto Scaling group configuration recommendation.</p> <p>Performance risk is the likelihood of the recommended instance type not meeting the performance requirement of your workload.</p> <p>The lowest performance risk is categorized as <code>0</code>, and the highest as <code>5</code>.</p>
+    /// <p>The performance risk of the Auto Scaling group configuration recommendation.</p> <p>Performance risk indicates the likelihood of the recommended instance type not meeting the resource needs of your workload. Compute Optimizer calculates an individual performance risk score for each specification of the recommended instance, including CPU, memory, EBS throughput, EBS IOPS, disk throughput, disk IOPS, network throughput, and network PPS. The performance risk of the recommended instance is calculated as the maximum performance risk score across the analyzed resource specifications.</p> <p>The value ranges from 0 to 5, with 0 meaning that the recommended resource is predicted to always provide enough hardware capability. The higher the performance risk is, the more likely you should validate whether the recommended resource meets the performance requirements of your workload before migrating your resource.</p>
     #[serde(rename = "performanceRisk")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub performance_risk: Option<f64>,
@@ -171,11 +171,11 @@ pub struct DescribeRecommendationExportJobsResponse {
     pub recommendation_export_jobs: Option<Vec<RecommendationExportJob>>,
 }
 
-/// <p>Describes a filter that returns a more specific list of Amazon Elastic Block Store (Amazon EBS) volume recommendations.</p> <p>This filter is used with the <code>GetEBSVolumeRecommendations</code> action.</p>
+/// <p>Describes a filter that returns a more specific list of Amazon Elastic Block Store (Amazon EBS) volume recommendations. Use this filter with the <code>GetEBSVolumeRecommendations</code> action.</p> <p>You can use <code>LambdaFunctionRecommendationFilter</code> with the <code>GetLambdaFunctionRecommendations</code> action, <code>JobFilter</code> with the <code>DescribeRecommendationExportJobs</code> action, and <code>Filter</code> with the <code>GetAutoScalingGroupRecommendations</code> and <code>GetEC2InstanceRecommendations</code> actions.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct EBSFilter {
-    /// <p>The name of the filter.</p> <p>Specify <code>Finding</code> to return recommendations with a specific finding classification (e.g., <code>Optimized</code>).</p>
+    /// <p>The name of the filter.</p> <p>Specify <code>Finding</code> to return recommendations with a specific finding classification (e.g., <code>NotOptimized</code>).</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -193,7 +193,7 @@ pub struct EBSUtilizationMetric {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p><p>The statistic of the utilization metric.</p> <p>The following statistics are available:</p> <ul> <li> <p> <code>Average</code> - This is the value of Sum / SampleCount during the specified period, or the average value observed during the specified period.</p> </li> <li> <p> <code>Maximum</code> - The highest value observed during the specified period. Use this value to determine high volumes of activity for your application.</p> </li> </ul></p>
+    /// <p>The statistic of the utilization metric.</p> <p>The Compute Optimizer API, AWS Command Line Interface (AWS CLI), and SDKs return utilization metrics using only the <code>Maximum</code> statistic, which is the highest value observed during the specified period.</p> <p>The Compute Optimizer console displays graphs for some utilization metrics using the <code>Average</code> statistic, which is the value of <code>Sum</code> / <code>SampleCount</code> during the specified period. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/viewing-recommendations.html">Viewing resource recommendations</a> in the <i>AWS Compute Optimizer User Guide</i>. You can also get averaged utilization metric data for your resources using Amazon CloudWatch. For more information, see the <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html">Amazon CloudWatch User Guide</a>.</p>
     #[serde(rename = "statistic")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub statistic: Option<String>,
@@ -206,7 +206,7 @@ pub struct EBSUtilizationMetric {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportAutoScalingGroupRecommendationsRequest {
-    /// <p>The IDs of the AWS accounts for which to export Auto Scaling group recommendations.</p> <p>If your account is the management account of an organization, use this parameter to specify the member accounts for which you want to export recommendations.</p> <p>This parameter cannot be specified together with the include member accounts parameter. The parameters are mutually exclusive.</p> <p>Recommendations for member accounts are not included in the export if this parameter, or the include member accounts parameter, is omitted.</p> <p>You can specify multiple account IDs per request.</p>
+    /// <p>The IDs of the AWS accounts for which to export Auto Scaling group recommendations.</p> <p>If your account is the management account of an organization, use this parameter to specify the member account for which you want to export recommendations.</p> <p>This parameter cannot be specified together with the include member accounts parameter. The parameters are mutually exclusive.</p> <p>Recommendations for member accounts are not included in the export if this parameter, or the include member accounts parameter, is omitted.</p> <p>You can specify multiple account IDs per request.</p>
     #[serde(rename = "accountIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_ids: Option<Vec<String>>,
@@ -222,7 +222,7 @@ pub struct ExportAutoScalingGroupRecommendationsRequest {
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    /// <p>Indicates whether to include recommendations for resources in all member accounts of the organization if your account is the management account of an organization.</p> <p>The member accounts must also be opted in to Compute Optimizer.</p> <p>Recommendations for member accounts of the organization are not included in the export file if this parameter is omitted.</p> <p>This parameter cannot be specified together with the account IDs parameter. The parameters are mutually exclusive.</p> <p>Recommendations for member accounts are not included in the export if this parameter, or the account IDs parameter, is omitted.</p>
+    /// <p>Indicates whether to include recommendations for resources in all member accounts of the organization if your account is the management account of an organization.</p> <p>The member accounts must also be opted in to Compute Optimizer, and trusted access for Compute Optimizer must be enabled in the organization account. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/security-iam.html#trusted-service-access">Compute Optimizer and AWS Organizations trusted access</a> in the <i>AWS Compute Optimizer User Guide</i>.</p> <p>Recommendations for member accounts of the organization are not included in the export file if this parameter is omitted.</p> <p>This parameter cannot be specified together with the account IDs parameter. The parameters are mutually exclusive.</p> <p>Recommendations for member accounts are not included in the export if this parameter, or the account IDs parameter, is omitted.</p>
     #[serde(rename = "includeMemberAccounts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_member_accounts: Option<bool>,
@@ -256,8 +256,47 @@ pub struct ExportDestination {
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ExportEBSVolumeRecommendationsRequest {
+    /// <p>The IDs of the AWS accounts for which to export Amazon EBS volume recommendations.</p> <p>If your account is the management account of an organization, use this parameter to specify the member account for which you want to export recommendations.</p> <p>This parameter cannot be specified together with the include member accounts parameter. The parameters are mutually exclusive.</p> <p>Recommendations for member accounts are not included in the export if this parameter, or the include member accounts parameter, is omitted.</p> <p>You can specify multiple account IDs per request.</p>
+    #[serde(rename = "accountIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_ids: Option<Vec<String>>,
+    /// <p>The recommendations data to include in the export file. For more information about the fields that can be exported, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/exporting-recommendations.html#exported-files">Exported files</a> in the <i>Compute Optimizer User Guide</i>.</p>
+    #[serde(rename = "fieldsToExport")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fields_to_export: Option<Vec<String>>,
+    /// <p>The format of the export file.</p> <p>The only export file format currently supported is <code>Csv</code>.</p>
+    #[serde(rename = "fileFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_format: Option<String>,
+    /// <p>An array of objects that describe a filter to export a more specific set of Amazon EBS volume recommendations.</p>
+    #[serde(rename = "filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<EBSFilter>>,
+    /// <p>Indicates whether to include recommendations for resources in all member accounts of the organization if your account is the management account of an organization.</p> <p>The member accounts must also be opted in to Compute Optimizer, and trusted access for Compute Optimizer must be enabled in the organization account. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/security-iam.html#trusted-service-access">Compute Optimizer and AWS Organizations trusted access</a> in the <i>AWS Compute Optimizer User Guide</i>.</p> <p>Recommendations for member accounts of the organization are not included in the export file if this parameter is omitted.</p> <p>This parameter cannot be specified together with the account IDs parameter. The parameters are mutually exclusive.</p> <p>Recommendations for member accounts are not included in the export if this parameter, or the account IDs parameter, is omitted.</p>
+    #[serde(rename = "includeMemberAccounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_member_accounts: Option<bool>,
+    #[serde(rename = "s3DestinationConfig")]
+    pub s_3_destination_config: S3DestinationConfig,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ExportEBSVolumeRecommendationsResponse {
+    /// <p>The identification number of the export job.</p> <p>Use the <code>DescribeRecommendationExportJobs</code> action, and specify the job ID to view the status of an export job.</p>
+    #[serde(rename = "jobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    #[serde(rename = "s3Destination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s_3_destination: Option<S3Destination>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportEC2InstanceRecommendationsRequest {
-    /// <p>The IDs of the AWS accounts for which to export instance recommendations.</p> <p>If your account is the management account of an organization, use this parameter to specify the member accounts for which you want to export recommendations.</p> <p>This parameter cannot be specified together with the include member accounts parameter. The parameters are mutually exclusive.</p> <p>Recommendations for member accounts are not included in the export if this parameter, or the include member accounts parameter, is omitted.</p> <p>You can specify multiple account IDs per request.</p>
+    /// <p>The IDs of the AWS accounts for which to export instance recommendations.</p> <p>If your account is the management account of an organization, use this parameter to specify the member account for which you want to export recommendations.</p> <p>This parameter cannot be specified together with the include member accounts parameter. The parameters are mutually exclusive.</p> <p>Recommendations for member accounts are not included in the export if this parameter, or the include member accounts parameter, is omitted.</p> <p>You can specify multiple account IDs per request.</p>
     #[serde(rename = "accountIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_ids: Option<Vec<String>>,
@@ -273,7 +312,7 @@ pub struct ExportEC2InstanceRecommendationsRequest {
     #[serde(rename = "filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<Filter>>,
-    /// <p>Indicates whether to include recommendations for resources in all member accounts of the organization if your account is the management account of an organization.</p> <p>The member accounts must also be opted in to Compute Optimizer.</p> <p>Recommendations for member accounts of the organization are not included in the export file if this parameter is omitted.</p> <p>Recommendations for member accounts are not included in the export if this parameter, or the account IDs parameter, is omitted.</p>
+    /// <p>Indicates whether to include recommendations for resources in all member accounts of the organization if your account is the management account of an organization.</p> <p>The member accounts must also be opted in to Compute Optimizer, and trusted access for Compute Optimizer must be enabled in the organization account. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/security-iam.html#trusted-service-access">Compute Optimizer and AWS Organizations trusted access</a> in the <i>AWS Compute Optimizer User Guide</i>.</p> <p>Recommendations for member accounts of the organization are not included in the export file if this parameter is omitted.</p> <p>Recommendations for member accounts are not included in the export if this parameter, or the account IDs parameter, is omitted.</p>
     #[serde(rename = "includeMemberAccounts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_member_accounts: Option<bool>,
@@ -295,15 +334,54 @@ pub struct ExportEC2InstanceRecommendationsResponse {
     pub s_3_destination: Option<S3Destination>,
 }
 
-/// <p>Describes a filter that returns a more specific list of recommendations.</p> <p>This filter is used with the <code>GetAutoScalingGroupRecommendations</code> and <code>GetEC2InstanceRecommendations</code> actions.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct ExportLambdaFunctionRecommendationsRequest {
+    /// <p>The IDs of the AWS accounts for which to export Lambda function recommendations.</p> <p>If your account is the management account of an organization, use this parameter to specify the member account for which you want to export recommendations.</p> <p>This parameter cannot be specified together with the include member accounts parameter. The parameters are mutually exclusive.</p> <p>Recommendations for member accounts are not included in the export if this parameter, or the include member accounts parameter, is omitted.</p> <p>You can specify multiple account IDs per request.</p>
+    #[serde(rename = "accountIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_ids: Option<Vec<String>>,
+    /// <p>The recommendations data to include in the export file. For more information about the fields that can be exported, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/exporting-recommendations.html#exported-files">Exported files</a> in the <i>Compute Optimizer User Guide</i>.</p>
+    #[serde(rename = "fieldsToExport")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fields_to_export: Option<Vec<String>>,
+    /// <p>The format of the export file.</p> <p>The only export file format currently supported is <code>Csv</code>.</p>
+    #[serde(rename = "fileFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_format: Option<String>,
+    /// <p>An array of objects that describe a filter to export a more specific set of Lambda function recommendations.</p>
+    #[serde(rename = "filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<LambdaFunctionRecommendationFilter>>,
+    /// <p>Indicates whether to include recommendations for resources in all member accounts of the organization if your account is the management account of an organization.</p> <p>The member accounts must also be opted in to Compute Optimizer, and trusted access for Compute Optimizer must be enabled in the organization account. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/security-iam.html#trusted-service-access">Compute Optimizer and AWS Organizations trusted access</a> in the <i>AWS Compute Optimizer User Guide</i>.</p> <p>Recommendations for member accounts of the organization are not included in the export file if this parameter is omitted.</p> <p>This parameter cannot be specified together with the account IDs parameter. The parameters are mutually exclusive.</p> <p>Recommendations for member accounts are not included in the export if this parameter, or the account IDs parameter, is omitted.</p>
+    #[serde(rename = "includeMemberAccounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_member_accounts: Option<bool>,
+    #[serde(rename = "s3DestinationConfig")]
+    pub s_3_destination_config: S3DestinationConfig,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ExportLambdaFunctionRecommendationsResponse {
+    /// <p>The identification number of the export job.</p> <p>Use the <code>DescribeRecommendationExportJobs</code> action, and specify the job ID to view the status of an export job.</p>
+    #[serde(rename = "jobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    #[serde(rename = "s3Destination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s_3_destination: Option<S3Destination>,
+}
+
+/// <p>Describes a filter that returns a more specific list of recommendations. Use this filter with the <code>GetAutoScalingGroupRecommendations</code> and <code>GetEC2InstanceRecommendations</code> actions.</p> <p>You can use <code>EBSFilter</code> with the <code>GetEBSVolumeRecommendations</code> action, <code>LambdaFunctionRecommendationFilter</code> with the <code>GetLambdaFunctionRecommendations</code> action, and <code>JobFilter</code> with the <code>DescribeRecommendationExportJobs</code> action.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Filter {
-    /// <p>The name of the filter.</p> <p>Specify <code>Finding</code> to return recommendations with a specific finding classification (e.g., <code>Overprovisioned</code>).</p> <p>Specify <code>RecommendationSourceType</code> to return recommendations of a specific resource type (e.g., <code>AutoScalingGroup</code>).</p>
+    /// <p>The name of the filter.</p> <p>Specify <code>Finding</code> to return recommendations with a specific finding classification (e.g., <code>Underprovisioned</code>).</p> <p>Specify <code>RecommendationSourceType</code> to return recommendations of a specific resource type (e.g., <code>Ec2Instance</code>).</p> <p>Specify <code>FindingReasonCodes</code> to return recommendations with a specific finding reason code (e.g., <code>CPUUnderprovisioned</code>).</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p><p>The value of the filter.</p> <p>The valid values for this parameter are as follows, depending on what you specify for the <code>name</code> parameter and the resource type that you wish to filter results for:</p> <ul> <li> <p>Specify <code>Optimized</code> or <code>NotOptimized</code> if you specified the <code>name</code> parameter as <code>Finding</code> and you want to filter results for Auto Scaling groups.</p> </li> <li> <p>Specify <code>Underprovisioned</code>, <code>Overprovisioned</code>, or <code>Optimized</code> if you specified the <code>name</code> parameter as <code>Finding</code> and you want to filter results for EC2 instances.</p> </li> <li> <p>Specify <code>Ec2Instance</code> or <code>AutoScalingGroup</code> if you specified the <code>name</code> parameter as <code>RecommendationSourceType</code>.</p> </li> </ul></p>
+    /// <p><p>The value of the filter.</p> <p>The valid values for this parameter are as follows, depending on what you specify for the <code>name</code> parameter and the resource type that you wish to filter results for:</p> <ul> <li> <p>Specify <code>Optimized</code> or <code>NotOptimized</code> if you specify the <code>name</code> parameter as <code>Finding</code> and you want to filter results for Auto Scaling groups.</p> </li> <li> <p>Specify <code>Underprovisioned</code>, <code>Overprovisioned</code>, or <code>Optimized</code> if you specify the <code>name</code> parameter as <code>Finding</code> and you want to filter results for EC2 instances.</p> </li> <li> <p>Specify <code>Ec2Instance</code> or <code>AutoScalingGroup</code> if you specify the <code>name</code> parameter as <code>RecommendationSourceType</code>.</p> </li> <li> <p>Specify one of the following options if you specify the <code>name</code> parameter as <code>FindingReasonCodes</code>:</p> <ul> <li> <p> <b> <code>CPUOverprovisioned</code> </b> — The instance’s CPU configuration can be sized down while still meeting the performance requirements of your workload.</p> </li> <li> <p> <b> <code>CPUUnderprovisioned</code> </b> — The instance’s CPU configuration doesn&#39;t meet the performance requirements of your workload and there is an alternative instance type that provides better CPU performance.</p> </li> <li> <p> <b> <code>MemoryOverprovisioned</code> </b> — The instance’s memory configuration can be sized down while still meeting the performance requirements of your workload.</p> </li> <li> <p> <b> <code>MemoryUnderprovisioned</code> </b> — The instance’s memory configuration doesn&#39;t meet the performance requirements of your workload and there is an alternative instance type that provides better memory performance.</p> </li> <li> <p> <b> <code>EBSThroughputOverprovisioned</code> </b> — The instance’s EBS throughput configuration can be sized down while still meeting the performance requirements of your workload.</p> </li> <li> <p> <b> <code>EBSThroughputUnderprovisioned</code> </b> — The instance’s EBS throughput configuration doesn&#39;t meet the performance requirements of your workload and there is an alternative instance type that provides better EBS throughput performance.</p> </li> <li> <p> <b> <code>EBSIOPSOverprovisioned</code> </b> — The instance’s EBS IOPS configuration can be sized down while still meeting the performance requirements of your workload.</p> </li> <li> <p> <b> <code>EBSIOPSUnderprovisioned</code> </b> — The instance’s EBS IOPS configuration doesn&#39;t meet the performance requirements of your workload and there is an alternative instance type that provides better EBS IOPS performance.</p> </li> <li> <p> <b> <code>NetworkBandwidthOverprovisioned</code> </b> — The instance’s network bandwidth configuration can be sized down while still meeting the performance requirements of your workload.</p> </li> <li> <p> <b> <code>NetworkBandwidthUnderprovisioned</code> </b> — The instance’s network bandwidth configuration doesn&#39;t meet the performance requirements of your workload and there is an alternative instance type that provides better network bandwidth performance. This finding reason happens when the <code>NetworkIn</code> or <code>NetworkOut</code> performance of an instance is impacted.</p> </li> <li> <p> <b> <code>NetworkPPSOverprovisioned</code> </b> — The instance’s network PPS (packets per second) configuration can be sized down while still meeting the performance requirements of your workload.</p> </li> <li> <p> <b> <code>NetworkPPSUnderprovisioned</code> </b> — The instance’s network PPS (packets per second) configuration doesn&#39;t meet the performance requirements of your workload and there is an alternative instance type that provides better network PPS performance.</p> </li> <li> <p> <b> <code>DiskIOPSOverprovisioned</code> </b> — The instance’s disk IOPS configuration can be sized down while still meeting the performance requirements of your workload.</p> </li> <li> <p> <b> <code>DiskIOPSUnderprovisioned</code> </b> — The instance’s disk IOPS configuration doesn&#39;t meet the performance requirements of your workload and there is an alternative instance type that provides better disk IOPS performance.</p> </li> <li> <p> <b> <code>DiskThroughputOverprovisioned</code> </b> — The instance’s disk throughput configuration can be sized down while still meeting the performance requirements of your workload.</p> </li> <li> <p> <b> <code>DiskThroughputUnderprovisioned</code> </b> — The instance’s disk throughput configuration doesn&#39;t meet the performance requirements of your workload and there is an alternative instance type that provides better disk throughput performance.</p> </li> </ul> </li> </ul></p>
     #[serde(rename = "values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
@@ -312,7 +390,7 @@ pub struct Filter {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetAutoScalingGroupRecommendationsRequest {
-    /// <p>The IDs of the AWS accounts for which to return Auto Scaling group recommendations.</p> <p>If your account is the management account of an organization, use this parameter to specify the member accounts for which you want to return Auto Scaling group recommendations.</p> <p>Only one account ID can be specified per request.</p>
+    /// <p>The ID of the AWS account for which to return Auto Scaling group recommendations.</p> <p>If your account is the management account of an organization, use this parameter to specify the member account for which you want to return Auto Scaling group recommendations.</p> <p>Only one account ID can be specified per request.</p>
     #[serde(rename = "accountIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_ids: Option<Vec<String>>,
@@ -354,7 +432,7 @@ pub struct GetAutoScalingGroupRecommendationsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEBSVolumeRecommendationsRequest {
-    /// <p>The IDs of the AWS accounts for which to return volume recommendations.</p> <p>If your account is the management account of an organization, use this parameter to specify the member accounts for which you want to return volume recommendations.</p> <p>Only one account ID can be specified per request.</p>
+    /// <p>The ID of the AWS account for which to return volume recommendations.</p> <p>If your account is the management account of an organization, use this parameter to specify the member account for which you want to return volume recommendations.</p> <p>Only one account ID can be specified per request.</p>
     #[serde(rename = "accountIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_ids: Option<Vec<String>>,
@@ -396,7 +474,7 @@ pub struct GetEBSVolumeRecommendationsResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetEC2InstanceRecommendationsRequest {
-    /// <p>The IDs of the AWS accounts for which to return instance recommendations.</p> <p>If your account is the management account of an organization, use this parameter to specify the member accounts for which you want to return instance recommendations.</p> <p>Only one account ID can be specified per request.</p>
+    /// <p>The ID of the AWS account for which to return instance recommendations.</p> <p>If your account is the management account of an organization, use this parameter to specify the member account for which you want to return instance recommendations.</p> <p>Only one account ID can be specified per request.</p>
     #[serde(rename = "accountIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_ids: Option<Vec<String>>,
@@ -485,6 +563,44 @@ pub struct GetEnrollmentStatusResponse {
     pub status_reason: Option<String>,
 }
 
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetLambdaFunctionRecommendationsRequest {
+    /// <p>The ID of the AWS account for which to return function recommendations.</p> <p>If your account is the management account of an organization, use this parameter to specify the member account for which you want to return function recommendations.</p> <p>Only one account ID can be specified per request.</p>
+    #[serde(rename = "accountIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_ids: Option<Vec<String>>,
+    /// <p>An array of objects that describe a filter that returns a more specific list of function recommendations.</p>
+    #[serde(rename = "filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<LambdaFunctionRecommendationFilter>>,
+    /// <p>The Amazon Resource Name (ARN) of the functions for which to return recommendations.</p> <p>You can specify a qualified or unqualified ARN. If you specify an unqualified ARN without a function version suffix, Compute Optimizer will return recommendations for the latest (<code>$LATEST</code>) version of the function. If you specify a qualified ARN with a version suffix, Compute Optimizer will return recommendations for the specified function version. For more information about using function versions, see <a href="https://docs.aws.amazon.com/lambda/latest/dg/configuration-versions.html#versioning-versions-using">Using versions</a> in the <i>AWS Lambda Developer Guide</i>.</p>
+    #[serde(rename = "functionArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_arns: Option<Vec<String>>,
+    /// <p>The maximum number of function recommendations to return with a single request.</p> <p>To retrieve the remaining results, make another request with the returned <code>NextToken</code> value.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token to advance to the next page of function recommendations.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetLambdaFunctionRecommendationsResponse {
+    /// <p>An array of objects that describe function recommendations.</p>
+    #[serde(rename = "lambdaFunctionRecommendations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lambda_function_recommendations: Option<Vec<LambdaFunctionRecommendation>>,
+    /// <p>The token to use to advance to the next page of function recommendations.</p> <p>This value is null when there are no more pages of function recommendations to return.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
 /// <p>Describes an error experienced when getting recommendations.</p> <p>For example, an error is returned if you request recommendations for an unsupported Auto Scaling group, or if you request recommendations for an instance of an unsupported instance family.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
@@ -506,7 +622,7 @@ pub struct GetRecommendationError {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRecommendationSummariesRequest {
-    /// <p>The IDs of the AWS accounts for which to return recommendation summaries.</p> <p>If your account is the management account of an organization, use this parameter to specify the member accounts for which you want to return recommendation summaries.</p> <p>Only one account ID can be specified per request.</p>
+    /// <p>The ID of the AWS account for which to return recommendation summaries.</p> <p>If your account is the management account of an organization, use this parameter to specify the member account for which you want to return recommendation summaries.</p> <p>Only one account ID can be specified per request.</p>
     #[serde(rename = "accountIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_ids: Option<Vec<String>>,
@@ -545,10 +661,14 @@ pub struct InstanceRecommendation {
     #[serde(rename = "currentInstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub current_instance_type: Option<String>,
-    /// <p><p>The finding classification for the instance.</p> <p>Findings for instances include:</p> <ul> <li> <p> <b> <code>Underprovisioned</code> </b>—An instance is considered under-provisioned when at least one specification of your instance, such as CPU, memory, or network, does not meet the performance requirements of your workload. Under-provisioned instances may lead to poor application performance.</p> </li> <li> <p> <b> <code>Overprovisioned</code> </b>—An instance is considered over-provisioned when at least one specification of your instance, such as CPU, memory, or network, can be sized down while still meeting the performance requirements of your workload, and no specification is under-provisioned. Over-provisioned instances may lead to unnecessary infrastructure cost.</p> </li> <li> <p> <b> <code>Optimized</code> </b>—An instance is considered optimized when all specifications of your instance, such as CPU, memory, and network, meet the performance requirements of your workload and is not over provisioned. An optimized instance runs your workloads with optimal performance and infrastructure cost. For optimized resources, AWS Compute Optimizer might recommend a new generation instance type.</p> </li> </ul></p>
+    /// <p><p>The finding classification of the instance.</p> <p>Findings for instances include:</p> <ul> <li> <p> <b> <code>Underprovisioned</code> </b>—An instance is considered under-provisioned when at least one specification of your instance, such as CPU, memory, or network, does not meet the performance requirements of your workload. Under-provisioned instances may lead to poor application performance.</p> </li> <li> <p> <b> <code>Overprovisioned</code> </b>—An instance is considered over-provisioned when at least one specification of your instance, such as CPU, memory, or network, can be sized down while still meeting the performance requirements of your workload, and no specification is under-provisioned. Over-provisioned instances may lead to unnecessary infrastructure cost.</p> </li> <li> <p> <b> <code>Optimized</code> </b>—An instance is considered optimized when all specifications of your instance, such as CPU, memory, and network, meet the performance requirements of your workload and is not over provisioned. For optimized resources, AWS Compute Optimizer might recommend a new generation instance type.</p> </li> </ul></p>
     #[serde(rename = "finding")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub finding: Option<String>,
+    /// <p><p>The reason for the finding classification of the instance.</p> <p>Finding reason codes for instances include:</p> <ul> <li> <p> <b> <code>CPUOverprovisioned</code> </b> — The instance’s CPU configuration can be sized down while still meeting the performance requirements of your workload. This is identified by analyzing the <code>CPUUtilization</code> metric of the current instance during the look-back period.</p> </li> <li> <p> <b> <code>CPUUnderprovisioned</code> </b> — The instance’s CPU configuration doesn&#39;t meet the performance requirements of your workload and there is an alternative instance type that provides better CPU performance. This is identified by analyzing the <code>CPUUtilization</code> metric of the current instance during the look-back period.</p> </li> <li> <p> <b> <code>MemoryOverprovisioned</code> </b> — The instance’s memory configuration can be sized down while still meeting the performance requirements of your workload. This is identified by analyzing the memory utilization metric of the current instance during the look-back period.</p> </li> <li> <p> <b> <code>MemoryUnderprovisioned</code> </b> — The instance’s memory configuration doesn&#39;t meet the performance requirements of your workload and there is an alternative instance type that provides better memory performance. This is identified by analyzing the memory utilization metric of the current instance during the look-back period.</p> <note> <p>Memory utilization is analyzed only for resources that have the unified CloudWatch agent installed on them. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/metrics.html#cw-agent">Enabling memory utilization with the Amazon CloudWatch Agent</a> in the <i>AWS Compute Optimizer User Guide</i>. On Linux instances, Compute Optimizer analyses the <code>mem<em>used</em>percent</code> metric in the <code>CWAgent</code> namespace, or the legacy <code>MemoryUtilization</code> metric in the <code>System/Linux</code> namespace. On Windows instances, Compute Optimizer analyses the <code>Memory % Committed Bytes In Use</code> metric in the <code>CWAgent</code> namespace.</p> </note> </li> <li> <p> <b> <code>EBSThroughputOverprovisioned</code> </b> — The instance’s EBS throughput configuration can be sized down while still meeting the performance requirements of your workload. This is identified by analyzing the <code>VolumeReadOps</code> and <code>VolumeWriteOps</code> metrics of EBS volumes attached to the current instance during the look-back period.</p> </li> <li> <p> <b> <code>EBSThroughputUnderprovisioned</code> </b> — The instance’s EBS throughput configuration doesn&#39;t meet the performance requirements of your workload and there is an alternative instance type that provides better EBS throughput performance. This is identified by analyzing the <code>VolumeReadOps</code> and <code>VolumeWriteOps</code> metrics of EBS volumes attached to the current instance during the look-back period.</p> </li> <li> <p> <b> <code>EBSIOPSOverprovisioned</code> </b> — The instance’s EBS IOPS configuration can be sized down while still meeting the performance requirements of your workload. This is identified by analyzing the <code>VolumeReadBytes</code> and <code>VolumeWriteBytes</code> metric of EBS volumes attached to the current instance during the look-back period.</p> </li> <li> <p> <b> <code>EBSIOPSUnderprovisioned</code> </b> — The instance’s EBS IOPS configuration doesn&#39;t meet the performance requirements of your workload and there is an alternative instance type that provides better EBS IOPS performance. This is identified by analyzing the <code>VolumeReadBytes</code> and <code>VolumeWriteBytes</code> metric of EBS volumes attached to the current instance during the look-back period.</p> </li> <li> <p> <b> <code>NetworkBandwidthOverprovisioned</code> </b> — The instance’s network bandwidth configuration can be sized down while still meeting the performance requirements of your workload. This is identified by analyzing the <code>NetworkIn</code> and <code>NetworkOut</code> metrics of the current instance during the look-back period.</p> </li> <li> <p> <b> <code>NetworkBandwidthUnderprovisioned</code> </b> — The instance’s network bandwidth configuration doesn&#39;t meet the performance requirements of your workload and there is an alternative instance type that provides better network bandwidth performance. This is identified by analyzing the <code>NetworkIn</code> and <code>NetworkOut</code> metrics of the current instance during the look-back period. This finding reason happens when the <code>NetworkIn</code> or <code>NetworkOut</code> performance of an instance is impacted.</p> </li> <li> <p> <b> <code>NetworkPPSOverprovisioned</code> </b> — The instance’s network PPS (packets per second) configuration can be sized down while still meeting the performance requirements of your workload. This is identified by analyzing the <code>NetworkPacketsIn</code> and <code>NetworkPacketsIn</code> metrics of the current instance during the look-back period.</p> </li> <li> <p> <b> <code>NetworkPPSUnderprovisioned</code> </b> — The instance’s network PPS (packets per second) configuration doesn&#39;t meet the performance requirements of your workload and there is an alternative instance type that provides better network PPS performance. This is identified by analyzing the <code>NetworkPacketsIn</code> and <code>NetworkPacketsIn</code> metrics of the current instance during the look-back period.</p> </li> <li> <p> <b> <code>DiskIOPSOverprovisioned</code> </b> — The instance’s disk IOPS configuration can be sized down while still meeting the performance requirements of your workload. This is identified by analyzing the <code>DiskReadOps</code> and <code>DiskWriteOps</code> metrics of the current instance during the look-back period.</p> </li> <li> <p> <b> <code>DiskIOPSUnderprovisioned</code> </b> — The instance’s disk IOPS configuration doesn&#39;t meet the performance requirements of your workload and there is an alternative instance type that provides better disk IOPS performance. This is identified by analyzing the <code>DiskReadOps</code> and <code>DiskWriteOps</code> metrics of the current instance during the look-back period.</p> </li> <li> <p> <b> <code>DiskThroughputOverprovisioned</code> </b> — The instance’s disk throughput configuration can be sized down while still meeting the performance requirements of your workload. This is identified by analyzing the <code>DiskReadBytes</code> and <code>DiskWriteBytes</code> metrics of the current instance during the look-back period.</p> </li> <li> <p> <b> <code>DiskThroughputUnderprovisioned</code> </b> — The instance’s disk throughput configuration doesn&#39;t meet the performance requirements of your workload and there is an alternative instance type that provides better disk throughput performance. This is identified by analyzing the <code>DiskReadBytes</code> and <code>DiskWriteBytes</code> metrics of the current instance during the look-back period.</p> </li> </ul> <note> <p>For more information about instance metrics, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/viewing_metrics_with_cloudwatch.html">List the available CloudWatch metrics for your instances</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>. For more information about EBS volume metrics, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using_cloudwatch_ebs.html">Amazon CloudWatch metrics for Amazon EBS</a> in the <i>Amazon Elastic Compute Cloud User Guide</i>.</p> </note></p>
+    #[serde(rename = "findingReasonCodes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub finding_reason_codes: Option<Vec<String>>,
     /// <p>The Amazon Resource Name (ARN) of the current instance.</p>
     #[serde(rename = "instanceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -587,10 +707,14 @@ pub struct InstanceRecommendationOption {
     #[serde(rename = "instanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_type: Option<String>,
-    /// <p>The performance risk of the instance recommendation option.</p> <p>Performance risk is the likelihood of the recommended instance type not meeting the performance requirement of your workload.</p> <p>The lowest performance risk is categorized as <code>0</code>, and the highest as <code>5</code>.</p>
+    /// <p>The performance risk of the instance recommendation option.</p> <p>Performance risk indicates the likelihood of the recommended instance type not meeting the resource needs of your workload. Compute Optimizer calculates an individual performance risk score for each specification of the recommended instance, including CPU, memory, EBS throughput, EBS IOPS, disk throughput, disk IOPS, network throughput, and network PPS. The performance risk of the recommended instance is calculated as the maximum performance risk score across the analyzed resource specifications.</p> <p>The value ranges from <code>0</code> to <code>5</code>, with <code>0</code> meaning that the recommended resource is predicted to always provide enough hardware capability. The higher the performance risk is, the more likely you should validate whether the recommendation will meet the performance requirements of your workload before migrating your resource.</p>
     #[serde(rename = "performanceRisk")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub performance_risk: Option<f64>,
+    /// <p><p>Describes the configuration differences between the current instance and the recommended instance type. You should consider the configuration differences before migrating your workloads from the current instance to the recommended instance type. The <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-instance-resize.html">Change the instance type guide for Linux</a> and <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/ec2-instance-resize.html">Change the instance type guide for Windows</a> provide general guidance for getting started with an instance migration.</p> <p>Platform differences include:</p> <ul> <li> <p> <b> <code>Hypervisor</code> </b> — The hypervisor of the recommended instance type is different than that of the current instance. For example, the recommended instance type uses a Nitro hypervisor and the current instance uses a Xen hypervisor. The differences that you should consider between these hypervisors are covered in the <a href="http://aws.amazon.com/ec2/faqs/#Nitro_Hypervisor">Nitro Hypervisor</a> section of the Amazon EC2 frequently asked questions. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#ec2-nitro-instances">Instances built on the Nitro System</a> in the <i>Amazon EC2 User Guide for Linux</i>, or <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/instance-types.html#ec2-nitro-instances">Instances built on the Nitro System</a> in the <i>Amazon EC2 User Guide for Windows</i>.</p> </li> <li> <p> <b> <code>NetworkInterface</code> </b> — The network interface of the recommended instance type is different than that of the current instance. For example, the recommended instance type supports enhanced networking and the current instance might not. To enable enhanced networking for the recommended instance type, you will need to install the Elastic Network Adapter (ENA) driver or the Intel 82599 Virtual Function driver. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#instance-networking-storage">Networking and storage features</a> and <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/enhanced-networking.html">Enhanced networking on Linux</a> in the <i>Amazon EC2 User Guide for Linux</i>, or <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/instance-types.html#instance-networking-storage">Networking and storage features</a> and <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/enhanced-networking.html">Enhanced networking on Windows</a> in the <i>Amazon EC2 User Guide for Windows</i>.</p> </li> <li> <p> <b> <code>StorageInterface</code> </b> — The storage interface of the recommended instance type is different than that of the current instance. For example, the recommended instance type uses an NVMe storage interface and the current instance does not. To access NVMe volumes for the recommended instance type, you will need to install or upgrade the NVMe driver. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#instance-networking-storage">Networking and storage features</a> and <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/nvme-ebs-volumes.html">Amazon EBS and NVMe on Linux instances</a> in the <i>Amazon EC2 User Guide for Linux</i>, or <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/instance-types.html#instance-networking-storage">Networking and storage features</a> and <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/nvme-ebs-volumes.html">Amazon EBS and NVMe on Windows instances</a> in the <i>Amazon EC2 User Guide for Windows</i>.</p> </li> <li> <p> <b> <code>InstanceStoreAvailability</code> </b> — The recommended instance type does not support instance store volumes and the current instance does. Before migrating, you might need to back up the data on your instance store volumes if you want to preserve them. For more information, see <a href="https://aws.amazon.com/premiumsupport/knowledge-center/back-up-instance-store-ebs/">How do I back up an instance store volume on my Amazon EC2 instance to Amazon EBS?</a> in the <i>AWS Premium Support Knowledge Base</i>. For more information, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/instance-types.html#instance-networking-storage">Networking and storage features</a> and <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/InstanceStorage.html">Amazon EC2 instance store</a> in the <i>Amazon EC2 User Guide for Linux</i>, or see <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/instance-types.html#instance-networking-storage">Networking and storage features</a> and <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/InstanceStorage.html">Amazon EC2 instance store</a> in the <i>Amazon EC2 User Guide for Windows</i>.</p> </li> <li> <p> <b> <code>VirtualizationType</code> </b> — The recommended instance type uses the hardware virtual machine (HVM) virtualization type and the current instance uses the paravirtual (PV) virtualization type. For more information about the differences between these virtualization types, see <a href="https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/virtualization_types.html">Linux AMI virtualization types</a> in the <i>Amazon EC2 User Guide for Linux</i>, or <a href="https://docs.aws.amazon.com/AWSEC2/latest/WindowsGuide/windows-ami-version-history.html#virtualization-types">Windows AMI virtualization types</a> in the <i>Amazon EC2 User Guide for Windows</i>.</p> </li> </ul></p>
+    #[serde(rename = "platformDifferences")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub platform_differences: Option<Vec<String>>,
     /// <p><p>An array of objects that describe the projected utilization metrics of the instance recommendation option.</p> <note> <p>The <code>Cpu</code> and <code>Memory</code> metrics are the only projected utilization metrics returned. Additionally, the <code>Memory</code> metric is returned only for resources that have the unified CloudWatch agent installed on them. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/metrics.html#cw-agent">Enabling Memory Utilization with the CloudWatch Agent</a>.</p> </note></p>
     #[serde(rename = "projectedUtilizationMetrics")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -601,7 +725,7 @@ pub struct InstanceRecommendationOption {
     pub rank: Option<i64>,
 }
 
-/// <p>Describes a filter that returns a more specific list of recommendation export jobs.</p> <p>This filter is used with the <code>DescribeRecommendationExportJobs</code> action.</p>
+/// <p>Describes a filter that returns a more specific list of recommendation export jobs. Use this filter with the <code>DescribeRecommendationExportJobs</code> action.</p> <p>You can use <code>EBSFilter</code> with the <code>GetEBSVolumeRecommendations</code> action, <code>LambdaFunctionRecommendationFilter</code> with the <code>GetLambdaFunctionRecommendations</code> action, and <code>Filter</code> with the <code>GetAutoScalingGroupRecommendations</code> and <code>GetEC2InstanceRecommendations</code> actions.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct JobFilter {
@@ -609,10 +733,128 @@ pub struct JobFilter {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p><p>The value of the filter.</p> <p>The valid values for this parameter are as follows, depending on what you specify for the <code>name</code> parameter:</p> <ul> <li> <p>Specify <code>Ec2Instance</code> or <code>AutoScalingGroup</code> if you specified the <code>name</code> parameter as <code>ResourceType</code>. There is no filter for EBS volumes because volume recommendations cannot be exported at this time.</p> </li> <li> <p>Specify <code>Queued</code>, <code>InProgress</code>, <code>Complete</code>, or <code>Failed</code> if you specified the <code>name</code> parameter as <code>JobStatus</code>.</p> </li> </ul></p>
+    /// <p><p>The value of the filter.</p> <p>The valid values for this parameter are as follows, depending on what you specify for the <code>name</code> parameter:</p> <ul> <li> <p>Specify <code>Ec2Instance</code> or <code>AutoScalingGroup</code> if you specify the <code>name</code> parameter as <code>ResourceType</code>. There is no filter for EBS volumes because volume recommendations cannot be exported at this time.</p> </li> <li> <p>Specify <code>Queued</code>, <code>InProgress</code>, <code>Complete</code>, or <code>Failed</code> if you specify the <code>name</code> parameter as <code>JobStatus</code>.</p> </li> </ul></p>
     #[serde(rename = "values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
+}
+
+/// <p>Describes a projected utilization metric of an AWS Lambda function recommendation option.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct LambdaFunctionMemoryProjectedMetric {
+    /// <p>The name of the projected utilization metric.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The statistic of the projected utilization metric.</p>
+    #[serde(rename = "statistic")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub statistic: Option<String>,
+    /// <p>The values of the projected utilization metrics.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<f64>,
+}
+
+/// <p>Describes a recommendation option for an AWS Lambda function.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct LambdaFunctionMemoryRecommendationOption {
+    /// <p>The memory size, in MB, of the function recommendation option.</p>
+    #[serde(rename = "memorySize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub memory_size: Option<i64>,
+    /// <p>An array of objects that describe the projected utilization metrics of the function recommendation option.</p>
+    #[serde(rename = "projectedUtilizationMetrics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub projected_utilization_metrics: Option<Vec<LambdaFunctionMemoryProjectedMetric>>,
+    /// <p>The rank of the function recommendation option.</p> <p>The top recommendation option is ranked as <code>1</code>.</p>
+    #[serde(rename = "rank")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rank: Option<i64>,
+}
+
+/// <p>Describes an AWS Lambda function recommendation.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct LambdaFunctionRecommendation {
+    /// <p>The AWS account ID of the function.</p>
+    #[serde(rename = "accountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p>The amount of memory, in MB, that's allocated to the current function.</p>
+    #[serde(rename = "currentMemorySize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_memory_size: Option<i64>,
+    /// <p><p>The finding classification of the function.</p> <p>Findings for functions include:</p> <ul> <li> <p> <b> <code>Optimized</code> </b> — The function is correctly provisioned to run your workload based on its current configuration and its utilization history. This finding classification does not include finding reason codes.</p> </li> <li> <p> <b> <code>NotOptimized</code> </b> — The function is performing at a higher level (over-provisioned) or at a lower level (under-provisioned) than required for your workload because its current configuration is not optimal. Over-provisioned resources might lead to unnecessary infrastructure cost, and under-provisioned resources might lead to poor application performance. This finding classification can include the <code>MemoryUnderprovisioned</code> and <code>MemoryUnderprovisioned</code> finding reason codes.</p> </li> <li> <p> <b> <code>Unavailable</code> </b> — Compute Optimizer was unable to generate a recommendation for the function. This could be because the function has not accumulated sufficient metric data, or the function does not qualify for a recommendation. This finding classification can include the <code>InsufficientData</code> and <code>Inconclusive</code> finding reason codes.</p> <note> <p>Functions with a finding of unavailable are not returned unless you specify the <code>filter</code> parameter with a value of <code>Unavailable</code> in your <code>GetLambdaFunctionRecommendations</code> request.</p> </note> </li> </ul></p>
+    #[serde(rename = "finding")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub finding: Option<String>,
+    /// <p><p>The reason for the finding classification of the function.</p> <note> <p>Functions that have a finding classification of <code>Optimized</code> don&#39;t have a finding reason code.</p> </note> <p>Finding reason codes for functions include:</p> <ul> <li> <p> <b> <code>MemoryOverprovisioned</code> </b> — The function is over-provisioned when its memory configuration can be sized down while still meeting the performance requirements of your workload. An over-provisioned function might lead to unnecessary infrastructure cost. This finding reason code is part of the <code>NotOptimized</code> finding classification.</p> </li> <li> <p> <b> <code>MemoryUnderprovisioned</code> </b> — The function is under-provisioned when its memory configuration doesn&#39;t meet the performance requirements of the workload. An under-provisioned function might lead to poor application performance. This finding reason code is part of the <code>NotOptimized</code> finding classification.</p> </li> <li> <p> <b> <code>InsufficientData</code> </b> — The function does not have sufficient metric data for Compute Optimizer to generate a recommendation. For more information, see the <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/requirements.html">Supported resources and requirements</a> in the <i>AWS Compute Optimizer User Guide</i>. This finding reason code is part of the <code>Unavailable</code> finding classification.</p> </li> <li> <p> <b> <code>Inconclusive</code> </b> — The function does not qualify for a recommendation because Compute Optimizer cannot generate a recommendation with a high degree of confidence. This finding reason code is part of the <code>Unavailable</code> finding classification.</p> </li> </ul></p>
+    #[serde(rename = "findingReasonCodes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub finding_reason_codes: Option<Vec<String>>,
+    /// <p>The Amazon Resource Name (ARN) of the current function.</p>
+    #[serde(rename = "functionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_arn: Option<String>,
+    /// <p>The version number of the current function.</p>
+    #[serde(rename = "functionVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_version: Option<String>,
+    /// <p>The time stamp of when the function recommendation was last refreshed.</p>
+    #[serde(rename = "lastRefreshTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_refresh_timestamp: Option<f64>,
+    /// <p>The number of days for which utilization metrics were analyzed for the function.</p>
+    #[serde(rename = "lookbackPeriodInDays")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lookback_period_in_days: Option<f64>,
+    /// <p>An array of objects that describe the memory configuration recommendation options for the function.</p>
+    #[serde(rename = "memorySizeRecommendationOptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub memory_size_recommendation_options: Option<Vec<LambdaFunctionMemoryRecommendationOption>>,
+    /// <p>The number of times your function code was executed during the look-back period.</p>
+    #[serde(rename = "numberOfInvocations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_invocations: Option<i64>,
+    /// <p>An array of objects that describe the utilization metrics of the function.</p>
+    #[serde(rename = "utilizationMetrics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub utilization_metrics: Option<Vec<LambdaFunctionUtilizationMetric>>,
+}
+
+/// <p>Describes a filter that returns a more specific list of AWS Lambda function recommendations. Use this filter with the <code>GetLambdaFunctionRecommendations</code> action.</p> <p>You can use <code>EBSFilter</code> with the <code>GetEBSVolumeRecommendations</code> action, <code>JobFilter</code> with the <code>DescribeRecommendationExportJobs</code> action, and <code>Filter</code> with the <code>GetAutoScalingGroupRecommendations</code> and <code>GetEC2InstanceRecommendations</code> actions.</p>
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct LambdaFunctionRecommendationFilter {
+    /// <p>The name of the filter.</p> <p>Specify <code>Finding</code> to return recommendations with a specific finding classification (e.g., <code>NotOptimized</code>).</p> <p>Specify <code>FindingReasonCode</code> to return recommendations with a specific finding reason code (e.g., <code>MemoryUnderprovisioned</code>).</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p><p>The value of the filter.</p> <p>The valid values for this parameter are as follows, depending on what you specify for the <code>name</code> parameter:</p> <ul> <li> <p>Specify <code>Optimized</code>, <code>NotOptimized</code>, or <code>Unavailable</code> if you specify the <code>name</code> parameter as <code>Finding</code>.</p> </li> <li> <p>Specify <code>MemoryOverprovisioned</code>, <code>MemoryUnderprovisioned</code>, <code>InsufficientData</code>, or <code>Inconclusive</code> if you specify the <code>name</code> parameter as <code>FindingReasonCode</code>.</p> </li> </ul></p>
+    #[serde(rename = "values")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub values: Option<Vec<String>>,
+}
+
+/// <p>Describes a utilization metric of an AWS Lambda function.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct LambdaFunctionUtilizationMetric {
+    /// <p><p>The name of the utilization metric.</p> <p>The following utilization metrics are available:</p> <ul> <li> <p> <code>Duration</code> - The amount of time that your function code spends processing an event.</p> </li> <li> <p> <code>Memory</code> - The amount of memory used per invocation.</p> </li> </ul></p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The statistic of the utilization metric.</p> <p>The Compute Optimizer API, AWS Command Line Interface (AWS CLI), and SDKs return utilization metrics using only the <code>Maximum</code> statistic, which is the highest value observed during the specified period.</p> <p>The Compute Optimizer console displays graphs for some utilization metrics using the <code>Average</code> statistic, which is the value of <code>Sum</code> / <code>SampleCount</code> during the specified period. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/viewing-recommendations.html">Viewing resource recommendations</a> in the <i>AWS Compute Optimizer User Guide</i>. You can also get averaged utilization metric data for your resources using Amazon CloudWatch. For more information, see the <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html">Amazon CloudWatch User Guide</a>.</p>
+    #[serde(rename = "statistic")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub statistic: Option<String>,
+    /// <p>The value of the utilization metric.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<f64>,
 }
 
 /// <p><p>Describes a projected utilization metric of a recommendation option, such as an Amazon EC2 instance. This represents the projected utilization of a recommendation option had you used that resource during the analyzed period.</p> <p>Compare the utilization metric data of your resource against its projected utilization metric data to determine the performance difference between your current resource and the recommended option.</p> <note> <p>The <code>Cpu</code> and <code>Memory</code> metrics are the only projected utilization metrics returned when you run the <code>GetEC2RecommendationProjectedMetrics</code> action. Additionally, the <code>Memory</code> metric is returned only for resources that have the unified CloudWatch agent installed on them. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/metrics.html#cw-agent">Enabling Memory Utilization with the CloudWatch Agent</a>.</p> </note></p>
@@ -631,6 +873,20 @@ pub struct ProjectedMetric {
     #[serde(rename = "values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<f64>>,
+}
+
+/// <p>A summary of a finding reason code.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct ReasonCodeSummary {
+    /// <p>The name of the finding reason code.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The value of the finding reason code summary.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<f64>,
 }
 
 /// <p>Describes a recommendation export job.</p> <p>Use the <code>DescribeRecommendationExportJobs</code> action to view your recommendation export jobs.</p> <p>Use the <code>ExportAutoScalingGroupRecommendations</code> or <code>ExportEC2InstanceRecommendations</code> actions to request an export of your recommendations.</p>
@@ -757,6 +1013,10 @@ pub struct Summary {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>An array of objects that summarize a finding reason code.</p>
+    #[serde(rename = "reasonCodeSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reason_code_summaries: Option<Vec<ReasonCodeSummary>>,
     /// <p>The value of the recommendation summary.</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -766,11 +1026,11 @@ pub struct Summary {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateEnrollmentStatusRequest {
-    /// <p>Indicates whether to enroll member accounts of the organization if the your account is the management account of an organization.</p>
+    /// <p>Indicates whether to enroll member accounts of the organization if the account is the management account of an organization.</p>
     #[serde(rename = "includeMemberAccounts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_member_accounts: Option<bool>,
-    /// <p>The new enrollment status of the account.</p> <p>Accepted options are <code>Active</code> or <code>Inactive</code>. You will get an error if <code>Pending</code> or <code>Failed</code> are specified.</p>
+    /// <p><p>The new enrollment status of the account.</p> <p>The following status options are available:</p> <ul> <li> <p> <code>Active</code> - Opts in your account to the Compute Optimizer service. Compute Optimizer begins analyzing the configuration and utilization metrics of your AWS resources after you opt in. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/metrics.html">Metrics analyzed by AWS Compute Optimizer</a> in the <i>AWS Compute Optimizer User Guide</i>.</p> </li> <li> <p> <code>Inactive</code> - Opts out your account from the Compute Optimizer service. Your account&#39;s recommendations and related metrics data will be deleted from Compute Optimizer after you opt out.</p> </li> </ul> <note> <p>The <code>Pending</code> and <code>Failed</code> options cannot be used to update the enrollment status of an account. They are returned in the response of a request to update the enrollment status of an account.</p> </note></p>
     #[serde(rename = "status")]
     pub status: String,
 }
@@ -792,11 +1052,11 @@ pub struct UpdateEnrollmentStatusResponse {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UtilizationMetric {
-    /// <p><p>The name of the utilization metric.</p> <p>The following utilization metrics are available:</p> <ul> <li> <p> <code>Cpu</code> - The percentage of allocated EC2 compute units that are currently in use on the instance. This metric identifies the processing power required to run an application on the instance.</p> <p>Depending on the instance type, tools in your operating system can show a lower percentage than CloudWatch when the instance is not allocated a full processor core.</p> <p>Units: Percent</p> </li> <li> <p> <code>Memory</code> - The percentage of memory that is currently in use on the instance. This metric identifies the amount of memory required to run an application on the instance.</p> <p>Units: Percent</p> <note> <p>The <code>Memory</code> metric is returned only for resources that have the unified CloudWatch agent installed on them. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/metrics.html#cw-agent">Enabling Memory Utilization with the CloudWatch Agent</a>.</p> </note> </li> <li> <p> <code>EBS<em>READ</em>OPS<em>PER</em>SECOND</code> - The completed read operations from all EBS volumes attached to the instance in a specified period of time.</p> <p>Unit: Count</p> </li> <li> <p> <code>EBS<em>WRITE</em>OPS<em>PER</em>SECOND</code> - The completed write operations to all EBS volumes attached to the instance in a specified period of time.</p> <p>Unit: Count</p> </li> <li> <p> <code>EBS<em>READ</em>BYTES<em>PER</em>SECOND</code> - The bytes read from all EBS volumes attached to the instance in a specified period of time.</p> <p>Unit: Bytes</p> </li> <li> <p> <code>EBS<em>WRITE</em>BYTES<em>PER</em>SECOND</code> - The bytes written to all EBS volumes attached to the instance in a specified period of time.</p> <p>Unit: Bytes</p> </li> </ul></p>
+    /// <p><p>The name of the utilization metric.</p> <p>The following utilization metrics are available:</p> <ul> <li> <p> <code>Cpu</code> - The percentage of allocated EC2 compute units that are currently in use on the instance. This metric identifies the processing power required to run an application on the instance.</p> <p>Depending on the instance type, tools in your operating system can show a lower percentage than CloudWatch when the instance is not allocated a full processor core.</p> <p>Units: Percent</p> </li> <li> <p> <code>Memory</code> - The percentage of memory that is currently in use on the instance. This metric identifies the amount of memory required to run an application on the instance.</p> <p>Units: Percent</p> <note> <p>The <code>Memory</code> metric is returned only for resources that have the unified CloudWatch agent installed on them. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/metrics.html#cw-agent">Enabling Memory Utilization with the CloudWatch Agent</a>.</p> </note> </li> <li> <p> <code>EBS<em>READ</em>OPS<em>PER</em>SECOND</code> - The completed read operations from all EBS volumes attached to the instance in a specified period of time.</p> <p>Unit: Count</p> </li> <li> <p> <code>EBS<em>WRITE</em>OPS<em>PER</em>SECOND</code> - The completed write operations to all EBS volumes attached to the instance in a specified period of time.</p> <p>Unit: Count</p> </li> <li> <p> <code>EBS<em>READ</em>BYTES<em>PER</em>SECOND</code> - The bytes read from all EBS volumes attached to the instance in a specified period of time.</p> <p>Unit: Bytes</p> </li> <li> <p> <code>EBS<em>WRITE</em>BYTES<em>PER</em>SECOND</code> - The bytes written to all EBS volumes attached to the instance in a specified period of time.</p> <p>Unit: Bytes</p> </li> <li> <p> <code>DISK<em>READ</em>OPS<em>PER</em>SECOND</code> - The completed read operations from all instance store volumes available to the instance in a specified period of time.</p> <p>If there are no instance store volumes, either the value is <code>0</code> or the metric is not reported.</p> </li> <li> <p> <code>DISK<em>WRITE</em>OPS<em>PER</em>SECOND</code> - The completed write operations from all instance store volumes available to the instance in a specified period of time.</p> <p>If there are no instance store volumes, either the value is <code>0</code> or the metric is not reported.</p> </li> <li> <p> <code>DISK<em>READ</em>BYTES<em>PER</em>SECOND</code> - The bytes read from all instance store volumes available to the instance. This metric is used to determine the volume of the data the application reads from the disk of the instance. This can be used to determine the speed of the application.</p> <p>If there are no instance store volumes, either the value is <code>0</code> or the metric is not reported.</p> </li> <li> <p> <code>DISK<em>WRITE</em>BYTES<em>PER</em>SECOND</code> - The bytes written to all instance store volumes available to the instance. This metric is used to determine the volume of the data the application writes onto the disk of the instance. This can be used to determine the speed of the application.</p> <p>If there are no instance store volumes, either the value is <code>0</code> or the metric is not reported.</p> </li> <li> <p> <code>NETWORK<em>IN</em>BYTES<em>PER</em>SECOND</code> - The number of bytes received by the instance on all network interfaces. This metric identifies the volume of incoming network traffic to a single instance.</p> </li> <li> <p> <code>NETWORK<em>OUT</em>BYTES<em>PER</em>SECOND</code> - The number of bytes sent out by the instance on all network interfaces. This metric identifies the volume of outgoing network traffic from a single instance.</p> </li> <li> <p> <code>NETWORK<em>PACKETS</em>IN<em>PER</em>SECOND</code> - The number of packets received by the instance on all network interfaces. This metric identifies the volume of incoming traffic in terms of the number of packets on a single instance.</p> </li> <li> <p> <code>NETWORK<em>PACKETS</em>OUT<em>PER</em>SECOND</code> - The number of packets sent out by the instance on all network interfaces. This metric identifies the volume of outgoing traffic in terms of the number of packets on a single instance.</p> </li> </ul></p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p><p>The statistic of the utilization metric.</p> <p>The following statistics are available:</p> <ul> <li> <p> <code>Average</code> - This is the value of Sum / SampleCount during the specified period, or the average value observed during the specified period.</p> </li> <li> <p> <code>Maximum</code> - The highest value observed during the specified period. Use this value to determine high volumes of activity for your application.</p> </li> </ul></p>
+    /// <p>The statistic of the utilization metric.</p> <p>The Compute Optimizer API, AWS Command Line Interface (AWS CLI), and SDKs return utilization metrics using only the <code>Maximum</code> statistic, which is the highest value observed during the specified period.</p> <p>The Compute Optimizer console displays graphs for some utilization metrics using the <code>Average</code> statistic, which is the value of <code>Sum</code> / <code>SampleCount</code> during the specified period. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/viewing-recommendations.html">Viewing resource recommendations</a> in the <i>AWS Compute Optimizer User Guide</i>. You can also get averaged utilization metric data for your resources using Amazon CloudWatch. For more information, see the <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html">Amazon CloudWatch User Guide</a>.</p>
     #[serde(rename = "statistic")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub statistic: Option<String>,
@@ -848,7 +1108,7 @@ pub struct VolumeRecommendation {
     #[serde(rename = "currentConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub current_configuration: Option<VolumeConfiguration>,
-    /// <p><p>The finding classification for the volume.</p> <p>Findings for volumes include:</p> <ul> <li> <p> <b> <code>NotOptimized</code> </b>—A volume is considered not optimized when AWS Compute Optimizer identifies a recommendation that can provide better performance for your workload.</p> </li> <li> <p> <b> <code>Optimized</code> </b>—An volume is considered optimized when Compute Optimizer determines that the volume is correctly provisioned to run your workload based on the chosen volume type. For optimized resources, Compute Optimizer might recommend a new generation volume type.</p> </li> </ul></p>
+    /// <p><p>The finding classification of the volume.</p> <p>Findings for volumes include:</p> <ul> <li> <p> <b> <code>NotOptimized</code> </b>—A volume is considered not optimized when AWS Compute Optimizer identifies a recommendation that can provide better performance for your workload.</p> </li> <li> <p> <b> <code>Optimized</code> </b>—An volume is considered optimized when Compute Optimizer determines that the volume is correctly provisioned to run your workload based on the chosen volume type. For optimized resources, Compute Optimizer might recommend a new generation volume type.</p> </li> </ul></p>
     #[serde(rename = "finding")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub finding: Option<String>,
@@ -882,7 +1142,7 @@ pub struct VolumeRecommendationOption {
     #[serde(rename = "configuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<VolumeConfiguration>,
-    /// <p>The performance risk of the volume recommendation option.</p> <p>Performance risk is the likelihood of the recommended volume type not meeting the performance requirement of your workload.</p> <p>The lowest performance risk is categorized as <code>0</code>, and the highest as <code>5</code>.</p>
+    /// <p>The performance risk of the volume recommendation option.</p> <p>Performance risk is the likelihood of the recommended volume type meeting the performance requirement of your workload.</p> <p>The value ranges from <code>0</code> to <code>5</code>, with <code>0</code> meaning that the recommended resource is predicted to always provide enough hardware capability. The higher the performance risk is, the more likely you should validate whether the recommendation will meet the performance requirements of your workload before migrating your resource.</p>
     #[serde(rename = "performanceRisk")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub performance_risk: Option<f64>,
@@ -1104,6 +1364,104 @@ impl fmt::Display for ExportAutoScalingGroupRecommendationsError {
     }
 }
 impl Error for ExportAutoScalingGroupRecommendationsError {}
+/// Errors returned by ExportEBSVolumeRecommendations
+#[derive(Debug, PartialEq)]
+pub enum ExportEBSVolumeRecommendationsError {
+    /// <p>You do not have sufficient access to perform this action.</p>
+    AccessDenied(String),
+    /// <p>An internal error has occurred. Try your call again.</p>
+    InternalServer(String),
+    /// <p>An invalid or out-of-range value was supplied for the input parameter.</p>
+    InvalidParameterValue(String),
+    /// <p>The request exceeds a limit of the service.</p>
+    LimitExceeded(String),
+    /// <p>The request must contain either a valid (registered) AWS access key ID or X.509 certificate.</p>
+    MissingAuthenticationToken(String),
+    /// <p>The account is not opted in to AWS Compute Optimizer.</p>
+    OptInRequired(String),
+    /// <p>The request has failed due to a temporary failure of the server.</p>
+    ServiceUnavailable(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
+}
+
+impl ExportEBSVolumeRecommendationsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ExportEBSVolumeRecommendationsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(ExportEBSVolumeRecommendationsError::AccessDenied(
+                        err.msg,
+                    ))
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(
+                        ExportEBSVolumeRecommendationsError::InternalServer(err.msg),
+                    )
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        ExportEBSVolumeRecommendationsError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(
+                        ExportEBSVolumeRecommendationsError::LimitExceeded(err.msg),
+                    )
+                }
+                "MissingAuthenticationToken" => {
+                    return RusotoError::Service(
+                        ExportEBSVolumeRecommendationsError::MissingAuthenticationToken(err.msg),
+                    )
+                }
+                "OptInRequiredException" => {
+                    return RusotoError::Service(
+                        ExportEBSVolumeRecommendationsError::OptInRequired(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        ExportEBSVolumeRecommendationsError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(ExportEBSVolumeRecommendationsError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ExportEBSVolumeRecommendationsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ExportEBSVolumeRecommendationsError::AccessDenied(ref cause) => write!(f, "{}", cause),
+            ExportEBSVolumeRecommendationsError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExportEBSVolumeRecommendationsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExportEBSVolumeRecommendationsError::LimitExceeded(ref cause) => write!(f, "{}", cause),
+            ExportEBSVolumeRecommendationsError::MissingAuthenticationToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExportEBSVolumeRecommendationsError::OptInRequired(ref cause) => write!(f, "{}", cause),
+            ExportEBSVolumeRecommendationsError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExportEBSVolumeRecommendationsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for ExportEBSVolumeRecommendationsError {}
 /// Errors returned by ExportEC2InstanceRecommendations
 #[derive(Debug, PartialEq)]
 pub enum ExportEC2InstanceRecommendationsError {
@@ -1208,6 +1566,114 @@ impl fmt::Display for ExportEC2InstanceRecommendationsError {
     }
 }
 impl Error for ExportEC2InstanceRecommendationsError {}
+/// Errors returned by ExportLambdaFunctionRecommendations
+#[derive(Debug, PartialEq)]
+pub enum ExportLambdaFunctionRecommendationsError {
+    /// <p>You do not have sufficient access to perform this action.</p>
+    AccessDenied(String),
+    /// <p>An internal error has occurred. Try your call again.</p>
+    InternalServer(String),
+    /// <p>An invalid or out-of-range value was supplied for the input parameter.</p>
+    InvalidParameterValue(String),
+    /// <p>The request exceeds a limit of the service.</p>
+    LimitExceeded(String),
+    /// <p>The request must contain either a valid (registered) AWS access key ID or X.509 certificate.</p>
+    MissingAuthenticationToken(String),
+    /// <p>The account is not opted in to AWS Compute Optimizer.</p>
+    OptInRequired(String),
+    /// <p>The request has failed due to a temporary failure of the server.</p>
+    ServiceUnavailable(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
+}
+
+impl ExportLambdaFunctionRecommendationsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<ExportLambdaFunctionRecommendationsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        ExportLambdaFunctionRecommendationsError::AccessDenied(err.msg),
+                    )
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(
+                        ExportLambdaFunctionRecommendationsError::InternalServer(err.msg),
+                    )
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        ExportLambdaFunctionRecommendationsError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(
+                        ExportLambdaFunctionRecommendationsError::LimitExceeded(err.msg),
+                    )
+                }
+                "MissingAuthenticationToken" => {
+                    return RusotoError::Service(
+                        ExportLambdaFunctionRecommendationsError::MissingAuthenticationToken(
+                            err.msg,
+                        ),
+                    )
+                }
+                "OptInRequiredException" => {
+                    return RusotoError::Service(
+                        ExportLambdaFunctionRecommendationsError::OptInRequired(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        ExportLambdaFunctionRecommendationsError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(
+                        ExportLambdaFunctionRecommendationsError::Throttling(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for ExportLambdaFunctionRecommendationsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            ExportLambdaFunctionRecommendationsError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExportLambdaFunctionRecommendationsError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExportLambdaFunctionRecommendationsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExportLambdaFunctionRecommendationsError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExportLambdaFunctionRecommendationsError::MissingAuthenticationToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExportLambdaFunctionRecommendationsError::OptInRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExportLambdaFunctionRecommendationsError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            ExportLambdaFunctionRecommendationsError::Throttling(ref cause) => {
+                write!(f, "{}", cause)
+            }
+        }
+    }
+}
+impl Error for ExportLambdaFunctionRecommendationsError {}
 /// Errors returned by GetAutoScalingGroupRecommendations
 #[derive(Debug, PartialEq)]
 pub enum GetAutoScalingGroupRecommendationsError {
@@ -1686,6 +2152,110 @@ impl fmt::Display for GetEnrollmentStatusError {
     }
 }
 impl Error for GetEnrollmentStatusError {}
+/// Errors returned by GetLambdaFunctionRecommendations
+#[derive(Debug, PartialEq)]
+pub enum GetLambdaFunctionRecommendationsError {
+    /// <p>You do not have sufficient access to perform this action.</p>
+    AccessDenied(String),
+    /// <p>An internal error has occurred. Try your call again.</p>
+    InternalServer(String),
+    /// <p>An invalid or out-of-range value was supplied for the input parameter.</p>
+    InvalidParameterValue(String),
+    /// <p>The request exceeds a limit of the service.</p>
+    LimitExceeded(String),
+    /// <p>The request must contain either a valid (registered) AWS access key ID or X.509 certificate.</p>
+    MissingAuthenticationToken(String),
+    /// <p>The account is not opted in to AWS Compute Optimizer.</p>
+    OptInRequired(String),
+    /// <p>The request has failed due to a temporary failure of the server.</p>
+    ServiceUnavailable(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
+}
+
+impl GetLambdaFunctionRecommendationsError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<GetLambdaFunctionRecommendationsError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "AccessDeniedException" => {
+                    return RusotoError::Service(
+                        GetLambdaFunctionRecommendationsError::AccessDenied(err.msg),
+                    )
+                }
+                "InternalServerException" => {
+                    return RusotoError::Service(
+                        GetLambdaFunctionRecommendationsError::InternalServer(err.msg),
+                    )
+                }
+                "InvalidParameterValueException" => {
+                    return RusotoError::Service(
+                        GetLambdaFunctionRecommendationsError::InvalidParameterValue(err.msg),
+                    )
+                }
+                "LimitExceededException" => {
+                    return RusotoError::Service(
+                        GetLambdaFunctionRecommendationsError::LimitExceeded(err.msg),
+                    )
+                }
+                "MissingAuthenticationToken" => {
+                    return RusotoError::Service(
+                        GetLambdaFunctionRecommendationsError::MissingAuthenticationToken(err.msg),
+                    )
+                }
+                "OptInRequiredException" => {
+                    return RusotoError::Service(
+                        GetLambdaFunctionRecommendationsError::OptInRequired(err.msg),
+                    )
+                }
+                "ServiceUnavailableException" => {
+                    return RusotoError::Service(
+                        GetLambdaFunctionRecommendationsError::ServiceUnavailable(err.msg),
+                    )
+                }
+                "ThrottlingException" => {
+                    return RusotoError::Service(GetLambdaFunctionRecommendationsError::Throttling(
+                        err.msg,
+                    ))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetLambdaFunctionRecommendationsError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetLambdaFunctionRecommendationsError::AccessDenied(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetLambdaFunctionRecommendationsError::InternalServer(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetLambdaFunctionRecommendationsError::InvalidParameterValue(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetLambdaFunctionRecommendationsError::LimitExceeded(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetLambdaFunctionRecommendationsError::MissingAuthenticationToken(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetLambdaFunctionRecommendationsError::OptInRequired(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetLambdaFunctionRecommendationsError::ServiceUnavailable(ref cause) => {
+                write!(f, "{}", cause)
+            }
+            GetLambdaFunctionRecommendationsError::Throttling(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetLambdaFunctionRecommendationsError {}
 /// Errors returned by GetRecommendationSummaries
 #[derive(Debug, PartialEq)]
 pub enum GetRecommendationSummariesError {
@@ -1865,6 +2435,15 @@ pub trait ComputeOptimizer {
         RusotoError<ExportAutoScalingGroupRecommendationsError>,
     >;
 
+    /// <p>Exports optimization recommendations for Amazon EBS volumes.</p> <p>Recommendations are exported in a comma-separated values (.csv) file, and its metadata in a JavaScript Object Notation (.json) file, to an existing Amazon Simple Storage Service (Amazon S3) bucket that you specify. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/exporting-recommendations.html">Exporting Recommendations</a> in the <i>Compute Optimizer User Guide</i>.</p> <p>You can have only one Amazon EBS volume export job in progress per AWS Region.</p>
+    async fn export_ebs_volume_recommendations(
+        &self,
+        input: ExportEBSVolumeRecommendationsRequest,
+    ) -> Result<
+        ExportEBSVolumeRecommendationsResponse,
+        RusotoError<ExportEBSVolumeRecommendationsError>,
+    >;
+
     /// <p>Exports optimization recommendations for Amazon EC2 instances.</p> <p>Recommendations are exported in a comma-separated values (.csv) file, and its metadata in a JavaScript Object Notation (.json) file, to an existing Amazon Simple Storage Service (Amazon S3) bucket that you specify. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/exporting-recommendations.html">Exporting Recommendations</a> in the <i>Compute Optimizer User Guide</i>.</p> <p>You can have only one Amazon EC2 instance export job in progress per AWS Region.</p>
     async fn export_ec2_instance_recommendations(
         &self,
@@ -1872,6 +2451,15 @@ pub trait ComputeOptimizer {
     ) -> Result<
         ExportEC2InstanceRecommendationsResponse,
         RusotoError<ExportEC2InstanceRecommendationsError>,
+    >;
+
+    /// <p>Exports optimization recommendations for AWS Lambda functions.</p> <p>Recommendations are exported in a comma-separated values (.csv) file, and its metadata in a JavaScript Object Notation (.json) file, to an existing Amazon Simple Storage Service (Amazon S3) bucket that you specify. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/exporting-recommendations.html">Exporting Recommendations</a> in the <i>Compute Optimizer User Guide</i>.</p> <p>You can have only one Lambda function export job in progress per AWS Region.</p>
+    async fn export_lambda_function_recommendations(
+        &self,
+        input: ExportLambdaFunctionRecommendationsRequest,
+    ) -> Result<
+        ExportLambdaFunctionRecommendationsResponse,
+        RusotoError<ExportLambdaFunctionRecommendationsError>,
     >;
 
     /// <p>Returns Auto Scaling group recommendations.</p> <p>AWS Compute Optimizer generates recommendations for Amazon EC2 Auto Scaling groups that meet a specific set of requirements. For more information, see the <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/requirements.html">Supported resources and requirements</a> in the <i>AWS Compute Optimizer User Guide</i>.</p>
@@ -1912,13 +2500,22 @@ pub trait ComputeOptimizer {
         &self,
     ) -> Result<GetEnrollmentStatusResponse, RusotoError<GetEnrollmentStatusError>>;
 
-    /// <p>Returns the optimization findings for an account.</p> <p>For example, it returns the number of Amazon EC2 instances in an account that are under-provisioned, over-provisioned, or optimized. It also returns the number of Auto Scaling groups in an account that are not optimized, or optimized.</p>
+    /// <p>Returns AWS Lambda function recommendations.</p> <p>AWS Compute Optimizer generates recommendations for functions that meet a specific set of requirements. For more information, see the <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/requirements.html">Supported resources and requirements</a> in the <i>AWS Compute Optimizer User Guide</i>.</p>
+    async fn get_lambda_function_recommendations(
+        &self,
+        input: GetLambdaFunctionRecommendationsRequest,
+    ) -> Result<
+        GetLambdaFunctionRecommendationsResponse,
+        RusotoError<GetLambdaFunctionRecommendationsError>,
+    >;
+
+    /// <p><p>Returns the optimization findings for an account.</p> <p>It returns the number of:</p> <ul> <li> <p>Amazon EC2 instances in an account that are <code>Underprovisioned</code>, <code>Overprovisioned</code>, or <code>Optimized</code>.</p> </li> <li> <p>Auto Scaling groups in an account that are <code>NotOptimized</code>, or <code>Optimized</code>.</p> </li> <li> <p>Amazon EBS volumes in an account that are <code>NotOptimized</code>, or <code>Optimized</code>.</p> </li> <li> <p>Lambda functions in an account that are <code>NotOptimized</code>, or <code>Optimized</code>.</p> </li> </ul></p>
     async fn get_recommendation_summaries(
         &self,
         input: GetRecommendationSummariesRequest,
     ) -> Result<GetRecommendationSummariesResponse, RusotoError<GetRecommendationSummariesError>>;
 
-    /// <p>Updates the enrollment (opt in) status of an account to the AWS Compute Optimizer service.</p> <p>If the account is a management account of an organization, this action can also be used to enroll member accounts within the organization.</p>
+    /// <p>Updates the enrollment (opt in and opt out) status of an account to the AWS Compute Optimizer service.</p> <p>If the account is a management account of an organization, this action can also be used to enroll member accounts within the organization.</p> <p>You must have the appropriate permissions to opt in to Compute Optimizer, to view its recommendations, and to opt out. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/security-iam.html">Controlling access with AWS Identity and Access Management</a> in the <i>AWS Compute Optimizer User Guide</i>.</p> <p>When you opt in, Compute Optimizer automatically creates a Service-Linked Role in your account to access its data. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/using-service-linked-roles.html">Using Service-Linked Roles for AWS Compute Optimizer</a> in the <i>AWS Compute Optimizer User Guide</i>.</p>
     async fn update_enrollment_status(
         &self,
         input: UpdateEnrollmentStatusRequest,
@@ -2020,6 +2617,31 @@ impl ComputeOptimizer for ComputeOptimizerClient {
             .deserialize::<ExportAutoScalingGroupRecommendationsResponse, _>()
     }
 
+    /// <p>Exports optimization recommendations for Amazon EBS volumes.</p> <p>Recommendations are exported in a comma-separated values (.csv) file, and its metadata in a JavaScript Object Notation (.json) file, to an existing Amazon Simple Storage Service (Amazon S3) bucket that you specify. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/exporting-recommendations.html">Exporting Recommendations</a> in the <i>Compute Optimizer User Guide</i>.</p> <p>You can have only one Amazon EBS volume export job in progress per AWS Region.</p>
+    async fn export_ebs_volume_recommendations(
+        &self,
+        input: ExportEBSVolumeRecommendationsRequest,
+    ) -> Result<
+        ExportEBSVolumeRecommendationsResponse,
+        RusotoError<ExportEBSVolumeRecommendationsError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "ComputeOptimizerService.ExportEBSVolumeRecommendations",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, ExportEBSVolumeRecommendationsError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ExportEBSVolumeRecommendationsResponse, _>()
+    }
+
     /// <p>Exports optimization recommendations for Amazon EC2 instances.</p> <p>Recommendations are exported in a comma-separated values (.csv) file, and its metadata in a JavaScript Object Notation (.json) file, to an existing Amazon Simple Storage Service (Amazon S3) bucket that you specify. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/exporting-recommendations.html">Exporting Recommendations</a> in the <i>Compute Optimizer User Guide</i>.</p> <p>You can have only one Amazon EC2 instance export job in progress per AWS Region.</p>
     async fn export_ec2_instance_recommendations(
         &self,
@@ -2046,6 +2668,34 @@ impl ComputeOptimizer for ComputeOptimizerClient {
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response)
             .deserialize::<ExportEC2InstanceRecommendationsResponse, _>()
+    }
+
+    /// <p>Exports optimization recommendations for AWS Lambda functions.</p> <p>Recommendations are exported in a comma-separated values (.csv) file, and its metadata in a JavaScript Object Notation (.json) file, to an existing Amazon Simple Storage Service (Amazon S3) bucket that you specify. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/exporting-recommendations.html">Exporting Recommendations</a> in the <i>Compute Optimizer User Guide</i>.</p> <p>You can have only one Lambda function export job in progress per AWS Region.</p>
+    async fn export_lambda_function_recommendations(
+        &self,
+        input: ExportLambdaFunctionRecommendationsRequest,
+    ) -> Result<
+        ExportLambdaFunctionRecommendationsResponse,
+        RusotoError<ExportLambdaFunctionRecommendationsError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "ComputeOptimizerService.ExportLambdaFunctionRecommendations",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                ExportLambdaFunctionRecommendationsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<ExportLambdaFunctionRecommendationsResponse, _>()
     }
 
     /// <p>Returns Auto Scaling group recommendations.</p> <p>AWS Compute Optimizer generates recommendations for Amazon EC2 Auto Scaling groups that meet a specific set of requirements. For more information, see the <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/requirements.html">Supported resources and requirements</a> in the <i>AWS Compute Optimizer User Guide</i>.</p>
@@ -2171,7 +2821,35 @@ impl ComputeOptimizer for ComputeOptimizerClient {
         proto::json::ResponsePayload::new(&response).deserialize::<GetEnrollmentStatusResponse, _>()
     }
 
-    /// <p>Returns the optimization findings for an account.</p> <p>For example, it returns the number of Amazon EC2 instances in an account that are under-provisioned, over-provisioned, or optimized. It also returns the number of Auto Scaling groups in an account that are not optimized, or optimized.</p>
+    /// <p>Returns AWS Lambda function recommendations.</p> <p>AWS Compute Optimizer generates recommendations for functions that meet a specific set of requirements. For more information, see the <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/requirements.html">Supported resources and requirements</a> in the <i>AWS Compute Optimizer User Guide</i>.</p>
+    async fn get_lambda_function_recommendations(
+        &self,
+        input: GetLambdaFunctionRecommendationsRequest,
+    ) -> Result<
+        GetLambdaFunctionRecommendationsResponse,
+        RusotoError<GetLambdaFunctionRecommendationsError>,
+    > {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header(
+            "x-amz-target",
+            "ComputeOptimizerService.GetLambdaFunctionRecommendations",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(
+                request,
+                GetLambdaFunctionRecommendationsError::from_response,
+            )
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response)
+            .deserialize::<GetLambdaFunctionRecommendationsResponse, _>()
+    }
+
+    /// <p><p>Returns the optimization findings for an account.</p> <p>It returns the number of:</p> <ul> <li> <p>Amazon EC2 instances in an account that are <code>Underprovisioned</code>, <code>Overprovisioned</code>, or <code>Optimized</code>.</p> </li> <li> <p>Auto Scaling groups in an account that are <code>NotOptimized</code>, or <code>Optimized</code>.</p> </li> <li> <p>Amazon EBS volumes in an account that are <code>NotOptimized</code>, or <code>Optimized</code>.</p> </li> <li> <p>Lambda functions in an account that are <code>NotOptimized</code>, or <code>Optimized</code>.</p> </li> </ul></p>
     async fn get_recommendation_summaries(
         &self,
         input: GetRecommendationSummariesRequest,
@@ -2194,7 +2872,7 @@ impl ComputeOptimizer for ComputeOptimizerClient {
             .deserialize::<GetRecommendationSummariesResponse, _>()
     }
 
-    /// <p>Updates the enrollment (opt in) status of an account to the AWS Compute Optimizer service.</p> <p>If the account is a management account of an organization, this action can also be used to enroll member accounts within the organization.</p>
+    /// <p>Updates the enrollment (opt in and opt out) status of an account to the AWS Compute Optimizer service.</p> <p>If the account is a management account of an organization, this action can also be used to enroll member accounts within the organization.</p> <p>You must have the appropriate permissions to opt in to Compute Optimizer, to view its recommendations, and to opt out. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/security-iam.html">Controlling access with AWS Identity and Access Management</a> in the <i>AWS Compute Optimizer User Guide</i>.</p> <p>When you opt in, Compute Optimizer automatically creates a Service-Linked Role in your account to access its data. For more information, see <a href="https://docs.aws.amazon.com/compute-optimizer/latest/ug/using-service-linked-roles.html">Using Service-Linked Roles for AWS Compute Optimizer</a> in the <i>AWS Compute Optimizer User Guide</i>.</p>
     async fn update_enrollment_status(
         &self,
         input: UpdateEnrollmentStatusRequest,

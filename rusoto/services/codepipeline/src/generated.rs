@@ -439,6 +439,69 @@ pub struct ActionType {
     pub settings: Option<ActionTypeSettings>,
 }
 
+/// <p>Information about parameters for artifacts associated with the action type, such as the minimum and maximum artifacts allowed.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ActionTypeArtifactDetails {
+    /// <p>The maximum number of artifacts that can be used with the actiontype. For example, you should specify a minimum and maximum of zero input artifacts for an action type with a category of <code>source</code>.</p>
+    #[serde(rename = "maximumCount")]
+    pub maximum_count: i64,
+    /// <p>The minimum number of artifacts that can be used with the action type. For example, you should specify a minimum and maximum of zero input artifacts for an action type with a category of <code>source</code>.</p>
+    #[serde(rename = "minimumCount")]
+    pub minimum_count: i64,
+}
+
+/// <p>The parameters for the action type definition that are provided when the action type is created or updated.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ActionTypeDeclaration {
+    /// <p>The description for the action type to be updated.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Information about the executor for an action type that was created with any supported integration model.</p>
+    #[serde(rename = "executor")]
+    pub executor: ActionTypeExecutor,
+    /// <p>The action category, owner, provider, and version of the action type to be updated.</p>
+    #[serde(rename = "id")]
+    pub id: ActionTypeIdentifier,
+    /// <p>Details for the artifacts, such as application files, to be worked on by the action. For example, the minimum and maximum number of input artifacts allowed.</p>
+    #[serde(rename = "inputArtifactDetails")]
+    pub input_artifact_details: ActionTypeArtifactDetails,
+    /// <p>Details for the output artifacts, such as a built application, that are the result of the action. For example, the minimum and maximum number of output artifacts allowed.</p>
+    #[serde(rename = "outputArtifactDetails")]
+    pub output_artifact_details: ActionTypeArtifactDetails,
+    /// <p>Details identifying the accounts with permissions to use the action type.</p>
+    #[serde(rename = "permissions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permissions: Option<ActionTypePermissions>,
+    /// <p>The properties of the action type to be updated.</p>
+    #[serde(rename = "properties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub properties: Option<Vec<ActionTypeProperty>>,
+    /// <p>The links associated with the action type to be updated.</p>
+    #[serde(rename = "urls")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub urls: Option<ActionTypeUrls>,
+}
+
+/// <p>The action engine, or executor, for an action type created for a provider, where the action is to be used by customers of the provider. The action engine is associated with the model used to create and update the action, such as the Lambda integration model.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ActionTypeExecutor {
+    /// <p>The action configuration properties for the action type. These properties are specified in the action definition when the action type is created.</p>
+    #[serde(rename = "configuration")]
+    pub configuration: ExecutorConfiguration,
+    /// <p>The timeout in seconds for the job. An action execution can have multiple jobs. This is the timeout for a single job, not the entire action execution.</p>
+    #[serde(rename = "jobTimeout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_timeout: Option<i64>,
+    /// <p><p>The policy statement that specifies the permissions in the CodePipeline customer’s account that are needed to successfully run an action.</p> <p>To grant permission to another account, specify the account ID as the Principal, a domain-style identifier defined by the service, for example <code>codepipeline.amazonaws.com</code>.</p> <note> <p>The size of the passed JSON policy document cannot exceed 2048 characters.</p> </note></p>
+    #[serde(rename = "policyStatementsTemplate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_statements_template: Option<String>,
+    /// <p>The integration model used to create and update the action type, <code>Lambda</code> or <code>JobWorker</code>. </p>
+    #[serde(rename = "type")]
+    pub type_: String,
+}
+
 /// <p>Represents information about an action type.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct ActionTypeId {
@@ -454,6 +517,56 @@ pub struct ActionTypeId {
     /// <p>A string that describes the action version.</p>
     #[serde(rename = "version")]
     pub version: String,
+}
+
+/// <p>Specifies the category, owner, provider, and version of the action type.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ActionTypeIdentifier {
+    /// <p><p>Defines what kind of action can be taken in the stage, one of the following:</p> <ul> <li> <p> <code>Source</code> </p> </li> <li> <p> <code>Build</code> </p> </li> <li> <p> <code>Test</code> </p> </li> <li> <p> <code>Deploy</code> </p> </li> <li> <p> <code>Approval</code> </p> </li> <li> <p> <code>Invoke</code> </p> </li> </ul></p>
+    #[serde(rename = "category")]
+    pub category: String,
+    /// <p>The creator of the action type being called: <code>AWS</code> or <code>ThirdParty</code>.</p>
+    #[serde(rename = "owner")]
+    pub owner: String,
+    /// <p>The provider of the action type being called. The provider name is supplied when the action type is created.</p>
+    #[serde(rename = "provider")]
+    pub provider: String,
+    /// <p>A string that describes the action type version.</p>
+    #[serde(rename = "version")]
+    pub version: String,
+}
+
+/// <p>Details identifying the users with permissions to use the action type.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ActionTypePermissions {
+    /// <p>A list of AWS account IDs with access to use the action type in their pipelines.</p>
+    #[serde(rename = "allowedAccounts")]
+    pub allowed_accounts: Vec<String>,
+}
+
+/// <p>Represents information about each property specified in the action configuration, such as the description and key name that display for the customer using the action type.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ActionTypeProperty {
+    /// <p>The description of the property that is displayed to users.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Whether the configuration property is a key.</p>
+    #[serde(rename = "key")]
+    pub key: bool,
+    /// <p>The property name that is displayed to users.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+    /// <p>Whether to omit the field value entered by the customer in the log. If <code>true</code>, the value is not saved in CloudTrail logs for the action execution.</p>
+    #[serde(rename = "noEcho")]
+    pub no_echo: bool,
+    /// <p>Whether the configuration property is an optional value.</p>
+    #[serde(rename = "optional")]
+    pub optional: bool,
+    /// <p>Indicates that the property is used with polling. An action type can have up to one queryable property. If it has one, that property must be both required and not secret.</p>
+    #[serde(rename = "queryable")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub queryable: Option<bool>,
 }
 
 /// <p>Returns information about the settings for an action type.</p>
@@ -475,6 +588,27 @@ pub struct ActionTypeSettings {
     #[serde(rename = "thirdPartyConfigurationUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub third_party_configuration_url: Option<String>,
+}
+
+/// <p>Returns information about URLs for web pages that display to customers as links on the pipeline view, such as an external configuration page for the action type.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ActionTypeUrls {
+    /// <p>The URL returned to the CodePipeline console that contains a link to the page where customers can configure the external action.</p>
+    #[serde(rename = "configurationUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration_url: Option<String>,
+    /// <p>The URL returned to the CodePipeline console that provides a deep link to the resources of the external system, such as a status page. This link is provided as part of the action display in the pipeline.</p>
+    #[serde(rename = "entityUrlTemplate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entity_url_template: Option<String>,
+    /// <p>The link to an execution page for the action type in progress. For example, for a CodeDeploy action, this link is shown on the pipeline view page in the CodePipeline console, and it links to a CodeDeploy status page.</p>
+    #[serde(rename = "executionUrlTemplate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execution_url_template: Option<String>,
+    /// <p>The URL returned to the CodePipeline console that contains a link to the page where customers can update or change the configuration of the external action.</p>
+    #[serde(rename = "revisionUrlTemplate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision_url_template: Option<String>,
 }
 
 /// <p>Represents information about the result of an approval request.</p>
@@ -834,6 +968,19 @@ pub struct ExecutionTrigger {
     pub trigger_type: Option<String>,
 }
 
+/// <p>The action engine, or executor, related to the supported integration model used to create and update the action type. The available executor types are <code>Lambda</code> and <code>JobWorker</code>.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct ExecutorConfiguration {
+    /// <p>Details about the <code>JobWorker</code> executor of the action type.</p>
+    #[serde(rename = "jobWorkerExecutorConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_worker_executor_configuration: Option<JobWorkerExecutorConfiguration>,
+    /// <p>Details about the <code>Lambda</code> executor of the action type.</p>
+    #[serde(rename = "lambdaExecutorConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lambda_executor_configuration: Option<LambdaExecutorConfiguration>,
+}
+
 /// <p>Represents information about failure details.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
@@ -848,6 +995,32 @@ pub struct FailureDetails {
     /// <p>The type of the failure.</p>
     #[serde(rename = "type")]
     pub type_: String,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct GetActionTypeInput {
+    /// <p><p>Defines what kind of action can be taken in the stage. The following are the valid values:</p> <ul> <li> <p> <code>Source</code> </p> </li> <li> <p> <code>Build</code> </p> </li> <li> <p> <code>Test</code> </p> </li> <li> <p> <code>Deploy</code> </p> </li> <li> <p> <code>Approval</code> </p> </li> <li> <p> <code>Invoke</code> </p> </li> </ul></p>
+    #[serde(rename = "category")]
+    pub category: String,
+    /// <p>The creator of an action type that was created with any supported integration model. There are two valid values: <code>AWS</code> and <code>ThirdParty</code>.</p>
+    #[serde(rename = "owner")]
+    pub owner: String,
+    /// <p>The provider of the action type being called. The provider name is specified when the action type is created.</p>
+    #[serde(rename = "provider")]
+    pub provider: String,
+    /// <p>A string that describes the action type version.</p>
+    #[serde(rename = "version")]
+    pub version: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct GetActionTypeOutput {
+    /// <p>The action type information for the requested action type, such as the action type ID.</p>
+    #[serde(rename = "actionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_type: Option<ActionTypeDeclaration>,
 }
 
 /// <p>Represents the input of a <code>GetJobDetails</code> action.</p>
@@ -1061,6 +1234,27 @@ pub struct JobDetails {
     pub id: Option<String>,
 }
 
+/// <p>Details about the polling configuration for the <code>JobWorker</code> action engine, or executor.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct JobWorkerExecutorConfiguration {
+    /// <p>The accounts in which the job worker is configured and might poll for jobs as part of the action execution.</p>
+    #[serde(rename = "pollingAccounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub polling_accounts: Option<Vec<String>>,
+    /// <p>The service Principals in which the job worker is configured and might poll for jobs as part of the action execution.</p>
+    #[serde(rename = "pollingServicePrincipals")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub polling_service_principals: Option<Vec<String>>,
+}
+
+/// <p>Details about the configuration for the <code>Lambda</code> action engine, or executor.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
+pub struct LambdaExecutorConfiguration {
+    /// <p>The ARN of the Lambda function used by the action engine.</p>
+    #[serde(rename = "lambdaFunctionArn")]
+    pub lambda_function_arn: String,
+}
+
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListActionExecutionsInput {
@@ -1106,6 +1300,10 @@ pub struct ListActionTypesInput {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>The Region to filter on for the list of action types.</p>
+    #[serde(rename = "regionFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub region_filter: Option<String>,
 }
 
 /// <p>Represents the output of a <code>ListActionTypes</code> action.</p>
@@ -1156,6 +1354,10 @@ pub struct ListPipelineExecutionsOutput {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListPipelinesInput {
+    /// <p>The maximum number of pipelines to return in a single call. To retrieve the remaining pipelines, make another call with the returned nextToken value. The minimum value you can specify is 1. The maximum accepted value is 1000.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
     /// <p>An identifier that was returned from the previous list pipelines call. It can be used to return the next set of pipelines in the list.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1343,10 +1545,14 @@ pub struct PipelineExecution {
     #[serde(rename = "pipelineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipeline_version: Option<i64>,
-    /// <p><p>The status of the pipeline execution.</p> <ul> <li> <p>InProgress: The pipeline execution is currently running.</p> </li> <li> <p>Stopped: The pipeline execution was manually stopped. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts.html#concepts-executions-stopped">Stopped Executions</a>.</p> </li> <li> <p>Stopping: The pipeline execution received a request to be manually stopped. Depending on the selected stop mode, the execution is either completing or abandoning in-progress actions. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts.html#concepts-executions-stopped">Stopped Executions</a>.</p> </li> <li> <p>Succeeded: The pipeline execution was completed successfully. </p> </li> <li> <p>Superseded: While this pipeline execution was waiting for the next stage to be completed, a newer pipeline execution advanced and continued through the pipeline instead. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts.html#concepts-superseded">Superseded Executions</a>.</p> </li> <li> <p>Failed: The pipeline execution was not completed successfully.</p> </li> </ul></p>
+    /// <p><p>The status of the pipeline execution.</p> <ul> <li> <p>Cancelled: The pipeline’s definition was updated before the pipeline execution could be completed.</p> </li> <li> <p>InProgress: The pipeline execution is currently running.</p> </li> <li> <p>Stopped: The pipeline execution was manually stopped. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts.html#concepts-executions-stopped">Stopped Executions</a>.</p> </li> <li> <p>Stopping: The pipeline execution received a request to be manually stopped. Depending on the selected stop mode, the execution is either completing or abandoning in-progress actions. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts.html#concepts-executions-stopped">Stopped Executions</a>.</p> </li> <li> <p>Succeeded: The pipeline execution was completed successfully. </p> </li> <li> <p>Superseded: While this pipeline execution was waiting for the next stage to be completed, a newer pipeline execution advanced and continued through the pipeline instead. For more information, see <a href="https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts.html#concepts-superseded">Superseded Executions</a>.</p> </li> <li> <p>Failed: The pipeline execution was not completed successfully.</p> </li> </ul></p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+    /// <p>A summary that contains a description of the pipeline execution status.</p>
+    #[serde(rename = "statusSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_summary: Option<String>,
 }
 
 /// <p>Summary information about a pipeline execution.</p>
@@ -1753,7 +1959,7 @@ pub struct StageExecution {
     /// <p>The ID of the pipeline execution associated with the stage.</p>
     #[serde(rename = "pipelineExecutionId")]
     pub pipeline_execution_id: String,
-    /// <p>The status of the stage, or for a completed stage, the last status of the stage.</p>
+    /// <p><p>The status of the stage, or for a completed stage, the last status of the stage.</p> <note> <p>A status of cancelled means that the pipeline’s definition was updated before the stage execution could be completed.</p> </note></p>
     #[serde(rename = "status")]
     pub status: String,
 }
@@ -1976,6 +2182,14 @@ pub struct UntagResourceInput {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct UntagResourceOutput {}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateActionTypeInput {
+    /// <p>The action type definition for the action type to be updated.</p>
+    #[serde(rename = "actionType")]
+    pub action_type: ActionTypeDeclaration,
+}
 
 /// <p>Represents the input of an <code>UpdatePipeline</code> action.</p>
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
@@ -2480,6 +2694,36 @@ impl fmt::Display for EnableStageTransitionError {
     }
 }
 impl Error for EnableStageTransitionError {}
+/// Errors returned by GetActionType
+#[derive(Debug, PartialEq)]
+pub enum GetActionTypeError {
+    /// <p>The specified action type cannot be found.</p>
+    ActionTypeNotFound(String),
+}
+
+impl GetActionTypeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<GetActionTypeError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ActionTypeNotFoundException" => {
+                    return RusotoError::Service(GetActionTypeError::ActionTypeNotFound(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for GetActionTypeError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            GetActionTypeError::ActionTypeNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for GetActionTypeError {}
 /// Errors returned by GetJobDetails
 #[derive(Debug, PartialEq)]
 pub enum GetJobDetailsError {
@@ -3608,6 +3852,42 @@ impl fmt::Display for UntagResourceError {
     }
 }
 impl Error for UntagResourceError {}
+/// Errors returned by UpdateActionType
+#[derive(Debug, PartialEq)]
+pub enum UpdateActionTypeError {
+    /// <p>The specified action type cannot be found.</p>
+    ActionTypeNotFound(String),
+    /// <p>The request failed because of an unknown error, exception, or failure.</p>
+    RequestFailed(String),
+}
+
+impl UpdateActionTypeError {
+    pub fn from_response(res: BufferedHttpResponse) -> RusotoError<UpdateActionTypeError> {
+        if let Some(err) = proto::json::Error::parse(&res) {
+            match err.typ.as_str() {
+                "ActionTypeNotFoundException" => {
+                    return RusotoError::Service(UpdateActionTypeError::ActionTypeNotFound(err.msg))
+                }
+                "RequestFailedException" => {
+                    return RusotoError::Service(UpdateActionTypeError::RequestFailed(err.msg))
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateActionTypeError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateActionTypeError::ActionTypeNotFound(ref cause) => write!(f, "{}", cause),
+            UpdateActionTypeError::RequestFailed(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateActionTypeError {}
 /// Errors returned by UpdatePipeline
 #[derive(Debug, PartialEq)]
 pub enum UpdatePipelineError {
@@ -3733,6 +4013,12 @@ pub trait CodePipeline {
         &self,
         input: EnableStageTransitionInput,
     ) -> Result<(), RusotoError<EnableStageTransitionError>>;
+
+    /// <p>Returns information about an action type created for an external provider, where the action is to be used by customers of the external provider. The action can be created with any supported integration model.</p>
+    async fn get_action_type(
+        &self,
+        input: GetActionTypeInput,
+    ) -> Result<GetActionTypeOutput, RusotoError<GetActionTypeError>>;
 
     /// <p><p>Returns information about a job. Used for custom actions only.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the S3 bucket used to store artifacts for the pipeline, if the action requires access to that S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>
     async fn get_job_details(
@@ -3889,6 +4175,12 @@ pub trait CodePipeline {
         &self,
         input: UntagResourceInput,
     ) -> Result<UntagResourceOutput, RusotoError<UntagResourceError>>;
+
+    /// <p>Updates an action type that was created with any supported integration model, where the action type is to be used by customers of the action type provider. Use a JSON file with the action definition and <code>UpdateActionType</code> to provide the full structure.</p>
+    async fn update_action_type(
+        &self,
+        input: UpdateActionTypeInput,
+    ) -> Result<(), RusotoError<UpdateActionTypeError>>;
 
     /// <p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure and <code>UpdatePipeline</code> to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>
     async fn update_pipeline(
@@ -4134,6 +4426,24 @@ impl CodePipeline for CodePipelineClient {
             .await?;
         std::mem::drop(response);
         Ok(())
+    }
+
+    /// <p>Returns information about an action type created for an external provider, where the action is to be used by customers of the external provider. The action can be created with any supported integration model.</p>
+    async fn get_action_type(
+        &self,
+        input: GetActionTypeInput,
+    ) -> Result<GetActionTypeOutput, RusotoError<GetActionTypeError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "CodePipeline_20150709.GetActionType");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, GetActionTypeError::from_response)
+            .await?;
+        let mut response = response;
+        let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+        proto::json::ResponsePayload::new(&response).deserialize::<GetActionTypeOutput, _>()
     }
 
     /// <p><p>Returns information about a job. Used for custom actions only.</p> <important> <p>When this API is called, AWS CodePipeline returns temporary credentials for the S3 bucket used to store artifacts for the pipeline, if the action requires access to that S3 bucket for input or output artifacts. This API also returns any secret values defined for the action.</p> </important></p>
@@ -4627,6 +4937,23 @@ impl CodePipeline for CodePipelineClient {
         let mut response = response;
         let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
         proto::json::ResponsePayload::new(&response).deserialize::<UntagResourceOutput, _>()
+    }
+
+    /// <p>Updates an action type that was created with any supported integration model, where the action type is to be used by customers of the action type provider. Use a JSON file with the action definition and <code>UpdateActionType</code> to provide the full structure.</p>
+    async fn update_action_type(
+        &self,
+        input: UpdateActionTypeInput,
+    ) -> Result<(), RusotoError<UpdateActionTypeError>> {
+        let mut request = self.new_signed_request("POST", "/");
+        request.add_header("x-amz-target", "CodePipeline_20150709.UpdateActionType");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded));
+
+        let response = self
+            .sign_and_dispatch(request, UpdateActionTypeError::from_response)
+            .await?;
+        std::mem::drop(response);
+        Ok(())
     }
 
     /// <p>Updates a specified pipeline with edits or changes to its structure. Use a JSON file with the pipeline structure and <code>UpdatePipeline</code> to provide the full structure of the pipeline. Updating the pipeline increases the version number of the pipeline by 1.</p>

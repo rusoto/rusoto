@@ -53,6 +53,10 @@ pub struct CancelChangeSetResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct Change {
+    /// <p>Optional name for the change.</p>
+    #[serde(rename = "ChangeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub change_name: Option<String>,
     /// <p>Change types are single string values that describe your intention for the change. Each change type is unique for each <code>EntityType</code> provided in the change's scope.</p>
     #[serde(rename = "ChangeType")]
     pub change_type: String,
@@ -106,6 +110,10 @@ pub struct ChangeSetSummaryListItem {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ChangeSummary {
+    /// <p>Optional name for the change.</p>
+    #[serde(rename = "ChangeName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub change_name: Option<String>,
     /// <p>The type of the change.</p>
     #[serde(rename = "ChangeType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -212,7 +220,7 @@ pub struct DescribeEntityResponse {
     pub last_modified_date: Option<String>,
 }
 
-/// <p>A product entity contains data that describes your product, its supported features, and how it can be used or launched by your customer. </p>
+/// <p>An entity contains data that describes your product, its supported features, and how it can be used or launched by your customer. </p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct Entity {
     /// <p>The identifier for the entity.</p>
@@ -744,7 +752,7 @@ pub trait MarketplaceCatalog {
         input: ListEntitiesRequest,
     ) -> Result<ListEntitiesResponse, RusotoError<ListEntitiesError>>;
 
-    /// <p>This operation allows you to request changes for your entities. Within a single ChangeSet, you cannot start the same change type against the same entity multiple times. Additionally, when a ChangeSet is running, all the entities targeted by the different changes are locked until the ChangeSet has completed (either succeeded, cancelled, or failed). If you try to start a ChangeSet containing a change against an entity that is already locked, you will receive a <code>ResourceInUseException</code>.</p> <p>For example, you cannot start the ChangeSet described in the <a href="https://docs.aws.amazon.com/marketplace-catalog/latest/api-reference/API_StartChangeSet.html#API_StartChangeSet_Examples">example</a> below because it contains two changes to execute the same change type (<code>AddRevisions</code>) against the same entity (<code>entity-id@1)</code>.</p>
+    /// <p>This operation allows you to request changes for your entities. Within a single ChangeSet, you cannot start the same change type against the same entity multiple times. Additionally, when a ChangeSet is running, all the entities targeted by the different changes are locked until the ChangeSet has completed (either succeeded, cancelled, or failed). If you try to start a ChangeSet containing a change against an entity that is already locked, you will receive a <code>ResourceInUseException</code>.</p> <p>For example, you cannot start the ChangeSet described in the <a href="https://docs.aws.amazon.com/marketplace-catalog/latest/api-reference/API_StartChangeSet.html#API_StartChangeSet_Examples">example</a> later in this topic, because it contains two changes to execute the same change type (<code>AddRevisions</code>) against the same entity (<code>entity-id@1)</code>.</p> <p>For more information about working with change sets, see <a href="https://docs.aws.amazon.com/marketplace-catalog/latest/api-reference/welcome.html#working-with-change-sets"> Working with change sets</a>.</p>
     async fn start_change_set(
         &self,
         input: StartChangeSetRequest,
@@ -960,7 +968,7 @@ impl MarketplaceCatalog for MarketplaceCatalogClient {
         }
     }
 
-    /// <p>This operation allows you to request changes for your entities. Within a single ChangeSet, you cannot start the same change type against the same entity multiple times. Additionally, when a ChangeSet is running, all the entities targeted by the different changes are locked until the ChangeSet has completed (either succeeded, cancelled, or failed). If you try to start a ChangeSet containing a change against an entity that is already locked, you will receive a <code>ResourceInUseException</code>.</p> <p>For example, you cannot start the ChangeSet described in the <a href="https://docs.aws.amazon.com/marketplace-catalog/latest/api-reference/API_StartChangeSet.html#API_StartChangeSet_Examples">example</a> below because it contains two changes to execute the same change type (<code>AddRevisions</code>) against the same entity (<code>entity-id@1)</code>.</p>
+    /// <p>This operation allows you to request changes for your entities. Within a single ChangeSet, you cannot start the same change type against the same entity multiple times. Additionally, when a ChangeSet is running, all the entities targeted by the different changes are locked until the ChangeSet has completed (either succeeded, cancelled, or failed). If you try to start a ChangeSet containing a change against an entity that is already locked, you will receive a <code>ResourceInUseException</code>.</p> <p>For example, you cannot start the ChangeSet described in the <a href="https://docs.aws.amazon.com/marketplace-catalog/latest/api-reference/API_StartChangeSet.html#API_StartChangeSet_Examples">example</a> later in this topic, because it contains two changes to execute the same change type (<code>AddRevisions</code>) against the same entity (<code>entity-id@1)</code>.</p> <p>For more information about working with change sets, see <a href="https://docs.aws.amazon.com/marketplace-catalog/latest/api-reference/welcome.html#working-with-change-sets"> Working with change sets</a>.</p>
     #[allow(unused_mut)]
     async fn start_change_set(
         &self,

@@ -31,7 +31,7 @@ pub struct CancelJournalKinesisStreamRequest {
     /// <p>The name of the ledger.</p>
     #[serde(rename = "LedgerName")]
     pub ledger_name: String,
-    /// <p>The unique ID that QLDB assigns to each QLDB journal stream.</p>
+    /// <p>The UUID (represented in Base62-encoded text) of the QLDB journal stream to be canceled.</p>
     #[serde(rename = "StreamId")]
     pub stream_id: String,
 }
@@ -39,7 +39,7 @@ pub struct CancelJournalKinesisStreamRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct CancelJournalKinesisStreamResponse {
-    /// <p>The unique ID that QLDB assigns to each QLDB journal stream.</p>
+    /// <p>The UUID (Base62-encoded text) of the canceled QLDB journal stream.</p>
     #[serde(rename = "StreamId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_id: Option<String>,
@@ -48,14 +48,14 @@ pub struct CancelJournalKinesisStreamResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct CreateLedgerRequest {
-    /// <p>The flag that prevents a ledger from being deleted by any user. If not provided on ledger creation, this feature is enabled (<code>true</code>) by default.</p> <p>If deletion protection is enabled, you must first disable it before you can delete the ledger using the QLDB API or the AWS Command Line Interface (AWS CLI). You can disable it by calling the <code>UpdateLedger</code> operation to set the flag to <code>false</code>. The QLDB console disables deletion protection for you when you use it to delete a ledger.</p>
+    /// <p>The flag that prevents a ledger from being deleted by any user. If not provided on ledger creation, this feature is enabled (<code>true</code>) by default.</p> <p>If deletion protection is enabled, you must first disable it before you can delete the ledger. You can disable it by calling the <code>UpdateLedger</code> operation to set the flag to <code>false</code>.</p>
     #[serde(rename = "DeletionProtection")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deletion_protection: Option<bool>,
     /// <p>The name of the ledger that you want to create. The name must be unique among all of your ledgers in the current AWS Region.</p> <p>Naming constraints for ledger names are defined in <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/limits.html#limits.naming">Quotas in Amazon QLDB</a> in the <i>Amazon QLDB Developer Guide</i>.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The permissions mode to assign to the ledger that you want to create.</p>
+    /// <p><p>The permissions mode to assign to the ledger that you want to create. This parameter can have one of the following values:</p> <ul> <li> <p> <code>ALLOW<em>ALL</code>: A legacy permissions mode that enables access control with API-level granularity for ledgers.</p> <p>This mode allows users who have the <code>SendCommand</code> API permission for this ledger to run all PartiQL commands (hence, <code>ALLOW</em>ALL</code>) on any tables in the specified ledger. This mode disregards any table-level or command-level IAM permissions policies that you create for the ledger.</p> </li> <li> <p> <code>STANDARD</code>: (<i>Recommended</i>) A permissions mode that enables access control with finer granularity for ledgers, tables, and PartiQL commands.</p> <p>By default, this mode denies all user requests to run any PartiQL commands on any tables in this ledger. To allow PartiQL commands to run, you must create IAM permissions policies for specific table resources and PartiQL actions, in addition to the <code>SendCommand</code> API permission for the ledger. For information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/getting-started-standard-mode.html">Getting started with the standard permissions mode</a> in the <i>Amazon QLDB Developer Guide</i>.</p> </li> </ul> <note> <p>We strongly recommend using the <code>STANDARD</code> permissions mode to maximize the security of your ledger data.</p> </note></p>
     #[serde(rename = "PermissionsMode")]
     pub permissions_mode: String,
     /// <p>The key-value pairs to add as tags to the ledger that you want to create. Tag keys are case sensitive. Tag values are case sensitive and can be null.</p>
@@ -75,7 +75,7 @@ pub struct CreateLedgerResponse {
     #[serde(rename = "CreationDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date_time: Option<f64>,
-    /// <p>The flag that prevents a ledger from being deleted by any user. If not provided on ledger creation, this feature is enabled (<code>true</code>) by default.</p> <p>If deletion protection is enabled, you must first disable it before you can delete the ledger using the QLDB API or the AWS Command Line Interface (AWS CLI). You can disable it by calling the <code>UpdateLedger</code> operation to set the flag to <code>false</code>. The QLDB console disables deletion protection for you when you use it to delete a ledger.</p>
+    /// <p>The flag that prevents a ledger from being deleted by any user. If not provided on ledger creation, this feature is enabled (<code>true</code>) by default.</p> <p>If deletion protection is enabled, you must first disable it before you can delete the ledger. You can disable it by calling the <code>UpdateLedger</code> operation to set the flag to <code>false</code>.</p>
     #[serde(rename = "DeletionProtection")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deletion_protection: Option<bool>,
@@ -83,6 +83,10 @@ pub struct CreateLedgerResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The permissions mode of the ledger that you created.</p>
+    #[serde(rename = "PermissionsMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permissions_mode: Option<String>,
     /// <p>The current status of the ledger.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -103,7 +107,7 @@ pub struct DescribeJournalKinesisStreamRequest {
     /// <p>The name of the ledger.</p>
     #[serde(rename = "LedgerName")]
     pub ledger_name: String,
-    /// <p>The unique ID that QLDB assigns to each QLDB journal stream.</p>
+    /// <p>The UUID (represented in Base62-encoded text) of the QLDB journal stream to describe.</p>
     #[serde(rename = "StreamId")]
     pub stream_id: String,
 }
@@ -120,7 +124,7 @@ pub struct DescribeJournalKinesisStreamResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct DescribeJournalS3ExportRequest {
-    /// <p>The unique ID of the journal export job that you want to describe.</p>
+    /// <p>The UUID (represented in Base62-encoded text) of the journal export job to describe.</p>
     #[serde(rename = "ExportId")]
     pub export_id: String,
     /// <p>The name of the ledger.</p>
@@ -155,7 +159,7 @@ pub struct DescribeLedgerResponse {
     #[serde(rename = "CreationDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date_time: Option<f64>,
-    /// <p>The flag that prevents a ledger from being deleted by any user. If not provided on ledger creation, this feature is enabled (<code>true</code>) by default.</p> <p>If deletion protection is enabled, you must first disable it before you can delete the ledger using the QLDB API or the AWS Command Line Interface (AWS CLI). You can disable it by calling the <code>UpdateLedger</code> operation to set the flag to <code>false</code>. The QLDB console disables deletion protection for you when you use it to delete a ledger.</p>
+    /// <p>The flag that prevents a ledger from being deleted by any user. If not provided on ledger creation, this feature is enabled (<code>true</code>) by default.</p> <p>If deletion protection is enabled, you must first disable it before you can delete the ledger. You can disable it by calling the <code>UpdateLedger</code> operation to set the flag to <code>false</code>.</p>
     #[serde(rename = "DeletionProtection")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deletion_protection: Option<bool>,
@@ -163,6 +167,10 @@ pub struct DescribeLedgerResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The permissions mode of the ledger.</p>
+    #[serde(rename = "PermissionsMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permissions_mode: Option<String>,
     /// <p>The current status of the ledger.</p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -172,10 +180,10 @@ pub struct DescribeLedgerResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ExportJournalToS3Request {
-    /// <p>The exclusive end date and time for the range of journal contents that you want to export.</p> <p>The <code>ExclusiveEndTime</code> must be in <code>ISO 8601</code> date and time format and in Universal Coordinated Time (UTC). For example: <code>2019-06-13T21:36:34Z</code> </p> <p>The <code>ExclusiveEndTime</code> must be less than or equal to the current UTC date and time.</p>
+    /// <p>The exclusive end date and time for the range of journal contents to export.</p> <p>The <code>ExclusiveEndTime</code> must be in <code>ISO 8601</code> date and time format and in Universal Coordinated Time (UTC). For example: <code>2019-06-13T21:36:34Z</code>.</p> <p>The <code>ExclusiveEndTime</code> must be less than or equal to the current UTC date and time.</p>
     #[serde(rename = "ExclusiveEndTime")]
     pub exclusive_end_time: f64,
-    /// <p>The inclusive start date and time for the range of journal contents that you want to export.</p> <p>The <code>InclusiveStartTime</code> must be in <code>ISO 8601</code> date and time format and in Universal Coordinated Time (UTC). For example: <code>2019-06-13T21:36:34Z</code> </p> <p>The <code>InclusiveStartTime</code> must be before <code>ExclusiveEndTime</code>.</p> <p>If you provide an <code>InclusiveStartTime</code> that is before the ledger's <code>CreationDateTime</code>, Amazon QLDB defaults it to the ledger's <code>CreationDateTime</code>.</p>
+    /// <p>The inclusive start date and time for the range of journal contents to export.</p> <p>The <code>InclusiveStartTime</code> must be in <code>ISO 8601</code> date and time format and in Universal Coordinated Time (UTC). For example: <code>2019-06-13T21:36:34Z</code>.</p> <p>The <code>InclusiveStartTime</code> must be before <code>ExclusiveEndTime</code>.</p> <p>If you provide an <code>InclusiveStartTime</code> that is before the ledger's <code>CreationDateTime</code>, Amazon QLDB defaults it to the ledger's <code>CreationDateTime</code>.</p>
     #[serde(rename = "InclusiveStartTime")]
     pub inclusive_start_time: f64,
     /// <p>The name of the ledger.</p>
@@ -192,7 +200,7 @@ pub struct ExportJournalToS3Request {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct ExportJournalToS3Response {
-    /// <p>The unique ID that QLDB assigns to each journal export job.</p> <p>To describe your export request and check the status of the job, you can use <code>ExportId</code> to call <code>DescribeJournalS3Export</code>.</p>
+    /// <p>The UUID (represented in Base62-encoded text) that QLDB assigns to each journal export job.</p> <p>To describe your export request and check the status of the job, you can use <code>ExportId</code> to call <code>DescribeJournalS3Export</code>.</p>
     #[serde(rename = "ExportId")]
     pub export_id: String,
 }
@@ -200,10 +208,10 @@ pub struct ExportJournalToS3Response {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetBlockRequest {
-    /// <p>The location of the block that you want to request. An address is an Amazon Ion structure that has two fields: <code>strandId</code> and <code>sequenceNo</code>.</p> <p>For example: <code>{strandId:"BlFTjlSXze9BIh1KOszcE3",sequenceNo:14}</code> </p>
+    /// <p>The location of the block that you want to request. An address is an Amazon Ion structure that has two fields: <code>strandId</code> and <code>sequenceNo</code>.</p> <p>For example: <code>{strandId:"BlFTjlSXze9BIh1KOszcE3",sequenceNo:14}</code>.</p>
     #[serde(rename = "BlockAddress")]
     pub block_address: ValueHolder,
-    /// <p>The latest block location covered by the digest for which to request a proof. An address is an Amazon Ion structure that has two fields: <code>strandId</code> and <code>sequenceNo</code>.</p> <p>For example: <code>{strandId:"BlFTjlSXze9BIh1KOszcE3",sequenceNo:49}</code> </p>
+    /// <p>The latest block location covered by the digest for which to request a proof. An address is an Amazon Ion structure that has two fields: <code>strandId</code> and <code>sequenceNo</code>.</p> <p>For example: <code>{strandId:"BlFTjlSXze9BIh1KOszcE3",sequenceNo:49}</code>.</p>
     #[serde(rename = "DigestTipAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub digest_tip_address: Option<ValueHolder>,
@@ -251,14 +259,14 @@ pub struct GetDigestResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct GetRevisionRequest {
-    /// <p>The block location of the document revision to be verified. An address is an Amazon Ion structure that has two fields: <code>strandId</code> and <code>sequenceNo</code>.</p> <p>For example: <code>{strandId:"BlFTjlSXze9BIh1KOszcE3",sequenceNo:14}</code> </p>
+    /// <p>The block location of the document revision to be verified. An address is an Amazon Ion structure that has two fields: <code>strandId</code> and <code>sequenceNo</code>.</p> <p>For example: <code>{strandId:"BlFTjlSXze9BIh1KOszcE3",sequenceNo:14}</code>.</p>
     #[serde(rename = "BlockAddress")]
     pub block_address: ValueHolder,
-    /// <p>The latest block location covered by the digest for which to request a proof. An address is an Amazon Ion structure that has two fields: <code>strandId</code> and <code>sequenceNo</code>.</p> <p>For example: <code>{strandId:"BlFTjlSXze9BIh1KOszcE3",sequenceNo:49}</code> </p>
+    /// <p>The latest block location covered by the digest for which to request a proof. An address is an Amazon Ion structure that has two fields: <code>strandId</code> and <code>sequenceNo</code>.</p> <p>For example: <code>{strandId:"BlFTjlSXze9BIh1KOszcE3",sequenceNo:49}</code>.</p>
     #[serde(rename = "DigestTipAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub digest_tip_address: Option<ValueHolder>,
-    /// <p>The unique ID of the document to be verified.</p>
+    /// <p>The UUID (represented in Base62-encoded text) of the document to be verified.</p>
     #[serde(rename = "DocumentId")]
     pub document_id: String,
     /// <p>The name of the ledger.</p>
@@ -278,7 +286,7 @@ pub struct GetRevisionResponse {
     pub revision: ValueHolder,
 }
 
-/// <p>The information about an Amazon QLDB journal stream, including the Amazon Resource Name (ARN), stream name, creation time, current status, and the parameters of your original stream creation request.</p>
+/// <p>Information about an Amazon QLDB journal stream, including the Amazon Resource Name (ARN), stream name, creation time, current status, and the parameters of the original stream creation request.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JournalKinesisStreamDescription {
@@ -302,7 +310,7 @@ pub struct JournalKinesisStreamDescription {
     #[serde(rename = "InclusiveStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inclusive_start_time: Option<f64>,
-    /// <p>The configuration settings of the Amazon Kinesis Data Streams destination for your QLDB journal stream.</p>
+    /// <p>The configuration settings of the Amazon Kinesis Data Streams destination for a QLDB journal stream.</p>
     #[serde(rename = "KinesisConfiguration")]
     pub kinesis_configuration: KinesisConfiguration,
     /// <p>The name of the ledger.</p>
@@ -314,7 +322,7 @@ pub struct JournalKinesisStreamDescription {
     /// <p>The current state of the QLDB journal stream.</p>
     #[serde(rename = "Status")]
     pub status: String,
-    /// <p>The unique ID that QLDB assigns to each QLDB journal stream.</p>
+    /// <p>The UUID (represented in Base62-encoded text) of the QLDB journal stream.</p>
     #[serde(rename = "StreamId")]
     pub stream_id: String,
     /// <p>The user-defined name of the QLDB journal stream.</p>
@@ -322,7 +330,7 @@ pub struct JournalKinesisStreamDescription {
     pub stream_name: String,
 }
 
-/// <p>The information about a journal export job, including the ledger name, export ID, when it was created, current status, and its start and end time export parameters.</p>
+/// <p>Information about a journal export job, including the ledger name, export ID, creation time, current status, and the parameters of the original export creation request.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct JournalS3ExportDescription {
@@ -332,7 +340,7 @@ pub struct JournalS3ExportDescription {
     /// <p>The date and time, in epoch time format, when the export job was created. (Epoch time format is the number of seconds elapsed since 12:00:00 AM January 1, 1970 UTC.)</p>
     #[serde(rename = "ExportCreationTime")]
     pub export_creation_time: f64,
-    /// <p>The unique ID of the journal export job.</p>
+    /// <p>The UUID (represented in Base62-encoded text) of the journal export job.</p>
     #[serde(rename = "ExportId")]
     pub export_id: String,
     /// <p>The inclusive start date and time for the range of journal contents that are specified in the original export request.</p>
@@ -351,14 +359,14 @@ pub struct JournalS3ExportDescription {
     pub status: String,
 }
 
-/// <p>The configuration settings of the Amazon Kinesis Data Streams destination for your Amazon QLDB journal stream.</p>
+/// <p>The configuration settings of the Amazon Kinesis Data Streams destination for an Amazon QLDB journal stream.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct KinesisConfiguration {
-    /// <p>Enables QLDB to publish multiple data records in a single Kinesis Data Streams record. To learn more, see <a href="https://docs.aws.amazon.com/streams/latest/dev/kinesis-kpl-concepts.html">KPL Key Concepts</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>.</p>
+    /// <p>Enables QLDB to publish multiple data records in a single Kinesis Data Streams record, increasing the number of records sent per API call.</p> <p> <i>This option is enabled by default.</i> Record aggregation has important implications for processing records and requires de-aggregation in your stream consumer. To learn more, see <a href="https://docs.aws.amazon.com/streams/latest/dev/kinesis-kpl-concepts.html">KPL Key Concepts</a> and <a href="https://docs.aws.amazon.com/streams/latest/dev/kinesis-kpl-consumer-deaggregation.html">Consumer De-aggregation</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>.</p>
     #[serde(rename = "AggregationEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aggregation_enabled: Option<bool>,
-    /// <p>The Amazon Resource Name (ARN) of the Kinesis data stream resource.</p>
+    /// <p>The Amazon Resource Name (ARN) of the Kinesis Data Streams resource.</p>
     #[serde(rename = "StreamArn")]
     pub stream_arn: String,
 }
@@ -494,7 +502,7 @@ pub struct ListLedgersResponse {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct ListTagsForResourceRequest {
-    /// <p>The Amazon Resource Name (ARN) for which you want to list the tags. For example:</p> <p> <code>arn:aws:qldb:us-east-1:123456789012:ledger/exampleLedger</code> </p>
+    /// <p>The Amazon Resource Name (ARN) for which to list the tags. For example:</p> <p> <code>arn:aws:qldb:us-east-1:123456789012:ledger/exampleLedger</code> </p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
 }
@@ -511,7 +519,7 @@ pub struct ListTagsForResourceResponse {
 /// <p>The encryption settings that are used by a journal export job to write data in an Amazon Simple Storage Service (Amazon S3) bucket.</p>
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct S3EncryptionConfiguration {
-    /// <p>The Amazon Resource Name (ARN) for a symmetric customer master key (CMK) in AWS Key Management Service (AWS KMS). Amazon QLDB does not support asymmetric CMKs.</p> <p>You must provide a <code>KmsKeyArn</code> if you specify <code>SSE_KMS</code> as the <code>ObjectEncryptionType</code>.</p> <p> <code>KmsKeyArn</code> is not required if you specify <code>SSE_S3</code> as the <code>ObjectEncryptionType</code>.</p>
+    /// <p>The Amazon Resource Name (ARN) for a symmetric customer master key (CMK) in AWS Key Management Service (AWS KMS). Amazon S3 does not support asymmetric CMKs.</p> <p>You must provide a <code>KmsKeyArn</code> if you specify <code>SSE_KMS</code> as the <code>ObjectEncryptionType</code>.</p> <p> <code>KmsKeyArn</code> is not required if you specify <code>SSE_S3</code> as the <code>ObjectEncryptionType</code>.</p>
     #[serde(rename = "KmsKeyArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_arn: Option<String>,
@@ -537,11 +545,11 @@ pub struct S3ExportConfiguration {
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct StreamJournalToKinesisRequest {
-    /// <p>The exclusive date and time that specifies when the stream ends. If you don't define this parameter, the stream runs indefinitely until you cancel it.</p> <p>The <code>ExclusiveEndTime</code> must be in <code>ISO 8601</code> date and time format and in Universal Coordinated Time (UTC). For example: <code>2019-06-13T21:36:34Z</code> </p>
+    /// <p>The exclusive date and time that specifies when the stream ends. If you don't define this parameter, the stream runs indefinitely until you cancel it.</p> <p>The <code>ExclusiveEndTime</code> must be in <code>ISO 8601</code> date and time format and in Universal Coordinated Time (UTC). For example: <code>2019-06-13T21:36:34Z</code>.</p>
     #[serde(rename = "ExclusiveEndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exclusive_end_time: Option<f64>,
-    /// <p>The inclusive start date and time from which to start streaming journal data. This parameter must be in <code>ISO 8601</code> date and time format and in Universal Coordinated Time (UTC). For example: <code>2019-06-13T21:36:34Z</code> </p> <p>The <code>InclusiveStartTime</code> cannot be in the future and must be before <code>ExclusiveEndTime</code>.</p> <p>If you provide an <code>InclusiveStartTime</code> that is before the ledger's <code>CreationDateTime</code>, QLDB effectively defaults it to the ledger's <code>CreationDateTime</code>.</p>
+    /// <p>The inclusive start date and time from which to start streaming journal data. This parameter must be in <code>ISO 8601</code> date and time format and in Universal Coordinated Time (UTC). For example: <code>2019-06-13T21:36:34Z</code>.</p> <p>The <code>InclusiveStartTime</code> cannot be in the future and must be before <code>ExclusiveEndTime</code>.</p> <p>If you provide an <code>InclusiveStartTime</code> that is before the ledger's <code>CreationDateTime</code>, QLDB effectively defaults it to the ledger's <code>CreationDateTime</code>.</p>
     #[serde(rename = "InclusiveStartTime")]
     pub inclusive_start_time: f64,
     /// <p>The configuration settings of the Kinesis Data Streams destination for your stream request.</p>
@@ -565,7 +573,7 @@ pub struct StreamJournalToKinesisRequest {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct StreamJournalToKinesisResponse {
-    /// <p>The unique ID that QLDB assigns to each QLDB journal stream.</p>
+    /// <p>The UUID (represented in Base62-encoded text) that QLDB assigns to each QLDB journal stream.</p>
     #[serde(rename = "StreamId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_id: Option<String>,
@@ -589,10 +597,10 @@ pub struct TagResourceResponse {}
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UntagResourceRequest {
-    /// <p>The Amazon Resource Name (ARN) from which you want to remove the tags. For example:</p> <p> <code>arn:aws:qldb:us-east-1:123456789012:ledger/exampleLedger</code> </p>
+    /// <p>The Amazon Resource Name (ARN) from which to remove the tags. For example:</p> <p> <code>arn:aws:qldb:us-east-1:123456789012:ledger/exampleLedger</code> </p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
-    /// <p>The list of tag keys that you want to remove.</p>
+    /// <p>The list of tag keys to remove.</p>
     #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
 }
@@ -603,8 +611,36 @@ pub struct UntagResourceResponse {}
 
 #[derive(Clone, Debug, Default, PartialEq, Serialize)]
 #[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
+pub struct UpdateLedgerPermissionsModeRequest {
+    /// <p>The name of the ledger.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p><p>The permissions mode to assign to the ledger. This parameter can have one of the following values:</p> <ul> <li> <p> <code>ALLOW<em>ALL</code>: A legacy permissions mode that enables access control with API-level granularity for ledgers.</p> <p>This mode allows users who have the <code>SendCommand</code> API permission for this ledger to run all PartiQL commands (hence, <code>ALLOW</em>ALL</code>) on any tables in the specified ledger. This mode disregards any table-level or command-level IAM permissions policies that you create for the ledger.</p> </li> <li> <p> <code>STANDARD</code>: (<i>Recommended</i>) A permissions mode that enables access control with finer granularity for ledgers, tables, and PartiQL commands.</p> <p>By default, this mode denies all user requests to run any PartiQL commands on any tables in this ledger. To allow PartiQL commands to run, you must create IAM permissions policies for specific table resources and PartiQL actions, in addition to the <code>SendCommand</code> API permission for the ledger. For information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/getting-started-standard-mode.html">Getting started with the standard permissions mode</a> in the <i>Amazon QLDB Developer Guide</i>.</p> </li> </ul> <note> <p>We strongly recommend using the <code>STANDARD</code> permissions mode to maximize the security of your ledger data.</p> </note></p>
+    #[serde(rename = "PermissionsMode")]
+    pub permissions_mode: String,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct UpdateLedgerPermissionsModeResponse {
+    /// <p>The Amazon Resource Name (ARN) for the ledger.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The name of the ledger.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The current permissions mode of the ledger.</p>
+    #[serde(rename = "PermissionsMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub permissions_mode: Option<String>,
+}
+
+#[derive(Clone, Debug, Default, PartialEq, Serialize)]
+#[cfg_attr(feature = "deserialize_structs", derive(Deserialize))]
 pub struct UpdateLedgerRequest {
-    /// <p>The flag that prevents a ledger from being deleted by any user. If not provided on ledger creation, this feature is enabled (<code>true</code>) by default.</p> <p>If deletion protection is enabled, you must first disable it before you can delete the ledger using the QLDB API or the AWS Command Line Interface (AWS CLI). You can disable it by calling the <code>UpdateLedger</code> operation to set the flag to <code>false</code>. The QLDB console disables deletion protection for you when you use it to delete a ledger.</p>
+    /// <p>The flag that prevents a ledger from being deleted by any user. If not provided on ledger creation, this feature is enabled (<code>true</code>) by default.</p> <p>If deletion protection is enabled, you must first disable it before you can delete the ledger. You can disable it by calling the <code>UpdateLedger</code> operation to set the flag to <code>false</code>.</p>
     #[serde(rename = "DeletionProtection")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deletion_protection: Option<bool>,
@@ -624,7 +660,7 @@ pub struct UpdateLedgerResponse {
     #[serde(rename = "CreationDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date_time: Option<f64>,
-    /// <p>The flag that prevents a ledger from being deleted by any user. If not provided on ledger creation, this feature is enabled (<code>true</code>) by default.</p> <p>If deletion protection is enabled, you must first disable it before you can delete the ledger using the QLDB API or the AWS Command Line Interface (AWS CLI). You can disable it by calling the <code>UpdateLedger</code> operation to set the flag to <code>false</code>. The QLDB console disables deletion protection for you when you use it to delete a ledger.</p>
+    /// <p>The flag that prevents a ledger from being deleted by any user. If not provided on ledger creation, this feature is enabled (<code>true</code>) by default.</p> <p>If deletion protection is enabled, you must first disable it before you can delete the ledger. You can disable it by calling the <code>UpdateLedger</code> operation to set the flag to <code>false</code>.</p>
     #[serde(rename = "DeletionProtection")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deletion_protection: Option<bool>,
@@ -1413,6 +1449,48 @@ impl fmt::Display for UpdateLedgerError {
     }
 }
 impl Error for UpdateLedgerError {}
+/// Errors returned by UpdateLedgerPermissionsMode
+#[derive(Debug, PartialEq)]
+pub enum UpdateLedgerPermissionsModeError {
+    /// <p>One or more parameters in the request aren't valid.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource doesn't exist.</p>
+    ResourceNotFound(String),
+}
+
+impl UpdateLedgerPermissionsModeError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> RusotoError<UpdateLedgerPermissionsModeError> {
+        if let Some(err) = proto::json::Error::parse_rest(&res) {
+            match err.typ.as_str() {
+                "InvalidParameterException" => {
+                    return RusotoError::Service(
+                        UpdateLedgerPermissionsModeError::InvalidParameter(err.msg),
+                    )
+                }
+                "ResourceNotFoundException" => {
+                    return RusotoError::Service(
+                        UpdateLedgerPermissionsModeError::ResourceNotFound(err.msg),
+                    )
+                }
+                "ValidationException" => return RusotoError::Validation(err.msg),
+                _ => {}
+            }
+        }
+        RusotoError::Unknown(res)
+    }
+}
+impl fmt::Display for UpdateLedgerPermissionsModeError {
+    #[allow(unused_variables)]
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            UpdateLedgerPermissionsModeError::InvalidParameter(ref cause) => write!(f, "{}", cause),
+            UpdateLedgerPermissionsModeError::ResourceNotFound(ref cause) => write!(f, "{}", cause),
+        }
+    }
+}
+impl Error for UpdateLedgerPermissionsModeError {}
 /// Trait representing the capabilities of the QLDB API. QLDB clients implement this trait.
 #[async_trait]
 pub trait Qldb {
@@ -1422,25 +1500,25 @@ pub trait Qldb {
         input: CancelJournalKinesisStreamRequest,
     ) -> Result<CancelJournalKinesisStreamResponse, RusotoError<CancelJournalKinesisStreamError>>;
 
-    /// <p>Creates a new ledger in your AWS account.</p>
+    /// <p>Creates a new ledger in your AWS account in the current Region.</p>
     async fn create_ledger(
         &self,
         input: CreateLedgerRequest,
     ) -> Result<CreateLedgerResponse, RusotoError<CreateLedgerError>>;
 
-    /// <p>Deletes a ledger and all of its contents. This action is irreversible.</p> <p>If deletion protection is enabled, you must first disable it before you can delete the ledger using the QLDB API or the AWS Command Line Interface (AWS CLI). You can disable it by calling the <code>UpdateLedger</code> operation to set the flag to <code>false</code>. The QLDB console disables deletion protection for you when you use it to delete a ledger.</p>
+    /// <p>Deletes a ledger and all of its contents. This action is irreversible.</p> <p>If deletion protection is enabled, you must first disable it before you can delete the ledger. You can disable it by calling the <code>UpdateLedger</code> operation to set the flag to <code>false</code>.</p>
     async fn delete_ledger(
         &self,
         input: DeleteLedgerRequest,
     ) -> Result<(), RusotoError<DeleteLedgerError>>;
 
-    /// <p>Returns detailed information about a given Amazon QLDB journal stream. The output includes the Amazon Resource Name (ARN), stream name, current status, creation time, and the parameters of your original stream creation request.</p>
+    /// <p>Returns detailed information about a given Amazon QLDB journal stream. The output includes the Amazon Resource Name (ARN), stream name, current status, creation time, and the parameters of the original stream creation request.</p> <p>This action does not return any expired journal streams. For more information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/streams.create.html#streams.create.states.expiration">Expiration for terminal streams</a> in the <i>Amazon QLDB Developer Guide</i>.</p>
     async fn describe_journal_kinesis_stream(
         &self,
         input: DescribeJournalKinesisStreamRequest,
     ) -> Result<DescribeJournalKinesisStreamResponse, RusotoError<DescribeJournalKinesisStreamError>>;
 
-    /// <p>Returns information about a journal export job, including the ledger name, export ID, when it was created, current status, and its start and end time export parameters.</p> <p>This action does not return any expired export jobs. For more information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/export-journal.request.html#export-journal.request.expiration">Export Job Expiration</a> in the <i>Amazon QLDB Developer Guide</i>.</p> <p>If the export job with the given <code>ExportId</code> doesn't exist, then throws <code>ResourceNotFoundException</code>.</p> <p>If the ledger with the given <code>Name</code> doesn't exist, then throws <code>ResourceNotFoundException</code>.</p>
+    /// <p>Returns information about a journal export job, including the ledger name, export ID, creation time, current status, and the parameters of the original export creation request.</p> <p>This action does not return any expired export jobs. For more information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/export-journal.request.html#export-journal.request.expiration">Export job expiration</a> in the <i>Amazon QLDB Developer Guide</i>.</p> <p>If the export job with the given <code>ExportId</code> doesn't exist, then throws <code>ResourceNotFoundException</code>.</p> <p>If the ledger with the given <code>Name</code> doesn't exist, then throws <code>ResourceNotFoundException</code>.</p>
     async fn describe_journal_s3_export(
         &self,
         input: DescribeJournalS3ExportRequest,
@@ -1476,7 +1554,7 @@ pub trait Qldb {
         input: GetRevisionRequest,
     ) -> Result<GetRevisionResponse, RusotoError<GetRevisionError>>;
 
-    /// <p>Returns an array of all Amazon QLDB journal stream descriptors for a given ledger. The output of each stream descriptor includes the same details that are returned by <code>DescribeJournalKinesisStream</code>.</p> <p>This action returns a maximum of <code>MaxResults</code> items. It is paginated so that you can retrieve all the items by calling <code>ListJournalKinesisStreamsForLedger</code> multiple times.</p>
+    /// <p>Returns an array of all Amazon QLDB journal stream descriptors for a given ledger. The output of each stream descriptor includes the same details that are returned by <code>DescribeJournalKinesisStream</code>.</p> <p>This action does not return any expired journal streams. For more information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/streams.create.html#streams.create.states.expiration">Expiration for terminal streams</a> in the <i>Amazon QLDB Developer Guide</i>.</p> <p>This action returns a maximum of <code>MaxResults</code> items. It is paginated so that you can retrieve all the items by calling <code>ListJournalKinesisStreamsForLedger</code> multiple times.</p>
     async fn list_journal_kinesis_streams_for_ledger(
         &self,
         input: ListJournalKinesisStreamsForLedgerRequest,
@@ -1485,13 +1563,13 @@ pub trait Qldb {
         RusotoError<ListJournalKinesisStreamsForLedgerError>,
     >;
 
-    /// <p>Returns an array of journal export job descriptions for all ledgers that are associated with the current AWS account and Region.</p> <p>This action returns a maximum of <code>MaxResults</code> items, and is paginated so that you can retrieve all the items by calling <code>ListJournalS3Exports</code> multiple times.</p> <p>This action does not return any expired export jobs. For more information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/export-journal.request.html#export-journal.request.expiration">Export Job Expiration</a> in the <i>Amazon QLDB Developer Guide</i>.</p>
+    /// <p>Returns an array of journal export job descriptions for all ledgers that are associated with the current AWS account and Region.</p> <p>This action returns a maximum of <code>MaxResults</code> items, and is paginated so that you can retrieve all the items by calling <code>ListJournalS3Exports</code> multiple times.</p> <p>This action does not return any expired export jobs. For more information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/export-journal.request.html#export-journal.request.expiration">Export job expiration</a> in the <i>Amazon QLDB Developer Guide</i>.</p>
     async fn list_journal_s3_exports(
         &self,
         input: ListJournalS3ExportsRequest,
     ) -> Result<ListJournalS3ExportsResponse, RusotoError<ListJournalS3ExportsError>>;
 
-    /// <p>Returns an array of journal export job descriptions for a specified ledger.</p> <p>This action returns a maximum of <code>MaxResults</code> items, and is paginated so that you can retrieve all the items by calling <code>ListJournalS3ExportsForLedger</code> multiple times.</p> <p>This action does not return any expired export jobs. For more information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/export-journal.request.html#export-journal.request.expiration">Export Job Expiration</a> in the <i>Amazon QLDB Developer Guide</i>.</p>
+    /// <p>Returns an array of journal export job descriptions for a specified ledger.</p> <p>This action returns a maximum of <code>MaxResults</code> items, and is paginated so that you can retrieve all the items by calling <code>ListJournalS3ExportsForLedger</code> multiple times.</p> <p>This action does not return any expired export jobs. For more information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/export-journal.request.html#export-journal.request.expiration">Export job expiration</a> in the <i>Amazon QLDB Developer Guide</i>.</p>
     async fn list_journal_s3_exports_for_ledger(
         &self,
         input: ListJournalS3ExportsForLedgerRequest,
@@ -1535,6 +1613,12 @@ pub trait Qldb {
         &self,
         input: UpdateLedgerRequest,
     ) -> Result<UpdateLedgerResponse, RusotoError<UpdateLedgerError>>;
+
+    /// <p><p>Updates the permissions mode of a ledger.</p> <important> <p>Before you switch to the <code>STANDARD</code> permissions mode, you must first create all required IAM policies and table tags to avoid disruption to your users. To learn more, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/ledger-management.basics.html#ledger-mgmt.basics.update-permissions.migrating">Migrating to the standard permissions mode</a> in the <i>Amazon QLDB Developer Guide</i>.</p> </important></p>
+    async fn update_ledger_permissions_mode(
+        &self,
+        input: UpdateLedgerPermissionsModeRequest,
+    ) -> Result<UpdateLedgerPermissionsModeResponse, RusotoError<UpdateLedgerPermissionsModeError>>;
 }
 /// A client for the QLDB API.
 #[derive(Clone)]
@@ -1609,7 +1693,7 @@ impl Qldb for QldbClient {
         }
     }
 
-    /// <p>Creates a new ledger in your AWS account.</p>
+    /// <p>Creates a new ledger in your AWS account in the current Region.</p>
     #[allow(unused_mut)]
     async fn create_ledger(
         &self,
@@ -1640,7 +1724,7 @@ impl Qldb for QldbClient {
         }
     }
 
-    /// <p>Deletes a ledger and all of its contents. This action is irreversible.</p> <p>If deletion protection is enabled, you must first disable it before you can delete the ledger using the QLDB API or the AWS Command Line Interface (AWS CLI). You can disable it by calling the <code>UpdateLedger</code> operation to set the flag to <code>false</code>. The QLDB console disables deletion protection for you when you use it to delete a ledger.</p>
+    /// <p>Deletes a ledger and all of its contents. This action is irreversible.</p> <p>If deletion protection is enabled, you must first disable it before you can delete the ledger. You can disable it by calling the <code>UpdateLedger</code> operation to set the flag to <code>false</code>.</p>
     #[allow(unused_mut)]
     async fn delete_ledger(
         &self,
@@ -1667,7 +1751,7 @@ impl Qldb for QldbClient {
         }
     }
 
-    /// <p>Returns detailed information about a given Amazon QLDB journal stream. The output includes the Amazon Resource Name (ARN), stream name, current status, creation time, and the parameters of your original stream creation request.</p>
+    /// <p>Returns detailed information about a given Amazon QLDB journal stream. The output includes the Amazon Resource Name (ARN), stream name, current status, creation time, and the parameters of the original stream creation request.</p> <p>This action does not return any expired journal streams. For more information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/streams.create.html#streams.create.states.expiration">Expiration for terminal streams</a> in the <i>Amazon QLDB Developer Guide</i>.</p>
     #[allow(unused_mut)]
     async fn describe_journal_kinesis_stream(
         &self,
@@ -1700,7 +1784,7 @@ impl Qldb for QldbClient {
         }
     }
 
-    /// <p>Returns information about a journal export job, including the ledger name, export ID, when it was created, current status, and its start and end time export parameters.</p> <p>This action does not return any expired export jobs. For more information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/export-journal.request.html#export-journal.request.expiration">Export Job Expiration</a> in the <i>Amazon QLDB Developer Guide</i>.</p> <p>If the export job with the given <code>ExportId</code> doesn't exist, then throws <code>ResourceNotFoundException</code>.</p> <p>If the ledger with the given <code>Name</code> doesn't exist, then throws <code>ResourceNotFoundException</code>.</p>
+    /// <p>Returns information about a journal export job, including the ledger name, export ID, creation time, current status, and the parameters of the original export creation request.</p> <p>This action does not return any expired export jobs. For more information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/export-journal.request.html#export-journal.request.expiration">Export job expiration</a> in the <i>Amazon QLDB Developer Guide</i>.</p> <p>If the export job with the given <code>ExportId</code> doesn't exist, then throws <code>ResourceNotFoundException</code>.</p> <p>If the ledger with the given <code>Name</code> doesn't exist, then throws <code>ResourceNotFoundException</code>.</p>
     #[allow(unused_mut)]
     async fn describe_journal_s3_export(
         &self,
@@ -1881,7 +1965,7 @@ impl Qldb for QldbClient {
         }
     }
 
-    /// <p>Returns an array of all Amazon QLDB journal stream descriptors for a given ledger. The output of each stream descriptor includes the same details that are returned by <code>DescribeJournalKinesisStream</code>.</p> <p>This action returns a maximum of <code>MaxResults</code> items. It is paginated so that you can retrieve all the items by calling <code>ListJournalKinesisStreamsForLedger</code> multiple times.</p>
+    /// <p>Returns an array of all Amazon QLDB journal stream descriptors for a given ledger. The output of each stream descriptor includes the same details that are returned by <code>DescribeJournalKinesisStream</code>.</p> <p>This action does not return any expired journal streams. For more information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/streams.create.html#streams.create.states.expiration">Expiration for terminal streams</a> in the <i>Amazon QLDB Developer Guide</i>.</p> <p>This action returns a maximum of <code>MaxResults</code> items. It is paginated so that you can retrieve all the items by calling <code>ListJournalKinesisStreamsForLedger</code> multiple times.</p>
     #[allow(unused_mut)]
     async fn list_journal_kinesis_streams_for_ledger(
         &self,
@@ -1926,7 +2010,7 @@ impl Qldb for QldbClient {
         }
     }
 
-    /// <p>Returns an array of journal export job descriptions for all ledgers that are associated with the current AWS account and Region.</p> <p>This action returns a maximum of <code>MaxResults</code> items, and is paginated so that you can retrieve all the items by calling <code>ListJournalS3Exports</code> multiple times.</p> <p>This action does not return any expired export jobs. For more information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/export-journal.request.html#export-journal.request.expiration">Export Job Expiration</a> in the <i>Amazon QLDB Developer Guide</i>.</p>
+    /// <p>Returns an array of journal export job descriptions for all ledgers that are associated with the current AWS account and Region.</p> <p>This action returns a maximum of <code>MaxResults</code> items, and is paginated so that you can retrieve all the items by calling <code>ListJournalS3Exports</code> multiple times.</p> <p>This action does not return any expired export jobs. For more information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/export-journal.request.html#export-journal.request.expiration">Export job expiration</a> in the <i>Amazon QLDB Developer Guide</i>.</p>
     #[allow(unused_mut)]
     async fn list_journal_s3_exports(
         &self,
@@ -1963,7 +2047,7 @@ impl Qldb for QldbClient {
         }
     }
 
-    /// <p>Returns an array of journal export job descriptions for a specified ledger.</p> <p>This action returns a maximum of <code>MaxResults</code> items, and is paginated so that you can retrieve all the items by calling <code>ListJournalS3ExportsForLedger</code> multiple times.</p> <p>This action does not return any expired export jobs. For more information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/export-journal.request.html#export-journal.request.expiration">Export Job Expiration</a> in the <i>Amazon QLDB Developer Guide</i>.</p>
+    /// <p>Returns an array of journal export job descriptions for a specified ledger.</p> <p>This action returns a maximum of <code>MaxResults</code> items, and is paginated so that you can retrieve all the items by calling <code>ListJournalS3ExportsForLedger</code> multiple times.</p> <p>This action does not return any expired export jobs. For more information, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/export-journal.request.html#export-journal.request.expiration">Export job expiration</a> in the <i>Amazon QLDB Developer Guide</i>.</p>
     #[allow(unused_mut)]
     async fn list_journal_s3_exports_for_ledger(
         &self,
@@ -2195,6 +2279,38 @@ impl Qldb for QldbClient {
         } else {
             let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
             Err(UpdateLedgerError::from_response(response))
+        }
+    }
+
+    /// <p><p>Updates the permissions mode of a ledger.</p> <important> <p>Before you switch to the <code>STANDARD</code> permissions mode, you must first create all required IAM policies and table tags to avoid disruption to your users. To learn more, see <a href="https://docs.aws.amazon.com/qldb/latest/developerguide/ledger-management.basics.html#ledger-mgmt.basics.update-permissions.migrating">Migrating to the standard permissions mode</a> in the <i>Amazon QLDB Developer Guide</i>.</p> </important></p>
+    #[allow(unused_mut)]
+    async fn update_ledger_permissions_mode(
+        &self,
+        input: UpdateLedgerPermissionsModeRequest,
+    ) -> Result<UpdateLedgerPermissionsModeResponse, RusotoError<UpdateLedgerPermissionsModeError>>
+    {
+        let request_uri = format!("/ledgers/{name}/permissions-mode", name = input.name);
+
+        let mut request = SignedRequest::new("PATCH", "qldb", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        let mut response = self
+            .client
+            .sign_and_dispatch(request)
+            .await
+            .map_err(RusotoError::from)?;
+        if response.status.is_success() {
+            let mut response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            let result = proto::json::ResponsePayload::new(&response)
+                .deserialize::<UpdateLedgerPermissionsModeResponse, _>()?;
+
+            Ok(result)
+        } else {
+            let response = response.buffer().await.map_err(RusotoError::HttpDispatch)?;
+            Err(UpdateLedgerPermissionsModeError::from_response(response))
         }
     }
 }

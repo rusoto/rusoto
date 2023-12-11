@@ -193,11 +193,11 @@ pub struct FetchPageResult {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct IOUsage {
-    /// <p>The number of read I/O requests that the command performed.</p>
+    /// <p>The number of read I/O requests that the command made.</p>
     #[serde(rename = "ReadIOs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub read_i_os: Option<i64>,
-    /// <p>The number of write I/O requests that the command performed.</p>
+    /// <p>The number of write I/O requests that the command made.</p>
     #[serde(rename = "WriteIOs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub write_i_os: Option<i64>,
@@ -333,7 +333,7 @@ pub struct StartTransactionResult {
 #[derive(Clone, Debug, Default, Deserialize, PartialEq)]
 #[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
 pub struct TimingInformation {
-    /// <p>The amount of time that was taken for the command to finish processing, measured in milliseconds.</p>
+    /// <p>The amount of time that QLDB spent on processing the command, measured in milliseconds.</p>
     #[serde(rename = "ProcessingTimeMilliseconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub processing_time_milliseconds: Option<i64>,
@@ -362,6 +362,8 @@ pub struct ValueHolder {
 pub enum SendCommandError {
     /// <p>Returned if the request is malformed or contains an error such as an invalid parameter value or a missing required parameter.</p>
     BadRequest(String),
+    /// <p>Returned when the request exceeds the processing capacity of the ledger.</p>
+    CapacityExceeded(String),
     /// <p>Returned if the session doesn't exist anymore because it timed out or expired.</p>
     InvalidSession(String),
     /// <p>Returned if a resource limit such as number of active sessions is exceeded.</p>
@@ -378,6 +380,9 @@ impl SendCommandError {
             match err.typ.as_str() {
                 "BadRequestException" => {
                     return RusotoError::Service(SendCommandError::BadRequest(err.msg))
+                }
+                "CapacityExceededException" => {
+                    return RusotoError::Service(SendCommandError::CapacityExceeded(err.msg))
                 }
                 "InvalidSessionException" => {
                     return RusotoError::Service(SendCommandError::InvalidSession(err.msg))
@@ -403,6 +408,7 @@ impl fmt::Display for SendCommandError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
             SendCommandError::BadRequest(ref cause) => write!(f, "{}", cause),
+            SendCommandError::CapacityExceeded(ref cause) => write!(f, "{}", cause),
             SendCommandError::InvalidSession(ref cause) => write!(f, "{}", cause),
             SendCommandError::LimitExceeded(ref cause) => write!(f, "{}", cause),
             SendCommandError::OccConflict(ref cause) => write!(f, "{}", cause),

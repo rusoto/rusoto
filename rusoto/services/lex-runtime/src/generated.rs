@@ -297,12 +297,12 @@ pub struct PostContentResponse {
     pub content_type: Option<String>,
     /// <p><p>Identifies the current state of the user interaction. Amazon Lex returns one of the following values as <code>dialogState</code>. The client can optionally use this information to customize the user interface. </p> <ul> <li> <p> <code>ElicitIntent</code> - Amazon Lex wants to elicit the user&#39;s intent. Consider the following examples: </p> <p> For example, a user might utter an intent (&quot;I want to order a pizza&quot;). If Amazon Lex cannot infer the user intent from this utterance, it will return this dialog state. </p> </li> <li> <p> <code>ConfirmIntent</code> - Amazon Lex is expecting a &quot;yes&quot; or &quot;no&quot; response. </p> <p>For example, Amazon Lex wants user confirmation before fulfilling an intent. Instead of a simple &quot;yes&quot; or &quot;no&quot; response, a user might respond with additional information. For example, &quot;yes, but make it a thick crust pizza&quot; or &quot;no, I want to order a drink.&quot; Amazon Lex can process such additional information (in these examples, update the crust type slot or change the intent from OrderPizza to OrderDrink). </p> </li> <li> <p> <code>ElicitSlot</code> - Amazon Lex is expecting the value of a slot for the current intent. </p> <p> For example, suppose that in the response Amazon Lex sends this message: &quot;What size pizza would you like?&quot;. A user might reply with the slot value (e.g., &quot;medium&quot;). The user might also provide additional information in the response (e.g., &quot;medium thick crust pizza&quot;). Amazon Lex can process such additional information appropriately. </p> </li> <li> <p> <code>Fulfilled</code> - Conveys that the Lambda function has successfully fulfilled the intent. </p> </li> <li> <p> <code>ReadyForFulfillment</code> - Conveys that the client has to fulfill the request. </p> </li> <li> <p> <code>Failed</code> - Conveys that the conversation with the user failed. </p> <p> This can happen for various reasons, including that the user does not provide an appropriate response to prompts from the service (you can configure how many times Amazon Lex can prompt a user for specific information), or if the Lambda function fails to fulfill the intent. </p> </li> </ul></p>
     pub dialog_state: Option<String>,
-    /// <p>The text used to process the request.</p> <p>If the input was an audio stream, the <code>inputTranscript</code> field contains the text extracted from the audio stream. This is the text that is actually processed to recognize intents and slot values. You can use this information to determine if Amazon Lex is correctly processing the audio that you send.</p>
-    pub input_transcript: Option<String>,
+    /// <p>The text used to process the request.</p> <p>If the input was an audio stream, the <code>encodedInputTranscript</code> field contains the text extracted from the audio stream. This is the text that is actually processed to recognize intents and slot values. You can use this information to determine if Amazon Lex is correctly processing the audio that you send.</p> <p>The <code>encodedInputTranscript</code> field is base-64 encoded. You must decode the field before you can use the value.</p>
+    pub encoded_input_transcript: Option<String>,
+    /// <p>The message to convey to the user. The message can come from the bot's configuration or from a Lambda function.</p> <p>If the intent is not configured with a Lambda function, or if the Lambda function returned <code>Delegate</code> as the <code>dialogAction.type</code> in its response, Amazon Lex decides on the next course of action and selects an appropriate message from the bot's configuration based on the current interaction context. For example, if Amazon Lex isn't able to understand user input, it uses a clarification prompt message.</p> <p>When you create an intent you can assign messages to groups. When messages are assigned to groups Amazon Lex returns one message from each group in the response. The message field is an escaped JSON string containing the messages. For more information about the structure of the JSON string returned, see <a>msg-prompts-formats</a>.</p> <p>If the Lambda function returns a message, Amazon Lex passes it to the client in its response.</p> <p>The <code>encodedMessage</code> field is base-64 encoded. You must decode the field before you can use the value.</p>
+    pub encoded_message: Option<String>,
     /// <p>Current user intent that Amazon Lex is aware of.</p>
     pub intent_name: Option<String>,
-    /// <p>The message to convey to the user. The message can come from the bot's configuration or from a Lambda function.</p> <p>If the intent is not configured with a Lambda function, or if the Lambda function returned <code>Delegate</code> as the <code>dialogAction.type</code> in its response, Amazon Lex decides on the next course of action and selects an appropriate message from the bot's configuration based on the current interaction context. For example, if Amazon Lex isn't able to understand user input, it uses a clarification prompt message.</p> <p>When you create an intent you can assign messages to groups. When messages are assigned to groups Amazon Lex returns one message from each group in the response. The message field is an escaped JSON string containing the messages. For more information about the structure of the JSON string returned, see <a>msg-prompts-formats</a>.</p> <p>If the Lambda function returns a message, Amazon Lex passes it to the client in its response.</p>
-    pub message: Option<String>,
     /// <p><p>The format of the response message. One of the following values:</p> <ul> <li> <p> <code>PlainText</code> - The message contains plain UTF-8 text.</p> </li> <li> <p> <code>CustomPayload</code> - The message is a custom format for the client.</p> </li> <li> <p> <code>SSML</code> - The message contains text formatted for voice output.</p> </li> <li> <p> <code>Composite</code> - The message contains an escaped JSON object containing one or more messages from the groups that messages were assigned to when the intent was created.</p> </li> </ul></p>
     pub message_format: Option<String>,
     /// <p>Provides a score that indicates how confident Amazon Lex is that the returned intent is the one that matches the user's intent. The score is between 0.0 and 1.0.</p> <p>The score is a relative score, not an absolute score. The score may change based on improvements to Amazon Lex. </p>
@@ -471,10 +471,10 @@ pub struct PutSessionResponse {
     pub content_type: Option<String>,
     /// <p><p/> <ul> <li> <p> <code>ConfirmIntent</code> - Amazon Lex is expecting a &quot;yes&quot; or &quot;no&quot; response to confirm the intent before fulfilling an intent.</p> </li> <li> <p> <code>ElicitIntent</code> - Amazon Lex wants to elicit the user&#39;s intent.</p> </li> <li> <p> <code>ElicitSlot</code> - Amazon Lex is expecting the value of a slot for the current intent.</p> </li> <li> <p> <code>Failed</code> - Conveys that the conversation with the user has failed. This can happen for various reasons, including the user does not provide an appropriate response to prompts from the service, or if the Lambda function fails to fulfill the intent.</p> </li> <li> <p> <code>Fulfilled</code> - Conveys that the Lambda function has sucessfully fulfilled the intent.</p> </li> <li> <p> <code>ReadyForFulfillment</code> - Conveys that the client has to fulfill the intent.</p> </li> </ul></p>
     pub dialog_state: Option<String>,
+    /// <p>The next message that should be presented to the user.</p> <p>The <code>encodedMessage</code> field is base-64 encoded. You must decode the field before you can use the value.</p>
+    pub encoded_message: Option<String>,
     /// <p>The name of the current intent.</p>
     pub intent_name: Option<String>,
-    /// <p>The next message that should be presented to the user.</p>
-    pub message: Option<String>,
     /// <p><p>The format of the response message. One of the following values:</p> <ul> <li> <p> <code>PlainText</code> - The message contains plain UTF-8 text.</p> </li> <li> <p> <code>CustomPayload</code> - The message is a custom format for the client.</p> </li> <li> <p> <code>SSML</code> - The message contains text formatted for voice output.</p> </li> <li> <p> <code>Composite</code> - The message contains an escaped JSON object containing one or more messages from the groups that messages were assigned to when the intent was created.</p> </li> </ul></p>
     pub message_format: Option<String>,
     /// <p>Map of key/value pairs representing session-specific context information.</p>
@@ -1051,9 +1051,11 @@ impl LexRuntime for LexRuntimeClient {
             result.bot_version = response.headers.remove("x-amz-lex-bot-version");
             result.content_type = response.headers.remove("Content-Type");
             result.dialog_state = response.headers.remove("x-amz-lex-dialog-state");
-            result.input_transcript = response.headers.remove("x-amz-lex-input-transcript");
+            result.encoded_input_transcript = response
+                .headers
+                .remove("x-amz-lex-encoded-input-transcript");
+            result.encoded_message = response.headers.remove("x-amz-lex-encoded-message");
             result.intent_name = response.headers.remove("x-amz-lex-intent-name");
-            result.message = response.headers.remove("x-amz-lex-message");
             result.message_format = response.headers.remove("x-amz-lex-message-format");
             result.nlu_intent_confidence =
                 response.headers.remove("x-amz-lex-nlu-intent-confidence");
@@ -1142,8 +1144,8 @@ impl LexRuntime for LexRuntimeClient {
             result.active_contexts = response.headers.remove("x-amz-lex-active-contexts");
             result.content_type = response.headers.remove("Content-Type");
             result.dialog_state = response.headers.remove("x-amz-lex-dialog-state");
+            result.encoded_message = response.headers.remove("x-amz-lex-encoded-message");
             result.intent_name = response.headers.remove("x-amz-lex-intent-name");
-            result.message = response.headers.remove("x-amz-lex-message");
             result.message_format = response.headers.remove("x-amz-lex-message-format");
             result.session_attributes = response.headers.remove("x-amz-lex-session-attributes");
             result.session_id = response.headers.remove("x-amz-lex-session-id");

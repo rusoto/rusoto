@@ -512,6 +512,10 @@ pub struct CreateDeploymentGroupInput {
     #[serde(rename = "onPremisesTagSet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub on_premises_tag_set: Option<OnPremisesTagSet>,
+    /// <p>Indicates what happens when new EC2 instances are launched mid-deployment and do not receive the deployed application revision.</p> <p>If this option is set to <code>UPDATE</code> or is unspecified, CodeDeploy initiates one or more 'auto-update outdated instances' deployments to apply the deployed application revision to the new EC2 instances.</p> <p>If this option is set to <code>IGNORE</code>, CodeDeploy does not initiate a deployment to update the new EC2 instances. This may result in instances having different revisions.</p>
+    #[serde(rename = "outdatedInstancesStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub outdated_instances_strategy: Option<String>,
     /// <p>A service role Amazon Resource Name (ARN) that allows AWS CodeDeploy to act on the user's behalf when interacting with AWS services.</p>
     #[serde(rename = "serviceRoleArn")]
     pub service_role_arn: String,
@@ -769,6 +773,10 @@ pub struct DeploymentGroupInfo {
     #[serde(rename = "onPremisesTagSet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub on_premises_tag_set: Option<OnPremisesTagSet>,
+    /// <p>Indicates what happens when new EC2 instances are launched mid-deployment and do not receive the deployed application revision.</p> <p>If this option is set to <code>UPDATE</code> or is unspecified, CodeDeploy initiates one or more 'auto-update outdated instances' deployments to apply the deployed application revision to the new EC2 instances.</p> <p>If this option is set to <code>IGNORE</code>, CodeDeploy does not initiate a deployment to update the new EC2 instances. This may result in instances having different revisions.</p>
+    #[serde(rename = "outdatedInstancesStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub outdated_instances_strategy: Option<String>,
     /// <p>A service role Amazon Resource Name (ARN) that grants CodeDeploy permission to make calls to AWS services on your behalf. For more information, see <a href="https://docs.aws.amazon.com/codedeploy/latest/userguide/getting-started-create-service-role.html">Create a Service Role for AWS CodeDeploy</a> in the <i>AWS CodeDeploy User Guide</i>.</p>
     #[serde(rename = "serviceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -815,7 +823,7 @@ pub struct DeploymentInfo {
     #[serde(rename = "createTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<f64>,
-    /// <p><p>The means by which the deployment was created:</p> <ul> <li> <p> <code>user</code>: A user created the deployment.</p> </li> <li> <p> <code>autoscaling</code>: Amazon EC2 Auto Scaling created the deployment.</p> </li> <li> <p> <code>codeDeployRollback</code>: A rollback process created the deployment.</p> </li> </ul></p>
+    /// <p><p>The means by which the deployment was created:</p> <ul> <li> <p> <code>user</code>: A user created the deployment.</p> </li> <li> <p> <code>autoscaling</code>: Amazon EC2 Auto Scaling created the deployment.</p> </li> <li> <p> <code>codeDeployRollback</code>: A rollback process created the deployment.</p> </li> <li> <p> <code>CodeDeployAutoUpdate</code>: An auto-update process created the deployment when it detected outdated EC2 instances.</p> </li> </ul></p>
     #[serde(rename = "creator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creator: Option<String>,
@@ -875,6 +883,9 @@ pub struct DeploymentInfo {
     #[serde(rename = "previousRevision")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub previous_revision: Option<RevisionLocation>,
+    #[serde(rename = "relatedDeployments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub related_deployments: Option<RelatedDeployments>,
     /// <p>Information about the location of stored application artifacts and the service from which to retrieve them.</p>
     #[serde(rename = "revision")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1939,7 +1950,7 @@ pub struct PutLifecycleEventHookExecutionStatusInput {
     #[serde(rename = "lifecycleEventHookExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lifecycle_event_hook_execution_id: Option<String>,
-    /// <p>The result of a Lambda function that validates a deployment lifecycle event (<code>Succeeded</code> or <code>Failed</code>).</p>
+    /// <p>The result of a Lambda function that validates a deployment lifecycle event. <code>Succeeded</code> and <code>Failed</code> are the only valid values for <code>status</code>.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1998,6 +2009,20 @@ pub struct RegisterOnPremisesInstanceInput {
     /// <p>The name of the on-premises instance to register.</p>
     #[serde(rename = "instanceName")]
     pub instance_name: String,
+}
+
+/// <p>Information about deployments related to the specified deployment.</p>
+#[derive(Clone, Debug, Default, Deserialize, PartialEq)]
+#[cfg_attr(any(test, feature = "serialize_structs"), derive(Serialize))]
+pub struct RelatedDeployments {
+    /// <p>The deployment IDs of 'auto-update outdated instances' deployments triggered by this deployment.</p>
+    #[serde(rename = "autoUpdateOutdatedInstancesDeploymentIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_update_outdated_instances_deployment_ids: Option<Vec<String>>,
+    /// <p>The deployment ID of the root deployment that triggered this deployment.</p>
+    #[serde(rename = "autoUpdateOutdatedInstancesRootDeploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_update_outdated_instances_root_deployment_id: Option<String>,
 }
 
 /// <p>Represents the input of a <code>RemoveTagsFromOnPremisesInstances</code> operation.</p>
@@ -2392,6 +2417,10 @@ pub struct UpdateDeploymentGroupInput {
     #[serde(rename = "onPremisesTagSet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub on_premises_tag_set: Option<OnPremisesTagSet>,
+    /// <p>Indicates what happens when new EC2 instances are launched mid-deployment and do not receive the deployed application revision.</p> <p>If this option is set to <code>UPDATE</code> or is unspecified, CodeDeploy initiates one or more 'auto-update outdated instances' deployments to apply the deployed application revision to the new EC2 instances.</p> <p>If this option is set to <code>IGNORE</code>, CodeDeploy does not initiate a deployment to update the new EC2 instances. This may result in instances having different revisions.</p>
+    #[serde(rename = "outdatedInstancesStrategy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub outdated_instances_strategy: Option<String>,
     /// <p>A replacement ARN for the service role, if you want to change it.</p>
     #[serde(rename = "serviceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
